@@ -4841,11 +4841,13 @@
     <ItemGroup>
       <Compile Remove="wwwroot\WebCore\plugins\kendo\**" />
       <Compile Remove="Modules\Approval\Components\**" />
+      <Compile Remove="obj\**" />
     </ItemGroup>
 
     <ItemGroup>
       <EmbeddedResource Remove="wwwroot\WebCore\plugins\kendo\**" />
       <EmbeddedResource Remove="Modules\Approval\Components\**" />
+      <EmbeddedResource Remove="obj\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -5364,6 +5366,7 @@
       <None Update="Modules\EntriNota\JS\entriNota.edit.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Remove="obj\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -5388,6 +5391,7 @@
         <Link>libwkhtmltox.dll</Link>
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+      <Content Remove="obj\**" />
     </ItemGroup>
 
 </Project>
