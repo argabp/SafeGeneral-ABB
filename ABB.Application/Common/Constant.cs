@@ -26,6 +26,12 @@ namespace ABB.Application.Common
             },
             {
                 "d_uw01r_06e", "PolisMotorMulti.html" 
+            },
+            {
+                "PolisCargoSingle.html", "spr_uw01r_18_eng"
+            },
+            {
+                "PolisCargoMulti.html", "spr_uw01r_18i_m"
             }
         };
         
@@ -51,6 +57,12 @@ namespace ABB.Application.Common
             },
             {
                 "PolisMotorMulti.html", "spr_uw01r_05_m"
+            },
+            {
+                "d_uw01r_18i", "PolisCargoSingle.html" 
+            },
+            {
+                "d_uw01r_18i_m", "PolisCargoMulti.html" 
             }
         };
     }
