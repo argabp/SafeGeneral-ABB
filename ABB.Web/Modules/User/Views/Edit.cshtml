@@ -1,0 +1,121 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.User.Models.EditUserModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@{
+    ViewData["Title"] = "User Page";
+}
+
+<script src="~/Modules/User/JS/user.form.js"></script>
+<script src="~/Modules/User/JS/user.edit.js"></script>
+
+<form id="UserForm" enctype="multipart/form-data">
+    <div class="window-body" style="background-color: lightgray">
+        <div class="form-group center">
+            <div class="circular-upload-container center">
+                <label for="profile-photo-input">
+                    <image src="@Model.Photo" />
+                </label>
+                <input id="profile-photo-input" type="file" name="ProfilePhoto" placeholder="Photo">
+
+                <input type="hidden" asp-for="Photo" />
+            </div>
+            <span asp-validation-for="ProfilePhoto" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="UserName" class="col-sm-5 ">Username</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="UserName" readonly="true" style="background-color: #FFFFE1"/>
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="hidden" asp-for="Id" />
+            <label asp-for="FirstName" class="col-sm-5 ">First Name</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="FirstName" placeholder="Enter first name" style="background-color: #FFFFE1"/>
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="LastName" class="col-sm-5 ">Last Name</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="LastName" placeholder="Enter last name" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="RoleId" class="col-sm-5">Role</label>
+
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="RoleId" readonly="true" option-label="Choose role" style="background-color: #FFFFE1"
+                                    datavaluefield="Id" datatextfield="Name" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetRoles","User")" />
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="RoleId" class="text-danger"></span>
+
+            </div>
+            <input type="hidden" asp-for="RoleName" />
+        </div>
+        <div class="form-group">
+            <label class="col-sm-5" asp-for="Email"></label>
+            <div class="col-sm-12">
+                <kendo-textbox for="Email" placeholder="Enter email" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-5">Phone Number</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="PhoneNumber" placeholder="Enter phone number" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-5">Address</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="Address" placeholder="Enter address" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group ">
+            <div class="row">
+                <div class="col-sm-6">
+                    <label class="col-sm-12">Status</label>
+                    <div class="col-sm-12 ">
+                        <div class="switch-box">
+                            @(Html.Kendo().SwitchFor(a=>a.IsActive))
+                            <label class="switch-label-on" for="IsActive">Active</label>
+                            <label class="switch-label-off" for="IsActive">Not Active</label>
+                            <span asp-validation-for="IsActive" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <label class="col-sm-12">Locked Out</label>
+                    <div class="col-sm-12">
+                        <div class=" switch-box">
+                            @(Html.Kendo().SwitchFor(a=>a.LockoutEnabled))
+                            <label class="switch-label-on" for="LockoutEnabled">Active</label>
+                            <label class="switch-label-off" for="LockoutEnabled">Not Active</label>
+                            <span asp-validation-for="LockoutEnabled" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <div class="window-footer">
+        <button type="button" id="btn-edit-user" class="btn btn-primary space-right">Save</button>
+    </div>
+</form>

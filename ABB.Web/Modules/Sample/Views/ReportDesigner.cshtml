@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "Report Designer";
+    Layout = "~/Modules/Shared/_ReportDesignerLayout.cshtml";
+}
+
+<div id="webReportDesigner">
+    loading...
+</div>
+<script src="~/plugins/jquery/jquery.min.js"></script>
+<script src="~/plugins/kendo/js/kendo.all.min.js"></script>
+
+
+<script src="/api/reports/resources/js/telerikReportViewer-15.2.21.915.min.js/"></script>
+
+<script src="/api/reportdesigner/designerresources/js/webReportDesigner-15.2.21.915.min.js/"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#webReportDesigner").telerik_WebReportDesigner({
+            toolboxArea: {
+                layout: "list" //Change to "grid" to display the contents of the Components area in a flow grid layout.
+            },
+            serviceUrl: "/api/reportdesigner/",
+            report: "UserListReport2.trdp"
+        }).data("telerik_WebDesigner");
+    });
+</script>

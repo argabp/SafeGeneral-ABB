@@ -1,0 +1,144 @@
+﻿@using Kendo.Mvc.UI
+@using ABB.Application.Zonas.Queries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Zona";
+}
+<script src="~/Modules/Zona/JS/zona.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+    #kd_zona{
+        background-color: #00FFFF;
+    }
+    #nm_zona{
+        background-color: #FFFFE1;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Zona
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<ZonaDto>()
+                .Name("ZonaGrid")
+                .ToolBar(toolbar => toolbar.Create())
+                .Editable(editable => editable.Mode(GridEditMode.InLine))
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetZonas", "Zona").Data("searchFilter"))
+                    .Model(model => model.Id(p => p.kd_zona))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.kd_zona).Width(150).Title("Kode Zona").Editable("disableGridTextboxWhenEdit");
+                    columns.Bound(col => col.nm_zona).Width(150).Title("Nama Zona");
+                    columns.Command(command =>
+                    {
+                        command.Edit();
+                        command.Custom("DeleteZona")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeleteZona");
+                    }).Width(200);
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .ClientDetailTemplateId("template")
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit").Save("onSaveZona"))
+        
+                )    
+        </div>
+        
+        <script id="template" type="text/kendo-tmpl">
+            <div class="row">
+                <div class="col-md-4 k-button k-button-icontext">
+                    <button style="border: none;" onclick="btnAddDetailZona_OnClick(#=kd_zona#)">+ ADD NEW RECORD</button>
+                </div>
+            </div>
+            @(Html.Kendo().TabStrip()
+                    .Name("tabStrip_#=kd_zona#")
+                    .SelectedIndex(0)
+                    .Animation(animation => animation.Open(open => open.Fade(FadeDirection.In)))
+                    .Items(items =>
+                    {
+                        items.Add().Text("Detail").Content(@<text>
+                            @(Html.Kendo().Grid<DetailZonaDto>()
+                                .Name("grid_Detail_#=kd_zona#") // template expression, to be evaluated in the master context
+                                .DataSource(dataSource => dataSource.Ajax()
+                                    .Read(read => read.Action("GetDetailZonas", "Zona", new { kd_zona = "#=kd_zona#" }))//.Data("getAsumsiPeriodeParam"))
+                                    .Model(m => m.Id(p => p.Id))
+                                )
+                                .Columns(columns =>
+                                {
+                                    columns.Bound(col => col.kd_zona).Width(100).Title("Kode Zona").Editable("disableGridTextbox");
+                                    columns.Bound(col => col.nm_kls_konstr).Width(200).Title("Kode Kelas Konstruksi");
+                                    columns.Bound(col => col.nm_zona_gb).Width(200).Title("Kode Kelas Konstruksi");
+                                    columns.Bound(col => col.nm_okup).Width(200).Title("Kode Kelas Konstruksi");
+                                    columns.Bound(col => col.text_stn_rate_premi).Width(200).Title("Satuan Rate Premi");
+                                    columns.Bound(col => col.pst_rate_prm).Width(100).Title("Zone I").Format("{0:n2}");
+                                    columns.Command(command =>
+                                    {
+                                        command.Custom("EditDetailZona")
+                                            .Text("Edit")
+                                            .IconClass("fa fa-pencil-alt")
+                                            .HtmlAttributes(new { title = "Edit" })
+                                            .Click("btnEditDetailZona_OnClick");
+                                        command.Custom("DeleteDetailZona")
+                                            .Text("Delete")
+                                            .IconClass("k-icon k-i-delete")
+                                            .HtmlAttributes(new { title="Delete"})
+                                            .Click("onDeleteDetailZona");
+                                    }).Width(200);
+                                })
+                                .Pageable(pager => pager
+                                    .Refresh(true)
+                                    .Info(true)
+                                    .PageSizes(true)
+                                )
+                                .Sortable()
+                                .Selectable()
+                                .Filterable()
+                                .Scrollable()
+                                .Height(380)
+                                .Resizable(a=>a.Columns(true))
+                                .Events(ev => ev.DataBound("gridAutoFit").Save("onSaveDetailZona").Edit("onEditDetailZona"))
+                                .ToClientTemplate())
+                        </text>
+                        );
+                    })
+                    .ToClientTemplate())
+        </script>
+
+        @(Html.Kendo().Window()
+            .Name("DetailZonaWindow")
+            .Title("Detail Zona")
+            .Width(400)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+    </div>
+</div>
+

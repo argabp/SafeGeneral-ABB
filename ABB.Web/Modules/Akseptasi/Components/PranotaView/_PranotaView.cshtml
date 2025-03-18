@@ -1,0 +1,38 @@
+﻿@using ABB.Web.Modules.Akseptasi.Components.Coverage
+@using ABB.Web.Modules.Akseptasi.Components.Obyek
+@using ABB.Web.Modules.Akseptasi.Components.Other
+@using ABB.Web.Modules.Akseptasi.Components.Resiko
+@using ABB.Web.Modules.Akseptasi.Models
+@using Kendo.Mvc.TagHelpers
+@using Kendo.Mvc.UI
+@model ABB.Web.Modules.Akseptasi.Models.AkseptasiPranotaParameterViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/Akseptasi/Components/PranotaView/pranotaView.js"></script>
+
+<div class="window-body">
+    <div id="pranotaTab">
+        <ul>
+            <li class="k-active">
+                Tertanggung
+            </li>
+            <li>
+                Koasuransi
+            </li>
+        </ul>
+        <div id="tabTertanggung">
+            <vc:pranota model="@Model"></vc:pranota>
+        </div>
+        <div id="tabKoasuransi">
+            <vc:pranota-koas model="@Model"></vc:pranota-koas>
+        </div>
+    </div>
+
+    <div class="window-footer">
+        <button type="button" id="btn-previous-akseptasiPranota" class="btn btn-primary space-right">
+            <span class="fa fa-arrow-left"></span> Previous
+        </button>
+    </div>
+</div>

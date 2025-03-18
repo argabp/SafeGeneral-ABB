@@ -1,0 +1,79 @@
+﻿@using Kendo.Mvc.UI
+@using ABB.Application.ReopenPolis.Queries
+@using ABB.Application.Common.Dtos
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Reopen Polis";
+}
+<script src="~/Modules/ReopenPolis/JS/reopenPolis.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Reopen Polis
+        </div>
+
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<ReopenPolisDto>()
+                .Name("ReopenPolisGrid")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetReopenPolis", "ReopenPolis").Data("searchFilter"))
+                    .Model(model => model.Id(p => p.Id))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
+                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
+                    columns.Bound(col => col.nm_scob).Width(150).Title("Nama Sub COB");
+                    columns.Bound(col => col.no_pol).Width(150).Title("Nomor Polis");
+                    columns.Bound(col => col.no_updt).Width(150).Title("Nomor Update");
+                    columns.Bound(col => col.no_renew).Width(150).Title("Nomor Renewal");
+                    columns.Bound(col => col.no_endt).Width(150).Title("Nomor Endorstment");
+                    columns.Bound(col => col.thn_uw).Width(150).Title("Tahun Underwriting");
+                    columns.Bound(col => col.tgl_input).Width(150).Title("Tanggal Input").Format("{0: dd-MM-yyyy}");
+                    columns.Bound(col => col.tgl_mul_ptg).Width(150).Title("Tanggal Mulai").Format("{0: dd-MM-yyyy}");
+                    columns.Bound(col => col.tgl_akh_ptg).Width(150).Title("Tanggal Akhir").Format("{0: dd-MM-yyyy}");
+                    columns.Bound(col => col.tgl_closing).Width(150).Title("Tanggal Closing").Format("{0: dd-MM-yyyy}");
+                    columns.Bound(col => col.nm_usr_input).Width(150).Title("Kode User Input");
+                    columns.Bound(col => col.nm_ttg).Width(150).Title("Nama Tertanggung");
+                    columns.Command(command =>
+                    {
+                        command.Custom("Reopen")
+                            .Text(" Reopen")
+                            .IconClass("fa fa-envelope-open-text")
+                            .HtmlAttributes(new { title = "Batal" })
+                            .Click("btnReopenPolis_OnClick");
+                    }).Width(200);
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit")))
+        </div>
+    </div>
+</div>
+

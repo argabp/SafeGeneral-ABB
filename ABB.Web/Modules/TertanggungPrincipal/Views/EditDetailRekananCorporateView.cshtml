@@ -1,0 +1,252 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.Rekanan.Models.SaveDetailRekananViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/TertanggungPrincipal/JS/rekanan.corporate.js"></script>
+
+<style>
+    label {
+        align-self: center;
+        margin: 0;
+    }
+</style>
+
+<div class="window-body">
+    <form id="DetailRekananRetailForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-group col-sm-12 row">
+            <label class="col-sm-3">Nama Institusi/Perusahaan</label>
+            <div class="col-sm-6">
+                <kendo-textbox for="perusahaaninstitusi" style="width: 100%"/>
+                <span asp-validation-for="perusahaaninstitusi" class="text-danger"></span>
+            </div>
+            <div class="col-sm-3">
+                <ul class="radio-group d-flex">
+                    <li class="flex-fill">
+                        <input type="radio" name="bentukflag" id="flag_sic_baru" class="k-radio">
+                        <label class="k-radio-label" for="flag_sic_baru">Baru</label>
+                    </li>
+                    <li class="flex-fill">
+                        <input type="radio" name="bentukflag" id="flag_sic_lama" class="k-radio">
+                        <label class="k-radio-label" for="flag_sic_lama">Lama</label>
+                    </li>
+                </ul>
+                <input type="hidden" id="bentukflag_value" value="@Model.bentukflag">
+                <div>
+                    <span asp-validation-for="bentukflag" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-sm-12 row">
+            <label class="col-sm-3">Nomor Pokok Wajib Pajak (NPWP)</label>
+            <div class="col-sm-2">
+                <div class="form-check">
+                  <input class="form-check-input" id="npwpinstitusi" type="checkbox">
+                  <input id="npwpinstitusi_value" type="hidden" value="@Model.npwpinstitusi">
+                  <label class="form-check-label" for="npwpinstitusi" style="padding-top: 0.25em">Terlampir</label>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <kendo-textbox for="npwp" style="width: 100%"/>
+            </div>
+        </div>
+        <div class="form-group col-sm-12 row">
+            <label class="col-sm-3">Surat Izin Usaha Perdagangan (SIUP)</label>
+            <div class="col-sm-2">
+                <div class="form-check">
+                  <input class="form-check-input" id="siupinstitusi" type="checkbox">
+                  <input id="siupinstitusi_value" type="hidden" value="@Model.siupinstitusi">
+                  <label class="form-check-label" for="siupinstitusi" style="padding-top: 0.25em">Terlampir</label>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <kendo-textbox for="siup" style="width: 100%"/>
+            </div>
+        </div>
+        <div class="form-group col-sm-12 row">
+            <label class="col-sm-3">Tanda Daftar Perusahaan (TDP)</label>
+            <div class="col-sm-2">
+                <div class="form-check">
+                  <input class="form-check-input" id="tdpinstitusi" type="checkbox">
+                  <input id="tdpinstitusi_value" type="hidden" value="@Model.tdpinstitusi">
+                  <label class="form-check-label" for="tdpinstitusi" style="padding-top: 0.25em">Terlampir</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-sm-12 row">
+            <label class="col-sm-3">Akte Pendirian dan Pengesahan dari Menteri</label>
+            <div class="col-sm-2" style="align-self: center">
+                <div class="form-check">
+                    <input class="form-check-input" id="hukumhaminstitusi" type="checkbox">
+                  <input id="hukumhaminstitusi_value" type="hidden" value="@Model.hukumhaminstitusi">
+                    <label class="form-check-label" for="hukumhaminstitusi" style="padding-top: 0.25em">Terlampir</label>
+                </div>
+            </div>
+            <label class="col-sm-2">Bidang Usaha</label>
+            <div class="col-sm-5">
+                <kendo-textbox for="usahainstitusi" style="width: 100%"/>
+            </div>
+        </div>
+        <div class="form-group col-sm-12 row">
+            <label class="col-sm-3" style="margin-bottom: 1.5em">Domisili Perusahaan</label>
+            <label class="col-sm-1" style="margin-bottom: 1.5em">Kota</label>
+            <div class="col-sm-2">
+                <kendo-textbox for="kotainstitusi" style="width: 100%"/>
+            </div>
+            <label class="col-sm-1">Kode Pos</label>
+            <div class="col-sm-2">
+                <kendo-textbox for="kodeposinstitusi" style="width: 100%"/>
+            </div>
+            <label class="col-sm-1">Telp</label>
+            <div class="col-sm-2">
+                <kendo-textbox for="telpinstitusi" style="width: 100%"/>
+            </div>
+            <label class="col-sm-1 offset-9" style="padding-top: 1em">Ext</label>
+            <div class="col-sm-2" style="padding-top: 1em">
+                <kendo-textbox for="telpextinstitusi" style="width: 100%"/>
+            </div>
+            <label class="col-sm-1 offset-9" style="padding-top: 1em">Fax</label>
+            <div class="col-sm-2" style="padding-top: 1em">
+                <kendo-textbox for="no_fax" style="width: 100%"/>
+            </div>
+        </div>
+        <div class="form-group col-sm-12 row">
+            <label class="col-sm-3">Website Perusahaan</label>
+            <div class="col-sm-6">
+                <kendo-textbox for="website" style="width: 100%"/>
+                <span asp-validation-for="website" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12 row">
+            <label class="col-sm-3">Nama Direktur Utama Presdir</label>
+            <div class="col-sm-9">
+                <kendo-textbox for="dirinstitusi" style="width: 100%"/>
+                <span asp-validation-for="dirinstitusi" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12 row">
+            <label class="col-sm-3" style="padding-top: 0.5em;">Kewarganegaraan</label>
+            <div class="col-sm-9">
+                <ul class="radio-group d-flex">
+                    <li class="flex-fill">
+                        <input type="radio" name="wniwna" id="wniwna_wni" class="k-radio">
+                        <label class="k-radio-label" for="wniwna_wni">WNI Lampirkan</label>
+                    </li>
+                    <li class="flex-fill">
+                        <input type="radio" name="wniwna" id="wniwna_wna" class="k-radio">
+                        <label class="k-radio-label" for="wniwna_wna">WNA Lampirkan</label>
+                    </li>
+                </ul>
+                <input type="hidden" id="wniwna_value" value="@Model.wniwna">
+                <div>
+                    <span asp-validation-for="wniwna" class="text-danger"></span>
+                </div>
+            </div>
+            
+            <div class="col-sm-4 offset-3" style="padding-top: 2em">
+                <ul class="radio-group d-flex">
+                    <li class="flex-fill">
+                        <input type="radio" name="wniflag" id="wniflag_ktp" class="k-radio">
+                        <label class="k-radio-label" for="wniflag_ktp">KTP</label>
+                    </li>
+                    <li class="flex-fill">
+                        <input type="radio" name="wniflag" id="wniflag_sim" class="k-radio">
+                        <label class="k-radio-label" for="wniflag_sim">SIM</label>
+                    </li>
+                    <li class="flex-fill">
+                        <input type="radio" name="wniflag" id="wniflag_paspor" class="k-radio">
+                        <label class="k-radio-label" for="wniflag_paspor">PASPOR</label>
+                    </li>
+                </ul>
+                <input type="hidden" id="wniflag_value" value="@Model.wniflag">
+                <div>
+                    <span asp-validation-for="wniflag" class="text-danger"></span>
+                </div>
+            </div>
+            
+            <div class="col-sm-5" style="padding-top: 2em">
+                <ul class="radio-group d-flex">
+                    <li class="flex-fill">
+                        <input type="radio" name="wnaflag" id="wnaflag_paspor" class="k-radio">
+                        <label class="k-radio-label" for="wnaflag_paspor">PASPOR</label>
+                    </li>
+                    <li class="flex-fill">
+                        <input type="radio" name="wnaflag" id="wnaflag_kms" class="k-radio">
+                        <label class="k-radio-label" for="wnaflag_kms">KMS</label>
+                    </li>
+                    <li class="flex-fill">
+                        <input type="radio" name="wnaflag" id="wnaflag_kitas" class="k-radio">
+                        <label class="k-radio-label" for="wnaflag_kitas">KITAS</label>
+                    </li>
+                    <li class="flex-fill">
+                        <input type="radio" name="wnaflag" id="wnaflag_kitap" class="k-radio">
+                        <label class="k-radio-label" for="wnaflag_kitap">KITAP</label>
+                    </li>
+                </ul>
+                <input type="hidden" id="wnaflag_value" value="@Model.wnaflag">
+                <div>
+                    <span asp-validation-for="wnaflag" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-sm-12 row" style="padding-top: 1em">
+            <label class="col-sm-3">Polis lain yang dimiliki</label>
+            <label class="col-sm-3" style="text-align: center">No</label>
+            <label class="col-sm-3" style="text-align: center">Jenis</label>
+            <label class="col-sm-3" style="text-align: center">Per. Asuransi</label>
+        </div>
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-3 offset-3">
+                <kendo-textbox for="nopolis1" style="width: 100%"/>
+            </div>
+            <div class="col-sm-3">
+                <kendo-textbox for="jenispolis1" style="width: 100%"/>
+            </div>
+            <div class="col-sm-3">
+                <kendo-textbox for="asuransipolis1" style="width: 100%"/>
+            </div>
+        </div>
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-3 offset-3">
+                <kendo-textbox for="nopolis2" style="width: 100%"/>
+            </div>
+            <div class="col-sm-3">
+                <kendo-textbox for="jenispolis2" style="width: 100%"/>
+            </div>
+            <div class="col-sm-3">
+                <kendo-textbox for="asuransipolis2" style="width: 100%"/>
+            </div>
+        </div>
+        <div class="form-group col-sm-12 row">
+            <label class="col-sm-3" style="padding-top: 0.5em">Tujuan Menutup Asuransi</label>
+            <div class="col-sm-9">
+                <ul class="radio-group d-flex">
+                    <li class="flex-fill">
+                        <input type="radio" name="tujuanpolisflag" id="tujuanpolisflag_perlingungan" class="k-radio">
+                        <label class="k-radio-label" for="tujuanpolisflag_perlingungan">Perlindungan terhadap harta kekayaan / Asset Perusahaan</label>
+                    </li>
+                    <li class="flex-fill">
+                        <input type="radio" name="tujuanpolisflag" id="tujuanpolisflag_lain" class="k-radio">
+                        <label class="k-radio-label" for="tujuanpolisflag_lain">Lain-lain</label>
+                    </li>
+                </ul>
+                <input type="hidden" id="tujuanpolisflag_value" value="@Model.tujuanpolisflag">
+                <div>
+                    <span asp-validation-for="tujuanpolisflag" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-sm-12 row" style="padding-top: 0.5em">
+            <div class="col-sm-9 offset-3">
+                <kendo-textbox for="tujuanpolislain" style="width: 100%"/>
+            </div>
+        </div>
+    </form>
+
+<div class="window-footer">
+    <button type="button" onclick="onSaveDetailRekananIndividu()" class="btn btn-success space-right">
+        <span class="fa fa-save"></span> Save
+    </button>
+</div>
+</div>

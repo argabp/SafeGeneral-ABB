@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html lang="en" @ViewData["HtmlAttribute"]>
+<head>
+    <meta charset="utf-8" />
+    <title>ABB | @ViewData["Title"]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="@ViewData["MetaDescription"]" />
+    <meta name="author" content="@ViewData["MetaAuthor"]" />
+    <meta name="keywords" content="@ViewData["MetaKeywords"]" />
+    <link rel="icon" type="image/x-icon" href="~/img/Logo-Icon.png">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    @*<link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">*@
+    <!-- Theme style-->
+    @*<link rel="stylesheet" href="~/css/adminlte.css">
+        <link rel="stylesheet" href="~/css/abb.css">*@
+    <!-- overlayScrollbars -->
+    @*<link rel="stylesheet" href="~/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">*@
+    <!--Kendo -->
+    @*<link rel="stylesheet" href="~/plugins/kendo/styles/kendo.office365.min.css">
+        <link rel="stylesheet" href="~/plugins/kendo/styles/kendo.common-office365.min.css">
+        <link rel="stylesheet" href="~/css/bootstrap-layout.css">*@
+</head>
+    <body>
+        @*<partial name="_Scripts" />*@
+        <div>
+            @RenderBody()
+        </div>
+    </body>
+    </html>

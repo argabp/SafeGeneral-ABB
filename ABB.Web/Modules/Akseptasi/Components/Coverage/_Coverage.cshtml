@@ -1,0 +1,63 @@
+﻿@using ABB.Application.Akseptasis.Queries
+@using Kendo.Mvc.UI
+
+<script src="~/Modules/Akseptasi/Components/Coverage/coverage.js"></script>
+
+<div class="window-body">
+    <div class="row">
+        <div class="col-md-4">
+            <input type="text" class="search-field-top" style="height: 1em" id="SearchKeywordCoverage" placeholder="Search"/>
+        </div>
+        <div class="offset-5"></div>
+        <div class="col-md-2">
+            <button class="flat-btn-primary" style="height: 1em" id="btnAddNewAkseptasiCoverage">Add New Akseptasi Coverage</button>
+        </div>
+    </div>
+    
+    @(Html.Kendo().Grid<AkseptasiCoverageDto>()
+        .Name("AkseptasiCoverageGrid")
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetAkseptasiCoverages", "Akseptasi").Data("searchFilterCoverage"))
+            .Model(model => model.Id(p => p.kd_cvrg))
+        )
+        .Columns(columns =>
+        {
+            columns.Bound(col => col.kd_cvrg).Width(150).Title("Kode Coverage");
+            columns.Command(command =>
+            {
+                command.Custom("EditAkseptasiCoverage")
+                    .Text("Edit")
+                    .IconClass("fa fa-pencil-alt")
+                    .HtmlAttributes(new { title = "Edit" })
+                    .Click("btnEditAkseptasiCoverage_OnClick");
+                command.Custom("DeleteAkseptasiCoverage")
+                    .Text("Delete")
+                    .IconClass("k-icon k-i-delete")
+                    .HtmlAttributes(new { title = "Delete" })
+                    .Click("btnDeleteAkseptasiCoverage_OnClick");
+            }).Width(200);
+        })
+        .Pageable(pager => pager
+            .Refresh(true)
+            .Info(true)
+            .PageSizes(true)
+        )
+        .Sortable()
+        .Filterable()
+        .Scrollable()
+        .AutoBind(false)
+        .Height(450)
+        .Resizable(a => a.Columns(true))
+        .Events(ev => ev.DataBound("gridAutoFit"))
+    
+        )
+    
+    <div class="window-footer">
+        <button type="button" id="btn-previous-akseptasiResikoCoverage" class="btn btn-primary space-right">
+            <span class="fa fa-arrow-left"></span> Previous
+        </button>
+        <button type="button" id="btn-next-akseptasiResikoCoverage" class="btn btn-primary space-right">
+            Next <span class="fa fa-arrow-right"></span>
+        </button>
+    </div>
+</div>

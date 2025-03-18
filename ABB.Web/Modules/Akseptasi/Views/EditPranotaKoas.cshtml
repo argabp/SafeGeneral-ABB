@@ -1,0 +1,151 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.Akseptasi.Models.AkseptasiPranotaKoasViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/Akseptasi/JS/akseptasi.pranotaKoas.js"></script>
+
+<style>
+    p {
+        margin: 0px;
+        padding: 0px;
+    }
+    label {
+        align-content: center;
+    }
+</style>
+
+@{
+    var nomor_aksepatsi = Model.kd_cb.Trim() + Model.kd_cob.Trim() +
+                          Model.kd_scob.Trim() + Model.kd_thn.Trim() + Model.no_aks.Trim();
+    var pranota_koas_pst_share = Model.pst_share == null ? 0 : (double)Model.pst_share;
+    var pranota_koas_nilai_prm = Model.nilai_prm == null ? 0 : (double)Model.nilai_prm;
+    var pranota_koas_nilai_kl = Model.nilai_kl == null ? 0 : (double)Model.nilai_kl;
+    var pranota_koas_pst_dis = Model.pst_dis == null ? 0 : (double)Model.pst_dis;
+    var pranota_koas_nilai_dis = Model.nilai_dis == null ? 0 : (double)Model.nilai_dis;
+    var pranota_koas_pst_hf = Model.pst_hf == null ? 0 : (double)Model.pst_hf;
+    var pranota_koas_nilai_hf = Model.nilai_hf == null ? 0 : (double)Model.nilai_hf;
+}
+
+<div class="window-body">
+    <form id="PranotaKoasForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Akseptasi</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="temp_pranota_koas_nomor_akseptasi" value="@nomor_aksepatsi" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Update</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="pranota_koas_no_updt" value="@Model.no_updt" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Mata Uang</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist name="pranota_koas_kd_mtu" style="width: 100%" readonly="true" value="@Model.kd_mtu"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetMataUang", "Akseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Premi 100%</label>
+                @* <div class="col-sm-6"> *@
+                @*     <kendo-textbox name="resiko_coverage_no_rsk" value="@Model.no_rsk" readonly="true" style="width: 100%"/> *@
+                @* </div> *@
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-3">Kode Rekanan</label>
+                <input type="hidden" id="temp_pranota_koas_kd_grp_pas" value="@Model.kd_grp_pas">
+                <div class="row col-sm-9">
+                    <div class="col-sm-6">
+                        <kendo-dropdownlist name="pranota_koas_kd_grp_pas" style="width: 100%" on-change="OnKodeRekananPranotaKoasChange"
+                                            option-label="Pilih Kode Rekanan" value="@Model.kd_grp_pas" readonly="true"
+                                            datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                            <datasource type="DataSourceTagHelperType.Custom">
+                                <transport>
+                                    <read url="@Url.Action("GetKodePersAsuransi", "Akseptasi")"/>
+                                </transport>
+                            </datasource>
+                        </kendo-dropdownlist>
+                    </div>
+                    <input type="hidden" id="temp_pranota_koas_kd_rk_pas" value="@Model.kd_rk_pas">
+                    <div class="col-sm-6">
+                        <kendo-dropdownlist name="pranota_koas_kd_rk_pas" style="width: 100%" readonly="true"
+                                            datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                            <datasource type="DataSourceTagHelperType.Custom">
+                                <transport>
+                                    <read url="@Url.Action("GetKodeRekanan", "Akseptasi")" data="dataKodeRekananPranotaKoasDropDown"/>
+                                </transport>
+                            </datasource>
+                        </kendo-dropdownlist>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Share (%)</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="pranota_koas_pst_share" value="@pranota_koas_pst_share" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Premi</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="pranota_koas_nilai_prm" value="@pranota_koas_nilai_prm" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Klaim</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="pranota_koas_nilai_kl" value="@pranota_koas_nilai_kl" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Diskon</label>
+                <div class="col-sm-2">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="pranota_koas_pst_dis" value="@pranota_koas_pst_dis" style="width: 100%"/>
+                    <span asp-validation-for="pst_dis" class="text-danger"></span>
+                </div>
+                <div class="col-sm-4">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="pranota_koas_nilai_dis" value="@pranota_koas_nilai_dis" style="width: 100%"/>
+                    <span asp-validation-for="nilai_dis" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Handling Fee</label>
+                <div class="col-sm-2">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="pranota_koas_pst_hf" value="@pranota_koas_pst_hf" style="width: 100%"/>
+                    <span asp-validation-for="pst_hf" class="text-danger"></span>
+                </div>
+                <div class="col-sm-4">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="pranota_koas_nilai_hf" value="@pranota_koas_nilai_hf" style="width: 100%"/>
+                    <span asp-validation-for="nilai_hf" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="window-footer">
+        <button type="button" id="btn-save-akseptasiPranotaKoas" class="btn btn-success space-right">
+            <span class="fa fa-save"></span> Save
+        </button>
+    </div>
+</div>

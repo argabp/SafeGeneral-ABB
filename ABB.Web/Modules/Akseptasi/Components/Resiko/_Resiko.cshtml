@@ -1,0 +1,60 @@
+﻿@using ABB.Application.Akseptasis.Queries
+@using Kendo.Mvc.UI
+
+<script src="~/Modules/Akseptasi/Components/Resiko/resiko.js"></script>
+
+<div class="window-body">
+    <div class="row">
+        <div class="col-md-4">
+            <input type="text" class="search-field-top" style="height: 1em" id="SearchKeywordResiko" placeholder="Search"/>
+        </div>
+        <div class="offset-5"></div>
+        <div class="col-md-2">
+            <button class="flat-btn-primary" style="height: 1em" id="btnAddNewAkseptasiResiko">Add New Akseptasi Resiko</button>
+        </div>
+    </div>
+    
+    @(Html.Kendo().Grid<AkseptasiResikoDto>()
+        .Name("AkseptasiResikoGrid")
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetAkseptasiResikos", "Akseptasi").Data("searchFilterResiko"))
+            .Model(model => model.Id(p => p.Id))
+        )
+        .Columns(columns =>
+        {
+            columns.Bound(col => col.ket_rsk).Width(150).Title("Keterangan Resiko");
+            columns.Command(command =>
+            {
+                command.Custom("EditAkseptasiResiko")
+                    .Text("Edit")
+                    .IconClass("fa fa-pencil-alt")
+                    .HtmlAttributes(new { title = "Edit" })
+                    .Click("btnEditAkseptasiResiko_OnClick");
+                command.Custom("DeleteAkseptasiResiko")
+                    .Text("Delete")
+                    .IconClass("k-icon k-i-delete")
+                    .HtmlAttributes(new { title = "Delete" })
+                    .Click("btnDeleteAkseptasiResiko_OnClick");
+            }).Width(200);
+        })
+        .Pageable(pager => pager
+            .Refresh(true)
+            .Info(true)
+            .PageSizes(true)
+        )
+        .Sortable()
+        .Filterable()
+        .Scrollable()
+        .Selectable()
+        .Height(450)
+        .Resizable(a => a.Columns(true))
+        .Events(ev => ev.DataBound("gridAutoFit").Change("OnResikoChange"))
+
+        )
+    
+    <div class="window-footer">
+        <button type="button" id="btn-next-akseptasiResiko" class="btn btn-primary space-right">
+            Next <span class="fa fa-arrow-right"></span>
+        </button>
+    </div>
+</div>

@@ -1,0 +1,51 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.BiayaMaterai.Models.BiayaMateraiViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="BiayaMateraiForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kode Mata Uang</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="kd_mtu" style="width: 100%" readonly="true"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetMataUang", "BiayaMaterai")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="kd_mtu" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Nilai Premi Mulai</label>
+            <div class="col-sm-12">
+                <kendo-numerictextbox for="nilai_prm_mul" style="width: 100%" readonly="true"/>
+                <span asp-validation-for="nilai_prm_mul" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Nilai Premi Akhir</label>
+            <div class="col-sm-12">
+                <kendo-numerictextbox for="nilai_prm_akh" style="width: 100%" readonly="true"/>
+                <span asp-validation-for="nilai_prm_akh" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Nilai Biaya Materai</label>
+            <div class="col-sm-12">
+                <kendo-numerictextbox for="nilai_bia_mat" style="width: 100%; background-color: #FFFFE1"/>
+                <span asp-validation-for="nilai_bia_mat" class="text-danger"></span>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="window-footer">
+    <button type="button" onclick="onSaveBiayaMaterai()" class="btn btn-success space-right">
+        <span class="fa fa-save"></span> Save
+    </button>
+</div>

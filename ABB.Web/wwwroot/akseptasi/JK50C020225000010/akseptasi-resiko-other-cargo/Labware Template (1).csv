@@ -1,0 +1,14 @@
+Labware Name (Required),Deck Location (Required),Consumable Location (Required),MWCO (Required if Chip),Liquid Type (Required if Tube),Starting Value (Required if Sample or Buffer),Starting Unit (Required for Starting Value),Starting Concentration,Density
+"Values: 1.5mL Conical Tube 4x6, 15mL Conical Tube 3x4, 50mL Conical Tube 2x3, Chip",Values: 1-12,Values: A1-D6,"Values: 5, 10, 30, 50, 100, 300","Values: Empty, Sample, Buffer",Values: 0.5-50,"Values: g, mL",Values: >= 0.1,Values: 0.5-6
+1.5mL Conical Tube 4x6,7,C3,,Empty,,,,
+1.5mL Conical Tube 4x6,7,A3,,Sample,1,g,0.1,1
+15mL Conical Tube 3x4,4,A2,,Sample,15,mL,0.1,1
+15mL Conical Tube 3x4,4,A1,,Buffer,15,mL,,1
+15mL Conical Tube 3x4,4,B1,,Empty,,,,
+50mL Conical Tube 2x3,1,B1,,Sample,50,g,0.1,1
+50mL Conical Tube 2x3,1,A1,,Sample,25,g,0.1,1.2
+50mL Conical Tube 2x3,1,A2,,Sample,50,mL,0.1,1.2
+Chip,6,A1,5,,,,,
+Chip,6,A2,10,,,,,
+Chip,6,A3,30,,,,,
+Chip,6,A4,50,,,,,

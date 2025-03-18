@@ -1,0 +1,75 @@
+﻿@using ABB.Application.Kotas.Queries
+@using Kendo.Mvc.UI
+@using ABB.Application.Lokasis.Queries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Kota";
+}
+
+<script src="~/Modules/Kota/JS/kota.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+    #kd_kota{
+        background-color: #00FFFF;
+    }
+    #nm_kota{
+        background-color: #FFFFE1;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Kota
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<KotaDto>()
+                .Name("KotaGrid")
+                .ToolBar(toolbar => toolbar.Create())
+                .Editable(editable => editable.Mode(GridEditMode.InLine))
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetKota", "Kota"))
+                    .Model(model => model.Id(p => p.kd_kota))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.kd_kota).Width(100).Title("Kode Kota").Editable("disableGridTextboxWhenEdit");
+                    columns.Bound(col => col.nm_kota).Width(200).Title("Nama Kota");
+                    columns.Command(command =>
+                    {
+                        command.Edit();
+                        command.Custom("DeleteKota")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeleteKota");
+                    }).Width(200);
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit").Save("onSaveKota"))
+
+                )
+        </div>
+    </div>
+</div>

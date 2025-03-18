@@ -1,0 +1,95 @@
+﻿@using Kendo.Mvc.UI
+@using ABB.Application.Users.Queries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "User List";
+}
+<script src="~/Modules/User/JS/user.index.js"></script>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            User Management
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+        </div>
+        <div class="col-md-2">
+            <button class="flat-btn-primary" id="btnAddUser">Add New User</button>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <input type="hidden" id="profilePictureFolder" value="@Configuration.GetSection("ProfilePictureFolder").Value">
+        @(Html.Kendo().Grid<UsersDto>()
+        .Name("UserGrid")
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetUsers", "User").Data("searchFilter"))
+        )
+        .Columns(columns =>
+        {
+            columns.Bound(col => col.Id).Hidden();
+            columns.Bound(col => col.UserName).Width(150).Title("Username");
+            columns.Bound(col => col.Photo).Width(80).ClientTemplate("#=photoTemplate(data)#");
+            columns.Bound(col => col.FullName).Width(250);
+            columns.Bound(col => col.Role).Width(150);
+            columns.Bound(col => col.Email);
+            columns.Bound(col => col.PhoneNumber);
+            columns.Bound(col => col.Address).Width(250);
+            columns.Bound(col => col.PasswordExpiryDate);
+            columns.Bound(col => col.LeaderName);
+            columns.Bound(col => col.IsActive).ClientTemplate("#=booleanTemplate(data.IsActive)#").Width(100);
+            columns.Bound(col => col.LockoutEnabled).Title("Locked Out").ClientTemplate("#=booleanTemplate(data.LockoutEnabled)#");
+            columns.Command(command =>
+            {
+                command.Custom("Edit")
+                        .Text(" ")
+                        .IconClass("fa fa-pencil-alt")
+                        .HtmlAttributes(new { title="Edit"})
+                        .Click("btnEditUser_OnClick");
+                command.Custom("Delete")
+                        .Text(" ")
+                        .IconClass("fa fa-trash")
+                        .HtmlAttributes(new { title="Delete"})
+                        .Click("btnDeleteUser_OnClick");
+                command.Custom("updatePassword")
+                       .Text(" ")
+                       .IconClass("fa fa-key")
+                        .HtmlAttributes(new { title="Change Password"})
+                       .Click("btnEditPassword_OnClick");
+
+            }).Title("Action").Width(110);
+        })
+        .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                    )
+        .Sortable()
+
+        //.ToolBar(t => t.Search())
+        .Filterable()
+        .Scrollable()
+        .Height(380)
+        .Resizable(a=>a.Columns(true))
+        .Events(ev => ev.DataBound("gridAutoFit"))
+
+        )
+        @(Html.Kendo().Window()
+            .Name("UserWindow")
+            .Title("User Page")
+            .Width(400)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+
+          )
+    </div>
+</div>
+

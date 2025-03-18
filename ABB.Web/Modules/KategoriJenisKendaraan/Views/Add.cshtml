@@ -1,0 +1,58 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.KategoriJenisKendaraan.Models.KategoriJenisKendaraanViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="KategoriJenisKendaraanForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kode Grup Resiko</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="kd_grp_rsk" style="width: 100%" readonly="true"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetGrupResiko", "KategoriJenisKendaraan")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="kd_grp_rsk" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kode Jenis</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="kd_rsk" style="width: 100%; background-color: #00FFFF"/>
+                <span asp-validation-for="kd_rsk" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Nama Jenis Kendaraan</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="desk_rsk" style="width: 100%; background-color: #FFFFE1"/>
+                <span asp-validation-for="desk_rsk" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kategori</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="kd_ref1" style="width: 100%"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetKategori", "KategoriJenisKendaraan")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="kd_ref1" class="text-danger"></span>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="window-footer">
+    <button type="button" onclick="onSaveKategoriJenisKendaraan()" class="btn btn-success space-right">
+        <span class="fa fa-save"></span> Save
+    </button>
+</div>

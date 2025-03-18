@@ -1,0 +1,228 @@
+﻿@using Kendo.Mvc.UI
+@inject IJsonHelper Json;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Dashboard";
+}
+
+<form>
+
+    <div class="flat-box">
+        <h5>
+            Textbox
+        </h5>
+        <div class="form-group">
+            <label class="col-sm-3 ">First Name</label>
+            <div class="col-sm-3">
+                <kendo-textbox name="FirstName" />
+            </div>
+        </div>
+        <h5>
+            PasswordBox
+        </h5>
+        <div class="form-group">
+            <label class="col-sm-3 ">Password</label>
+            <div class="col-sm-3">
+                <vc:password-box name="samplePassword" value="1234567890"></vc:password-box>
+            </div>
+        </div>
+        <p>
+
+        </p>
+        <h5>
+            Number
+        </h5>
+        <div class="form-group">
+            <label class="col-sm-3 ">Numeric</label>
+            <div class="col-sm-3">
+                <kendo-numerictextbox name="sampleNumeric" k-min="0" k-max="9" step="1"/>
+            </div>
+        </div>
+        <p>
+
+        </p>
+        <h5>
+            Checkbox
+        </h5>
+        <div class="form-group">
+            <label class="col-md-3 ">Is Active</label>
+            <div class="col-md-3">
+                <input type="checkbox" class="k-checkbox" checked="checked" />
+                <input type="checkbox" class="k-checkbox" disabled />
+                <input type="checkbox" class="k-checkbox" />
+            </div>
+        </div>
+        <p>
+
+        </p>
+        <h5>
+            Switch
+        </h5>
+        <div class="form-group">
+            <div class="col-md-3 switch-box">
+                @(Html.Kendo().Switch()
+.Name("sampleSwitch")
+                 )
+                <label class="switch-label-on" for="sampleSwitch">Mandatory</label>
+                <label class="switch-label-off" for="sampleSwitch">Not Mandatory</label>
+
+            </div>
+        </div>
+        <p>
+
+        </p>
+        <h5>
+            Radio Group
+        </h5>
+        <div class="form-group">
+            <ul class="radio-group d-flex">
+                <li class="flex-fill">
+                    <input type="radio" name="sampleRadio" id="sr1" class="k-radio" checked="checked">
+                    <label class="k-radio-label" for="sr1">Inbound Call</label>
+                </li>
+                <li class="flex-fill">
+                    <input type="radio" name="sampleRadio" id="sr2" class="k-radio">
+                    <label class="k-radio-label" for="sr2">Outbound Call</label>
+                </li>
+                <li class="flex-fill">
+                    <input type="radio" name="sampleRadio" id="sr3" class="k-radio">
+                    <label class="k-radio-label" for="sr3">Zoom Meeting</label>
+                </li>
+                <li class="flex-fill">
+                    <input type="radio" name="sampleRadio" id="sr4" class="k-radio" disabled="disabled">
+                    <label class="k-radio-label" for="sr4">Email</label>
+                </li>
+            </ul>
+        </div>
+        <p>
+
+        </p>
+        <h5>
+            Date Picker
+        </h5>
+        <div class="form-group">
+            <label class="col-md-3 ">Date</label>
+            <div class="col-md-3 ">
+                @(Html.Kendo().DatePicker()
+.Name("sampleDate")
+                 )
+            </div>
+
+        </div>
+        <div class="form-group">
+            <label class="col-md-3 ">Date Time</label>
+            <div class="col-md-3 ">
+                @(Html.Kendo().DateTimePicker()
+.Name("sampleDateTime")
+                 )
+            </div>
+        </div>
+        <p>
+
+        </p>
+        <h5>Dropdown</h5>
+        <div class="form-group">
+            <div class="col-sm-3">
+                <label>Role </label>
+                <kendo-dropdownlist name="sampleDropdown" option-label="Please Select"
+                                    datavaluefield="Id" datatextfield="Name">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetRoles", "User")" />
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+            </div>
+        </div>
+        <h5>Combobox with add data</h5>
+        <!-- Template -->
+        <script id="footerTemplate" type="text/x-kendo-template">
+            # var value = instance.input.val() #
+            # var id = instance.element[0].id #
+            # var trimmed = value.replace(/\s+/g, '') #
+            # console.log(instance) #
+            # if(value!="" && trimmed !="" && !value.includes("Select") ) { #
+            <div class="d-flex">
+            <button class="k-button flex-fill orangetext" style="display:block; text-align:left" onclick="addRoleFromComboBox('#: id #' , '#: value #')" ontouchend="addRole('#: id #' , '#: value #')">
+            + add <span class="blacktext">'#: value #'</span> as new role
+            </button>
+            </div>
+            # } #
+        </script>
+        <div class="form-group">
+            <div class="col-sm-3">
+                <label>Role </label>
+                <kendo-combobox name="sampleCombobox" placeholder="Please Select"
+                                footer-template-id="footerTemplate" footer-template="" suggest="true" filter="FilterType.Contains"
+                                datavaluefield="Id" datatextfield="Name">
+                    <datasource type="DataSourceTagHelperType.Custom" server-filtering="false">
+                        <transport>
+                            <read url="@Url.Action("GetRoles", "User")" />
+                        </transport>
+                    </datasource>
+                </kendo-combobox>
+            </div>
+        </div>
+        <script>
+            function addRole(widgetId, value, type) {
+                var widget = $("#" + widgetId).data(type);
+                var dataSource = widget.dataSource;
+                var selectedValue = widget.value();
+
+                if (confirm("Are you sure?")) {
+                    conosle.log("OK");
+
+                }
+            }
+            function addRoleFromMultiSelect(widgetId, value, type) {
+                addRole(widgetId, value, 'kendoMultiSelect');
+            }
+            function addRoleFromComboBox(widgetId, value, type) {
+                addRole(widgetId, value, 'kendoComboBox');
+            }
+        </script>
+        <p>
+
+        </p>
+        <h5>Multiselect</h5>
+        <script id="footerTemplateMultipleSelect" type="text/x-kendo-template">
+            # var value = instance.input.val() #
+            # var id = instance.element[0].id #
+            # var trimmed = value.replace(/\s+/g, '') #
+            # console.log(instance) #
+            # if(value!="" && trimmed !="" && !value.includes("Select") ) { #
+            <div class="d-flex">
+            <button class="k-button flex-fill orangetext" style="display:block; text-align:left" onclick="addRoleFromMultiSelect('#: id #' , '#: value #')" ontouchend="addRoleFromMultiSelect('#: id #' , '#: value #')">
+                    + add <span class="blacktext">'#: value #'</span> as new role
+            </button>
+            </div>
+            # } #
+        </script>
+        <div class="form-group">
+            <div class="col-sm-3">
+                <label>Role </label>
+                <kendo-multiselect name="sampleMultiSelect" placeholder="Please Select" clear-button="false"
+                                   footer-template-id="footerTemplateMultipleSelect" filter="FilterType.Contains" max-selected-items="10"
+                                   datavaluefield="Id" datatextfield="Name">
+                    <datasource type="DataSourceTagHelperType.Custom" server-filtering="false">
+                        <transport>
+                            <read url="@Url.Action("GetRoles", "User")" />
+                        </transport>
+                    </datasource>
+                </kendo-multiselect>
+
+            </div>
+
+            <p>
+
+            </p>
+
+
+        </div>
+    </div>
+</form>
+
+
+

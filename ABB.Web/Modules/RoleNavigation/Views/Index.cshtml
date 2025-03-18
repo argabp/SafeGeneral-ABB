@@ -1,0 +1,78 @@
+﻿@using Kendo.Mvc.UI
+@using ABB.Application.RoleNavigations.Queries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Role List";
+}
+
+<script src="~/Modules/RoleNavigation/JS/roleNavigation.index.js"></script>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-5">
+            Role for Menu
+
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search" />
+        </div>
+        <div class="col-md-3">
+            <button class="flat-btn-primary" id="btnAddNewRoleNavigation">Set New Role for Menu</button>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        @(Html.Kendo().Grid<RoleNavigationDto>()
+        .Name("RoleNavigationGrid")
+        .DataSource(dataSource => dataSource.Ajax().PageSize(5)
+            .Read(read => read.Action("GetRoleNavigations", "RoleNavigation").Data("searchFilter"))
+        )
+        .Columns(columns =>
+        {
+            columns.Bound(col => col.RoleId).Hidden();
+            columns.Bound(col => col.RoleName);
+            columns.Bound(col => col.Menu).ClientTemplate("#= brTemplate(data.Menu) #");
+            columns.Bound(col => col.SubMenu).ClientTemplate("#= brTemplate(data.SubMenu) #");
+            columns.Command(command =>
+            {
+                command.Custom("Edit")
+                        .Text(" ")
+                        .IconClass("fa fa-pencil-alt")
+                        .Click("btnEditRoleNavigation_OnClick")
+                        .HtmlAttributes(new { title = "Edit" });
+                command.Custom("Delete")
+                        .Text(" ")
+                        .IconClass("fa fa-trash")
+                        .Click("btnDeleteRoleNavigation_OnClick")
+                        .HtmlAttributes(new { title = "Delete" });
+            }).Title("Action").Width(180);
+        })
+        .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(new int[] { 5, 10, 25, 50 })
+                    )
+        .Sortable()
+        .Resizable(r => r.Columns(true))
+        .Scrollable()
+        .Height(400)
+        .Filterable())
+        @(Html.Kendo().Window()
+            .Name("RoleNavigationWindow")
+            .Title("Role Page")
+            .Width(800)
+            .Height(550)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            .LoadContentFrom("Add", "RoleNavigation")
+          )
+    </div>
+</div>
+

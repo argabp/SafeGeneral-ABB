@@ -1,0 +1,79 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.Zona.Models.DetailZonaViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="DetailZonaForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kode Zona</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="kd_zona" readonly="true" style="width: 100%"/>
+                <span asp-validation-for="kd_zona" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kode Kelas Konstruksi</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="kd_kls_konstr" style="width: 100%" readonly="true"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetKelasKonstruksi", "Zona")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="kd_kls_konstr" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Nama Zona Gempa Bumi</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="nm_zona_gb" style="width: 100%; background-color: #FFFFE1"/>
+                <span asp-validation-for="nm_zona_gb" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kode Okupasi</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="kd_okup" style="width: 100%" class="not-null-dropdown"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetOkupasi", "Zona")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="kd_okup" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Satuan Rate Premi</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="stn_rate_prm" style="width: 100%" class="not-null-dropdown"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetSatuanRatePremi", "Zona")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="stn_rate_prm" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Rate Premi</label>
+            <div class="col-sm-12">
+                <kendo-numerictextbox for="pst_rate_prm" format="{0:n6}" decimals="6" style="width: 100%; background-color: #FFFFE1"/>
+                <span asp-validation-for="pst_rate_prm" class="text-danger"></span>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="window-footer">
+    <button type="button" onclick="onSaveDetailZona()" class="btn btn-success space-right">
+        <span class="fa fa-save"></span> Save
+    </button>
+</div>

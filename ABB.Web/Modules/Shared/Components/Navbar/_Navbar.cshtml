@@ -1,0 +1,69 @@
+﻿@model ABB.Application.Users.Queries.NavbarDto
+
+<input type="hidden" id="hdnUserId" value="@Model?.Id"/>
+<input type="hidden" id="hdnUserName" value="@Model?.UserName"/>
+
+<style>
+  .user-image{
+      float: left;
+      line-height: .8;
+      margin-left: 0.8rem;
+      margin-right: 0.5rem;
+      margin-top: -3px;
+      max-height: 33px;
+      width: auto;
+  }
+</style>
+
+<!-- Navbar -->
+<nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button">
+                <i class="fas fa-bars"></i>
+            </a>
+        </li>
+    </ul>
+
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <strong class="nav-link">@Model?.FullName</strong>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#" role="button">
+                <img src="@Model?.Photo" class="user-image img-circle" alt="@Model?.FullName">
+            </a>
+        </li>
+        <li class="nav-item">
+        <form name="logout" asp-controller="Account" asp-action="Logout" method="post">
+          <a class="nav-link" id="btn-logout" data-widget="control-sidebar" data-slide="true" href="#" role="button">
+            <span class="fas fa-sign-out-alt fa-lg"></span>
+          </a>
+        </form>
+      </li>
+    </ul>
+</nav>
+<!-- /.navbar -->
+<script>
+  $(document).ready(function () {
+        btnLogout_OnClick();
+    });
+
+    function goToHome() {
+        window.location.href = "/Home/Index";
+    }
+
+    function btnLogout_OnClick() {
+        $('#btn-logout').click(function () {
+            showConfirmationById('#LogoutConfirmation','Confirmation', `Are you sure, that you want to logout?`,
+                function () {
+                  ajaxGet("/Account/Logout", () => {
+                    location.href = "/Account/Login";
+                  });
+                }
+            );
+        });
+    }
+ </script>

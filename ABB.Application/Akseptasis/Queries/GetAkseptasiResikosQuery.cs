@@ -1,0 +1,63 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using ABB.Application.Common.Interfaces;
+using MediatR;
+
+namespace ABB.Application.Akseptasis.Queries
+{
+    public class GetAkseptasiResikosQuery : IRequest<List<AkseptasiResikoDto>>
+    {
+        public string SearchKeyword { get; set; }
+        public string DatabaseName { get; set; }
+        public string KodeCabang { get; set; }
+        
+        public string kd_cob { get; set; }
+
+        public string kd_scob { get; set; }
+
+        public string kd_thn { get; set; }
+
+        public string no_aks { get; set; }
+
+        public Int16 no_updt { get; set; }
+    }
+
+    public class GetAkseptasiResikosQueryHandler : IRequestHandler<GetAkseptasiResikosQuery, List<AkseptasiResikoDto>>
+    {
+        private readonly IDbConnectionFactory _connectionFactory;
+
+        public GetAkseptasiResikosQueryHandler(IDbConnectionFactory connectionFactory)
+        {
+            _connectionFactory = connectionFactory;
+        }
+
+        public async Task<List<AkseptasiResikoDto>> Handle(GetAkseptasiResikosQuery request, CancellationToken cancellationToken)
+        {
+	        try
+	        {
+		        _connectionFactory.CreateDbConnection(request.DatabaseName);
+		        return (await _connectionFactory.Query<AkseptasiResikoDto>(@"SELECT p.*, CONVERT(VARCHAR(100), p.no_rsk) + p.kd_endt Id
+				FROM uw04a p
+				WHERE p.kd_cb = @KodeCabang AND 
+				      p.kd_cob = @kd_cob AND 
+				      p.kd_scob = @kd_scob AND 
+				      p.kd_thn = @kd_thn AND 
+				      p.no_aks = @no_aks AND 
+				      p.no_updt = @no_updt", 
+			        new { request.SearchKeyword, request.KodeCabang, 
+				        request.kd_cob, request.kd_scob, request.kd_thn,
+				        request.no_aks, request.no_updt
+			        })).ToList();;
+	        }
+	        catch (Exception e)
+	        {
+		        Console.WriteLine(e);
+		        throw;
+	        }
+            
+        }
+    }
+}

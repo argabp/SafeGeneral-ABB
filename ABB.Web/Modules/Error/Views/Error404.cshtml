@@ -1,0 +1,30 @@
+﻿@using Kendo.Mvc.UI
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Not Found Page";
+}
+
+
+
+
+<div class="flat-box">
+
+    <div class="error-page">
+        <h2 class="headline text-warning" style="margin-right:20px"> 404</h2>
+
+        <div class="error-content" style="margin-top: 20px">
+            <h3><i class="fas fa-exclamation-triangle text-warning"></i> Oops! Page not found.</h3>
+
+            <p>
+                We could not find the page you were looking for.
+                Meanwhile, you may <a href="/home/index">return to dashboard</a>
+            </p>
+
+
+        </div>
+        <!-- /.error-content -->
+    </div>
+
+</div>

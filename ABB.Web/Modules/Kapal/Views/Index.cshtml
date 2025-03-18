@@ -1,0 +1,85 @@
+﻿@using ABB.Application.Kapals.Queries
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.TagHelpers
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Kapal";
+}
+
+<script src="~/Modules/Kapal/JS/kapal.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-8">
+            Kapal
+        </div>
+
+        <div class="col-md-4">
+            <button class="flat-btn-primary" onclick="btnAddKapal_OnClick()">Add New Kapal</button>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<KapalDto>()
+                .Name("KapalGrid")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetKapals", "Kapal").Data("searchFilter"))
+                    .Model(model => model.Id(p => p.kd_kapal))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.kd_kapal).Width(150).Title("Kode Kapal");
+                    columns.Bound(col => col.nm_kapal).Width(150).Title("Nama Kapal");
+                    columns.Command(command =>
+                    {
+                        command.Custom("EditKapal")
+                            .Text("Edit")
+                            .IconClass("fa fa-pencil-alt")
+                            .HtmlAttributes(new { title = "Edit" })
+                            .Click("btnEditKapal_OnClick");
+                        command.Custom("DeleteKapal")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeleteKapal");
+                    }).Width(200);
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit"))
+        
+                )    
+        </div>
+        
+        @(Html.Kendo().Window()
+            .Name("KapalWindow")
+            .Title("Kapal")
+            .Width(400)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+    </div>
+</div>
+

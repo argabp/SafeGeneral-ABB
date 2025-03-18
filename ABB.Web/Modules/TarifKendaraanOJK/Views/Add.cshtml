@@ -1,0 +1,94 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.TarifKendaraanOJK.Models.TarifKendaraanOJKViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="TarifKendaraanOJKForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-group col-sm-12">
+            <input type="hidden" id="kd_kategori" value="@Model.kd_kategori">
+            <label class="col-sm-12">Bentuk Pertanggungan</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="kd_jns_ptg" style="width: 100%" class="primary-dropdown"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetBentukPertanggungan", "TarifKendaraanOJK")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="kd_jns_ptg" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kode Wilayah</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="kd_wilayah" style="width: 100%" class="primary-dropdown"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetWilayah", "TarifKendaraanOJK")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="kd_wilayah" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">No.</label>
+            <div class="col-sm-12">
+                <kendo-numerictextbox for="no_kategori" style="width: 100%; background-color: #00FFFF"/>
+                <span asp-validation-for="no_kategori" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">TSI Awal</label>
+            <div class="col-sm-12">
+                <kendo-numerictextbox for="nilai_ptg_mul" style="width: 100%; background-color: #FFFFE1"/>
+                <span asp-validation-for="nilai_ptg_mul" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">TSI Akhir</label>
+            <div class="col-sm-12">
+                <kendo-numerictextbox for="nilai_ptg_akh" style="width: 100%; background-color: #FFFFE1"/>
+                <span asp-validation-for="nilai_ptg_akh" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Satuan Rate</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="stn_rate_prm" style="width: 100%" class="not-null-dropdown"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetSatuanRate", "TarifKendaraanOJK")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="stn_rate_prm" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Tarif Bawah</label>
+            <div class="col-sm-12">
+                <kendo-numerictextbox for="pst_rate_prm_min" style="width: 100%; background-color: #FFFFE1"/>
+                <span asp-validation-for="pst_rate_prm_min" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Tarif Atas</label>
+            <div class="col-sm-12">
+                <kendo-numerictextbox for="pst_rate_prm_max" style="width: 100%; background-color: #FFFFE1"/>
+                <span asp-validation-for="pst_rate_prm_max" class="text-danger"></span>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="window-footer">
+    <button type="button" onclick="onSaveTarifKendaraanOJK()" class="btn btn-success space-right">
+        <span class="fa fa-save"></span> Save
+    </button>
+</div>

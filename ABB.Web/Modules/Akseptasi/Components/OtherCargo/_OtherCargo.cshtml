@@ -1,0 +1,237 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.Akseptasi.Models.AkseptasiResikoOtherCargoViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/Akseptasi/Components/OtherCargo/otherCargo.js"></script>
+
+<style>
+    p {
+        margin: 0px;
+        padding: 0px;
+    }
+    label {
+        align-content: center;
+    }
+</style>
+
+@{
+    var nomor_aksepatsi = Model.kd_cb.Trim() + Model.kd_cob.Trim() +
+                          Model.kd_scob.Trim() + Model.kd_thn.Trim() + Model.no_aks.Trim();
+}
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="OtherForm" enctype="multipart/form-data" autocomplete="off">
+        @Html.HiddenFor(h => h.grp_kond)
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Akseptasi</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="temp_other_nomor_akseptasi" value="@nomor_aksepatsi" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Update</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="resiko_other_no_updt" value="@Model.no_updt" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Resiko</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="resiko_other_no_rsk" value="@Model.no_rsk" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Endorsment</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist name="resiko_other_kd_endt" style="width: 100%" readonly="true" value="@Model.kd_endt"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeEndorsment", "Akseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Alat Angkut</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_kapal" style="width: 100%" class="not-null-dropdown"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeAlatAngkut", "Akseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nama Kapal</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="nm_kapal" style="width: 100%; background-color: #FFFFE1"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor B/L</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="no_bl" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">No. Packing List</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="no_po" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Invoice</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="no_inv" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor L/C</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="no_lc" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Tanggal Berangkat</label>
+                <div class="col-sm-6">
+                    <kendo-datepicker for="tgl_brkt"></kendo-datepicker>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Dari</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="tempat_brkt" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Tiba</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="tempat_tiba" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Transit</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="tempat_transit" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Consignee</label>
+                <div class="col-sm-6">
+                    <kendo-textarea name="consignee" rows="2" style="width: 100%">@Model.consignee</kendo-textarea>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kondisi Ptg.</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_kond" style="width: 100%"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKondisiPtg", "Akseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Deductible (%)</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" for="pst_deduct" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kondisi Spesial</label>
+                <div class="col-sm-6">
+                    <kendo-textarea name="kond_sps" rows="2" style="width: 100%">@Model.kond_sps</kendo-textarea>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Survey</label>
+                @* <div class="col-sm-6"> *@
+                @*     <kendo-dropdownlist for="kd_kond" style="width: 100%" *@
+                @*                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains"> *@
+                @*         <datasource type="DataSourceTagHelperType.Custom"> *@
+                @*             <transport> *@
+                @*                 <read url="@Url.Action("GetKondisiPtg", "Akseptasi")"/> *@
+                @*             </transport> *@
+                @*         </datasource> *@
+                @*     </kendo-dropdownlist> *@
+                @* </div> *@
+                <div class="col-sm-6">
+                    <kendo-textarea name="survey" rows="2" style="width: 100%">@Model.survey</kendo-textarea>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Transhipment</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="st_transit" style="width: 100%"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetTranshipment", "Akseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Link File</label>
+                <div class="col-sm-6">
+                    <kendo-upload name="linkFileOtherCargo" multiple="false"></kendo-upload>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="window-footer">
+        <button type="button" id="btn-save-akseptasiResikoOtherCargo" class="btn btn-success space-right">
+            <span class="fa fa-save"></span> Save
+        </button>
+        <button type="button" id="btn-next-akseptasiResikoOtherCargo" class="btn btn-primary space-right">
+            Next <span class="fa fa-arrow-right"></span>
+        </button>
+    </div>
+</div>

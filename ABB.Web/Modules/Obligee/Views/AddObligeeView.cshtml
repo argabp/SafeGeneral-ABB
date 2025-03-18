@@ -1,0 +1,93 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.Obligee.Models.SaveObligeeViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<div class="window-body">
+    <form id="ObligeeForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kode Cabang</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="kd_cb" style="width: 100%"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetKodeCabang", "Obligee")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="kd_cb" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kode Group Obligee</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="kd_grp_rk" style="width: 100%"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetKodeGroupObligee", "Obligee")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="kd_grp_rk" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kode Obligee</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="kd_rk" readonly="true" style="width: 100%"/>
+                <span asp-validation-for="kd_rk" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Nama Obligee</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="nm_rk" style="width: 100%"/>
+                <span asp-validation-for="nm_rk" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kota Obligee</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="kd_kota" style="width: 100%"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetKotaObligee", "Obligee")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="kd_kota" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Alamat Obligee</label>
+            <div class="col-sm-12">
+                <kendo-textarea name="almt" rows="3" style="width: 100%">@Model.almt</kendo-textarea>
+                <span asp-validation-for="almt" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Retail/Corporate</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="flag_sic" style="width: 100%"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetFlagSic", "Obligee")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="flag_sic" class="text-danger"></span>
+            </div>
+        </div>
+    </form>
+
+<div class="window-footer">
+    <button type="button" onclick="onSaveObligee()" class="btn btn-success space-right">
+        <span class="fa fa-save"></span> Save
+    </button>
+</div>
+</div>

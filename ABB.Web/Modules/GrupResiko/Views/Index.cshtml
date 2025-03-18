@@ -1,0 +1,128 @@
+﻿@using Kendo.Mvc.UI
+@using ABB.Application.GrupResikos.Queries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Grup Resiko";
+}
+<script src="~/Modules/GrupResiko/JS/grupResiko.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+    #kd_grp_rsk, #kd_rsk{
+        background-color: #00FFFF;
+    }
+    #desk_grp_rsk, #desk_rsk{
+        background-color: #FFFFE1;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Grup Resiko
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<GrupResikoDto>()
+                .Name("GrupResikoGrid")
+                .ToolBar(toolbar => toolbar.Create())
+                .Editable(editable => editable.Mode(GridEditMode.InLine))
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetGrupResikos", "GrupResiko").Data("searchFilter"))
+                    .Model(model => model.Id(p => p.kd_grp_rsk))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.kd_grp_rsk).Width(150).Title("Kode Grup Resiko").Editable("disableGridTextboxWhenEdit");
+                    columns.Bound(col => col.desk_grp_rsk).Width(250).Title("Deskripsi Grup Resiko");
+                    columns.Bound(col => col.kd_jns_grp).Width(150).Title("Kode Jenis Grup");
+                    columns.Command(command =>
+                    {
+                        command.Edit();
+                        command.Custom("DeleteGrupResiko")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeleteGrupResiko");
+                    }).Width(200);
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .ClientDetailTemplateId("template")
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit").Save("onSaveGrupResiko"))
+        
+                )    
+        </div>
+        
+        <script id="template" type="text/kendo-tmpl">
+            @(Html.Kendo().TabStrip()
+                    .Name("tabStrip_#=kd_grp_rsk#")
+                    .SelectedIndex(0)
+                    .Animation(animation => animation.Open(open => open.Fade(FadeDirection.In)))
+                    .Items(items =>
+                    {
+                        items.Add().Text("Detail").Content(@<text>
+                            @(Html.Kendo().Grid<DetailGrupResikoDto>()
+                                .Name("grid_Detail_#=kd_grp_rsk#") // template expression, to be evaluated in the master context
+                                .ToolBar(toolbar => toolbar.Create())
+                                .Editable(editable => editable.Mode(GridEditMode.InLine))
+                                .DataSource(dataSource => dataSource.Ajax()
+                                    .Read(read => read.Action("GetDetailGrupResikos", "GrupResiko", new { kd_grp_rsk = "#=kd_grp_rsk#" }))//.Data("getAsumsiPeriodeParam"))
+                                    .Model(m => m.Id(p => p.Id))
+                                )
+                                .Columns(columns =>
+                                {
+                                    columns.Bound(col => col.kd_grp_rsk).Width(150).Title("Kode Grup Resiko").Editable("disableGridTextbox");
+                                    columns.Bound(col => col.kd_rsk).Width(150).Title("Kode Resiko").Editable("disableGridTextboxWhenEdit");
+                                    columns.Bound(col => col.desk_rsk).Width(150).Title("Deskripsi Resiko");
+                                    columns.Bound(col => col.kd_ref).Width(200).Title("Kode Referensi");
+                                    columns.Bound(col => col.kd_ref1).Width(200).Title("KodeReferensi 1");
+                                    columns.Command(command =>
+                                    {
+                                        command.Edit();
+                                        command.Custom("DeleteDetailGrupResiko")
+                                            .Text("Delete")
+                                            .IconClass("k-icon k-i-delete")
+                                            .HtmlAttributes(new { title="Delete"})
+                                            .Click("onDeleteDetailGrupResiko");
+                                    }).Width(200);
+                                })
+                                .Pageable(pager => pager
+                                    .Refresh(true)
+                                    .Info(true)
+                                    .PageSizes(true)
+                                )
+                                .Sortable()
+                                .Selectable()
+                                .Filterable()
+                                .Scrollable()
+                                .Height(380)
+                                .Resizable(a=>a.Columns(true))
+                                .Events(ev => ev.DataBound("gridAutoFit").Save("onSaveDetailGrupResiko").Edit("onEditDetailGrupResiko"))
+                                .ToClientTemplate())
+                        </text>
+                        );
+                    })
+                    .ToClientTemplate())
+        </script>
+    </div>
+</div>
+

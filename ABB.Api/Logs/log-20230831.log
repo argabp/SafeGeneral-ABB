@@ -1,0 +1,116 @@
+08/31/2023 10:43:32 +07:00 An unhandled exception has occurred while executing the request.
+System.NotSupportedException: The collection type 'Microsoft.AspNetCore.Http.IHeaderDictionary' on 'Microsoft.AspNetCore.Http.IFormFile.Headers' is not supported.
+   at System.Text.Json.JsonClassInfo.GetElementType(Type propertyType, Type parentType, MemberInfo memberInfo, JsonSerializerOptions options)
+   at System.Text.Json.JsonClassInfo.CreateProperty(Type declaredPropertyType, Type runtimePropertyType, Type implementedPropertyType, PropertyInfo propertyInfo, Type parentClassType, JsonConverter converter, JsonSerializerOptions options)
+   at System.Text.Json.JsonClassInfo.AddProperty(Type propertyType, PropertyInfo propertyInfo, Type classType, JsonSerializerOptions options)
+   at System.Text.Json.JsonClassInfo..ctor(Type type, JsonSerializerOptions options)
+   at System.Text.Json.JsonSerializerOptions.GetOrAddClass(Type classType)
+   at System.Text.Json.JsonPropertyInfo.get_ElementClassInfo()
+   at System.Text.Json.JsonSerializer.ReadCore(JsonSerializerOptions options, Utf8JsonReader& reader, ReadStack& readStack)
+   at System.Text.Json.JsonSerializer.ReadCore(JsonReaderState& readerState, Boolean isFinalBlock, ReadOnlySpan`1 buffer, JsonSerializerOptions options, ReadStack& readStack)
+   at System.Text.Json.JsonSerializer.ReadAsync[TValue](Stream utf8Json, Type returnType, JsonSerializerOptions options, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonInputFormatter.ReadRequestBodyAsync(InputFormatterContext context, Encoding encoding)
+   at Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonInputFormatter.ReadRequestBodyAsync(InputFormatterContext context, Encoding encoding)
+   at Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BodyModelBinder.BindModelAsync(ModelBindingContext bindingContext)
+   at Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.BindModelAsync(ActionContext actionContext, IModelBinder modelBinder, IValueProvider valueProvider, ParameterDescriptor parameter, ModelMetadata metadata, Object value)
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerBinderDelegateProvider.<>c__DisplayClass0_0.<<CreateBinderDelegate>g__Bind|0>d.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+08/31/2023 10:44:53 +07:00 An unhandled exception has occurred while executing the request.
+System.NotSupportedException: The collection type 'Microsoft.AspNetCore.Http.IHeaderDictionary' on 'Microsoft.AspNetCore.Http.IFormFile.Headers' is not supported.
+   at System.Text.Json.JsonClassInfo.GetElementType(Type propertyType, Type parentType, MemberInfo memberInfo, JsonSerializerOptions options)
+   at System.Text.Json.JsonClassInfo.CreateProperty(Type declaredPropertyType, Type runtimePropertyType, Type implementedPropertyType, PropertyInfo propertyInfo, Type parentClassType, JsonConverter converter, JsonSerializerOptions options)
+   at System.Text.Json.JsonClassInfo.AddProperty(Type propertyType, PropertyInfo propertyInfo, Type classType, JsonSerializerOptions options)
+   at System.Text.Json.JsonClassInfo..ctor(Type type, JsonSerializerOptions options)
+   at System.Text.Json.JsonSerializerOptions.GetOrAddClass(Type classType)
+   at System.Text.Json.JsonPropertyInfo.get_ElementClassInfo()
+   at System.Text.Json.JsonSerializer.ReadCore(JsonSerializerOptions options, Utf8JsonReader& reader, ReadStack& readStack)
+   at System.Text.Json.JsonSerializer.ReadCore(JsonReaderState& readerState, Boolean isFinalBlock, ReadOnlySpan`1 buffer, JsonSerializerOptions options, ReadStack& readStack)
+   at System.Text.Json.JsonSerializer.ReadAsync[TValue](Stream utf8Json, Type returnType, JsonSerializerOptions options, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonInputFormatter.ReadRequestBodyAsync(InputFormatterContext context, Encoding encoding)
+   at Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonInputFormatter.ReadRequestBodyAsync(InputFormatterContext context, Encoding encoding)
+   at Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BodyModelBinder.BindModelAsync(ModelBindingContext bindingContext)
+   at Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.BindModelAsync(ActionContext actionContext, IModelBinder modelBinder, IValueProvider valueProvider, ParameterDescriptor parameter, ModelMetadata metadata, Object value)
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerBinderDelegateProvider.<>c__DisplayClass0_0.<<CreateBinderDelegate>g__Bind|0>d.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+08/31/2023 10:46:13 +07:00 An unhandled exception has occurred while executing the request.
+System.NotSupportedException: The collection type 'Microsoft.AspNetCore.Http.IHeaderDictionary' on 'Microsoft.AspNetCore.Http.IFormFile.Headers' is not supported.
+   at System.Text.Json.JsonClassInfo.GetElementType(Type propertyType, Type parentType, MemberInfo memberInfo, JsonSerializerOptions options)
+   at System.Text.Json.JsonClassInfo.CreateProperty(Type declaredPropertyType, Type runtimePropertyType, Type implementedPropertyType, PropertyInfo propertyInfo, Type parentClassType, JsonConverter converter, JsonSerializerOptions options)
+   at System.Text.Json.JsonClassInfo.AddProperty(Type propertyType, PropertyInfo propertyInfo, Type classType, JsonSerializerOptions options)
+   at System.Text.Json.JsonClassInfo..ctor(Type type, JsonSerializerOptions options)
+   at System.Text.Json.JsonSerializerOptions.GetOrAddClass(Type classType)
+   at System.Text.Json.JsonPropertyInfo.get_ElementClassInfo()
+   at System.Text.Json.JsonSerializer.ReadCore(JsonSerializerOptions options, Utf8JsonReader& reader, ReadStack& readStack)
+   at System.Text.Json.JsonSerializer.ReadCore(JsonReaderState& readerState, Boolean isFinalBlock, ReadOnlySpan`1 buffer, JsonSerializerOptions options, ReadStack& readStack)
+   at System.Text.Json.JsonSerializer.ReadAsync[TValue](Stream utf8Json, Type returnType, JsonSerializerOptions options, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonInputFormatter.ReadRequestBodyAsync(InputFormatterContext context, Encoding encoding)
+   at Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonInputFormatter.ReadRequestBodyAsync(InputFormatterContext context, Encoding encoding)
+   at Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BodyModelBinder.BindModelAsync(ModelBindingContext bindingContext)
+   at Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.BindModelAsync(ActionContext actionContext, IModelBinder modelBinder, IValueProvider valueProvider, ParameterDescriptor parameter, ModelMetadata metadata, Object value)
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerBinderDelegateProvider.<>c__DisplayClass0_0.<<CreateBinderDelegate>g__Bind|0>d.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+08/31/2023 10:47:14 +07:00 An unhandled exception has occurred while executing the request.
+System.NotSupportedException: The collection type 'Microsoft.AspNetCore.Http.IHeaderDictionary' on 'Microsoft.AspNetCore.Http.IFormFile.Headers' is not supported.
+   at System.Text.Json.JsonClassInfo.GetElementType(Type propertyType, Type parentType, MemberInfo memberInfo, JsonSerializerOptions options)
+   at System.Text.Json.JsonClassInfo.CreateProperty(Type declaredPropertyType, Type runtimePropertyType, Type implementedPropertyType, PropertyInfo propertyInfo, Type parentClassType, JsonConverter converter, JsonSerializerOptions options)
+   at System.Text.Json.JsonClassInfo.AddProperty(Type propertyType, PropertyInfo propertyInfo, Type classType, JsonSerializerOptions options)
+   at System.Text.Json.JsonClassInfo..ctor(Type type, JsonSerializerOptions options)
+   at System.Text.Json.JsonSerializerOptions.GetOrAddClass(Type classType)
+   at System.Text.Json.JsonPropertyInfo.get_ElementClassInfo()
+   at System.Text.Json.JsonSerializer.ReadCore(JsonSerializerOptions options, Utf8JsonReader& reader, ReadStack& readStack)
+   at System.Text.Json.JsonSerializer.ReadCore(JsonReaderState& readerState, Boolean isFinalBlock, ReadOnlySpan`1 buffer, JsonSerializerOptions options, ReadStack& readStack)
+   at System.Text.Json.JsonSerializer.ReadAsync[TValue](Stream utf8Json, Type returnType, JsonSerializerOptions options, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonInputFormatter.ReadRequestBodyAsync(InputFormatterContext context, Encoding encoding)
+   at Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonInputFormatter.ReadRequestBodyAsync(InputFormatterContext context, Encoding encoding)
+   at Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BodyModelBinder.BindModelAsync(ModelBindingContext bindingContext)
+   at Microsoft.AspNetCore.Mvc.ModelBinding.ParameterBinder.BindModelAsync(ActionContext actionContext, IModelBinder modelBinder, IValueProvider valueProvider, ParameterDescriptor parameter, ModelMetadata metadata, Object value)
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerBinderDelegateProvider.<>c__DisplayClass0_0.<<CreateBinderDelegate>g__Bind|0>d.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+08/31/2023 14:07:17 +07:00 Object In: {"id_nds":3,"keterangan":"3251","tgl_status":"0001-01-01T00:00:00","Attachments":[{"ContentDisposition":"form-data; name=Attachments; filename=\"Flow Penutupan Sirama 11.pdf\"; filename*=utf-8''Flow%20Penutupan%20Sirama%2011.pdf","ContentType":"application/pdf","Headers":{"Content-Type":["application/pdf"],"Content-Disposition":["form-data; name=Attachments; filename=\"Flow Penutupan Sirama 11.pdf\"; filename*=utf-8''Flow%20Penutupan%20Sirama%2011.pdf"]},"Length":250357,"Name":"Attachments","FileName":"Flow Penutupan Sirama 11.pdf"},{"ContentDisposition":"form-data; name=Attachments; filename=\"Flow Penutupan Sirama final.pdf\"; filename*=utf-8''Flow%20Penutupan%20Sirama%20final.pdf","ContentType":"application/pdf","Headers":{"Content-Type":["application/pdf"],"Content-Disposition":["form-data; name=Attachments; filename=\"Flow Penutupan Sirama final.pdf\"; filename*=utf-8''Flow%20Penutupan%20Sirama%20final.pdf"]},"Length":250351,"Name":"Attachments","FileName":"Flow Penutupan Sirama final.pdf"}]}
+08/31/2023 14:07:23 +07:00 Dto: {"authkey":"c0ce2e897025efe93b05570847ef543fff543ce2537e39796dea8ad240f011fa","no_nota_dinas":"212","tgl_bayar":"0001-01-01T00:00:00","no_invoice":null,"no_bukti_bayar":"3251","nilai_bayar":3208104.000000,"dokumen":[]}
+08/31/2023 14:07:24 +07:00 Object reference not set to an instance of an object.
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at ABB.Application.ApprovalNotaDinas.Commands.UpdatePembayaranNasLifeCommandHandler.Handle(UpdatePembayaranNasLifeCommand request, CancellationToken cancellationToken) in C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Application\ApprovalNotaDinas\Commands\UpdatePembayaranNasLifeCommand.cs:line 69
+08/31/2023 14:07:24 +07:00 Error Unhandle : for Request "UpdatePembayaranNasLifeCommand" UpdatePembayaranNasLifeCommand { id_nds: 3, no_bukti_bayar: "3251", tgl_bayar: 01/01/0001 00:00:00, Attachments: null }
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at ABB.Application.ApprovalNotaDinas.Commands.UpdatePembayaranNasLifeCommandHandler.Handle(UpdatePembayaranNasLifeCommand request, CancellationToken cancellationToken) in C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Application\ApprovalNotaDinas\Commands\UpdatePembayaranNasLifeCommand.cs:line 117
+   at ABB.Application.Common.Behaviours.ValidationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Application\Common\Behaviours\ValidationBehaviour.cs:line 36
+   at ABB.Application.Common.Behaviours.UnhandledExceptionBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Application\Common\Behaviours\UnhandledExceptionBehaviour.cs:line 26
+08/31/2023 14:09:27 +07:00 Object In: {"id_nds":3,"keterangan":"2351","tgl_status":"2022-02-09T00:00:00","Attachments":[{"ContentDisposition":"form-data; name=Attachments; filename=\"Flow Penutupan Sirama 11.pdf\"; filename*=utf-8''Flow%20Penutupan%20Sirama%2011.pdf","ContentType":"application/pdf","Headers":{"Content-Type":["application/pdf"],"Content-Disposition":["form-data; name=Attachments; filename=\"Flow Penutupan Sirama 11.pdf\"; filename*=utf-8''Flow%20Penutupan%20Sirama%2011.pdf"]},"Length":250357,"Name":"Attachments","FileName":"Flow Penutupan Sirama 11.pdf"},{"ContentDisposition":"form-data; name=Attachments; filename=\"Flow Penutupan Sirama final.pdf\"; filename*=utf-8''Flow%20Penutupan%20Sirama%20final.pdf","ContentType":"application/pdf","Headers":{"Content-Type":["application/pdf"],"Content-Disposition":["form-data; name=Attachments; filename=\"Flow Penutupan Sirama final.pdf\"; filename*=utf-8''Flow%20Penutupan%20Sirama%20final.pdf"]},"Length":250351,"Name":"Attachments","FileName":"Flow Penutupan Sirama final.pdf"}]}
+08/31/2023 14:11:00 +07:00 Object In: {"id_nds":3,"keterangan":"4326","tgl_status":"2023-08-09T00:00:00","Attachments":[{"ContentDisposition":"form-data; name=Attachments; filename=\"Flow Penutupan Sirama 11.pdf\"; filename*=utf-8''Flow%20Penutupan%20Sirama%2011.pdf","ContentType":"application/pdf","Headers":{"Content-Type":["application/pdf"],"Content-Disposition":["form-data; name=Attachments; filename=\"Flow Penutupan Sirama 11.pdf\"; filename*=utf-8''Flow%20Penutupan%20Sirama%2011.pdf"]},"Length":250357,"Name":"Attachments","FileName":"Flow Penutupan Sirama 11.pdf"},{"ContentDisposition":"form-data; name=Attachments; filename=\"Flow Penutupan Sirama final.pdf\"; filename*=utf-8''Flow%20Penutupan%20Sirama%20final.pdf","ContentType":"application/pdf","Headers":{"Content-Type":["application/pdf"],"Content-Disposition":["form-data; name=Attachments; filename=\"Flow Penutupan Sirama final.pdf\"; filename*=utf-8''Flow%20Penutupan%20Sirama%20final.pdf"]},"Length":250351,"Name":"Attachments","FileName":"Flow Penutupan Sirama final.pdf"}]}
+08/31/2023 14:13:38 +07:00 Object In: {"id_nds":3,"keterangan":"3251","tgl_status":"2023-08-09T00:00:00","Attachments":[{"ContentDisposition":"form-data; name=Attachments; filename=\"Flow Penutupan Sirama 11.pdf\"; filename*=utf-8''Flow%20Penutupan%20Sirama%2011.pdf","ContentType":"application/pdf","Headers":{"Content-Type":["application/pdf"],"Content-Disposition":["form-data; name=Attachments; filename=\"Flow Penutupan Sirama 11.pdf\"; filename*=utf-8''Flow%20Penutupan%20Sirama%2011.pdf"]},"Length":250357,"Name":"Attachments","FileName":"Flow Penutupan Sirama 11.pdf"},{"ContentDisposition":"form-data; name=Attachments; filename=\"Flow Penutupan Sirama final.pdf\"; filename*=utf-8''Flow%20Penutupan%20Sirama%20final.pdf","ContentType":"application/pdf","Headers":{"Content-Type":["application/pdf"],"Content-Disposition":["form-data; name=Attachments; filename=\"Flow Penutupan Sirama final.pdf\"; filename*=utf-8''Flow%20Penutupan%20Sirama%20final.pdf"]},"Length":250351,"Name":"Attachments","FileName":"Flow Penutupan Sirama final.pdf"}]}
+08/31/2023 14:13:44 +07:00 Dto: {"authkey":"c0ce2e897025efe93b05570847ef543fff543ce2537e39796dea8ad240f011fa","no_nota_dinas":"212","tgl_bayar":"2023-08-09T00:00:00","no_invoice":null,"no_bukti_bayar":"3251","nilai_bayar":3208104.000000,"dokumen":[]}
+08/31/2023 14:16:13 +07:00 Object In: {"id_nds":3,"keterangan":"325","tgl_status":"2023-08-09T00:00:00","Attachments":[{"ContentDisposition":"form-data; name=Attachments; filename=\"Flow Penutupan Sirama 11.pdf\"; filename*=utf-8''Flow%20Penutupan%20Sirama%2011.pdf","ContentType":"application/pdf","Headers":{"Content-Type":["application/pdf"],"Content-Disposition":["form-data; name=Attachments; filename=\"Flow Penutupan Sirama 11.pdf\"; filename*=utf-8''Flow%20Penutupan%20Sirama%2011.pdf"]},"Length":250357,"Name":"Attachments","FileName":"Flow Penutupan Sirama 11.pdf"},{"ContentDisposition":"form-data; name=Attachments; filename=\"Flow Penutupan Sirama final.pdf\"; filename*=utf-8''Flow%20Penutupan%20Sirama%20final.pdf","ContentType":"application/pdf","Headers":{"Content-Type":["application/pdf"],"Content-Disposition":["form-data; name=Attachments; filename=\"Flow Penutupan Sirama final.pdf\"; filename*=utf-8''Flow%20Penutupan%20Sirama%20final.pdf"]},"Length":250351,"Name":"Attachments","FileName":"Flow Penutupan Sirama final.pdf"}]}
+08/31/2023 14:16:26 +07:00 Dto: {"authkey":"c0ce2e897025efe93b05570847ef543fff543ce2537e39796dea8ad240f011fa","no_nota_dinas":"212","tgl_bayar":"2023-08-09T00:00:00","no_invoice":null,"no_bukti_bayar":"325","nilai_bayar":3208104.000000,"dokumen":[]}

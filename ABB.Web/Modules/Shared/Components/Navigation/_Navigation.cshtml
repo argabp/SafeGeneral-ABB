@@ -1,0 +1,86 @@
+﻿@using System.Text
+@using ABB.Application.Navigations.Queries
+@model List<ABB.Application.Navigations.Queries.LoggedInNavigationDto>
+
+@{
+    var CurrentController = ViewContext.RouteData.Values["controller"].ToString();
+    var CurrentAction = ViewContext.RouteData.Values["action"].ToString();
+}
+<nav class="mt-2">
+    <div>
+        <input type="hidden" id="SelectedModule" value="@ViewBag.Module">
+        <select class="form-control select2" name="Module" id="Module" style="width: 100%;" onchange="changeModule(this)">
+        </select>
+    </div>
+    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        @Html.Raw(BuildNavigation(Model, CurrentController, CurrentAction))
+    </ul>
+</nav>
+@functions
+{
+    private static string BuildNavigation(List<LoggedInNavigationDto> navigations, string CurrentController, string CurrentAction)
+    {
+        var topLevelNavigations = navigations.Where(x => x.ParentId == 0).ToList();
+        var strBuilder = new StringBuilder();
+        foreach (var nav in topLevelNavigations)
+        {
+            if (HasSubNavigation(navigations,nav.NavigationId))
+            {
+                strBuilder.Append(GetSubNavigationItem(navigations, nav, CurrentController, CurrentAction));
+            }
+            else
+            {
+                strBuilder.Append(GetNavigationItem(nav, CurrentController, CurrentAction));
+            }
+
+        }
+        return strBuilder.ToString();
+    }
+    private static bool HasSubNavigation(List<LoggedInNavigationDto> navigations, int id)
+    {
+        return navigations.Where(x => x.ParentId == id)?.Any() ?? false;
+    }
+
+    private static string GetNavigationItem(LoggedInNavigationDto nav, string CurrentController, string CurrentAction)
+    {
+        string openInNewWindow = "";
+        if(nav.Controller=="WebReportDesigner" && nav.Action == "Index")
+            openInNewWindow=" target='_blank' ";
+        var selectedCss = nav.Controller == CurrentController && nav.Action == CurrentAction ? "selected" : "";
+        var strBuilder = new StringBuilder();
+        strBuilder.Append($"<li class='nav-item {selectedCss}'>");
+        strBuilder.Append($"<a href='/{nav.Controller}/{nav.Action}' {openInNewWindow} class='nav-link'>");
+        strBuilder.Append($"<i class='nav-icon fas {nav.Icon}'></i>");
+        strBuilder.Append($"<p> {nav.Text} </p>");
+        strBuilder.Append("</a></li>");
+        return strBuilder.ToString();
+    }
+    private static string GetOpenParentNavigationCss(List<LoggedInNavigationDto> subNavigation, string CurrentController, string CurrentAction)
+    {
+        string css = "";
+        foreach (var subnav in subNavigation)
+        {
+            if (subnav.Controller == CurrentController && subnav.Action == CurrentAction)
+                css = "menu-is-opening menu-open";
+        }
+        return css;
+    }
+    private static string GetSubNavigationItem(List<LoggedInNavigationDto> navigations, LoggedInNavigationDto nav, string CurrentController, string CurrentAction)
+    {
+        var strBuilder = new StringBuilder();
+        var subNavigation = navigations.Where(x => x.ParentId == nav.NavigationId).OrderBy(x => x.Sort).ToList();
+        strBuilder.Append($"<li class='nav-item {GetOpenParentNavigationCss(subNavigation, CurrentController, CurrentAction)}'>");
+        strBuilder.Append($"<a href='#' class='nav-link'>");
+        strBuilder.Append($"<i class='nav-icon fas {nav.Icon}'></i>");
+        strBuilder.Append($"<p> {nav.Text} <i class='right fas fa-angle-left'></i></p>");
+        strBuilder.Append($"</a>");
+        strBuilder.Append("<ul class='nav nav-treeview'>");
+        foreach (var subnav in subNavigation)
+        {
+            strBuilder.Append(GetNavigationItem(subnav, CurrentController, CurrentAction));
+        }
+        strBuilder.Append(@"</ul></li> ");
+        return strBuilder.ToString();
+    }
+
+}

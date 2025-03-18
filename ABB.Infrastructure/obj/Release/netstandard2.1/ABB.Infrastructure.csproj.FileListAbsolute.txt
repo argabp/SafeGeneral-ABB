@@ -1,0 +1,14 @@
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Infrastructure\bin\Release\netstandard2.1\ABB.Infrastructure.deps.json
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Infrastructure\bin\Release\netstandard2.1\ABB.Infrastructure.dll
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Infrastructure\bin\Release\netstandard2.1\ABB.Infrastructure.pdb
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Infrastructure\bin\Release\netstandard2.1\ABB.Application.dll
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Infrastructure\bin\Release\netstandard2.1\ABB.Domain.dll
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Infrastructure\bin\Release\netstandard2.1\ABB.Application.pdb
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Infrastructure\bin\Release\netstandard2.1\ABB.Domain.pdb
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Infrastructure\obj\Release\netstandard2.1\ABB.Infrastructure.csprojAssemblyReference.cache
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Infrastructure\obj\Release\netstandard2.1\ABB.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Infrastructure\obj\Release\netstandard2.1\ABB.Infrastructure.AssemblyInfo.cs
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Infrastructure\obj\Release\netstandard2.1\ABB.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Infrastructure\obj\Release\netstandard2.1\ABB.Infrastructure.csproj.CopyComplete
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Infrastructure\obj\Release\netstandard2.1\ABB.Infrastructure.dll
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Infrastructure\obj\Release\netstandard2.1\ABB.Infrastructure.pdb

@@ -1,0 +1,330 @@
+﻿@using ABB.Application.Kotas.Queries
+@using Kendo.Mvc.UI
+@using ABB.Application.Lokasis.Queries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Lokasi";
+}
+
+<script src="~/Modules/Lokasi/JS/lokasi.index.js"></script>
+@* <script src="~/Modules/Lokasi/JS/lokasi.detail.js"></script> *@
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+    #kd_prop, #kd_pos, #kd_kab, #kd_kec, #kd_kel{
+        background-color: #00FFFF;
+    }
+    #nm_prop, #nm_kab, #nm_kec, #nm_kel{
+        background-color: #FFFFE1;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Provinsi
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<ProvinsiDto>()
+                .Name("ProvinsiGrid")
+                .ToolBar(toolbar => toolbar.Create())
+                .Editable(editable => editable.Mode(GridEditMode.InLine))
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetProvinsi", "Lokasi"))
+                    .Model(model => model.Id(p => p.kd_prop))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.kd_prop).Width(100).Title("Kode Provinsi").Editable("disableGridTextboxWhenEdit");
+                    columns.Bound(col => col.nm_prop).Width(200).Title("Nama Provinsi");
+                    columns.Bound(col => col.no_pos).Width(100).Title("No Pos");
+                    columns.Bound(col => col.kd_wilayah).Width(100).Title("Kode Wilayah");
+                    columns.Command(command =>
+                    {
+                        command.Edit();
+                        command.Custom("DeleteProvinsi")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeleteProvinsi");
+                    }).Width(200);
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .ClientDetailTemplateId("template")
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit").Save("onSaveProvinsi"))
+        
+                )    
+        </div>
+        
+        <script id="template" type="text/kendo-tmpl">
+            @(Html.Kendo().TabStrip()
+                    .Name("tabStrip_#=kd_prop#")
+                    .SelectedIndex(0)
+                    .Animation(animation => animation.Open(open => open.Fade(FadeDirection.In)))
+                    .Items(items =>
+                    {
+                        items.Add().Text("Kabupaten").Content(@<text>
+                            @(Html.Kendo().Grid<KabupatenDto>()
+                                .Name("grid_Kabupaten_#=kd_prop#") // template expression, to be evaluated in the master context
+                                .ToolBar(toolbar => toolbar.Create())
+                                .Editable(editable => editable.Mode(GridEditMode.InLine))
+                                .DataSource(dataSource => dataSource.Ajax()
+                                    .Read(read => read.Action("GetKabupaten", "Lokasi", new { kd_prop = "#=kd_prop#" }))//.Data("getAsumsiPeriodeParam"))
+                                    .Model(m => m.Id(p => p.Id))
+                                )
+                                .Columns(columns =>
+                                {
+                                    columns.Bound(col => col.kd_prop).Width(100).Title("Kode Provinsi").Editable("disableGridTextbox");
+                                    columns.Bound(col => col.kd_kab).Width(100).Title("Kode Kabupaten").Editable("disableGridTextboxWhenEdit");
+                                    columns.Bound(col => col.nm_kab).Width(200).Title("Nama Kabupaten");
+                                    columns.Command(command =>
+                                    {
+                                        command.Edit();
+                                        command.Custom("DeleteKabupaten")
+                                            .Text("Delete")
+                                            .IconClass("k-icon k-i-delete")
+                                            .HtmlAttributes(new { title="Delete"})
+                                            .Click("onDeleteKabupaten");
+                                    }).Width(200);
+                                })
+                                .Pageable(pager => pager
+                                    .Refresh(true)
+                                    .Info(true)
+                                    .PageSizes(true)
+                                )
+                                .Sortable()
+                                .Selectable()
+                                .Filterable()
+                                .Scrollable()
+                                .Height(380)
+                                .Resizable(a=>a.Columns(true))
+                                .Events(ev => ev.DataBound("gridAutoFit").Change("onKabupatenChange").Save("onSaveKabupaten").Edit("onEditKabupaten"))
+                                .ToClientTemplate())
+                        </text>
+                        );
+                        items.Add().Text("Kecamatan").Content(
+                            @<text>
+                        @(Html.Kendo().Grid<KecamatanDto>()
+                            .Name("grid_Kecamatan_#=kd_prop#")
+                            .ToolBar(toolbar => toolbar.Create())
+                            .Editable(editable => editable.Mode(GridEditMode.InLine))
+                            .DataSource(dataSource => dataSource.Ajax()
+                                .Read(read => read.Action("GetKecamatan", "Lokasi").Data("getKecamatanParam"))
+                                .Model(m =>
+                                {
+                                    m.Id(p => p.Id);
+                                })
+                            )
+                            .Columns(columns =>
+                            {
+                                columns.Bound(col => col.kd_prop).Width(100).Title("Kode Provinsi").Editable("disableGridTextbox");
+                                columns.Bound(col => col.kd_kab).Width(100).Title("Kode Kabupaten").Editable("disableGridTextbox");
+                                columns.Bound(col => col.kd_kec).Width(100).Title("Kode Kecamatan").Editable("disableGridTextboxWhenEdit");
+                                columns.Bound(col => col.nm_kec).Width(200).Title("Nama Kecamatan");
+                                columns.Command(command =>
+                                {
+                                    command.Edit();
+                                    command.Custom("DeleteKecamatan")
+                                        .Text("Delete")
+                                        .IconClass("k-icon k-i-delete")
+                                        .HtmlAttributes(new { title="Delete"})
+                                        .Click("onDeleteKecamatan");
+                                }).Width(200);
+                            })
+                            .Pageable(pager => pager
+                                        .Refresh(true)
+                                        .Info(true)
+                                        .PageSizes(true)
+                                        )
+                            .Sortable()
+                                .Filterable()
+                            .Scrollable()
+                            .Selectable()
+                            .Height(380)
+                            .Resizable(a=>a.Columns(true))
+                            .Events(ev => ev.DataBound("gridAutoFit").Change("onKecamatanChange").Save("onSaveKecamatan").Edit("onEditKecamatan"))
+                            .ToClientTemplate())
+                        </text>
+                        );
+                        items.Add().Text("Kelurahan").Content(
+                            @<text>
+                        @(Html.Kendo().Grid<KelurahanDto>()
+                            .Name("grid_Kelurahan_#=kd_prop#")
+                            .ToolBar(toolbar => toolbar.Create())
+                            .Editable(editable => editable.Mode(GridEditMode.InLine))
+                            .DataSource(dataSource => dataSource.Ajax()
+                                .Read(read => read.Action("GetKelurahan", "Lokasi").Data("getKelurahanParam"))
+                                .Model(m =>
+                                {
+                                    m.Id(p => p.Id);
+                                })
+                            )
+                            .Columns(columns =>
+                            {
+                                columns.Bound(col => col.kd_prop).Width(100).Title("Kode Provinsi").Editable("disableGridTextbox");
+                                columns.Bound(col => col.kd_kab).Width(100).Title("Kode Kabupaten").Editable("disableGridTextbox");
+                                columns.Bound(col => col.kd_kec).Width(100).Title("Kode Kecamatan").Editable("disableGridTextbox");
+                                columns.Bound(col => col.kd_kel).Width(100).Title("Kode Kelurahan").Editable("disableGridTextboxWhenEdit");
+                                columns.Bound(col => col.nm_kel).Width(200).Title("Nama Kelurahan");
+                                columns.Command(command =>
+                                {
+                                    command.Edit();
+                                    command.Custom("DeleteKelurahan")
+                                        .Text("Delete")
+                                        .IconClass("k-icon k-i-delete")
+                                        .HtmlAttributes(new { title="Delete"})
+                                        .Click("onDeleteKelurahan");
+                                }).Width(200);
+                            })
+                            .Pageable(pager => pager
+                                        .Refresh(true)
+                                        .Info(true)
+                                        .PageSizes(true)
+                                        )
+                            .Sortable()
+                                .Filterable()
+                            .Scrollable()
+                            .Height(380)
+                            .Resizable(a=>a.Columns(true))
+                            .Events(ev => ev.DataBound("gridAutoFit").Save("onSaveKelurahan").Edit("onEditKelurahan"))
+                            .ToClientTemplate())
+                        </text>
+                        );
+                    })
+                    .ToClientTemplate())
+        </script>
+    </div>
+</div>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Lokasi Resiko
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<LokasiResikoDto>()
+                .Name("LokasiResikoGrid")
+                .ToolBar(toolbar => toolbar.Create())
+                .Editable(editable => editable.Mode(GridEditMode.InLine))
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetLokasiResiko", "Lokasi"))
+                    .Model(model => model.Id(p => p.kd_pos))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.kd_pos).Width(100).Title("Kode Pos").Editable("disableGridTextboxWhenEdit");
+                    columns.Bound(col => col.jalan).Width(200).Title("Jalan");
+                    columns.Bound(col => col.kota).Width(100).Title("Kota");
+                    columns.Command(command =>
+                    {
+                        command.Edit();
+                        command.Custom("DeleteLokasiResiko")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title = "Delete" })
+                            .Click("onDeleteLokasiResiko");
+                    }).Width(200);
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .ClientDetailTemplateId("templateDetailLokasiResiko")
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Selectable()
+                .Height(450)
+                .Resizable(a => a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit").Save("onSaveLokasiResiko"))
+
+                )
+        </div>
+
+        <script id="templateDetailLokasiResiko" type="text/kendo-tmpl">
+            <div class="row">
+                <div class="col-md-4 k-button k-button-icontext">
+                    <button style="border: none;" onclick="btnAddDetailLokasiResiko_OnClick(#=kd_pos#)">+ ADD NEW RECORD</button>
+                </div>
+            </div>
+            @(Html.Kendo().Grid<DetailLokasiResikoDto>()
+                .Name("grid_LokasiResiko_#=kd_pos#")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetDetailLokasiResiko", "Lokasi", new { kd_pos = "#=kd_pos#" })) //.Data("getAsumsiPeriodeParam"))
+                    .Model(m => m.Id(p => p.Id))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.kd_pos).Width(100).Title("Kode Pos").Editable("disableGridTextbox");
+                    columns.Bound(col => col.kd_lok_rsk).Width(150).Title("Kode Lokasi Resiko").Editable("disableGridTextboxWhenEdit");
+                    columns.Bound(col => col.gedung).Width(200).Title("Gedung");
+                    columns.Bound(col => col.alamat).Width(300).Title("Alamat");
+                    columns.Bound(col => col.kd_prop).Width(100).Title("Nama Provinsi").Width(200).ClientTemplate("\\#=nm_prop\\#").EditorTemplateName("KendoDropdownProvinsi");
+                    columns.Bound(col => col.kd_kab).Width(100).Title("Nama Kabupaten").Width(200).ClientTemplate("\\#=nm_kab\\#");
+                    columns.Bound(col => col.kd_kec).Width(100).Title("Nama Kecamatan").Width(200).ClientTemplate("\\#=nm_kec\\#");
+                    columns.Bound(col => col.kd_kec).Width(100).Title("Nama Kelurahan").Width(200).ClientTemplate("\\#=nm_kel\\#");
+                    columns.Command(command =>
+                    {
+                        command.Custom("EditDetailLokasiResiko")
+                            .Text("Edit")
+                            .IconClass("fa fa-pencil-alt")
+                            .HtmlAttributes(new { title = "Edit" })
+                            .Click("btnEditDetailLokasiResiko_OnClick");
+                        command.Custom("DeleteDetailLokasiResiko")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title = "Delete" })
+                            .Click("onDeleteDetailLokasiResiko");
+                    }).Width(200);
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Selectable()
+                .Filterable()
+                .Scrollable()
+                .Height(380)
+                .Resizable(a => a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit").Save("onSaveDetailLokasiResiko").Edit("onEditDetailLokasiResiko"))
+                .ToClientTemplate())
+        
+        
+        </script>
+
+        @(Html.Kendo().Window()
+            .Name("DetailLokasiResikoWindow")
+            .Title("Detail Lokasi Resiko")
+            .Width(400)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+    </div>
+</div>

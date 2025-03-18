@@ -1,0 +1,93 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.Kapal.Models.KapalViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="KapalForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kode Kapal</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="kd_kapal" style="width: 100%; background-color: #00FFFF"/>
+                <span asp-validation-for="kd_kapal" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Nama Kapal</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="nm_kapal" style="width: 100%"/>
+                <span asp-validation-for="nm_kapal" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Jenis Kapal</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="merk_kapal" style="width: 100%"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetJenisKapal", "Kapal")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="merk_kapal" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Bendera</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="kd_negara" style="width: 100%" class="not-null-dropdown"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetNegara", "Kapal")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="merk_kapal" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Tahun Buat</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="thn_buat" style="width: 100%"/>
+                <span asp-validation-for="thn_buat" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Gross Tonage</label>
+            <div class="col-sm-12">
+                <kendo-numerictextbox for="grt" style="width: 100%"/>
+                <span asp-validation-for="grt" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Klasifikasi</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="st_class" style="width: 100%"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetKlasifikasi", "Kapal")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="st_class" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Ekuitas</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="ekuitas" style="width: 100%"/>
+                <span asp-validation-for="ekuitas" class="text-danger"></span>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="window-footer">
+    <button type="button" onclick="onSaveKapal()" class="btn btn-success space-right">
+        <span class="fa fa-save"></span> Save
+    </button>
+</div>

@@ -1,0 +1,108 @@
+﻿@using Kendo.Mvc.UI
+@using ABB.Application.Obligees.Queries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Obligee";
+}
+
+<script src="~/Modules/Obligee/JS/obligee.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-8">
+            Obligee
+        </div>
+
+        <div class="col-md-4">
+            <button class="flat-btn-primary" onclick="btnAddObligee_OnClick()">Add New Obligee</button>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<ObligeeDto>()
+                .Name("ObligeeGrid")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetObligees", "Obligee").Data("searchFilter"))
+                    .Model(model => model.Id(p => p.Id))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
+                    columns.Bound(col => col.nm_grp_rk).Width(150).Title("Nama Group Obligee");
+                    columns.Bound(col => col.kd_rk).Width(150).Title("Kode Obligee");
+                    columns.Bound(col => col.nm_rk).Width(150).Title("Nama Obligee");
+                    columns.Bound(col => col.nm_kota).Width(150).Title("Kota Obligee");
+                    columns.Bound(col => col.almt).Width(150).Title("Alamat Obligee");
+                    columns.Bound(col => col.nm_sic).Width(150).Title("Retail/Corporate");
+                    columns.Command(command =>
+                    {
+                        command.Custom("EditObligee")
+                            .Text("Edit")
+                            .IconClass("fa fa-pencil-alt")
+                            .HtmlAttributes(new { title = "Edit" })
+                            .Click("btnEditObligee_OnClick");
+                        command.Custom("DeleteObligee")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeleteObligee");
+                        command.Custom("EditDetailObligee")
+                            .Text("Detail")
+                            .IconClass("fa fa-pencil-alt")
+                            .HtmlAttributes(new { title = "Edit" })
+                            .Click("btnEditDetailObligee_OnClick");
+                        command.Custom("DeleteDetailObligee")
+                            .Text("Delete Detail")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeleteDetailObligee");
+                    }).Width(200);
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit"))
+        
+                )    
+        </div>
+        
+        @(Html.Kendo().Window()
+            .Name("ObligeeWindow")
+            .Title("Obligee")
+            .Width(400)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+        
+        @(Html.Kendo().Window()
+            .Name("DetailObligeeWindow")
+            .Title("Detail Obligee")
+            .Width(900)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+    </div>
+</div>
+

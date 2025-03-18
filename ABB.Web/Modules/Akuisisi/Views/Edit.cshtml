@@ -1,0 +1,86 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.Akuisisi.Models.AkuisisiViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="AkuisisiForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kode COB</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="kd_cob" style="width: 100%" readonly="true"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetCOB", "Akuisisi")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="kd_cob" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kode SCOB</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="kd_scob" style="width: 100%" readonly="true"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetSCOB", "Akuisisi")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="kd_scob" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kode Tahun</label>
+            <div class="col-sm-12">
+                <kendo-numerictextbox for="kd_thn" style="width: 100%" readonly="true"/>
+                <span asp-validation-for="kd_thn" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kode Mata Uang</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="kd_mtu" style="width: 100%" readonly="true"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetMataUang", "Akuisisi")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="kd_mtu" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Nilai Minimum Premi</label>
+            <div class="col-sm-12">
+                <kendo-numerictextbox for="nilai_min_acq" style="width: 100%; background-color: #FFFFE1"/>
+                <span asp-validation-for="nilai_min_acq" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Nilai Maksimum Premi</label>
+            <div class="col-sm-12">
+                <kendo-numerictextbox for="nilai_maks_acq" style="width: 100%; background-color: #FFFFE1"/>
+                <span asp-validation-for="nilai_maks_acq" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Presentasi Nilai Akuisisi</label>
+            <div class="col-sm-12">
+                <kendo-numerictextbox for="nilai_acq" style="width: 100%; background-color: #FFFFE1"/>
+                <span asp-validation-for="nilai_acq" class="text-danger"></span>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="window-footer">
+    <button type="button" onclick="onSaveAkuisisi()" class="btn btn-success space-right">
+        <span class="fa fa-save"></span> Save
+    </button>
+</div>

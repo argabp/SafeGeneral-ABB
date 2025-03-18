@@ -1,0 +1,73 @@
+﻿@using Kendo.Mvc.UI
+@using ABB.Application.RoleModules.Queries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Role Module";
+}
+
+<script src="~/Modules/RoleModule/JS/roleModule.index.js"></script>
+
+<div class="flat-box">
+    <div class="flat-box-title">
+        Role Module
+
+        <div class="pullright-flex">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search" />
+            <button class="flat-btn-primary" id="btnAddRoleModule">Add Role Module</button>
+        </div>
+    </div>
+    <div class="flat-box-content">
+        @(Html.Kendo().Grid<RoleModuleViewDto>()
+        .Name("RoleModuleGrid")
+        .DataSource(dataSource => dataSource.Ajax().PageSize(10)
+            .Read(read => read.Action("GetRoleModules", "RoleModule").Data("searchFilter"))
+        )
+        .Columns(columns =>
+        {
+            columns.Bound(col => col.RoleId).Hidden();
+            columns.Bound(col => col.RoleName).Width(100);
+            columns.Bound(col => col.Modules).ClientTemplate("#= brTemplate(Modules)#").Width(250);
+            columns.Command(command =>
+            {
+                command.Custom("Edit")
+                        .Text(" ")
+                        .IconClass("fa fa-pencil-alt")
+                        .HtmlAttributes(new { title = "Edit" })
+                        .Click("btnEditRoleModule_OnClick");
+                command.Custom("Delete")
+                        .Text(" ")
+                        .IconClass("fa fa-trash")
+                        .HtmlAttributes(new { title = "Delete" })
+                        .Click("btnDeleteRoleModule_OnClick");
+
+            }).Title("Action").Width(80);
+
+        })
+        .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                    )
+        .Scrollable(a=>a.Height(420))
+        .Resizable(a => a.Columns(true))
+        .Events(ev => ev.DataBound("gridAutoFit"))
+        .Sortable()
+        .Filterable())
+        @(Html.Kendo().Window()
+            .Name("RoleModuleWindow")
+            .Title("Add Role Module")
+            .Width(600)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            .LoadContentFrom("Add", "RoleModule")
+          )
+    </div>
+</div>
+

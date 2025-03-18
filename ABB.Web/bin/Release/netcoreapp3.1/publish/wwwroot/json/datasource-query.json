@@ -1,0 +1,14 @@
+[
+  {
+    "Name": "Query Bar & Line",
+    "Query": "select Convert(varchar(10),CreatedDate,110) CreatedDate, \r\n(select count(*) from tr_application where EFormStatusId='3025'\r\n\t and Convert(varchar(10),CreatedDate,110) = Convert(varchar(10),a.CreatedDate,110)) 'NEW',\r\n(select count(*) from tr_application where EFormStatusId='3026'\r\n\t and Convert(varchar(10),CreatedDate,110) = Convert(varchar(10),a.CreatedDate,110)) 'VERIFIED',\r\n(select count(*) from tr_application where EFormStatusId='3031'\r\n\t and Convert(varchar(10),CreatedDate,110) = Convert(varchar(10),a.CreatedDate,110)) 'REJECT'\r\nfrom TR_Application a\r\nleft join ms_eformstatus es on a.EFormStatusId = es.EFormStatusId\r\nWHERE a.EFormStatusId <> 0\r\nGroup By Convert(varchar(10),CreatedDate,110)\r\norder by CreatedDate "
+  },
+  {
+    "Name": "Query Pie & Progress",
+    "Query": "select distinct\r\n(select count(*) from tr_application where EFormStatusId='3025') 'NEW',\r\n(select count(*) from tr_application where EFormStatusId='3026') 'VERIFIED',\r\n(select count(*) from tr_application where EFormStatusId='3031') 'REJECT'\r\nfrom TR_Application a\r\nleft join ms_eformstatus es on a.EFormStatusId = es.EFormStatusId\r\nWHERE a.EFormStatusId <> 0"
+  },
+  {
+    "Name": "Extract Data Source",
+    "Query": "Select app.ApplicationId, c.CampaignName, es.StatusCode EFormStatus, app.CreatedDate From tr_application app\r\nLeft Join MS_Campaign c On app.CampaignId = c.CampaignId\r\nLeft Join MS_EFormStatus es ON app.EFormStatusId = es.EFormStatusId\r\nWhere (c.CampaignName = {CampaignName} OR {CampaignName} ='')\r\nAND (es.StatusCode = {EFormStatusName} OR {EFormStatusName} = '')\r\nAND (app.CreatedDate Between {DateFrom} And {DateTo} OR {DateFrom} = '' OR {DateFrom} = ' ' ) "
+  }
+]

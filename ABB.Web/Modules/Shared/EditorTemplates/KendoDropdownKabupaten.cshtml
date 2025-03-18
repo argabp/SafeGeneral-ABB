@@ -1,0 +1,20 @@
+﻿@using Kendo.Mvc.UI
+
+@(Html.Kendo().DropDownList()
+    .Name("DropdownKabupaten")
+    .DataSource(x => {x.Read(read => read.Action("GetKabupatenDropdown", "Lokasi").Data("getKapubatenDropdown"))
+        .ServerFiltering( true); })
+    .DataValueField("Value") // The value of the drop-down is taken from the EmployeeID property.
+    .DataTextField("Text") // The text of the items is taken from the EmployeeName property.
+    .Enable(false)
+    .AutoBind(false)
+    .CascadeFrom("DropdownProvinsi")
+    )
+    
+<script>
+     function getKapubatenDropdown(e) {
+         return { 
+             kd_prop: $("#kd_prop").val()
+         };
+     }
+</script>

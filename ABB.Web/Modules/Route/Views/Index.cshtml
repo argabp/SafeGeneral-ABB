@@ -1,0 +1,55 @@
+﻿@using Kendo.Mvc.UI
+@using ABB.Application.Routes.Queries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "URL Management";
+}
+
+<script src="~/Modules/Route/JS/route.index.js"></script>
+
+<div class="flat-box">
+    <div class="flat-box-title">
+        URL Management
+
+        <div class="pullright-flex">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search" />
+            <button class="flat-btn-primary" id="btnGenerateRoute">Generate URL</button>
+        </div>
+    </div>
+    <div class="flat-box-content">
+        @(Html.Kendo().Grid<RouteViewDto>()
+        .Name("RouteGrid")
+        .DataSource(dataSource => dataSource.Ajax().PageSize(10)
+            .Read(read => read.Action("GetRouteList", "Route").Data("searchFilter"))
+        )
+        .Columns(columns =>
+        {
+            columns.Bound(col => col.RouteId).Hidden();
+            columns.Bound(col => col.RouteName).Title("URL Name");
+            columns.Bound(col => col.Route).Title("URL Address");
+
+        })
+        .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(new int[] { 5, 10, 25, 50 })
+                    )
+        .Sortable()
+        .Filterable())
+        @(Html.Kendo().Window()
+            .Name("RouteWindow")
+            .Title("Generate Route")
+            .Width(400)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+          )
+    </div>
+</div>
+

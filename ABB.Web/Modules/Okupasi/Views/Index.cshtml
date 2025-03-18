@@ -1,0 +1,144 @@
+﻿@using Kendo.Mvc.UI
+@using ABB.Application.Okupasis.Queries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Okupasi";
+}
+<script src="~/Modules/Okupasi/JS/okupasi.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+    #kd_okup{
+        background-color: #00FFFF;
+    }
+    #nm_okup, #nm_okup_ing{
+        background-color: #FFFFE1;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Okupasi
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<OkupasiDto>()
+                .Name("OkupasiGrid")
+                .ToolBar(toolbar => toolbar.Create())
+                .Editable(editable => editable.Mode(GridEditMode.InLine))
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetOkupasis", "Okupasi").Data("searchFilter"))
+                    .Model(model => model.Id(p => p.kd_okup))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.kd_okup).Width(150).Title("Kode Okupasi").Editable("disableGridTextboxWhenEdit");
+                    columns.Bound(col => col.nm_okup).Width(150).Title("Nama Okupasi");
+                    columns.Bound(col => col.nm_okup_ing).Width(150).Title("Nama Okupasi Inggris");
+                    columns.Bound(col => col.kd_category).Width(150).Title("Kode Category");
+                    columns.Command(command =>
+                    {
+                        command.Edit();
+                        command.Custom("DeleteOkupasi")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeleteOkupasi");
+                    }).Width(200);
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .ClientDetailTemplateId("template")
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit").Save("onSaveOkupasi"))
+        
+                )    
+        </div>
+        
+        <script id="template" type="text/kendo-tmpl">
+            <div class="row">
+                <div class="col-md-4 k-button k-button-icontext">
+                    <button style="border: none;" onclick="btnAddDetailOkupasi_OnClick(#=kd_okup#)">+ ADD NEW RECORD</button>
+                </div>
+            </div>
+            @(Html.Kendo().TabStrip()
+                    .Name("tabStrip_#=kd_okup#")
+                    .SelectedIndex(0)
+                    .Animation(animation => animation.Open(open => open.Fade(FadeDirection.In)))
+                    .Items(items =>
+                    {
+                        items.Add().Text("Detail").Content(@<text>
+                            @(Html.Kendo().Grid<DetailOkupasiDto>()
+                                .Name("grid_Detail_#=kd_okup#") // template expression, to be evaluated in the master context
+                                .DataSource(dataSource => dataSource.Ajax()
+                                    .Read(read => read.Action("GetDetailOkupasis", "Okupasi", new { kd_okup = "#=kd_okup#" }))//.Data("getAsumsiPeriodeParam"))
+                                    .Model(m => m.Id(p => p.Id))
+                                )
+                                .Columns(columns =>
+                                {
+                                    columns.Bound(col => col.kd_okup).Width(150).Title("Kode Okupasi").Editable("disableGridTextbox");
+                                    columns.Bound(col => col.text_kls_konstr).Width(150).Title("Kode Kelas Konstruksi").Editable("disableGridTextboxWhenEdit");
+                                    columns.Bound(col => col.text_stn_rate_premi).Width(150).Title("Satuan Rate Premi").EditorTemplateName("KendoNumericTextBoxInt");
+                                    columns.Bound(col => col.pst_rate_prm).Width(200).Title("Rate Premi").Format("{0:n2}").EditorTemplateName("KendoNumericTextBox");
+                                    columns.Command(command =>
+                                    {
+                                        command.Custom("EditDetailOkupasi")
+                                            .Text("Edit")
+                                            .IconClass("fa fa-pencil-alt")
+                                            .HtmlAttributes(new { title = "Edit" })
+                                            .Click("btnEditDetailOkupasi_OnClick");
+                                        command.Custom("DeleteDetailOkupasi")
+                                            .Text("Delete")
+                                            .IconClass("k-icon k-i-delete")
+                                            .HtmlAttributes(new { title="Delete"})
+                                            .Click("onDeleteDetailOkupasi");
+                                    }).Width(200);
+                                })
+                                .Pageable(pager => pager
+                                    .Refresh(true)
+                                    .Info(true)
+                                    .PageSizes(true)
+                                )
+                                .Sortable()
+                                .Selectable()
+                                .Filterable()
+                                .Scrollable()
+                                .Height(380)
+                                .Resizable(a=>a.Columns(true))
+                                .Events(ev => ev.DataBound("gridAutoFit").Save("onSaveDetailOkupasi").Edit("onEditDetailOkupasi"))
+                                .ToClientTemplate())
+                        </text>
+                        );
+                    })
+                    .ToClientTemplate())
+        </script>
+
+        @(Html.Kendo().Window()
+            .Name("DetailOkupasiWindow")
+            .Title("Detail Okupasi")
+            .Width(400)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+    </div>
+</div>
+

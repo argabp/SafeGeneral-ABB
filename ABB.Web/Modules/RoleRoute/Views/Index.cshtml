@@ -1,0 +1,79 @@
+﻿@using Kendo.Mvc.UI
+@using ABB.Application.RoleRoutes.Queries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Role URL List";
+}
+
+<script src="~/Modules/RoleRoute/JS/roleRoute.index.js"></script>
+<style>
+    .k-checkbox {
+        background-color: var(--jade-green) !important;
+    }
+    .table th{
+        padding: 0.5em !important
+    }
+    .center{
+        text-align:center;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-8">
+            Role for URL
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search" />
+        </div>
+    </div>
+    <div class="flat-box-content">
+        @(Html.Kendo().Grid<RoleRouteDto>()
+        .Name("RoleRouteGrid")
+        .DataSource(dataSource => dataSource.Ajax().PageSize(5)
+            .Read(read => read.Action("GetRoleRoutes", "RoleRoute").Data("searchFilter"))
+        )
+        .Columns(columns =>
+        {
+            columns.Bound(col => col.RoleId).Hidden();
+            columns.Bound(col => col.RoleName).Width(160);
+            columns.Bound(col => col.Controller).Width(200).ClientTemplate("#= brTemplate(data.Controller) #");
+            columns.Bound(col => col.Action).ClientTemplate("#= brTemplate(data.Action) #");
+            columns.Command(command =>
+            {
+                command.Custom("Edit")
+                        .Text(" ")
+                        .IconClass("fa fa-pencil-alt")
+                        .Click("btnEditRoleRoute_OnClick")
+                        .HtmlAttributes(new { title = "Edit" });
+            }).Title("Action").Width(80);
+        })
+        .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(new int[] { 5, 10, 25, 50 })
+                    )
+        .Sortable()
+        .Height(400)
+        .Scrollable()
+        .Resizable(r => r.Columns(true))
+        .Filterable())
+
+        @(Html.Kendo().Window()
+            .Name("RoleRouteWindow")
+            .Title("Role Route Page")
+            .Width(600)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            .LoadContentFrom("Edit", "RoleRoute")
+          )
+    </div>
+</div>
+

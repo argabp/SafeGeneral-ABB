@@ -1,0 +1,91 @@
+﻿@using ABB.Application.BiayaPerSubCOBs.Queries
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.TagHelpers
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Biaya Per Sub COB";
+}
+
+<script src="~/Modules/BiayaPerSubCOB/JS/biayaPerSubCOB.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-8">
+            Biaya Per Sub COB
+        </div>
+
+        <div class="col-md-4">
+            <button class="flat-btn-primary" onclick="btnAddBiayaPerSubCOB_OnClick()">Add New Biaya Per Sub COB</button>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<BiayaPerSubCOBDto>()
+                .Name("BiayaPerSubCOBGrid")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetBiayaPerSubCOBs", "BiayaPerSubCOB").Data("searchFilter"))
+                    .Model(model => model.Id(p => p.Id))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
+                    columns.Bound(col => col.nm_scob).Width(150).Title("Nama SCOB");
+                    columns.Bound(col => col.nm_mtu).Width(150).Title("Nama Mata Uang");
+                    columns.Bound(col => col.nilai_min_prm).Width(150).Title("Nilai Minimum Premi");
+                    columns.Bound(col => col.nilai_bia_pol).Width(150).Title("Nilai Biaya Polis");
+                    columns.Bound(col => col.nilai_bia_adm).Width(150).Title("Nilai Biaya Adm. dll");
+                    columns.Bound(col => col.nilai_min_form).Width(150).Title("Nilai Minimum Formulir");
+                    columns.Bound(col => col.nilai_maks_plafond).Width(150).Title("Nilai Maksimum Plafond");
+                    columns.Command(command =>
+                    {
+                        command.Custom("EditBiayaPerSubCOB")
+                            .Text("Edit")
+                            .IconClass("fa fa-pencil-alt")
+                            .HtmlAttributes(new { title = "Edit" })
+                            .Click("btnEditBiayaPerSubCOB_OnClick");
+                        command.Custom("DeleteBiayaPerSubCOB")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeleteBiayaPerSubCOB");
+                    }).Width(200);
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit"))
+        
+                )    
+        </div>
+        
+        @(Html.Kendo().Window()
+            .Name("BiayaPerSubCOBWindow")
+            .Title("Biaya Per Sub COB")
+            .Width(400)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+    </div>
+</div>
+

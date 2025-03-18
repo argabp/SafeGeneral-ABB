@@ -1,0 +1,42 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.Role.Models.EditRoleModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@{
+    ViewData["Title"] = "Role Page";
+}
+
+<script src="~/Modules/Role/JS/role.edit.js"></script>
+
+<form id="RoleForm" enctype="multipart/form-data">
+    <div class="window-body" style="background-color: lightgray">
+
+        <div class="form-group">
+            <input type="hidden" asp-for="Id" />
+            <label asp-for="Name" class="col-sm-3"></label>
+            <div class="col-sm-12">
+                <kendo-textbox for="Name" style="background-color: #FFFFE1"/>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description" class="col-sm-3"></label>
+            <div class="col-sm-12">
+                <kendo-textbox for="Description" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group"  style="display:none">
+            <label asp-for="RoleCode" class="col-sm-3"></label>
+            <div class="col-sm-12">
+                <kendo-numerictextbox for="RoleCode" restrict-decimals="true" format="#" decimals="0" spinners="false" readonly="true" />
+                <span asp-validation-for="RoleCode" class="text-danger"></span>
+            </div>
+        </div>
+
+    </div>
+    <div class="window-footer">
+        <button type="button" id="btn-edit-role" class="btn btn-primary space-right">Save</button>
+    </div>
+</form>

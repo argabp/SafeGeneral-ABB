@@ -1,0 +1,108 @@
+﻿@using Kendo.Mvc.UI
+@using ABB.Application.Rekanans.Queries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Tertanggung & Principal";
+}
+
+<script src="~/Modules/TertanggungPrincipal/JS/rekanan.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-8">
+            Tertanggung & Principal
+        </div>
+
+        <div class="col-md-4">
+            <button class="flat-btn-primary" onclick="btnAddRekanan_OnClick()">Add New Rekanan</button>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<RekananDto>()
+                .Name("RekananGrid")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetRekanans", "TertanggungPrincipal").Data("searchFilter"))
+                    .Model(model => model.Id(p => p.Id))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
+                    columns.Bound(col => col.nm_grp_rk).Width(150).Title("Nama Group Rekanan");
+                    columns.Bound(col => col.kd_rk).Width(150).Title("Kode Rekanan");
+                    columns.Bound(col => col.nm_rk).Width(150).Title("Nama Rekanan");
+                    columns.Bound(col => col.nm_kota).Width(150).Title("Kota Rekanan");
+                    columns.Bound(col => col.almt).Width(150).Title("Alamat Rekanan");
+                    columns.Bound(col => col.nm_sic).Width(150).Title("Retail/Corporate");
+                    columns.Command(command =>
+                    {
+                        command.Custom("EditRekanan")
+                            .Text("Edit")
+                            .IconClass("fa fa-pencil-alt")
+                            .HtmlAttributes(new { title = "Edit" })
+                            .Click("btnEditRekanan_OnClick");
+                        command.Custom("DeleteRekanan")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeleteRekanan");
+                        command.Custom("EditDetailRekanan")
+                            .Text("Detail")
+                            .IconClass("fa fa-pencil-alt")
+                            .HtmlAttributes(new { title = "Edit" })
+                            .Click("btnEditDetailRekanan_OnClick");
+                        command.Custom("DeleteDetailRekanan")
+                            .Text("Delete Detail")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeleteDetailRekanan");
+                    }).Width(200);
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit"))
+        
+                )    
+        </div>
+        
+        @(Html.Kendo().Window()
+            .Name("RekananWindow")
+            .Title("Rekanan")
+            .Width(400)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+        
+        @(Html.Kendo().Window()
+            .Name("DetailRekananWindow")
+            .Title("Detail Rekanan")
+            .Width(900)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+    </div>
+</div>
+

@@ -1,0 +1,100 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.PertanggunganKendaraan.Models.PertanggunganKendaraanViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/PertanggunganKendaraan/JS/pertanggunganKendaraan.form.js"></script>
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="PertanggunganKendaraanForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kode COB</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="kd_cob" style="width: 100%" class="primary-dropdown"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetCOB", "PertanggunganKendaraan")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="kd_cob" class="text-danger"></span>
+            </div>
+        </div>
+        <input type="hidden" id="kd_scob" value="@Model.kd_scob">
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Jenis Pertanggungan</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="kd_jns_ptg" style="width: 100%; background-color: #00FFFF"/>
+                <span asp-validation-for="kd_jns_ptg" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Deskripsi</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="desk" style="width: 100%"/>
+                <span asp-validation-for="desk" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Keterangan Klasula</label>
+            <div class="col-sm-12">
+                <kendo-textarea name="ket_klasula" rows="3" style="width: 100%; background-color: white">@Model.ket_klasula</kendo-textarea>
+                <span asp-validation-for="ket_klasula" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12 row">
+            <input type="hidden" id="tempTJH" value="@Model.flag_tjh">
+            <div class="col-3" style="padding-left: 1.5em">
+                <label>
+                    <input type="checkbox" class="k-checkbox" id="flag_tjh"/>
+                    TJH
+                </label>
+            </div>
+            <input type="hidden" id="tempRSCC" value="@Model.flag_rscc">
+            <div class="col-3">
+                <label>
+                    <input type="checkbox" class="k-checkbox" id="flag_rscc"/>
+                    RSCC
+                </label>
+            </div>
+            <input type="hidden" id="tempBanjir" value="@Model.flag_banjir">
+            <div class="col-3">
+                <label>
+                    <input type="checkbox" class="k-checkbox" id="flag_banjir"/>
+                    Flood
+                </label>
+            </div>
+        </div>
+        <div class="form-group col-sm-12 row">
+            <input type="hidden" id="tempAccessories" value="@Model.flag_accessories">
+            <div class="col-3" style="padding-left: 1.5em">
+                <label>
+                    <input type="checkbox" class="k-checkbox" id="flag_accessories"/>
+                    Accessories
+                </label>
+            </div>
+            <input type="hidden" id="tempLainLain01" value="@Model.flag_lain_lain01">
+            <div class="col-3">
+                <label>
+                    <input type="checkbox" class="k-checkbox" id="flag_lain_lain01"/>
+                    Lain lain 01
+                </label>
+            </div>
+            <input type="hidden" id="tempLainLain02" value="@Model.flag_lain_lain02">
+            <div class="col-3">
+                <label>
+                    <input type="checkbox" class="k-checkbox" id="flag_lain_lain02"/>
+                    Lain lain 02
+                </label>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="window-footer">
+    <button type="button" onclick="onSavePertanggunganKendaraan()" class="btn btn-success space-right">
+        <span class="fa fa-save"></span> Save
+    </button>
+</div>

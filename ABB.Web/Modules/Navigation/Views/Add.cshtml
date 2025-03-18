@@ -1,0 +1,104 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.Navigation.Models.AddNavigationModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@{
+    ViewData["Title"] = "User Page";
+    Layout = "";
+}
+
+<script id="iconTemplate" type="text/x-kendo-template">
+    <span class="fas #:Name#"></span>
+</script>
+
+<script src="~/Modules/Navigation/JS/navigation.form.js"></script>
+<script src="~/Modules/Navigation/JS/navigation.add.js"></script>
+<script src="~/Modules/Navigation/JS/fawe.icon.js"></script>
+
+<form id="NavForm" enctype="multipart/form-data">
+    <div class="window-body" style="background-color: lightgray">
+
+        <div class="form-group col-12">
+            <label class="col-sm-5">Menu Name</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="Text" style="background-color:  #FFFFE1" />
+                <span asp-validation-for="Text" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row flex-row justify-content-between" style="margin-left:0px;margin-right:0px;">
+            <div class="form-group left col-6">
+                <label asp-for="Icon" class="col-sm-3 "></label>
+                <div class="col-sm-12">
+                    <kendo-combobox for="Icon" datavaluefield="Name" datatextfield="Name" suggest="true" filter="FilterType.Contains" placeholder="Please Choose Icon" template-id="iconTemplate" />
+                    <span asp-validation-for="Icon" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group right col-5">
+                <label class="col-sm-3">Status</label>
+                <div class="col-sm-12  switch-box">
+                    @(Html.Kendo().SwitchFor(a=>a.IsActive).Events(e=>e.Change("onSwitchChange")))
+                    <label class="switch-label-on" for="IsActive">Active</label>
+                    <label class="switch-label-off" for="IsActive">Not Active</label>
+                    <span asp-validation-for="IsActive" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    <div class="form-group col-12">
+            <label asp-for="RouteId" class="col-sm-3">URL Name</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="RouteId" option-label="Please Choose URL" filter="FilterType.Contains"
+                                    datavaluefield="Id" datatextfield="Description" class="not-null-dropdown">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetRouteDropdown","Navigation")" />
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="RouteId" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group col-11" style="display:flex;flex-direction:row;justify-content:flex-start;">
+
+            <div class="col-12">
+                <label>
+                    <input type="checkbox" class="k-checkbox" id="hasSubmenu" />
+                    This menu have submenus
+                </label>
+            </div>
+
+        </div>
+
+        <div id="submenu">
+            <div id="NavInlineGrid" class="inline-grid"></div>
+            <br />
+            <btn id="btn-add-subnavigation" class="flat-btn-simple">+ Add More Submenu</btn>
+            <br />
+            <span asp-validation-for="SubNavigations" class="text-danger"></span>
+
+        </div>
+    </div>
+    <div class="window-footer">
+        <div class="col-12">
+            <button type="button" id="btnCreateNavigation" class="btn btn-primary space-right">Save</button>
+        </div>
+    </div>
+</form>
+
+<style>
+    #Icon_listbox > .k-item {
+        display: block !important;
+        width: 24px !important;
+        float: left !important;
+    }
+    #submenu {
+        margin-left: 7.5px;
+        margin-right: 7.5px;
+    }
+    .form-group{
+    margin-left:-7.5px;
+    }
+        #Icon_listbox > .k-item > span {
+            font-size: 24px !important;
+        }
+</style>

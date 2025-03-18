@@ -1,0 +1,52 @@
+﻿@using Kendo.Mvc.TagHelpers
+@using Kendo.Mvc.UI
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model ABB.Web.Modules.COB.Models.COBViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@{
+    ViewData["Title"] = "COB Page";
+}
+
+<script src="~/Modules/COB/JS/cob.edit.js"></script>
+
+<form id="COBForm" enctype="multipart/form-data">
+    <div class="window-body" style="background-color: lightgray">
+
+        <div class="form-group">
+            <label asp-for="kd_cob" class="col-sm-12" style="align-content: center">Kode COB</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="kd_cob" readonly="true"/>
+                <span asp-validation-for="kd_cob" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="nm_cob" class="col-sm-12" style="align-content: center">Nama COB</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="nm_cob"/>
+                <span asp-validation-for="nm_cob" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="nm_cob_ing" class="col-sm-12" style="align-content: center">Nama COB (English)</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="nm_cob_ing"/>
+                <span asp-validation-for="nm_cob_ing" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="kd_class" class="col-sm-12" style="align-content: center">Kode Class</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="kd_class"/>
+                <span asp-validation-for="kd_class" class="text-danger"></span>
+            </div>
+        </div>
+
+    </div>
+    <div class="window-footer">
+        <button type="button" id="btn-edit-cob" class="btn btn-primary space-right">Save</button>
+    </div>
+</form>

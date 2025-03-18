@@ -1,0 +1,60 @@
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Application\bin\Debug\ABB.Application.deps.json
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Application\bin\Debug\ABB.Application.dll
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Application\bin\Debug\ABB.Application.pdb
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Application\bin\Debug\ABB.Domain.dll
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Application\bin\Debug\ABB.Domain.pdb
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Application\obj\Debug\ABB.Application.csprojAssemblyReference.cache
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Application\obj\Debug\ABB.Application.AssemblyInfoInputs.cache
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Application\obj\Debug\ABB.Application.AssemblyInfo.cs
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Application\obj\Debug\ABB.Application.csproj.CoreCompileInputs.cache
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Application\obj\Debug\ABB.Application.csproj.CopyComplete
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Application\obj\Debug\ABB.Application.dll
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Application\obj\Debug\ABB.Application.pdb
+C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Application\bin\Debug\ABB.Application.deps.json
+C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Application\bin\Debug\ABB.Application.dll
+C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Application\bin\Debug\ABB.Application.pdb
+C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Application\bin\Debug\ABB.Domain.dll
+C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Application\bin\Debug\ABB.Domain.pdb
+C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Application\obj\Debug\ABB.Application.csprojAssemblyReference.cache
+C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Application\obj\Debug\ABB.Application.AssemblyInfoInputs.cache
+C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Application\obj\Debug\ABB.Application.AssemblyInfo.cs
+C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Application\obj\Debug\ABB.Application.csproj.CoreCompileInputs.cache
+C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Application\obj\Debug\ABB.Application.csproj.CopyComplete
+C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Application\obj\Debug\ABB.Application.dll
+C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Application\obj\Debug\ABB.Application.pdb
+C:\Users\Formulatrix\RiderProjects\Mine\CSM\ABB.Application\bin\Debug\ABB.Application.deps.json
+C:\Users\Formulatrix\RiderProjects\Mine\CSM\ABB.Application\bin\Debug\ABB.Application.dll
+C:\Users\Formulatrix\RiderProjects\Mine\CSM\ABB.Application\bin\Debug\ABB.Application.pdb
+C:\Users\Formulatrix\RiderProjects\Mine\CSM\ABB.Application\bin\Debug\ABB.Domain.dll
+C:\Users\Formulatrix\RiderProjects\Mine\CSM\ABB.Application\bin\Debug\ABB.Domain.pdb
+C:\Users\Formulatrix\RiderProjects\Mine\CSM\ABB.Application\obj\Debug\ABB.Application.csprojAssemblyReference.cache
+C:\Users\Formulatrix\RiderProjects\Mine\CSM\ABB.Application\obj\Debug\ABB.Application.AssemblyInfoInputs.cache
+C:\Users\Formulatrix\RiderProjects\Mine\CSM\ABB.Application\obj\Debug\ABB.Application.AssemblyInfo.cs
+C:\Users\Formulatrix\RiderProjects\Mine\CSM\ABB.Application\obj\Debug\ABB.Application.csproj.CoreCompileInputs.cache
+C:\Users\Formulatrix\RiderProjects\Mine\CSM\ABB.Application\obj\Debug\ABB.Application.csproj.CopyComplete
+C:\Users\Formulatrix\RiderProjects\Mine\CSM\ABB.Application\obj\Debug\ABB.Application.dll
+C:\Users\Formulatrix\RiderProjects\Mine\CSM\ABB.Application\obj\Debug\ABB.Application.pdb
+C:\Users\FORMULATRIX\RiderProjects\Mine\AbbReporting\ABB.Application\bin\Debug\ABB.Application.deps.json
+C:\Users\FORMULATRIX\RiderProjects\Mine\AbbReporting\ABB.Application\bin\Debug\ABB.Application.dll
+C:\Users\FORMULATRIX\RiderProjects\Mine\AbbReporting\ABB.Application\bin\Debug\ABB.Application.pdb
+C:\Users\FORMULATRIX\RiderProjects\Mine\AbbReporting\ABB.Application\bin\Debug\ABB.Domain.dll
+C:\Users\FORMULATRIX\RiderProjects\Mine\AbbReporting\ABB.Application\bin\Debug\ABB.Domain.pdb
+C:\Users\FORMULATRIX\RiderProjects\Mine\AbbReporting\ABB.Application\obj\Debug\ABB.Application.csprojAssemblyReference.cache
+C:\Users\FORMULATRIX\RiderProjects\Mine\AbbReporting\ABB.Application\obj\Debug\ABB.Application.AssemblyInfoInputs.cache
+C:\Users\FORMULATRIX\RiderProjects\Mine\AbbReporting\ABB.Application\obj\Debug\ABB.Application.AssemblyInfo.cs
+C:\Users\FORMULATRIX\RiderProjects\Mine\AbbReporting\ABB.Application\obj\Debug\ABB.Application.csproj.CoreCompileInputs.cache
+C:\Users\FORMULATRIX\RiderProjects\Mine\AbbReporting\ABB.Application\obj\Debug\ABB.Application.csproj.CopyComplete
+C:\Users\FORMULATRIX\RiderProjects\Mine\AbbReporting\ABB.Application\obj\Debug\ABB.Application.dll
+C:\Users\FORMULATRIX\RiderProjects\Mine\AbbReporting\ABB.Application\obj\Debug\ABB.Application.pdb
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Application\bin\Debug\ABB.Application.deps.json
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Application\bin\Debug\ABB.Application.dll
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Application\bin\Debug\ABB.Application.pdb
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Application\bin\Debug\ABB.Domain.dll
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Application\bin\Debug\ABB.Domain.pdb
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Application\obj\Debug\ABB.Application.csprojAssemblyReference.cache
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Application\obj\Debug\ABB.Application.AssemblyInfoInputs.cache
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Application\obj\Debug\ABB.Application.AssemblyInfo.cs
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Application\obj\Debug\ABB.Application.csproj.CoreCompileInputs.cache
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Application\obj\Debug\ABB.Application.csproj.CopyComplete
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Application\obj\Debug\ABB.Application.dll
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Application\obj\Debug\ABB.Application.pdb

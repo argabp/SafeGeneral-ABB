@@ -1,0 +1,313 @@
+<html>
+<head>
+    <title>Schedule Polis Kebakaran</title>
+</head>
+
+<style>
+    td {
+        font-size: 8.5pt;
+    }
+
+    h1 {
+        font-size: 11.5pt;
+    }
+
+    h2 {
+        font-size: 9.5pt;
+    }
+    .watermark {
+        position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg); /* Rotasi watermark */
+            font-size: 200px;
+            color: rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+            z-index: -1;
+            white-space: nowrap;
+            pointer-events: none;
+        }
+</style>
+
+<body>
+
+    <div class="watermark">DRAFT</div>
+
+    <h1 style="text-align: center; margin-top: 0px; margin-bottom: 0px;">IKHTISAR PERTANGGUNGAN</h1>
+<h2 style="text-align: center; margin-top: 0px; margin-bottom: 0px;">POLIS STANDAR KEBAKARAN INDONESIA</h2>
+<hr style="color: black">
+
+<table style="width: 100%;">
+    <tr>
+        <td style="width: 20%;">No. Polis</td>
+        <td style="width: 2.5%">:</td>
+        <td style="width: 30%"><strong>{{no_pol_ttg}}-{{st_pas}}</strong></td>
+        <td>Ex Polis</td>
+        <td style="width: 2.5%">:</td>
+        <td style="width: 30%">{{no_pol_lama}}</td>
+    </tr>
+</table>
+<table style="width: 100%;">
+    <tr>
+        <td style="width: 20%;">Nama Tertanggung</td>
+        <td style="width: 2.5%">:</td>
+        <td><strong>{{nm_ttg}}</strong></td>
+    </tr>
+</table>
+
+<table style="width: 100%;">
+    <tr>
+        <td style="width: 20%;">Alamat Tertanggung</td>
+        <td style="width: 2.5%">:</td>
+        <td style="width: 100%">{{almt_ttg}}</td>
+    </tr>
+</table>
+
+<table style="width: 100%;">
+    <tr>
+        <td style="width: 20%;">Letak/Lokasi Resiko</td>
+        <td style="width: 2.5%">:</td>
+        <td style="width: 100%">TERLAMPIR</td>
+    </tr>
+</table>
+
+<hr style="color: black">
+
+<table style="width: 100%;">
+    <tr>
+        <td style="width: 4.3%;">Jangka-waktu pertanggungan</td>
+        <td style="width: 0.6%">:</td>
+        <td style="width: 20%">{{jk_wkt_ptg}}</td>
+    </tr>
+</table>
+
+<table style="width: 100%;">
+    <tr>
+        <td style="width: 25%;" colspan="">Mulai dari tanggal {{tgl_mul_ptg_ind}} sampai dengan tanggal {{tgl_akh_ptg_ind}}</td>
+    </tr>
+</table>
+
+<table style="width: 100%;">
+    <tr>
+        <td>kedua tanggal tersebut pada pukul 12.00 siang waktu setempat dimana obyek pertanggungan berada.</td>
+    </tr>
+</table>
+
+<hr style="color: black">
+
+<table style="width: 100%;">
+    <tr>
+        <td style="width: 20%;">Penerangan</td>
+        <td style="width: 1%;">:</td>
+        <td style="width: 38.3;">TERLAMPIR</td>
+        <td style="width: 10%;">Premi</td>
+    </tr>
+    <tr>
+        <td style="width: 10%;">Kelas Konstruksi</td>
+        <td style="width: 1%;">:</td>
+        <td style="width: 38.3%;">TERLAMPIR</td>
+        <td style="width: 20%;">- Jaminan Pokok</td>
+        <td style="width: 1%;">:</td>
+        <td style="width: 15%;">{{kd_mtu_symbol}} {{nilai_prm_pkk}}</td>
+    </tr>
+    <tr>
+        <td style="width: 10%;">Jenis Resiko/Okupasi</td>
+        <td style="width: 1%;">:</td>
+        <td style="width: 38.3%;">TERLAMPIR</td>
+        <td style="width: 20%;">- Jaminan Tambahan {{kd_cvrg_01}}</td>
+        <td style="width: 1%;">:</td>
+        <td style="width: 25%;">{{kd_mtu_symbol}} {{nilai_prm_tbh_01}}</td>
+    </tr>
+    <tr>
+        <td style="width: 10%;">No. Kode</td>
+        <td style="width: 1%;">:</td>
+        <td style="width: 38.3%;">TERLAMPIR</td>
+        <td style="width: 20%;">- Jaminan Tambahan {{kd_cvrg_02}}</td>
+        <td style="width: 1%;">:</td>
+        <td style="width: 25%;">{{kd_mtu_symbol}} {{nilai_prm_tbh_02}}</td>
+    </tr>
+    <tr>
+        <td style="width: 10%;">Suku Premi</td>
+        <td style="width: 1%;">:</td>
+        <td style="width: 38.3%;">{{pst_rate_prm_pkk}}{{stn_rate_prm_pkk}}/TERLAMPIR</td>
+        <td style="width: 20%;">- Jaminan Tambahan</td>
+        <td style="width: 1%;">:</td>
+        <td style="width: 25%;">{{kd_mtu_symbol}} {{nilai_prm_tbh_03}}</td>
+    </tr>
+    <tr>
+        <td style="width: 10%;"></td>
+        <td style="width: 1%;"></td>
+        <td style="width: 25%;"></td>
+        <td style="width: 20%;">- Jaminan Tambahan {{kd_cvrg_04}}</td>
+        <td style="width: 1%;">:</td>
+        <td style="width: 25%;">{{kd_mtu_symbol}} {{nilai_prm_tbh_04}}</td>
+    </tr>
+    <tr>
+        <td style="width: 10%;"></td>
+        <td style="width: 1%;"></td>
+        <td style="width: 25%;"></td>
+        <td style="width: 20%;">- Jaminan Tambahan {{kd_cvrg_05}}</td>
+        <td style="width: 1%;">:</td>
+        <td style="width: 25%;">{{kd_mtu_symbol}} {{nilai_prm_tbh_05}}</td>
+    </tr>
+    <tr>
+        <td style="width: 10%;"></td>
+        <td style="width: 1%;"></td>
+        <td style="width: 25%;"></td>
+        <td style="width: 20%;">- Discount</td>
+        <td style="width: 1%;">:</td>
+        <td style="width: 25%;">{{kd_mtu_symbol}} {{nilai_dis}}</td>
+    </tr>
+    <tr>
+        <td style="width: 10%;"></td>
+        <td style="width: 1%;"></td>
+        <td style="width: 25%;"></td>
+        <td style="width: 20%;"></td>
+        <td style="width: 1%;"></td>
+        <td style="width: 25%;"colspan=2><hr style="border-top: 3px double black; width: 100%;"></td>
+    </tr>
+</table>
+
+<table style="border-collapse: collapse; width: 100%;">
+    <tr style="height: 20px;">
+        <td style="width: 13%;"><u>Jenis Jaminan</u></td>
+        <td style="width: 10%;text-align: center"><u>No. Kode</u></td>
+        <td style="width: 21.3%;text-align: center"><u>Suku Premi</u></td>
+    </tr>
+    <tr style="height: 20px;">
+        <td style="width: 1%;">{{nm_cvrg_01}}</td>
+        <td style="width: 12%;">{{kd_cvrg_01}}</td>
+        <td style="width: 10%;">{{pst_rate_prm_01}} {{stn_rate_prm_01}}</td>
+        <td style="width: 1%;">Sub Total</td>
+        <td style="width: 1%">:</td>
+        <td style="padding: 0; margin: 0; width: 15.2%">{{kd_mtu_symbol}} {{nilai_prm_pkk}}</td>
+    </tr>
+    <tr style="height: 20px;">
+        <td style="width: 1%;">{{nm_cvrg_02}}</td>
+        <td style="width: 12%;">{{kd_cvrg_02}}</td>
+        <td style="width: 10%;">{{pst_rate_prm_02}} {{stn_rate_prm_02}}</td>
+        <td style="width: 15%;">-Biaya Polis</td>
+        <td style="width: 1%">:</td>
+        <td style="padding: 0; margin: 0;">{{kd_mtu_symbol}} {{nilai_bia_pol}}</td>
+    </tr>
+    <tr style="height: 20px;">
+        <td style="width: 1%;">{{nm_cvrg_03}}</td>
+        <td style="width: 12%;">{{kd_cvrg_03}}</td>
+        <td style="width: 10%;">{{pst_rate_prm_03}} {{stn_rate_prm_03}}</td>
+        <td style="width: 15%;">-Bea materai</td>
+        <td style="width: 1%">:</td>
+        <td style="padding: 0; margin: 0;">{{kd_mtu_symbol}} {{nilai_bia_mat}}</td>
+    </tr>
+    <tr style="height: 20px;">
+        <td style="width: 1%;">{{nm_cvrg_04}}</td>
+        <td style="width: 12%;">{{kd_cvrg_04}}</td>
+        <td style="width: 10%;">{{pst_rate_prm_04}} {{stn_rate_prm_04}}</td>
+        <td style="width: 15%;"></td>
+        <td style="width: 1%"></td>
+        <td style="padding: 0; margin: 0;"><hr style="color: black"></td>
+        <hr>
+    </tr>
+    <tr style="height: 20px;" border="1">
+        <td style="width: 1%;">{{nm_cvrg_05}}</td>
+        <td style="width: 12%;">{{kd_cvrg_05}}</td>
+        <td style="width: 10%;">{{pst_rate_prm_05}} {{stn_rate_prm_05}}</td>
+        <td style="width: 15%;">Jumlah</td>
+        <td style="width: 1%">:</td>
+        <td style="padding: 0; margin: 0;">{{kd_mtu_symbol}} {{nilai_ttl}}</td>
+    </tr>
+</table>
+
+<hr style="color: black">
+
+<table style="width: 100%;" >
+    <tr>
+        <td style="width: 10%;">Deductible</td>
+        <td style="width: 1%">:</td>
+        <td style="width: 25%">{{deduct}}</td>
+    </tr>
+    <tr>
+        <td style="width: 2%;">Endorsemen/Klausul/Syarat tambahan</td>
+        <td style="width: 1%">:</td>
+    </tr>
+    <tr>
+        <td colspan=2 style="width: 2%;">{{ket_klausa}}</td>
+    </tr>
+</table>
+
+<hr style="color: black">
+
+<table style="border-collapse: collapse; width: 100%;">
+    <tr style="height: 20px;">
+        <td style="width: 1%;">No.</td>
+        <td style="width: 0%;" colspan="2">Harta Benda dan atau kepentingan yang dipertanggungkan</td>
+        <td></td>
+        <td style="width: 10%;">Harga Pertanggungan</td>
+    </tr>
+    <tr style="height: 20px;">
+        <td style="width: 1%;">1.</td>
+        <td style="width: 68%;" colspan="2">{{desk_oby_01}}</td>
+        <td></td>
+        <td style="padding: 0; margin: 0; width: 17.5%;">{{kd_oby_01}} {{nilai_oby_01}}</td>
+    </tr>
+    <tr style="height: 20px;">
+        <td style="width: 1%;">2.</td>
+        <td style="width: 30%;" colspan="2">{{desk_oby_02}}</td>
+        <td></td>
+        <td style="padding: 0; margin: 0; width: 17.5%;">{{kd_oby_02}} {{nilai_oby_02}}</td>
+    </tr>
+    <tr style="height: 20px;">
+        <td style="width: 1%;">3.</td>
+        <td style="width: 68%;" colspan="2">{{desk_oby_03}}</td>
+        <td></td>
+        <td style="padding: 0; margin: 0; width: 17.5%;">{{kd_oby_03}} {{nilai_oby_03}}</td>
+    </tr>
+    <tr style="height: 20px;">
+        <td style="width: 1%;">4.</td>
+        <td style="width: 68%;" colspan="2">{{desk_oby_04}}</td>
+        <td></td>
+        <td style="padding: 0; margin: 0; width: 17.5%;">{{kd_oby_04}} {{nilai_oby_04}}</td>
+    </tr>
+    <tr style="height: 20px;">
+        <td style="width: 1%;">5.</td>
+        <td style="width: 68%;" colspan="2">{{desk_oby_05}}</td>
+        <td></td>
+        <td style="padding: 0; margin: 0; width: 17.5%;">{{kd_oby_05}} {{nilai_oby_05}}</td>
+    </tr>
+    <tr style="height: 20px;">
+        <td style="width: 1%;"></td>
+        <td style="width: 68%; text-align: right; padding-right: 5px" colspan="2">Jumlah</td>
+        <td style="padding: 0; margin: 0; width: 1%;">:</td>
+        <td style="padding: 0; margin: 0; width: 5%;">{{kd_mtu_symbol}} {{nilai_ttl_ptg}}</td>
+    </tr>
+</table>
+
+<hr style="color: black">
+
+<table style="width: 100%;" >
+    <tr>
+        <td style="width: 20%;">{{ctt_pol}}</td>
+        <td></td>
+        <td style="width: 20%;" align="center">{{kt_cb}},{{tgl_closing_ind}}</td>
+    </tr>
+    <tr>
+        <td style="width: 25%;">{{lamp_pol}}</td>
+        <td></td>
+        <td style="text-align: center"><strong>PT. Asuransi Bhakti Bhayangkara</strong></td>
+    </tr>
+    <tr style="height: 150px">
+        <td style="width: 25%;"></td>
+        <td style="width: 25%;"></td>
+        <td style="text-align: center; padding-right: 15px" colspan=2><br><br><br><br><br><br><br><b><u>Chusnul Chotimah, SE, AAIK</u></b><br>Kepala Divisi Underwriting</td>
+    </tr>
+    <tr>
+        <td style="text-align: center;" colspan="3">{{st_title3}}</td>
+    </tr>
+    <tr>
+        <td style="text-align: center;" colspan="3">{{st_title6}}</td>
+    </tr>
+    <tr>
+        <td style="text-align: center;" colspan="3">{{st_title4}}</td>
+    </tr>
+</table>
+</body>
+</html>

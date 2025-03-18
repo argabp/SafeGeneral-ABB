@@ -1,0 +1,97 @@
+﻿
+.form-control, /* if this class is applied to a Kendo UI widget, its layout may change */
+.container,
+.container-fluid,
+.row,
+.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1,
+.col-xs-2, .col-sm-2, .col-md-2, .col-lg-2,
+.col-xs-3, .col-sm-3, .col-md-3, .col-lg-3,
+.col-xs-4, .col-sm-4, .col-md-4, .col-lg-4,
+.col-xs-5, .col-sm-5, .col-md-5, .col-lg-5,
+.col-xs-6, .col-sm-6, .col-md-6, .col-lg-6,
+.col-xs-7, .col-sm-7, .col-md-7, .col-lg-7,
+.col-xs-8, .col-sm-8, .col-md-8, .col-lg-8,
+.col-xs-9, .col-sm-9, .col-md-9, .col-lg-9,
+.col-xs-10, .col-sm-10, .col-md-10, .col-lg-10,
+.col-xs-11, .col-sm-11, .col-md-11, .col-lg-11,
+.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+/*Extra large devices (large desktops, 1200px and up)*/
+@media (min-width: 1200px), (min-width: 992px), (min-width: 768px) {
+    .col-md-0point5 {
+        width: 4.166666665%;
+        flex: 0 0 4.166%;
+        max-width: 4.166%;
+    }
+
+    .col-md-1point5 {
+        width: 12.499999995%;
+        flex: 0 0 12.499%;
+        max-width: 12.499%;
+    }
+
+    .col-md-2point5 {
+        width: 20.833333325%;
+        flex: 0 0 20.833%;
+        max-width: 20.833%;
+    }
+
+    .col-md-3point5 {
+        width: 29.166666655%;
+        flex: 0 0 29.166%;
+        max-width: 29.166%;
+    }
+
+    .col-md-4point5 {
+        width: 37.499999985%;
+        flex: 0 0 37.499%;
+        max-width: 37.499%;
+    }
+
+    .col-md-5point5 {
+        width: 45.8333333155%;
+        flex: 0 0 45.833%;
+        max-width: 45.833%;
+    }
+
+    .col-md-6point5 {
+        width: 54.166666645%;
+        flex: 0 0 54.166%;
+        max-width: 54.166%;
+    }
+
+    .col-md-7point5 {
+        width: 62.499999975%;
+        flex: 0 0 62.499%;
+        max-width: 62.499%;
+    }
+
+    .col-md-8point5 {
+        width: 70.833333305%;
+        flex: 0 0 70.833%;
+        max-width: 70.833%;
+    }
+
+    .col-md-9point5 {
+        width: 79.166666635%;
+        flex: 0 0 79.166%;
+        max-width: 79.166%;
+    }
+
+    .col-md-10point5 {
+        width: 87.499999965%;
+        flex: 0 0 87.499%;
+        max-width: 87.499%;
+    }
+
+    .col-md-11point5 {
+        width: 95.833333295%;
+        flex: 0 0 95.833%;
+        max-width: 95.833%;
+    }
+}
+

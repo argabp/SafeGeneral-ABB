@@ -1,0 +1,87 @@
+﻿@using ABB.Application.BiayaMaterais.Queries
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.TagHelpers
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Biaya Materai";
+}
+
+<script src="~/Modules/BiayaMaterai/JS/biayaMaterai.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-8">
+            Biaya Materai
+        </div>
+
+        <div class="col-md-4">
+            <button class="flat-btn-primary" onclick="btnAddBiayaMaterai_OnClick()">Add New Biaya Materai</button>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<BiayaMateraiDto>()
+                .Name("BiayaMateraiGrid")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetBiayaMaterais", "BiayaMaterai").Data("searchFilter"))
+                    .Model(model => model.Id(p => p.Id))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.nm_mtu).Width(150).Title("Nama Mata Uang");
+                    columns.Bound(col => col.nilai_prm_mul).Width(150).Title("Nilai Premi Mulai");
+                    columns.Bound(col => col.nilai_prm_akh).Width(150).Title("Nilai Premi Akhir");
+                    columns.Bound(col => col.nilai_bia_mat).Width(150).Title("Nilai Biaya Materai");
+                    columns.Command(command =>
+                    {
+                        command.Custom("EditBiayaMaterai")
+                            .Text("Edit")
+                            .IconClass("fa fa-pencil-alt")
+                            .HtmlAttributes(new { title = "Edit" })
+                            .Click("btnEditBiayaMaterai_OnClick");
+                        command.Custom("DeleteBiayaMaterai")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeleteBiayaMaterai");
+                    }).Width(200);
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit"))
+        
+                )    
+        </div>
+        
+        @(Html.Kendo().Window()
+            .Name("BiayaMateraiWindow")
+            .Title("Biaya Materai")
+            .Width(400)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+    </div>
+</div>
+

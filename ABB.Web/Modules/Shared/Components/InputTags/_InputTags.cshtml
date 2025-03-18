@@ -1,0 +1,153 @@
+﻿@using Kendo.Mvc.UI
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@using ABB.Web.Modules.Shared.Components.InputTags
+@model InputTagsModel
+<style>
+    .input-tags-search {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    .input-tags {
+        box-sizing: border-box!important;
+        padding-right: 20px !important;
+        padding-left: 20px !important;
+        background-color: white;
+        background: url("../img/ic_search.png") no-repeat;
+        background-position: left;
+        margin: 0px 0px 5px 0px;
+    }
+    .input-tags-item {
+        height: 34px;
+        border-radius: 22px;
+        -moz-border-radius: 22px;
+        -webkit-border-radius: 22px;
+        background-color: rgba(138, 146, 160, 0.1);
+        padding: 2px 6px 2px 2px;
+        align-items: center;
+        display: flex;
+        margin : 2px 0px 2px 0px;
+    }
+    .input-tags-item img {
+        width: 30px;
+        -moz-border-radius: 50%;
+        -webkit-border-radius: 50%;
+        border-radius: 50%;
+    }
+        .input-tags-item .label {
+            font-size: 12px;
+            font-family: PoppinsMedium,sans-serif;
+            padding: 0px 5px 0px 5px;
+            flex-grow: 1;
+            overflow-x: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+    .input-tags-item .action{
+        cursor:pointer;
+        color:darkgrey;
+        margin-right:8px;
+    }
+    .initial-img {
+        font-family: 'PoppinsRegular',sans-serif;
+        width: 30px;
+        height: 30px;
+        border-radius: 15px;
+        background: #004D3C;
+        font-size: 20px;
+        color: #fff;
+        text-align: center;
+        min-width:30px;
+    }
+</style>
+<div input-tags-container="@Model.Name" class="col-sm-12">
+        @(Html.Kendo().AutoComplete()
+        .Name(Model.Name)
+        .HtmlAttributes(new { data= "[]" })
+        .Placeholder(Model.PlaceHolder)
+        .DataTextField("Description")
+        .Filter("contains")
+        .BindTo(Model.Items)
+        )
+    <div input-tags-selected="@Model.Name" class="row">
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#@Model.Name').parent().addClass('input-tags-search');
+        $('#@Model.Name').addClass('input-tags');
+        $('#@Model.Name').data('kendoAutoComplete').bind("select", function (e) {
+            var dataItem = this.dataItem(e.item.index());
+            var currentData = JSON.parse($('#@Model.Name').attr('data'));
+            if (existInputTagData(currentData, dataItem.Value)) return;
+            addInputTagData('@Model.Name', dataItem);
+            addInputTagUI('@Model.Name', dataItem, '@Model.ColumnCount');
+        });
+        $('#@Model.Name').data('kendoAutoComplete').bind("close", function (e) {
+            this.value('');
+        });
+        $(document).on('click', '.del-@Model.Name', function (e) {
+            deleteInputTag(e, '@Model.Name');
+        });
+    });
+    function deleteInputTag(e, id) {
+        var value = $(e.target).attr('value');
+        var currentData = JSON.parse($('#' + id).attr('data'));
+        currentData = currentData.filter(e => e !== value);
+        $('#' + id).attr('data', JSON.stringify(currentData));
+        $(e.target).parent().parent().remove();
+    }
+    function getInputTagDataSource(modelName) {
+        return $('#' + modelName).data('kendoAutoComplete').dataSource.data();
+    }
+    function addInputTagData(modelName, dataItem) {
+        var currentData = JSON.parse($('#' + modelName).attr('data'));
+        currentData.push(dataItem.Value);
+        $('#' + modelName).attr('data', JSON.stringify(currentData));
+    }
+    function addInputTagUI(modelName, dataItem, colCount = 3) {
+        var imgElement = '';
+        var colDiv = 12 / colCount;
+        if (dataItem.ImageUrl) imgElement = `<img src = ${dataItem.ImageUrl} />`;
+        else {
+            var initial = dataItem.Description[0].toUpperCase()
+            imgElement = `<div class="initial-img"> ${initial}</div>`;
+        }
+        if (!dataItem.IsTeam) {
+            $(`[input-tags-selected="${modelName}"]`).append(`
+                <div class='col-sm-${colDiv}'>
+                     <div class="input-tags-item">
+                        ${imgElement}
+                        <div class="label darkest " title="${dataItem.Description}" >${dataItem.Description}</div>
+                        <div class="fa fa-times action del-${modelName}" value=${dataItem.Value} style="cursor:pointer"></div>
+                    </div>
+                </div>
+            `);
+        } else {
+            dataItem.Description = `Team: ${dataItem.Description} (${dataItem.Member} Members)`;
+            $(`[input-tags-selected="${modelName}"]`).append(`
+                <div class='col-sm-6 col-lg-6 col-xl-4'>
+                     <div class="input-tags-item teamid-${dataItem.Value}" style="cursor:pointer;" onclick="getMember(${dataItem.Value})">
+                        ${imgElement}
+                        <div class="label darkest " title="${dataItem.Description}" >${dataItem.Description}</div>
+                        <div class="fa fa-times action del-${modelName}" value=${dataItem.Value} style="cursor:pointer"></div>
+<div class="popup"><ul></ul></div>
+                    </div>
+                </div>
+            `);
+
+        }
+    }
+    function existInputTagData(arrItem, selectedItem) {
+        var exist = false;
+        for (var item of arrItem) {
+            if (item == selectedItem) {
+                exist = true;
+                break;
+            }
+        }
+
+        return exist ;
+    }
+</script>

@@ -1,0 +1,273 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.Akseptasi.Models.AkseptasiResikoOtherFireViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/Akseptasi/Components/Other/otherFire.js"></script>
+
+<style>
+    p {
+        margin: 0px;
+        padding: 0px;
+    }
+    label {
+        align-content: center;
+    }
+</style>
+
+@{
+    var nomor_aksepatsi = Model.kd_cb.Trim() + Model.kd_cob.Trim() +
+                          Model.kd_scob.Trim() + Model.kd_thn.Trim() + Model.no_aks.Trim();
+}
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="OtherFireForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Akseptasi</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="temp_other_nomor_akseptasi" value="@nomor_aksepatsi" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Update</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="resiko_other_fire_no_updt" value="@Model.no_updt" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Resiko</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="resiko_other_no_rsk" value="@Model.no_rsk" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Endorsment</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist name="resiko_other_fire_kd_endt" style="width: 100%" readonly="true" value="@Model.kd_endt"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeEndorsment", "Akseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Zona</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_zona" style="width: 100%"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeZona", "Akseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Lokasi Resiko</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_lok_rsk" style="width: 100%"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetLokasiResiko", "Akseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-3">Alamat Lok. Resiko</label>
+                <div class="col-sm-9">
+                    <kendo-textarea name="almt_rsk" rows="2" style="width: 100%; background-color: #FFFFE1">@Model.almt_rsk</kendo-textarea>
+                    <span asp-validation-for="almt_rsk" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kota</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="kt_rsk" style="width: 100%; background-color: #FFFFE1"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Pos</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="kd_pos_rsk" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Propinsi</label>
+                <div class="col-sm-6">
+                    <input type="hidden" id="temp_kd_prop" value="@Model.kd_prop">
+                    <kendo-dropdownlist for="kd_prop" style="width: 100%" option-label="Pilih Propinsi" on-change="OnKodePropinsiChange"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="not-null-dropdown">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodePropinsi", "Akseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Kabupaten</label>
+                <div class="col-sm-6">
+                    <input type="hidden" id="temp_kd_kab" value="@Model.kd_kab">
+                    <kendo-dropdownlist for="kd_kab" style="width: 100%" option-label="Pilih Kabupaten" on-change="OnKodeKabupatenChange"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeKabupaten", "Akseptasi")" data="dataKodeKabupatenDropDown"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Kecamatan</label>
+                <div class="col-sm-6">
+                    <input type="hidden" id="temp_kd_kec" value="@Model.kd_kec">
+                    <kendo-dropdownlist for="kd_kec" style="width: 100%" option-label="Pilih Kecamatan" on-change="OnKodeKecamatanChange"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeKecamatan", "Akseptasi")" data="dataKodeKecamatanDropDown"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Kelurahan</label>
+                <div class="col-sm-6">
+                    <input type="hidden" id="temp_kd_kel" value="@Model.kd_kel">
+                    <kendo-dropdownlist for="kd_kel" style="width: 100%" option-label="Pilih Kelurahan"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeKelurahan", "Akseptasi")" data="dataKodeKelurahanDropDown"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Penerangan</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_penerangan" style="width: 100%"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodePenerangan", "Akseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kelas Konstruksi</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_kls_konstr" style="width: 100%" class="not-null-dropdown"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeKelasKonstruksi", "Akseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Okupasi</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_okup" style="width: 100%" class="not-null-dropdown"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeKodeOkupasi", "Akseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-3">Keterangan Okupasi</label>
+                <div class="col-sm-9">
+                    <kendo-textarea name="ket_okup" rows="2" style="width: 100%">@Model.ket_okup</kendo-textarea>
+                    <span asp-validation-for="ket_okup" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kategori Gedung</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kategori_gd" style="width: 100%"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKategoriGedung", "Akseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Tahun Pembuatan</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox decimals="0" format="#" spinners="false" for="umur_gd" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Jumlah Lantai</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox decimals="0" format="#" spinners="false" for="jml_lantai" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="window-footer">
+        <button type="button" id="btn-previous-akseptasiResikoOther" class="btn btn-primary space-right">
+            <span class="fa fa-arrow-left"></span> Previous
+        </button>
+        <button type="button" id="btn-save-akseptasiResikoOtherFire" class="btn btn-success space-right">
+            <span class="fa fa-save"></span> Save
+        </button>
+    </div>
+</div>

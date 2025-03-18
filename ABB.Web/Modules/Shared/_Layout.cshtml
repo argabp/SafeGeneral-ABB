@@ -1,0 +1,109 @@
+﻿@using ABB.Web.Modules.Shared.Components.Navbar
+@using Kendo.Mvc.UI
+@addTagHelper *, ABB.Web
+<!DOCTYPE html>
+<html lang="en" @ViewData["HtmlAttribute"]>
+<head>
+    <meta charset="utf-8" />
+    <title>ABB | @ViewData["Title"]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="@ViewData["MetaDescription"]" />
+    <meta name="author" content="@ViewData["MetaAuthor"]" />
+    <meta name="keywords" content="@ViewData["MetaKeywords"]" />
+
+    <link rel="icon" type="image/x-icon" href="~/img/Logo-Icon.png">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/css/adminlte.css">
+    <link rel="stylesheet" href="~/css/abb.css">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="~/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <!-- Kendo -->
+    <link rel="stylesheet" href="~/plugins/kendo/styles/kendo.office365.min.css">
+    <link rel="stylesheet" href="~/plugins/kendo/styles/kendo.common-office365.min.css">
+    <link rel="stylesheet" href="~/css/bootstrap-layout.css">
+    <!-- Toastr -->
+    <link rel="stylesheet" href="~/plugins/toastr/toastr.min.css">
+
+    @await RenderSectionAsync("_Style", false)
+    
+    <style>
+        .loader-div{
+            display: none;
+            height: 100%;
+            width: 100%;
+            background-color: gray;
+            position: absolute;
+            z-index: 2000;
+            opacity: 0.5;
+        }
+        .custom-loader {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 50px;
+            aspect-ratio: 1;
+            --c: no-repeat linear-gradient(#000 0 0);
+            background: 
+            var(--c) 0%   50%,
+            var(--c) 50%  50%,
+            var(--c) 100% 50%;
+            background-size: 20% 100%;
+            animation: l1 1s infinite linear;
+        }
+        @@keyframes l1 {
+            0%  {background-size: 20% 100%,20% 100%,20% 100%}
+            33% {background-size: 20% 10% ,20% 100%,20% 100%}
+            50% {background-size: 20% 100%,20% 10% ,20% 100%}
+            66% {background-size: 20% 100%,20% 100%,20% 10% }
+            100%{background-size: 20% 100%,20% 100%,20% 100%}
+        }
+        
+        .not-null-dropdown .k-dropdown-wrap {
+            background-color: #FFFFE1;
+        }
+        .primary-dropdown .k-dropdown-wrap {
+          background-color: #00FFFF;
+        }
+    </style>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+    @* <partial name="_Scripts" /> *@
+@await Html.PartialAsync("~/Modules/Shared/_Scripts.cshtml")
+<div class="wrapper">
+    <!-- Custom Loader -->
+    <div class="loader-div" id="custom-loader">
+        <div class="custom-loader"></div>
+    </div>
+    <!-- Preloader -->
+    <div class="preloader flex-column justify-content-center align-items-center">
+        <img class="animation__shake" src="/img/Logo-Icon.png" alt="ABB" height="60" width="60">
+    </div>
+    @* <partial name="_Header" /> *@
+    <vc:navbar/>
+
+    @* <partial name="_Sidebar" /> *@
+    @await Html.PartialAsync("~/Modules/Shared/_Sidebar.cshtml")
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+        </div>
+        <!-- /.content-header -->
+        <!-- Main content -->
+        <section class="content">
+            @RenderBody()
+        </section>
+        <!-- /.content -->
+    </div>
+
+    @* <partial name="_Footer" /> *@
+    @await Html.PartialAsync("~/Modules/Shared/_Footer.cshtml")
+
+    @* <partial name="_PostScript" /> *@
+    @await Html.PartialAsync("~/Modules/Shared/_PostScript.cshtml")
+</div>
+</body>
+</html>

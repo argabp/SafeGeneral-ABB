@@ -1,0 +1,75 @@
+﻿@using ABB.Application.PeruntukanKendaraans.Queries
+@using Kendo.Mvc.UI
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Peruntukan Kendaraan";
+}
+
+<script src="~/Modules/PeruntukanKendaraan/JS/peruntukanKendaraan.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+    #kd_utk{
+        background-color: #00FFFF;
+    }
+    #nm_utk{
+        background-color: #FFFFE1;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Peruntukan Kendaraan
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<PeruntukanKendaraanDto>()
+                .Name("PeruntukanKendaraanGrid")
+                .ToolBar(toolbar => toolbar.Create())
+                .Editable(editable => editable.Mode(GridEditMode.InLine))
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetPeruntukanKendaraan", "PeruntukanKendaraan"))
+                    .Model(model => model.Id(p => p.kd_utk))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.kd_utk).Width(100).Title("Kode Untuk").Editable("disableGridTextboxWhenEdit");
+                    columns.Bound(col => col.nm_utk).Width(200).Title("Nama Untuk (Indonesia)");
+                    columns.Bound(col => col.nm_utk_ing).Width(200).Title("Nama Untuk (English)");
+                    columns.Command(command =>
+                    {
+                        command.Edit();
+                        command.Custom("DeletePeruntukanKendaraan")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeletePeruntukanKendaraan");
+                    }).Width(200);
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit").Save("onSavePeruntukanKendaraan"))
+
+                )
+        </div>
+    </div>
+</div>

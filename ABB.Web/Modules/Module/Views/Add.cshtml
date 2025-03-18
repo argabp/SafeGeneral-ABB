@@ -1,0 +1,66 @@
+﻿@using Kendo.Mvc.TagHelpers
+@using Kendo.Mvc.UI
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model ABB.Web.Modules.Module.Models.ModuleViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@{
+    ViewData["Title"] = "Module Page";
+}
+
+<script src="~/Modules/Module/JS/module.add.js"></script>
+<script src="~/Modules/Module/JS/fawe.icon.js"></script>
+
+<script id="iconTemplate" type="text/x-kendo-template">
+    <span class="fas #:Name#"></span>
+</script>
+
+<form id="ModuleForm" enctype="multipart/form-data">
+    <div class="window-body" style="background-color: lightgray">
+        <div class="form-group">
+            <input type="hidden" asp-for="Id" />
+            <label asp-for="Name" class="col-sm-3"></label>
+            <div class="col-sm-12">
+                <kendo-textbox for="Name" style="background-color:  #FFFFE1" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Icon" class="col-sm-3"></label>
+            <div class="col-sm-12">
+                <kendo-combobox for="Icon" datavaluefield="Name" datatextfield="Name" suggest="true" filter="FilterType.Contains" placeholder="Please Choose Icon" template-id="iconTemplate" />
+                <span asp-validation-for="Icon" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Sequence" class="col-sm-3"></label>
+            <div class="col-sm-12">
+                <kendo-numerictextbox for="Sequence" restrict-decimals="true" format="#" decimals="0"  spinners="false" />
+                <span asp-validation-for="Sequence" class="text-danger"></span>
+            </div>
+        </div>
+
+    </div>
+    <div class="window-footer">
+        <button type="button" id="btn-add-module" class="btn btn-primary space-right">Save</button>
+    </div>
+</form>
+
+<style>
+    #Icon_listbox > .k-item {
+        display: block !important;
+        width: 24px !important;
+        float: left !important;
+    }
+    #submenu {
+        margin-left: 7.5px;
+        margin-right: 7.5px;
+    }
+    .form-group{
+    margin-left:-7.5px;
+    }
+        #Icon_listbox > .k-item > span {
+            font-size: 24px !important;
+        }
+</style>

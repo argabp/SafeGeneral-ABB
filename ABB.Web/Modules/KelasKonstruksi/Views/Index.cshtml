@@ -1,0 +1,74 @@
+﻿@using ABB.Application.KelasKonsturksis.Queries
+@using Kendo.Mvc.UI
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Kelas Konstruksi";
+}
+
+<script src="~/Modules/KelasKonstruksi/JS/kelasKonstruksi.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+    #kd_kls_konstr{
+        background-color: #00FFFF;
+    }
+    #nm_kls_konstr{
+        background-color: #FFFFE1;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Kelas Konstruksi
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<KelasKonstruksiDto>()
+                .Name("KelasKonstruksiGrid")
+                .ToolBar(toolbar => toolbar.Create())
+                .Editable(editable => editable.Mode(GridEditMode.InLine))
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetKelasKonstruksi", "KelasKonstruksi"))
+                    .Model(model => model.Id(p => p.kd_kls_konstr))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.kd_kls_konstr).Width(200).Title("Kode Kelas Konstruksi").Editable("disableGridTextboxWhenEdit");
+                    columns.Bound(col => col.nm_kls_konstr).Width(200).Title("Nama Kelas Konstruksi");
+                    columns.Command(command =>
+                    {
+                        command.Edit();
+                        command.Custom("DeleteKelasKonstruksi")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeleteKelasKonstruksi");
+                    }).Width(200);
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit").Save("onSaveKelasKonstruksi"))
+
+                )
+        </div>
+    </div>
+</div>

@@ -1,0 +1,52 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.Account.Models.ProfileViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@{
+    ViewData["Title"] = "User Profile";
+}
+<script src="~/Modules/Account/JS/account.change-profile.js"></script>
+<form id="ChangeProfileForm" action="/Account/ChangeProfile" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="@Model.UserProfile.Email" />
+    <input type="hidden" asp-for="@Model.UserProfile.RoleName" />
+    <input type="hidden" asp-for="@Model.UserProfile.FullName" />
+    <input type="hidden" asp-for="@Model.UserProfile.Photo" />
+    <input type="file" asp-for="UserProfile.ProfilePhoto" placeholder="Photo" style="display:none">
+    <div class="form-group">
+        <input type="hidden" asp-for="UserProfile.Id" />
+        <label asp-for="UserProfile.FirstName" class="col-sm-3 "></label>
+        <div class="col-sm-12">
+            <kendo-textbox for="UserProfile.FirstName" />
+            <span asp-validation-for="UserProfile.FirstName" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="UserProfile.LastName" class="col-sm-3 "></label>
+        <div class="col-sm-12">
+            <kendo-textbox for="UserProfile.LastName" />
+            <span asp-validation-for="UserProfile.LastName" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3">Phone</label>
+        <div class="col-sm-12">
+            <kendo-textbox for="UserProfile.PhoneNumber" />
+            <span asp-validation-for="UserProfile.PhoneNumber" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="UserProfile.Address" class="col-sm-3 "></label>
+        <div class="col-sm-12">
+            <kendo-textbox for="UserProfile.Address" />
+            <span asp-validation-for="UserProfile.Address" class="text-danger"></span>
+        </div>
+    </div>
+    <div id="validation-profile-photo">
+        <span asp-validation-for="UserProfile.ProfilePhoto" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12">
+            <button type="button" id="btn-update-profile" class="btn btn-primary space-right">Update Profile</button>
+        </div>
+    </div>
+</form>

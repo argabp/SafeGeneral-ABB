@@ -1,0 +1,59 @@
+﻿@using ABB.Application.Akseptasis.Queries
+@using Kendo.Mvc.UI
+
+<script src="~/Modules/Akseptasi/Components/OtherMotorDetail/otherMotorDetail.js"></script>
+
+<div class="window-body">
+    <div class="row">
+        <div class="col-md-4">
+            <input type="text" class="search-field-top" style="height: 1em" id="SearchKeywordOtherMotorDetailKoas" placeholder="Search"/>
+        </div>
+        <div class="offset-5"></div>
+        <div class="col-md-2">
+            <button class="flat-btn-primary" style="height: 1em" id="btnAddNewAkseptasiOtherMotorDetail">Add New Akseptasi Other Motor Detail</button>
+        </div>
+    </div>
+    
+    @(Html.Kendo().Grid<AkseptasiOtherMotorDetailDto>()
+        .Name("AkseptasiOtherMotorDetailGrid")
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetAkseptasiOtherMotorDetails", "Akseptasi").Data("searchFilterOtherMotorDetail"))
+            .Model(model => model.Id(p => p.thn_ptg_kend))
+        )
+        .Columns(columns =>
+        {
+            columns.Bound(col => col.thn_ptg_kend).Width(150).Title("Tahun PTG Kendaraan");
+            columns.Command(command =>
+            {
+                command.Custom("EditAkseptasiOtherMotorDetail")
+                    .Text("Edit")
+                    .IconClass("fa fa-pencil-alt")
+                    .HtmlAttributes(new { title = "Edit" })
+                    .Click("btnEditAkseptasiOtherMotorDetail_OnClick");
+                command.Custom("DeleteAkseptasiOtherMotorDetail")
+                    .Text("Delete")
+                    .IconClass("k-icon k-i-delete")
+                    .HtmlAttributes(new { title = "Delete" })
+                    .Click("btnDeleteAkseptasiOtherMotorDetail_OnClick");
+            }).Width(200);
+        })
+        .Pageable(pager => pager
+            .Refresh(true)
+            .Info(true)
+            .PageSizes(true)
+        )
+        .Sortable()
+        .Filterable()
+        .Scrollable()
+        .Height(450)
+        .Resizable(a => a.Columns(true))
+        .Events(ev => ev.DataBound("gridAutoFit"))
+    
+        )
+    
+    <div class="window-footer">
+        <button type="button" id="btn-previous-akseptasiOtherMotorDetail" class="btn btn-primary space-right">
+            <span class="fa fa-arrow-left"></span> Previous
+        </button>
+    </div>
+</div>

@@ -1,0 +1,77 @@
+﻿@using Kendo.Mvc.UI
+@using ABB.Application.Roles.Queries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Role List";
+}
+
+<script src="~/Modules/Role/JS/role.index.js"></script>
+<script src="~/Modules/Role/JS/role.form.js"></script>
+
+@Html.AntiForgeryToken()
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Master Role Name
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search" />
+        </div>
+
+        <div class="col-md-2">
+            <button class="flat-btn-primary" id="btnAddNewRole">Add New Role</button>
+        </div>
+    </div>
+    <div class="flat-box-content">
+        @(Html.Kendo().Grid<RolesDto>()
+        .Name("RoleGrid")
+        .DataSource(dataSource => dataSource.Ajax().PageSize(5)
+            .Read(read => read.Action("GetRoles", "Role").Data("searchFilter"))
+        )
+        .Resizable(r => r.Columns(true))
+        .Columns(columns =>
+        {
+            columns.Bound(col => col.RoleId).Hidden();
+            columns.Bound(col => col.RoleCode);
+            columns.Bound(col => col.RoleName);
+            columns.Bound(col => col.Description);
+            columns.Command(command =>
+            {
+                command.Custom("Edit")
+                        .Text(" ")
+                        .IconClass("fa fa-pencil-alt")
+                        .HtmlAttributes(new { title="Edit"})
+                        .Click("btnEditRole_OnClick");
+                command.Custom("Delete")
+                        .Text(" ")
+                        .IconClass("fa fa-trash")
+                        .HtmlAttributes(new { title="Delete"})
+                        .Click("btnDeleteRole_OnClick");
+            }).Title("Action").Width(180);
+        })
+        .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(new int[] { 5, 10, 25, 50 })
+                    )
+        .Sortable()
+        .Height(400)
+        .Scrollable()
+        .Filterable())
+        @(Html.Kendo().Window()
+            .Name("RoleWindow")
+            .Title("Role Page")
+            .Width(400)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+          )
+    </div>
+</div>
+

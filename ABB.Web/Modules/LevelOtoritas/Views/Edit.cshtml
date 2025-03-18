@@ -1,0 +1,44 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.LevelOtoritas.Models.LevelOtoritasViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="LevelOtoritasForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Username</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="kd_user" style="width: 100%" readonly="true"/>
+                <span asp-validation-for="kd_user" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Password</label>
+            <div class="col-sm-12">
+                <vc:password-box name="kd_pass" value="@Model.kd_pass" place-holder="Password"/>
+                <span asp-validation-for="kd_pass" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Level Otoritas</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="flag_xol" style="width: 100%"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetLevelOtoritas", "LevelOtoritas")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="flag_xol" class="text-danger"></span>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="window-footer">
+    <button type="button" onclick="onSaveLevelOtoritas()" class="btn btn-success space-right">
+        <span class="fa fa-save"></span> Save
+    </button>
+</div>

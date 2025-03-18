@@ -1,0 +1,79 @@
+﻿@using Kendo.Mvc.UI
+@using ABB.Application.SCOBs.Queries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "SCOB List";
+}
+
+<script src="~/Modules/SCOB/JS/scob.index.js"></script>
+<script src="~/Modules/SCOB/JS/scob.form.js"></script>
+
+@Html.AntiForgeryToken()
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Master SCOB
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search" />
+        </div>
+
+        <div class="col-md-2">
+            <button class="flat-btn-primary" id="btnAddNewSCOB">Add SCOB</button>
+        </div>
+    </div>
+    <div class="flat-box-content">
+        @(Html.Kendo().Grid<SCOBDto>()
+        .Name("SCOBGrid")
+        .DataSource(dataSource => dataSource.Ajax().PageSize(5)
+            .Read(read => read.Action("GetSCOBs", "SCOB").Data("searchFilter"))
+        )
+        .Resizable(r => r.Columns(true))
+        .Columns(columns =>
+        {
+            columns.Bound(col => col.kd_cob).Title("Kode COB").Width(100);
+            columns.Bound(col => col.kd_scob).Title("Kode Sub COB").Width(100);
+            columns.Bound(col => col.nm_scob).Title("Nama Sub COB").Width(200);
+            columns.Bound(col => col.nm_scob_ing).Title("Nama Sub COB (English)").Width(100);
+            columns.Bound(col => col.kd_map_scob).Title("Kode Map Sub COB").Width(100);
+            columns.Bound(col => col.kd_sub_grp).Title("Kode Sub Group").Width(100);
+            columns.Command(command =>
+            {
+                command.Custom("Edit")
+                        .Text(" ")
+                        .IconClass("fa fa-pencil-alt")
+                        .HtmlAttributes(new { title="Edit"})
+                        .Click("btnEditSCOB_OnClick");
+                command.Custom("Delete")
+                        .Text(" ")
+                        .IconClass("fa fa-trash")
+                        .HtmlAttributes(new { title="Delete"})
+                        .Click("btnDeleteSCOB_OnClick");
+            }).Title("Action").Width(180);
+        })
+        .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(new int[] { 5, 10, 25, 50 })
+                    )
+        .Sortable()
+        .Height(400)
+        .Scrollable()
+        .Filterable())
+        @(Html.Kendo().Window()
+            .Name("SCOBWindow")
+            .Title("SCOB Page")
+            .Width(500)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+          )
+    </div>
+</div>
+

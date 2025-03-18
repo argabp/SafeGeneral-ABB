@@ -1,0 +1,31 @@
+﻿@addTagHelper *, ABB.Web
+<!DOCTYPE html>
+<html lang="en" @ViewData["HtmlAttribute"]>
+<head>
+    <meta charset="utf-8" />
+    <title>ABB | @ViewData["Title"]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="@ViewData["MetaDescription"]" />
+    <meta name="author" content="@ViewData["MetaAuthor"]" />
+    <meta name="keywords" content="@ViewData["MetaKeywords"]" />
+
+    <link rel="icon" type="image/x-icon" href="~/img/Logo-Icon.png">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/css/adminlte.css">
+    <link rel="stylesheet" href="~/css/abb.css">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="~/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <!-- Kendo -->
+    <link rel="stylesheet" href="~/plugins/kendo/styles/kendo.office365.min.css">
+    <link rel="stylesheet" href="~/plugins/kendo/styles/kendo.common-office365.min.css">
+    <link rel="stylesheet" href="~/css/bootstrap-layout.css">
+
+    @await RenderSectionAsync("_Style", false)
+</head>
+@await Html.PartialAsync("~/Modules/Shared/_Scripts.cshtml")
+<body>
+@RenderBody()
+</body>
+</html>

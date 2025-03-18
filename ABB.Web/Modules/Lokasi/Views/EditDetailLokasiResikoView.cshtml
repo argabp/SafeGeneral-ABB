@@ -1,0 +1,100 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.Lokasi.Models.DetailLokasiResikoViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="DetailLokasiResikoForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kode Pos</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="kd_pos" readonly="true" style="width: 100%"/>
+                <span asp-validation-for="kd_pos" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kode Lokasi Resiko</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="kd_lok_rsk" readonly="true" style="width: 100%"/>
+                <span asp-validation-for="kd_lok_rsk" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Gedung</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="gedung" style="width: 100%"/>
+                <span asp-validation-for="gedung" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Alamat</label>
+            <div class="col-sm-12">
+                <kendo-textarea name="alamat" rows="2" style="width: 100%; background-color: white">@Model.alamat</kendo-textarea>
+                <span asp-validation-for="alamat" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Nama Provinsi</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="kd_prop" on-change="changeProvinsi" style="width: 100%"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetProvinsiDropdown", "Lokasi")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="kd_prop" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Nama Kabupaten</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="kd_kab" on-change="changeKabupaten" style="width: 100%"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetKabupatenDropdown", "Lokasi")" data="getProvinsiDropdown"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="kd_kab" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Nama Kecamatan</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="kd_kec" on-change="changeKecamatan" style="width: 100%"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetKecamatanDropdown", "Lokasi")" data="getKabupatenDropdown"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="kd_kec" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Nama Kelurahan</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="kd_kel" style="width: 100%"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetKelurahanDropdown", "Lokasi")" data="getKecamatanDropdown"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="kd_kel" class="text-danger"></span>
+            </div>
+        </div>
+    </form>
+
+<div class="window-footer">
+    <button type="button" onclick="onSaveDetailLokasiResiko()" class="btn btn-success space-right">
+        <span class="fa fa-save"></span> Save
+    </button>
+</div>
+</div>

@@ -1,0 +1,74 @@
+﻿@using ABB.Application.GrupObyeks.Queries
+@using Kendo.Mvc.UI
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Grup Obyek";
+}
+
+<script src="~/Modules/GrupObyek/JS/grupObyek.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+    #kd_grp_oby{
+        background-color: #00FFFF;
+    }
+    #nm_grp_oby{
+        background-color: #FFFFE1;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Grup Obyek
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<GrupObyekDto>()
+                .Name("GrupObyekGrid")
+                .ToolBar(toolbar => toolbar.Create())
+                .Editable(editable => editable.Mode(GridEditMode.InLine))
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetGrupObyeks", "GrupObyek"))
+                    .Model(model => model.Id(p => p.kd_grp_oby))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.kd_grp_oby).Width(150).Title("Kode Grup Obyek").Editable("disableGridTextboxWhenEdit");
+                    columns.Bound(col => col.nm_grp_oby).Width(200).Title("Nama Grup Obyek");
+                    columns.Command(command =>
+                    {
+                        command.Edit();
+                        command.Custom("DeleteGrupObyek")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeleteGrupObyek");
+                    }).Width(200);
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit").Save("onSaveGrupObyek"))
+
+                )
+        </div>
+    </div>
+</div>

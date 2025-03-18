@@ -1,0 +1,90 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.Account.Models.ProfileViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@{
+    ViewData["Title"] = "User Profile";
+}
+<style>
+    .info-field {
+        color: gray;
+        margin-top:10px;
+    }
+
+    .info-fullname {
+        text-align: center;
+        font-weight: bold;
+    }
+    .info-rolename {
+        text-align: center;
+        font-weight: bold;
+        color: gray;
+        margin-top:5px;
+    }
+
+    .flat-box-content {
+        margin-top: 0px !important;
+    }
+</style>
+@{
+    var Email = string.IsNullOrEmpty(@Model.UserProfile.Email) ? "-" : @Model.UserProfile.Email;
+    var PhoneNumber = string.IsNullOrEmpty(@Model.UserProfile.PhoneNumber) ? "-" : @Model.UserProfile.PhoneNumber;
+    var Address = string.IsNullOrEmpty(@Model.UserProfile.Address) ? "-" : @Model.UserProfile.Address;
+}
+<script src="~/Modules/Account/JS/account.profile.js"></script>
+<div class="row">
+    <div class="col-sm-4">
+        <div class="flat-box">
+            <div class="flat-box-title">
+                Profile Page
+            </div>
+            <div class="flat-box-content">
+                <div class="form-group center" style="margin-bottom:10px">
+                    <div class="circular-upload-container center">
+                        <label asp-for="UserProfile.ProfilePhoto">
+                            <image src="@Model?.UserProfile.Photo" />
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom:0px">
+                    <div class="col-md-12 info-fullname">
+                        <div class="info-fullname"> @Model.UserProfile.FullName</div>
+                        <div class="info-rolename">@Model.UserProfile.RoleName</div>
+                        <br />
+                    </div>
+
+                    <div id="validation-profile-photo-container">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flat-box" style="margin-top:5px">
+            <div class="flat-box-content">
+                <div class="col-sm-12 info-field">Email address</div>
+                <div class="col-sm-12">@Email</div>
+                <div class="col-sm-12 info-field">Phone</div>
+                <div class="col-sm-12">@PhoneNumber</div>
+                <div class="col-sm-12 info-field">Address</div>
+                <div class="col-sm-12">@Address</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-8">
+        @(Html.Kendo().TabStrip()
+            .Name("ChangeProfileTab")
+            .Items(tabstrip =>
+            {
+                tabstrip.Add().Text("Profile")
+                    .Content(@<text><div id="ChangeProfileContainer"></div></text>);
+
+                tabstrip.Add().Text("Password")
+                    .Content(@<text><div id="ChangePasswordContainer"></div></text>);
+            })
+            .SelectedIndex(0)
+        )
+    </div>
+
+</div>

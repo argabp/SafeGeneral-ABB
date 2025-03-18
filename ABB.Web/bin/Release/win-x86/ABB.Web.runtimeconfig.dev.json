@@ -1,0 +1,8 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "C:\\Users\\Formulatrix\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\Formulatrix\\.nuget\\packages"
+    ]
+  }
+}

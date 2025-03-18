@@ -1,0 +1,161 @@
+﻿@using ABB.Application.PertanggunganKendaraans.Queries
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.TagHelpers
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Pertanggungan Kendaranaan";
+}
+
+<script src="~/Modules/PertanggunganKendaraan/JS/pertanggunganKendaraan.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-8">
+            Pertanggungan Kendaranaan
+        </div>
+
+        <div class="col-md-4">
+            <button class="flat-btn-primary" onclick="btnAddPertanggunganKendaraan_OnClick()">Add New Pertanggungan Kendaraan</button>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<PertanggunganKendaraanDto>()
+                .Name("PertanggunganKendaraanGrid")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetPertanggunganKendaraans", "PertanggunganKendaraan").Data("searchFilter"))
+                    .Model(model => model.Id(p => p.Id))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
+                    columns.Bound(col => col.desk).Width(150).Title("Deskripsi");
+                    columns.Command(command =>
+                    {
+                        command.Custom("EditPertanggunganKendaraan")
+                            .Text("Edit")
+                            .IconClass("fa fa-pencil-alt")
+                            .HtmlAttributes(new { title = "Edit" })
+                            .Click("btnEditPertanggunganKendaraan_OnClick");
+                        command.Custom("DeletePertanggunganKendaraan")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeletePertanggunganKendaraan");
+                    }).Width(200);
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .ClientDetailTemplateId("template")
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit"))
+        
+                )    
+        </div>
+        
+        
+        <script id="template" type="text/kendo-tmpl">
+            <div class="row">
+                <div class="col-md-4 k-button k-button-icontext">
+                    <button style="border: none;" onclick="btnAddDetailPertanggunganKendaraan_OnClick('#=kd_cob#', '#=kd_scob#', '#=kd_jns_ptg#')">+ ADD NEW RECORD</button>
+                </div>
+            </div>
+            @(Html.Kendo().TabStrip()
+                .Name("tabStrip_#=Id#")
+                .SelectedIndex(0)
+                .Animation(animation => animation.Open(open => open.Fade(FadeDirection.In)))
+                .Items(items =>
+                {
+                    items.Add().Text("Detail").Content(@<text>
+                            @(Html.Kendo().Grid<DetailPertanggunganKendaraanDto>()
+                                .Name("DetailPertanggunganKendaraanGrid#=Id#") // template expression, to be evaluated in the master context
+                                .DataSource(dataSource => dataSource.Ajax()
+                                    .Read(read => read.Action("GetDetailPertanggunganKendaraans", "PertanggunganKendaraan", new { kd_cob = "#=kd_cob#", kd_scob = "#=kd_scob#", kd_jns_ptg = "#=kd_jns_ptg#" }))
+                                    .Model(m => m.Id(p => p.Id))
+                                )
+                                .Columns(columns =>
+                                {
+                                    columns.Bound(col => col.no_urut).Width(100).Title("No Urut");
+                                    columns.Bound(col => col.nilai_tsi_tjh_mul).Width(150).Title("Nilai TSI TJH Awal");
+                                    columns.Bound(col => col.nilai_tsi_tjh_akh).Width(150).Title("Nilai TSI TJH Akhir");
+                                    columns.Bound(col => col.pst_rate_tjh).Width(100).Title("Rate Premi");
+                                    columns.Bound(col => col.text_stn_rate_tjh).Width(100).Title("Satuan Rate Premi");
+                                    columns.Bound(col => col.nilai_prm_tjh).Width(150).Title("Premi TJH");
+                                    columns.Bound(col => col.nilai_tsi_tjp).Width(150).Title("Nilai TSI TJ Penumpang");
+                                    columns.Bound(col => col.nilai_prm_tjp).Width(150).Title("Nilai Premi TJ Penumpang");
+                                    columns.Bound(col => col.pst_rate_pad).Width(100).Title("Rate PAD");
+                                    columns.Bound(col => col.pst_rate_pap).Width(100).Title("Rate PAP");
+                                    columns.Command(command =>
+                                    {
+                                        command.Custom("EditDetailPertanggunganKendaraan")
+                                            .Text("Edit")
+                                            .IconClass("fa fa-pencil-alt")
+                                            .HtmlAttributes(new { title = "Edit" })
+                                            .Click("btnEditDetailPertanggunganKendaraan_OnClick");
+                                        command.Custom("DeleteDetailPertanggunganKendaraan")
+                                            .Text("Delete")
+                                            .IconClass("k-icon k-i-delete")
+                                            .HtmlAttributes(new { title = "Delete" })
+                                            .Click("onDeleteDetailPertanggunganKendaraan");
+                                    }).Width(200);
+                                })
+                                .Pageable(pager => pager
+                                    .Refresh(true)
+                                    .Info(true)
+                                    .PageSizes(true)
+                                )
+                                .Sortable()
+                                .Selectable()
+                                .Filterable()
+                                .Scrollable()
+                                .Height(380)
+                                .Resizable(a => a.Columns(true))
+                                .Events(ev => ev.DataBound("gridAutoFit").Save("onSaveDetailPertanggunganKendaraan"))
+                                .ToClientTemplate())
+                        </text>
+                        );
+                })
+                .ToClientTemplate())
+        
+        </script>
+        
+        @(Html.Kendo().Window()
+            .Name("PertanggunganKendaraanWindow")
+            .Title("Pertanggungan Kendaraan")
+            .Width(400)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+        
+        @(Html.Kendo().Window()
+            .Name("DetailPertanggunganKendaraanWindow")
+            .Title("Detail Pertanggungan Kendaraan")
+            .Width(400)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+    </div>
+</div>
+

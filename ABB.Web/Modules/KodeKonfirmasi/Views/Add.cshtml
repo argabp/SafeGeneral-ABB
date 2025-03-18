@@ -1,0 +1,152 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.KodeKonfirmasi.Models.KodeKonfirmasiViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/KodeKonfirmasi/JS/kodeKonfirmasi.form.js"></script>
+<script src="~/Modules/KodeKonfirmasi/JS/kodeKonfirmasi.add.js"></script>
+
+<style>
+    p {
+        margin: 0px;
+        padding: 0px;
+    }
+    label {
+        align-content: center;
+    }
+</style>
+
+<div class="window-body">
+    <form id="KodeKonfirmasiForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-3">Kode Cabang Akseptasi</label>
+                <div class="col-sm-9 row">
+                    <div class="col-sm-8">
+                        <kendo-dropdownlist for="kd_cb" style="width: 100%" on-change="OnKodeCabangChange" option-label="Pilih Cabang"
+                                            datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                            <datasource type="DataSourceTagHelperType.Custom">
+                                <transport>
+                                    <read url="@Url.Action("GetCabang", "KodeKonfirmasi")"/>
+                                </transport>
+                            </datasource>
+                        </kendo-dropdownlist>
+                        <span asp-validation-for="kd_cb" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-4">
+                        <ul class="radio-group d-flex">
+                            <li class="flex-fill">
+                                <input type="radio" name="flag_polis" id="flag_polis_baru" class="k-radio">
+                                <label class="k-radio-label" for="flag_polis_baru">Polis</label>
+                            </li>
+                            <li class="flex-fill">
+                                <input type="radio" name="flag_polis" id="flag_polis_induk" checked="true" class="k-radio">
+                                <label class="k-radio-label" for="flag_polis_induk">Polis Induk</label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-3">Kode COB</label>
+                <div class="col-sm-9 row">
+                    <div class="col-sm-8">
+                        <kendo-dropdownlist for="kd_cob" style="width: 100%" on-change="OnKodeCOBChange" option-label="Pilih COB"
+                                            datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                            <datasource type="DataSourceTagHelperType.Custom">
+                                <transport>
+                                    <read url="@Url.Action("GetCOB", "KodeKonfirmasi")"/>
+                                </transport>
+                            </datasource>
+                        </kendo-dropdownlist>
+                        <span asp-validation-for="kd_cob" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-3">Kode SCOB</label>
+                <div class="col-sm-9 row">
+                    <div class="col-sm-8">
+                        <kendo-dropdownlist for="kd_scob" style="width: 100%" on-change="OnKodeSCOBChange" option-label="Pilih SCOB"
+                                            datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                            <datasource type="DataSourceTagHelperType.Custom">
+                                <transport>
+                                    <read url="@Url.Action("GetSCOB", "KodeKonfirmasi")"/>
+                                </transport>
+                            </datasource>
+                        </kendo-dropdownlist>
+                        <span asp-validation-for="kd_scob" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-3">Nomor Akseptasi</label>
+                <div class="col-sm-9 row">
+                    <div class="col-sm-2">
+                        <kendo-textbox name="temp_kd_cb" value="@Model.kd_cb" readonly="true" style="width: 100%"/>
+                    </div>
+                    <div class="col-sm-1">
+                        <kendo-textbox name="temp_kd_cob" value="@Model.kd_cob" readonly="true" style="width: 100%"/>
+                    </div>
+                    <div class="col-sm-2">
+                        <kendo-textbox name="temp_kd_scob" value="@Model.kd_scob" readonly="true" style="width: 100%"/>
+                    </div>
+                    <div class="col-sm-1">
+                        <kendo-textbox for="kd_thn" style="width: 100%"/>
+                        <span asp-validation-for="kd_thn" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-2">
+                        <kendo-textbox for="no_aks" style="width: 100%"/>
+                        <span asp-validation-for="no_aks" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-3">Kode Konfirmasi</label>
+                <div class="col-sm-9 row">
+                    <div class="col-sm-8">
+                        <kendo-textbox for="kd_konfirm" style="width: 100%"/>
+                        <span asp-validation-for="kd_konfirm" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-3">Tanggal Input</label>
+                <div class="col-sm-9 row">
+                    <div class="col-sm-8">
+                        <kendo-datepicker for="tgl_input" value="DateTime.Now" readonly="true"></kendo-datepicker>
+                        <span asp-validation-for="tgl_input" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-3">Kode User Input</label>
+                <div class="col-sm-9 row">
+                    <div class="col-sm-8">
+                        <kendo-textbox for="kd_usr_input" readonly="true" style="width: 100%"/>
+                        <span asp-validation-for="kd_usr_input" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="window-footer">
+        <button type="button" id="btn-add-kodeKonfirmasi" class="btn btn-success space-right">
+            <span class="fa fa-save"></span> Save
+        </button>
+    </div>
+</div>

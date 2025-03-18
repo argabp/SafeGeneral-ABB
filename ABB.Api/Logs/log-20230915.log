@@ -1,0 +1,10 @@
+09/15/2023 13:59:48 +07:00 Value cannot be null. (Parameter 'path2')
+System.ArgumentNullException: Value cannot be null. (Parameter 'path2')
+   at System.IO.Path.Combine(String path1, String path2)
+   at ABB.Application.PengajuanAkseptasi.Commands.DataAkseptasiNasLifeCommandHandler.GetFile(String dokumenName, String no_sppa) in C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Application\PengajuanAkseptasi\Commands\DataAkseptasiNasLifeCommand.cs:line 153
+   at ABB.Application.PengajuanAkseptasi.Commands.DataAkseptasiNasLifeCommandHandler.Handle(DataAkseptasiNasLifeCommand request, CancellationToken cancellationToken) in C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Application\PengajuanAkseptasi\Commands\DataAkseptasiNasLifeCommand.cs:line 99
+09/15/2023 13:59:48 +07:00 Error Unhandle : for Request "DataAkseptasiNasLifeCommand" DataAkseptasiNasLifeCommand { kd_cb: "SM30 ", kd_product: "0552 ", kd_thn: "23", kd_rk: "007674", no_sppa: "00015", no_updt: 0, kd_approval: "001", kd_user_status: "0a35e9e46a0144c68262407bd32bf2c1" }
+System.ArgumentNullException: Value cannot be null. (Parameter 'path2')
+   at ABB.Application.PengajuanAkseptasi.Commands.DataAkseptasiNasLifeCommandHandler.Handle(DataAkseptasiNasLifeCommand request, CancellationToken cancellationToken) in C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Application\PengajuanAkseptasi\Commands\DataAkseptasiNasLifeCommand.cs:line 136
+   at ABB.Application.Common.Behaviours.ValidationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Application\Common\Behaviours\ValidationBehaviour.cs:line 36
+   at ABB.Application.Common.Behaviours.UnhandledExceptionBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Application\Common\Behaviours\UnhandledExceptionBehaviour.cs:line 26

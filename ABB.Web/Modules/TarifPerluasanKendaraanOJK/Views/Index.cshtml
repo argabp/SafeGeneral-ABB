@@ -1,0 +1,133 @@
+﻿@using ABB.Application.TarifPerluasanKendaraanOJKs.Queries
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.TagHelpers
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Tarif Perluasan Kendaraan OJK";
+}
+
+<script src="~/Modules/TarifPerluasanKendaraanOJK/JS/tarifPerluasanKendaraanOJK.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-8">
+            Tarif Perluasan Kendaraan OJK
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<KategoriDto>()
+                .Name("KategoriDtoGrid")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetKategoris", "TarifPerluasanKendaraanOJK").Data("searchFilter"))
+                    .Model(model => model.Id(p => p.kd_kategori))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.kd_kategori).Width(150).Title("Kode Kategori");
+                    columns.Bound(col => col.nm_kategori).Width(150).Title("Nama Kategori");
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .ClientDetailTemplateId("template")
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit"))
+        
+                )    
+        </div>
+        
+        
+        <script id="template" type="text/kendo-tmpl">
+            <div class="row">
+                <div class="col-md-4 k-button k-button-icontext">
+                    <button style="border: none;" onclick="btnAddTarifPerluasanKendaraanOJK_OnClick('#=kd_kategori#')">+ ADD NEW RECORD</button>
+                </div>
+            </div>
+            @(Html.Kendo().TabStrip()
+                .Name("tabStrip_#=kd_kategori#")
+                .SelectedIndex(0)
+                .Animation(animation => animation.Open(open => open.Fade(FadeDirection.In)))
+                .Items(items =>
+                {
+                    items.Add().Text("Detail").Content(@<text>
+                            @(Html.Kendo().Grid<TarifPerluasanKendaraanOJKDto>()
+                                .Name("TarifPerluasanKendaraanOJKGrid#=kd_kategori#") // template expression, to be evaluated in the master context
+                                .DataSource(dataSource => dataSource.Ajax()
+                                    .Read(read => read.Action("GetTarifPerluasanKendaraanOJKs", "TarifPerluasanKendaraanOJK", new { kd_kategori = "#=kd_kategori#" }))
+                                    .Model(m => m.Id(p => p.Id))
+                                )
+                                .Columns(columns =>
+                                {
+                                    columns.Bound(col => col.nm_jns_ptg).Width(100).Title("Bentuk Pertanggungan");
+                                    columns.Bound(col => col.nm_wilayah).Width(150).Title("Kode Wilayah");
+                                    columns.Bound(col => col.no_kategori).Width(150).Title("No.");
+                                    columns.Bound(col => col.nilai_ptg_mul).Width(100).Title("TSI Awal");
+                                    columns.Bound(col => col.nilai_ptg_akh).Width(100).Title("TSI Akhir");
+                                    columns.Bound(col => col.nm_stn_rate_prm).Width(150).Title("Satuan Rate");
+                                    columns.Bound(col => col.pst_rate_prm_min).Width(150).Title("Tarif Bawah");
+                                    columns.Bound(col => col.pst_rate_prm_max).Width(150).Title("Tarif Atas");
+                                    columns.Command(command =>
+                                    {
+                                        command.Custom("EditTarifPerluasanKendaraanOJK")
+                                            .Text("Edit")
+                                            .IconClass("fa fa-pencil-alt")
+                                            .HtmlAttributes(new { title = "Edit" })
+                                            .Click("btnEditTarifPerluasanKendaraanOJK_OnClick");
+                                        command.Custom("DeleteTarifPerluasanKendaraanOJK")
+                                            .Text("Delete")
+                                            .IconClass("k-icon k-i-delete")
+                                            .HtmlAttributes(new { title = "Delete" })
+                                            .Click("onDeleteTarifPerluasanKendaraanOJK");
+                                    }).Width(200);
+                                })
+                                .Pageable(pager => pager
+                                    .Refresh(true)
+                                    .Info(true)
+                                    .PageSizes(true)
+                                )
+                                .Sortable()
+                                .Selectable()
+                                .Filterable()
+                                .Scrollable()
+                                .Height(380)
+                                .Resizable(a => a.Columns(true))
+                                .Events(ev => ev.DataBound("gridAutoFit"))
+                                .ToClientTemplate())
+                        </text>
+                        );
+                })
+                .ToClientTemplate())
+        
+        </script>
+        
+        @(Html.Kendo().Window()
+            .Name("TarifPerluasanKendaraanOJKWindow")
+            .Title("Tarif Perluasan Kendaraan OJK")
+            .Width(400)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+    </div>
+</div>
+

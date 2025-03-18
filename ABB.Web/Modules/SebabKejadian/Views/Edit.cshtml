@@ -1,0 +1,45 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.SebabKejadian.Models.SebabKejadianViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="SebabKejadianForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Nama COB</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="kd_cob" style="width: 100%" readonly="true"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetCOB", "SebabKejadian")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="kd_cob" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kode Sebab Kejadian</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="kd_sebab" style="width: 100%" readonly="true"/>
+                <span asp-validation-for="kd_sebab" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Nama Sebab Kejadian</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="nm_sebab" style="width: 100%; background-color: #FFFFE1"/>
+                <span asp-validation-for="nm_sebab" class="text-danger"></span>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="window-footer">
+    <button type="button" onclick="onSaveSebabKejadian()" class="btn btn-success space-right">
+        <span class="fa fa-save"></span> Save
+    </button>
+</div>

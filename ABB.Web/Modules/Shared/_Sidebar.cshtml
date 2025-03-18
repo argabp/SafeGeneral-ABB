@@ -1,0 +1,22 @@
+﻿@addTagHelper *, ABB.Web
+
+<!-- Main Sidebar Container -->
+<aside class="main-sidebar sidebar-dark-primary elevation-4" style="background: #073763;">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Sidebar user panel (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img src="~/img/Logo-Icon.png" alt="ABB Logo" class="brand-image" style="opacity: .8">
+            </div>
+            
+            <div class="col-sm-10">
+                <h5 style="margin: 0; text-align: center; color: white;">@ViewBag.DatabaseName</h5>
+            </div>
+        </div>
+        <!-- Sidebar Menu -->
+        <vc:navigation logged-in-username="@Context.User.Identity.Name"></vc:navigation>
+        <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+</aside>

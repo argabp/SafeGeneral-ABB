@@ -1,0 +1,45 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.DokumenKlaim.Models.DokumenKlaimViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="DokumenKlaimForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Nama COB</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="kd_cob" style="width: 100%" readonly="true"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetCOB", "DokumenKlaim")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="kd_cob" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kode Dokumen Klaim</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="kd_dok" style="width: 100%;" readonly="true"/>
+                <span asp-validation-for="kd_dok" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Nama Dokumen Klaim</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="nm_dok" style="width: 100%"/>
+                <span asp-validation-for="nm_dok" class="text-danger"></span>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="window-footer">
+    <button type="button" onclick="onSaveDokumenKlaim()" class="btn btn-success space-right">
+        <span class="fa fa-save"></span> Save
+    </button>
+</div>

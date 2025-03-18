@@ -1,0 +1,44 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.JenisSor.Models.JenisSorViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="JenisSorForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kode Jenis SOR</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="kd_jns_sor" style="width: 100%; background-color: #00FFFF"/>
+                <span asp-validation-for="kd_jns_sor" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Nama Jenis SOR</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="nm_jns_sor" style="width: 100%; background-color: #FFFFE1"/>
+                <span asp-validation-for="nm_jns_sor" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Group Jenis SOR</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="grp_jns_sor" style="width: 100%" class="not-null-dropdown"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetGroupJenisSor", "JenisSor")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="grp_jns_sor" class="text-danger"></span>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="window-footer">
+    <button type="button" onclick="onSaveJenisSor()" class="btn btn-success space-right">
+        <span class="fa fa-save"></span> Save
+    </button>
+</div>

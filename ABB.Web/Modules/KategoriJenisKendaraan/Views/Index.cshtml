@@ -1,0 +1,87 @@
+﻿@using ABB.Application.KategoriJenisKendaraans.Queries
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.TagHelpers
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Kategori Jenis Kendaraan";
+}
+
+<script src="~/Modules/KategoriJenisKendaraan/JS/kategoriJenisKendaraan.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-8">
+            Kategori Jenis Kendaraan
+        </div>
+
+        <div class="col-md-4">
+            <button class="flat-btn-primary" onclick="btnAddKategoriJenisKendaraan_OnClick()">Add New Kategori Jenis Kendaraan</button>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<KategoriJenisKendaraanDto>()
+                .Name("KategoriJenisKendaraanGrid")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetKategoriJenisKendaraans", "KategoriJenisKendaraan").Data("searchFilter"))
+                    .Model(model => model.Id(p => p.Id))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.desk_grp_rsk).Width(150).Title("Grup Resiko");
+                    columns.Bound(col => col.kd_rsk).Width(150).Title("Kode Jenis");
+                    columns.Bound(col => col.desk_rsk).Width(150).Title("Nama Jenis Kendaraan");
+                    columns.Bound(col => col.nm_ref).Width(150).Title("Kategori");
+                    columns.Command(command =>
+                    {
+                        command.Custom("EditKategoriJenisKendaraan")
+                            .Text("Edit")
+                            .IconClass("fa fa-pencil-alt")
+                            .HtmlAttributes(new { title = "Edit" })
+                            .Click("btnEditKategoriJenisKendaraan_OnClick");
+                        command.Custom("DeleteKategoriJenisKendaraan")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeleteKategoriJenisKendaraan");
+                    }).Width(200);
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit"))
+        
+                )    
+        </div>
+        
+        @(Html.Kendo().Window()
+            .Name("KategoriJenisKendaraanWindow")
+            .Title("Kategori Jenis Kendaraan")
+            .Width(400)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+    </div>
+</div>
+

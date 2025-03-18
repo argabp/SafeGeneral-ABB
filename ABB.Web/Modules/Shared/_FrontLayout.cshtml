@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" @ViewData["HtmlAttribute"]>
+<head>
+    <!-- META SECTION -->
+    <meta charset="utf-8" />
+    <title>ABB </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="@ViewData["MetaDescription"]" />
+    <meta name="author" content="@ViewData["MetaAuthor"]" />
+    <meta name="keywords" content="@ViewData["MetaKeywords"]" />
+    <link rel="icon" type="image/x-icon" href="~/img/Logo-Icon.png">
+    <!-- END META SECTION -->
+    <!-- CSS INCLUDE -->
+    <link rel="stylesheet" href="~/plugins/bootstrap/css/bootstrap.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/css/adminlte.css">
+    <link rel="stylesheet" type="text/css" href="~/css/abb.css" />
+    <!-- Kendo -->
+    <link rel="stylesheet" href="~/plugins/kendo/styles/kendo.office365.min.css">
+    <link rel="stylesheet" href="~/plugins/kendo/styles/kendo.common-office365.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
+    <!-- EOF CSS INCLUDE -->
+</head>
+<body class="hold-transition login-page">
+@await Html.PartialAsync("~/Modules/Shared/_Scripts.cshtml")
+    @* <div style=""> *@
+    @*      *@
+@* </div> *@
+@RenderBody()
+</body>
+</html>

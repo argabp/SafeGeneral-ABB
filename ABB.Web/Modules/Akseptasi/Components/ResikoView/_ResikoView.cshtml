@@ -1,0 +1,59 @@
+﻿@using ABB.Web.Modules.Akseptasi.Components.Coverage
+@using ABB.Web.Modules.Akseptasi.Components.Obyek
+@using ABB.Web.Modules.Akseptasi.Components.Other
+@using ABB.Web.Modules.Akseptasi.Components.Resiko
+@using ABB.Web.Modules.Akseptasi.Models
+@using Kendo.Mvc.TagHelpers
+@using Kendo.Mvc.UI
+@model ABB.Web.Modules.Akseptasi.Models.AkseptasiResikoParameterViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/Akseptasi/Components/ResikoView/resikoView.js"></script>
+
+<div class="window-body">
+    <div id="resikoTab">
+        <ul>
+            <li class="k-active">
+                Resiko
+            </li>
+            <li>
+                Coverage
+            </li>
+            <li>
+                Obyek
+            </li>
+            <li>
+                Others
+            </li>
+            <li>
+                Alokasi
+            </li>
+        </ul>
+        <div id="tabResiko">
+            <vc:resiko model="@Model"></vc:resiko>
+        </div>
+        <div id="tabCoverage">
+            <vc:coverage model="@Model"></vc:coverage>
+        </div>
+        <div id="tabObyek">
+            <vc:obyek model="@Model"></vc:obyek>
+        </div>
+        <div id="tabOther">
+            <vc:other model="@Model"></vc:other>
+        </div>
+        <div id="tabAlokasi">
+            <vc:alokasi model="@Model"></vc:alokasi>
+        </div>
+    </div>
+    
+    <div class="window-footer">
+        <button type="button" id="btn-previous-akseptasiResikoView" class="btn btn-primary space-right">
+            <span class="fa fa-arrow-left"></span> Previous
+        </button>
+        <button type="button" id="btn-next-akseptasiResikoView" class="btn btn-primary space-right">
+            Next <span class="fa fa-arrow-right"></span>
+        </button>
+    </div>
+</div>

@@ -1,0 +1,93 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.KapasitasCabang.Models.KapasitasCabangViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="KapasitasCabangForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kode Cabang</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="kd_cb" style="width: 100%" class="primary-dropdown"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetCabang", "KapasitasCabang")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="kd_cb" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kode COB</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="kd_cob" style="width: 100%" class="primary-dropdown"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetCOB", "KapasitasCabang")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="kd_cob" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kode SCOB</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="kd_scob" style="width: 100%" class="primary-dropdown"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetSCOB", "KapasitasCabang")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="kd_scob" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Tahun</label>
+            <div class="col-sm-12">
+                <kendo-numerictextbox for="thn" style="width: 100%; background-color: #00FFFF"/>
+                <span asp-validation-for="thn" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Nilai Kapasitas</label>
+            <div class="col-sm-12">
+                <kendo-numerictextbox for="nilai_kapasitas" style="width: 100%; background-color: #FFFFE1"/>
+                <span asp-validation-for="nilai_kapasitas" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Nilai Klaim</label>
+            <div class="col-sm-12">
+                <kendo-numerictextbox for="nilai_kl" style="width: 100%"/>
+                <span asp-validation-for="nilai_kl" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Tanggal Input</label>
+            <div class="col-sm-12">
+                <kendo-datepicker format="MM/dd/yyyy" for="tgl_input" value="@DateTime.Now" style="width: 100%; background-color: #FFFFE1"/>
+                <span asp-validation-for="tgl_input" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kode User Input</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="kd_usr_input" style="width: 100%; background-color: #FFFFE1"/>
+                <span asp-validation-for="kd_usr_input" class="text-danger"></span>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="window-footer">
+    <button type="button" onclick="onSaveKapasitasCabang()" class="btn btn-success space-right">
+        <span class="fa fa-save"></span> Save
+    </button>
+</div>

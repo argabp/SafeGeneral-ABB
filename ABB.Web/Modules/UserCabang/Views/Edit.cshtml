@@ -1,0 +1,50 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.UserCabang.Models.EditUserCabangModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@{
+    ViewData["Title"] = "User Cabang Page";
+}
+
+<script src="~/Modules/UserCabang/JS/userCabang.form.js"></script>
+<script src="~/Modules/UserCabang/JS/userCabang.edit.js"></script>
+
+@Html.AntiForgeryToken()
+<form id="UserCabangForm" enctype="multipart/form-data">
+    <div class="window-body" style="background-color: lightgray">
+
+        <div class="form-group">
+            <label asp-for="userid" class="col-sm-3">User</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="userid" option-label="Choose User"
+                                    filter="FilterType.Contains" class="not-null-dropdown"
+                                    datavaluefield="Value" datatextfield="Text">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetUsers","UserCabang")" />
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="userid" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12">
+                <h6><strong>Set Cabang</strong></h6>
+            </div>
+        </div>
+        <input type="hidden" id="CabangDatasource" value='@Html.Raw(Json.Serialize(Model.Cabangs))' />
+        <div class="col-sm-12">
+            <div id="CabangGrid" class="inline-grid"></div>
+        </div>
+        <br />
+        <div class="col-sm-12">
+            <btn id="btn-add-cabang" class="flat-btn-simple">+ Add More Cabang</btn>
+            <br />
+            <span asp-validation-for="Cabangs" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="window-footer">
+        <button type="button" id="btn-save-userCabang" class="btn btn-primary space-right">Save</button>
+    </div>
+</form>

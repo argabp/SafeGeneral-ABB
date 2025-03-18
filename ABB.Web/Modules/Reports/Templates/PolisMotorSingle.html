@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Schedule Polis Kebakaran</title>
+</head>
+
+<style>
+	td {
+		font-size: 8.5pt;
+	}
+	h1 {
+		font-size: 11.5pt;
+	}
+	h2 {
+		font-size: 9.5pt;
+	}
+</style>
+
+<body>
+
+
+<h1 style="text-align: center; margin-top: 0px; margin-bottom: 0px;">COVER NOTE</h1>
+<hr style="color: black">
+
+<table style="width: 100%;">
+	<tr>
+		<td style="width: 25%;">Pencurian</td>
+		<td style="width: 2.5%">:</td>
+		<td></td>
+	</tr>
+</table>
+
+<table style="width: 100%;">
+	<tr>
+		<td style="width: 25%;">No. Polis</td>
+		<td style="width: 2.5%">:</td>
+		<td style="width: 25%">{{no_pol_ttg}}</td>
+		<td style="width: 25%">Ex. No. Polis</td>
+		<td style="width: 2.5%">:</td>
+		<td style="width: 25%">{{no_pol_lama}}</td>
+	</tr>
+</table>
+
+<table style="width: 100%;">
+	<tr>
+		<td style="width: 2.5%;">1. </td>
+		<td style="width: 22.3%;">Nama Tertanggung</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5">{{nm_ttg}}</td>
+	</tr>
+	<tr>
+		<td style="width: 2.5%;">2. </td>
+		<td style="width: 22.3%;">Alamat Tertanggung</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5">{{almt_ttg}}</td>
+	</tr>
+	<tr>
+		<td style="width: 2.5%;">3. </td>
+		<td style="width: 22.3%;">Jangka Waktu Pertanggungan</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5">{{jk_wkt_ptg}}{{jk_wkt_ptg_ind}} Bulan</td>
+	</tr>
+	<tr>
+		<td style="width: 2.5%;"></td>
+		<td style="width: 22.3%;"></td>
+		<td style="width: 2.5%"></td>
+		<td>Mulai dari tanggal {{tgl_mul_ptg_ind}} sampai dengan tanggal {{tgl_akh_ptg_ind}}</td>
+
+	</tr>
+	<tr>
+		<td style="width: 2.5%;"></td>
+		<td style="width: 22.3%;"></td>
+		<td style="width: 2.5%"></td>
+		<td colspan="5">(Kedua hari tersebut pada pukul 12.00 tengah hari) waktu dimana polis diterbitkan.</td>
+	</tr>
+	<tr>
+		<td style="width: 2.5%;">4.</td>
+		<td style="width: 22.3%;">Obyek Pertanggungan</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5"></td>
+	</tr>
+	<tr>
+		<td style="width: 2.5%;"></td>
+		<td style="width: 22.3%;">No Polisi</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5">{{no_pls}}</td>
+	</tr>
+	<tr>
+		<td style="width: 2.5%;"></td>
+		<td style="width: 22.3%;">Merk/Type/Tahun Pembuatan</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5">if(isnull( {{nm_merk_kend}} ),'',{{nm_merk_kend}}) + ' / '  +  if(isnull({{tipe_kend}}),'',{{tipe_kend}})+'/ '  + if(isnull(string({{thn_buat}})),'',string({{thn_buat}})) </td>
+	</tr>
+	<tr>
+		<td style="width: 2.5%;"></td>
+		<td style="width: 22.3%;">Nomor Mesin / Nomor Rangka</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5">{{no_msn}}/{{no_rangka}}</td>
+	</tr>
+	<tr>
+		<td style="width: 2.5%;"></td>
+		<td style="width: 22.3%;">Jumlah Tempat Duduk</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5">{{jml_tempat_ddk}}</td>
+	</tr>
+	<tr>
+		<td style="width: 2.5%;"></td>
+		<td style="width: 22.3%;">Daya angkut</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5"></td>
+	</tr>
+	<tr>
+		<td style="width: 2.5%;"></td>
+		<td style="width: 22.3%;">Jenis Kendaraan</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5">if(isnull({{nm_jns_kend}}),'',{{nm_jns_kend}})</td>
+	</tr>
+    <tr>
+		<td style="width: 2.5%;">5.</td>
+		<td style="width: 22.3%;">Perlengkapan Tambahan</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5">{{desk_aksesoris}}</td>
+	</tr>
+    <tr>
+		<td style="width: 2.5%;">6.</td>
+		<td style="width: 22.3%;">Penggunaan Kendaraan</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5">{{nm_utk}}</td>
+	</tr>
+    <tr>
+		<td style="width: 2.5%;">7.</td>
+		<td style="width: 22.3%;">Harga Pertanggungan</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="2">{{nilai_casco}}</td>
+		<td colspan="2"></td>
+	</tr>
+    <tr>
+		<td style="width: 2.5%;"></td>
+		<td style="width: 22.3%;">a. Kendaraan Bermotor</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5">{{kd_mtu_symbol_4}}{{nilai_casco - nilai_aksesories }}</td>
+	</tr>
+    <tr>
+		<td style="width: 2.5%;"></td>
+		<td style="width: 22.3%;">b. TJH Pihak Ketiga</td>
+		<td style="width: 2.5%">:</td>
+		<td>{{kd_mtu_symbol_1}}{{nilai_pap}} / orang</td>
+		<td colspan="4"></td>
+	</tr>
+    <tr>
+		<td style="width: 2.5%;"></td>
+		<td style="width: 22.3%;">c. Perlengkapan Tambahan</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5">{{kd_mtu_symbol_11}}{{nilai_aksesories}}</td>
+	</tr>
+    <tr>
+		<td style="width: 2.5%;">8.</td>
+		<td style="width: 22.3%;">Kondisi Pertanggungan</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5">{{kd_jns_ptg}}</td>
+	</tr>
+    <tr>
+		<td style="width: 2.5%;">9.</td>
+		<td style="width: 22.3%;">Jaminan Tambahan</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5"></td>
+	</tr>
+    <tr>
+		<td style="width: 2.5%;"></td>
+		<td style="width: 22.3%;">a. Kecelakaan Diri Pengemudi</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5">{{kd_mtu_symbol}}{{nilai_pad}}</td>
+	</tr>
+    <tr>
+		<td style="width: 2.5%;"></td>
+		<td style="width: 22.3%;">b. Kecelakaan Diri Penumpang</td>
+		<td style="width: 2.5%">:</td>
+		<td>{{kd_mtu_symbol_1}}{{nilai_pap}} / orang</td>
+		<td colspan="4"></td>
+	</tr>
+    <tr>
+		<td style="width: 2.5%;"></td>
+		<td style="width: 22.3%;">c. Tanggung Jawab Hukum Terhadap Penumpang</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5">{{kd_mtu_symbol_2}}{{nilai_tjp}}</td>
+	</tr>
+    <tr>
+		<td style="width: 2.5%;">10.</td>
+		<td style="width: 22.3%;">Klausula Tambahan</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5">{{ket_klausa}}</td>
+	</tr>
+    <tr>
+		<td style="width: 2.5%;">11.</td>
+		<td style="width: 22.3%;">Resiko Sendiri Kecelakaan</td>
+		<td style="width: 2.5%">:</td>
+		<td>{{kd_mtu_symbol_7}}{{nilai_rsk_sendiri}} / Kejadian untuk PARTIAL LOSS</td>
+		<td colspan="4"></td>
+	</tr>
+    <tr>
+		<td style="width: 2.5%;"></td>
+		<td style="width: 22.3%;"></td>
+		<td style="width: 2.5%"></td>
+		<td colspan="4">{{desk_deduct}}</td>
+	</tr>
+    <tr>
+		<td style="width: 2.5%;">12.</td>
+		<td style="width: 22.3%;">Suku Premi</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="4"></td>
+	</tr>
+    <tr>
+		<td style="width: 2.5%;">13.</td>
+		<td style="width: 22.3%;">Perhitungan Premi</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5"></td>
+	</tr>
+	<tr>
+		<td style="width: 2.5%;"></td>
+		<td style="width: 22.3%;">- Premi Kendaraan Bermotor</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5">{{kd_mtu_symbol_19}}{{nilai_prm_casco}}</td>
+	</tr>
+	<tr>
+		<td style="width: 2.5%;"></td>
+		<td style="width: 22.3%;">- Premi TJH Pihak III</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5">{{kd_mtu_symbol_14}}{{nilai_prm_tjh}}</td>
+	</tr>
+	<tr>
+		<td style="width: 2.5%;"></td>
+		<td style="width: 22.3%;">- Premi PA</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5">{{kd_mtu_symbol_22}}{{nilai_prm_pad}}</td>
+	</tr>
+	<tr>
+		<td style="width: 2.5%;"></td>
+		<td style="width: 22.3%;">- Premi Banjir</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5">{{kd_mtu_symbol_19}}{{nilai_prm_banjir}}</td>
+	</tr>
+	<tr>
+		<td style="width: 2.5%;"></td>
+		<td style="width: 22.3%;">- Premi AOG</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5">{{kd_mtu_symbol_19}}{{nilai_prm_aog}}</td>
+	</tr>
+	<tr>
+		<td style="width: 2.5%;"></td>
+		<td style="width: 22.3%;">- Premi SRCC</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5">{{kd_mtu_symbol_19}}{{nilai_prm_hh}}</td>
+	</tr>
+	<tr>
+		<td style="width: 2.5%;"></td>
+		<td style="width: 22.3%;">- Premi Terorisme</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5">{{kd_mtu_symbol_19}}{{nilai_prm_trs}}</td>
+	</tr>
+	<tr>
+		<td style="width: 2.5%;"></td>
+		<td style="width: 22.3%;">- Premi TJH Penumpang</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5">{{kd_mtu_symbol_19}}{{nilai_prm_tjp}}</td>
+	</tr>
+	<tr>
+		<td style="width: 2.5%;"></td>
+		<td style="width: 22.3%;">- Biaya Polis</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5">{{kd_mtu_symbol_19}}{{nilai_bia_pol}}</td>
+	</tr>
+	<tr>
+		<td style="width: 2.5%;"></td>
+		<td style="width: 22.3%;">- Biaya materai</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5">{{kd_mtu_symbol_19}}{{nilai_bia_mat}}</td>
+	</tr>
+	<tr>
+		<td style="width: 2.5%;"></td>
+		<td style="width: 22.3%;">- Diskon</td>
+		<td style="width: 2.5%">:</td>
+		<td colspan="5">{{kd_mtu_symbol_19}}</td>
+	</tr>
+</table>
+<table style="width: 100%;">
+    <tr>
+        <td style="width: 2.5%;"></td>
+		<td style="width: 22.3%;"></td>
+		<td style="width: 20%"><hr></td>
+		<td></td>
+	</tr>
+</table>
+<table style="width: 100%;">
+    <tr>
+		<td style="width: 2.5%;"></td>
+		<td style="width: 22.3%; padding-left: 2%;">TOTAL</td>
+		<td style="width: 2.5%">:</td>
+		<td style="width: 30%;">{{kd_mtu_symbol_19}}{{nilai_ttl}}</td>
+		<td colspan="2">Dibuat di {{kt_cb}},</td>
+	</tr>
+</table>
+<table style="width: 100%;">
+    <tr>
+        <td style="width: 2.5%;"></td>
+		<td style="width: 22.3%;"></td>
+		<td style="width: 20%"><hr style="border-top: 3px double black; width: 100%;"></td>
+        <td style="width: 12.5%;"></td>
+		<td colspan="2">Pada tanggal {{tgl_closing_ind}},</td>
+	</tr>
+    <tr>
+        <td style="width: 2.5%;"></td>
+		<td style="width: 22.3%;">{{lamp_pol}}</td>
+		<td style="width: 20%"></td>
+        <td style="width: 12.5%;"></td>
+		<td colspan="2">Penanggung</td>
+	</tr>
+    <tr>
+        <td style="width: 2.5%;"></td>
+		<td style="width: 22.3%; text-align: center;">{{nohp}}/{{notelp}}</td>
+		<td style="width: 20%"></td>
+        <td style="width: 12.5%;"></td>
+		<td colspan="2"></td>
+	</tr>
+    <tr style="height: 15px;">
+        <td style="text-align: center;" colspan="5"></td>
+    </tr>
+    <tr style="height: 15px;">
+        <td style="text-align: center;" colspan="5"></td>
+    </tr>
+    <tr>
+        <td style="text-align: center;" colspan="5">{{st_title3}}</td>
+    </tr>
+    <tr>
+        <td style="text-align: center;" colspan="5">{{st_title6}}</td>
+    </tr>
+    <tr>
+        <td style="text-align: center;" colspan="5">{{st_title4}}</td>
+    </tr>
+</table>
+<table style="width: 100%;">
+    <tr>
+        <td style="width: 2.5%;"></td>
+        <td style="text-align: left; width: 10%;">{{nm_user}}</td>
+        <td style="text-align: left;" colspan="2">{{notelp}} / {{nohp}}</td>
+    </tr>
+</table>
+</body>
+</html>

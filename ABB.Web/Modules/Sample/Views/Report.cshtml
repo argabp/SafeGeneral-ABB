@@ -1,0 +1,30 @@
+﻿@using Kendo.Mvc.UI
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Report";
+}
+
+<script src="~/Modules/Sample/JS/sample.js"></script>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-sm-2">
+            Report
+        </div>
+    </div>
+    <div class="flat-box-content">
+        <div class="col-sm-12" style="padding-top:20px;">
+            <div class="col-sm-3" style=" float: right; padding:0px">
+                <button class="flat-btn-primary" id="btnGenerateReport" onclick="onGenerateReport()">Generate Report</button>
+            </div>
+        </div>
+    </div>
+    <div id="reportView" style="padding-top:5em;"></div>
+</div>
+

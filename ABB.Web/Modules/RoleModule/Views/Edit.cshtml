@@ -1,0 +1,55 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.RoleModule.Models.RoleModuleViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@{
+    ViewData["Title"] = "Role Module Page";
+    Layout = "";
+}
+
+<script src="~/Modules/RoleModule/JS/roleModule.form.js"></script>
+<script src="~/Modules/RoleModule/JS/roleModule.edit.js"></script>
+
+<form id="RoleModuleForm" enctype="multipart/form-data">
+    <div class="window-body" style="background-color: lightgray">
+
+        <div class="form-group col-12">
+            <label class="col-sm-5">Role</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="RoleId" option-label="Please Choose Role" filter="FilterType.Contains"
+                                    datavaluefield="Value" datatextfield="Text" readonly="true" class="not-null-dropdown">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetRoles","RoleModule")" />
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="RoleId" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div id="modules">
+            <div id="ModuleInlineGrid" class="inline-grid"></div>
+            <br />
+            <btn id="btn-add-module" class="flat-btn-simple">+ Add Module</btn>
+            <br />
+            <span asp-validation-for="Modules" class="text-danger"></span>
+
+        </div>
+    </div>
+    <div class="window-footer">
+        <div class="col-12">
+            <button type="button" id="btnUpdateRoleModule" class="btn btn-primary space-right">Save</button>
+        </div>
+    </div>
+</form>
+
+<style>
+    #modules {
+        margin-left: 7.5px;
+        margin-right: 7.5px;
+    }
+    .form-group{
+        margin-left:-7.5px;
+    }
+</style>

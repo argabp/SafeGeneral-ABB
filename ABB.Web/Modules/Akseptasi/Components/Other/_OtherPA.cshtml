@@ -1,0 +1,485 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.Akseptasi.Models.AkseptasiResikoOtherPAViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/Akseptasi/Components/Other/otherPA.js"></script>
+
+<style>
+    p {
+        margin: 0px;
+        padding: 0px;
+    }
+    label {
+        align-content: center;
+    }
+</style>
+
+@{
+    var nomor_aksepatsi = Model.kd_cb.Trim() + Model.kd_cob.Trim() +
+                          Model.kd_scob.Trim() + Model.kd_thn.Trim() + Model.no_aks.Trim();
+}
+<div class="window-body" style="background-color: lightgray">
+    <form id="OtherPAForm" enctype="multipart/form-data" autocomplete="off">
+        @Html.HiddenFor(h => h. kd_grp_asj)
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Akseptasi</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="temp_other_nomor_akseptasi" value="@nomor_aksepatsi" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Update</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="resiko_other_pa_no_updt" value="@Model.no_updt" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Resiko</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="resiko_other_pa_no_rsk" value="@Model.no_rsk" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Endorsment</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist name="resiko_other_pa_kd_endt" style="width: 100%" readonly="true" value="@Model.kd_endt"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeEndorsment", "Akseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Jenis Kredit</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_jns_kr" style="width: 100%" on-change="OnJenisKreditChange"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeJenisKredit", "Akseptasi")" data="dataKodeJenisKreditDropDown"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Jenis Pembayaran</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="st_pbyr" style="width: 100%"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetJenisPembayaran", "Akseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Jenis Cover</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_grp_kr" style="width: 100%"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetJenisCover", "Akseptasi")" data="dataJenisCoverDropDown"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Asuransi Jiwa</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_rk_asj" style="width: 100%"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetAsuransiJiwa", "Akseptasi")" data="dataAsuransiJiwaDropDown"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor KTP</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="no_deb" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor SPPA</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="no_sppa" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nama Peserta</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="nm_deb" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Pekerjaan</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="kd_usr" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kelas</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist name="resiko_other_pa_kd_updt" style="width: 100%" value="@Model.kd_updt"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKelas", "Akseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Almt. / Instansi</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="alm_lok_ptg" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-4">
+                <label class="col-sm-6">Tempat Lahir</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="tmp_lahir" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-4">
+                <label class="col-sm-6">Tanggal Lahir</label>
+                <div class="col-sm-6">
+                    <kendo-datepicker for="tgl_lahir" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-4">
+                <label class="col-sm-6">Usia</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" decimals="0" format="#" for="usia_deb" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Tanggal PK.</label>
+                <div class="col-sm-6">
+                    <kendo-datepicker for="tgl_real" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Periode Ptg.</label>
+                <div class="col-sm-6 row">
+                    <div class="col-sm-5">
+                        <kendo-datepicker name="resiko_other_pa_tgl_mul_ptg" value="@Model.tgl_mul_ptg" style="width: 100%"/>
+                    </div>
+                    <label class="col-sm-2">-</label>
+                    <div class="col-sm-5">
+                        <kendo-datepicker name="resiko_other_pa_tgl_akh_ptg" value="@Model.tgl_akh_ptg" style="width: 100%"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-4">
+                <label class="col-sm-5">JK Waktu</label>
+                <div class="col-sm-5">
+                    <kendo-numerictextbox spinners="false" decimals="0" format="#" for="jk_wkt" style="width: 100%"/>
+                </div>
+                <label class="col-sm-2">Bln</label>
+            </div>
+            <div class="row col-sm-4">
+                <label class="col-sm-5">Angsuran Per</label>
+                <div class="col-sm-5">
+                    <kendo-numerictextbox spinners="false" decimals="0" format="#" for="thn_akh" style="width: 100%"/>
+                </div>
+                <label class="col-sm-2">Thn</label>
+            </div>
+            <div class="row col-sm-4">
+                <label class="col-sm-6">Tanggal Input</label>
+                <div class="col-sm-6">
+                    <kendo-datepicker name="resiko_other_pa_tgl_input" value="@Model.tgl_input" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <fieldset>
+            <legend>Ahli Waris</legend>
+            <div class="form-group row">
+                <div class="row col-sm-6">
+                    <label class="col-sm-6">Nama</label>
+                </div>
+                <div class="row col-sm-6">
+                    <label class="col-sm-6">Hub. Dg Ahli Waris</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="row col-sm-6">
+                    <kendo-textbox for="waris01" style="width: 100%"/>
+                </div>
+                <div class="row col-sm-6">
+                    <kendo-textbox for="hub01" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="row col-sm-6">
+                    <kendo-textbox for="waris02" style="width: 100%"/>
+                </div>
+                <div class="row col-sm-6">
+                    <kendo-textbox for="hub02" style="width: 100%"/>
+                </div>
+            </div>
+        </fieldset>
+        <div class="form-group row">
+            <div class="row col-sm-9">
+                <label class="col-sm-3">Jenis Resiko</label>
+                <label class="col-sm-3">JUP<br/>MAX</label>
+                <label class="col-sm-3">Rate</label>
+                <label class="col-sm-3">Premi<br/>(RP)</label>
+            </div>
+            <div class="row col-sm-3">
+                <label class="col-sm-6">Total Premi x</label>
+                <label class="col-sm-6">365</label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-9">
+                <div class="col-sm-3">
+                    <kendo-dropdownlist for="flag_std" style="width: 100%"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetFlagStd", "Akseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+                <div class="col-sm-3">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_harga_ptg" style="width: 100%"/>
+                </div>
+                <div class="col-sm-3 row">
+                    <div class="col-sm-6">
+                        <kendo-numerictextbox spinners="false" decimals="2" for="pst_rate_std" style="width: 100%"/>
+                    </div>
+                    <div class="col-sm-6">
+                        <kendo-dropdownlist for="stn_rate_std" style="width: 100%"
+                                            datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                            <datasource type="DataSourceTagHelperType.Custom">
+                                <transport>
+                                    <read url="@Url.Action("GetRatePremi", "Akseptasi")"/>
+                                </transport>
+                            </datasource>
+                        </kendo-dropdownlist>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_prm_std" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-3">
+                <label class="col-sm-6">Jangka Waktu</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" decimals="2" format="#" for="nilai_prm_btn" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-9">
+                <div class="col-sm-3">
+                    <kendo-dropdownlist for="flag_bjr" style="width: 100%"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetFlagBjr", "Akseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+                <div class="col-sm-3">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_ptg_bjr" style="width: 100%"/>
+                </div>
+                <div class="col-sm-3 row">
+                    <div class="col-sm-6">
+                        <kendo-numerictextbox spinners="false" decimals="2" for="pst_rate_bjr" style="width: 100%"/>
+                    </div>
+                    <div class="col-sm-6">
+                        <kendo-dropdownlist for="stn_rate_bjr" style="width: 100%"
+                                            datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                            <datasource type="DataSourceTagHelperType.Custom">
+                                <transport>
+                                    <read url="@Url.Action("GetRatePremi", "Akseptasi")"/>
+                                </transport>
+                            </datasource>
+                        </kendo-dropdownlist>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_prm_bjr" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-3">
+                <label class="col-sm-6">Biaya Kartu</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_bia_adm" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-9">
+                <div class="col-sm-3">
+                    <kendo-dropdownlist for="flag_gb" style="width: 100%"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetFlagGb", "Akseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+                <div class="col-sm-3">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_ptg_gb" style="width: 100%"/>
+                </div>
+                <div class="col-sm-3 row">
+                    <div class="col-sm-6">
+                        <kendo-numerictextbox spinners="false" decimals="2" for="pst_rate_gb" style="width: 100%"/>
+                    </div>
+                    <div class="col-sm-6">
+                        <kendo-dropdownlist for="stn_rate_gb" style="width: 100%"
+                                            datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                            <datasource type="DataSourceTagHelperType.Custom">
+                                <transport>
+                                    <read url="@Url.Action("GetRatePremi", "Akseptasi")"/>
+                                </transport>
+                            </datasource>
+                        </kendo-dropdownlist>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_prm_gb" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-9">
+                <div class="col-sm-3">
+                    <kendo-dropdownlist for="flag_tl" style="width: 100%"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetFlagTl", "Akseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+                <div class="col-sm-3">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_ptg_tl" style="width: 100%"/>
+                </div>
+                <div class="col-sm-3 row">
+                    <div class="col-sm-6">
+                        <kendo-numerictextbox spinners="false" decimals="2" for="pst_rate_tl" style="width: 100%"/>
+                    </div>
+                    <div class="col-sm-6">
+                        <kendo-dropdownlist for="stn_rate_tl" style="width: 100%"
+                                            datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                            <datasource type="DataSourceTagHelperType.Custom">
+                                <transport>
+                                    <read url="@Url.Action("GetRatePremi", "Akseptasi")"/>
+                                </transport>
+                            </datasource>
+                        </kendo-dropdownlist>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_prm_tl" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-3">
+                <hr>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-9">
+                <div class="col-sm-3">
+                    <kendo-dropdownlist for="stn_rate_phk" style="width: 100%"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetStnRatePhk", "Akseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+                <div class="col-sm-3">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_ptg_phk" style="width: 100%"/>
+                </div>
+                <div class="col-sm-3 row">
+                    <div class="col-sm-6">
+                        <kendo-numerictextbox spinners="false" decimals="2" for="pst_rate_phk" style="width: 100%"/>
+                    </div>
+                    <div class="col-sm-6">
+                        <kendo-dropdownlist name="resiko_other_pa_stn_rate_phk" style="width: 100%" value="@Model.stn_rate_phk"
+                                            datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                            <datasource type="DataSourceTagHelperType.Custom">
+                                <transport>
+                                    <read url="@Url.Action("GetRatePremi", "Akseptasi")"/>
+                                </transport>
+                            </datasource>
+                        </kendo-dropdownlist>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_prm_phk" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-3">
+                <label class="col-sm-6">Total</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" decimals="2" name="resiko_other_pa_total" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-9">
+                <label class="col-sm-4">TOTAL</label>
+                <label class="col-sm-4"></label>
+                <label class="col-sm-4"></label>
+                <label class="col-sm-4"></label>
+            </div>
+        </div>
+    </form>
+
+    <div class="window-footer">
+        <button type="button" id="btn-previous-akseptasiResikoOther" class="btn btn-primary space-right">
+            <span class="fa fa-arrow-left"></span> Previous
+        </button>
+        <button type="button" id="btn-save-akseptasiResikoOtherPA" class="btn btn-success space-right">
+            <span class="fa fa-save"></span> Save
+        </button>
+    </div>
+</div>

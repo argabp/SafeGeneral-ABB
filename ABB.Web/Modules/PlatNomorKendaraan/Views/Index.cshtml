@@ -1,0 +1,87 @@
+﻿@using ABB.Application.PlatNomorKendaraans.Queries
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.TagHelpers
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Plat Nomor Kendaraan";
+}
+
+<script src="~/Modules/PlatNomorKendaraan/JS/platNomorKendaraan.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-8">
+            Plat Nomor Kendaraan
+        </div>
+
+        <div class="col-md-4">
+            <button class="flat-btn-primary" onclick="btnAddPlatNomorKendaraan_OnClick()">Add New Plat Nomor Kendaraan</button>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<PlatNomorKendaraanDto>()
+                .Name("PlatNomorKendaraanGrid")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetPlatNomorKendaraans", "PlatNomorKendaraan").Data("searchFilter"))
+                    .Model(model => model.Id(p => p.Id))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.desk_grp_rsk).Width(150).Title("Grup Resiko");
+                    columns.Bound(col => col.kd_rsk).Width(150).Title("Kode Plat");
+                    columns.Bound(col => col.desk_rsk).Width(150).Title("Kota/Daerah");
+                    columns.Bound(col => col.nm_ref).Width(150).Title("Kode Wilayah");
+                    columns.Command(command =>
+                    {
+                        command.Custom("EditPlatNomorKendaraan")
+                            .Text("Edit")
+                            .IconClass("fa fa-pencil-alt")
+                            .HtmlAttributes(new { title = "Edit" })
+                            .Click("btnEditPlatNomorKendaraan_OnClick");
+                        command.Custom("DeletePlatNomorKendaraan")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeletePlatNomorKendaraan");
+                    }).Width(200);
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit"))
+        
+                )    
+        </div>
+        
+        @(Html.Kendo().Window()
+            .Name("PlatNomorKendaraanWindow")
+            .Title("Plat Nomor Kendaraan")
+            .Width(400)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+    </div>
+</div>
+

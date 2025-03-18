@@ -1,0 +1,127 @@
+﻿@using Kendo.Mvc.UI
+@using ABB.Application.MataUangs.Queries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Mata Uang";
+}
+<script src="~/Modules/Matauang/JS/mataUang.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+    #kd_mtu, #tgl_mul, #tgl_akh{
+        background-color: #00FFFF;
+    }
+    #symbol, #nilai_kurs, .k-input{
+        background-color: #FFFFE1;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Mata Uang
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<MataUangDto>()
+                .Name("MataUangGrid")
+                .ToolBar(toolbar => toolbar.Create())
+                .Editable(editable => editable.Mode(GridEditMode.InLine))
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetMatauangs", "MataUang").Data("searchFilter"))
+                    .Model(model => model.Id(p => p.kd_mtu))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.kd_mtu).Width(150).Title("Kode Mata Uang").Editable("disableGridTextboxWhenEdit");
+                    columns.Bound(col => col.nm_mtu).Width(150).Title("Nama Mata Uang");
+                    columns.Bound(col => col.symbol).Width(150).Title("Symbol");
+                    columns.Command(command =>
+                    {
+                        command.Edit();
+                        command.Custom("DeleteMataUang")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeleteMataUang");
+                    }).Width(200);
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .ClientDetailTemplateId("template")
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit").Save("onSaveMataUang"))
+        
+                )    
+        </div>
+        
+        <script id="template" type="text/kendo-tmpl">
+            @(Html.Kendo().TabStrip()
+                    .Name("tabStrip_#=kd_mtu#")
+                    .SelectedIndex(0)
+                    .Animation(animation => animation.Open(open => open.Fade(FadeDirection.In)))
+                    .Items(items =>
+                    {
+                        items.Add().Text("Detail").Content(@<text>
+                            @(Html.Kendo().Grid<DetailMataUangDto>()
+                                .Name("grid_Periode_#=kd_mtu#") // template expression, to be evaluated in the master context
+                                .ToolBar(toolbar => toolbar.Create())
+                                .Editable(editable => editable.Mode(GridEditMode.InLine))
+                                .DataSource(dataSource => dataSource.Ajax()
+                                    .Read(read => read.Action("GetDetailMataUangs", "MataUang", new { kd_mtu = "#=kd_mtu#" }))//.Data("getAsumsiPeriodeParam"))
+                                    .Model(m => m.Id(p => p.Id))
+                                )
+                                .Columns(columns =>
+                                {
+                                    columns.Bound(col => col.kd_mtu).Width(150).Title("Kode Mata Uang").Editable("disableGridTextbox");
+                                    columns.Bound(col => col.tgl_mul).Width(150).Title("Tanggal Mulai").Format("{0: dd-MM-yyyy}").EditorTemplateName("KendoDateEditor").Editable("disableGridTextboxWhenEdit");
+                                    columns.Bound(col => col.tgl_akh).Width(150).Title("Tanggal Akhir").Format("{0: dd-MM-yyyy}").EditorTemplateName("KendoDateEditor").Editable("disableGridTextboxWhenEdit");
+                                    columns.Bound(col => col.nilai_kurs).Width(200).Title("Nilai Kurs").Format("{0:n2}").EditorTemplateName("KendoNumericTextBox");
+                                    columns.Command(command =>
+                                    {
+                                        command.Edit();
+                                        command.Custom("DeleteDetailMataUang")
+                                            .Text("Delete")
+                                            .IconClass("k-icon k-i-delete")
+                                            .HtmlAttributes(new { title="Delete"})
+                                            .Click("onDeleteDetailMataUang");
+                                    }).Width(200);
+                                })
+                                .Pageable(pager => pager
+                                    .Refresh(true)
+                                    .Info(true)
+                                    .PageSizes(true)
+                                )
+                                .Sortable()
+                                .Selectable()
+                                .Filterable()
+                                .Scrollable()
+                                .Height(380)
+                                .Resizable(a=>a.Columns(true))
+                                .Events(ev => ev.DataBound("gridAutoFit").Save("onSaveDetailMataUang").Edit("onEditDetailMataUang"))
+                                .ToClientTemplate())
+                        </text>
+                        );
+                    })
+                    .ToClientTemplate())
+        </script>
+    </div>
+</div>
+

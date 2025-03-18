@@ -1,0 +1,91 @@
+﻿@using ABB.Application.KapasitasCabangs.Queries
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.TagHelpers
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Kapasitas Cabang";
+}
+
+<script src="~/Modules/KapasitasCabang/JS/kapasitasCabang.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-8">
+            Kapasitas Cabang
+        </div>
+
+        <div class="col-md-4">
+            <button class="flat-btn-primary" onclick="btnAddKapasitasCabang_OnClick()">Add New Kapasitas Cabang</button>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<KapasitasCabangDto>()
+                .Name("KapasitasCabangGrid")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetKapasitasCabangs", "KapasitasCabang").Data("searchFilter"))
+                    .Model(model => model.Id(p => p.Id))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
+                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
+                    columns.Bound(col => col.nm_scob).Width(150).Title("Nama SCOB");
+                    columns.Bound(col => col.thn).Width(150).Title("Tahun");
+                    columns.Bound(col => col.nilai_kapasitas).Width(150).Title("Nilai Kapasitas");
+                    columns.Bound(col => col.nilai_kl).Width(150).Title("Nilai Klaim");
+                    columns.Bound(col => col.tgl_input).Width(150).Title("Tanggal Input").Format("{0:dd MMM yyyy • HH:mm}");
+                    columns.Bound(col => col.kd_usr_input).Width(150).Title("Kode User Input");
+                    columns.Command(command =>
+                    {
+                        command.Custom("EditKapasitasCabang")
+                            .Text("Edit")
+                            .IconClass("fa fa-pencil-alt")
+                            .HtmlAttributes(new { title = "Edit" })
+                            .Click("btnEditKapasitasCabang_OnClick");
+                        command.Custom("DeleteKapasitasCabang")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeleteKapasitasCabang");
+                    }).Width(200);
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit"))
+        
+                )    
+        </div>
+        
+        @(Html.Kendo().Window()
+            .Name("KapasitasCabangWindow")
+            .Title("KapasitasCabang")
+            .Width(400)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+    </div>
+</div>
+

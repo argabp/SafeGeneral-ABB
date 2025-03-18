@@ -1,0 +1,71 @@
+﻿@using ABB.Application.Akseptasis.Queries
+@using Kendo.Mvc.UI
+
+<script src="~/Modules/Akseptasi/Components/PranotaKoas/pranotaKoas.js"></script>
+
+<div class="window-body">
+    <div class="row">
+        <div class="col-md-4">
+            <input type="text" class="search-field-top" style="height: 1em" id="SearchKeywordPranotaKoas" placeholder="Search"/>
+        </div>
+        <div class="offset-5"></div>
+        <div class="col-md-2">
+            <button class="flat-btn-primary" style="height: 1em" id="btnAddNewAkseptasiPranotaKoas">Add New Akseptasi Pranota Koas</button>
+        </div>
+    </div>
+    
+    @(Html.Kendo().Grid<AkseptasiPranotaKoasDto>()
+        .Name("AkseptasiPranotaKoasGrid")
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetAkseptasiPranotaKoass", "Akseptasi").Data("searchFilterPranotaKoas"))
+            .Model(model => model.Id(p => p.Id))
+        )
+        .Columns(columns =>
+        {
+            columns.Bound(col => col.Id).Width(150).Title("Nomor Koas");
+            columns.Command(command =>
+            {
+                command.Custom("EditAkseptasiPranotaKoas")
+                    .Text("Edit")
+                    .IconClass("fa fa-pencil-alt")
+                    .HtmlAttributes(new { title = "Edit" })
+                    .Click("btnEditAkseptasiPranotaKoas_OnClick");
+                command.Custom("DeleteAkseptasiPranotaKoas")
+                    .Text("Delete")
+                    .IconClass("k-icon k-i-delete")
+                    .HtmlAttributes(new { title = "Delete" })
+                    .Click("btnDeleteAkseptasiPranotaKoas_OnClick");
+            }).Width(200);
+        })
+        .Pageable(pager => pager
+            .Refresh(true)
+            .Info(true)
+            .PageSizes(true)
+        )
+        .Sortable()
+        .Filterable()
+        .Scrollable()
+        .Height(450)
+        .Resizable(a => a.Columns(true))
+        .Events(ev => ev.DataBound("onPranotaKoasBound"))
+    
+        )
+    
+    <div class="form-group row col-sm-12" style="padding-top: 3em">
+        <div class="row col-sm-12">
+            <h3 class="col-sm-6">Total Share & Premi</h3>
+            <div class="col-sm-2">
+                <h3 id="totalPercentagePranotaKoas">0</h3>
+            </div>
+            <div class="col-sm-4">
+                <h3 id="totalPremiPranotaKoas">0</h3>
+            </div>
+        </div>
+    </div>
+    
+    <div class="window-footer">
+        <button type="button" id="btn-previous-akseptasiPranotaKoas" class="btn btn-primary space-right">
+            <span class="fa fa-arrow-left"></span> Previous
+        </button>
+    </div>
+</div>

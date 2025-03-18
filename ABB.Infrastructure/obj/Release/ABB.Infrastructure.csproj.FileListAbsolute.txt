@@ -1,0 +1,70 @@
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Infrastructure\bin\Release\ABB.Infrastructure.deps.json
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Infrastructure\bin\Release\ABB.Infrastructure.dll
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Infrastructure\bin\Release\ABB.Infrastructure.pdb
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Infrastructure\bin\Release\ABB.Application.dll
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Infrastructure\bin\Release\ABB.Domain.dll
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Infrastructure\bin\Release\ABB.Application.pdb
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Infrastructure\bin\Release\ABB.Domain.pdb
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Infrastructure\obj\Release\ABB.Infrastructure.csprojAssemblyReference.cache
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Infrastructure\obj\Release\ABB.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Infrastructure\obj\Release\ABB.Infrastructure.AssemblyInfo.cs
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Infrastructure\obj\Release\ABB.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Infrastructure\obj\Release\ABB.Infrastructure.csproj.CopyComplete
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Infrastructure\obj\Release\ABB.Infrastructure.dll
+C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Infrastructure\obj\Release\ABB.Infrastructure.pdb
+C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Infrastructure\bin\Release\ABB.Infrastructure.deps.json
+C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Infrastructure\bin\Release\ABB.Infrastructure.dll
+C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Infrastructure\bin\Release\ABB.Infrastructure.pdb
+C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Infrastructure\bin\Release\ABB.Application.dll
+C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Infrastructure\bin\Release\ABB.Domain.dll
+C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Infrastructure\bin\Release\ABB.Application.pdb
+C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Infrastructure\bin\Release\ABB.Domain.pdb
+C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Infrastructure\obj\Release\ABB.Infrastructure.csprojAssemblyReference.cache
+C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Infrastructure\obj\Release\ABB.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Infrastructure\obj\Release\ABB.Infrastructure.AssemblyInfo.cs
+C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Infrastructure\obj\Release\ABB.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Infrastructure\obj\Release\ABB.Infrastructure.csproj.CopyComplete
+C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Infrastructure\obj\Release\ABB.Infrastructure.dll
+C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Infrastructure\obj\Release\ABB.Infrastructure.pdb
+C:\Users\Formulatrix\RiderProjects\Mine\CSM\ABB.Infrastructure\bin\Release\ABB.Infrastructure.deps.json
+C:\Users\Formulatrix\RiderProjects\Mine\CSM\ABB.Infrastructure\bin\Release\ABB.Infrastructure.dll
+C:\Users\Formulatrix\RiderProjects\Mine\CSM\ABB.Infrastructure\bin\Release\ABB.Infrastructure.pdb
+C:\Users\Formulatrix\RiderProjects\Mine\CSM\ABB.Infrastructure\bin\Release\ABB.Application.dll
+C:\Users\Formulatrix\RiderProjects\Mine\CSM\ABB.Infrastructure\bin\Release\ABB.Domain.dll
+C:\Users\Formulatrix\RiderProjects\Mine\CSM\ABB.Infrastructure\bin\Release\ABB.Application.pdb
+C:\Users\Formulatrix\RiderProjects\Mine\CSM\ABB.Infrastructure\bin\Release\ABB.Domain.pdb
+C:\Users\Formulatrix\RiderProjects\Mine\CSM\ABB.Infrastructure\obj\Release\ABB.Infrastructure.csprojAssemblyReference.cache
+C:\Users\Formulatrix\RiderProjects\Mine\CSM\ABB.Infrastructure\obj\Release\ABB.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\Formulatrix\RiderProjects\Mine\CSM\ABB.Infrastructure\obj\Release\ABB.Infrastructure.AssemblyInfo.cs
+C:\Users\Formulatrix\RiderProjects\Mine\CSM\ABB.Infrastructure\obj\Release\ABB.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\Formulatrix\RiderProjects\Mine\CSM\ABB.Infrastructure\obj\Release\ABB.Infrastructure.csproj.CopyComplete
+C:\Users\Formulatrix\RiderProjects\Mine\CSM\ABB.Infrastructure\obj\Release\ABB.Infrastructure.dll
+C:\Users\Formulatrix\RiderProjects\Mine\CSM\ABB.Infrastructure\obj\Release\ABB.Infrastructure.pdb
+C:\Users\FORMULATRIX\RiderProjects\Mine\AbbReporting\ABB.Infrastructure\bin\Release\ABB.Infrastructure.deps.json
+C:\Users\FORMULATRIX\RiderProjects\Mine\AbbReporting\ABB.Infrastructure\bin\Release\ABB.Infrastructure.dll
+C:\Users\FORMULATRIX\RiderProjects\Mine\AbbReporting\ABB.Infrastructure\bin\Release\ABB.Infrastructure.pdb
+C:\Users\FORMULATRIX\RiderProjects\Mine\AbbReporting\ABB.Infrastructure\bin\Release\ABB.Application.dll
+C:\Users\FORMULATRIX\RiderProjects\Mine\AbbReporting\ABB.Infrastructure\bin\Release\ABB.Domain.dll
+C:\Users\FORMULATRIX\RiderProjects\Mine\AbbReporting\ABB.Infrastructure\bin\Release\ABB.Application.pdb
+C:\Users\FORMULATRIX\RiderProjects\Mine\AbbReporting\ABB.Infrastructure\bin\Release\ABB.Domain.pdb
+C:\Users\FORMULATRIX\RiderProjects\Mine\AbbReporting\ABB.Infrastructure\obj\Release\ABB.Infrastructure.csprojAssemblyReference.cache
+C:\Users\FORMULATRIX\RiderProjects\Mine\AbbReporting\ABB.Infrastructure\obj\Release\ABB.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\FORMULATRIX\RiderProjects\Mine\AbbReporting\ABB.Infrastructure\obj\Release\ABB.Infrastructure.AssemblyInfo.cs
+C:\Users\FORMULATRIX\RiderProjects\Mine\AbbReporting\ABB.Infrastructure\obj\Release\ABB.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\FORMULATRIX\RiderProjects\Mine\AbbReporting\ABB.Infrastructure\obj\Release\ABB.Infrastructure.csproj.CopyComplete
+C:\Users\FORMULATRIX\RiderProjects\Mine\AbbReporting\ABB.Infrastructure\obj\Release\ABB.Infrastructure.dll
+C:\Users\FORMULATRIX\RiderProjects\Mine\AbbReporting\ABB.Infrastructure\obj\Release\ABB.Infrastructure.pdb
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Infrastructure\bin\Release\ABB.Infrastructure.deps.json
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Infrastructure\bin\Release\ABB.Infrastructure.dll
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Infrastructure\bin\Release\ABB.Infrastructure.pdb
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Infrastructure\bin\Release\ABB.Application.dll
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Infrastructure\bin\Release\ABB.Domain.dll
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Infrastructure\bin\Release\ABB.Application.pdb
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Infrastructure\bin\Release\ABB.Domain.pdb
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Infrastructure\obj\Release\ABB.Infrastructure.csprojAssemblyReference.cache
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Infrastructure\obj\Release\ABB.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Infrastructure\obj\Release\ABB.Infrastructure.AssemblyInfo.cs
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Infrastructure\obj\Release\ABB.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Infrastructure\obj\Release\ABB.Infrastructure.csproj.CopyComplete
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Infrastructure\obj\Release\ABB.Infrastructure.dll
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Infrastructure\obj\Release\ABB.Infrastructure.pdb
