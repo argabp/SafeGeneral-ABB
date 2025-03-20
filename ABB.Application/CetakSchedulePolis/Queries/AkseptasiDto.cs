@@ -14,7 +14,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
 
         public string kd_thn { get; set; }
 
-        public string no_aks { get; set; }
+        public string no_pol { get; set; }
 
         public Int16 no_updt { get; set; }
         
@@ -23,8 +23,6 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         public string nm_cob { get; set; }
         
         public string nm_scob { get; set; }
-
-        public string? no_pol_ttg { get; set; }
 
         public DateTime? tgl_closing { get; set; }
         

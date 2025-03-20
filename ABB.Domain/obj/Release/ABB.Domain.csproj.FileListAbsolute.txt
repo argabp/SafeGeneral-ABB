@@ -43,3 +43,12 @@ C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Domain\obj\Release\ABB.D
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Domain\obj\Release\ABB.Domain.csproj.CoreCompileInputs.cache
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Domain\obj\Release\ABB.Domain.dll
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Domain\obj\Release\ABB.Domain.pdb
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Domain\bin\Release\ABB.Domain.deps.json
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Domain\bin\Release\ABB.Domain.dll
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Domain\bin\Release\ABB.Domain.pdb
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Domain\obj\Release\ABB.Domain.csprojAssemblyReference.cache
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Domain\obj\Release\ABB.Domain.AssemblyInfoInputs.cache
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Domain\obj\Release\ABB.Domain.AssemblyInfo.cs
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Domain\obj\Release\ABB.Domain.csproj.CoreCompileInputs.cache
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Domain\obj\Release\ABB.Domain.dll
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Domain\obj\Release\ABB.Domain.pdb

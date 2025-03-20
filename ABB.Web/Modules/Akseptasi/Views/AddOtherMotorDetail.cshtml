@@ -40,7 +40,7 @@
     var akseptasi_other_motor_detail_nilai_prm_banjir = Model.nilai_prm_banjir == null ? 0 : (double)Model.nilai_prm_banjir;
 }
 
-<div class="window-body">
+<div class="window-body"  style="background-color: lightgray">
     <form id="OtherMotorDetailForm" enctype="multipart/form-data" autocomplete="off">
         @Html.HiddenFor(h => h.st_deffered)
         <div class="form-group row">
@@ -85,7 +85,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-4">Tahun</label>
                 <div class="col-sm-8">
-                    <kendo-numerictextbox decimals="0" spinners="false" format="#" for="thn_ptg_kend" style="width: 100%"/>
+                    <kendo-numerictextbox decimals="0" spinners="false" format="#" for="thn_ptg_kend" style="width: 100%; background-color: #00FFFF"/>
                 </div>
             </div>
             <div class="row col-sm-6">
@@ -100,14 +100,14 @@
                 <label class="col-sm-4">TSI Casco</label>
                 <div class="col-sm-8">
                     <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_casco" 
-                                          value="@akseptasi_other_motor_detail_nilai_casco" style="width: 100%"/>
+                                          value="@akseptasi_other_motor_detail_nilai_casco" style="width: 100%; background-color: #FFFFE1"/>
                 </div>
             </div>
             <div class="row col-sm-6">
                 <label class="col-sm-4">Premi Casco</label>
                 <div class="col-sm-8">
                     <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_prm_casco"
-                                          value="@akseptasi_other_motor_detail_nilai_prm_casco" style="width: 100%"/>
+                                          value="@akseptasi_other_motor_detail_nilai_prm_casco" style="width: 100%; background-color: #FFFFE1"/>
                 </div>
             </div>
         </div>
@@ -129,7 +129,7 @@
                 <label class="col-sm-4">Own Risk</label>
                 <div class="col-sm-8">
                     <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_rsk_sendiri"
-                                          value="@akseptasi_other_motor_detail_nilai_rsk_sendiri" style="width: 100%"/>
+                                          value="@akseptasi_other_motor_detail_nilai_rsk_sendiri" style="width: 100%; background-color: #FFFFE1"/>
                 </div>
             </div>
         </div>
@@ -138,14 +138,14 @@
                 <label class="col-sm-4">Premi AOG</label>
                 <div class="col-sm-8">
                     <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_prm_aog" 
-                                          value="@akseptasi_other_motor_detail_nilai_prm_aog" style="width: 100%"/>
+                                          value="@akseptasi_other_motor_detail_nilai_prm_aog" style="width: 100%; background-color: #FFFFE1"/>
                 </div>
             </div>
             <div class="row col-sm-6">
                 <label class="col-sm-4">Premi HH</label>
                 <div class="col-sm-8">
                     <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_prm_hh"
-                                          value="@akseptasi_other_motor_detail_nilai_prm_hh" style="width: 100%"/>
+                                          value="@akseptasi_other_motor_detail_nilai_prm_hh" style="width: 100%; background-color: #FFFFE1"/>
                 </div>
             </div>
         </div>
@@ -154,14 +154,14 @@
                 <label class="col-sm-4">TJH</label>
                 <div class="col-sm-8">
                     <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_tjh" 
-                                          value="@akseptasi_other_motor_detail_nilai_tjh" style="width: 100%"/>
+                                          value="@akseptasi_other_motor_detail_nilai_tjh" style="width: 100%; background-color: #FFFFE1"/>
                 </div>
             </div>
             <div class="row col-sm-6">
                 <label class="col-sm-4">Premi TJH</label>
                 <div class="col-sm-8">
                     <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_prm_tjh"
-                                          value="@akseptasi_other_motor_detail_nilai_prm_tjh" style="width: 100%"/>
+                                          value="@akseptasi_other_motor_detail_nilai_prm_tjh" style="width: 100%; background-color: #FFFFE1"/>
                 </div>
             </div>
         </div>
@@ -170,14 +170,14 @@
                 <label class="col-sm-4">TSI TJP</label>
                 <div class="col-sm-8">
                     <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_tjp" 
-                                          value="@akseptasi_other_motor_detail_nilai_tjp" style="width: 100%"/>
+                                          value="@akseptasi_other_motor_detail_nilai_tjp" style="width: 100%; background-color: #FFFFE1"/>
                 </div>
             </div>
             <div class="row col-sm-6">
                 <label class="col-sm-4">Premi TJP</label>
                 <div class="col-sm-8">
                     <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_prm_tjp"
-                                          value="@akseptasi_other_motor_detail_nilai_prm_tjp" style="width: 100%"/>
+                                          value="@akseptasi_other_motor_detail_nilai_prm_tjp" style="width: 100%; background-color: #FFFFE1"/>
                 </div>
             </div>
         </div>
@@ -186,14 +186,14 @@
                 <label class="col-sm-4">TSI PAP</label>
                 <div class="col-sm-8">
                     <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_pap" 
-                                          value="@akseptasi_other_motor_detail_nilai_pap" style="width: 100%"/>
+                                          value="@akseptasi_other_motor_detail_nilai_pap" style="width: 100%; background-color: #FFFFE1"/>
                 </div>
             </div>
             <div class="row col-sm-6">
                 <label class="col-sm-4">Premi PAP</label>
                 <div class="col-sm-8">
                     <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_prm_pap"
-                                          value="@akseptasi_other_motor_detail_nilai_prm_pap" style="width: 100%"/>
+                                          value="@akseptasi_other_motor_detail_nilai_prm_pap" style="width: 100%; background-color: #FFFFE1"/>
                 </div>
             </div>
         </div>
@@ -202,14 +202,14 @@
                 <label class="col-sm-4">TSI PAD</label>
                 <div class="col-sm-8">
                     <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_pad" 
-                                          value="@akseptasi_other_motor_detail_nilai_pad" style="width: 100%"/>
+                                          value="@akseptasi_other_motor_detail_nilai_pad" style="width: 100%; background-color: #FFFFE1"/>
                 </div>
             </div>
             <div class="row col-sm-6">
                 <label class="col-sm-4">Premi PAD</label>
                 <div class="col-sm-8">
                     <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_prm_pad"
-                                          value="@akseptasi_other_motor_detail_nilai_prm_pad" style="width: 100%"/>
+                                          value="@akseptasi_other_motor_detail_nilai_prm_pad" style="width: 100%; background-color: #FFFFE1"/>
                 </div>
             </div>
         </div>

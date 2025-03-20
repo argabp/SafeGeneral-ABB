@@ -7,14 +7,14 @@ using MediatR;
 
 namespace ABB.Application.CetakNotaDanKwitansiPolis.Queries
 {
-    public class GetAkseptasisQuery : IRequest<List<CetakSchedulePolis.Queries.AkseptasiDto>>
+    public class GetAkseptasisQuery : IRequest<List<AkseptasiDto>>
     {
         public string SearchKeyword { get; set; }
         public string DatabaseName { get; set; }
         public string KodeCabang { get; set; }
     }
 
-    public class GetAkseptasisQueryHandler : IRequestHandler<CetakSchedulePolis.Queries.GetAkseptasisQuery, List<CetakSchedulePolis.Queries.AkseptasiDto>>
+    public class GetAkseptasisQueryHandler : IRequestHandler<GetAkseptasisQuery, List<AkseptasiDto>>
     {
         private readonly IDbConnectionFactory _connectionFactory;
 
@@ -23,13 +23,13 @@ namespace ABB.Application.CetakNotaDanKwitansiPolis.Queries
             _connectionFactory = connectionFactory;
         }
 
-        public async Task<List<CetakSchedulePolis.Queries.AkseptasiDto>> Handle(CetakSchedulePolis.Queries.GetAkseptasisQuery request, CancellationToken cancellationToken)
+        public async Task<List<AkseptasiDto>> Handle(GetAkseptasisQuery request, CancellationToken cancellationToken)
         {
             _connectionFactory.CreateDbConnection(request.DatabaseName);
-            return (await _connectionFactory.Query<CetakSchedulePolis.Queries.AkseptasiDto>(@"SELECT 
-    		RTRIM(LTRIM(p.kd_cb)) + RTRIM(LTRIM(p.kd_cob)) + RTRIM(LTRIM(p.kd_scob)) + RTRIM(LTRIM(p.kd_thn)) + RTRIM(LTRIM(p.no_aks)) + CONVERT(varchar(max), p.no_updt) Id,
+            return (await _connectionFactory.Query<AkseptasiDto>(@"SELECT 
+    		RTRIM(LTRIM(p.kd_cb)) + RTRIM(LTRIM(p.kd_cob)) + RTRIM(LTRIM(p.kd_scob)) + RTRIM(LTRIM(p.kd_thn)) + RTRIM(LTRIM(p.no_pol)) + CONVERT(varchar(max), p.no_updt) Id,
     		p.*, cb.nm_cb, cob.nm_cob, scob.nm_scob, u.Username nm_usr_input
-				FROM uw01a p
+				FROM uw01e p
 					INNER JOIN rf01 cb
 						ON p.kd_cb = cb.kd_cb
 					INNER JOIN rf04 cob
@@ -38,7 +38,7 @@ namespace ABB.Application.CetakNotaDanKwitansiPolis.Queries
 						ON p.kd_scob = scob.kd_scob
 					LEFT JOIN MS_User u
 						ON u.UserId = p.kd_usr_input
-				WHERE cb.kd_cb = @KodeCabang AND (p.no_aks like '%'+@SearchKeyword+'%' 
+				WHERE cb.kd_cb = @KodeCabang AND (p.no_pol like '%'+@SearchKeyword+'%' 
 					OR p.no_pol_ttg like '%'+@SearchKeyword+'%' 
 					OR p.no_updt like '%'+@SearchKeyword+'%' 
 					OR cb.nm_cb like '%'+@SearchKeyword+'%' 

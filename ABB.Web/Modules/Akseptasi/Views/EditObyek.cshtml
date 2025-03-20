@@ -23,7 +23,7 @@
     var pst_adj = (double) Model.pst_adj;
 }
 
-<div class="window-body">
+<div class="window-body" style="background-color: lightgray">
     <form id="ObyekForm" enctype="multipart/form-data" autocomplete="off">
     @* @Html.HiddenFor(h => h.link_file) *@
         <div class="form-group row">
@@ -73,7 +73,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Kode Group Obyek</label>
                 <div class="col-sm-6">
-                    <kendo-dropdownlist for="kd_grp_oby" style="width: 100%"
+                    <kendo-dropdownlist for="kd_grp_oby" style="width: 100%" class="not-null-dropdown"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -88,7 +88,7 @@
             <div class="row col-sm-12">
                 <label class="col-sm-3">Uraian Pertanggungan</label>
                 <div class="col-sm-9">
-                    <kendo-textarea name="desk_oby" rows="2" style="width: 100%">@Model.desk_oby</kendo-textarea>
+                    <kendo-textarea name="desk_oby" rows="2" style="width: 100%; background-color: #FFFFE1">@Model.desk_oby</kendo-textarea>
                     <span asp-validation-for="desk_oby" class="text-danger"></span>
                 </div>
             </div>
@@ -97,10 +97,10 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Nilai Pertanggungan</label>
                 <div class="col-sm-3">
-                    <kendo-numerictextbox decimals="2" spinners="false" name="resiko_obyek_nilai_ttl_ptg" value="@resiko_obyek_nilai_ttl_ptg" style="width: 100%"/>
+                    <kendo-numerictextbox decimals="2" spinners="false" name="resiko_obyek_nilai_ttl_ptg" value="@resiko_obyek_nilai_ttl_ptg" style="width: 100%; background-color: #FFFFE1"/>
                 </div>
                 <div class="col-sm-3">
-                    <kendo-numerictextbox decimals="2" spinners="false" for="pst_adj" value="@pst_adj" style="width: 100%"/>
+                    <kendo-numerictextbox decimals="2" spinners="false" for="pst_adj" value="@pst_adj" style="width: 100%; background-color: #FFFFE1"/>
                 </div>
             </div>
         </div>

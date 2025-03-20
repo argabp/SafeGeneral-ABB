@@ -24,7 +24,7 @@
     var resiko_coverage_pst_kms = (double) Model.pst_kms;
 }
 
-<div class="window-body">
+<div class="window-body" style="background-color: lightgray">
     <form id="CoverageForm" enctype="multipart/form-data" autocomplete="off">
         <div class="form-group row">
             <div class="row col-sm-6">
@@ -80,7 +80,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Jaminan</label>
                 <div class="col-sm-6">
-                    <kendo-dropdownlist for="flag_pkk" style="width: 100%"
+                    <kendo-dropdownlist for="flag_pkk" style="width: 100%" class="not-null-dropdown"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -93,7 +93,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Diskon (%)</label>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox decimals="2" spinners="false" name="resiko_coverage_pst_dis" value="@resiko_coverage_pst_dis" style="width: 100%"/>
+                    <kendo-numerictextbox decimals="2" spinners="false" name="resiko_coverage_pst_dis" value="@resiko_coverage_pst_dis" style="width: 100%; background-color: #FFFFE1"/>
                 </div>
             </div>
         </div>
@@ -101,10 +101,10 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Rate Premi</label>
                 <div class="col-sm-3">
-                    <kendo-numerictextbox decimals="2" spinners="false" name="resiko_coverage_pst_rate_prm" value="@resiko_coverage_pst_rate_prm" style="width: 100%"/>
+                    <kendo-numerictextbox decimals="2" spinners="false" name="resiko_coverage_pst_rate_prm" value="@resiko_coverage_pst_rate_prm" style="width: 100%; background-color: #FFFFE1"/>
                 </div>
                 <div class="col-sm-3">
-                    <kendo-dropdownlist name="resiko_coverage_stn_rate_prm" style="width: 100%" value="@Model.stn_rate_prm"
+                    <kendo-dropdownlist name="resiko_coverage_stn_rate_prm" style="width: 100%" value="@Model.stn_rate_prm" class="not-null-dropdown"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -117,7 +117,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Komisi (%)</label>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox decimals="2" spinners="false" name="resiko_coverage_pst_kms" value="@resiko_coverage_pst_kms" style="width: 100%"/>
+                    <kendo-numerictextbox decimals="2" spinners="false" name="resiko_coverage_pst_kms" value="@resiko_coverage_pst_kms" style="width: 100%; background-color: #FFFFE1"/>
                 </div>
             </div>
         </div>

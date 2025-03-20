@@ -19,7 +19,7 @@ namespace ABB.Application.CetakNotaDanKwitansiPolis.Queries
         public string kd_cob { get; set; }
         public string kd_scob { get; set; }
         public int kd_thn { get; set; }
-        public string no_aks { get; set; }
+        public string no_pol { get; set; }
         public string? nm_ttg { get; set; }
         public int no_updt { get; set; }
         public string jenisLaporan { get; set; }
@@ -60,7 +60,7 @@ namespace ABB.Application.CetakNotaDanKwitansiPolis.Queries
                 new
                 {
                     input_str = $"{request.kd_cb.Trim()}{request.kd_cob.Trim()}{request.kd_scob.Trim()}" +
-                                $"{request.kd_thn}{request.no_aks.Trim()}{request.no_updt}{request.nm_ttg?.Trim()}"
+                                $"{request.kd_thn}{request.no_pol.Trim()}{request.no_updt}{request.nm_ttg?.Trim()}"
                 })).FirstOrDefault();
             
             string reportPath = Path.Combine( _environment.ContentRootPath, "Modules", "Reports", "Templates", reportTempalteName );

@@ -25,7 +25,7 @@ function viewReport(element){
     form.kd_cb = dataItem.kd_cb;
     form.kd_cob = dataItem.kd_cob;
     form.kd_scob = dataItem.kd_scob;
-    form.no_aks = dataItem.no_aks;
+    form.no_pol = dataItem.no_pol;
     form.no_updt = dataItem.no_updt;
     form.kd_thn = dataItem.kd_thn;
     form.nm_ttg = dataItem.nm_ttg;

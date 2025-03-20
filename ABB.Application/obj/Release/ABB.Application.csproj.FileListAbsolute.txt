@@ -58,3 +58,15 @@ C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Application\obj\Release\
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Application\obj\Release\ABB.Application.csproj.CopyComplete
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Application\obj\Release\ABB.Application.dll
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneral\ABB.Application\obj\Release\ABB.Application.pdb
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Application\bin\Release\ABB.Application.deps.json
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Application\bin\Release\ABB.Application.dll
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Application\bin\Release\ABB.Application.pdb
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Application\bin\Release\ABB.Domain.dll
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Application\bin\Release\ABB.Domain.pdb
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Application\obj\Release\ABB.Application.csprojAssemblyReference.cache
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Application\obj\Release\ABB.Application.AssemblyInfoInputs.cache
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Application\obj\Release\ABB.Application.AssemblyInfo.cs
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Application\obj\Release\ABB.Application.csproj.CoreCompileInputs.cache
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Application\obj\Release\ABB.Application.csproj.CopyComplete
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Application\obj\Release\ABB.Application.dll
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Application\obj\Release\ABB.Application.pdb

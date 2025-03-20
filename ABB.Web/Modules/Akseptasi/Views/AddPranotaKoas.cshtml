@@ -28,7 +28,7 @@
     var pranota_koas_nilai_hf = Model.nilai_hf == null ? 0 : (double)Model.nilai_hf;
 }
 
-<div class="window-body">
+<div class="window-body" style="background-color: lightgray">
     <form id="PranotaKoasForm" enctype="multipart/form-data" autocomplete="off">
         <div class="form-group row">
             <div class="row col-sm-6">
@@ -71,7 +71,7 @@
                 <div class="row col-sm-9">
                     <div class="col-sm-6">
                         <kendo-dropdownlist name="pranota_koas_kd_grp_pas" style="width: 100%" on-change="OnKodeRekananPranotaKoasChange" option-label="Pilih Kode Rekanan"
-                                            datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                                            datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown">
                             <datasource type="DataSourceTagHelperType.Custom">
                                 <transport>
                                     <read url="@Url.Action("GetKodePersAsuransi", "Akseptasi")"/>
@@ -80,7 +80,7 @@
                         </kendo-dropdownlist>
                     </div>
                     <div class="col-sm-6">
-                        <kendo-dropdownlist name="pranota_koas_kd_rk_pas" style="width: 100%"
+                        <kendo-dropdownlist name="pranota_koas_kd_rk_pas" style="width: 100%" class="primary-dropdown"
                                             datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                             <datasource type="DataSourceTagHelperType.Custom">
                                 <transport>

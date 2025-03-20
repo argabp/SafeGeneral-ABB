@@ -9,7 +9,7 @@ namespace ABB.Web.Modules.CetakSchedulePolis.Models
         public string kd_cb { get; set; }
         public string kd_cob { get; set; }
         public string kd_scob { get; set; }
-        public string no_aks { get; set; }
+        public string no_pol { get; set; }
         public int no_updt { get; set; }
         public string jenisLaporan { get; set; }
         public string bahasa { get; set; }

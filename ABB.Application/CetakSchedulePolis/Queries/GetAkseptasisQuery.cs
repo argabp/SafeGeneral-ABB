@@ -27,9 +27,9 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         {
             _connectionFactory.CreateDbConnection(request.DatabaseName);
             return (await _connectionFactory.Query<AkseptasiDto>(@"SELECT 
-    		RTRIM(LTRIM(p.kd_cb)) + RTRIM(LTRIM(p.kd_cob)) + RTRIM(LTRIM(p.kd_scob)) + RTRIM(LTRIM(p.kd_thn)) + RTRIM(LTRIM(p.no_aks)) + CONVERT(varchar(max), p.no_updt) Id,
+    		RTRIM(LTRIM(p.kd_cb)) + RTRIM(LTRIM(p.kd_cob)) + RTRIM(LTRIM(p.kd_scob)) + RTRIM(LTRIM(p.kd_thn)) + RTRIM(LTRIM(p.no_pol)) + CONVERT(varchar(max), p.no_updt) Id,
     		p.*, cb.nm_cb, cob.nm_cob, scob.nm_scob, u.Username nm_usr_input
-				FROM uw01a p
+				FROM uw01e p
 					INNER JOIN rf01 cb
 						ON p.kd_cb = cb.kd_cb
 					INNER JOIN rf04 cob
@@ -38,7 +38,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
 						ON p.kd_scob = scob.kd_scob
 					LEFT JOIN MS_User u
 						ON u.UserId = p.kd_usr_input
-				WHERE cb.kd_cb = @KodeCabang AND (p.no_aks like '%'+@SearchKeyword+'%' 
+				WHERE cb.kd_cb = @KodeCabang AND (p.no_pol like '%'+@SearchKeyword+'%' 
 					OR p.no_pol_ttg like '%'+@SearchKeyword+'%' 
 					OR p.no_updt like '%'+@SearchKeyword+'%' 
 					OR cb.nm_cb like '%'+@SearchKeyword+'%' 

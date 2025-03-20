@@ -21,7 +21,7 @@
                           Model.kd_scob.Trim() + Model.kd_thn.Trim() + Model.no_aks.Trim();
 }
 
-<div class="window-body">
+<div class="window-body" style="background-color: lightgray">
     <form id="OtherCargoDetailForm" enctype="multipart/form-data" autocomplete="off">
         <div class="form-group row">
             <div class="row col-sm-6">
@@ -62,7 +62,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Nomor Urut</label>
                 <div class="col-sm-6">
-                    <kendo-textbox name="resiko_other_cargo_no_urut" value="@Model.no_urut" style="width: 100%"/>
+                    <kendo-textbox name="resiko_other_cargo_no_urut" value="@Model.no_urut" style="width: 100%; background-color: #00FFFF"/>
                 </div>
             </div>
         </div>
@@ -70,7 +70,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Jenis Angkut</label>
                 <div class="col-sm-6">
-                    <kendo-dropdownlist for="jns_angkut" style="width: 100%"
+                    <kendo-dropdownlist for="jns_angkut" style="width: 100%" class="not-null-dropdown"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -100,7 +100,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">No. Alat Angkut</label>
                 <div class="col-sm-6">
-                    <kendo-textbox for="nm_angkut" style="width: 100%"/>
+                    <kendo-textbox for="nm_angkut" style="width: 100%; background-color: #FFFFE1"/>
                 </div>
             </div>
         </div>

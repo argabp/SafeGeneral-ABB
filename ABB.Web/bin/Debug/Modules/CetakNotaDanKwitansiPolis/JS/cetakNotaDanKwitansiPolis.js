@@ -24,8 +24,7 @@ function viewReport(element){
     form.kd_cb = dataItem.kd_cb;
     form.kd_cob = dataItem.kd_cob;
     form.kd_scob = dataItem.kd_scob;
-    form.no_aks = dataItem.no_aks;
-    form.no_pol_ttg = dataItem.no_pol_ttg;
+    form.no_pol = dataItem.no_pol;
     form.no_updt = dataItem.no_updt;
     form.jenisLaporan = formElement[0].querySelector('select[name="jenisLaporan"]').value
     form.bahasa = formElement[0].querySelector('select[name="mataUang"]').value

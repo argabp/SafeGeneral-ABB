@@ -29,7 +29,7 @@
     var faktor_prd = Model.faktor_prd == null ? 0 : (double)Model.faktor_prd;
 }
 
-<div class="window-body">
+<div class="window-body" style="background-color: lightgray">
     <form id="ResikoForm" enctype="multipart/form-data" autocomplete="off">
         @Html.HiddenFor(h => h.nilai_kl)
         <input type="hidden" id="resiko_kd_thn">
@@ -83,7 +83,7 @@
             <div class="row col-sm-12">
                 <label class="col-sm-3">Kode Mata Uang</label>
                 <div class="col-sm-9">
-                    <kendo-dropdownlist for="kd_mtu_prm" style="width: 100%"
+                    <kendo-dropdownlist for="kd_mtu_prm" style="width: 100%" class="not-null-dropdown"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -99,11 +99,11 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Rate Premi</label>
                 <div class="col-sm-3">
-                    <kendo-numerictextbox decimals="2" spinners="false" for="pst_rate_prm" style="width: 100%"/>
+                    <kendo-numerictextbox decimals="2" spinners="false" for="pst_rate_prm" style="width: 100%; background-color: #FFFFE1"/>
                     <span asp-validation-for="pst_rate_prm" class="text-danger"></span>
                 </div>
                 <div class="col-sm-3">
-                    <kendo-dropdownlist for="stn_rate_prm" style="width: 100%"
+                    <kendo-dropdownlist for="stn_rate_prm" style="width: 100%"  class="not-null-dropdown"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -126,13 +126,13 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Premi</label>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox decimals="2" spinners="false" name="resiko_nilai_prm" value="@resiko_nilai_prm" style="width: 100%"/>
+                    <kendo-numerictextbox decimals="2" spinners="false" name="resiko_nilai_prm" value="@resiko_nilai_prm" style="width: 100%; background-color: #FFFFE1"/>
                 </div>
             </div>
             <div class="row col-sm-6">
                 <label class="col-sm-6">Total Pertanggungan</label>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox decimals="2" spinners="false" name="resiko_nilai_ttl_ptg" value="@resiko_nilai_ttl_ptg" style="width: 100%"/>
+                    <kendo-numerictextbox decimals="2" spinners="false" name="resiko_nilai_ttl_ptg" value="@resiko_nilai_ttl_ptg" style="width: 100%; background-color: #FFFFE1"/>
                 </div>
             </div>
         </div>
@@ -143,7 +143,7 @@
                     <kendo-numerictextbox decimals="2" spinners="false" name="resiko_pst_dis" value="@resiko_pst_dis" style="width: 100%"/>
                 </div>
                 <div class="col-sm-4">
-                    <kendo-numerictextbox decimals="2" spinners="false" name="resiko_nilai_dis" value="@resiko_nilai_dis" style="width: 100%"/>
+                    <kendo-numerictextbox decimals="2" spinners="false" name="resiko_nilai_dis" value="@resiko_nilai_dis" style="width: 100%; background-color: #FFFFE1"/>
                 </div>
             </div>
             <div class="row col-sm-6">
@@ -167,7 +167,7 @@
                     <kendo-numerictextbox decimals="2" spinners="false" name="resiko_pst_kms" value="@resiko_pst_kms" style="width: 100%"/>
                 </div>
                 <div class="col-sm-4">
-                    <kendo-numerictextbox decimals="2" spinners="false" name="resiko_nilai_kms" value="@resiko_nilai_kms" style="width: 100%"/>
+                    <kendo-numerictextbox decimals="2" spinners="false" name="resiko_nilai_kms" value="@resiko_nilai_kms" style="width: 100%; background-color: #FFFFE1"/>
                 </div>
             </div>
             <div class="row col-sm-6">
