@@ -4790,6 +4790,8 @@
 
     <ItemGroup>
       <Folder Include="Logs" />
+      <Folder Include="Modules\PostingKomisiTambahan\Models" />
+      <Folder Include="Modules\PostingPolis\Models" />
       <Folder Include="wwwroot\img\profile-picture" />
       <Folder Include="wwwroot\pengajuan-akseptasi-all" />
       <Folder Include="wwwroot\pengajuan-akseptasi-kreditur" />
@@ -5383,6 +5385,9 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Modules\Reports\Templates\PolisMotorSingle.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\PostingKomisiTambahan\JS\postingKomisiTambahan.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
