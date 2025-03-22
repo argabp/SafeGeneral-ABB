@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polis Bonding Penawaran</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            border: 1px solid black;
+            padding: 20px;
+        }
+
+        .h1 {
+            text-align: center;
+            font-size: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .section {
+            margin-top: 10px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table td {
+            padding: 8px;
+            border: 1px solid black;
+			font-size: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="h1"><u>JAMINAN PENAWARAN</u></div>
+        <div class="section">
+            <table class="table">
+                <tr>
+                    <td style="width: 5%;">Nomor</td>
+                    <td style="width: 1%;">:</td>
+                    <td style="width: 10%;">{{no_pol_ttg}}</td>
+                    <td style="width: 5%;">Reg No.</td>
+                    <td style="width: 1%;">:</td>
+					<td style="width: 8%;">{{no_reg}}</td>
+					<td style="width: 8%;">Nilai Jaminan</td>
+					<td style="width: 1%;">:</td>
+					<td style="width: 5%;">{{symbol}}{{nilai_bond}}</td>
+                </tr>
+			</table>
+            <table class="table">
+				<tr>
+                    <td style="width: 1%; vertical-align: top;">1. </td>
+                    <td style="vertical-align: top; text-align: justify;">Dengan ini dinyatakan, bahwa kami: ' +if(isNull ({{nm_ttg}}),'',{{nm_ttg}}) + ',' + if(isNull (almt_ttg),'',almt_ttg)+' 
+						sebagai Penyedia, selanjutnya disebut TERJAMIN, dan ' + if(isNull (nm_persh),'',nm_persh)+ ',' + if(isNull (almt),'',almt) + ' sebagai Penjamin, selanjutnya disebut sebagai PENJAMIN, 
+						bertanggung jawab dan dengan tegas terikat pada ' + if(isNull (nm_obl),'',nm_obl)+',' +  if(isNull (almt_obl),'',almt_obl)+ ' sebagai Pelaksana Pelelangan, 
+						selanjutnya disebut PENERIMA JAMINAN atas sejumlah '+symbol + string(nilai_bond,if ( trim(symbol) ='Rp ','#,##0','#,##0.0000')) + ' ( '+ (if(isNull(ket_nilai_bond),'',ket_nilai_bond))+ ' )</td>
+                </tr>
+			</table>    
+                <!-- <tr>
+                    <td>Alamat Tertanggung</td>
+                    <td>:</td>
+                    <td colspan="4">{{almt_ttg}}</td>
+                </tr>
+                <tr>
+                    <td>Penerima Barang</td>
+                    <td>:</td>
+                    <td colspan="4">{{consignee}}</td>
+                </tr>
+                <tr>
+                    <td>Harga Pertanggungan</td>
+                    <td>:</td>
+                    <td colspan="4">{{kd_mtu_symbol_1}} {{nilai_ttl_ptg}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td colspan="4">{{ket_kurs}}</td>
+                </tr>
+                <tr>
+                    <td>No. Packing List / No. Dokumen</td>
+                    <td>:</td>
+                    <td>{{no_po}}</td>
+                    <td>/</td>
+                    <td>{{no_lc}}</td>
+                </tr>
+                <tr>
+                    <td>Obyek Pertanggungan</td>
+                    <td>:</td>
+                    <td colspan="2">{{desk_oby_01}}</td>
+                </tr>
+                <tr>
+                    <td>Dari / Ke</td>
+                    <td>:</td>
+                    <td>{{tempat_brkt}} / {{tempat_tiba}}</td>
+                </tr>
+                <tr>
+                    <td>Nama Alat Angkut</td>
+                    <td>:</td>
+                    <td colspan="3">{{nm_kapal}}</td>
+                </tr>
+                <tr>
+                    <td>Tanggal Pemberangkatan</td>
+                    <td>:</td>
+                    <td colspan="3">{{tgl_brkt}}</td>
+                </tr>
+                <tr>
+                    <td>Nomor Faktur</td>
+                    <td>:</td>
+                    <td colspan="3">{{no_inv}}</td>
+                </tr>
+                <tr>
+                    <td>Surat Muat Laut</td>
+                    <td>:</td>
+                    <td colspan="3">{{no_bl}}</td>
+                </tr>
+                <tr>
+                    <td>Resiko Sendiri</td>
+                    <td>:</td>
+                    <td colspan="3">{{desk_deduct}}</td>
+                </tr>
+                <tr>
+                    <td>Daftar Kemasan</td>
+                    <td>:</td>
+                    <td colspan="3">-</td>
+                </tr>
+                <tr>
+                    <td>Kondisi</td>
+                    <td>:</td>
+                    <td colspan="3">{{desk_kond}}</td>
+                </tr>
+                <tr>
+                    <td>Janji</td>
+                    <td>:</td>
+                    <td colspan="3">-</td>
+                </tr>
+                <tr>
+                    <td>Klausul</td>
+                    <td>:</td>
+                    <td colspan="3">{{ket_klausula}}</td>
+                </tr>
+                <tr>
+                    <td>Perhitungan Premi</td>
+                    <td>:</td>
+                    <td>{{pst_rate_prm}} {{stn_rate_prm}} x {{kd_mtu_symbol_2}} {{nilai_ttl_ptg_2}}</td>
+					<td></td>
+                    <td>=</td>
+                    <td>{{kd_mtu_symbol_23}} {{nilai_prm}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>Diskon</td>
+                    <td></td>
+                    <td>=</td>
+                    <td>if (isnull)</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>Biaya Polis</td>
+                    <td></td>
+                    <td>=</td>
+                    <td>{{kd_mtu_symbol_23}} {{nilai_bia_pol}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>Materai</td>
+                    <td></td>
+                    <td>=</td>
+                    <td>{{kd_mtu_symbol_23}} {{nilai_bia_mat}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><hr></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>=</td>
+                    <td>string(nilai_ttl - nilai_di)</td>
+                </tr>
+                <tr>
+                    <td>{{nilai_dis}}</td>
+                    <td></td>
+                    <td>{{stamp_duty}}</td>
+                    <td></td>
+                    <td></td>
+                    <td><hr style="border-top: 3px double black; width: 100%;"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>{{ctt_polis}}</td>
+                    <td></td>
+                    <td colspan="2">{{st_title5}}, {{tgl_closing}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="2" align="center">PT. Asuransi Bhakti Bhayangkara</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="2" align="center"><br><br><br><br><br><br><br><br><br><br><br><strong><u>Ati Nofianti, A.Md, As. K</u></strong></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="2" align="center"><strong>Kepala Divisi Underwriting</strong></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="6" align="center">{{st_title3}}</td>
+                </tr>
+                <tr>
+                    <td colspan="6" align="center">{{st_title6}}</td>
+                </tr>
+                <tr>
+                    <td colspan="6" align="center">{{st_title4}}</td>
+                </tr> -->
+			</table>
+        </div>
+</body>
+</html>
