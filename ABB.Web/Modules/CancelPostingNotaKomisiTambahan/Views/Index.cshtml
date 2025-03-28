@@ -1,0 +1,69 @@
+﻿@using ABB.Application.CancelPostingNotaKomisiTambahans.Queries
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.TagHelpers
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Cancel Posting Nota Komisi Tambahan";
+}
+<script src="~/Modules/CancelPostingNotaKomisiTambahan/JS/cancelPostingNotaKomisiTambahan.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-10">
+            Cancel Posting Nota Komisi Tambahan
+        </div>
+
+        <div class="col-md-2">
+                <button class="flat-btn-primary" onclick="cancelPolis()">Cancel</button>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<CancelPostingNotaKomisiTambahanDto>()
+                .Name("CancelPostingNotaKomisiTambahanGrid")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetCancelPolicies", "CancelPostingNotaKomisiTambahan").Data("searchFilter"))
+                    .Model(model => model.Id(p => new { p.kd_cb, p.kd_cob, p.kd_scob, p.kd_thn, p.no_pol, p.no_updt }))
+                )
+                .Columns(columns =>
+                {
+                    columns.Select().Width(50);
+                    columns.Bound(col => col.kd_cb).Width(150).Title("Nama Cabang");
+                    columns.Bound(col => col.kd_cob).Width(150).Title("Nama COB");
+                    columns.Bound(col => col.kd_scob).Width(150).Title("Nama Sub COB");
+                    columns.Bound(col => col.kd_thn).Width(150).Title("Nomor Akseptasi");
+                    columns.Bound(col => col.no_pol).Width(150).Title("Nomor Polis");
+                    columns.Bound(col => col.no_updt).Width(150).Title("Nomor Update");
+                    columns.Bound(col => col.no_pol_ttg).Width(150).Title("Nomor Polis");
+                    columns.Bound(col => col.nm_ttj).Width(150).Title("Nama Tertuju");
+                    columns.Bound(col => col.tgl_posting).Width(150).Title("Tanggal Posting").Format("{0: dd-MM-yyyy}");
+                    columns.Bound(col => col.kd_usr_posting).Width(150).Title("User Kode Posting");
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .PersistSelection()
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit")))
+        </div>
+    </div>
+</div>
+

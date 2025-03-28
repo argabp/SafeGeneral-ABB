@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using ABB.Application.Common.Interfaces;
 using ABB.Application.Common.Services;
 using ABB.Application.PostingKomisiTambahans.Queries;
-using ABB.Application.PostingPolicies.Queries;
 using MediatR;
 
 namespace ABB.Application.PostingKomisiTambahans.Commands
