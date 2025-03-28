@@ -44,6 +44,9 @@ namespace ABB.Application.Common
             },
             {
                 "d_uw01r_16", "PolisBondingPemeliharaan.html"
+            },
+            {
+                "d_uw01r_30", "PolisPABiasaSingle.html"
             }
         };
         
@@ -87,6 +90,9 @@ namespace ABB.Application.Common
             },
             {
                 "PolisBondingPemeliharaan.html", "spr_uw01r_16" 
+            },
+            {
+                "PolisPABiasaSingle.html", "spr_uw01r_30" 
             }
         };
     }
