@@ -32,6 +32,18 @@ namespace ABB.Application.Common
             },
             {
                 "d_uw01r_18i_m", "PolisCargoMulti.html"
+            },
+            {
+                "d_uw01r_11", "PolisBondingPenawaran.html"
+            },
+            {
+                "d_uw01r_13", "PolisBondingPelaksanaan.html"
+            },
+            {
+                "d_uw01r_15", "PolisBondingUangMuka.html"
+            },
+            {
+                "d_uw01r_16", "PolisBondingPemeliharaan.html"
             }
         };
         
@@ -63,6 +75,18 @@ namespace ABB.Application.Common
             },
             {
                 "PolisCargoMulti.html", "spr_uw01r_18i_m" 
+            },
+            {
+                "PolisBondingPenawaran.html", "spr_uw01r_11" 
+            },
+            {
+                "PolisBondingPelaksanaan.html", "spr_uw01r_13" 
+            },
+            {
+                "PolisBondingUangMuka.html", "spr_uw01r_15" 
+            },
+            {
+                "PolisBondingPemeliharaan.html", "spr_uw01r_16" 
             }
         };
     }

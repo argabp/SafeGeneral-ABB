@@ -35,8 +35,8 @@
 
         .table td {
             padding: 8px;
-            border: 1px solid black;
-			font-size: 10px;
+            /* border: 1px solid black; */
+			font-size: 12px;
         }
     </style>
 </head>
@@ -61,203 +61,174 @@
             <table class="table">
 				<tr>
                     <td style="width: 1%; vertical-align: top;">1. </td>
-                    <td style="vertical-align: top; text-align: justify;">Dengan ini dinyatakan, bahwa kami: ' +if(isNull ({{nm_ttg}}),'',{{nm_ttg}}) + ',' + if(isNull (almt_ttg),'',almt_ttg)+' 
-						sebagai Penyedia, selanjutnya disebut TERJAMIN, dan ' + if(isNull (nm_persh),'',nm_persh)+ ',' + if(isNull (almt),'',almt) + ' sebagai Penjamin, selanjutnya disebut sebagai PENJAMIN, 
-						bertanggung jawab dan dengan tegas terikat pada ' + if(isNull (nm_obl),'',nm_obl)+',' +  if(isNull (almt_obl),'',almt_obl)+ ' sebagai Pelaksana Pelelangan, 
-						selanjutnya disebut PENERIMA JAMINAN atas sejumlah '+symbol + string(nilai_bond,if ( trim(symbol) ='Rp ','#,##0','#,##0.0000')) + ' ( '+ (if(isNull(ket_nilai_bond),'',ket_nilai_bond))+ ' )</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Dengan ini dinyatakan, bahwa kami: ' +if(isNull ({{nm_ttg}}),'',{{nm_ttg}}) + ',' + if(isNull ({{almt_ttg}}),'',{{almt_ttg}})+' 
+						sebagai Penyedia, selanjutnya disebut TERJAMIN, dan ' + if(isNull ({{nm_persh}}),'',{{nm_persh}})+ ',' + if(isNull ({{almt}}),'',{{almt}}) + ' sebagai Penjamin, selanjutnya disebut sebagai PENJAMIN, 
+						bertanggung jawab dan dengan tegas terikat pada ' + if(isNull ({{nm_obl}}),'',{{nm_obl}})+',' +  if(isNull ({{almt_obl}}),'',{{almt_obl}})+ ' sebagai Pelaksana Pelelangan, 
+						selanjutnya disebut PENERIMA JAMINAN atas sejumlah '+symbol + string({{nilai_bond}},if ( trim(symbol) ='Rp ','#,##0','#,##0.0000')) + ' ( '+ (if(isNull({{ket_nilai_bond}}),'',{{ket_nilai_bond}}))+ ' )</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">2. </td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8">Maka kami, TERJAMIN dan PENJAMIN dengan ini mengikatkan 
+                        diri untuk melakukan pembayaran jumlah tersebut di atas dengan baik dan benar bilamana TERJAMIN tidak 
+                        memenuhi kewajiban sebagaimana ditetapkan dalam Dokumen Pengadaan 
+                        Nomor : ' + if(isNull(ba_srh_trm),'',ba_srh_trm)+ ' Tanggal ' +if(isNull(tgl_kontrak),'',tgl_kontrak)+ ' 
+                        untuk pelaksanaan pelelangan pekerjaan ' + if(isNull(ket_rincian_kontr),'',ket_rincian_kontr)+ ' 
+                        yang diselenggarakan oleh PENERIMA JAMINAN.</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">3. </td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Surat Jaminan ini berlaku apabila TERJAMIN:</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;"></td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;">a</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Menarik kembali penawarannya selama dilaksanakannya pelelangan atau sesudah dinyatakan sebagai pemenang.</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;"></td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;">b</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8">Tidak,</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;"></td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;"></td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;">1)</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="6">menyerahkan Jaminan Pelaksanaan setelah ditunjuk sebagai pemenang</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;"></td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;"></td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;">2)</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="6">menandatangani kontrak</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;"></td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;"></td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;">3)</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="6">hadir dalam klarifikasi dan/atau verifikasi sebagai calon pemenang</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;"></td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;">c</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8">terlibat Korupsi Kolusi dan Nepotisme (KKN)</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">4. </td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Surat Jaminan ini berlaku selama 
+                        '+if(isNull({{jml_hari}}),'',{{jml_hari}})+ ' kalender dan efektif mulai dari tanggal ' 
+                        + if(isNull({{tgl_mul_ptg_ind}}),'',{{tgl_mul_ptg_ind}}) + ' sampai dengan tanggal  ' 
+                        + if(isNull({{tgl_akh_ptg_ind}}),'',{{tgl_akh_ptg_ind}}) + '.'</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">5. </td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" >PENJAMIN akan membayar kepada PENERIMA 
+                        JAMINAN sejumlah nilai jaminan tersebut di atas dalam waktu paling lambat 14 (empat belas) hari kerja 
+                        tanpa syarat (unconditional) setelah menerima tuntutan penagihan secara tertulis dari PENERIMA JAMINAN 
+                        berdasarkan keputusan PENERIMA JAMINAN mengenai pengenaan sanksi akibat TERJAMIN cidera janji/wanprestasi</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">6. </td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Menunjuk pada Pasal 1832 KUH Perdata dengan 
+                        ini ditegaskan kembali bahwa PENJAMIN melepaskan hak-hak istimewa untuk menuntut supaya harta benda TERJAMIN 
+                        lebih dahulu disita  dan dijual guna dapat melunasi hutangnya sebagaimana dimaksud dalam Pasal 1831 KUH 
+                        Perdata.</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">7. </td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Tuntutan pencairan terhadap PENJAMIN 
+                        berdasarkan Jaminan ini harus sudah diajukan sekurang-kurangnya dalam waktu 28 (dua puluh delapan) hari 
+                        kalender sesudah berakhirnya masa berlaku Jaminan ini.</td>
+                </tr>
+                <tr style="height: 50px;">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="width: 30%;" colspan="2">dikeluarkan di + if(isNull({{kt_cb}}),'',{{kt_cb}})</td>
+                </tr>
+                <tr>
+                    <td style="width: 20%;" colspan="4">TERJAMIN</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="width: 30%;" colspan="2">pada tanggal +   if(isnull({{tgl_closing_ind}}),'',{{tgl_closing_ind}})</td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="text-align: center">{{nm_ttg}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="width: 30%; text-align: center;" colspan="2">PT. ASURANSI BHAKTI BHAYANGKARA</td>
+                </tr>
+                <tr style="height: 100px;">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="text-align: center;">{{nm_principal}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="width: 30%; text-align: center;" colspan="2">{{nm_surety}}</td>
+                </tr>
+                <tr>
+                    <td style="text-align: center" colspan="4">{{jbt_principal}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="width: 30%; text-align: center;" colspan="2">{{jbt_surety}}</td>
+                </tr>
+                <tr style="height: 50px;">
+                    <td colspan="4"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <td colspan="4">Service Charges : {{symbol_1}}{{charge}} </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="width: 30%;" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td colspan="9"><hr style="height: 6px; border-top: 2px solid black; border-bottom: 2px solid black;"></td>
+                </tr>
+                <tr>
+                    <td colspan="9" align="center">{{st_title3}}</td>
+                </tr>
+                <tr>
+                    <td colspan="9" align="center">{{st_title6}}</td>
+                </tr>
+                <tr>
+                    <td colspan="9" align="center">{{st_title4}}</td>
+                </tr>
+                <tr>
+                    <td colspan="9"><hr style="height: 6px; border-top: 2px solid black; border-bottom: 2px solid black;"></td>
                 </tr>
 			</table>    
-                <!-- <tr>
-                    <td>Alamat Tertanggung</td>
-                    <td>:</td>
-                    <td colspan="4">{{almt_ttg}}</td>
-                </tr>
-                <tr>
-                    <td>Penerima Barang</td>
-                    <td>:</td>
-                    <td colspan="4">{{consignee}}</td>
-                </tr>
-                <tr>
-                    <td>Harga Pertanggungan</td>
-                    <td>:</td>
-                    <td colspan="4">{{kd_mtu_symbol_1}} {{nilai_ttl_ptg}}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td colspan="4">{{ket_kurs}}</td>
-                </tr>
-                <tr>
-                    <td>No. Packing List / No. Dokumen</td>
-                    <td>:</td>
-                    <td>{{no_po}}</td>
-                    <td>/</td>
-                    <td>{{no_lc}}</td>
-                </tr>
-                <tr>
-                    <td>Obyek Pertanggungan</td>
-                    <td>:</td>
-                    <td colspan="2">{{desk_oby_01}}</td>
-                </tr>
-                <tr>
-                    <td>Dari / Ke</td>
-                    <td>:</td>
-                    <td>{{tempat_brkt}} / {{tempat_tiba}}</td>
-                </tr>
-                <tr>
-                    <td>Nama Alat Angkut</td>
-                    <td>:</td>
-                    <td colspan="3">{{nm_kapal}}</td>
-                </tr>
-                <tr>
-                    <td>Tanggal Pemberangkatan</td>
-                    <td>:</td>
-                    <td colspan="3">{{tgl_brkt}}</td>
-                </tr>
-                <tr>
-                    <td>Nomor Faktur</td>
-                    <td>:</td>
-                    <td colspan="3">{{no_inv}}</td>
-                </tr>
-                <tr>
-                    <td>Surat Muat Laut</td>
-                    <td>:</td>
-                    <td colspan="3">{{no_bl}}</td>
-                </tr>
-                <tr>
-                    <td>Resiko Sendiri</td>
-                    <td>:</td>
-                    <td colspan="3">{{desk_deduct}}</td>
-                </tr>
-                <tr>
-                    <td>Daftar Kemasan</td>
-                    <td>:</td>
-                    <td colspan="3">-</td>
-                </tr>
-                <tr>
-                    <td>Kondisi</td>
-                    <td>:</td>
-                    <td colspan="3">{{desk_kond}}</td>
-                </tr>
-                <tr>
-                    <td>Janji</td>
-                    <td>:</td>
-                    <td colspan="3">-</td>
-                </tr>
-                <tr>
-                    <td>Klausul</td>
-                    <td>:</td>
-                    <td colspan="3">{{ket_klausula}}</td>
-                </tr>
-                <tr>
-                    <td>Perhitungan Premi</td>
-                    <td>:</td>
-                    <td>{{pst_rate_prm}} {{stn_rate_prm}} x {{kd_mtu_symbol_2}} {{nilai_ttl_ptg_2}}</td>
-					<td></td>
-                    <td>=</td>
-                    <td>{{kd_mtu_symbol_23}} {{nilai_prm}}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td>Diskon</td>
-                    <td></td>
-                    <td>=</td>
-                    <td>if (isnull)</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td>Biaya Polis</td>
-                    <td></td>
-                    <td>=</td>
-                    <td>{{kd_mtu_symbol_23}} {{nilai_bia_pol}}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td>Materai</td>
-                    <td></td>
-                    <td>=</td>
-                    <td>{{kd_mtu_symbol_23}} {{nilai_bia_mat}}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td><hr></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>=</td>
-                    <td>string(nilai_ttl - nilai_di)</td>
-                </tr>
-                <tr>
-                    <td>{{nilai_dis}}</td>
-                    <td></td>
-                    <td>{{stamp_duty}}</td>
-                    <td></td>
-                    <td></td>
-                    <td><hr style="border-top: 3px double black; width: 100%;"></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td>{{ctt_polis}}</td>
-                    <td></td>
-                    <td colspan="2">{{st_title5}}, {{tgl_closing}}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td colspan="2" align="center">PT. Asuransi Bhakti Bhayangkara</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td colspan="2" align="center"><br><br><br><br><br><br><br><br><br><br><br><strong><u>Ati Nofianti, A.Md, As. K</u></strong></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td colspan="2" align="center"><strong>Kepala Divisi Underwriting</strong></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td colspan="6" align="center">{{st_title3}}</td>
-                </tr>
-                <tr>
-                    <td colspan="6" align="center">{{st_title6}}</td>
-                </tr>
-                <tr>
-                    <td colspan="6" align="center">{{st_title4}}</td>
-                </tr> -->
-			</table>
         </div>
 </body>
 </html>
