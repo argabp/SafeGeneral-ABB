@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lampiran Daftar Isi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            width: 90%;
+            margin: auto;
+            border: 1px solid black;
+            padding: 25px;
+        }
+
+        .h1 {
+            text-align: center;
+            font-size: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            /* margin-bottom: 15px; */
+        }
+
+        .section {
+            margin-top: 10px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table td {
+            padding: 8px;
+            border: 1px solid black;
+			font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="h1">LAMPIRAN INI MERUPAKAN BAGIAN YANG TIDAK TERPISAHKAN DARI</div>
+        <div class="h1">POLIS KEBAKARAN</div>
+        <div class="section">
+            <table class="table">
+                <tr>
+                    <td style="width: 15%; vertical-align: top;">NOMOR POLIS</td>
+                    <td style="vertical-align: top; text-align: justify;">:</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="6">{{no_pol_ttg}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">NAMA TERTANGGUNG</td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;">:</td>
+                    <td style="vertical-align: top; text-align: justify; width: 70%;" colspan="5">{{nm_ttg}}</td>
+                    <td style="vertical-align: top; text-align: justify;">Dalam {{nm_mtu}}</td>
+                </tr>
+            </table>
+            <table class="table">
+                <tr>
+                    <td style="width: 3%; text-align: center;" rowspan="2">No. </td>
+                    <td style="width: 20%; text-align: center;" rowspan="2">Uraian</td>
+                    <td style="width: 20%; text-align: center;" rowspan="2">Lokasi Resiko</td>
+                    <td style="width: 10%; text-align: center;" rowspan="2">Keterangan Okupasi</td>
+                    <td style="width: 5%;  text-align: center;">Kelas Kostruksi</td>
+                    <td style="width: 10%; text-align: center;" rowspan="2">Penerangan</td>
+                    <td style="width: 10%; text-align: center;" rowspan="2">Symbol</td>
+                    <td style="width: 10%; text-align: center;" rowspan="2">Nilai Total Tanggungan</td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top; text-align: center;">Kode Zona</td>
+                </tr>
+                <tr style="height: 50px;">
+                    <td style="font-weight: bold;" colspan="8">{{nm_grp_oby}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 3%;  text-align: right; vertical-align: top;" rowspan="2">{{no_oby}}</td>
+                    <td style="width: 20%; text-align: left; vertical-align: top;" rowspan="2">{{desk_oby}}</td>
+                    <td style="width: 20%; text-align: left; vertical-align: top;" rowspan="2">{{almt_rsk}}</td>
+                    <td style="width: 10%; text-align: left; vertical-align: top;" rowspan="2">{{ket_okup}}</td>
+                    <td style="width: 5%;  text-align: center; vertical-align: top;">{{kd_kls_konstr}}</td>
+                    <td style="width: 10%; text-align: left; vertical-align: top;" rowspan="2">if( {{kd_penerangan}} ='1','Listrik', 'Lain-lain')</td>
+                    <td style="width: 10%; text-align: left; vertical-align: top;" rowspan="2">{{symbol}}</td>
+                    <td style="width: 10%; text-align: center; vertical-align: top;" rowspan="2">{{nilai_ttl_ptg}}</td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top; text-align: center;">{{ket_rsk}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="font-weight: bold; text-align: center;" colspan="2">{{nm_grp_oby}} : </td>
+                    <td style="font-weight: bold;">sum( {{nilai_ttl_ptg}} for 1  ) </td>
+                </tr>
+                <tr style="height: 50px;">
+                    <td style="font-weight: bold;" colspan="8">{{nm_grp_oby_1}}</td>
+                </tr>
+                <!-- <tr>
+                    <td style="width: 1%; vertical-align: top;">-</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" ><i> Hole in One</i> berlaku hanya untuk 1  (satu) kali kesempatan pada spesifikasi <i>hole</i> yang dipertandingkan.</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">-</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Hadiah hanya diberikan kepada peserta yang pertama kali berhasil memenuhi ketentuan <i>Hole in One</i> pada <i>spek_hole_1</i> dan peserta lain yang memenuhi ketentuan <i>Hole in One</i> pada <i>hole</i> tersebut tidak berhak lagi atas hadiah yang tercantum pada polis ini.</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">-</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Apabila terjadi <i> Hole in One</i> harus dibuat Berita Acara yang ditandatangani oleh Panitia, Peserta, dan Petugas Asuransi (Penanggung) yang menjaga <i>hole</i> tersebut</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">-</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Pekerjaan atau kegemaran Peserta/Tertanggung yang mengandung risiko tinggi, seperti buruh tambang, penyelam, balap mobil, olah raga terbang layang / penerjun atau pekerjaan - pekerjaan / kegemaran - kegemaran  lainnya  yang  dapat dipersamakan dengan itu,  sepanjang resiko itu tidak dipertanggungkan; </td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">-</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Terlibat secara  langsung  maupun  tidak  langsung  dalam  pemberontakan,  revolusi,  perang  saudara,  kerusuhan, pengambilan kekuasaan,   ikut serta  dalam  aksi  atau  kegiatan  militer, atau aksi dari seseorang yang bertindak selaku atau berhubungan dengan organisasi manapun dengan aktifitas yang mengarah kepada penggulingan pemerintah secara "de jure" atau "de facto" atau dengan pengaruh dari terorisme.</td>
+                </tr> -->
+            </table>
+            <!-- <table class="table">
+                <tr>
+                    <td style="width: 15%; vertical-align: top;">KALUSUL</td>
+                    <td style="width: 1%; vertical-align: top; text-align: justify;">:</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="7">{{ket_klausula}}</td>
+                </tr>
+                <tr>
+                    <td colspan="9"></td>
+                </tr>
+                <tr>
+                    <td style="width: 15%; vertical-align: top;">RATE</td>
+                    <td style="width: 1%; vertical-align: top; text-align: justify;">:</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="7">{{pst_rate_prm}}if( {{stn_rate_prm}} ='1','%','%o')</td>
+                </tr>
+                <tr>
+                    <td style="width: 15%; vertical-align: top;">PERHITUNGAN PREMI</td>
+                    <td style="width: 1%; vertical-align: top; text-align: justify;">:</td>
+                    <td style="vertical-align: top; text-align: justify;">{{kd_mtu_1}} {{nilai_ttl_ptg_1}}</td>
+                    <td style="vertical-align: top; text-align: justify;">x</td>
+                    <td style="vertical-align: top; text-align: justify;">{{pst_rate_prm_1}} if( {{stn_rate_prm}} ='1','%','%o')</td>
+                    <td style="vertical-align: top; text-align: justify;">x</td>
+                    <td style="vertical-align: top; text-align: justify;">{{jk_wkt_ptg}}</td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;">=</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="3">{{kd_mtu_2}} {{nilai_prm}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 15%; vertical-align: top;"></td>
+                    <td style="width: 1%; vertical-align: top; text-align: justify;"></td>
+                    <td style="vertical-align: top; text-align: justify; padding-left: 200px;" colspan="5">Biaya Polis</td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;">=</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="3">{{kd_mtu_2}} {{nilai_bia_pol}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 15%; vertical-align: top;"></td>
+                    <td style="width: 1%; vertical-align: top; text-align: justify;"></td>
+                    <td style="vertical-align: top; text-align: justify; padding-left: 200px;" colspan="5">Materai</td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;">=</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="3">{{kd_mtu_2}} {{nilai_bia_mat}}</td>
+                </tr>
+                <tr>
+                    <td colspan="8"></td>
+                    <td><hr></td>
+                </tr>
+                <tr>
+                    <td colspan="8"></td>
+                    <td>{{kd_mtu_2}} {{nilai_ttl_prm}}</td>
+                </tr>
+                <tr>
+                    <td colspan="8"></td>
+                    <td><hr style="border-top: 2px solid black;"></td>
+                </tr>
+                <tr>
+                    <td colspan="7"></td>
+                    <td style="width: 30%; text-align: center;" colspan="2">{{kota_cab}}, {{tgl_closing}}</td>
+                </tr>
+                <tr>
+                    <td colspan="7"></td>
+                    <td style="width: 30%; text-align: center;" colspan="2">PT. Asuransi Bhakti Bhayangkara</td>
+                </tr>
+                <tr style="height: 150px;">
+                    <td colspan="7"></td>
+                    <td style="width: 30%;" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td colspan="7"></td>
+                    <td style="width: 30%; text-align: center; font-weight: bold;" colspan="2"><u>Chusnul Chotimah, SE, AAIK</u></td>
+                </tr>
+                <tr>
+                    <td colspan="7"></td>
+                    <td style="width: 30%; text-align: center; font-weight: bold;" colspan="2">Kepala Divisi Underwriting</td>
+                </tr>
+            </table>-->
+        </div>
+</body>
+</html>
