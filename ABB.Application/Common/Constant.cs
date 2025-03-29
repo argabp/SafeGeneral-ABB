@@ -47,6 +47,12 @@ namespace ABB.Application.Common
             },
             {
                 "d_uw01r_30", "PolisPABiasaSingle.html"
+            },
+            {
+                "d_uw01r_30m_srm", "PolisPASiramaMulti.html"
+            },
+            {
+                "d_uw01r_34", "PolisHoleinoneSingle.html"
             }
         };
         
@@ -93,6 +99,12 @@ namespace ABB.Application.Common
             },
             {
                 "PolisPABiasaSingle.html", "spr_uw01r_30" 
+            },
+            {
+                "PolisPASiramaMulti.html", "spr_uw01r_30m_srm" 
+            },
+            {
+                "PolisHoleinoneSingle.html", "spr_uw01r_34" 
             }
         };
     }
