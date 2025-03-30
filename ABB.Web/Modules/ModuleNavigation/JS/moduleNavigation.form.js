@@ -116,7 +116,6 @@ function saveModuleNavigation(url) {
             }
             else {
                 var errors = Object.keys(dataReturn.Message).map(k => dataReturn.Message[k]);
-                debugger;
                 errors.forEach((error)=> toastr.error(error))
             }
                 

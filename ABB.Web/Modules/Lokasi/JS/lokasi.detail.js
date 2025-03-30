@@ -93,7 +93,6 @@ function detailInit(e) {
     
 function loadLokasiResikoData() {
     ajaxGet("/Lokasi/GetLokasiResiko", (result) => {
-        debugger;
         loadInlineGridDS({
             gridId: '#LokasiResikoGrid',
             arrayObj: result.Data,

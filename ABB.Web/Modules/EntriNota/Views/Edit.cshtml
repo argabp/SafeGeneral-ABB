@@ -1,51 +1,284 @@
-﻿@using Kendo.Mvc.UI
-@model ABB.Web.Modules.RoleNavigation.Models.AddRoleNavigationModel
+﻿@using ABB.Application.EntriNotas.Queries
+@using ABB.Domain.Entities
+@using ABB.Web.Modules.EntriNota.Models
+@using Kendo.Mvc.TagHelpers
+@using Kendo.Mvc.UI
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model ABB.Web.Modules.EntriNota.Models.NotaViewModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Kendo.Mvc
 @{
     ViewData["Title"] = "Role Page";
+    var nomor_aksepatsi = Model.kd_cb.Trim() + " . " + Model.kd_cob.Trim() + " . " +
+                          Model.kd_scob.Trim() + " . " + Model.kd_thn.Trim() + " . " + Model.no_pol.Trim();
+    var nomor_nota = Model.kd_cb.Trim() + " . " + Model.jns_tr.Trim() + " . " + Model.kd_thn.Trim() + " . " + 
+                     Model.kd_bln.Trim() + " . " + Model.no_nt_msk.Trim()+ " / " + Model.jns_nt_kel.Trim() + " . " + 
+                     Model.no_nt_kel.Trim();
 }
 
-<script src="~/Modules/RoleNavigation/JS/roleNavigation.form.js"></script>
-<script src="~/Modules/RoleNavigation/JS/roleNavigation.add.js"></script>
+<script src="~/Modules/EntriNota/JS/entriNota.edit.js"></script>
 
 @Html.AntiForgeryToken()
-<form id="RoleForm" enctype="multipart/form-data">
+<form id="EntriNotaForm" enctype="multipart/form-data">
     <div class="window-body" style="background-color: lightgray">
+        @Html.HiddenFor(m => m.kd_cb)
+        @Html.HiddenFor(m => m.jns_tr)
+        @Html.HiddenFor(m => m.jns_nt_msk)
+        @Html.HiddenFor(m => m.kd_thn)
+        @Html.HiddenFor(m => m.kd_bln)
+        @Html.HiddenFor(m => m.no_nt_msk)
+        @Html.HiddenFor(m => m.jns_nt_kel)
+        @Html.HiddenFor(m => m.no_nt_kel)
+        @Html.HiddenFor(m => m.kd_cob)
+        @Html.HiddenFor(m => m.kd_scob)
+        @Html.HiddenFor(m => m.no_pol)
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Akseptasi</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="temp_nomor_akseptasi" value="@nomor_aksepatsi" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Update</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="no_updt" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
 
-        <div class="form-group">
-            <label asp-for="RoleId" class="col-sm-3"></label>
-            <div class="col-sm-12">
-                <kendo-dropdownlist for="RoleId" option-label="Please Select"
-                                    filter="FilterType.Contains" class="primary-dropdown"
-                                    datavaluefield="Id" datatextfield="Name">
-                    <datasource type="DataSourceTagHelperType.Custom">
-                        <transport>
-                            <read url="@Url.Action("GetRoles","RoleNavigation")" />
-                        </transport>
-                    </datasource>
-                </kendo-dropdownlist>
-                <span asp-validation-for="RoleId" class="text-danger"></span>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Nota</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="temp_nomor_nota" value="@nomor_nota" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Mata Uang</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_mtu" style="width: 100%" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetMataUang", "EntriNota")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <div class="col-sm-12">
-                <h6><strong>Set Menu</strong></h6>
-                <p>User can access the following menus and sub menus</p>
+
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Polis</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="no_pol_ttg" readonly="true" style="width: 100%"/>
+                </div>
             </div>
         </div>
-        <input type="hidden" id="NavigationDatasource" value='@Html.Raw(Json.Serialize(Model.Navigations))' />
-        <div class="col-sm-12">
-            <div id="NavigationGrid" class="inline-grid"></div>
+        
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Tertuju</label>
+                <div class="col-sm-6">
+                    <input type="hidden" id="temp_kd_grp_ttj" value="@Model.kd_grp_ttj">
+                    <kendo-dropdownlist for="kd_grp_ttj" style="width: 100%" on-change="OnKodeTertujuChange" option-label="Pilih Kode Tertuju"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeTertuju", "EntriNota")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_grp_ttj" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <div class="col-sm-6">
+                    <input type="hidden" id="temp_kd_rk_ttj" value="@Model.kd_rk_ttj">
+                    <kendo-dropdownlist for="kd_rk_ttj" style="width: 100%"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeRekananTertuju", "EntriNota")" data="dataKodeTertujuDropDown"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_rk_ttj" class="text-danger"></span>
+                </div>
+            </div>
         </div>
-        <br />
-        <div class="col-sm-12">
-            <btn id="btn-add-navigation" class="flat-btn-simple">+ Add More Menu</btn>
-            <br />
-            <span asp-validation-for="Navigations" class="text-danger"></span>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nama Tertuju</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="nm_ttj" style="width: 100%"/>
+                    <span asp-validation-for="nm_ttj" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Alamat</label>
+                <div class="col-sm-6">
+                    <kendo-textarea name="almt_ttj" rows="2" style="width: 100%; background-color: white">@Model.almt_ttj</kendo-textarea>
+                    <span asp-validation-for="almt_ttj" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kota Tertuju</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="kt_ttj" style="width: 100%"/>
+                    <span asp-validation-for="kt_ttj" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Keterangan Nota</label>
+                <div class="col-sm-6">
+                    <kendo-textarea name="ket_nt" rows="2" style="width: 100%; background-color: white">@Model.ket_nt</kendo-textarea>
+                    <span asp-validation-for="ket_nt" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Keterangan Kwitansi</label>
+                <div class="col-sm-6">
+                    <kendo-textarea name="ket_kwi" rows="2" style="width: 100%; background-color: white">@Model.ket_kwi</kendo-textarea>
+                    <span asp-validation-for="ket_kwi" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nilai Nota</label>
+                <div class="col-sm-3">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_nt" style="width: 100%; background-color: #FFFFE1"/>
+                    <span asp-validation-for="nilai_nt" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Tanggal Nota</label>
+                <div class="col-sm-6">
+                    <kendo-datepicker for="tgl_nt" style="width: 100%"/>
+                    <span asp-validation-for="ket_kwi" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-3">Nilai PPN</label>
+                <div class="col-sm-3">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="pst_ppn" style="width: 100%; background-color: #FFFFE1"/>
+                    <span asp-validation-for="pst_ppn" class="text-danger"></span>
+                </div>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_ppn" style="width: 100%;"/>
+                    <span asp-validation-for="nilai_ppn" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Flag Cancel</label>
+                <input type="hidden" id="tempFlag_cancel" value="@Model.flag_cancel">
+                <div class="col-sm-6">
+                    <label>
+                        <input type="checkbox" class="k-checkbox" id="flag_cancel"/> Cancel
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-3">Nilai PPH</label>
+                <div class="col-sm-3">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="pst_pph" style="width: 100%; background-color: #FFFFE1"/>
+                    <span asp-validation-for="pst_pph" class="text-danger"></span>
+                </div>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_pph" style="width: 100%;"/>
+                    <span asp-validation-for="nilai_pph" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Flag Posting</label>
+                <input type="hidden" id="tempFlag_posting" value="@Model.flag_posting">
+                <div class="col-sm-6">
+                    <label>
+                        <input type="checkbox" class="k-checkbox" id="flag_posting"/> Posting
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-3">Jasa Koperasi</label>
+                <div class="col-sm-3">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="pst_lain" style="width: 100%;"/>
+                    <span asp-validation-for="pst_lain" class="text-danger"></span>
+                </div>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_lain" style="width: 100%;"/>
+                    <span asp-validation-for="nilai_lain" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            @(Html.Kendo().Grid<DetailNotaDto>()
+                .Name("DetailEntriNotaGrid")
+                .ToolBar(toolbar => toolbar.Create())
+                .Editable(editable => editable.Mode(GridEditMode.InLine))
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetDetailNotas", "EntriNota", new
+                    {
+                        Model.kd_cb, Model.jns_tr, Model.jns_nt_msk, Model.kd_thn,
+                        Model.kd_bln, Model.no_nt_msk, Model.jns_nt_kel, Model.no_nt_kel
+                    }))
+                    .Model(m => m.Id(p => p.no_ang))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.tgl_ang).Width(150).Title("Tanggal Angsuran").Format("{0: dd-MM-yyyy}").EditorTemplateName("KendoDateEditor");
+                    columns.Bound(col => col.tgl_jth_tempo).Width(150).Title("Tanggal Jatuh Tempo").Format("{0: dd-MM-yyyy}").EditorTemplateName("KendoDateEditor");
+                    columns.Bound(col => col.pst_ang).Width(200).Title("Angsuran (%)").Format("{0:n2}").EditorTemplateName("KendoNumericTextBoxTwoDecimal");//.ClientFooterTemplate("Total: #= sum ? kendo.toString(sum, 'n2') : '0.00' #");
+                    columns.Bound(col => col.nilai_ang).Width(200).Title("Jumlah Angsuran").Format("{0:n2}").EditorTemplateName("KendoNumericTextBoxTwoDecimal");//.ClientFooterTemplate("Total: #= sum ? kendo.toString(sum, 'n2') : '0.00' #");
+                    columns.Command(command =>
+                    {
+                        command.Edit();
+                        command.Custom("DeleteDetailNota")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeleteDetailNota");
+                    }).Width(200);
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Selectable()
+                .Filterable()
+                .Scrollable()
+                .Height(380)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("OnDetailNotaDataBound").Edit("onEditDetailNota"))
+                ) 
+        </div>
+        <div class="form-group row">
+            <h5 class="col-sm-6">Total Presentase Angsuran & Nilai Angsuran</h5>
+            <h5 class="col-sm-3" id="totalPersentaseAngsuran"></h5>
+            <h5 class="col-sm-3" id="totalAngsuran"></h5>
         </div>
     </div>
     <div class="window-footer">
-        <button type="button" id="btn-save-roleNavigation" class="btn btn-primary space-right">Save</button>
+        <button type="button" id="btn-save-entriNota" class="btn btn-primary space-right">Save</button>
     </div>
 </form>

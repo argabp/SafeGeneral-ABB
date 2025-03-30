@@ -9,7 +9,7 @@
 
 @{
     Layout = "~/Modules/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Mata Uang";
+    ViewData["Title"] = "Entri Nota";
 }
 <script src="~/Modules/EntriNota/JS/entriNota.index.js"></script>
 
@@ -29,8 +29,7 @@
     <div class="flat-box-content">
         <div class="div-box">
             @(Html.Kendo().Grid<NotaDto>()
-                .Name("NotaGrid")
-                .ToolBar(toolbar => toolbar.Create())
+                .Name("EntriNotaGrid")
                 .Editable(editable => editable.Mode(GridEditMode.InLine))
                 .DataSource(dataSource => dataSource.Ajax()
                     .Read(read => read.Action("GetEntriNotas", "EntriNota").Data("searchFilter"))
@@ -46,51 +45,18 @@
                     columns.Bound(col => col.no_nt_msk).Width(100).Title("No Nota Masuk");
                     columns.Bound(col => col.jns_nt_kel).Width(100).Title("Jenis Nota Keluar");
                     columns.Bound(col => col.no_nt_kel).Width(100).Title("No Nota Keluar");
-                })
-                .Pageable(pager => pager
-                    .Refresh(true)
-                    .Info(true)
-                    .PageSizes(true)
-                )
-                .ClientDetailTemplateId("template")
-                .Sortable()
-                .Filterable()
-                .Scrollable()
-                .Height(450)
-                .Resizable(a=>a.Columns(true))
-                .Events(ev => ev.DataBound("gridAutoFit"))
-        
-                )    
-        </div>
-        
-        <script id="template" type="text/kendo-tmpl">
-            @(Html.Kendo().Grid<DetailNota>()
-                .Name("grid_Detail_#=Id#") // template expression, to be evaluated in the master context
-                .ToolBar(toolbar => toolbar.Create())
-                .Editable(editable => editable.Mode(GridEditMode.InLine))
-                .DataSource(dataSource => dataSource.Ajax()
-                    .Read(read => read.Action("GetDetailNotas", "EntriNota", new
-                    {
-                        kd_cb = "#=kd_cb#", jns_tr = "#=jns_tr#", jns_nt_msk = "#=jns_nt_msk#",
-                        kd_thn = "#=kd_thn#", kd_bln = "#=kd_bln#", no_nt_msk = "#=no_nt_msk#",
-                        jns_nt_kel = "#=jns_nt_kel#", no_nt_kel = "#=no_nt_kel#"
-                    }))
-                    .Model(m => m.Id(p => p.no_ang))
-                )
-                .Columns(columns =>
-                {
-                    columns.Bound(col => col.tgl_ang).Width(150).Title("Tanggal Angsuran").Format("{0: dd-MM-yyyy}").EditorTemplateName("KendoDateEditor");
-                    columns.Bound(col => col.tgl_jth_tempo).Width(150).Title("Tanggal Jatuh Tempo").Format("{0: dd-MM-yyyy}").EditorTemplateName("KendoDateEditor");
-                    columns.Bound(col => col.pst_ang).Width(200).Title("Angsuran (%)").Format("{0:n2}").EditorTemplateName("KendoNumericTextBoxTwoDecimal");//.ClientFooterTemplate("Total: #= sum ? kendo.toString(sum, 'n2') : '0.00' #");
-                    columns.Bound(col => col.nilai_ang).Width(200).Title("Jumlah Angsuran").Format("{0:n2}").EditorTemplateName("KendoNumericTextBoxTwoDecimal");//.ClientFooterTemplate("Total: #= sum ? kendo.toString(sum, 'n2') : '0.00' #");
                     columns.Command(command =>
                     {
-                        command.Edit();
-                        command.Custom("DeleteDetailNota")
-                            .Text("Delete")
-                            .IconClass("k-icon k-i-delete")
-                            .HtmlAttributes(new { title="Delete"})
-                            .Click("onDeleteDetailNota");
+                        command.Custom("EditNota")
+                            .Text("Edit")
+                            .IconClass("k-icon k-i-edit")
+                            .HtmlAttributes(new { title="Edit"})
+                            .Click("onEditEntriNota");
+                        command.Custom("CancelNota")
+                            .Text("Cancel")
+                            .IconClass("fa fa-times-circle")
+                            .HtmlAttributes(new { title="Cancel"})
+                            .Click("onCancelEntriNota");
                     }).Width(200);
                 })
                 .Pageable(pager => pager
@@ -99,15 +65,31 @@
                     .PageSizes(true)
                 )
                 .Sortable()
-                .Selectable()
                 .Filterable()
                 .Scrollable()
-                .Height(380)
+                .Height(450)
                 .Resizable(a=>a.Columns(true))
-                .Events(ev => ev.DataBound("OnDetailNotaDataBound").Save("onSaveDetailNota").Edit("onEditDetailNota"))
-                .ToClientTemplate())
-                <div id="total#=Id#" class="col-sm-12 row"></div>
-        </script>
+                .Events(ev => ev.DataBound("gridAutoFit"))
+                ) 
+        </div>
+        
+        @(Html.Kendo().Window()
+            .Name("EntriNotaWindow")
+            .Title("Entri Nota")
+            .Width(1200)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+        
+        @(Html.Kendo().Window()
+            .Name("EntriNotaCancelWindow")
+            .Title("Entri Nota Cancel")
+            .Width(1200)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
     </div>
 </div>
 

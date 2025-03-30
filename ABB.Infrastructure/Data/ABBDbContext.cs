@@ -94,6 +94,7 @@ namespace ABB.Infrastructure.Data
         public DbSet<Nota> Nota { get; set; }
         public DbSet<DetailNota> DetailNota { get; set; }
         public DbSet<DetailAlokasi> DetailAlokasi { get; set; }
+        public DbSet<NotaKomisiTambahan> NotaKomisiTambahan { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -181,6 +182,7 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new NotaMap());
             builder.ApplyConfiguration(new DetailNotaMap());
             builder.ApplyConfiguration(new DetailAlokasiMap());
+            builder.ApplyConfiguration(new NotaKomisiTambahanMap());
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

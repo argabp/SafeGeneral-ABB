@@ -1,0 +1,41 @@
+﻿@using ABB.Application.NotaKomisiTambahans.Commands
+@using Kendo.Mvc.UI
+@using ABB.Application.NotaKomisiTambahans.Queries
+@using ABB.Domain.Entities
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+
+<div class="window-body" style="background-color: lightgray">
+    @(Html.Kendo().Grid<NomorAkseptasiDto>()
+    .Name("NomorAkseptasiGrid")
+    .Editable(editable => editable.Mode(GridEditMode.InLine))
+    .DataSource(dataSource => dataSource.Ajax()
+        .Read(read => read.Action("GetNomorAkseptasis", "NotaKomisiTambahan").Data("searchFilter"))
+        .Model(model => model.Id(p => p.Id))
+    )
+    .Columns(columns =>
+    {
+        columns.Bound(col => col.no_akseptasi).Width(100).Title("Nomor Akseptasi");
+        columns.Bound(col => col.kd_mtu).Width(50).Title("Mata Uang");
+        columns.Bound(col => col.nm_ttg).Width(150).Title("Nama Tertanggung");
+        columns.Bound(col => col.no_pol_ttg).Width(100).Title("Nomor Polis");
+    })
+    .Pageable(pager => pager
+        .Refresh(true)
+        .Info(true)
+        .PageSizes(true)
+    )
+    .Sortable()
+        .Selectable()
+    .Filterable()
+    .Scrollable()
+    .Height(450)
+    .Resizable(a=>a.Columns(true))
+    .Events(ev => ev.DataBound("gridAutoFit").Change("OnNomorAkseptasiChange"))
+    )
+</div>
+

@@ -33,12 +33,5 @@ namespace ABB.Web.Modules.EntriNota.Models
         public decimal pst_ang { get; set; }
 
         public decimal nilai_ang { get; set; }
-
-        public void Mapping(Profile profile)
-        {
-            profile.CreateMap<DetailNotaViewModel, AddDetailNotaCommand>();
-            profile.CreateMap<DetailNotaViewModel, EditDetailNotaCommand>();
-            profile.CreateMap<DetailNotaViewModel, DeleteDetailNotaCommand>();
-        }
     }
 }

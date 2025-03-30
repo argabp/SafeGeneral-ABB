@@ -1,9 +1,18 @@
 using System;
+using System.Collections.Generic;
+using ABB.Application.Common.Interfaces;
+using ABB.Application.EntriNotas.Commands;
+using AutoMapper;
 
 namespace ABB.Application.EntriNotas.Queries
 {
-    public class NotaDto
+    public class NotaDto : IMapFrom<SaveEntriNotaCommand>
     {
+        public NotaDto()
+        {
+            Details = new List<DetailNotaDto>();
+        }
+        
         public string Id { get; set; }
         
         public string kd_cb { get; set; }
@@ -71,5 +80,13 @@ namespace ABB.Application.EntriNotas.Queries
         public decimal? pst_lain { get; set; }
 
         public decimal? nilai_lain { get; set; }
+
+        public List<DetailNotaDto> Details { get; set; }
+
+        public void Mapping(Profile profile)
+        {
+            profile.CreateMap<NotaDto, SaveEntriNotaCommand>();
+            profile.CreateMap<NotaDto, SaveEntriNotaCancelCommand>();
+        }
     }
 }

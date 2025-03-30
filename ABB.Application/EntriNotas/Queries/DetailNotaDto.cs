@@ -1,8 +1,11 @@
 using System;
+using ABB.Application.Common.Interfaces;
+using ABB.Domain.Entities;
+using AutoMapper;
 
 namespace ABB.Application.EntriNotas.Queries
 {
-    public class DetailNotaDto
+    public class DetailNotaDto : IMapFrom<DetailNota>
     {
         public string kd_cb { get; set; }
 
@@ -29,5 +32,10 @@ namespace ABB.Application.EntriNotas.Queries
         public decimal pst_ang { get; set; }
 
         public decimal nilai_ang { get; set; }
+
+        public void Mapping(Profile profile)
+        {
+            profile.CreateMap<DetailNotaDto, DetailNota>();
+        }
     }
 }
