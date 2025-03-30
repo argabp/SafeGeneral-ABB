@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Polis Jaminan Penawaran</title>
+    <title>Polis Bonding Pelaksanaan</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -43,101 +43,79 @@
 <body>
 
     <div class="container">
-        <div class="h1"><u>JAMINAN PENAWARAN</u></div>
+        <div class="h1"><u>JAMINAN PELAKSANAAN</u></div>
         <div class="section">
             <table class="table">
                 <tr>
-                    <td style="width: 5%;">Nomor</td>
-                    <td style="width: 1%;">:</td>
-                    <td style="width: 10%;">{{no_pol_ttg}}</td>
-                    <td style="width: 5%;">Reg No.</td>
-                    <td style="width: 1%;">:</td>
-					<td style="width: 8%;">{{no_reg}}</td>
-					<td style="width: 8%;">Nilai Jaminan</td>
-					<td style="width: 1%;">:</td>
-					<td style="width: 5%;">{{symbol}}{{nilai_bond}}</td>
+                    <td style="width: 15%;">Nomor Jaminan</td>
+                    <td >:</td>
+                    <td style="width: 45%;">{{no_pol_ttg}}</td>
+					<td>Nilai</td>
+					<td>:</td>
+					<td>{{symbol}} string({{nilai_bond}},if ( trim({{symbol}}) ='Rp ','#,##0','#,##0.0000'))</td>
+
                 </tr>
 			</table>
             <table class="table">
 				<tr>
                     <td style="width: 1%; vertical-align: top;">1. </td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Dengan ini dinyatakan, bahwa kami: ' +if(isNull ({{nm_ttg}}),'',{{nm_ttg}}) + ',' + if(isNull ({{almt_ttg}}),'',{{almt_ttg}})+' 
-						sebagai Penyedia, selanjutnya disebut TERJAMIN, dan ' + if(isNull ({{nm_persh}}),'',{{nm_persh}})+ ',' + if(isNull ({{almt}}),'',{{almt}}) + ' sebagai Penjamin, selanjutnya disebut sebagai PENJAMIN, 
-						bertanggung jawab dan dengan tegas terikat pada ' + if(isNull ({{nm_obl}}),'',{{nm_obl}})+',' +  if(isNull ({{almt_obl}}),'',{{almt_obl}})+ ' sebagai Pelaksana Pelelangan, 
-						selanjutnya disebut PENERIMA JAMINAN atas sejumlah '+symbol + string({{nilai_bond}},if ( trim(symbol) ='Rp ','#,##0','#,##0.0000')) + ' ( '+ (if(isNull({{ket_nilai_bond}}),'',{{ket_nilai_bond}}))+ ' )</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Dengan ini dinyatakan, bahwa kami : ' 
+                        +if(isNull({{nm_ttg}}),'',{{nm_ttg}})+ ', ' +if(isNull({{almt_ttg}}),'',{{almt_ttg}})+ ' sebagai Penyedia, selanjutnya 
+                        disebut TERJAMIN, dan ' + if(isNull({{nm_persh}}),'',{{nm_persh}}) + ', ' + if(isNull({{almt}}),'',{{almt}}) + ' 
+                        sebagai Penjamin, selanjutnya disebut sebagai PENJAMIN, bertanggung jawab dan dengan tegas terikat pada 
+                        ' +if(isNull({{nm_obl}}),'',{{nm_obl}})+ ', ' +if(isNull({{almt_obl}}),'',{{almt_obl}})+ ' sebagai Pemilik Pekerjaan, 
+                        selanjutnya disebut PENERIMA JAMINAN atas uang sejumlah 
+                        ' + {{symbol}} + '' + string({{nilai_bond}},if ( trim({{symbol}}) ='Rp ','#,##0','#,##0.0000')) + '  (  ' + 
+                        (if(isNull({{ket_nilai_bond}}),'',{{ket_nilai_bond}})) + '  )</td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">2. </td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="8">Maka kami, TERJAMIN dan PENJAMIN dengan ini mengikatkan 
-                        diri untuk melakukan pembayaran jumlah tersebut di atas dengan baik dan benar bilamana TERJAMIN tidak 
-                        memenuhi kewajiban sebagaimana ditetapkan dalam Dokumen Pengadaan 
-                        Nomor : ' + if(isNull(ba_srh_trm),'',ba_srh_trm)+ ' Tanggal ' +if(isNull(tgl_kontrak),'',tgl_kontrak)+ ' 
-                        untuk pelaksanaan pelelangan pekerjaan ' + if(isNull(ket_rincian_kontr),'',ket_rincian_kontr)+ ' 
-                        yang diselenggarakan oleh PENERIMA JAMINAN.</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8">Maka kami, TERJAMIN dan PENJAMIN dengan ini 
+                        mengikatkan diri untuk melakukan pembayaran jumlah tersebut di atas dengan baik dan benar bilamana TERJAMIN 
+                        tidak memenuhi kewajiban dalam melaksanakan ' + if(isNull({{ket_rincian_kontr}}),'',{{ket_rincian_kontr}})
+                         + ' sebagaimana ditetapkan berdasarkan Surat Penunjukan Pelaksanaan Pekerjaan (SPK) 
+                         Nomor : ' +if(isNull({{no_kontr}}),'',{{no_kontr}})+ ' tanggal ' +  if(isNull({{tgl_kontrak}}),'',{{tgl_kontrak}})
+                         + ' dari PENERIMA JAMINAN.</td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">3. </td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Surat Jaminan ini berlaku apabila TERJAMIN:</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" >'Surat Jaminan ini berlaku mulai dari 
+                        tanggal ' + if(isNull(t{{gl_mul_ptg_ind}}),'',{{tgl_mul_ptg_ind}}) + ' sampai dengan tanggal ' + 
+                        if(isNull({{tgl_akh_ptg_ind}}),'',{{tgl_akh_ptg_ind}})</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">4. </td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Jaminan ini berlaku apabila:</td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;"></td>
                     <td style="vertical-align: top; text-align: justify; width: 1%;">a</td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Menarik kembali penawarannya selama dilaksanakannya pelelangan atau sesudah dinyatakan sebagai pemenang.</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" >TERJAMIN tidak menyelesaikan pekerjaan tersebut pada waktunya dengan baik dan benar sesuai dengan ketentuan dalam Kontrak</td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;"></td>
                     <td style="vertical-align: top; text-align: justify; width: 1%;">b</td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="8">Tidak,</td>
-                </tr>
-                <tr>
-                    <td style="width: 1%; vertical-align: top;"></td>
-                    <td style="vertical-align: top; text-align: justify; width: 1%;"></td>
-                    <td style="vertical-align: top; text-align: justify; width: 1%;">1)</td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="6">menyerahkan Jaminan Pelaksanaan setelah ditunjuk sebagai pemenang</td>
-                </tr>
-                <tr>
-                    <td style="width: 1%; vertical-align: top;"></td>
-                    <td style="vertical-align: top; text-align: justify; width: 1%;"></td>
-                    <td style="vertical-align: top; text-align: justify; width: 1%;">2)</td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="6">menandatangani kontrak</td>
-                </tr>
-                <tr>
-                    <td style="width: 1%; vertical-align: top;"></td>
-                    <td style="vertical-align: top; text-align: justify; width: 1%;"></td>
-                    <td style="vertical-align: top; text-align: justify; width: 1%;">3)</td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="6">hadir dalam klarifikasi dan/atau verifikasi sebagai calon pemenang</td>
-                </tr>
-                <tr>
-                    <td style="width: 1%; vertical-align: top;"></td>
-                    <td style="vertical-align: top; text-align: justify; width: 1%;">c</td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="8">terlibat Korupsi Kolusi dan Nepotisme (KKN)</td>
-                </tr>
-                <tr>
-                    <td style="width: 1%; vertical-align: top;">4. </td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Surat Jaminan ini berlaku selama 
-                        '+if(isNull({{jml_hari}}),'',{{jml_hari}})+ ' kalender dan efektif mulai dari tanggal ' 
-                        + if(isNull({{tgl_mul_ptg_ind}}),'',{{tgl_mul_ptg_ind}}) + ' sampai dengan tanggal  ' 
-                        + if(isNull({{tgl_akh_ptg_ind}}),'',{{tgl_akh_ptg_ind}}) + '.'</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8">Pemutusan kontrak akibat kesalahan TERJAMIN.</td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">5. </td>
                     <td style="vertical-align: top; text-align: justify;" colspan="8" >PENJAMIN akan membayar kepada PENERIMA 
-                        JAMINAN sejumlah nilai jaminan tersebut di atas dalam waktu paling lambat 14 (empat belas) hari kerja 
-                        tanpa syarat (unconditional) setelah menerima tuntutan penagihan secara tertulis dari PENERIMA JAMINAN 
-                        berdasarkan keputusan PENERIMA JAMINAN mengenai pengenaan sanksi akibat TERJAMIN cidera janji/wanprestasi</td>
+                        JAMINAN sejumlah nilai jaminan tersebut di atas dalam waktu paling lambat 14 (empat belas) hari kerja tanpa 
+                        syarat (Unconditional) setelah menerima tuntutan pencairan secara tertulis dari PENERIMA JAMINAN berdasarkan 
+                        Keputusan PENERIMA JAMINAN mengenai pengenaan sanksi akibat TERJAMIN cidera janji.</td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">6. </td>
                     <td style="vertical-align: top; text-align: justify;" colspan="8" >Menunjuk pada Pasal 1832 KUH Perdata dengan 
-                        ini ditegaskan kembali bahwa PENJAMIN melepaskan hak-hak istimewa untuk menuntut supaya harta benda TERJAMIN 
-                        lebih dahulu disita  dan dijual guna dapat melunasi hutangnya sebagaimana dimaksud dalam Pasal 1831 KUH 
-                        Perdata.</td>
+                        ini ditegaskan kembali bahwa PENJAMIN melepaskan hak-hak istimewa untuk menuntut supaya harta benda pihak 
+                        yang dijamin lebih dahulu disita dan dijual guna dapat melunasi hutangnya sebagaimana dimaksud dalam Pasal 
+                        1831 KUH Perdata.</td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">7. </td>
                     <td style="vertical-align: top; text-align: justify;" colspan="8" >Tuntutan pencairan terhadap PENJAMIN 
-                        berdasarkan Jaminan ini harus sudah diajukan sekurang-kurangnya dalam waktu 28 (dua puluh delapan) hari 
-                        kalender sesudah berakhirnya masa berlaku Jaminan ini.</td>
+                        berdasarkan Jaminan ini harus sudah diajukan selambat-lambatnya dalam waktu 7 (tujuh) hari kalender 
+                        sesudah berakhirnya masa berlaku Jaminan ini.</td>
                 </tr>
                 <tr style="height: 50px;">
                     <td></td>

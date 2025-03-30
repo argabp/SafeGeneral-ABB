@@ -107,6 +107,11 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                 cetakSchedulePolis.no_pls, cetakSchedulePolis.nilai_prm_pkm,
                 cetakSchedulePolis.jml_tempat_ddk, cetakSchedulePolis.nm_jns_kend,
                 cetakSchedulePolis.desk_aksesoris, cetakSchedulePolis.nm_utk,
+                cetakSchedulePolis.no_oby, cetakSchedulePolis.desk_oby,
+                cetakSchedulePolis.ket_okup, cetakSchedulePolis.kd_kls_konstr,
+                cetakSchedulePolis.kd_penerangan, cetakSchedulePolis.symbol,
+                cetakSchedulePolis.ket_rsk, cetakSchedulePolis.nm_mtu,
+                cetakSchedulePolis.nm_grp_oby, cetakSchedulePolis.nm_grp_oby_1,
                 sub_total_kebakaran
             } );
 

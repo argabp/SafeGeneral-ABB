@@ -191,5 +191,25 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         public  string desk_aksesoris { get; set; }
         
         public  string nm_utk { get; set; }
+        
+        public  string no_oby { get; set; }
+        
+        public  string  desk_oby { get; set; }
+
+        public  string ket_okup { get; set; }
+        
+        public  string kd_kls_konstr { get; set; }
+        
+        public  string kd_penerangan { get; set; }
+        
+        public  string symbol { get; set; }
+        
+        public  string ket_rsk { get; set; }
+        
+        public  string nm_mtu { get; set; }
+        
+        public  string nm_grp_oby { get; set; }
+        
+        public  string nm_grp_oby_1 { get; set; }
     }
 }
