@@ -1,0 +1,124 @@
+﻿@using System.Globalization
+@using Kendo.Mvc.UI
+@model ABB.Web.Modules.Akseptasi.Models.KeteranganEndorsmentViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/Akseptasi/JS/akseptasi.keteranganEndorsment.js"></script>
+
+<style>
+    p {
+        margin: 0px;
+        padding: 0px;
+    }
+    label {
+        align-content: center;
+    }
+</style>
+
+@{
+    ViewData["Title"] = "Keterangan Endorsment";
+    var nomor_aksepatsi = Model.kd_cb.Trim() + " . " + Model.kd_cob.Trim() + " . " +
+                          Model.kd_scob.Trim() + " . " + Model.kd_thn.Trim() + " . " + Model.no_aks.Trim();
+}
+
+@Html.AntiForgeryToken()
+<form id="KeteranganEndorsmentForm" enctype="multipart/form-data">
+    @Html.HiddenFor(m => m.kd_cob)
+    @Html.HiddenFor(m => m.kd_scob)
+    @Html.HiddenFor(m => m.kd_thn)
+    @Html.HiddenFor(m => m.no_aks)
+    @Html.HiddenFor(m => m.no_updt)
+    <div class="window-body" style="background-color: lightgray">
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Akseptasi</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="temp_nomor_akseptasi" value="@nomor_aksepatsi" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Endorsment Ke</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" format="#" for="no_endt" style="width: 100%"/>
+                    <span asp-validation-for="no_endt" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Jenis Pertanggungan</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_cb" style="width: 100%" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetCabang", "NomorRegistrasiPolis")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_cb" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-3">Atas Nama</label>
+                <div class="col-sm-9">
+                    <kendo-textbox for="nm_ttg" readonly="true" style="width: 100%; background-color: #FFFFE1"/>
+                    <span asp-validation-for="nm_ttg" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-3">Alamat</label>
+                <div class="col-sm-9">
+                    <kendo-textarea name="almt_ttg" readonly="true" rows="2" style="width: 100%; background-color: var(--soft-grey) !important;">@Model.almt_ttg</kendo-textarea>
+                    <span asp-validation-for="almt_ttg" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-3"></label>
+                <div class="col-sm-9">
+                    <kendo-textbox for="kt_ttg" readonly="true" style="width: 100%"/>
+                    <span asp-validation-for="kt_ttg" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Masa Pertanggungan</label>
+                <div class="col-sm-6 row">
+                    <div class="col-sm-5">
+                        <kendo-datepicker for="tgl_mul_ptg" style="width: 100%; background-color: #FFFFE1" readonly="true"/>
+                        <span asp-validation-for="tgl_mul_ptg" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-2" style="align-content: center">
+                        <p>s/d</p>
+                    </div>
+                    <div class="col-sm-5">
+                        <kendo-datepicker for="tgl_akh_ptg" style="width: 100%; background-color: #FFFFE1" readonly="true"/>
+                        <span asp-validation-for="tgl_akh_ptg" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <div class="col-sm-12">
+                    <kendo-textarea name="ket_endt" rows="7" style="width: 100%; background-color: white">@Model.ket_endt</kendo-textarea>
+                    <span asp-validation-for="ket_endt" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="window-footer">
+        <button type="button" id="btn-save-keteranganEndorsment" class="btn btn-primary space-right">Save</button>
+    </div>
+</form>

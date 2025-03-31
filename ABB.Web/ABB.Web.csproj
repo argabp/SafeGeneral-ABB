@@ -5411,6 +5411,9 @@
       <None Update="Modules\NomorRegistrasiPolis\JS\nomorRegistrasiPolis.index.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\Akseptasi\JS\akseptasi.keteranganEndorsment.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

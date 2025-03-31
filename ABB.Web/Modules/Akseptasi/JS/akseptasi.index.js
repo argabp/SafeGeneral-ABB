@@ -18,12 +18,14 @@ function btnAddAkseptasi_Click() {
         openAkseptasiWindow('/Akseptasi/Add', 'Add New Akseptasi');
     });
 }
+
 function btnEditAkseptasi_OnClick(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     console.log('dataItem', dataItem);
     openAkseptasiWindow(`/Akseptasi/Edit?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_aks=${dataItem.no_aks}&no_updt=${dataItem.no_updt}`, 'Edit Akseptasi');
 }
+
 function btnClosingAkseptasi_OnClick(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
@@ -33,6 +35,13 @@ function btnClosingAkseptasi_OnClick(e) {
             setTimeout(function () { closingAkseptasi(dataItem); }, 500);
         }
     );
+}
+
+function btnKeteranganEndorsment_OnClick(e) {
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    console.log('dataItem', dataItem);
+    openAkseptasiWindow(`/Akseptasi/KeteranganEndorsment?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_aks=${dataItem.no_aks}&no_updt=${dataItem.no_updt}`, 'Edit Akseptasi');
 }
 
 function closingAkseptasi(dataItem){
@@ -92,4 +101,17 @@ function deleteAkseptasi(dataItem) {
 
         closeProgressOnGrid('#AkseptasiGrid');
     }, AjaxContentType.URLENCODED);
+}
+
+function onAkseptasiDataBound(e) {
+    // Check each row for the value of `no_updt`
+    var grid = $("#AkseptasiGrid").data("kendoGrid");
+    grid.tbody.find("tr").each(function() {
+        var dataItem = grid.dataItem(this);
+        // Check if the value of no_updt is 1
+        if (dataItem.no_updt === 0) {
+            // Find the "Closing" button and hide it
+            $(this).find("a[title='KeteranganEndorsment']").hide();
+        }
+    });
 }

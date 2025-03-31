@@ -55,12 +55,12 @@
                     columns.Command(command =>
                     {
                         command.Custom("EditAkseptasi")
-                            .Text(" Edit")
+                            .Text(" Edit ")
                             .IconClass("fa fa-pencil-alt")
                             .HtmlAttributes(new { title = "Edit" })
                             .Click("btnEditAkseptasi_OnClick");
                         command.Custom("Closing")
-                            .Text(" Closing")
+                            .Text(" Closing ")
                             .IconClass("fa fa-lock")
                             .HtmlAttributes(new { title = "Closing" })
                             .Click("btnClosingAkseptasi_OnClick");
@@ -69,6 +69,11 @@
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
                             .Click("btnDeleteAkseptasi_OnClick");
+                        command.Custom("KeteranganEndorsment")
+                            .Text("KeteranganEndorsment")
+                            .IconClass("fa fa-indent")
+                            .HtmlAttributes(new { title="KeteranganEndorsment"})
+                            .Click("btnKeteranganEndorsment_OnClick");
                     }).Width(200);
                 })
                 .Pageable(pager => pager
@@ -81,7 +86,7 @@
                 .Scrollable()
                 .Height(450)
                 .Resizable(a=>a.Columns(true))
-                .Events(ev => ev.DataBound("gridAutoFit"))
+                .Events(ev => ev.DataBound("onAkseptasiDataBound"))
         
                 )    
         </div>

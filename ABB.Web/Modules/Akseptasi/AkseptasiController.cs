@@ -183,6 +183,50 @@ namespace ABB.Web.Modules.Akseptasi
                 kd_cb = kd_cb
             });
         }
+
+        [HttpGet]
+        public async Task<IActionResult> KeteranganEndorsment(string kd_cb, string kd_cob,
+            string kd_scob, string kd_thn, string no_aks, short no_updt)
+        {
+            var command = new GetAkseptasiQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                kd_cob = kd_cob,
+                kd_scob = kd_scob,
+                kd_thn = kd_thn,
+                no_aks = no_aks,
+                no_updt = no_updt,
+                kd_cb = kd_cb
+            };
+            
+            var result = await Mediator.Send(command);
+
+            result.kd_cb = result.kd_cb.Trim();
+            
+            return PartialView(Mapper.Map<KeteranganEndorsmentViewModel>(result));
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> SaveKeteranganEndorsment([FromBody] KeteranganEndorsmentViewModel model)
+        {
+            try
+            {
+                var command = Mapper.Map<SaveKeteranganEndorsmentCommand>(model);
+                command.DatabaseName = Request.Cookies["DatabaseValue"];
+                await Mediator.Send(command);
+                return Json(new { Result = "OK", Message = "Successfully Keterangan Endorsment"});
+            }
+            catch (ValidationException ex)
+            {
+                ModelState.AddModelErrors(ex);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", ex.Message });
+            }
+
+            return PartialView("KeteranganEndorsment", model);
+        }
         
         public JsonResult GetStatusAkseptasi()
         {
