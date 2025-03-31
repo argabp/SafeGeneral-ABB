@@ -5405,6 +5405,12 @@
       <None Update="Modules\NotaKomisiTambahan\JS\notaKomisiTambahan.edit.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\NomorRegistrasiPolis\JS\nomorRegistrasiPolis.edit.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\NomorRegistrasiPolis\JS\nomorRegistrasiPolis.index.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

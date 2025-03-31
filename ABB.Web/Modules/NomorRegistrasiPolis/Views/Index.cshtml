@@ -1,0 +1,78 @@
+﻿@using ABB.Application.NomorRegistrasiPolis.Queries
+@using Kendo.Mvc.UI
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Nomor Registrasi Polis";
+}
+<script src="~/Modules/NomorRegistrasiPolis/JS/nomorRegistrasiPolis.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Entri Nota
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<NomorRegistrasiPolisDto>()
+                .Name("NomorRegistrasiPolisGrid")
+                .Editable(editable => editable.Mode(GridEditMode.InLine))
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetNomorRegistrasiPolis", "NomorRegistrasiPolis").Data("searchFilter"))
+                    .Model(model => model.Id(p => p.Id))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.nm_cb).Width(100).Title("Nama Cabang");
+                    columns.Bound(col => col.nm_cob).Width(100).Title("Nama COB");
+                    columns.Bound(col => col.nm_scob).Width(100).Title("Nama SCOB");
+                    columns.Bound(col => col.kd_thn).Width(100).Title("Kode Tahun");
+                    columns.Bound(col => col.no_pol_ttg).Width(100).Title("Nomor Polis");
+                    columns.Bound(col => col.no_reff).Width(100).Title("No Reff");
+                    columns.Command(command =>
+                    {
+                        command.Custom("EditNomorRegistrasiPolis")
+                            .Text("Edit")
+                            .IconClass("k-icon k-i-edit")
+                            .HtmlAttributes(new { title="Edit"})
+                            .Click("onEditNomorRegistrasiPolis");
+                    }).Width(200);
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit"))
+                ) 
+        </div>
+        
+        @(Html.Kendo().Window()
+            .Name("NomorRegistrasiPolisWindow")
+            .Title("Entri Nota")
+            .Width(1200)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+    </div>
+</div>
+
