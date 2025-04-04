@@ -3,12 +3,24 @@
 
 <script src="~/Modules/Akseptasi/Components/Resiko/resiko.js"></script>
 
+<style>
+    .flat-btn-primary{
+        padding: 10px 0px;
+    }
+</style>
+
 <div class="window-body">
     <div class="row">
         <div class="col-md-4">
             <input type="text" class="search-field-top" style="height: 1em" id="SearchKeywordResiko" placeholder="Search"/>
         </div>
-        <div class="offset-5"></div>
+        <div class="offset-2"></div>
+        <div class="col-md-2">
+            <button class="flat-btn-primary" style="height: 1em" id="btnCopyResiko">Copy</button>
+        </div>
+        <div class="col-md-2">
+            <button class="flat-btn-primary" style="height: 1em" id="btnCopyEndorsResiko">Copy Endors</button>
+        </div>
         <div class="col-md-2">
             <button class="flat-btn-primary" style="height: 1em" id="btnAddNewAkseptasiResiko">Add New Akseptasi Resiko</button>
         </div>

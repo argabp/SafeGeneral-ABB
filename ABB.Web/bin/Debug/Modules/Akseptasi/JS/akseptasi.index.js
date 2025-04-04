@@ -16,6 +16,7 @@ function openAkseptasiWindow(url, title) {
 function btnAddAkseptasi_Click() {
     $('#btnAddNewAkseptasi').click(function () {
         openAkseptasiWindow('/Akseptasi/Add', 'Add New Akseptasi');
+        resiko = null;
     });
 }
 
@@ -23,6 +24,7 @@ function btnEditAkseptasi_OnClick(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     console.log('dataItem', dataItem);
+    resiko = null;
     openAkseptasiWindow(`/Akseptasi/Edit?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_aks=${dataItem.no_aks}&no_updt=${dataItem.no_updt}`, 'Edit Akseptasi');
 }
 
@@ -30,7 +32,7 @@ function btnClosingAkseptasi_OnClick(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     showConfirmation('Confirmation', `Are you sure you want to closing Akseptasi?`,
-        function () {
+        function () {        
             showProgressOnGrid('#AkseptasiGrid');
             setTimeout(function () { closingAkseptasi(dataItem); }, 500);
         }

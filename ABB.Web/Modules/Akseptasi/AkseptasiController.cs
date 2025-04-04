@@ -109,8 +109,30 @@ namespace ABB.Web.Modules.Akseptasi
             {
                 var command = Mapper.Map<ClosingAkseptasiCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
-                var entity = await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Akseptasi"});
+                await Mediator.Send(command);
+                return Json(new { Result = "OK", Message = "Successfully Closing Akseptasi"});
+            }
+            catch (ValidationException ex)
+            {
+                ModelState.AddModelErrors(ex);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", ex.Message });
+            }
+
+            return PartialView("Add", model);
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> CopyResiko([FromForm] CopyResikoViewModel model)
+        {
+            try
+            {
+                var command = Mapper.Map<CopyResikoCommand>(model);
+                command.DatabaseName = Request.Cookies["DatabaseValue"];
+                await Mediator.Send(command);
+                return Json(new { Result = "OK", Message = "Successfully Copy Resiko"});
             }
             catch (ValidationException ex)
             {

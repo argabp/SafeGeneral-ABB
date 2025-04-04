@@ -2,6 +2,7 @@
     btnNextResiko();
     searchKeywordResiko_OnKeyUp();
     btnAddAkseptasiResiko_Click();
+    btnCopyResiko_OnClick();
 });
 
 function btnNextResiko(){
@@ -123,4 +124,48 @@ function refreshTabOther(){
             $("#tabOther").html(response);
         }
     );
+}
+
+
+function btnCopyResiko_OnClick() {
+    $('#btnCopyResiko').click(function () {
+        showConfirmation('Confirmation', `Apakah anda yakin akan meng copy resiko ini??`,
+            function () {
+                if(resiko == null){
+                    showMessage("Error", "Please select resiko first");
+                    return;
+                }
+                showProgressOnGrid('#AkseptasiResikoGrid');
+                setTimeout(function () { copyResiko(); }, 500);
+            }
+        );
+    });
+}
+
+function copyResiko() {
+    var data ={
+        kd_cb: resiko.kd_cb,
+        kd_cob: resiko.kd_cob,
+        kd_scob: resiko.kd_scob,
+        kd_thn: resiko.kd_thn,
+        no_aks: resiko.no_aks,
+        no_updt: resiko.no_updt,
+        no_rsk: resiko.no_rsk,
+        kd_endt: resiko.kd_endt,
+    }
+    
+    ajaxPost(`/Akseptasi/CopyResiko`, data, function (response) {
+        if (response.Result) {
+            showMessage('Success', response.Message);
+            refreshGrid("#AkseptasiResikoGrid");
+        }
+        else if (!response.Result) {
+            showMessage('Error', response.Message);
+            refreshGrid("#AkseptasiResikoGrid");
+        }
+        else
+            $("#AkseptasiWindow").html(response);
+
+        closeProgressOnGrid('#AkseptasiResikoGrid');
+    }, AjaxContentType.URLENCODED);
 }
