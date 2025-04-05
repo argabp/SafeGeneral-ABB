@@ -70,7 +70,7 @@ namespace ABB.Web.Modules.NomorRegistrasiPolis
             }
             catch (Exception ex)
             {
-                return Json(new { Result = "ERROR", Message = ex.Message });
+                return Json(new { Result = "ERROR", Message = ex.InnerException == null ? ex.Message : ex.InnerException.Message });
             }
         }
         
