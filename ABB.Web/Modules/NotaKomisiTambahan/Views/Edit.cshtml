@@ -211,7 +211,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-3">Nilai Nota</label>
                 <div class="col-sm-3">
-                    <kendo-numerictextbox spinners="false" decimals="2" for="pst_nt" style="width: 100%;"/>
+                    <kendo-numerictextbox spinners="false" on-change="onPercentageNotaChange" decimals="2" for="pst_nt" style="width: 100%;"/>
                     <span asp-validation-for="pst_nt" class="text-danger"></span>
                 </div>
                 <div class="col-sm-6">

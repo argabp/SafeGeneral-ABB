@@ -50,7 +50,7 @@ function OnKodeTertujuChange(e){
 }
 
 function OnNomorAkseptasiChange(e){
-    showProgressOnGrid("#NomorAkseptasiGrid");
+    showProgress("#NomorAkseptasiWindow");
     
     var selectedRow = this.dataItem(this.select());
     $("#kd_cb").val(selectedRow.kd_cb);
@@ -121,20 +121,41 @@ function OnNomorAkseptasiChange(e){
                 &jns_nt_kel=${jns_nt_kel}&kd_grp_ttj=${kd_grp_ttj}&uraian=${$("#uraian").val()}
                 &kd_cb=${selectedRow.kd_cb}&kd_rk_ttj=${kd_rk_ttj}`, (returnValueSecond) => {
                 if(returnValueSecond.length === 1){
-                    $("#uraian").val(returnValue[0].split(",")[1]);
+                    $("#uraian").val(returnValueSecond[0].split(",")[1]);
                 } else {
-                    $("#nilai_nt").getKendoNumericTextBox().value(returnValue[0].split(",")[1]);
-                    $("#pst_ppn").getKendoNumericTextBox().value(returnValue[1].split(",")[1]);
-                    $("#pst_pph").getKendoNumericTextBox().value(returnValue[2].split(",")[1]);
-                    $("#nilai_ppn").getKendoNumericTextBox().value(returnValue[3].split(",")[1]);
-                    $("#nilai_pph").getKendoNumericTextBox().value(returnValue[4].split(",")[1]);
-                    $("#uraian").val(returnValue[5].split(",")[1]);
-                    $("#pst_lain").getKendoNumericTextBox().value(returnValue[6].split(",")[1]);
-                    $("#nilai_lain").getKendoNumericTextBox().value(returnValue[7].split(",")[1]);
+                    $("#nilai_nt").getKendoNumericTextBox().value(returnValueSecond[0].split(",")[1]);
+                    $("#pst_ppn").getKendoNumericTextBox().value(returnValueSecond[1].split(",")[1]);
+                    $("#pst_pph").getKendoNumericTextBox().value(returnValueSecond[2].split(",")[1]);
+                    $("#nilai_ppn").getKendoNumericTextBox().value(returnValueSecond[3].split(",")[1]);
+                    $("#nilai_pph").getKendoNumericTextBox().value(returnValueSecond[4].split(",")[1]);
+                    $("#uraian").val(returnValueSecond[5].split(",")[1]);
+                    $("#pst_lain").getKendoNumericTextBox().value(returnValueSecond[6].split(",")[1]);
+                    $("#nilai_lain").getKendoNumericTextBox().value(returnValueSecond[7].split(",")[1]);
                 }
             });
             
             closeWindow($("#NomorAkseptasiWindow"));
         });
+    });
+}
+
+function onPercentageNotaChange(e){
+    debugger;
+    ajaxGet(`/NotaKomisiTambahan/GetNilaiAndPercentage?kd_mtu=${$("#kd_mtu").val()}
+                &tgl_nt=${$("#tgl_nt").val()}&pst_nt=${e.sender.value()}&nilai_nt=${$("#nilai_nt").val()}
+                &jns_nt_kel=${$("#jns_nt_kel").val()}&kd_grp_ttj=${$("#kd_grp_ttj").val()}&uraian=${$("#uraian").val()}
+                &kd_cb=${$("#kd_cb").val()}&kd_rk_ttj=${$("#kd_rk_ttj").val()}`, (returnValue) => {
+        if(returnValue.length === 1){
+            $("#uraian").val(returnValue[0].split(",")[1]);
+        } else {
+            $("#nilai_nt").getKendoNumericTextBox().value(returnValue[0].split(",")[1]);
+            $("#pst_ppn").getKendoNumericTextBox().value(returnValue[1].split(",")[1]);
+            $("#pst_pph").getKendoNumericTextBox().value(returnValue[2].split(",")[1]);
+            $("#nilai_ppn").getKendoNumericTextBox().value(returnValue[3].split(",")[1]);
+            $("#nilai_pph").getKendoNumericTextBox().value(returnValue[4].split(",")[1]);
+            $("#uraian").val(returnValue[5].split(",")[1]);
+            $("#pst_lain").getKendoNumericTextBox().value(returnValue[6].split(",")[1]);
+            $("#nilai_lain").getKendoNumericTextBox().value(returnValue[7].split(",")[1]);
+        }
     });
 }

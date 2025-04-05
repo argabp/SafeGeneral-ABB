@@ -22,7 +22,7 @@
             <button class="flat-btn-primary" style="height: 1em" id="btnCopyEndorsResiko">Copy Endors</button>
         </div>
         <div class="col-md-2">
-            <button class="flat-btn-primary" style="height: 1em" id="btnAddNewAkseptasiResiko">Add New Akseptasi Resiko</button>
+            <button class="flat-btn-primary" style="height: 1em" id="btnAddNewAkseptasiResiko">Add New Resiko</button>
         </div>
     </div>
     
@@ -34,6 +34,7 @@
         )
         .Columns(columns =>
         {
+            columns.Bound(col => col.no_rsk).Width(50).Title("Nomor Resiko");
             columns.Bound(col => col.no_updt).Width(50).Title("Nomor Update");
             columns.Bound(col => col.ket_rsk).Width(150).Title("Keterangan Resiko");
             columns.Command(command =>

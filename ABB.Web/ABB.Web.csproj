@@ -5414,6 +5414,9 @@
       <None Update="Modules\Akseptasi\JS\akseptasi.keteranganEndorsment.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\Akseptasi\JS\akseptasi.copyEndors.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

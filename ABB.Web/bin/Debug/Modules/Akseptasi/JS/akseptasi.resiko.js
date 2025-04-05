@@ -1,5 +1,9 @@
 ﻿$(document).ready(function () {
     btnSaveAkseptasiResiko_Click();
+    
+    if(resiko.kd_endt === "D"){
+        $("#btn-save-akseptasiResiko").hide();
+    }
 });
 
 function btnSaveAkseptasiResiko_Click() {

@@ -1743,6 +1743,92 @@ namespace ABB.Web.Modules.Akseptasi
         }
 
         #endregion
+
+        #region Copy Endors
+        
+        public async Task<ActionResult> GetCopyEndorsDto([DataSourceRequest] DataSourceRequest request, string searchkeyword)
+        {
+            var ds = await Mediator.Send(new GetCopyEndorsQuery()
+            {
+                SearchKeyword = searchkeyword,
+                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty
+            });
+
+            return Json(ds.AsQueryable().ToDataSourceResult(request));
+        }
+        
+        public IActionResult CopyEndors()
+        {
+            return PartialView();
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> CopyEndorsDelete([FromBody] CopyEndorsDto model)
+        {
+            try
+            {
+                var command = Mapper.Map<CopyEndorsUpdateDeleteCommand>(model);
+                command.DatabaseName = Request.Cookies["DatabaseValue"];
+                await Mediator.Send(command);
+                return Json(new { Result = "OK", Message = "Successfully Copy Endors Delete"});
+            }
+            catch (ValidationException ex)
+            {
+                ModelState.AddModelErrors(ex);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", ex.Message });
+            }
+
+            return PartialView("CopyEddors", model);
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> CopyEndorsUpdate([FromBody] CopyEndorsDto model)
+        {
+            try
+            {
+                var command = Mapper.Map<CopyEndorsUpdateDeleteCommand>(model);
+                command.DatabaseName = Request.Cookies["DatabaseValue"];
+                await Mediator.Send(command);
+                return Json(new { Result = "OK", Message = "Successfully Copy Endors Update"});
+            }
+            catch (ValidationException ex)
+            {
+                ModelState.AddModelErrors(ex);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", ex.Message });
+            }
+
+            return PartialView("CopyEddors", model);
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> CopyEndorsInsert([FromBody] CopyEndorsDto model)
+        {
+            try
+            {
+                var command = Mapper.Map<CopyEndorsInsertCommand>(model);
+                command.DatabaseName = Request.Cookies["DatabaseValue"];
+                await Mediator.Send(command);
+                return Json(new { Result = "OK", Message = "Successfully Copy Endors Insert"});
+            }
+            catch (ValidationException ex)
+            {
+                ModelState.AddModelErrors(ex);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", ex.Message });
+            }
+
+            return PartialView("CopyEddors", model);
+        }
+
+        #endregion
         
         public async Task<JsonResult> GetMataUang()
         {

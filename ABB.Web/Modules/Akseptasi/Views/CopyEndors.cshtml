@@ -1,0 +1,63 @@
+﻿@using ABB.Application.Akseptasis.Queries
+@using Kendo.Mvc.UI
+
+<script src="~/Modules/Akseptasi/JS/akseptasi.copyEndors.js"></script>
+
+<style>
+    .flat-btn-primary{
+        padding: 10px 0px;
+    }
+</style>
+
+<div class="window-body">
+    <div class="row">
+        <div class="col-md-4">
+            <input type="text" class="search-field-top" style="height: 1em" id="SearchKeywordCopyEndors" placeholder="Search"/>
+        </div>
+    </div>
+    
+    @(Html.Kendo().Grid<CopyEndorsDto>()
+        .Name("CopyEndorsGrid")
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetCopyEndorsDto", "Akseptasi").Data("searchFilterCopyEndors"))
+            .Model(model => model.Id(p => p.Id))
+        )
+        .Columns(columns =>
+        {
+            columns.Bound(col => col.no_rsk).Width(50).Title("Nomor Resiko");
+            columns.Bound(col => col.no_updt).Width(50).Title("Nomor Update");
+            columns.Bound(col => col.kd_endt).Width(150).Title("Kode Endorstment");
+            columns.Command(command =>
+            {
+                command.Custom("DeleteCopyEndors")
+                    .Text("Delete")
+                    .IconClass("k-icon k-i-delete")
+                    .HtmlAttributes(new { title = "Delete" })
+                    .Click("btnDeleteCopyEndors_OnClick");
+                command.Custom("UpdateCopyEndors")
+                    .Text("Update")
+                    .IconClass("fa fa-pencil-alt")
+                    .HtmlAttributes(new { title = "Update" })
+                    .Click("btnUpdateCopyEndors_OnClick");
+                command.Custom("InsertCopyEndors")
+                    .Text("Insert")
+                    .IconClass("fa fa-plus")
+                    .HtmlAttributes(new { title = "Insert" })
+                    .Click("btnInsertCopyEndors_OnClick");
+            }).Width(200);
+        })
+        .Pageable(pager => pager
+            .Refresh(true)
+            .Info(true)
+            .PageSizes(true)
+        )
+        .Sortable()
+        .Filterable()
+        .Scrollable()
+        .Selectable()
+        .Height(450)
+        .Resizable(a => a.Columns(true))
+        .Events(ev => ev.DataBound("gridAutoFit"))
+
+        )
+</div>

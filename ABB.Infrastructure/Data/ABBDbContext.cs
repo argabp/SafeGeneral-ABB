@@ -96,6 +96,7 @@ namespace ABB.Infrastructure.Data
         public DbSet<DetailAlokasi> DetailAlokasi { get; set; }
         public DbSet<NotaKomisiTambahan> NotaKomisiTambahan { get; set; }
         public DbSet<NomorRegistrasiPolis> NomorRegistrasiPolis { get; set; }
+        public DbSet<CopyEndors> CopyEndors { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -185,6 +186,7 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new DetailAlokasiMap());
             builder.ApplyConfiguration(new NotaKomisiTambahanMap());
             builder.ApplyConfiguration(new NomorRegistrasiPolisMap());
+            builder.ApplyConfiguration(new CopyEndorsMap());
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

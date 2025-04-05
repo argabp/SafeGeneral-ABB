@@ -3,6 +3,7 @@
     searchKeywordResiko_OnKeyUp();
     btnAddAkseptasiResiko_Click();
     btnCopyResiko_OnClick();
+    btnCopyEndorsResiko_OnClick();
 });
 
 function btnNextResiko(){
@@ -84,16 +85,30 @@ var resiko;
 function OnResikoChange(e){
     var grid = e.sender;
     resiko = grid.dataItem(this.select());
-    refreshGrid("#AkseptasiCoverageGrid");
-    refreshGrid("#AkseptasiObyekGrid");
-    refreshGrid("#AlokasiGrid");
-    refreshTabOther();
+    
+    if(resiko.no_updt === 1){
+        $("#btnCopyEndorsResiko").show();
+    } else {
+        $("#btnCopyEndorsResiko").hide();
+    }
 
     var tabstrip = $('#resikoTab').data("kendoTabStrip");
-    tabstrip.enable(tabstrip.items()[1]);
-    tabstrip.enable(tabstrip.items()[2]);
-    tabstrip.enable(tabstrip.items()[3]);
-    tabstrip.enable(tabstrip.items()[4]);
+    if(resiko.kd_endt === "I")
+    {
+        refreshGrid("#AkseptasiCoverageGrid");
+        refreshGrid("#AkseptasiObyekGrid");
+        // refreshGrid("#AlokasiGrid");
+        refreshTabOther();
+        tabstrip.enable(tabstrip.items()[1]);
+        tabstrip.enable(tabstrip.items()[2]);
+        tabstrip.enable(tabstrip.items()[3]);
+        tabstrip.enable(tabstrip.items()[4]);
+    } else {
+        tabstrip.disable(tabstrip.items()[1]);
+        tabstrip.disable(tabstrip.items()[2]);
+        tabstrip.disable(tabstrip.items()[3]);
+        tabstrip.disable(tabstrip.items()[4]);
+    }
 }
 
 function refreshTabOther(){
@@ -125,7 +140,6 @@ function refreshTabOther(){
         }
     );
 }
-
 
 function btnCopyResiko_OnClick() {
     $('#btnCopyResiko').click(function () {
@@ -168,4 +182,14 @@ function copyResiko() {
 
         closeProgressOnGrid('#AkseptasiResikoGrid');
     }, AjaxContentType.URLENCODED);
+}
+
+function openCopyEndorsWindow(url, title) {
+    openWindow('#CopyEndorsWindow', url, title);
+}
+
+function btnCopyEndorsResiko_OnClick() {
+    $('#btnCopyEndorsResiko').click(function () {
+        openCopyEndorsWindow("/Akseptasi/CopyEndors", "Copy Endors")
+    });
 }
