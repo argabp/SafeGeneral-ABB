@@ -38,6 +38,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         {
             "LampiranPolisFireDaftarIsi.html",
             "LampiranPolisPASiramaObyek.html",
+            "LampiranPolisPABiasaDaftarisi.html"
         };
 
         private List<string> MultipleReport = new List<string>()
@@ -185,7 +186,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                     cetakSchedulePolis.kd_penerangan, cetakSchedulePolis.symbol,
                     cetakSchedulePolis.ket_rsk, cetakSchedulePolis.nm_mtu,
                     cetakSchedulePolis.nm_grp_oby, cetakSchedulePolis.nm_grp_oby_1,
-                    sub_total_kebakaran
+                    sub_total_kebakaran, cetakSchedulePolis.cover
                 } );
             }
             
@@ -239,6 +240,24 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                                     <td style='vertical-align: top; text-align: center;'>{0}</td>
                                     <td style='vertical-align: top; text-align: center;'>{0}</td>
                                     <td style='vertical-align: top; text-align: center;'>{0}</td>
+                                </tr>";
+                case "LampiranPolisPABiasaDaftarisi.html":
+                    
+                    //TODO logic here
+                    
+                    return @$"
+                                <tr>
+                                    <td style='vertical-align: top; text-align: center;'>{sequence}</td>
+                                    <td style='vertical-align: top; text-align: center;'>{data.nm_ttg}</td>
+                                    <td style='vertical-align: top; text-align: center;'>{data.almt_ttg}</td>
+                                    <td style='vertical-align: top; text-align: center;'>{data.tgl_lahir}</td>
+                                    <td style='vertical-align: top; text-align: center;'>{data.usia}</td>
+                                    <td style='vertical-align: top; text-align: center;'>{data.jup}</td>
+                                    <td style='vertical-align: top; text-align: center;'>{data.tgl_mul_ptg_ind}</td>
+                                    <td style='vertical-align: top; text-align: center;'>{data.tgl_akh_ptg_ind}</td>
+                                    <td style='vertical-align: top; text-align: center;'>{0}</td>
+                                    <td style='vertical-align: top; text-align: center;'>{0}</td>
+                                    <td style='vertical-align: top; text-align: center;'>kd_usr</td>
                                 </tr>";
                 default:
                     return string.Empty;

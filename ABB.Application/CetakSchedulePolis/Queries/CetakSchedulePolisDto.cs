@@ -217,5 +217,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         public DateTime? tgl_lahir { get; set; }
         public decimal? jk_wkt { get; set; }
         public int? usia { get; set; }
+        public decimal? jup { get; set; }
+        public string? cover { get; set; }
     }
 }

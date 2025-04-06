@@ -59,6 +59,9 @@ namespace ABB.Application.Common
             },
             {
                 "d_uw01r_30do_srm2", "LampiranPolisPASiramaObyek.html"
+            },
+            {
+                "d_uw01r_30do", "LampiranPolisPABiasaDaftarisi.html"
             }
         };
         
@@ -117,6 +120,9 @@ namespace ABB.Application.Common
             },
             {
                 "LampiranPolisPASiramaObyek.html", "spr_uw01r_30do_srm" 
+            },
+            {
+                "LampiranPolisPABiasaDaftarisi.html", "spr_uw01r_30do" 
             }
         };
 
