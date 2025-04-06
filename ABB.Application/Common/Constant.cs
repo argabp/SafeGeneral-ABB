@@ -113,5 +113,53 @@ namespace ABB.Application.Common
                 "LampiranPolisFireDaftarIsi.html", "spr_uw01r_01do" 
             }
         };
+
+        public static readonly string HeaderReport = @"<!DOCTYPE html>
+                                                        <html lang='id'>
+                                                        <head>
+                                                            <meta charset='UTF-8'>
+                                                            <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                                                            <title>Polis PA Sirama Multi</title>
+                                                            <style>
+                                                                body {
+                                                                    font-family: Arial, sans-serif;
+                                                                }
+
+                                                                .container {
+                                                                    width: 90%;
+                                                                    margin: auto;
+                                                                    border: 1px solid black;
+                                                                    padding: 25px;
+                                                                    page-break-before: always; /* Forces a page break before this element */
+                                                                }
+
+                                                                .h1 {
+                                                                    text-align: center;
+                                                                    font-size: 15px;
+                                                                    font-weight: bold;
+                                                                    text-transform: uppercase;
+                                                                    /* margin-bottom: 15px; */
+                                                                }
+
+                                                                .section {
+                                                                    margin-top: 10px;
+                                                                }
+
+                                                                .table {
+                                                                    width: 100%;
+                                                                    border-collapse: collapse;
+                                                                }
+
+                                                                .table td {
+                                                                    padding: 8px;
+                                                                    /* border: 1px solid black; */
+			                                                        font-size: 12px;
+                                                                }
+                                                            </style>
+                                                        </head>
+                                                        <body>";
+
+        public static readonly string FooterReport = @"</body>
+                                                        </html>";
     }
 }
