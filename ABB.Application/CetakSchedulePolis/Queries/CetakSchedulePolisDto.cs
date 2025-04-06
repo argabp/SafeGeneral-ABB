@@ -219,5 +219,16 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         public int? usia { get; set; }
         public decimal? jup { get; set; }
         public string? cover { get; set; }
+        public string? jns_brg { get; set; }
+        public string? penerima_brg { get; set; }
+        public string? tempat_brkg { get; set; }
+        public string? tempate_tiba { get; set; }
+        public string? nm_kapal { get; set; }
+        public string? tgl_brkg { get; set; }
+        public string? desk_kond { get; set; }
+        public decimal? nilai_prm { get; set; }
+        public decimal? pst_rate_prm { get; set; }
+        public string? stn_rate_prm { get; set; }
+        public decimal? pst_deduct { get; set; }
     }
 }

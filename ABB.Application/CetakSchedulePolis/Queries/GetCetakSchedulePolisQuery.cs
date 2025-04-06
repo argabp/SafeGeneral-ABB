@@ -38,7 +38,8 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         {
             "LampiranPolisFireDaftarIsi.html",
             "LampiranPolisPASiramaObyek.html",
-            "LampiranPolisPABiasaDaftarisi.html"
+            "LampiranPolisPABiasaDaftarisi.html",
+            "LampiranPolisCargoDaftarisi.html"
         };
 
         private List<string> MultipleReport = new List<string>()
@@ -76,7 +77,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
             var cetakSchedulePolisData = (await _connectionFactory.QueryProc<CetakSchedulePolisDto>(storeProcedureName, 
                 new
                 {
-                    input_str = $"JK50,P,0552,24,00001,0,PT. BPR. DHAHA EKONOMI"
+                    input_str = $"JK50,C,0203,24,00003,0,GOLDEN SHIELD PTE LTD"
                     // input_str = $"{request.kd_cb.Trim()},{request.kd_cob.Trim()},{request.kd_scob.Trim()}," +
                     //             $"{request.kd_thn},{request.no_pol.Trim()},{request.no_updt},{request.nm_ttg?.Trim()}"
                 })).ToList();
@@ -258,6 +259,19 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                                     <td style='vertical-align: top; text-align: center;'>{0}</td>
                                     <td style='vertical-align: top; text-align: center;'>{0}</td>
                                     <td style='vertical-align: top; text-align: center;'>kd_usr</td>
+                                </tr>";
+                case "LampiranPolisCargoDaftarisi.html":
+                    
+                    //TODO logic here
+                    
+                    return @$"<tr>
+                                    <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{sequence}</td>
+                                    <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.jns_brg}</td>
+                                    <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.penerima_brg}<br>{data.tempat_brkg} / {data.tempate_tiba}</td>
+                                    <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.nm_kapal}</td>
+                                    <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.tgl_brkg}<br>{data.desk_kond}</td>
+                                    <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.nilai_prm}<br>{data.pst_rate_prm} {data.stn_rate_prm}</td>
+                                    <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.pst_deduct}</td>
                                 </tr>";
                 default:
                     return string.Empty;

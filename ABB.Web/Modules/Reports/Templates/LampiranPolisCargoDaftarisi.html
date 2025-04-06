@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang='id'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Lampiran Daftar Isi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            width: 90%;
+            margin: auto;
+            padding: 25px;
+        }
+
+        .h1 {
+            text-align: center;
+            font-size: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            /* margin-bottom: 15px; */
+        }
+
+        .section {
+            margin-top: 10px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table td {
+            padding: 8px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+<p style='font-size: 12px; margin: auto; width: 90%'>PT. ASURANSI BHAKTI BHAYANGKARA</p>
+
+<div class='container'>
+    <div class='section'>
+        <p style='font-size: 12px'>Diletakan dan merupakan bagian yang tidak terpisahkan dari Polis: {{no_pol_ttg}}</p>
+        <p style='font-size: 12px'>Nama Tertanggung: {{nm_ttg}}</p>
+        <table class='table'>
+            <tr>
+                <td style='width: 3%; text-align: center; border: 1px solid;'>No.</td>
+                <td style='width: 20%; text-align: center; border: 1px solid;'>jns_brg</td>
+                <td style='width: 20%; text-align: center; border: 1px solid;'>PENERIMA BARANG Dari / Ke</td>
+                <td style='width: 10%; text-align: center; border: 1px solid;'>ALAT ANGKUT</td>
+                <td style='width: 10%; text-align: center; border: 1px solid;'>Tanggal Keberangkatan<br>Kondisi Pertanggungan</td>
+                <td style='width: 10%; text-align: center; border: 1px solid;'>Premi<br>Suku Premi</td>
+                <td style='width: 10%; text-align: center; border: 1px solid;'>Deductible</td>
+            </tr>
+            {{detail}}
+            <tr>
+                <td style='border-top: 1px solid'></td>
+                <td style='border-top: 1px solid'></td>
+                <td style='border-top: 1px solid'></td>
+                <td style='border-top: 1px solid'></td>
+                <td style='border-top: 1px solid'></td>
+                <td style='border-top: 1px solid'></td>
+                <td style='border-top: 1px solid'></td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>
