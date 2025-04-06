@@ -1,3 +1,5 @@
+using System;
+
 namespace ABB.Application.CetakSchedulePolis.Queries
 {
     public class CetakSchedulePolisDto
@@ -211,5 +213,9 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         public  string nm_grp_oby { get; set; }
         
         public  string nm_grp_oby_1 { get; set; }
+
+        public DateTime? tgl_lahir { get; set; }
+        public decimal? jk_wkt { get; set; }
+        public int? usia { get; set; }
     }
 }

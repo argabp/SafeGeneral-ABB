@@ -36,7 +36,8 @@ namespace ABB.Application.CetakSchedulePolis.Queries
 
         private List<string> ReportHaveDetails = new List<string>()
         {
-            "LampiranPolisFireDaftarIsi.html"
+            "LampiranPolisFireDaftarIsi.html",
+            "LampiranPolisPASiramaObyek.html",
         };
 
         private List<string> MultipleReport = new List<string>()
@@ -74,7 +75,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
             var cetakSchedulePolisData = (await _connectionFactory.QueryProc<CetakSchedulePolisDto>(storeProcedureName, 
                 new
                 {
-                    input_str = "JK50,P,0552,24,00001,0,PT. BPR. DHAHA EKONOMI"
+                    input_str = $"JK50,P,0552,24,00001,0,PT. BPR. DHAHA EKONOMI"
                     // input_str = $"{request.kd_cb.Trim()},{request.kd_cob.Trim()},{request.kd_scob.Trim()}," +
                     //             $"{request.kd_thn},{request.no_pol.Trim()},{request.no_updt},{request.nm_ttg?.Trim()}"
                 })).ToList();
@@ -102,9 +103,11 @@ namespace ABB.Application.CetakSchedulePolis.Queries
             if (ReportHaveDetails.Contains(reportTemplateName))
             {
                 StringBuilder stringBuilder = new StringBuilder();
+                var sequence = 0;
                 foreach (var data in cetakSchedulePolisData)
                 {
-                    stringBuilder.Append(GenerateDetailReport(reportTemplateName, data));
+                    sequence++;
+                    stringBuilder.Append(GenerateDetailReport(reportTemplateName, data, sequence));
                 }
                 resultTemplate = templateProfileResult.Render( new
                 {
@@ -185,13 +188,11 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                     sub_total_kebakaran
                 } );
             }
-
             
-
             return resultTemplate;
         }
     
-        private string GenerateDetailReport(string reportType, CetakSchedulePolisDto data)
+        private string GenerateDetailReport(string reportType, CetakSchedulePolisDto data, int sequence)
         {
             switch (reportType)
             {
@@ -221,6 +222,24 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                             <td style='font-weight: bold; text-align: center;' colspan='2'>{data.nm_grp_oby} : </td>
                             <td style='font-weight: bold;'>sum( {data.nilai_ttl_ptg} for 1  ) </td>
                         </tr>";
+                case "LampiranPolisPASiramaObyek.html":
+                    
+                    //TODO logic here
+                    
+                    return @$"
+                                <tr>
+                                    <td style='vertical-align: top; text-align: center;'>{sequence}</td>
+                                    <td style='vertical-align: top; text-align: center;'>{data.nm_ttg}</td>
+                                    <td style='vertical-align: top; text-align: center;'>{data.tgl_lahir}</td>
+                                    <td style='vertical-align: top; text-align: center;'>{data.tgl_mul_ptg_ind}</td>
+                                    <td style='vertical-align: top; text-align: center;'>{data.tgl_akh_ptg_ind}</td>
+                                    <td style='vertical-align: top; text-align: center;'>{data.jk_wkt}</td>
+                                    <td style='vertical-align: top; text-align: center;'>{data.usia}</td>
+                                    <td style='vertical-align: top; text-align: center;'>{0}</td>
+                                    <td style='vertical-align: top; text-align: center;'>{0}</td>
+                                    <td style='vertical-align: top; text-align: center;'>{0}</td>
+                                    <td style='vertical-align: top; text-align: center;'>{0}</td>
+                                </tr>";
                 default:
                     return string.Empty;
             }

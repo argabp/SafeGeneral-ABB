@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang='id'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Lampiran Daftar Isi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            width: 90%;
+            margin: auto;
+            padding: 25px;
+        }
+
+        .h1 {
+            text-align: center;
+            font-size: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            /* margin-bottom: 15px; */
+        }
+
+        .section {
+            margin-top: 10px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table td {
+            padding: 8px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class='container'>
+    <div class='h1'>DAFTAR PESERTA ASURANSI KECELAKAAN DIRI PRIMA (SiRAMA)</div>
+    <div class='h1'>PROGRAM ASURANSI KECELKAAN DIRI UNTUK PESERTA KREDIT DENGAN PERTANGGUNGAN MENURUN</div>
+    <div class='h1'>DEBITUR BANK / LEMBAGA KEUANGAN: {{nm_polis}}</div>
+    <div class='h1'>NO. POLIS INDUK: {{no_pol_induk}}</div>
+    <div class='section'>
+        <table class='table'>
+            <tr>
+                <td style='vertical-align: top; text-align: left; border-bottom: 1px solid;' colspan=10><strong>No. Sertifikat : {{no_pol_ttg}}</strong></td>
+                <td style='vertical-align: top; text-align: center; border-bottom: 1px solid;'>Dalam Rupiah</td>
+            </tr>
+            <tr>
+                <td style='width: 3%; text-align: center; border-bottom: 1px solid;' rowspan='2'>NO.</td>
+                <td style='width: 20%; text-align: center; border-bottom: 1px solid;' rowspan='2'>NAMA</td>
+                <td style='width: 20%; text-align: center; border-bottom: 1px solid;' rowspan='2'>Lahir</td>
+                <td style='width: 5%;  text-align: center;' colspan='2'>TANGGAL</td>
+                <td style='width: 10%; text-align: center; border-bottom: 1px solid;' rowspan='2'>MASA ASURANSI (Bulan)</td>
+                <td style='width: 10%; text-align: center; border-bottom: 1px solid;' rowspan='2'>USIA (Tahun)</td>
+                <td style='width: 10%; text-align: center; border-bottom: 1px solid;' rowspan='2'>UANG Pertanggungan</td>
+                <td style='width: 10%; text-align: center; border-bottom: 1px solid;' rowspan='2'>PREMI DASAR (PA + ND)</td>
+                <td style='width: 10%; text-align: center; border-bottom: 1px solid;' rowspan='2'>PREMI TAMBAHAN (PHK)</td>
+                <td style='width: 10%; text-align: center; border-bottom: 1px solid;' rowspan='2'>PREMI</td>
+            </tr>
+            <tr>
+                <td style='vertical-align: top; text-align: center; border-bottom: 1px solid;'>Mulai Asuransi</td>
+                <td style='vertical-align: top; text-align: center; border-bottom: 1px solid;'>Akhir Asuransi</td>
+            </tr>
+            <tr>
+                <td style='vertical-align: top; text-align: left; padding-left: 2em' colspan=11>Natural Death</td>
+            </tr>
+            {{detail}}
+            <tr>
+                <td style='vertical-align: top; text-align: left; border-top: 1px solid;border-bottom: 1px solid' colspan=7><strong>TOTAL</strong></td>
+                <td style='vertical-align: top; text-align: left; border-top: 1px solid;border-bottom: 1px solid'><strong>{{total_uang_pertanggungan}}</strong></td>
+                <td style='vertical-align: top; text-align: left; border-top: 1px solid;border-bottom: 1px solid'><strong>{{total_premi_dasar}}</strong></td>
+                <td style='vertical-align: top; text-align: left; border-top: 1px solid;border-bottom: 1px solid'><strong>{{total_premi_tambahan}}</strong></td>
+                <td style='vertical-align: top; text-align: left; border-top: 1px solid;border-bottom: 1px solid'><strong>{{total_premi}}</strong></td>
+            </tr>
+            <tr>
+                <td style='vertical-align: top; text-align: left;' colspan=7><strong>Ket</strong></td>
+                <td style='vertical-align: top; text-align: center;' colspan=4>{{kd_cb}}, {{tgl_closing_ind}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>
