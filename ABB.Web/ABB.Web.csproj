@@ -5417,6 +5417,45 @@
       <None Update="Modules\Akseptasi\JS\akseptasi.copyEndors.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\Reports\Templates\LampiranPolisCargoDaftarisi.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Reports\Templates\LampiranPolisFireDaftarIsi.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Reports\Templates\LampiranPolisMotorDetil.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Reports\Templates\LampiranPolisMotorListing.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Reports\Templates\LampiranPolisPABiasaDaftarisi.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Reports\Templates\LampiranPolisPASiramaObyek.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Reports\Templates\PolisBondingPelaksanaan.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Reports\Templates\PolisBondingPemeliharaan.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Reports\Templates\PolisBondingPenawaran.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Reports\Templates\PolisBondingUangMuka.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Reports\Templates\PolisHoleinoneSingle.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Reports\Templates\PolisPABiasaSingle.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Reports\Templates\PolisPASiramaMulti.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
