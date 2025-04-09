@@ -39,7 +39,9 @@ namespace ABB.Application.CetakSchedulePolis.Queries
             "LampiranPolisFireDaftarIsi.html",
             "LampiranPolisPASiramaObyek.html",
             "LampiranPolisPABiasaDaftarisi.html",
-            "LampiranPolisCargoDaftarisi.html"
+            "LampiranPolisCargoDaftarisi.html",
+            "LampiranPolisMotorListing.html",
+            "LampiranPolisMotorDetil.html"
         };
 
         private List<string> MultipleReport = new List<string>()
@@ -77,7 +79,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
             var cetakSchedulePolisData = (await _connectionFactory.QueryProc<CetakSchedulePolisDto>(storeProcedureName, 
                 new
                 {
-                    input_str = $"JK50,C,0203,24,00003,0,GOLDEN SHIELD PTE LTD"
+                    input_str = $"JK50,M,0151,24,00001,0,PT. BRI MULTIFINANCE QQ PT. ASANDO KARYA"
                     // input_str = $"{request.kd_cb.Trim()},{request.kd_cob.Trim()},{request.kd_scob.Trim()}," +
                     //             $"{request.kd_thn},{request.no_pol.Trim()},{request.no_updt},{request.nm_ttg?.Trim()}"
                 })).ToList();
@@ -187,7 +189,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                     cetakSchedulePolis.kd_penerangan, cetakSchedulePolis.symbol,
                     cetakSchedulePolis.ket_rsk, cetakSchedulePolis.nm_mtu,
                     cetakSchedulePolis.nm_grp_oby, cetakSchedulePolis.nm_grp_oby_1,
-                    sub_total_kebakaran, cetakSchedulePolis.cover
+                    sub_total_kebakaran, cetakSchedulePolis.cover, cetakSchedulePolis.tgl_closing
                 } );
             }
             
@@ -260,19 +262,361 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                                     <td style='vertical-align: top; text-align: center;'>{0}</td>
                                     <td style='vertical-align: top; text-align: center;'>kd_usr</td>
                                 </tr>";
-                case "LampiranPolisCargoDaftarisi.html":
+                case "LampiranPolisMotorListing.html":
                     
                     //TODO logic here
                     
                     return @$"<tr>
-                                    <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{sequence}</td>
-                                    <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.jns_brg}</td>
-                                    <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.penerima_brg}<br>{data.tempat_brkg} / {data.tempate_tiba}</td>
-                                    <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.nm_kapal}</td>
-                                    <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.tgl_brkg}<br>{data.desk_kond}</td>
-                                    <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.nilai_prm}<br>{data.pst_rate_prm} {data.stn_rate_prm}</td>
-                                    <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.pst_deduct}</td>
-                                </tr>";
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{sequence}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.nm_jns_kend}/{data.nm_merk_kend}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{0}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.no_rangka}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.nilai_casco}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{0}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.nilai_prm_casco}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.nilai_prm}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.nilai_rsk_sendiri}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.nilai_pap}</td>
+                            </tr>
+
+                            <tr>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.no_msn}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.nm_utk}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.nilai_tjh}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.nilai_pad}</td>
+                            </tr>
+
+                            <tr>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.tipe_kend}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.jml_tempat_ddk}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.perlengkapan}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>Banjir</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.pst_rate_banjir} {data.stn_rate_banjir}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.nilai_prm_banjir}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.nilai_tjp}</td>
+                            </tr>
+
+                            <tr>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.kd_jns_ptg}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.nm_pemilik}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.no_pls}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>Gempa Bumi</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.pst_rate_aog} {data.stn_rate_aog}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.nilai_prm_aog}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                            </tr>
+
+                            <tr>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.tgl_mul_ptg} s/d {data.tgl_akh_ptg}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>Huru-Hara</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.pst_rate_hh} {data.stn_rate_hh}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.nilai_prm_hh}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                            </tr>
+
+                            <tr>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>TRS</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.pst_rate_trs} {data.stn_rate_trs}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.nilai_prm_trs}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                            </tr>
+
+                            <tr>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>Kec. Diri Pap.</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.nilai_prm_pap}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.nilai_prm_pap}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>0,500 %</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                            </tr>
+
+                            <tr>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>Kec. Diri Png.</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.nilai_prm_pad}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.nilai_prm_pad}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>1,000 %</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                            </tr>
+
+                            <tr>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>TJH</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.nilai_prm_tjh}</td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                            </tr>
+                            <tr>
+
+                            <tr>
+                                <td style='vertical-align: top; text-align: center;border-top: 1px solid;border-left: 1px solid;border-bottom: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-top: 1px solid;border-bottom: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-top: 1px solid;border-bottom: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-top: 1px solid;border-bottom: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-top: 1px solid;border-bottom: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-top: 1px solid;border-bottom: 1px solid;'>{0}</td>
+                                <td style='vertical-align: top; text-align: center;border-top: 1px solid;border-bottom: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-top: 1px solid;border-bottom: 1px solid;'>{0}</td>
+                                <td style='vertical-align: top; text-align: center;border-top: 1px solid;border-bottom: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-top: 1px solid;border-bottom: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: center;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;'></td>
+                            </tr>";
+                case "LampiranPolisMotorDetil.html":
+                    
+                    //TODO logic here
+                    
+                    return @$"<table>
+                              <tr>
+                                <td style='width: 5%;'>{sequence}</td>
+                                <td style='width: 20%;'>MERK / JENIS / TAHUN / WARNA</td>
+                                <td style='width: 1%;'>:</td>
+                                <td style='width: 60%;' colspan='6'></td>
+                                <td>Rate : </td>
+                              </tr>
+                              <tr>
+                                <td></td>
+                                <td>NOMOR POLISI</td>
+                                <td>:</td>
+                                <td colspan='8'>{data.no_pls}</td>
+                              </tr>
+                              <tr>
+                                <td></td>
+                                <td>PENGGUNAAN KENDARAAN</td>
+                                <td>:</td>
+                                <td colspan='8'>{data.nm_utk}</td>
+                              </tr>
+                              <tr>
+                                <td></td>
+                                <td>NO. RANGKA / MESIN</td>
+                                <td>:</td>
+                                <td colspan='8'>{data.no_rangka} / {data.no_msn}</td>
+                              </tr>
+                              <tr>
+                                <td></td>
+                                <td>JUMLAH TEMPAT DUDUK</td>
+                                <td>:</td>
+                                <td colspan='8'>{data.jml_tempat_ddk} Orang</td>
+                              </tr>
+                              <tr>
+                                <td></td>
+                                <td>RESIKO SENDIRI</td>
+                                <td>:</td>
+                                <td colspan='8'>{data.symbol} {data.nilai_rsk_sendiri}</td>
+                              </tr>
+                              <tr>
+                                <td></td>
+                                <td>MASA PERTANGGUNGAN</td>
+                                <td>:</td>
+                                <td colspan='8'>{data.jk_wkt_ptg} ha</td>
+                              </tr>
+                              <tr>
+                                <td></td>
+                                <td>HARGA PERTANGGUNGAN</td>
+                                <td>:</td>
+                                <td style='width: 18%;'>{data.symbol} {data.nilai_casco_1}</td>
+                                <td style='width: 1%;'>=</td>
+                                <td style='width: 15%;'>{data.nilai_casco_2}</td>
+                                <td style='width: 15%;'>x {data.pst_rate} %</td>
+                                <td style='width: 1%;'>=</td>
+                                <td colspan='3'>{data.symbol} {data.nilai_prm_casco}</td>
+                              </tr>
+                              <tr>
+                                <td></td>
+                                <td>TJH PIHAK KETIGA</td>
+                                <td>:</td>
+                                <td style='width: 18%;'>{data.symbol} {data.nilai_tjh}</td>
+                                <td style='width: 1%;'></td>
+                                <td style='width: 15%;'></td>
+                                <td style='width: 15%;'></td>
+                                <td style='width: 1%;'>=</td>
+                                <td colspan='3'>{data.symbol} {data.nilai_prm_tjh}</td>
+                              </tr>
+                              <tr>
+                                <td></td>
+                                <td>Premi Huru-hara</td>
+                                <td>:</td>
+                                <td style='width: 18%;'></td>
+                                <td style='width: 1%;'>=</td>
+                                <td style='width: 15%;'>{data.nilai_casco}</td>
+                                <td style='width: 15%;'>x {data.pst_rate} %</td>
+                                <td style='width: 1%;'>=</td>
+                                <td colspan='3'>{data.symbol} {data.nilai_prm_hh_1}</td>
+                              </tr>
+                              <tr>
+                                <td></td>
+                                <td>Premi Bencana Alam</td>
+                                <td>:</td>
+                                <td style='width: 18%;'></td>
+                                <td style='width: 1%;'>=</td>
+                                <td style='width: 15%;'>{data.nilai_casco_3}</td>
+                                <td style='width: 15%;'>x {data.pst_rate} %</td>
+                                <td style='width: 1%;'>=</td>
+                                <td colspan='3'>{data.symbol} {data.nilai_prm_aog}</td>
+                              </tr>
+                              <tr>
+                                <td></td>
+                                <td>Premi Banjir</td>
+                                <td>:</td>
+                                <td style='width: 18%;'></td>
+                                <td style='width: 1%;'>=</td>
+                                <td style='width: 15%;'>{data.nilai_casco_4}</td>
+                                <td style='width: 15%;'>x {data.pst_rate} %</td>
+                                <td style='width: 1%;'>=</td>
+                                <td colspan='3'>{data.symbol} {data.nilai_prm_banjir}</td>
+                              </tr>
+                              <tr>
+                                <td></td>
+                                <td>Premi TRS</td>
+                                <td>:</td>
+                                <td style='width: 18%;'></td>
+                                <td style='width: 1%;'>=</td>
+                                <td style='width: 15%;'>{data.nilai_casco+5}</td>
+                                <td style='width: 15%;'>x {data.pst_rate} %</td>
+                                <td style='width: 1%;'>=</td>
+                                <td colspan='3'>{data.symbol} {data.nilai_prm_trs}</td>
+                              </tr>
+                              <tr>
+                                <td></td>
+                                <td>PA Penumpang</td>
+                                <td>:</td>
+                                <td style='width: 18%;'>{data.symbol} {data.nilai_pap}</td>
+                                <td style='width: 1%;'></td>
+                                <td style='width: 15%;'></td>
+                                <td style='width: 15%;'></td>
+                                <td style='width: 1%;'>=</td>
+                                <td colspan='3'>{data.symbol} {data.nilai_prm_pap}</td>
+                              </tr>
+                              <tr>
+                                <td></td>
+                                <td>PA Pengemudi</td>
+                                <td>:</td>
+                                <td style='width: 18%;'>{data.symbol} {data.nilai_pad}</td>
+                                <td style='width: 1%;'></td>
+                                <td style='width: 15%;'></td>
+                                <td style='width: 15%;'></td>
+                                <td style='width: 1%;'>=</td>
+                                <td colspan='3'>{data.symbol} {data.nilai_prm_pad}</td>
+                              </tr>
+                              <tr>
+                                <td></td>
+                                <td>TJH Penumpang Pihak Ketiga</td>
+                                <td>:</td>
+                                <td style='width: 18%;'>{data.symbol} {data.nilai_tjp}</td>
+                                <td style='width: 1%;'></td>
+                                <td style='width: 15%;'></td>
+                                <td style='width: 15%;'></td>
+                                <td style='width: 1%;'>=</td>
+                                <td colspan='3'>{data.symbol} {data.nilai_prm_tkp}</td>
+                              </tr>
+                              <tr>
+                                <td></td>
+                                <td>ME Penumpang</td>
+                                <td>:</td>
+                                <td style='width: 18%;'>{data.symbol} {data.nilai_pap_med}</td>
+                                <td style='width: 1%;'></td>
+                                <td style='width: 15%;'></td>
+                                <td style='width: 15%;'></td>
+                                <td style='width: 1%;'>=</td>
+                                <td colspan='3'>{data.symbol} {data.nilai_prm_pap_med}</td>
+                              </tr>
+                              <tr>
+                                <td></td>
+                                <td>ME Pengemudi</td>
+                                <td>:</td>
+                                <td style='width: 18%;'>{data.symbol} {data.nilai_pad_med}</td>
+                                <td style='width: 1%;'></td>
+                                <td style='width: 15%;'></td>
+                                <td style='width: 15%;'></td>
+                                <td style='width: 1%;'>=</td>
+                                <td colspan='3'>{data.symbol} {data.nilai_prm_pad_med}</td>
+                              </tr>
+                              <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td style='width: 18%;'>------------------------------------------</td>
+                                <td style='width: 1%;'></td>
+                                <td style='width: 15%;'></td>
+                                <td style='width: 15%;'></td>
+                                <td style='width: 1%;'></td>
+                                <td colspan='3'>---------------------------------------------------</td>
+                              </tr>
+                              <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td style='width: 18%;'>sum {data.symbol} {data.nilai_casco} + {data.nilai_tjh}</td>
+                                <td style='width: 1%;'></td>
+                                <td style='width: 15%;'></td>
+                                <td style='width: 15%;'></td>
+                                <td style='width: 1%;'></td>
+                                <td colspan='3'>sum {data.symbol} {data.nilai_prm_casco} + {data.nilai_prm_tjh}</td>
+                              </tr>
+                              <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td style='width: 18%;'>------------------------------------------</td>
+                                <td style='width: 1%;'></td>
+                                <td style='width: 15%;'></td>
+                                <td style='width: 15%;'></td>
+                                <td style='width: 1%;'></td>
+                                <td colspan='3'>---------------------------------------------------</td>
+                              </tr>
+                            </table>
+                            <hr class='s1'>
+                            <!-- Total -->
+                            <h3>TOTAL PREMIUM :</h3>
+                            <table>
+                              <tr><td>HP CASCO</td><td>: xxxxxxxxxxxxxxxxxxx</td></tr>
+                              <tr><td>HP TJH</td><td>: xxxxxxxxxxxxxxxxxxxxxx</td></tr>
+                              <tr><td><strong>PREMI</strong></td><td>: <strong>xxxxxxxxxxxxxxxxxxx</strong></td></tr>
+                            </table>";
                 default:
                     return string.Empty;
             }

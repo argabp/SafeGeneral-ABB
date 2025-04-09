@@ -65,6 +65,12 @@ namespace ABB.Application.Common
             },
             {
                 "d_uw01r_18do_i", "LampiranPolisCargoDaftarisi.html"
+            },
+            {
+                "d_uw01r_27", "LampiranPolisMotorListing.html"
+            },
+            {
+                "d_uw01r_06do", "LampiranPolisMotorDetil.html"
             }
         };
         
@@ -129,6 +135,12 @@ namespace ABB.Application.Common
             },
             {
                 "LampiranPolisCargoDaftarisi.html", "spr_uw01r_18i_m_do" 
+            },
+            {
+                "LampiranPolisMotorListing.html", "spr_uw01r_27" 
+            },
+            {
+                "LampiranPolisMotorDetil.html", "spr_uw01r_06do" 
             }
         };
 

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Perincian Data Kendaraan Bermotor</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      margin: 30px;
+    }
+    h2, h3 {
+      text-align: left;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      padding: 6px;
+      text-align: left;
+    }
+    .no-border {
+      border: none;
+    }
+    .right {
+      text-align: right;
+    }
+    .center {
+      text-align: center;
+    }
+    hr.s1{
+      height:5px;
+      order-top:1px solid black;
+      border-bottom:2px solid black;
+    }
+  </style>
+</head>
+<body>
+
+<h2><u>PERINCIAN DATA KENDARAAN BERMOTOR</u></h2>
+
+<table class="no-border">
+  <tr>
+    <td style="width: 15%;">NO. POLIS</td>
+    <td style="width: 1%;">:</td>
+    <td>{{no_pol_ttg}}</td>
+  </tr>
+  <tr>
+    <td style="width: 15%;">TERTANGGUNG</td>
+    <td style="width: 1%;">:</td>
+    <td>{{nm_ttg}}</td>
+  </tr>
+</table>
+
+<h3>BENTUK PERTANGGUNGAN : [ E ] ALL RISK</h3>
+
+{{detail}}
+
+</body>
+</html>

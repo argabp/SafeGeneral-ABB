@@ -1,7 +1,13 @@
 ﻿
 function searchFilterCopyEndors() {
     return {
-        searchkeyword: $("#SearchKeywordCopyEndors").val()
+        searchkeyword: $("#SearchKeywordCopyEndors").val(),
+        kd_cb: $("#kd_cb").val(),
+        kd_cob: $("#kd_cob").val(),
+        kd_scob: $("#kd_scob").val(),
+        kd_thn: $("#kd_thn").val(),
+        no_pol: $("#no_aks").val(),
+        no_updt: $("#no_updt").val(),
     }
 }
 
@@ -83,7 +89,7 @@ function btnInsertCopyEndors_OnClick(e) {
     showConfirmation('Confirmation', `Apakah akan melanjutkan proses Copy Endorsment Insert?`,
         function () {
             showProgressOnGrid('#CopyEndorsGrid');
-            setTimeout(function () { copyEndorsUpdate(dataItem); }, 500);
+            setTimeout(function () { copyEndorsInsert(dataItem); }, 500);
         }
     );
 }

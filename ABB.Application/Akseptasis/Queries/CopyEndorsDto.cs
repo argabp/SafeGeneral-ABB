@@ -25,6 +25,8 @@ namespace ABB.Application.Akseptasis.Queries
 
         public string kd_endt { get; set; }
 
+        public string ket_rsk { get; set; }
+
         public void Mapping(Profile profile)
         {
             profile.CreateMap<CopyEndorsDto, CopyEndorsUpdateDeleteCommand>();

@@ -1746,12 +1746,19 @@ namespace ABB.Web.Modules.Akseptasi
 
         #region Copy Endors
         
-        public async Task<ActionResult> GetCopyEndorsDto([DataSourceRequest] DataSourceRequest request, string searchkeyword)
+        public async Task<ActionResult> GetCopyEndors([DataSourceRequest] DataSourceRequest request,
+            string searchkeyword, string kd_cb, string kd_cob, string kd_scob, string kd_thn, string no_pol, Int16 no_updt)
         {
             var ds = await Mediator.Send(new GetCopyEndorsQuery()
             {
                 SearchKeyword = searchkeyword,
-                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty
+                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                kd_cb = kd_cb,
+                kd_cob = kd_cob,
+                kd_scob = kd_scob,
+                kd_thn = kd_thn,
+                no_pol = no_pol,
+                no_updt = no_updt,
             });
 
             return Json(ds.AsQueryable().ToDataSourceResult(request));

@@ -19,7 +19,7 @@
     @(Html.Kendo().Grid<CopyEndorsDto>()
         .Name("CopyEndorsGrid")
         .DataSource(dataSource => dataSource.Ajax()
-            .Read(read => read.Action("GetCopyEndorsDto", "Akseptasi").Data("searchFilterCopyEndors"))
+            .Read(read => read.Action("GetCopyEndors", "Akseptasi").Data("searchFilterCopyEndors"))
             .Model(model => model.Id(p => p.Id))
         )
         .Columns(columns =>
@@ -27,6 +27,7 @@
             columns.Bound(col => col.no_rsk).Width(50).Title("Nomor Resiko");
             columns.Bound(col => col.no_updt).Width(50).Title("Nomor Update");
             columns.Bound(col => col.kd_endt).Width(150).Title("Kode Endorstment");
+            columns.Bound(col => col.ket_rsk).Width(150).Title("Keterangnan Resiko");
             columns.Command(command =>
             {
                 command.Custom("DeleteCopyEndors")

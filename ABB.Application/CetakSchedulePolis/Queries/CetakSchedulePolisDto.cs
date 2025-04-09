@@ -230,5 +230,44 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         public decimal? pst_rate_prm { get; set; }
         public string? stn_rate_prm { get; set; }
         public decimal? pst_deduct { get; set; }
+        public decimal? nilai_casco { get; set; }
+        public decimal? nilai_prm_casco { get; set; }
+        public decimal? nilai_rsk_sendiri { get; set; }
+        public decimal? nilai_pap { get; set; }
+        public decimal? nilai_tjh { get; set; }
+        public decimal? nilai_pad { get; set; }
+        public string? tipe_kend { get; set; }
+        public string? nm_merk_kend { get; set; }
+        public string? perlengkapan { get; set; }
+        public decimal? pst_rate_banjir { get; set; }
+        public decimal? nilai_prm_banjir { get; set; }
+        public decimal? stn_rate_banjir { get; set; }
+        public decimal? nilai_tjp { get; set; }
+        public string? kd_jns_ptg { get; set; }
+        public string? nm_pemilik { get; set; }
+        public decimal? pst_rate_aog { get; set; }
+        public decimal? stn_rate_aog { get; set; }
+        public decimal? nilai_prm_aog { get; set; }
+        public decimal? pst_rate_hh { get; set; }
+        public decimal? stn_rate_hh { get; set; }
+        public decimal? nilai_prm_hh { get; set; }
+        public decimal? pst_rate_trs { get; set; }
+        public decimal? stn_rate_trs { get; set; }
+        public decimal? nilai_prm_trs { get; set; }
+        public decimal? nilai_prm_pap { get; set; }
+        public decimal? nilai_prm_pad { get; set; }
+        public decimal? nilai_prm_tjh { get; set; }
+        public string? tgl_closing { get; set; }
+        public decimal? nilai_casco_1 { get; set; }
+        public decimal? nilai_casco_2 { get; set; }
+        public decimal? pst_rate { get; set; }
+        public decimal? nilai_prm_hh_1 { get; set; }
+        public decimal? nilai_casco_3 { get; set; }
+        public decimal? nilai_casco_4 { get; set; }
+        public decimal? nilai_prm_tkp { get; set; }
+        public decimal? nilai_pap_med { get; set; }
+        public decimal? nilai_prm_pap_med { get; set; }
+        public decimal? nilai_pad_med { get; set; }
+        public decimal? nilai_prm_pad_med { get; set; }
     }
 }
