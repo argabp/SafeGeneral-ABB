@@ -5456,6 +5456,12 @@
       <None Update="Modules\Reports\Templates\PolisPASiramaMulti.html">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\LaporanProduksiAsuransi\JS\laporanProduksiAsuransi.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Reports\Templates\LaporanProduksiAsuransi.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

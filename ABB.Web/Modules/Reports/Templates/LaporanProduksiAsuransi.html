@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang='id'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Laporan Produksi Asuransi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .h1 {
+            text-align: center;
+            font-size: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            /* margin-bottom: 15px; */
+        }
+
+        .section {
+            margin-top: 10px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table td {
+            padding: 8px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+{{details}}
+<table class='table'>
+    <tr>
+        <td colspan=6 style='border-bottom: 1px solid; width: 60%'>TOTAL KESELURUHAN DALAM RUPIAH</td>
+        <td style='border-bottom: 1px solid;text-align: right'></td>
+        <td style='border-bottom: 1px solid;text-align: right'>{{total_semua_nilai_prm}}</td>
+        <td style='border-bottom: 1px solid;text-align: right'>{{total_semua_nilai_dis}}<br>{{total_semua_nilai_kms}}</td>
+        <td style='border-bottom: 1px solid;text-align: right'>{{total_semua_premi_netto}}</td>
+        <td style='border-bottom: 1px solid;text-align: right'>{{total_semua_nilai_bia_pol}}</td>
+        <td style='border-bottom: 1px solid;text-align: right'>{{total_semua_nilai_bia_mat}}</td>
+        <td style='border-bottom: 1px solid;text-align: right'>{{total_semua_group}}</td>
+    </tr>
+    <tr>
+        <td colspan=10></td>
+        <td colspan=3 style='text-align: center'><strong>Departement Underwriting</strong></td>
+    </tr>
+    <tr>
+        <td colspan=10></td>
+        <td colspan=3 style='text-align: center'>{{nm_cb}}, {{date}}</td>
+    </tr>
+</table>
+</body>
+</html>

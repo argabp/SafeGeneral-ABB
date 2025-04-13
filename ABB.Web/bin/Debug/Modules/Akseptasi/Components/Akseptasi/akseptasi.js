@@ -259,7 +259,7 @@ function OnPolisIndukChange(e){
 }
 
 function OnKodeRekananTertanggungChange(e){
-    ajaxGet(`/PolisInduk/GetKodeRekananTertanggung?kd_cb=${$("#kd_cb").val()}&kd_grp_rk=${$("#kd_grp_ttg").val()}&kd_rk=${e.sender._cascadedValue}`, (returnValue) => {
+    ajaxGet(`/Akseptasi/GetKodeRekananTertanggung?kd_cb=${$("#kd_cb").val()}&kd_grp_rk=${$("#kd_grp_ttg").val()}&kd_rk=${e.sender._cascadedValue}`, (returnValue) => {
         var strings = returnValue.split(",");
         $("#nm_ttg").getKendoTextBox().value(strings[1]);
         $("#almt_ttg").getKendoTextArea().value(strings[4]);

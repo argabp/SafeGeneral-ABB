@@ -18,13 +18,13 @@ namespace ABB.Infrastructure.Services
             _profilePictureHelper = profilePictureHelper;
         }
 
-        public void GenerateReport(string reportName, string templateReport, string path)
+        public void GenerateReport(string reportName, string templateReport, string path, Orientation orientation = Orientation.Portrait)
         {
             var doc = new HtmlToPdfDocument()
             {
                 GlobalSettings = {
                     ColorMode = ColorMode.Color,
-                    Orientation = DinkToPdf.Orientation.Portrait,
+                    Orientation = orientation,
                     PaperSize = PaperKind.A4,
                 },
                 Objects = {

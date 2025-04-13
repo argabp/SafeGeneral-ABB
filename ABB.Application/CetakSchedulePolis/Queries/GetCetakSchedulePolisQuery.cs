@@ -261,6 +261,19 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                                     <td style='vertical-align: top; text-align: center;'>{0}</td>
                                     <td style='vertical-align: top; text-align: center;'>kd_usr</td>
                                 </tr>";
+                case "LampiranPolisCargoDaftarisi.html":
+                    
+                    //TODO logic here
+                    
+                    return @$"<tr>
+                                    <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{sequence}</td>
+                                    <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.jns_brg}</td>
+                                    <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.penerima_brg}<br>{data.tempat_brkg} / {data.tempate_tiba}</td>
+                                    <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.nm_kapal}</td>
+                                    <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.tgl_brkg}<br>{data.desk_kond}</td>
+                                    <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.nilai_prm}<br>{data.pst_rate_prm} {data.stn_rate_prm}</td>
+                                    <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.pst_deduct}</td>
+                                </tr>";
                 case "LampiranPolisMotorListing.html":
                     
                     //TODO logic here
