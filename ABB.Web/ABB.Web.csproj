@@ -5462,6 +5462,18 @@
       <None Update="Modules\Reports\Templates\LaporanProduksiAsuransi.html">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\LaporanProduksiAsuransiKeluar\JS\laporanProduksiAsuransiKeluar.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Reports\Templates\LaporanProduksiAsuransiKeluar.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\LaporanProduksiAsuransiMasuk\JS\laporanProduksiAsuransiMasuk.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Reports\Templates\LaporanProduksiAsuransiMasuk.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

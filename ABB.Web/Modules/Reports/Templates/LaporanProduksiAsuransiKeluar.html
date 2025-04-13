@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang='id'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Laporan Produksi Asuransi Keluar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .h1 {
+            text-align: center;
+            font-size: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            /* margin-bottom: 15px; */
+        }
+
+        .section {
+            margin-top: 10px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table td {
+            padding: 8px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+{{details}}
+<table class='table'>
+    <tr>
+        <td colspan=4 style='border-bottom: 1px solid; width: 60%'>Total Keseluruhan Nilai</td>
+        <td style='border-bottom: 1px solid;text-align: right'>{{total_semua_sum_ins}}</td>
+        <td style='border-bottom: 1px solid;text-align: right'>{{total_semua_share_member}}</td>
+        <td style='border-bottom: 1px solid;text-align: right'>{{total_semua_premi_koas}}</td>
+        <td style='border-bottom: 1px solid;text-align: right'>{{total_semua_commission}}</td>
+        <td style='border-bottom: 1px solid;text-align: right'>{{total_semua_handling_fee}}</td>
+        <td style='border-bottom: 1px solid;text-align: right'>{{total_semua_amount_due_to_you}}</td>
+    </tr>
+</table>
+</body>
+</html>

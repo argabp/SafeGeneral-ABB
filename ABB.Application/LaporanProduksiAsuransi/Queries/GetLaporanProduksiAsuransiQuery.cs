@@ -73,13 +73,13 @@ namespace ABB.Application.LaporanProduksiAsuransi.Queries
             
 
             StringBuilder stringBuilder = new StringBuilder();
-            decimal? total_semua_nilai_prm = 0;
-            decimal? total_semua_nilai_dis = 0;
-            decimal? total_semua_nilai_kms = 0;
-            decimal? total_semua_premi_netto = 0;
-            decimal? total_semua_nilai_bia_pol = 0;
-            decimal? total_semua_nilai_bia_mat = 0;
-            decimal? total_semua_group = 0;
+            decimal total_semua_nilai_prm = 0;
+            decimal total_semua_nilai_dis = 0;
+            decimal total_semua_nilai_kms = 0;
+            decimal total_semua_premi_netto = 0;
+            decimal total_semua_nilai_bia_pol = 0;
+            decimal total_semua_nilai_bia_mat = 0;
+            decimal total_semua_group = 0;
             foreach (var nama_cob in nama_cobs)
             {
                 var sequence = 0;
@@ -146,39 +146,45 @@ namespace ABB.Application.LaporanProduksiAsuransi.Queries
                                                     <tr style='height: 50px;'>
                                                         <td style='font-weight: bold; border: 1px solid' colspan='13'>{nama_cob}</td>
                                                     </tr>");
-                decimal? total_nilai_prm = 0;
-                decimal? total_nilai_dis = 0;
-                decimal? total_nilai_kms = 0;
-                decimal? total_premi_netto = 0;
-                decimal? total_nilai_bia_pol = 0;
-                decimal? total_nilai_bia_mat = 0;
-                decimal? total_group = 0;
+                decimal total_nilai_prm = 0;
+                decimal total_nilai_dis = 0;
+                decimal total_nilai_kms = 0;
+                decimal total_premi_netto = 0;
+                decimal total_nilai_bia_pol = 0;
+                decimal total_nilai_bia_mat = 0;
+                decimal total_group = 0;
                 foreach (var data in laporanProduksiAsuransiDatas.Where(w => w.nm_cob == nama_cob))
                 {
                     sequence++;
-                    var premi_netto = data.nilai_prm - (data.nilai_dis + data.nilai_kms);
-                    var total_bia = data.nilai_bia_pol + data.nilai_bia_mat;
+                    var nilai_ttl_ptg = data.nilai_ttl_ptg == null ? "0" : data.nilai_ttl_ptg.Value.ToString("#,##0");
+                    var nilai_dis = data.nilai_dis == null ? "0" : data.nilai_dis.Value.ToString("#,##0");
+                    var nilai_prm = data.nilai_prm == null ? "0" : data.nilai_prm.Value.ToString("#,##0");
+                    var nilai_kms = data.nilai_kms == null ? "0" : data.nilai_kms.Value.ToString("#,##0");
+                    var nilai_bia_pol = data.nilai_ttl_ptg == null ? "0" : data.nilai_bia_pol.Value.ToString("#,##0");
+                    var nilai_bia_mat = data.nilai_ttl_ptg == null ? "0" : data.nilai_bia_mat.Value.ToString("#,##0");
+                    var premi_netto = Convert.ToDecimal(data.nilai_prm) - (Convert.ToDecimal(data.nilai_dis) + Convert.ToDecimal(data.nilai_kms));
+                    var total_bia = Convert.ToDecimal(data.nilai_bia_pol) + Convert.ToDecimal(data.nilai_bia_mat);
                     stringBuilder.Append(@$"<tr>
                                                 <td style='width: 3%;  text-align: left; vertical-align: top; border: 1px solid'>{sequence}</td>
                                                 <td style='width: 20%; text-align: left; vertical-align: top; border: 1px solid'>{data.no_pol_ttg}<br>{data.no_nota}</td>
                                                 <td style='width: 20%; text-align: left; vertical-align: top; border: 1px solid'>{data.nm_ttg}<br>{data.nm_qq}</td>
                                                 <td style='width: 10%; text-align: center; vertical-align: top; border: 1px solid'>{data.tgl_mul_ptg_ind} s/d {data.tgl_akh_ptg_ind}<br>{data.tgl_nt.Value.ToShortDateString()}</td>
-                                                <td style='width: 5%;  text-align: right; vertical-align: top; border: 1px solid'>{data.nilai_ttl_ptg.Value:#,##0}<br>{data.no_reg}</td>
+                                                <td style='width: 5%;  text-align: right; vertical-align: top; border: 1px solid'>{nilai_ttl_ptg}<br>{data.no_reg}</td>
                                                 <td style='width: 10%; text-align: left; vertical-align: top; border: 1px solid'>{data.kd_cvrg}</td>
                                                 <td style='width: 10%; text-align: center; vertical-align: top; border: 1px solid'>Rp.</td>
-                                                <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{data.nilai_prm.Value:#,##0}</td>
-                                                <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{data.nilai_dis.Value:#,##0}<br>{data.nilai_kms.Value:#,##0}</td>
-                                                <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{premi_netto.Value:#,##0}</td>
-                                                <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{data.nilai_bia_pol.Value:#,##0}</td>
-                                                <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{data.nilai_bia_mat.Value:#,##0}</td>
-                                                <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{total_bia.Value:#,##0}</td>
+                                                <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{nilai_prm}</td>
+                                                <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{nilai_dis}<br>{nilai_kms}</td>
+                                                <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{premi_netto}</td>
+                                                <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{nilai_bia_pol}</td>
+                                                <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{nilai_bia_mat}</td>
+                                                <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{total_bia}</td>
                                             </tr>");
-                    total_nilai_prm += data.nilai_prm;
-                    total_nilai_dis += data.nilai_dis;
-                    total_nilai_kms += data.nilai_kms;
+                    total_nilai_prm += Convert.ToDecimal(nilai_ttl_ptg);
+                    total_nilai_dis += Convert.ToDecimal(nilai_dis);
+                    total_nilai_kms += Convert.ToDecimal(nilai_kms);
                     total_premi_netto += premi_netto;
-                    total_nilai_bia_pol += data.nilai_bia_pol;
-                    total_nilai_bia_mat += data.nilai_bia_mat;
+                    total_nilai_bia_pol += Convert.ToDecimal(nilai_bia_pol);
+                    total_nilai_bia_mat += Convert.ToDecimal(nilai_bia_mat);
                     total_group += total_bia;
                 }
 
@@ -188,12 +194,12 @@ namespace ABB.Application.LaporanProduksiAsuransi.Queries
                                         <tr>
                                             <td colspan=6 style='border-bottom: 1px solid; border-top: 1px solid'>TOTAL DALAM ORIGINAL</td>
                                             <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: center'>Rp.</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{total_nilai_prm.Value:#,##0}</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{total_nilai_dis.Value:#,##0}<br>{total_nilai_kms.Value:#,##0}</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{total_premi_netto.Value:#,##0}</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{total_nilai_bia_pol.Value:#,##0}</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{total_nilai_bia_mat.Value:#,##0}</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{total_group.Value:#,##0}</td>
+                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{total_nilai_prm:#,##0}</td>
+                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{total_nilai_dis:#,##0}<br>{total_nilai_kms:#,##0}</td>
+                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{total_premi_netto:#,##0}</td>
+                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{total_nilai_bia_pol:#,##0}</td>
+                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{total_nilai_bia_mat:#,##0}</td>
+                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{total_group:#,##0}</td>
                                         </tr>
                                     </table>
                                     </div>");
@@ -209,13 +215,13 @@ namespace ABB.Application.LaporanProduksiAsuransi.Queries
             
             resultTemplate = templateProfileResult.Render( new
             {
-                total_semua_nilai_prm = total_semua_nilai_prm.Value.ToString("#,##0"), 
-                total_semua_nilai_dis = total_semua_nilai_dis.Value.ToString("#,##0"), 
-                total_semua_nilai_kms = total_semua_nilai_kms.Value.ToString("#,##0"),
-                total_semua_premi_netto = total_semua_premi_netto.Value.ToString("#,##0"), 
-                total_semua_nilai_bia_pol = total_semua_nilai_bia_pol.Value.ToString("#,##0"), 
-                total_semua_nilai_bia_mat = total_semua_nilai_bia_mat.Value.ToString("#,##0"),
-                total_semua_group = total_semua_group.Value.ToString("#,##0"),
+                total_semua_nilai_prm = total_semua_nilai_prm.ToString("#,##0"), 
+                total_semua_nilai_dis = total_semua_nilai_dis.ToString("#,##0"), 
+                total_semua_nilai_kms = total_semua_nilai_kms.ToString("#,##0"),
+                total_semua_premi_netto = total_semua_premi_netto.ToString("#,##0"), 
+                total_semua_nilai_bia_pol = total_semua_nilai_bia_pol.ToString("#,##0"), 
+                total_semua_nilai_bia_mat = total_semua_nilai_bia_mat.ToString("#,##0"),
+                total_semua_group = total_semua_group.ToString("#,##0"),
                 laporanProduksiAsuransiDatas[0].nm_cb,
                 date = DateTime.Now.ToString("dd MMMM yyyy"), details = stringBuilder.ToString()
             } );
