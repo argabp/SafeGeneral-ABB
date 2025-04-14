@@ -147,7 +147,10 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                     cetakSchedulePolis.kd_penerangan, cetakSchedulePolis.symbol,
                     cetakSchedulePolis.ket_rsk, cetakSchedulePolis.nm_mtu,
                     cetakSchedulePolis.nm_grp_oby, cetakSchedulePolis.nm_grp_oby_1,
-                    sub_total_kebakaran, detail = stringBuilder.ToString()
+                    sub_total_kebakaran, detail = stringBuilder.ToString(),
+                    cetakSchedulePolis.deduct, cetakSchedulePolis.nilai_prm_pkk,
+                    cetakSchedulePolis.no_pol_lama,cetakSchedulePolis.footer,
+                    cetakSchedulePolis.desk_deduct,
                 } );
             }
             else
@@ -674,14 +677,17 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                             cetakSchedulePolis.kt_cb, cetakSchedulePolis.nm_user,
                             cetakSchedulePolis.no_msn, cetakSchedulePolis.no_rangka,
                             cetakSchedulePolis.no_pls, cetakSchedulePolis.nilai_prm_pkm,
-                            cetakSchedulePolis.jml_tempat_ddk, cetakSchedulePolis.nm_jns_kend,
+                            cetakSchedulePolis.jml_tempat_ddk, cetakSchedulePolis.nm_merk_kend,
                             cetakSchedulePolis.desk_aksesoris, cetakSchedulePolis.nm_utk,
                             cetakSchedulePolis.no_oby, cetakSchedulePolis.desk_oby,
                             cetakSchedulePolis.ket_okup, cetakSchedulePolis.kd_kls_konstr,
                             cetakSchedulePolis.kd_penerangan, cetakSchedulePolis.symbol,
                             cetakSchedulePolis.ket_rsk, cetakSchedulePolis.nm_mtu,
                             cetakSchedulePolis.nm_grp_oby, cetakSchedulePolis.nm_grp_oby_1,
-                            sub_total_kebakaran
+                            cetakSchedulePolis.thn_buat, cetakSchedulePolis.nm_jns_kend,
+                            cetakSchedulePolis.footer, cetakSchedulePolis.desk_deduct,
+                            cetakSchedulePolis.nilai_prm_casco, cetakSchedulePolis.tempat_tiba,
+                            cetakSchedulePolis.tempat_brkt,
                         }));
                     }
 

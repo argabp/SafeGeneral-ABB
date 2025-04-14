@@ -18,7 +18,7 @@
 
         .h1 {
             text-align: center;
-            font-size: 11.5px;
+            font-size: 14px;
             font-weight: bold;
             text-transform: uppercase;
             margin-bottom: 10px;
@@ -35,23 +35,24 @@
 
         .table td {
             padding: 8px;
-            border: 1px solid black;
-			font-size: 8.5px;
+            /* border: 1px solid black; */
+			font-size: 10px;
         }
 		p {
 			text-align: justify;
-			font-size: 7px;
+			font-size: 12px;
+            font-style: italic;
 		}
 		h2 {
 			text-align: center;
-			font-size: 9.5px;
+			font-size: 12px;
 		}
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div class="h1">Polis Pengangkutan Barang</div>
+        <div class="h1"><u>Polis Pengangkutan Barang</u></div>
         <p>KAMI, bersama ini menyetujui, dengan pertimbangan pembayaran kepada 
 			kami oleh atau atas nama Tertanggung  premi sebagaimana yang telah  diatur, menanggung kerugian
 			kerusakan tanggung jawab atau biaya sesuai dengan lingkup dan cara yang diatur disini :
@@ -79,89 +80,109 @@
                     <td colspan="4">{{almt_ttg}}</td>
                 </tr>
                 <tr>
-                    <td>Penerima Barang</td>
+                    <td>Jenis Barang</td>
                     <td>:</td>
-                    <td colspan="4">{{consignee}}</td>
+                    <td colspan="4"><i>Terlampir</i></td>
                 </tr>
                 <tr>
                     <td>Harga Pertanggungan</td>
                     <td>:</td>
-                    <td colspan="4">{{kd_mtu_symbol_1}} {{nilai_ttl_ptg}}</td>
+                    <td>Harga Barang (Invoice)</td>
+                    <td>:</td>
+                    <td colspan="2"><i>Terlampir</i></td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
-                    <td colspan="4">{{ket_kurs}}</td>
+                    <td>Uang Tambang</td>
+                    <td>:</td>
+                    <td colspan="2">-</td>
                 </tr>
                 <tr>
-                    <td>No. Packing List / No. Dokumen</td>
+                    <td></td>
+                    <td></td>
+                    <td>Premi Asuransi</td>
                     <td>:</td>
-                    <td>{{no_po}}</td>
-                    <td>/</td>
-                    <td>{{no_lc}}</td>
+                    <td colspan="2">-</td>
                 </tr>
                 <tr>
-                    <td>Obyek Pertanggungan</td>
+                    <td></td>
+                    <td></td>
+                    <td>Keuntungan yang diharapkan</td>
                     <td>:</td>
-                    <td colspan="2">{{desk_oby_01}}</td>
+                    <td colspan="2">-</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="2"><hr></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>Jumlah</td>
+                    <td>:</td>
+                    <td colspan="2"><i>Terlampir</i></td>
+                </tr>
+                <tr>
+                    <td>Penerima Barang</td>
+                    <td>:</td>
+                    <td colspan="4"><i>Terlampir</i></td>
                 </tr>
                 <tr>
                     <td>Dari / Ke</td>
                     <td>:</td>
-                    <td>{{tempat_brkt}} / {{tempat_tiba}}</td>
+                    <td colspan="4"><i>Terlampir</i></td>
                 </tr>
                 <tr>
-                    <td>Nama Alat Angkut</td>
+                    <td>Alat Angkut</td>
                     <td>:</td>
-                    <td colspan="3">{{nm_kapal}}</td>
+                    <td colspan="4"><i>Terlampir</i></td>
                 </tr>
                 <tr>
-                    <td>Tanggal Pemberangkatan</td>
+                    <td>Tanggal keberangkatan</td>
                     <td>:</td>
-                    <td colspan="3">{{tgl_brkt}}</td>
+                    <td colspan="4"><i>Terlampir</i></td>
                 </tr>
                 <tr>
-                    <td>Nomor Faktur</td>
+                    <td>Pindah kapal, jika ada</td>
                     <td>:</td>
-                    <td colspan="3">{{no_inv}}</td>
+                    <td colspan="4"><i>Terlampir</i></td>
                 </tr>
                 <tr>
-                    <td>Surat Muat Laut</td>
+                    <td>Kondisi Pertanggungan</td>
                     <td>:</td>
-                    <td colspan="3">{{no_bl}}</td>
+                    <td colspan="4"><i>Terlampir</i></td>
                 </tr>
                 <tr>
-                    <td>Resiko Sendiri</td>
+                    <td>Klausul/Endorsment</td>
                     <td>:</td>
-                    <td colspan="3">{{desk_deduct}}</td>
+                    <td colspan="4"><i>Terlampir</i></td>
                 </tr>
                 <tr>
-                    <td>Daftar Kemasan</td>
+                    <td>Ketentuan Khusus</td>
                     <td>:</td>
-                    <td colspan="3">-</td>
+                    <td colspan="4">Terlampir</td>
                 </tr>
                 <tr>
-                    <td>Kondisi</td>
+                    <td>Suku Premi</td>
                     <td>:</td>
-                    <td colspan="3">{{desk_kond}}</td>
+                    <td colspan="4"><i>Terlampir</i></td>
                 </tr>
                 <tr>
-                    <td>Janji</td>
+                    <td>Deductible</td>
                     <td>:</td>
-                    <td colspan="3">-</td>
-                </tr>
-                <tr>
-                    <td>Klausul</td>
-                    <td>:</td>
-                    <td colspan="3">{{ket_klausula}}</td>
+                    <td colspan="4"><i>Terlampir</i></td>
                 </tr>
                 <tr>
                     <td>Perhitungan Premi</td>
                     <td>:</td>
-                    <td>{{pst_rate_prm}} {{stn_rate_prm}} x {{kd_mtu_symbol_2}} {{nilai_ttl_ptg_2}}</td>
+                    <td>{{pst_rate_prm}} {{stn_rate_prm}} x {{kd_mtu_symbol}} {{nilai_ttl_ptg_2}}</td>
 					<td></td>
                     <td>=</td>
-                    <td>{{kd_mtu_symbol_23}} {{nilai_prm}}</td>
+                    <td>{{kd_mtu_symbol}} {{nilai_prm}}</td>
                 </tr>
                 <tr>
                     <td></td>
@@ -169,7 +190,7 @@
                     <td>Diskon</td>
                     <td></td>
                     <td>=</td>
-                    <td>if (isnull)</td>
+                    <td>{{kd_mtu_symbol}} {{nilai_dis}}</td>
                 </tr>
                 <tr>
                     <td></td>
@@ -177,7 +198,7 @@
                     <td>Biaya Polis</td>
                     <td></td>
                     <td>=</td>
-                    <td>{{kd_mtu_symbol_23}} {{nilai_bia_pol}}</td>
+                    <td>{{kd_mtu_symbol}} {{nilai_bia_pol}}</td>
                 </tr>
                 <tr>
                     <td></td>
@@ -185,7 +206,7 @@
                     <td>Materai</td>
                     <td></td>
                     <td>=</td>
-                    <td>{{kd_mtu_symbol_23}} {{nilai_bia_mat}}</td>
+                    <td>{{kd_mtu_symbol}} {{nilai_bia_mat}}</td>
                 </tr>
                 <tr>
                     <td></td>
@@ -201,7 +222,7 @@
                     <td></td>
                     <td></td>
                     <td>=</td>
-                    <td>string(nilai_ttl - nilai_di)</td>
+                    <td>{{nilai_ttl}}</td>
                 </tr>
                 <tr>
                     <td>{{nilai_dis}}</td>
@@ -230,7 +251,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td colspan="2" align="center"><br><br><br><br><br><br><br><br><br><br><br><strong><u>Ati Nofianti, A.Md, As. K</u></strong></td>
+                    <td colspan="2" align="center"><br><br><br><br><br><br><strong><u>Ati Nofianti, A.Md, As. K</u></strong></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -240,28 +261,7 @@
                     <td colspan="2" align="center"><strong>Kepala Divisi Underwriting</strong></td>
                 </tr>
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td colspan="6" align="center">{{st_title3}}</td>
-                </tr>
-                <tr>
-                    <td colspan="6" align="center">{{st_title6}}</td>
-                </tr>
-                <tr>
-                    <td colspan="6" align="center">{{st_title4}}</td>
+                    <td colspan="6" align="center">{{footer}}</td>
                 </tr>
 			</table>
         </div>

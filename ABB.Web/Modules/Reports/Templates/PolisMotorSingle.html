@@ -64,14 +64,7 @@
 		<td style="width: 2.5%;"></td>
 		<td style="width: 22.3%;"></td>
 		<td style="width: 2.5%"></td>
-		<td>Mulai dari tanggal {{tgl_mul_ptg_ind}} sampai dengan tanggal {{tgl_akh_ptg_ind}}</td>
-
-	</tr>
-	<tr>
-		<td style="width: 2.5%;"></td>
-		<td style="width: 22.3%;"></td>
-		<td style="width: 2.5%"></td>
-		<td colspan="5">(Kedua hari tersebut pada pukul 12.00 tengah hari) waktu dimana polis diterbitkan.</td>
+		<td>Mulai dari tanggal {{tgl_mul_ptg_ind}} sampai dengan tanggal {{tgl_akh_ptg_ind}} (Kedua hari tersebut pada pukul 12.00 tengah hari) waktu dimana polis diterbitkan.</td>
 	</tr>
 	<tr>
 		<td style="width: 2.5%;">4.</td>
@@ -89,13 +82,13 @@
 		<td style="width: 2.5%;"></td>
 		<td style="width: 22.3%;">Merk/Type/Tahun Pembuatan</td>
 		<td style="width: 2.5%">:</td>
-		<td colspan="5">if(isnull( {{nm_merk_kend}} ),'',{{nm_merk_kend}}) + ' / '  +  if(isnull({{tipe_kend}}),'',{{tipe_kend}})+'/ '  + if(isnull(string({{thn_buat}})),'',string({{thn_buat}})) </td>
+		<td colspan="5">{{nm_merk_kend}} / {{tipe_kend}} / {{thn_buat}}</td>
 	</tr>
 	<tr>
 		<td style="width: 2.5%;"></td>
 		<td style="width: 22.3%;">Nomor Mesin / Nomor Rangka</td>
 		<td style="width: 2.5%">:</td>
-		<td colspan="5">{{no_msn}}/{{no_rangka}}</td>
+		<td colspan="5">{{no_msn}} / {{no_rangka}}</td>
 	</tr>
 	<tr>
 		<td style="width: 2.5%;"></td>
@@ -113,7 +106,7 @@
 		<td style="width: 2.5%;"></td>
 		<td style="width: 22.3%;">Jenis Kendaraan</td>
 		<td style="width: 2.5%">:</td>
-		<td colspan="5">if(isnull({{nm_jns_kend}}),'',{{nm_jns_kend}})</td>
+		<td colspan="5">{{nm_jns_kend}}</td>
 	</tr>
     <tr>
 		<td style="width: 2.5%;">5.</td>
@@ -328,13 +321,7 @@
         <td style="text-align: center;" colspan="5"></td>
     </tr>
     <tr>
-        <td style="text-align: center;" colspan="5">{{st_title3}}</td>
-    </tr>
-    <tr>
-        <td style="text-align: center;" colspan="5">{{st_title6}}</td>
-    </tr>
-    <tr>
-        <td style="text-align: center;" colspan="5">{{st_title4}}</td>
+        <td style="text-align: center;" colspan="5">{{footer}}</td>
     </tr>
 </table>
 <table style="width: 100%;">

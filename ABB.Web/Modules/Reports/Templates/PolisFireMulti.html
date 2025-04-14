@@ -31,7 +31,7 @@
 
 <body>
 
-    <div class="watermark">DRAFT</div>
+    <!-- <div class="watermark">DRAFT</div> -->
 
     <h1 style="text-align: center; margin-top: 0px; margin-bottom: 0px;">IKHTISAR PERTANGGUNGAN</h1>
 <h2 style="text-align: center; margin-top: 0px; margin-bottom: 0px;">POLIS STANDAR KEBAKARAN INDONESIA</h2>
@@ -83,13 +83,7 @@
 
 <table style="width: 100%;">
     <tr>
-        <td style="width: 25%;" colspan="">Mulai dari tanggal {{tgl_mul_ptg_ind}} sampai dengan tanggal {{tgl_akh_ptg_ind}}</td>
-    </tr>
-</table>
-
-<table style="width: 100%;">
-    <tr>
-        <td>kedua tanggal tersebut pada pukul 12.00 siang waktu setempat dimana obyek pertanggungan berada.</td>
+        <td style="width: 25%;" colspan="">Mulai dari tanggal {{tgl_mul_ptg_ind}} sampai dengan tanggal {{tgl_akh_ptg_ind}} kedua tanggal tersebut pada pukul 12.00 siang waktu setempat dimana obyek pertanggungan berada.</td>
     </tr>
 </table>
 
@@ -129,8 +123,8 @@
     <tr>
         <td style="width: 10%;">Suku Premi</td>
         <td style="width: 1%;">:</td>
-        <td style="width: 38.3%;">{{pst_rate_prm_pkk}}{{stn_rate_prm_pkk}}/TERLAMPIR</td>
-        <td style="width: 20%;">- Jaminan Tambahan</td>
+        <td style="width: 38.3%;">{{pst_rate_prm_pkk}}{{stn_rate_prm_pkk}}</td>
+        <td style="width: 20%;">- Jaminan Tambahan {{kd_cvrg_03}}</td>
         <td style="width: 1%;">:</td>
         <td style="width: 25%;">{{kd_mtu_symbol}} {{nilai_prm_tbh_03}}</td>
     </tr>
@@ -219,10 +213,10 @@
 
 <hr style="color: black">
 
-<table style="width: 100%;" >
+<table style="width: 100%;">
     <tr>
-        <td style="width: 10%;">Deductible</td>
-        <td style="width: 1%">:</td>
+        <td style="width: 1%;">Deductible</td>
+        <td style="width: 0.5%">:</td>
         <td style="width: 25%">{{deduct}}</td>
     </tr>
     <tr>
@@ -230,7 +224,7 @@
         <td style="width: 1%">:</td>
     </tr>
     <tr>
-        <td colspan=2 style="width: 2%;">{{ket_klausa}}</td>
+        <td colspan=2 style="width: 2%;">{{ket_klausula}}</td>
     </tr>
 </table>
 
@@ -297,16 +291,10 @@
     <tr style="height: 150px">
         <td style="width: 25%;"></td>
         <td style="width: 25%;"></td>
-        <td style="text-align: center; padding-right: 15px" colspan=2><br><br><br><br><br><br><br><b><u>Chusnul Chotimah, SE, AAIK</u></b><br>Kepala Divisi Underwriting</td>
+        <td style="text-align: center; padding-right: 15px" colspan=2><br><br><br><br><b><u>Chusnul Chotimah, SE, AAIK</u></b><br>Kepala Divisi Underwriting</td>
     </tr>
     <tr>
-        <td style="text-align: center;" colspan="3">{{st_title3}}</td>
-    </tr>
-    <tr>
-        <td style="text-align: center;" colspan="3">{{st_title6}}</td>
-    </tr>
-    <tr>
-        <td style="text-align: center;" colspan="3">{{st_title4}}</td>
+        <td style="text-align: center;" colspan="3">{{footer}}</td>
     </tr>
 </table>
 </body>

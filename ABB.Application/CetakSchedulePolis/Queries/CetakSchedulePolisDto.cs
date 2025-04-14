@@ -16,7 +16,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
 
         public string no_renew { get; set; }
 
-        public string? no_pol_lama { get; set; }
+        public string no_pol_lama { get; set; }
 
         public string nm_cb { get; set; }
 
@@ -231,13 +231,13 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         public string? stn_rate_prm { get; set; }
         public decimal? pst_deduct { get; set; }
         public decimal? nilai_casco { get; set; }
-        public decimal? nilai_prm_casco { get; set; }
+        public decimal nilai_prm_casco { get; set; }
         public decimal? nilai_rsk_sendiri { get; set; }
         public decimal? nilai_pap { get; set; }
         public decimal? nilai_tjh { get; set; }
         public decimal? nilai_pad { get; set; }
         public string? tipe_kend { get; set; }
-        public string? nm_merk_kend { get; set; }
+        public string nm_merk_kend { get; set; }
         public string? perlengkapan { get; set; }
         public decimal? pst_rate_banjir { get; set; }
         public decimal? nilai_prm_banjir { get; set; }
@@ -269,5 +269,10 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         public decimal? nilai_prm_pap_med { get; set; }
         public decimal? nilai_pad_med { get; set; }
         public decimal? nilai_prm_pad_med { get; set; }
+        public string deduct { get; set; }
+        public string nilai_prm_pkk { get; set; }
+        public string thn_buat { get; set; }
+        public string tempat_brkt { get; set; }
+        public string tempat_tiba { get; set; }
     }
 }

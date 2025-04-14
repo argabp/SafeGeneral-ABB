@@ -6,13 +6,13 @@
     <title>Polis Pengangkutan Barang</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            /* font-family: Arial, sans-serif; */
         }
 
         .container {
             width: 80%;
             margin: auto;
-            border: 1px solid black;
+            /* border: 1px solid black; */
             padding: 20px;
         }
 
@@ -34,12 +34,13 @@
         }
 
         .table td {
-            padding: 8px;
-			font-size: 10px;
+            padding: 5px;
+			font-size: 12px;
+            /* border: 1px solid #000; */
         }
 		p {
 			text-align: justify;
-			font-size: 10px;
+			font-size: 12px;
 		}
 		h2 {
 			text-align: center;
@@ -51,7 +52,7 @@
 
     <div class="container">
         <div class="h1">Polis Pengangkutan Barang</div>
-        <p>KAMI, bersama ini menyetujui, dengan pertimbangan pembayaran kepada 
+        <p style="letter-spacing: 1px;">KAMI, bersama ini menyetujui, dengan pertimbangan pembayaran kepada 
 			kami oleh atau atas nama Tertanggung  premi sebagaimana yang telah  diatur, menanggung kerugian
 			kerusakan tanggung jawab atau biaya sesuai dengan lingkup dan cara yang diatur disini :
 		</p>
@@ -85,7 +86,7 @@
                 <tr>
                     <td>Harga Pertanggungan</td>
                     <td>:</td>
-                    <td colspan="4">{{kd_mtu_symbol_1}} {{nilai_ttl_ptg}}</td>
+                    <td colspan="4"><strong>{{kd_mtu_symbol}} {{nilai_ttl_ptg}}</strong></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -168,7 +169,7 @@
                     <td>Diskon</td>
                     <td></td>
                     <td>=</td>
-                    <td>if (isnull)</td>
+                    <td>{{nilai_dis}}</td>
                 </tr>
                 <tr>
                     <td></td>
@@ -200,7 +201,7 @@
                     <td></td>
                     <td></td>
                     <td>=</td>
-                    <td>string(nilai_ttl - nilai_di)</td>
+                    <td>{{nilai_ttl}}</td>
                 </tr>
                 <tr>
                     <td>{{nilai_dis}}</td>
@@ -229,7 +230,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td colspan="2" align="center"><br><br><br><br><br><br><br><br><br><br><br><strong><u>Ati Nofianti, A.Md, As. K</u></strong></td>
+                    <td colspan="2" align="center"><br><br><br><br><strong><u>Ati Nofianti, A.Md, As. K</u></strong></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -239,28 +240,7 @@
                     <td colspan="2" align="center"><strong>Kepala Divisi Underwriting</strong></td>
                 </tr>
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td colspan="6" align="center">{{st_title3}}</td>
-                </tr>
-                <tr>
-                    <td colspan="6" align="center">{{st_title6}}</td>
-                </tr>
-                <tr>
-                    <td colspan="6" align="center">{{st_title4}}</td>
+                    <td colspan="6" align="center">{{footer}}</td>
                 </tr>
 			</table>
         </div>
