@@ -95,7 +95,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
             
             Template templateProfileResult = Template.Parse( templateReportHtml );
 
-            string resultTemplate;
+            string resultTemplate = string.Empty;;
 
             if (MultipleReport.Contains(reportTemplateName))
                 return GenerateMultipleReport(reportTemplateName, cetakSchedulePolisData, templateReportHtml);
@@ -170,7 +170,14 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                         cetakSchedulePolis.nilai_prm_tjh, cetakSchedulePolis.nilai_prm_pad,
                         cetakSchedulePolis.nilai_prm_banjir, cetakSchedulePolis.nilai_prm_aog,
                         cetakSchedulePolis.nilai_prm_hh, cetakSchedulePolis.nilai_prm_trs,
-                        cetakSchedulePolis.nilai_prm_tjp,
+                        cetakSchedulePolis.nilai_prm_tjp,cetakSchedulePolis.no_pol,
+                        cetakSchedulePolis.consignee,cetakSchedulePolis.no_po,
+                        cetakSchedulePolis.no_lc,cetakSchedulePolis.tempat_brkt,
+                        cetakSchedulePolis.tempat_tiba,cetakSchedulePolis.nm_kapal,
+                        cetakSchedulePolis.tgl_brkt,cetakSchedulePolis.no_inv,
+                        cetakSchedulePolis.no_bl,cetakSchedulePolis.desk_kond,
+                        cetakSchedulePolis.pst_rate_prm,cetakSchedulePolis.stn_rate_prm,
+                        cetakSchedulePolis.nilai_prm,
                     });
             }
             else
@@ -232,6 +239,13 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                     cetakSchedulePolis.nilai_prm_pad,cetakSchedulePolis.nilai_prm_banjir,
                     cetakSchedulePolis.nilai_prm_aog,cetakSchedulePolis.nilai_prm_hh,
                     cetakSchedulePolis.nilai_prm_trs,cetakSchedulePolis.nilai_prm_tjp,
+                    cetakSchedulePolis.no_pol,cetakSchedulePolis.consignee,
+                    cetakSchedulePolis.no_po,cetakSchedulePolis.no_lc,
+                    cetakSchedulePolis.tempat_brkt,cetakSchedulePolis.tempat_tiba,
+                    cetakSchedulePolis.nm_kapal,cetakSchedulePolis.tgl_brkt,
+                    cetakSchedulePolis.no_inv,cetakSchedulePolis.no_bl,
+                    cetakSchedulePolis.desk_kond,cetakSchedulePolis.pst_rate_prm,
+                    cetakSchedulePolis.stn_rate_prm,cetakSchedulePolis.nilai_prm,
                 } );
             }
             
@@ -744,7 +758,13 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                             cetakSchedulePolis.nilai_prm_tjh,cetakSchedulePolis.nilai_prm_pad,
                             cetakSchedulePolis.nilai_prm_banjir,cetakSchedulePolis.nilai_prm_aog,
                             cetakSchedulePolis.nilai_prm_hh,cetakSchedulePolis.nilai_prm_trs,
-                            cetakSchedulePolis.nilai_prm_tjp,
+                            cetakSchedulePolis.nilai_prm_tjp,cetakSchedulePolis.no_pol,
+                            cetakSchedulePolis.consignee,cetakSchedulePolis.no_po,
+                            cetakSchedulePolis.no_lc,cetakSchedulePolis.nm_kapal,
+                            cetakSchedulePolis.tgl_brkt,cetakSchedulePolis.no_inv,
+                            cetakSchedulePolis.no_bl,cetakSchedulePolis.desk_kond,
+                            cetakSchedulePolis.pst_rate_prm,cetakSchedulePolis.stn_rate_prm,
+                            cetakSchedulePolis.nilai_prm,
                         }));
                     }
 

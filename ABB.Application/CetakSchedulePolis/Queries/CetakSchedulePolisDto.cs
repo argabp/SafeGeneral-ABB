@@ -277,5 +277,11 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         public string lamp_pol { get; set; }
         public string nilai_aksesories{ get; set; }
         public string nilai_prm_tjp {get; set; }
+        public string consignee {get; set; }
+        public string no_po {get; set; }
+        public string no_lc {get; set; }
+        public string no_inv {get; set; }
+        public string no_bl {get; set; }
+        public string tgl_brkt { get; set; }
     }
 }

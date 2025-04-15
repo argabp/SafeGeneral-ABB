@@ -6,7 +6,7 @@
     <title>Polis Pengangkutan Barang</title>
     <style>
         body {
-            /* font-family: Arial, sans-serif; */
+            font-family: Arial, sans-serif;
         }
 
         .container {
@@ -61,131 +61,132 @@
             <h2>IKHTISAR</h2>
             <table class="table">
                 <tr>
-                    <td>Nomor Polis</td>
-                    <td>:</td>
-                    <td>{{no_pol_ttg}}</td>
-                    <td style="width: 10%;">Reg No.</td>
-                    <td>:</td>
-					<td>{{no_pol}}</td>
+                    <td style="width: 30%;">Nomor Polis</td>
+                    <td style="width: 1%;">:</td>
+                    <td style="width: 15%;" colspan="4">{{no_pol_ttg}}</td>
+                    <td colspan="4"></td>
                 </tr>
                 <tr>
                     <td>Tertanggung</td>
                     <td>:</td>
-                    <td colspan="4">{{nm_ttg}}</td>
+                    <td colspan="8">{{nm_ttg}}</td>
                 </tr>
                 <tr>
                     <td>Alamat Tertanggung</td>
                     <td>:</td>
-                    <td colspan="4">{{almt_ttg}}</td>
+                    <td colspan="8">{{almt_ttg}}</td>
                 </tr>
                 <tr>
                     <td>Penerima Barang</td>
                     <td>:</td>
-                    <td colspan="4">{{consignee}}</td>
+                    <td colspan="8">{{consignee}}</td>
                 </tr>
                 <tr>
                     <td>Harga Pertanggungan</td>
                     <td>:</td>
-                    <td colspan="4"><strong>{{kd_mtu_symbol}} {{nilai_ttl_ptg}}</strong></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td colspan="4">{{ket_kurs}}</td>
+                    <td style="width: 10%;" colspan="8"><strong>{{kd_mtu_symbol}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{nilai_ttl_ptg}}</strong></td>
                 </tr>
                 <tr>
                     <td>No. Packing List / No. Dokumen</td>
                     <td>:</td>
-                    <td>{{no_po}}</td>
+                    <td style="width: 15%;">{{no_po}}</td>
                     <td>/</td>
-                    <td>{{no_lc}}</td>
+                    <td colspan="3">{{no_lc}}</td>
                 </tr>
                 <tr>
                     <td>Obyek Pertanggungan</td>
                     <td>:</td>
-                    <td colspan="2">{{desk_oby_01}}</td>
+                    <td colspan="8">{{desk_oby_01}}</td>
                 </tr>
                 <tr>
                     <td>Dari / Ke</td>
                     <td>:</td>
-                    <td>{{tempat_brkt}} / {{tempat_tiba}}</td>
+                    <td colspan="8">{{tempat_brkt}} / {{tempat_tiba}}</td>
                 </tr>
                 <tr>
                     <td>Nama Alat Angkut</td>
                     <td>:</td>
-                    <td colspan="3">{{nm_kapal}}</td>
+                    <td colspan="7">{{nm_kapal}}</td>
                 </tr>
                 <tr>
                     <td>Tanggal Pemberangkatan</td>
                     <td>:</td>
-                    <td colspan="3">{{tgl_brkt}}</td>
+                    <td colspan="7">{{tgl_brkt}}</td>
                 </tr>
                 <tr>
                     <td>Nomor Faktur</td>
                     <td>:</td>
-                    <td colspan="3">{{no_inv}}</td>
+                    <td colspan="7">{{no_inv}}</td>
                 </tr>
                 <tr>
                     <td>Surat Muat Laut</td>
                     <td>:</td>
-                    <td colspan="3">{{no_bl}}</td>
+                    <td colspan="7">{{no_bl}}</td>
                 </tr>
                 <tr>
                     <td>Resiko Sendiri</td>
                     <td>:</td>
-                    <td colspan="3">{{desk_deduct}}</td>
+                    <td colspan="7">{{desk_deduct}}</td>
                 </tr>
                 <tr>
                     <td>Daftar Kemasan</td>
                     <td>:</td>
-                    <td colspan="3">-</td>
+                    <td colspan="7">-</td>
                 </tr>
                 <tr>
                     <td>Kondisi</td>
                     <td>:</td>
-                    <td colspan="3">{{desk_kond}}</td>
+                    <td colspan="7">{{desk_kond}}</td>
                 </tr>
                 <tr>
                     <td>Janji</td>
                     <td>:</td>
-                    <td colspan="3">-</td>
+                    <td colspan="7">-</td>
                 </tr>
                 <tr>
                     <td>Klausul</td>
                     <td>:</td>
-                    <td colspan="3">{{ket_klausula}}</td>
+                    <td colspan="7">{{ket_klausula}}</td>
                 </tr>
                 <tr>
                     <td>Perhitungan Premi</td>
                     <td>:</td>
-                    <td>{{pst_rate_prm}} {{stn_rate_prm}} x {{kd_mtu_symbol_2}} {{nilai_ttl_ptg_2}}</td>
-					<td></td>
-                    <td>=</td>
-                    <td>{{kd_mtu_symbol_23}} {{nilai_prm}}</td>
+                    <td>{{pst_rate_prm}} {{stn_rate_prm}}</td>
+                    <td>x</td>
+                    <td>{{kd_mtu_symbol}} {{nilai_ttl_ptg}}</td>
+                    <td style="width: 1%;">=</td>
+                    <td style="width: 5%;">{{kd_mtu_symbol}}</td>
+                    <td style="text-align: right;">{{nilai_prm}}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
                     <td>Diskon</td>
                     <td></td>
+                    <td></td>
                     <td>=</td>
-                    <td>{{nilai_dis}}</td>
+                    <td>{{kd_mtu_symbol}}</td>
+                    <td style="text-align: right;">{{nilai_dis}}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
                     <td>Biaya Polis</td>
                     <td></td>
+                    <td></td>
                     <td>=</td>
-                    <td>{{kd_mtu_symbol_23}} {{nilai_bia_pol}}</td>
+                    <td>{{kd_mtu_symbol}}</td>
+                    <td style="text-align: right;">{{nilai_bia_pol}}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
                     <td>Materai</td>
                     <td></td>
+                    <td></td>
                     <td>=</td>
-                    <td>{{kd_mtu_symbol_23}} {{nilai_bia_mat}}</td>
+                    <td>{{kd_mtu_symbol}}</td>
+                    <td style="text-align: right;">{{nilai_bia_mat}}</td>
                 </tr>
                 <tr>
                     <td></td>
@@ -193,15 +194,17 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td><hr></td>
+                    <td colspan="3"><hr></td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td></td>
                     <td>=</td>
-                    <td>{{nilai_ttl}}</td>
+                    <td>{{kd_mtu_symbol}}</td>
+                    <td style="text-align: right;">{{nilai_ttl}}</td>
                 </tr>
                 <tr>
                     <td>{{nilai_dis}}</td>
@@ -209,38 +212,42 @@
                     <td>{{stamp_duty}}</td>
                     <td></td>
                     <td></td>
-                    <td><hr style="border-top: 3px double black; width: 100%;"></td>
+                    <td colspan="3"><hr style="border-top: 3px double black; width: 100%;"></td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
                     <td>{{ctt_polis}}</td>
                     <td></td>
-                    <td colspan="2">{{st_title5}}, {{tgl_closing}}</td>
+                    <td></td>
+                    <td colspan="4" align="center">{{kt_cb}}, {{tgl_closing}}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td colspan="2" align="center">PT. Asuransi Bhakti Bhayangkara</td>
+                    <td></td>
+                    <td colspan="3" align="center">PT. Asuransi Bhakti Bhayangkara</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td colspan="2" align="center"><br><br><br><br><strong><u>Ati Nofianti, A.Md, As. K</u></strong></td>
+                    <td></td>
+                    <td colspan="3" align="center"><br><br><br><br><strong><u>Ati Nofianti, A.Md, As. K</u></strong></td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td colspan="2" align="center"><strong>Kepala Divisi Underwriting</strong></td>
+                    <td></td>
+                    <td colspan="3" align="center"><strong>Kepala Divisi Underwriting</strong></td>
                 </tr>
                 <tr>
-                    <td colspan="6" align="center">{{footer}}</td>
+                    <td colspan="8" align="center">{{footer}}</td>
                 </tr>
 			</table>
         </div>
