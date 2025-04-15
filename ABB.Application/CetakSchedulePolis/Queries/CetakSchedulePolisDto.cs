@@ -274,5 +274,6 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         public string thn_buat { get; set; }
         public string tempat_brkt { get; set; }
         public string tempat_tiba { get; set; }
+        public string lamp_pol { get; set; }
     }
 }

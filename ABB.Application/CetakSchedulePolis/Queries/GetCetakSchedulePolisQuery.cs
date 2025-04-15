@@ -150,7 +150,15 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                     sub_total_kebakaran, detail = stringBuilder.ToString(),
                     cetakSchedulePolis.deduct, cetakSchedulePolis.nilai_prm_pkk,
                     cetakSchedulePolis.no_pol_lama,cetakSchedulePolis.footer,
-                    cetakSchedulePolis.desk_deduct,
+                    cetakSchedulePolis.desk_deduct,cetakSchedulePolis.st_pas,
+                    cetakSchedulePolis.nilai_prm_tbh_03,cetakSchedulePolis.nilai_prm_tbh_04,
+                    cetakSchedulePolis.nilai_prm_tbh_05,cetakSchedulePolis.kd_cvrg_03,
+                    cetakSchedulePolis.kd_cvrg_04,cetakSchedulePolis.kd_cvrg_05,
+                    cetakSchedulePolis.nm_cvrg_03,cetakSchedulePolis.nm_cvrg_04,
+                    cetakSchedulePolis.nm_cvrg_05,cetakSchedulePolis.pst_rate_prm_03,
+                    cetakSchedulePolis.pst_rate_prm_04,cetakSchedulePolis.pst_rate_prm_05,
+                    cetakSchedulePolis.stn_rate_prm_03,cetakSchedulePolis.stn_rate_prm_04,
+                    cetakSchedulePolis.stn_rate_prm_05,cetakSchedulePolis.lamp_pol,
                 } );
             }
             else
@@ -191,7 +199,17 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                     cetakSchedulePolis.kd_penerangan, cetakSchedulePolis.symbol,
                     cetakSchedulePolis.ket_rsk, cetakSchedulePolis.nm_mtu,
                     cetakSchedulePolis.nm_grp_oby, cetakSchedulePolis.nm_grp_oby_1,
-                    sub_total_kebakaran, cetakSchedulePolis.cover, cetakSchedulePolis.tgl_closing
+                    sub_total_kebakaran, cetakSchedulePolis.cover, cetakSchedulePolis.tgl_closing,
+                    cetakSchedulePolis.no_pol_lama,cetakSchedulePolis.st_pas,
+                    cetakSchedulePolis.nilai_prm_pkk,cetakSchedulePolis.nilai_prm_tbh_03,
+                    cetakSchedulePolis.nilai_prm_tbh_04, cetakSchedulePolis.nilai_prm_tbh_05,
+                    cetakSchedulePolis.kd_cvrg_03, cetakSchedulePolis.kd_cvrg_04,
+                    cetakSchedulePolis.kd_cvrg_05,cetakSchedulePolis.nm_cvrg_03,
+                    cetakSchedulePolis.nm_cvrg_04, cetakSchedulePolis.nm_cvrg_05,
+                    cetakSchedulePolis.pst_rate_prm_03, cetakSchedulePolis.pst_rate_prm_04,
+                    cetakSchedulePolis.pst_rate_prm_05,cetakSchedulePolis.stn_rate_prm_03,
+                    cetakSchedulePolis.stn_rate_prm_04,cetakSchedulePolis.stn_rate_prm_05,
+                    cetakSchedulePolis.deduct,cetakSchedulePolis.lamp_pol,
                 } );
             }
             
@@ -687,7 +705,16 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                             cetakSchedulePolis.thn_buat, cetakSchedulePolis.nm_jns_kend,
                             cetakSchedulePolis.footer, cetakSchedulePolis.desk_deduct,
                             cetakSchedulePolis.nilai_prm_casco, cetakSchedulePolis.tempat_tiba,
-                            cetakSchedulePolis.tempat_brkt,
+                            cetakSchedulePolis.tempat_brkt,cetakSchedulePolis.nilai_prm_pkk,
+                            cetakSchedulePolis.nilai_prm_tbh_03,cetakSchedulePolis.nilai_prm_tbh_04,
+                            cetakSchedulePolis.nilai_prm_tbh_05,cetakSchedulePolis.kd_cvrg_03,
+                            cetakSchedulePolis.kd_cvrg_04,cetakSchedulePolis.kd_cvrg_05,
+                            cetakSchedulePolis.nm_cvrg_03,cetakSchedulePolis.nm_cvrg_04,
+                            cetakSchedulePolis.nm_cvrg_05,cetakSchedulePolis.pst_rate_prm_03,
+                            cetakSchedulePolis.pst_rate_prm_04,cetakSchedulePolis.pst_rate_prm_05,
+                            cetakSchedulePolis.stn_rate_prm_03,cetakSchedulePolis.stn_rate_prm_04,
+                            cetakSchedulePolis.stn_rate_prm_05,cetakSchedulePolis.deduct,
+                            cetakSchedulePolis.lamp_pol,
                         }));
                     }
 
