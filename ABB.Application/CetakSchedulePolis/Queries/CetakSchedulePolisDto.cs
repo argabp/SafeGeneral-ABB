@@ -190,7 +190,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         
         public  string nm_jns_kend { get; set; }
         
-        public  string desk_aksesoris { get; set; }
+        public  string desk_aksesories { get; set; }
         
         public  string nm_utk { get; set; }
         
@@ -275,5 +275,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         public string tempat_brkt { get; set; }
         public string tempat_tiba { get; set; }
         public string lamp_pol { get; set; }
+        public string nilai_aksesories{ get; set; }
+        public string nilai_prm_tjp {get; set; }
     }
 }

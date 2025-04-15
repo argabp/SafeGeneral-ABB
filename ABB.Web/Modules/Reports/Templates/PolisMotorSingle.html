@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Schedule Polis Kebakaran</title>
+	<title>Polis Motor Single</title>
 </head>
 
 <style>
@@ -19,16 +19,7 @@
 <body>
 
 
-<h1 style="text-align: center; margin-top: 0px; margin-bottom: 0px;">COVER NOTE</h1>
-<hr style="color: black">
-
-<table style="width: 100%;">
-	<tr>
-		<td style="width: 25%;">Pencurian</td>
-		<td style="width: 2.5%">:</td>
-		<td></td>
-	</tr>
-</table>
+<h1 style="text-align: center; margin-top: 0px; margin-bottom: 20px;">IKHTISAR PERTANGGUNGAN KENDARAAN</h1>
 
 <table style="width: 100%;">
 	<tr>
@@ -64,7 +55,7 @@
 		<td style="width: 2.5%;"></td>
 		<td style="width: 22.3%;"></td>
 		<td style="width: 2.5%"></td>
-		<td>Mulai dari tanggal {{tgl_mul_ptg_ind}} sampai dengan tanggal {{tgl_akh_ptg_ind}} (Kedua hari tersebut pada pukul 12.00 tengah hari) waktu dimana polis diterbitkan.</td>
+		<td colspan="3">Mulai dari tanggal {{tgl_mul_ptg_ind}} sampai dengan tanggal {{tgl_akh_ptg_ind}} (Kedua hari tersebut pada pukul 12.00 tengah hari) waktu dimana polis diterbitkan.</td>
 	</tr>
 	<tr>
 		<td style="width: 2.5%;">4.</td>
@@ -112,7 +103,7 @@
 		<td style="width: 2.5%;">5.</td>
 		<td style="width: 22.3%;">Perlengkapan Tambahan</td>
 		<td style="width: 2.5%">:</td>
-		<td colspan="5">{{desk_aksesoris}}</td>
+		<td colspan="5">{{desk_aksesories}}</td>
 	</tr>
     <tr>
 		<td style="width: 2.5%;">6.</td>
@@ -124,27 +115,29 @@
 		<td style="width: 2.5%;">7.</td>
 		<td style="width: 22.3%;">Harga Pertanggungan</td>
 		<td style="width: 2.5%">:</td>
-		<td colspan="2">{{nilai_casco}}</td>
+		<td colspan="2"></td>
 		<td colspan="2"></td>
 	</tr>
     <tr>
 		<td style="width: 2.5%;"></td>
 		<td style="width: 22.3%;">a. Kendaraan Bermotor</td>
 		<td style="width: 2.5%">:</td>
-		<td colspan="5">{{kd_mtu_symbol_4}}{{nilai_casco - nilai_aksesories }}</td>
+		<td style="width: 5%;">{{kd_mtu_symbol}}</td>
+		<td colspan="3">{{nilai_casco}} - {{nilai_aksesories }}</td>
 	</tr>
     <tr>
 		<td style="width: 2.5%;"></td>
 		<td style="width: 22.3%;">b. TJH Pihak Ketiga</td>
 		<td style="width: 2.5%">:</td>
-		<td>{{kd_mtu_symbol_1}}{{nilai_pap}} / orang</td>
-		<td colspan="4"></td>
+		<td>{{kd_mtu_symbol}}</td>
+		<td colspan="4">{{nilai_tjh}} / orang</td>
 	</tr>
     <tr>
 		<td style="width: 2.5%;"></td>
 		<td style="width: 22.3%;">c. Perlengkapan Tambahan</td>
 		<td style="width: 2.5%">:</td>
-		<td colspan="5">{{kd_mtu_symbol_11}}{{nilai_aksesories}}</td>
+		<td>{{kd_mtu_symbol}}</td>
+		<td colspan="4">{{nilai_aksesories}}</td>
 	</tr>
     <tr>
 		<td style="width: 2.5%;">8.</td>
@@ -162,33 +155,35 @@
 		<td style="width: 2.5%;"></td>
 		<td style="width: 22.3%;">a. Kecelakaan Diri Pengemudi</td>
 		<td style="width: 2.5%">:</td>
-		<td colspan="5">{{kd_mtu_symbol}}{{nilai_pad}}</td>
+		<td>{{kd_mtu_symbol}}</td>
+		<td colspan="4">{{nilai_pad}}</td>
 	</tr>
     <tr>
 		<td style="width: 2.5%;"></td>
 		<td style="width: 22.3%;">b. Kecelakaan Diri Penumpang</td>
 		<td style="width: 2.5%">:</td>
-		<td>{{kd_mtu_symbol_1}}{{nilai_pap}} / orang</td>
-		<td colspan="4"></td>
+		<td>{{kd_mtu_symbol}}</td>
+		<td colspan="3">{{nilai_pap}} / orang</td>
 	</tr>
     <tr>
 		<td style="width: 2.5%;"></td>
 		<td style="width: 22.3%;">c. Tanggung Jawab Hukum Terhadap Penumpang</td>
 		<td style="width: 2.5%">:</td>
-		<td colspan="5">{{kd_mtu_symbol_2}}{{nilai_tjp}}</td>
+		<td>{{kd_mtu_symbol}}</td>
+		<td colspan="4">{{nilai_tjp}}</td>
 	</tr>
     <tr>
 		<td style="width: 2.5%;">10.</td>
 		<td style="width: 22.3%;">Klausula Tambahan</td>
 		<td style="width: 2.5%">:</td>
-		<td colspan="5">{{ket_klausa}}</td>
+		<td colspan="5">{{ket_klausula}}</td>
 	</tr>
     <tr>
 		<td style="width: 2.5%;">11.</td>
 		<td style="width: 22.3%;">Resiko Sendiri Kecelakaan</td>
 		<td style="width: 2.5%">:</td>
-		<td>{{kd_mtu_symbol_7}}{{nilai_rsk_sendiri}} / Kejadian untuk PARTIAL LOSS</td>
-		<td colspan="4"></td>
+		<td>{{kd_mtu_symbol}}</td>
+		<td colspan="3">{{nilai_rsk_sendiri}} / Kejadian untuk PARTIAL LOSS</td>
 	</tr>
     <tr>
 		<td style="width: 2.5%;"></td>
@@ -212,67 +207,78 @@
 		<td style="width: 2.5%;"></td>
 		<td style="width: 22.3%;">- Premi Kendaraan Bermotor</td>
 		<td style="width: 2.5%">:</td>
-		<td colspan="5">{{kd_mtu_symbol_19}}{{nilai_prm_casco}}</td>
+		<td>{{kd_mtu_symbol}}</td>
+		<td colspan="4">{{nilai_prm_casco}}</td>
 	</tr>
 	<tr>
 		<td style="width: 2.5%;"></td>
 		<td style="width: 22.3%;">- Premi TJH Pihak III</td>
 		<td style="width: 2.5%">:</td>
-		<td colspan="5">{{kd_mtu_symbol_14}}{{nilai_prm_tjh}}</td>
+		<td>{{kd_mtu_symbol}}</td>
+		<td colspan="4">{{nilai_prm_tjh}}</td>
 	</tr>
 	<tr>
 		<td style="width: 2.5%;"></td>
 		<td style="width: 22.3%;">- Premi PA</td>
 		<td style="width: 2.5%">:</td>
-		<td colspan="5">{{kd_mtu_symbol_22}}{{nilai_prm_pad}}</td>
+		<td>{{kd_mtu_symbol}}</td>
+		<td colspan="4">{{nilai_prm_pad}}</td>
 	</tr>
 	<tr>
 		<td style="width: 2.5%;"></td>
 		<td style="width: 22.3%;">- Premi Banjir</td>
 		<td style="width: 2.5%">:</td>
-		<td colspan="5">{{kd_mtu_symbol_19}}{{nilai_prm_banjir}}</td>
+		<td>{{kd_mtu_symbol}}</td>
+		<td colspan="4">{{nilai_prm_banjir}}</td>
 	</tr>
 	<tr>
 		<td style="width: 2.5%;"></td>
 		<td style="width: 22.3%;">- Premi AOG</td>
 		<td style="width: 2.5%">:</td>
-		<td colspan="5">{{kd_mtu_symbol_19}}{{nilai_prm_aog}}</td>
+		<td>{{kd_mtu_symbol}}</td>
+		<td colspan="4">{{nilai_prm_aog}}</td>
 	</tr>
 	<tr>
 		<td style="width: 2.5%;"></td>
 		<td style="width: 22.3%;">- Premi SRCC</td>
 		<td style="width: 2.5%">:</td>
-		<td colspan="5">{{kd_mtu_symbol_19}}{{nilai_prm_hh}}</td>
+		<td>{{kd_mtu_symbol}}</td>
+		<td colspan="4">{{nilai_prm_hh}}</td>
 	</tr>
 	<tr>
 		<td style="width: 2.5%;"></td>
 		<td style="width: 22.3%;">- Premi Terorisme</td>
 		<td style="width: 2.5%">:</td>
-		<td colspan="5">{{kd_mtu_symbol_19}}{{nilai_prm_trs}}</td>
+		<td>{{kd_mtu_symbol}}</td>
+		<td colspan="4">{{nilai_prm_trs}}</td>
 	</tr>
 	<tr>
 		<td style="width: 2.5%;"></td>
 		<td style="width: 22.3%;">- Premi TJH Penumpang</td>
 		<td style="width: 2.5%">:</td>
-		<td colspan="5">{{kd_mtu_symbol_19}}{{nilai_prm_tjp}}</td>
+		<td>{{kd_mtu_symbol}}</td>
+		<td colspan="4">{{nilai_prm_tjp}}</td>
 	</tr>
 	<tr>
 		<td style="width: 2.5%;"></td>
 		<td style="width: 22.3%;">- Biaya Polis</td>
 		<td style="width: 2.5%">:</td>
-		<td colspan="5">{{kd_mtu_symbol_19}}{{nilai_bia_pol}}</td>
+		<td>{{kd_mtu_symbol}}</td>
+		<td colspan="4">{{nilai_bia_pol}}</td>
 	</tr>
 	<tr>
 		<td style="width: 2.5%;"></td>
 		<td style="width: 22.3%;">- Biaya materai</td>
 		<td style="width: 2.5%">:</td>
-		<td colspan="5">{{kd_mtu_symbol_19}}{{nilai_bia_mat}}</td>
+		<td>{{kd_mtu_symbol}}</td>
+		<td colspan="4">{{nilai_bia_mat}}</td>
 	</tr>
 	<tr>
 		<td style="width: 2.5%;"></td>
 		<td style="width: 22.3%;">- Diskon</td>
 		<td style="width: 2.5%">:</td>
-		<td colspan="5">{{kd_mtu_symbol_19}}</td>
+		<td>{{kd_mtu_symbol}}</td>
+		<td colspan="4">{{nilai_dis}}</td>
 	</tr>
 </table>
 <table style="width: 100%;">
@@ -288,7 +294,8 @@
 		<td style="width: 2.5%;"></td>
 		<td style="width: 22.3%; padding-left: 2%;">TOTAL</td>
 		<td style="width: 2.5%">:</td>
-		<td style="width: 30%;">{{kd_mtu_symbol_19}}{{nilai_ttl}}</td>
+		<td style="width: 5%;">{{kd_mtu_symbol}}</td>
+		<td style="width: 25%;">{{nilai_ttl}}</td>
 		<td colspan="2">Dibuat di {{kt_cb}},</td>
 	</tr>
 </table>
