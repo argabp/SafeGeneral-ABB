@@ -258,7 +258,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                     cetakSchedulePolis.ket_rincian_kontr,cetakSchedulePolis.jml_hari,
                     cetakSchedulePolis.nm_principal,cetakSchedulePolis.jbt_principal,
                     cetakSchedulePolis.nm_surety,cetakSchedulePolis.jbt_surety,
-                    cetakSchedulePolis.charge,
+                    cetakSchedulePolis.charge, cetakSchedulePolis.footer,
                 } );
             }
             
