@@ -283,5 +283,18 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         public string no_inv {get; set; }
         public string no_bl {get; set; }
         public string tgl_brkt { get; set; }
+        public string nilai_bond { get; set; }
+        public string nm_obl { get; set; }
+        public string almt_obl { get; set; }
+        public string ket_nilai_bond { get; set; }
+        public string ba_srh_trm { get; set; }
+        public string tgl_kontrak { get; set; }
+        public string ket_rincian_kontr { get; set; }
+        public string jml_hari { get; set; }
+        public string nm_principal { get; set; }
+        public string jbt_principal { get; set; }
+        public string nm_surety { get; set; }
+        public string jbt_surety { get; set; }
+        public string charge { get; set; }
     }
 }

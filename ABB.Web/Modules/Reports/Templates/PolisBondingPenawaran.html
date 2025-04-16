@@ -12,7 +12,7 @@
         .container {
             width: 80%;
             margin: auto;
-            border: 1px solid black;
+            /* border: 1px solid black; */
             padding: 20px;
         }
 
@@ -49,10 +49,10 @@
                 <tr>
                     <td style="width: 5%;">Nomor</td>
                     <td style="width: 1%;">:</td>
-                    <td style="width: 10%;">{{no_pol_ttg}}</td>
-                    <td style="width: 5%;">Reg No.</td>
-                    <td style="width: 1%;">:</td>
-					<td style="width: 8%;">{{no_reg}}</td>
+                    <td style="width: 20%;">{{no_pol_ttg}}</td>
+                    <!-- <td style="width: 5%;">Reg No.</td> -->
+                    <!-- <td style="width: 1%;">:</td>
+					<td style="width: 8%;">{{no_reg}}</td> -->
 					<td style="width: 8%;">Nilai Jaminan</td>
 					<td style="width: 1%;">:</td>
 					<td style="width: 5%;">{{symbol}}{{nilai_bond}}</td>
@@ -61,19 +61,15 @@
             <table class="table">
 				<tr>
                     <td style="width: 1%; vertical-align: top;">1. </td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Dengan ini dinyatakan, bahwa kami: ' +if(isNull ({{nm_ttg}}),'',{{nm_ttg}}) + ',' + if(isNull ({{almt_ttg}}),'',{{almt_ttg}})+' 
-						sebagai Penyedia, selanjutnya disebut TERJAMIN, dan ' + if(isNull ({{nm_persh}}),'',{{nm_persh}})+ ',' + if(isNull ({{almt}}),'',{{almt}}) + ' sebagai Penjamin, selanjutnya disebut sebagai PENJAMIN, 
-						bertanggung jawab dan dengan tegas terikat pada ' + if(isNull ({{nm_obl}}),'',{{nm_obl}})+',' +  if(isNull ({{almt_obl}}),'',{{almt_obl}})+ ' sebagai Pelaksana Pelelangan, 
-						selanjutnya disebut PENERIMA JAMINAN atas sejumlah '+symbol + string({{nilai_bond}},if ( trim(symbol) ='Rp ','#,##0','#,##0.0000')) + ' ( '+ (if(isNull({{ket_nilai_bond}}),'',{{ket_nilai_bond}}))+ ' )</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Dengan ini dinyatakan, bahwa kami: {{nm_ttg}}, {{almt_ttg}} sebagai Penyedia, selanjutnya disebut TERJAMIN, dan {{nm_persh}}, {{almt}} sebagai Penjamin, selanjutnya disebut sebagai PENJAMIN, 
+						bertanggung jawab dan dengan tegas terikat pada {{nm_obl}}, {{almt_obl}} sebagai Pelaksana Pelelangan, selanjutnya disebut PENERIMA JAMINAN atas sejumlah {{symbol}}{{nilai_bond}} ({{ket_nilai_bond}})</td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">2. </td>
                     <td style="vertical-align: top; text-align: justify;" colspan="8">Maka kami, TERJAMIN dan PENJAMIN dengan ini mengikatkan 
                         diri untuk melakukan pembayaran jumlah tersebut di atas dengan baik dan benar bilamana TERJAMIN tidak 
                         memenuhi kewajiban sebagaimana ditetapkan dalam Dokumen Pengadaan 
-                        Nomor : ' + if(isNull(ba_srh_trm),'',ba_srh_trm)+ ' Tanggal ' +if(isNull(tgl_kontrak),'',tgl_kontrak)+ ' 
-                        untuk pelaksanaan pelelangan pekerjaan ' + if(isNull(ket_rincian_kontr),'',ket_rincian_kontr)+ ' 
-                        yang diselenggarakan oleh PENERIMA JAMINAN.</td>
+                        Nomor : {{ba_srh_trm}} Tanggal {{tgl_kontrak}} untuk pelaksanaan pelelangan pekerjaan {{ket_rincian_kontr}} yang diselenggarakan oleh PENERIMA JAMINAN.</td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">3. </td>
@@ -115,9 +111,8 @@
                 <tr>
                     <td style="width: 1%; vertical-align: top;">4. </td>
                     <td style="vertical-align: top; text-align: justify;" colspan="8" >Surat Jaminan ini berlaku selama 
-                        '+if(isNull({{jml_hari}}),'',{{jml_hari}})+ ' kalender dan efektif mulai dari tanggal ' 
-                        + if(isNull({{tgl_mul_ptg_ind}}),'',{{tgl_mul_ptg_ind}}) + ' sampai dengan tanggal  ' 
-                        + if(isNull({{tgl_akh_ptg_ind}}),'',{{tgl_akh_ptg_ind}}) + '.'</td>
+                        {{jml_hari}} kalender dan efektif mulai dari tanggal {{tgl_mul_ptg_ind}} sampai dengan tanggal
+                        {{tgl_akh_ptg_ind}}.</td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">5. </td>
@@ -158,14 +153,14 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td style="width: 30%;" colspan="2">dikeluarkan di + if(isNull({{kt_cb}}),'',{{kt_cb}})</td>
+                    <td style="width: 30%;" colspan="2">dikeluarkan di {{kt_cb}}</td>
                 </tr>
                 <tr>
-                    <td style="width: 20%;" colspan="4">TERJAMIN</td>
+                    <td style="width: 20%;" colspan="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TERJAMIN</td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td style="width: 30%;" colspan="2">pada tanggal +   if(isnull({{tgl_closing_ind}}),'',{{tgl_closing_ind}})</td>
+                    <td style="width: 30%;" colspan="2">pada tanggal {{tgl_closing_ind}}</td>
                 </tr>
                 <tr>
                     <td colspan="4" style="text-align: center">{{nm_ttg}}</td>
@@ -207,27 +202,20 @@
                     <td colspan="2"></td>
                 </tr>
                 <tr>
-                    <td colspan="4">Service Charges : {{symbol_1}}{{charge}} </td>
-                    <td></td>
+                    <td colspan="5">Service Charges : {{symbol}}{{charge}} </td>
+
                     <td></td>
                     <td></td>
                     <td style="width: 30%;" colspan="2"></td>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <td colspan="9"><hr style="height: 6px; border-top: 2px solid black; border-bottom: 2px solid black;"></td>
-                </tr>
+                </tr> -->
                 <tr>
-                    <td colspan="9" align="center">{{st_title3}}</td>
-                </tr>
-                <tr>
-                    <td colspan="9" align="center">{{st_title6}}</td>
-                </tr>
-                <tr>
-                    <td colspan="9" align="center">{{st_title4}}</td>
-                </tr>
-                <tr>
+                    <td colspan="9" align="center">{{footer}}</td>
+                <!-- <tr>
                     <td colspan="9"><hr style="height: 6px; border-top: 2px solid black; border-bottom: 2px solid black;"></td>
-                </tr>
+                </tr> -->
 			</table>    
         </div>
 </body>

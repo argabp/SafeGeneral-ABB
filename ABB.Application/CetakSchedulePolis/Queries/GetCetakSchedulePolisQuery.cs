@@ -177,7 +177,13 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                         cetakSchedulePolis.tgl_brkt,cetakSchedulePolis.no_inv,
                         cetakSchedulePolis.no_bl,cetakSchedulePolis.desk_kond,
                         cetakSchedulePolis.pst_rate_prm,cetakSchedulePolis.stn_rate_prm,
-                        cetakSchedulePolis.nilai_prm,
+                        cetakSchedulePolis.nilai_prm,cetakSchedulePolis.nilai_bond,
+                        cetakSchedulePolis.nm_obl,cetakSchedulePolis.almt_obl,
+                        cetakSchedulePolis.ket_nilai_bond,cetakSchedulePolis.ba_srh_trm,
+                        cetakSchedulePolis.tgl_kontrak,cetakSchedulePolis.ket_rincian_kontr,
+                        cetakSchedulePolis.jml_hari,cetakSchedulePolis.nm_principal,
+                        cetakSchedulePolis.jbt_principal,cetakSchedulePolis.nm_surety,
+                        cetakSchedulePolis.jbt_surety,cetakSchedulePolis.charge,
                     });
             }
             else
@@ -246,6 +252,13 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                     cetakSchedulePolis.no_inv,cetakSchedulePolis.no_bl,
                     cetakSchedulePolis.desk_kond,cetakSchedulePolis.pst_rate_prm,
                     cetakSchedulePolis.stn_rate_prm,cetakSchedulePolis.nilai_prm,
+                    cetakSchedulePolis.nilai_bond,cetakSchedulePolis.nm_obl,
+                    cetakSchedulePolis.almt_obl,cetakSchedulePolis.ket_nilai_bond,
+                    cetakSchedulePolis.ba_srh_trm,cetakSchedulePolis.tgl_kontrak,
+                    cetakSchedulePolis.ket_rincian_kontr,cetakSchedulePolis.jml_hari,
+                    cetakSchedulePolis.nm_principal,cetakSchedulePolis.jbt_principal,
+                    cetakSchedulePolis.nm_surety,cetakSchedulePolis.jbt_surety,
+                    cetakSchedulePolis.charge,
                 } );
             }
             
@@ -764,7 +777,13 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                             cetakSchedulePolis.tgl_brkt,cetakSchedulePolis.no_inv,
                             cetakSchedulePolis.no_bl,cetakSchedulePolis.desk_kond,
                             cetakSchedulePolis.pst_rate_prm,cetakSchedulePolis.stn_rate_prm,
-                            cetakSchedulePolis.nilai_prm,
+                            cetakSchedulePolis.nilai_prm,cetakSchedulePolis.nilai_bond,
+                            cetakSchedulePolis.nm_obl,cetakSchedulePolis.almt_obl,
+                            cetakSchedulePolis.ket_nilai_bond,cetakSchedulePolis.ba_srh_trm,
+                            cetakSchedulePolis.tgl_kontrak,cetakSchedulePolis.ket_rincian_kontr,
+                            cetakSchedulePolis.jml_hari,cetakSchedulePolis.nm_principal,
+                            cetakSchedulePolis.jbt_principal,cetakSchedulePolis.nm_surety,
+                            cetakSchedulePolis.jbt_surety,cetakSchedulePolis.charge,
                         }));
                     }
 
