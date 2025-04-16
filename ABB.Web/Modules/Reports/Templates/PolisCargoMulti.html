@@ -12,7 +12,7 @@
         .container {
             width: 80%;
             margin: auto;
-            border: 1px solid black;
+            /* border: 1px solid black; */
             padding: 20px;
         }
 
@@ -55,19 +55,15 @@
         <div class="h1"><u>Polis Pengangkutan Barang</u></div>
         <p>KAMI, bersama ini menyetujui, dengan pertimbangan pembayaran kepada 
 			kami oleh atau atas nama Tertanggung  premi sebagaimana yang telah  diatur, menanggung kerugian
-			kerusakan tanggung jawab atau biaya sesuai dengan lingkup dan cara yang diatur disini :
-		</p>
+			kerusakan tanggung jawab atau biaya sesuai dengan lingkup dan cara yang diatur disini.</p>
 
         <div class="section">
             <h2>IKHTISAR</h2>
-            <table class="table">
+            <table class="table" border="1">
                 <tr>
                     <td>Nomor Polis</td>
                     <td>:</td>
-                    <td>{{no_pol_ttg}}</td>
-                    <td style="width: 10%;">Reg No.</td>
-                    <td>:</td>
-					<td>{{no_pol}}</td>
+                    <td colspan="4">{{no_pol_ttg}}</td>
                 </tr>
                 <tr>
                     <td>Tertanggung</td>
@@ -88,29 +84,33 @@
                     <td>Harga Pertanggungan</td>
                     <td>:</td>
                     <td>Harga Barang (Invoice)</td>
+                    <td></td>
                     <td>:</td>
-                    <td colspan="2"><i>Terlampir</i></td>
+                    <td><i>Terlampir</i></td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
                     <td>Uang Tambang</td>
+                    <td></td>
                     <td>:</td>
-                    <td colspan="2">-</td>
+                    <td>-</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
                     <td>Premi Asuransi</td>
+                    <td></td>
                     <td>:</td>
-                    <td colspan="2">-</td>
+                    <td>-</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
                     <td>Keuntungan yang diharapkan</td>
+                    <td></td>
                     <td>:</td>
-                    <td colspan="2">-</td>
+                    <td>-</td>
                 </tr>
                 <tr>
                     <td></td>
@@ -123,8 +123,9 @@
                     <td></td>
                     <td></td>
                     <td>Jumlah</td>
+                    <td></td>
                     <td>:</td>
-                    <td colspan="2"><i>Terlampir</i></td>
+                    <td><i>Terlampir</i></td>
                 </tr>
                 <tr>
                     <td>Penerima Barang</td>
@@ -159,7 +160,7 @@
                 <tr>
                     <td>Klausul/Endorsment</td>
                     <td>:</td>
-                    <td colspan="4"><i>Terlampir</i></td>
+                    <td colspan="4">{{ket_klausula}}</td>
                 </tr>
                 <tr>
                     <td>Ketentuan Khusus</td>
@@ -179,7 +180,7 @@
                 <tr>
                     <td>Perhitungan Premi</td>
                     <td>:</td>
-                    <td>{{pst_rate_prm}} {{stn_rate_prm}} x {{kd_mtu_symbol}} {{nilai_ttl_ptg_2}}</td>
+                    <td>{{pst_rate_prm}} {{stn_rate_prm}} x {{kd_mtu_symbol}} {{nilai_ttl_ptg}}</td>
 					<td></td>
                     <td>=</td>
                     <td>{{kd_mtu_symbol}} {{nilai_prm}}</td>
@@ -213,52 +214,50 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td><hr></td>
+                    <td colspan="2"><hr></td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
-                    <td></td>
+                    <td>Jumlah</td>
                     <td></td>
                     <td>=</td>
-                    <td>{{nilai_ttl}}</td>
-                </tr>
-                <tr>
-                    <td>{{nilai_dis}}</td>
-                    <td></td>
-                    <td>{{stamp_duty}}</td>
-                    <td></td>
-                    <td></td>
-                    <td><hr style="border-top: 3px double black; width: 100%;"></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td>{{ctt_polis}}</td>
-                    <td></td>
-                    <td colspan="2">{{st_title5}}, {{tgl_closing}}</td>
+                    <td>{{kd_mtu_symbol}} {{nilai_ttl}}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td colspan="2" align="center">PT. Asuransi Bhakti Bhayangkara</td>
+                    <td colspan="2"><hr style="border-top: 3px double black; width: 100%;"></td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td></td>
-                    <td colspan="2" align="center"><br><br><br><br><br><br><strong><u>Ati Nofianti, A.Md, As. K</u></strong></td>
+                    <td style="text-align: center;">Dikeluarkan di</td>
+                    <td>{{kt_cb}}</td>
+                    <td colspan="2">pada tanggal {{tgl_closing}}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
+                    <td style="text-align: center;">PT. Asuransi Bhakti Bhayangkara</td>
+                    <td></td>
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
                     <td></td>
                     <td></td>
-                    <td colspan="2" align="center"><strong>Kepala Divisi Underwriting</strong></td>
+                    <td style="text-align: center;"><br><br><br><br><br><br><strong><u>Ati Nofianti, A.Md, As. K</u></strong></td>
+                    <td></td>
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: center;"><strong>Kepala Divisi Underwriting</strong></td>
+                    <td></td>
+                    <td colspan="2"</td>
                 </tr>
                 <tr>
                     <td colspan="6" align="center">{{footer}}</td>
