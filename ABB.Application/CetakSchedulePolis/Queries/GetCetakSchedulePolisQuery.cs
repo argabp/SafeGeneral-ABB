@@ -198,6 +198,12 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                         cetakSchedulePolis.stn_rate_E,cetakSchedulePolis.nilai_ptg_D,
                         cetakSchedulePolis.nilai_prm_A,cetakSchedulePolis.nilai_prm_B,
                         cetakSchedulePolis.nilai_prm_C,cetakSchedulePolis.nilai_prm_D,
+                        cetakSchedulePolis.obyek_ptg,cetakSchedulePolis.ket_event,
+                        cetakSchedulePolis.lokasi,cetakSchedulePolis.jml_peserta,
+                        cetakSchedulePolis.tgl_mul_ptg,cetakSchedulePolis.tgl_akh_ptg,
+                        cetakSchedulePolis.spek_hole,cetakSchedulePolis.ket_hadiah,
+                        cetakSchedulePolis.own_risk,cetakSchedulePolis.kd_mtu,
+                        cetakSchedulePolis.kota_cab,cetakSchedulePolis.nilai_ttl_prm,
                         
                     });
             }
@@ -288,6 +294,13 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                     cetakSchedulePolis.stn_rate_E,cetakSchedulePolis.nilai_ptg_D,
                     cetakSchedulePolis.nilai_prm_A,cetakSchedulePolis.nilai_prm_B,
                     cetakSchedulePolis.nilai_prm_C,cetakSchedulePolis.nilai_prm_D,
+                    cetakSchedulePolis.obyek_ptg,cetakSchedulePolis.ket_event,
+                    cetakSchedulePolis.lokasi,cetakSchedulePolis.jml_peserta,
+                    cetakSchedulePolis.tgl_mul_ptg,cetakSchedulePolis.tgl_akh_ptg,
+                    cetakSchedulePolis.spek_hole,cetakSchedulePolis.ket_hadiah,
+                    cetakSchedulePolis.own_risk,cetakSchedulePolis.kd_mtu,
+                    cetakSchedulePolis.kota_cab,cetakSchedulePolis.nilai_ttl_prm,
+                    
                 } );
             }
             
@@ -827,7 +840,13 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                             cetakSchedulePolis.stn_rate_E,cetakSchedulePolis.nilai_ptg_D,
                             cetakSchedulePolis.nilai_prm_A,cetakSchedulePolis.nilai_prm_B,
                             cetakSchedulePolis.nilai_prm_C,cetakSchedulePolis.nilai_prm_D,
-                            cetakSchedulePolis.almt_polis,
+                            cetakSchedulePolis.almt_polis,cetakSchedulePolis.obyek_ptg,
+                            cetakSchedulePolis.ket_event,cetakSchedulePolis.lokasi,
+                            cetakSchedulePolis.jml_peserta,cetakSchedulePolis.tgl_mul_ptg,
+                            cetakSchedulePolis.tgl_akh_ptg,cetakSchedulePolis.spek_hole,
+                            cetakSchedulePolis.ket_hadiah,cetakSchedulePolis.own_risk,
+                            cetakSchedulePolis.kd_mtu,cetakSchedulePolis.kota_cab,
+                            cetakSchedulePolis.nilai_ttl_prm,
                         }));
                     }
 

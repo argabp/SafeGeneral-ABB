@@ -323,6 +323,15 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         public string nilai_prm_C { get; set; }
         public string nilai_prm_D { get; set; }
         public string almt_polis { get; set; }
-        
+        public string obyek_ptg { get; set; }
+        public string ket_event { get; set; }
+        public string lokasi { get; set; }
+        public string jml_peserta { get; set; }
+        public string spek_hole { get; set; }
+        public string ket_hadiah { get; set; }
+        public string own_risk { get; set; }
+        public string kd_mtu { get; set; }
+        public string kota_cab { get; set; }
+        public string nilai_ttl_prm { get; set; }
     }
 }
