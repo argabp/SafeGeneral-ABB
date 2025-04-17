@@ -333,5 +333,10 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         public string kd_mtu { get; set; }
         public string kota_cab { get; set; }
         public string nilai_ttl_prm { get; set; }
+        public string no_rsk { get; set; }
+        public string nm_deb { get; set; }
+        public string alm_lok_ptg { get; set; }
+        public string kd_usr { get; set; }
+        public string tmp_lahir { get; set; }
     }
 }

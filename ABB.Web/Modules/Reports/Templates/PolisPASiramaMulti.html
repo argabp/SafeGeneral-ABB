@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Polis PA Biasa Single</title>
+    <title>Polis PA Sirama Multi</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -49,10 +49,10 @@
             <table class="table">
                 <tr>
                     <td style="width: 8%;"></td>
-                    <td style="width: 2%;">Nomor Sertifikat</td>
+                    <td style="width: 7%;">Nomor Sertifikat</td>
                     <td style="width: 1%;">:</td>
                     <td style="width: 1%;">{{no_pol_ttg}}</td>
-                    <td style="width: 1%;">Reg No.</td>
+                    <td style="width: 5%;">Reg No.</td>
                     <td style="width: 1%;">:</td>
 					<td style="width: 8%;">{{no_rsk}}</td>
                 </tr>
@@ -64,12 +64,12 @@
                 <tr>
                     <td style="width: 15%; vertical-align: top; font-weight: bold; letter-spacing: 5px;">NAMA</td>
                     <td style="vertical-align: top; text-align: justify;">:</td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="7">{{nm_deb}}</td>
+                    <td style="vertical-align: top; text-align: justify; letter-spacing: 1px;" colspan="7"><strong>{{nm_deb}}</strong></td>
                 </tr>
                 <tr>
                     <td style="width: 15%; vertical-align: top; font-weight: bold; letter-spacing: 5px;">ALAMAT</td>
                     <td style="vertical-align: top; text-align: justify;">:</td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="7">{{alm_lok_ptg}}</td>
+                    <td style="vertical-align: top; text-align: justify; letter-spacing: 1px;" colspan="7"><strong>{{alm_lok_ptg}}</strong></td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top; text-align: justify;" colspan="10">Seterusnya dinyatakan sebagai Penanda Tangan,  untuk pembayaran ganti rugi sebesar sisa kredit,  maksimal sebesar nilai uang pertanggungan seperti tersebut dibawah ini dalam hal:</td>
@@ -77,7 +77,7 @@
                 <tr>
                     <td style="width: 1%; vertical-align: top;">Meninggal Dunia</td>
                     <td style="vertical-align: top; text-align: justify; width: 1%;">:</td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="8">Rp. {{nilai_ptg_a}}</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8">{{nilai_ptg_a}}</td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">Pekerjaan</td>
@@ -92,7 +92,7 @@
                 <tr>
                     <td style="width: 1%; vertical-align: top;">Alamat</td>
                     <td style="vertical-align: top; text-align: justify; width: 1%;">:</td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="8">{{alm_lok_ptg_1}}</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8">{{alm_lok_ptg}}</td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">Jangka Waktu</td>
@@ -168,7 +168,7 @@
             <table class="table">
                 <tr>
                     <td style="width: 15%;">Premi Dasar</td>
-                    <td style="width: 1%;">{{kd_mtu_symbol_2}}</td>
+                    <td style="width: 1%;">{{kd_mtu_symbol}}</td>
                     <td style="text-align: right; width: 10%;">{{nilai_prm_pkk}}</td>
                     <td></td>
                     <td></td>
@@ -178,8 +178,8 @@
                 </tr>
                 <tr>
                     <td style="width: 15%;">Premi Tambahan</td>
-                    <td style="width: 1%;">{{kd_mtu_symbol_2}}</td>
-                    <td style="text-align: right;">if(isnull({{nilai_prm_tbh_01}}),'0',string({{nilai_prm_tbh_01}},if (trim({{kd_mtu_symbol}}) = 'Rp ','#,##0000','#,##0.0000')))</td>
+                    <td style="width: 1%;">{{kd_mtu_symbol}}</td>
+                    <td style="text-align: right;">{{nilai_prm_tbh_01}}</td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -188,7 +188,7 @@
                 </tr>
                 <tr>
                     <td style="width: 15%;">Biaya Polis</td>
-                    <td style="width: 1%;">{{kd_mtu_symbol_2}}</td>
+                    <td style="width: 1%;">{{kd_mtu_symbol}}</td>
                     <td style="text-align: right;">{{nilai_bia_pol}}</td>
                     <td></td>
                     <td></td>
@@ -198,7 +198,7 @@
                 </tr>
                 <tr>
                     <td style="width: 15%;">Materai</td>
-                    <td style="width: 1%;">{{kd_mtu_symbol_2}}</td>
+                    <td style="width: 1%;">{{kd_mtu_symbol}}</td>
                     <td style="text-align: right;">{{nilai_bia_mat}}</td>
                     <td></td>
                     <td></td>
@@ -218,7 +218,7 @@
                 </tr>
                 <tr>
                     <td style="width: 15%; font-weight: bold;">Jumlah</td>
-                    <td style="width: 1%; font-weight: bold;">{{kd_mtu_symbol_2}}</td>
+                    <td style="width: 1%; font-weight: bold;">{{kd_mtu_symbol}}</td>
                     <td style="text-align: right; font-weight: bold; border-bottom: 1px;">{{nilai_ttl}}</td>
                     <td></td>
                     <td></td>
@@ -237,8 +237,8 @@
     </div>
 
     <div class="container">
-        <div class="h1"><u>IKHTISAR PERTANGGUNGAN</u></div>
-        <div class="h1"><u>POLIS ASURANSI KECELAKAAN DIRI PRIMA (SiRAMA)</u></div>
+        <div class="h1">IKHTISAR PERTANGGUNGAN</div>
+        <div class="h1">POLIS ASURANSI KECELAKAAN DIRI PRIMA (SiRAMA)</div>
         <div class="section">
             <table class="table">
                 <tr>
@@ -246,24 +246,24 @@
                     <td style="width: 2%;">Nomor Sertifikat</td>
                     <td style="width: 1%;">:</td>
                     <td style="width: 1%;">{{no_pol_ttg}}</td>
-                    <td style="width: 1%;">Reg No.</td>
+                    <td style="width: 5%;">Reg No.</td>
                     <td style="width: 1%;">:</td>
-                    <td style="width: 8%;">{{no_rsk}}</td>
+					<td style="width: 8%;">{{no_rsk}}</td>
                 </tr>
-            </table>
+			</table>
             <table class="table">
-                <tr>
+				<tr>
                     <td style="width: 1%; vertical-align: top; text-align: justify;" colspan="10">Perseroan Terbatas ASURANSI BHAKTI BHAYANGKARA, selanjutnya disebut PT. ABB ,  menanggung atas dasar syarat-syarat dalam polis ini:</td>
                 </tr>
                 <tr>
                     <td style="width: 15%; vertical-align: top; font-weight: bold; letter-spacing: 5px;">NAMA</td>
                     <td style="vertical-align: top; text-align: justify;">:</td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="7">{{nm_deb}}</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="7"><strong>{{nm_deb}}</strong></td>
                 </tr>
                 <tr>
                     <td style="width: 15%; vertical-align: top; font-weight: bold; letter-spacing: 5px;">ALAMAT</td>
                     <td style="vertical-align: top; text-align: justify;">:</td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="7">{{alm_lok_ptg}}</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="7"><strong>{{alm_lok_ptg}}</strong></td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top; text-align: justify;" colspan="10">Seterusnya dinyatakan sebagai Penanda Tangan,  untuk pembayaran ganti rugi sebesar sisa kredit,  maksimal sebesar nilai uang pertanggungan seperti tersebut dibawah ini dalam hal:</td>
@@ -271,7 +271,7 @@
                 <tr>
                     <td style="width: 1%; vertical-align: top;">Meninggal Dunia</td>
                     <td style="vertical-align: top; text-align: justify; width: 1%;">:</td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="8">Rp. {{nilai_ptg_a}}</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8">{{nilai_ptg_a}}</td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">Pekerjaan</td>
@@ -286,7 +286,7 @@
                 <tr>
                     <td style="width: 1%; vertical-align: top;">Alamat</td>
                     <td style="vertical-align: top; text-align: justify; width: 1%;">:</td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="8">{{alm_lok_ptg_1}}</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8">{{alm_lok_ptg}}</td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">Jangka Waktu</td>
@@ -362,7 +362,7 @@
             <table class="table">
                 <tr>
                     <td style="width: 15%;">Premi Dasar</td>
-                    <td style="width: 1%;">{{kd_mtu_symbol_2}}</td>
+                    <td style="width: 1%;">{{kd_mtu_symbol}}</td>
                     <td style="text-align: right; width: 10%;">{{nilai_prm_pkk}}</td>
                     <td></td>
                     <td></td>
@@ -372,8 +372,8 @@
                 </tr>
                 <tr>
                     <td style="width: 15%;">Premi Tambahan</td>
-                    <td style="width: 1%;">{{kd_mtu_symbol_2}}</td>
-                    <td style="text-align: right;">if(isnull({{nilai_prm_tbh_01}}),'0',string({{nilai_prm_tbh_01}},if (trim({{kd_mtu_symbol}}) = 'Rp ','#,##0000','#,##0.0000')))</td>
+                    <td style="width: 1%;">{{kd_mtu_symbol}}</td>
+                    <td style="text-align: right;">{{nilai_prm_tbh_01}}</td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -382,7 +382,7 @@
                 </tr>
                 <tr>
                     <td style="width: 15%;">Biaya Polis</td>
-                    <td style="width: 1%;">{{kd_mtu_symbol_2}}</td>
+                    <td style="width: 1%;">{{kd_mtu_symbol}}</td>
                     <td style="text-align: right;">{{nilai_bia_pol}}</td>
                     <td></td>
                     <td></td>
@@ -392,7 +392,7 @@
                 </tr>
                 <tr>
                     <td style="width: 15%;">Materai</td>
-                    <td style="width: 1%;">{{kd_mtu_symbol_2}}</td>
+                    <td style="width: 1%;">{{kd_mtu_symbol}}</td>
                     <td style="text-align: right;">{{nilai_bia_mat}}</td>
                     <td></td>
                     <td></td>
@@ -412,7 +412,7 @@
                 </tr>
                 <tr>
                     <td style="width: 15%; font-weight: bold;">Jumlah</td>
-                    <td style="width: 1%; font-weight: bold;">{{kd_mtu_symbol_2}}</td>
+                    <td style="width: 1%; font-weight: bold;">{{kd_mtu_symbol}}</td>
                     <td style="text-align: right; font-weight: bold; border-bottom: 1px;">{{nilai_ttl}}</td>
                     <td></td>
                     <td></td>
@@ -426,8 +426,9 @@
 
                     <td style="width: 30%;" colspan="2"></td>
                 </tr>
-            </table>
+			</table>    
         </div>
+    </div>
     </div>
 </body>
 </html>

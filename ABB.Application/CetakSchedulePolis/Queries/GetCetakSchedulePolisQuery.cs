@@ -204,7 +204,10 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                         cetakSchedulePolis.spek_hole,cetakSchedulePolis.ket_hadiah,
                         cetakSchedulePolis.own_risk,cetakSchedulePolis.kd_mtu,
                         cetakSchedulePolis.kota_cab,cetakSchedulePolis.nilai_ttl_prm,
-                        
+                        cetakSchedulePolis.no_rsk,cetakSchedulePolis.nm_deb,
+                        cetakSchedulePolis.alm_lok_ptg,cetakSchedulePolis.kd_usr,
+                        cetakSchedulePolis.tmp_lahir,
+
                     });
             }
             else
@@ -300,6 +303,9 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                     cetakSchedulePolis.spek_hole,cetakSchedulePolis.ket_hadiah,
                     cetakSchedulePolis.own_risk,cetakSchedulePolis.kd_mtu,
                     cetakSchedulePolis.kota_cab,cetakSchedulePolis.nilai_ttl_prm,
+                    cetakSchedulePolis.no_rsk,cetakSchedulePolis.nm_deb,
+                    cetakSchedulePolis.alm_lok_ptg,cetakSchedulePolis.kd_usr,
+                    cetakSchedulePolis.tmp_lahir,
                     
                 } );
             }
@@ -846,7 +852,9 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                             cetakSchedulePolis.tgl_akh_ptg,cetakSchedulePolis.spek_hole,
                             cetakSchedulePolis.ket_hadiah,cetakSchedulePolis.own_risk,
                             cetakSchedulePolis.kd_mtu,cetakSchedulePolis.kota_cab,
-                            cetakSchedulePolis.nilai_ttl_prm,
+                            cetakSchedulePolis.nilai_ttl_prm,cetakSchedulePolis.no_rsk,
+                            cetakSchedulePolis.nm_deb,cetakSchedulePolis.alm_lok_ptg,
+                            cetakSchedulePolis.kd_usr,cetakSchedulePolis.tmp_lahir,
                         }));
                     }
 
