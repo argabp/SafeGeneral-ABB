@@ -184,6 +184,21 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                         cetakSchedulePolis.jml_hari,cetakSchedulePolis.nm_principal,
                         cetakSchedulePolis.jbt_principal,cetakSchedulePolis.nm_surety,
                         cetakSchedulePolis.jbt_surety,cetakSchedulePolis.charge,
+                        cetakSchedulePolis.nm_polis,cetakSchedulePolis.almt_polis,
+                        cetakSchedulePolis.tgl_lahir,cetakSchedulePolis.nm_waris_1,
+                        cetakSchedulePolis.nm_waris_2,cetakSchedulePolis.nm_waris_3,
+                        cetakSchedulePolis.hub_waris_1,cetakSchedulePolis.hub_waris_2,
+                        cetakSchedulePolis.hub_waris_3,cetakSchedulePolis.jk_wkt_ptg_ind,
+                        cetakSchedulePolis.nilai_ptg_A,cetakSchedulePolis.nilai_ptg_B,
+                        cetakSchedulePolis.nilai_ptg_C,cetakSchedulePolis.pst_A,
+                        cetakSchedulePolis.pst_B,cetakSchedulePolis.pst_C,
+                        cetakSchedulePolis.pst_D,cetakSchedulePolis.pst_E,
+                        cetakSchedulePolis.stn_rate_A,cetakSchedulePolis.stn_rate_B,
+                        cetakSchedulePolis.stn_rate_C,cetakSchedulePolis.stn_rate_D,
+                        cetakSchedulePolis.stn_rate_E,cetakSchedulePolis.nilai_ptg_D,
+                        cetakSchedulePolis.nilai_prm_A,cetakSchedulePolis.nilai_prm_B,
+                        cetakSchedulePolis.nilai_prm_C,cetakSchedulePolis.nilai_prm_D,
+                        
                     });
             }
             else
@@ -259,6 +274,20 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                     cetakSchedulePolis.nm_principal,cetakSchedulePolis.jbt_principal,
                     cetakSchedulePolis.nm_surety,cetakSchedulePolis.jbt_surety,
                     cetakSchedulePolis.charge, cetakSchedulePolis.footer,
+                    cetakSchedulePolis.nm_polis,cetakSchedulePolis.almt_polis,
+                    cetakSchedulePolis.tgl_lahir,cetakSchedulePolis.nm_waris_1,
+                    cetakSchedulePolis.nm_waris_2,cetakSchedulePolis.nm_waris_3,
+                    cetakSchedulePolis.hub_waris_1,cetakSchedulePolis.hub_waris_2,
+                    cetakSchedulePolis.hub_waris_3,cetakSchedulePolis.jk_wkt_ptg_ind,
+                    cetakSchedulePolis.nilai_ptg_A,cetakSchedulePolis.nilai_ptg_B,
+                    cetakSchedulePolis.nilai_ptg_C,cetakSchedulePolis.pst_A,
+                    cetakSchedulePolis.pst_B,cetakSchedulePolis.pst_C,
+                    cetakSchedulePolis.pst_D,cetakSchedulePolis.pst_E,
+                    cetakSchedulePolis.stn_rate_A,cetakSchedulePolis.stn_rate_B,
+                    cetakSchedulePolis.stn_rate_C,cetakSchedulePolis.stn_rate_D,
+                    cetakSchedulePolis.stn_rate_E,cetakSchedulePolis.nilai_ptg_D,
+                    cetakSchedulePolis.nilai_prm_A,cetakSchedulePolis.nilai_prm_B,
+                    cetakSchedulePolis.nilai_prm_C,cetakSchedulePolis.nilai_prm_D,
                 } );
             }
             
@@ -784,6 +813,21 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                             cetakSchedulePolis.jml_hari,cetakSchedulePolis.nm_principal,
                             cetakSchedulePolis.jbt_principal,cetakSchedulePolis.nm_surety,
                             cetakSchedulePolis.jbt_surety,cetakSchedulePolis.charge,
+                            cetakSchedulePolis.no_pol_lama,cetakSchedulePolis.nm_polis,
+                            cetakSchedulePolis.tgl_lahir,cetakSchedulePolis.nm_waris_1,
+                            cetakSchedulePolis.nm_waris_2,cetakSchedulePolis.nm_waris_3,
+                            cetakSchedulePolis.hub_waris_1,cetakSchedulePolis.hub_waris_2,
+                            cetakSchedulePolis.hub_waris_3,cetakSchedulePolis.jk_wkt_ptg_ind,
+                            cetakSchedulePolis.nilai_ptg_A,cetakSchedulePolis.nilai_ptg_B,
+                            cetakSchedulePolis.nilai_ptg_C,cetakSchedulePolis.pst_A,
+                            cetakSchedulePolis.pst_B,cetakSchedulePolis.pst_C,
+                            cetakSchedulePolis.pst_D,cetakSchedulePolis.pst_E,
+                            cetakSchedulePolis.stn_rate_A,cetakSchedulePolis.stn_rate_B,
+                            cetakSchedulePolis.stn_rate_C,cetakSchedulePolis.stn_rate_D,
+                            cetakSchedulePolis.stn_rate_E,cetakSchedulePolis.nilai_ptg_D,
+                            cetakSchedulePolis.nilai_prm_A,cetakSchedulePolis.nilai_prm_B,
+                            cetakSchedulePolis.nilai_prm_C,cetakSchedulePolis.nilai_prm_D,
+                            cetakSchedulePolis.almt_polis,
                         }));
                     }
 

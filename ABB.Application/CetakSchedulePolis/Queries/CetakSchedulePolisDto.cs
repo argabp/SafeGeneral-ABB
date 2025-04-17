@@ -296,5 +296,33 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         public string nm_surety { get; set; }
         public string jbt_surety { get; set; }
         public string charge { get; set; }
+        public string nm_polis { get; set; }
+        public string nm_waris_1 { get; set; }
+        public string nm_waris_2 { get; set; }
+        public string nm_waris_3 { get; set; }
+        public string hub_waris_1 { get; set; }
+        public string hub_waris_2 { get; set; }
+        public string hub_waris_3 { get; set; }
+        public string jk_wkt_ptg_ind { get; set; }
+        public string nilai_ptg_A { get; set; }
+        public string nilai_ptg_B { get; set; }
+        public string nilai_ptg_C { get; set; }
+        public string nilai_ptg_D { get; set; }
+        public string pst_A { get; set; }
+        public string pst_B { get; set; }
+        public string pst_C { get; set; }
+        public string pst_D { get; set; }
+        public string pst_E { get; set; }
+        public string stn_rate_A { get; set; }
+        public string stn_rate_B{ get; set; }
+        public string stn_rate_C { get; set; }
+        public string stn_rate_D { get; set; }
+        public string stn_rate_E { get; set; }
+        public string nilai_prm_A { get; set; }
+        public string nilai_prm_B { get; set; }
+        public string nilai_prm_C { get; set; }
+        public string nilai_prm_D { get; set; }
+        public string almt_polis { get; set; }
+        
     }
 }
