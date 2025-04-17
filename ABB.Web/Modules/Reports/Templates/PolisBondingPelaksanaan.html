@@ -10,7 +10,7 @@
         }
 
         .container {
-            width: 80%;
+            width: 90%;
             margin: auto;
             /* border: 1px solid black; */
             padding: 20px;
@@ -130,10 +130,12 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td style="width: 30%;" colspan="2">dikeluarkan di {{kt_cb}}</td>
+                    <td></td>
+                    <td style="width: 35%;" colspan="2">dikeluarkan di {{kt_cb}}</td>
                 </tr>
                 <tr>
                     <td style="width: 20%;" colspan="4">TERJAMIN</td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -141,6 +143,7 @@
                 </tr>
                 <tr>
                     <td colspan="5"><strong>{{nm_ttg}}</strong></td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td style="width: 30%;" colspan="2"><strong>PT. ASURANSI BHAKTI BHAYANGKARA</strong></td>
@@ -157,18 +160,12 @@
                     <td></td>
                 </tr>
                 <tr>
-                    <td colspan="4"><strong><u>{{nm_principal}}</u></strong></td>
+                    <td colspan="4"><strong><u>{{nm_principal}}</u></strong> <br> {{jbt_principal}}</td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td style="width: 30%;" colspan="2"><strong><u>{{nm_surety}}</u></strong></td>
-                </tr>
-                <tr>
-                    <td colspan="4">{{jbt_principal}}</td>
                     <td></td>
-                    <td></td>
-                    <td></td>
-                    <td style="width: 30%;" colspan="2">{{jbt_surety}}</td>
+                    <td colspan="2"><strong><u>{{nm_surety}}</u></strong> <br> {{jbt_surety}}</td>
                 </tr>
                 <tr style="height: 50px;">
                     <td colspan="4"></td>
@@ -178,21 +175,15 @@
                     <td colspan="2"></td>
                 </tr>
                 <tr>
-                    <td colspan="5">Service Charges : {{symbol_1}}{{charge}} </td>
+                    <td colspan="5"><strong><u>Service Charges : {{symbol}} {{charge}}</u></strong></td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td style="width: 30%;" colspan="2"></td>
                 </tr>
-                <!-- <tr>
-                    <td colspan="9"><hr style="height: 6px; border-top: 2px solid black; border-bottom: 2px solid black;"></td>
-                </tr> -->
                 <tr>
                     <td colspan="9" align="center">{{footer}}</td>
                 </tr>
-                <!-- <tr>
-                    <td colspan="9"><hr style="height: 6px; border-top: 2px solid black; border-bottom: 2px solid black;"></td>
-                </tr> -->
 			</table>    
         </div>
 </body>
