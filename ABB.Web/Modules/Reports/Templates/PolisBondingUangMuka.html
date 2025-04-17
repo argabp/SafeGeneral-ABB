@@ -12,7 +12,7 @@
         .container {
             width: 80%;
             margin: auto;
-            border: 1px solid black;
+            /* border: 1px solid black; */
             padding: 20px;
         }
 
@@ -52,44 +52,40 @@
                     <td style="width: 45%;">{{no_pol_ttg}}</td>
 					<td>Nilai</td>
 					<td>:</td>
-					<td>{{symbol}} string({{nilai_bond}},if ( trim({{symbol}}) ='Rp ','#,##0','#,##0.0000'))</td>
+					<td>{{symbol}} {{nilai_bond}}</td>
 
                 </tr>
 			</table>
             <table class="table">
 				<tr>
-                    <td style="width: 1%; vertical-align: top;">1. </td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="8" >'Dengan ini dinyatakan, bahwa kami : ' +if(isNull(nm_ttg),'',nm_ttg)+ ' ,' +if(isNull(almt_ttg),'',almt_ttg)+ ' sebagai Penyedia, selanjutnya disebut TERJAMIN, dan ' +if(isNull(nm_persh),'',nm_persh)+ ', ' + if(isNull(almt),'',almt) + ' sebagai Penjamin, selanjutnya disebut sebagai PENJAMIN, bertanggung jawab dan dengan tegas terikat pada '+ if(isNull(nm_obl),'',nm_obl)+ ', ' +if(isNull(almt_obl),'',almt_obl)+ ' sebagai Pemilik Pekerjaan, selanjutnya disebut PENERIMA JAMINAN, atas uang sejumlah ' + symbol+ string(nilai_bond,if ( trim(symbol) ='Rp ','#,##0','#,##0.0000')) + '  ( ' + (if(isNull(ket_nilai_bond),'',ket_nilai_bond)) + ' ).'</td>
+                    <td style="vertical-align: top; width: 1%;">1. </td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8">Dengan ini dinyatakan, bahwa kami :{{nm_ttg}}, {{almt_ttg}} sebagai Penyedia, selanjutnya disebut TERJAMIN, dan {{nm_persh}}, {{almt}} sebagai Penjamin, selanjutnya disebut sebagai PENJAMIN, bertanggung jawab dan dengan tegas terikat pada {{nm_obl}}, {{almt_obl}} sebagai Pemilik Pekerjaan, selanjutnya disebut PENERIMA JAMINAN, atas uang sejumlah {{symbol}} {{nilai_bond}} ({{ket_nilai_bond}}).</td>
                 </tr>
                 <tr>
-                    <td style="width: 1%; vertical-align: top;">2. </td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="8">'Maka kami, TERJAMIN dan PENJAMIN dengan ini mengikatkan diri untuk melakukan pembayaran jumlah tersebut di atas dengan baik dan benar bilamana TERJAMIN tidak memenuhi kewajiban dalam melaksanakan pekerjaan ' +if(isNull(ket_rincian_kontr),'',ket_rincian_kontr)+ ' sebagaimana ditetapkan berdasarkan Surat Perjanjian No. : ' +if(isNull(ba_srh_trm),'',ba_srh_trm)+ ' tanggal ' +if(isNull(tgl_kontrak),'',tgl_kontrak)+ ' dari PENERIMA JAMINAN.'</td>
+                    <td style="vertical-align: top; width: 1%;">2. </td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8">Maka kami, TERJAMIN dan PENJAMIN dengan ini mengikatkan diri untuk melakukan pembayaran jumlah tersebut di atas dengan baik dan benar bilamana TERJAMIN tidak memenuhi kewajiban dalam melaksanakan pekerjaan {{ket_rincian_kontr}} sebagaimana ditetapkan berdasarkan Surat Perjanjian No. : {{ba_srh_trm}} tanggal {{tgl_kontrak}} dari PENERIMA JAMINAN.</td>
                 </tr>
                 <tr>
-                    <td style="width: 1%; vertical-align: top;">3. </td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="8" >''Surat Jaminan ini berlaku selama ' + if(isNull(jml_hari),'',jml_hari) +  ' kalender dan efektif mulai dari tanggal ' + if(isNull(tgl_mul_ptg_ind),'',tgl_mul_ptg_ind) + ' sampai dengan tanggal ' + if(isNull(tgl_akh_ptg_ind),'',tgl_akh_ptg_ind)</td>
+                    <td style="vertical-align: top; width: 1%;">3. </td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Surat Jaminan ini berlaku selama {{jml_hari}} kalender dan efektif mulai dari tanggal {{tgl_mul_ptg_ind}} sampai dengan tanggal {{tgl_akh_ptg_ind}}</td>
                 </tr>
                 <tr>
-                    <td style="width: 1%; vertical-align: top;">4. </td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Jaminan ini berlaku apabila:</td>
+                    <td style="vertical-align: top; width: 1%;">4. </td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Jaminan ini berlaku apabila: <br> TERJAMIN tidak memenuhi kewajibannya atau melakukan pembayaran kembali kepada PENERIMA JAMINAN senilai Uang Muka yang wajib dibayar menurut Dokumen Kontrak.</td>
                 </tr>
                 <tr>
-                    <td style="width: 1%; vertical-align: top;"></td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="9">TERJAMIN tidak memenuhi kewajibannya atau melakukan pembayaran kembali kepada PENERIMA JAMINAN senilai Uang Muka yang wajib dibayar menurut Dokumen Kontrak.</td>
-                </tr>
-                <tr>
-                    <td style="width: 1%; vertical-align: top;">5. </td>
+                    <td style="vertical-align: top; width: 1%;">5. </td>
                     <td style="vertical-align: top; text-align: justify;" colspan="8" >PENJAMIN akan membayar kepada PENERIMA JAMINAN Uang Muka atau sisa Uang Muka yang belum dikembalikan TERJAMIN dalam waktu paling lambat 14 (empat belas) hari kerja tanpa syarat (Unconditional) setelah menerima tuntutan pencairan secara tertulis dari PENERIMA JAMINAN berdasarkan Keputusan PENERIMA JAMINAN mengenai pengenaan sanksi akibat TERJAMIN cidera janji.</td>
                 </tr>
                 <tr>
-                    <td style="width: 1%; vertical-align: top;">6. </td>
+                    <td style="vertical-align: top; width: 1%;">6. </td>
                     <td style="vertical-align: top; text-align: justify;" colspan="8" >Menunjuk pada Pasal 1832 KUH Perdata dengan ini ditegaskan kembali bahwa PENJAMIN melepaskan hak-hak istimewa untuk menuntut supaya harta benda TERJAMIN lebih dahulu disita dan dijual guna dapat melunasi hutangnya sebagaimana dimaksud dalam Pasal 1831 KUH Perdata.</td>
                 </tr>
                 <tr>
-                    <td style="width: 1%; vertical-align: top;">7. </td>
+                    <td style="vertical-align: top; width: 1%;">7. </td>
                     <td style="vertical-align: top; text-align: justify;" colspan="8" >Tuntutan pencairan terhadap PENJAMIN berdasarkan Jaminan ini harus sudah diajukan selambat-lambatnya dalam waktu 30 (tiga puluh) hari kalender sesudah berakhirnya masa berlaku Jaminan ini.</td>
                 </tr>
-                <tr style="height: 50px;">
+                <tr style="height: 40px;">
                     <td></td>
                     <td></td>
                     <td></td>
@@ -108,21 +104,25 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td style="width: 30%;" colspan="2">dikeluarkan di + if(isNull({{kt_cb}}),'',{{kt_cb}})</td>
+                    <td style="width: 30%;" colspan="2">dikeluarkan di {{kt_cb}} <br> pada tanggal {{tgl_closing_ind}}</td>
                 </tr>
                 <tr>
-                    <td style="width: 20%;" colspan="4">TERJAMIN</td>
+                    <td colspan="2">TERJAMIN</td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td style="width: 30%;" colspan="2">pada tanggal +   if(isnull({{tgl_closing_ind}}),'',{{tgl_closing_ind}})</td>
+                    <td></td>
+                    <td></td>
+                    <td style="width: 30%;" colspan="2">PENJAMIN</td>
                 </tr>
                 <tr>
-                    <td colspan="4" style="text-align: center">{{nm_ttg}}</td>
+                    <td colspan="2"><strong>{{nm_ttg}}</strong></td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td style="width: 30%; text-align: center;" colspan="2">PT. ASURANSI BHAKTI BHAYANGKARA</td>
+                    <td></td>
+                    <td></td>
+                    <td style="width: 40%;" colspan="2"><strong>PT. ASURANSI BHAKTI BHAYANGKARA</strong></td>
                 </tr>
                 <tr style="height: 100px;">
                     <td></td>
@@ -136,47 +136,34 @@
                     <td></td>
                 </tr>
                 <tr>
-                    <td colspan="4" style="text-align: center;">{{nm_principal}}</td>
+                    <td colspan="2"><strong><u>{{nm_principal}}</u></strong> <br> {{jbt_principal}}</td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td style="width: 30%; text-align: center;" colspan="2">{{nm_surety}}</td>
-                </tr>
-                <tr>
-                    <td style="text-align: center" colspan="4">{{jbt_principal}}</td>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td style="width: 30%; text-align: center;" colspan="2">{{jbt_surety}}</td>
+                    <td style="width: 35%;" colspan="2"><strong><u>{{nm_surety}}</u></strong> <br> {{jbt_surety}}</td>
                 </tr>
                 <tr style="height: 50px;">
-                    <td colspan="4"></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
                     <td colspan="2"></td>
-                </tr>
-                <tr>
-                    <td colspan="4">Service Charges : {{symbol_1}}{{charge}} </td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td style="width: 30%;" colspan="2"></td>
+                    <td></td>
+                    <td></td>
                 </tr>
                 <tr>
-                    <td colspan="9"><hr style="height: 6px; border-top: 2px solid black; border-bottom: 2px solid black;"></td>
+                    <td colspan="2"><strong><u>Service Charges : {{symbol}}{{charge}}</u></strong></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="width: 30%;" colspan="4"></td>
                 </tr>
                 <tr>
-                    <td colspan="9" align="center">{{st_title3}}</td>
+                    <td colspan="9" style="height: 25px;"></td>
                 </tr>
                 <tr>
-                    <td colspan="9" align="center">{{st_title6}}</td>
-                </tr>
-                <tr>
-                    <td colspan="9" align="center">{{st_title4}}</td>
-                </tr>
-                <tr>
-                    <td colspan="9"><hr style="height: 6px; border-top: 2px solid black; border-bottom: 2px solid black;"></td>
+                    <td colspan="9" align="center">{{footer}}</td>
                 </tr>
 			</table>    
         </div>
