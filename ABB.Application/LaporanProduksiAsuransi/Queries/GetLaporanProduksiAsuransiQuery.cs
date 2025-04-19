@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Hosting;
@@ -156,14 +157,14 @@ namespace ABB.Application.LaporanProduksiAsuransi.Queries
                 foreach (var data in laporanProduksiAsuransiDatas.Where(w => w.nm_cob == nama_cob))
                 {
                     sequence++;
-                    var nilai_ttl_ptg = data.nilai_ttl_ptg == null ? "0" : data.nilai_ttl_ptg.Value.ToString("#,##0");
-                    var nilai_dis = data.nilai_dis == null ? "0" : data.nilai_dis.Value.ToString("#,##0");
-                    var nilai_prm = data.nilai_prm == null ? "0" : data.nilai_prm.Value.ToString("#,##0");
-                    var nilai_kms = data.nilai_kms == null ? "0" : data.nilai_kms.Value.ToString("#,##0");
-                    var nilai_bia_pol = data.nilai_ttl_ptg == null ? "0" : data.nilai_bia_pol.Value.ToString("#,##0");
-                    var nilai_bia_mat = data.nilai_ttl_ptg == null ? "0" : data.nilai_bia_mat.Value.ToString("#,##0");
-                    var premi_netto = Convert.ToDecimal(data.nilai_prm) - (Convert.ToDecimal(data.nilai_dis) + Convert.ToDecimal(data.nilai_kms));
-                    var total_bia = Convert.ToDecimal(data.nilai_bia_pol) + Convert.ToDecimal(data.nilai_bia_mat);
+                    var nilai_ttl_ptg = MoneyHelper.ConvertToReportFormat(data.nilai_ttl_ptg);
+                    var nilai_dis = MoneyHelper.ConvertToReportFormat(data.nilai_ttl_ptg);
+                    var nilai_prm = MoneyHelper.ConvertToReportFormat(data.nilai_prm);
+                    var nilai_kms = MoneyHelper.ConvertToReportFormat(data.nilai_kms);
+                    var nilai_bia_pol = MoneyHelper.ConvertToReportFormat(data.nilai_bia_pol);
+                    var nilai_bia_mat = MoneyHelper.ConvertToReportFormat(data.nilai_bia_mat);
+                    var premi_netto = MoneyHelper.ConvertToReportFormat(Convert.ToDecimal(data.nilai_prm) - (Convert.ToDecimal(data.nilai_dis) + Convert.ToDecimal(data.nilai_kms)));
+                    var total_bia = MoneyHelper.ConvertToReportFormat(Convert.ToDecimal(data.nilai_bia_pol) + Convert.ToDecimal(data.nilai_bia_mat));
                     stringBuilder.Append(@$"<tr>
                                                 <td style='width: 3%;  text-align: left; vertical-align: top; border: 1px solid'>{sequence}</td>
                                                 <td style='width: 20%; text-align: left; vertical-align: top; border: 1px solid'>{data.no_pol_ttg}<br>{data.no_nota}</td>
@@ -179,13 +180,13 @@ namespace ABB.Application.LaporanProduksiAsuransi.Queries
                                                 <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{nilai_bia_mat}</td>
                                                 <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{total_bia}</td>
                                             </tr>");
-                    total_nilai_prm += Convert.ToDecimal(nilai_ttl_ptg);
-                    total_nilai_dis += Convert.ToDecimal(nilai_dis);
-                    total_nilai_kms += Convert.ToDecimal(nilai_kms);
-                    total_premi_netto += premi_netto;
-                    total_nilai_bia_pol += Convert.ToDecimal(nilai_bia_pol);
-                    total_nilai_bia_mat += Convert.ToDecimal(nilai_bia_mat);
-                    total_group += total_bia;
+                    total_nilai_prm += MoneyHelper.ConvertToDecimalFormat(nilai_ttl_ptg);
+                    total_nilai_dis += MoneyHelper.ConvertToDecimalFormat(nilai_dis);
+                    total_nilai_kms += MoneyHelper.ConvertToDecimalFormat(nilai_kms);
+                    total_premi_netto += MoneyHelper.ConvertToDecimalFormat(premi_netto);
+                    total_nilai_bia_pol += MoneyHelper.ConvertToDecimalFormat(nilai_bia_pol);
+                    total_nilai_bia_mat += MoneyHelper.ConvertToDecimalFormat(nilai_bia_mat);
+                    total_group += MoneyHelper.ConvertToDecimalFormat(total_bia);
                 }
 
                 stringBuilder.Append(@$"<tr>
@@ -215,13 +216,13 @@ namespace ABB.Application.LaporanProduksiAsuransi.Queries
             
             resultTemplate = templateProfileResult.Render( new
             {
-                total_semua_nilai_prm = total_semua_nilai_prm.ToString("#,##0"), 
-                total_semua_nilai_dis = total_semua_nilai_dis.ToString("#,##0"), 
-                total_semua_nilai_kms = total_semua_nilai_kms.ToString("#,##0"),
-                total_semua_premi_netto = total_semua_premi_netto.ToString("#,##0"), 
-                total_semua_nilai_bia_pol = total_semua_nilai_bia_pol.ToString("#,##0"), 
-                total_semua_nilai_bia_mat = total_semua_nilai_bia_mat.ToString("#,##0"),
-                total_semua_group = total_semua_group.ToString("#,##0"),
+                total_semua_nilai_prm = MoneyHelper.ConvertToReportFormat(total_semua_nilai_prm), 
+                total_semua_nilai_dis = MoneyHelper.ConvertToReportFormat(total_semua_nilai_dis), 
+                total_semua_nilai_kms = MoneyHelper.ConvertToReportFormat(total_semua_nilai_kms),
+                total_semua_premi_netto = MoneyHelper.ConvertToReportFormat(total_semua_premi_netto), 
+                total_semua_nilai_bia_pol = MoneyHelper.ConvertToReportFormat(total_semua_nilai_bia_pol), 
+                total_semua_nilai_bia_mat = MoneyHelper.ConvertToReportFormat(total_semua_nilai_bia_mat),
+                total_semua_group = MoneyHelper.ConvertToReportFormat(total_semua_group),
                 laporanProduksiAsuransiDatas[0].nm_cb,
                 date = DateTime.Now.ToString("dd MMMM yyyy"), details = stringBuilder.ToString()
             } );

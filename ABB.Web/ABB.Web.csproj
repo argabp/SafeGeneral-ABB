@@ -5474,6 +5474,12 @@
       <None Update="Modules\Reports\Templates\LaporanProduksiAsuransiMasuk.html">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\Reports\Templates\RekapitulasiProduksi.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\RekapitulasiProduksi\JS\rekapitulasiProduksi.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

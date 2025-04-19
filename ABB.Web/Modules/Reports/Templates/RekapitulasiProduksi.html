@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang='id'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Laporan Produksi Asuransi Keluar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .h1 {
+            text-align: center;
+            font-size: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            /* margin-bottom: 15px; */
+        }
+
+        .section {
+            margin-top: 10px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table td {
+            padding: 8px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+<div style='page-break-before: always;'>
+    <p style='font-size: 14px; margin: auto;'><strong>PT. ASURANSI BHAKTI BHAYANGKARA</strong></p>
+    <p style='font-size: 12px; margin: auto;'>Jl. Palatehan No. 5 Kebayoran Baru</p>
+
+    <div class='container'>
+        <div class='section'>
+            <p style='font-size: 14px; margin: auto; text-align: center;'>REKAPITULASI PRODUKSI</p>
+            <p style='font-size: 14px; margin: auto; text-align: center;'>{{nm_cb}}</p>
+            <p style='font-size: 14px; margin: auto; text-align: center; padding-bottom: 3em'>Periode: {{kd_bln_mul}} s/d {{kd_bln_akh}}</p>
+            
+                {{details}}
+            <div>
+                <p style="text-align: right"><strong>Departement Underwriting</strong></p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
