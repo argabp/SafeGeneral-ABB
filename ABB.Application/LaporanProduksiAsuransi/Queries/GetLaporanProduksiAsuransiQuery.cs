@@ -195,12 +195,12 @@ namespace ABB.Application.LaporanProduksiAsuransi.Queries
                                         <tr>
                                             <td colspan=6 style='border-bottom: 1px solid; border-top: 1px solid'>TOTAL DALAM ORIGINAL</td>
                                             <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: center'>Rp.</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{total_nilai_prm:#,##0}</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{total_nilai_dis:#,##0}<br>{total_nilai_kms:#,##0}</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{total_premi_netto:#,##0}</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{total_nilai_bia_pol:#,##0}</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{total_nilai_bia_mat:#,##0}</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{total_group:#,##0}</td>
+                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_nilai_prm)}</td>
+                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_nilai_dis)}<br>{ReportHelper.ConvertToReportFormat(total_nilai_kms)}</td>
+                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_premi_netto)}</td>
+                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_nilai_bia_pol)}</td>
+                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_nilai_bia_mat)}</td>
+                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_group)}</td>
                                         </tr>
                                     </table>
                                     </div>");

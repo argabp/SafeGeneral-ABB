@@ -69,9 +69,9 @@ namespace ABB.Application.RenewalReminder.Queries
                                         <td style='width: 5%;  text-align: center; border: 1px solid' colspan=3>Jatuh Tempo</td>
                                     </tr>
                                     <tr>
-                                        <td style='border: 1px solid'>Tanggal</td>
-                                        <td style='border: 1px solid'>Bulan</td>
-                                        <td style='border: 1px solid'>Tahun</td>
+                                        <td style='border: 1px solid; text-align: center;'>Tanggal</td>
+                                        <td style='border: 1px solid; text-align: center;'>Bulan</td>
+                                        <td style='border: 1px solid; text-align: center;'>Tahun</td>
                                     </tr>");
 
             var groups = renewalReminderDatas.Select(s => s.nm_cob?.Trim() + "|" + s.nm_scob?.Trim()).Distinct().ToList();
@@ -95,17 +95,17 @@ namespace ABB.Application.RenewalReminder.Queries
                                         <tr>
                                             <td style='width: 3%;  text-align: left; vertical-align: top; border-left: 1px solid; border-right: 1px solid;'>{sequence}</td>
                                             <td style='width: 20%; text-align: left; vertical-align: top; border-left: 1px solid; border-right: 1px solid;'>{data.no_pol_ttg}</td>
-                                            <td style='width: 20%; text-align: right; vertical-align: top; border-left: 1px solid; border-right: 1px solid;'>{data.nm_ttg}</td>
+                                            <td style='width: 20%; text-align: left; vertical-align: top; border-left: 1px solid; border-right: 1px solid;'>{data.nm_ttg}</td>
                                             <td style='width: 20%; text-align: right; vertical-align: top; border-left: 1px solid; border-right: 1px solid;'>{nilai_ptg}</td>
                                             <td style='width: 20%; text-align: right; vertical-align: top; border-left: 1px solid; border-right: 1px solid;'>{nilai_prm}</td>
-                                            <td style='width: 5%;  text-align: right; vertical-align: top; border-left: 1px solid; border-right: 1px solid;'>{data.tgl_akh_ptg_ind:dd}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border-left: 1px solid; border-right: 1px solid;'>{data.tgl_akh_ptg_ind:MMM}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border-left: 1px solid; border-right: 1px solid;'>{data.tgl_akh_ptg_ind:yyyy}</td>
+                                            <td style='width: 5%;  text-align: center; vertical-align: top; border-left: 1px solid; border-right: 1px solid;'>{data.tgl_akh_ptg_ind:dd}</td>
+                                            <td style='width: 10%; text-align: center; vertical-align: top; border-left: 1px solid; border-right: 1px solid;'>{data.tgl_akh_ptg_ind:MMM}</td>
+                                            <td style='width: 10%; text-align: center; vertical-align: top; border-left: 1px solid; border-right: 1px solid;'>{data.tgl_akh_ptg_ind:yyyy}</td>
                                         </tr>");
                 }
             }
             
-            stringBuilder.Append("</table>");
+            stringBuilder.Append("<tr><td style='border-top:1px solid' colspan=7></td></tr></table>");
             
             var renewalReminder = renewalReminderDatas.FirstOrDefault();
             resultTemplate = templateProfileResult.Render( new

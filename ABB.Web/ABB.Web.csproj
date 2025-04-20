@@ -5486,6 +5486,12 @@
       <None Update="Modules\RenewalReminder\JS\renewalReminder.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\Reports\Templates\LaporanBulananCabang.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\LaporanBulananCabang\JS\laporanBulananCabang.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
