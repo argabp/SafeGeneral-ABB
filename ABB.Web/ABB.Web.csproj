@@ -5480,6 +5480,12 @@
       <None Update="Modules\RekapitulasiProduksi\JS\rekapitulasiProduksi.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\Reports\Templates\RenewalReminder.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\RenewalReminder\JS\renewalReminder.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

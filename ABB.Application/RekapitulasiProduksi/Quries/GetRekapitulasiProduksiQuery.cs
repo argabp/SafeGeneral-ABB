@@ -6,10 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
-using ABB.Application.LaporanProduksiAsuransiKeluar.Queries;
 using MediatR;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Primitives;
 using Scriban;
 
 namespace ABB.Application.RekapitulasiProduksi.Quries

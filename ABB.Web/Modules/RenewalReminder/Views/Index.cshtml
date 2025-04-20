@@ -1,0 +1,81 @@
+﻿@using Kendo.Mvc.UI
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@model ABB.Web.Modules.RenewalReminder.Models.RenewalReminderViewModel
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Renewal Reminder";
+}
+<script src="~/Modules/RenewalReminder/JS/renewalReminder.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+<div class="flat-box">
+    
+    <form id="RenewalReminderForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Cabang</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_cb" style="width: 100%" option-label="Pilih Cabang"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetCabang", "RenewalReminder")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_cb" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode COB</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_cob" style="width: 100%" option-label="Pilih COB"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetCOB", "RenewalReminder")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_cob" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Periode</label>
+                <div class="col-sm-6 row">
+                    <div class="col-sm-5">
+                        <kendo-datepicker for="kd_bln_mul" value="DateTime.Now"/>
+                        <span asp-validation-for="kd_bln_mul" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-2" style="align-content: center">
+                        <p style="margin-bottom: 3px">s/d</p>
+                    </div>
+                    <div class="col-sm-5">
+                        <kendo-datepicker for="kd_bln_akh" value="DateTime.Now"/>
+                        <span asp-validation-for="kd_bln_akh" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <button type="button" id="btn-preview" class="btn btn-success space-right">
+                <span class="fa fa-search"></span> Preview
+            </button>
+        </div>
+    </form>
+</div>
+
