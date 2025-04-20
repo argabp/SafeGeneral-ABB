@@ -52,7 +52,7 @@ namespace ABB.Application.Common
                 "d_uw01r_30m_srm", "PolisPASiramaMulti.html"
             },
             {
-                "d_uw01r_34", "PolisHoleinoneSingle.html"
+                "d_uw01r_34", "PolisHoleInOneSingle.html"
             },
             {
                 "d_uw01r_01do", "LampiranPolisFireDaftarIsi.html"
@@ -122,7 +122,7 @@ namespace ABB.Application.Common
                 "PolisPASiramaMulti.html", "spr_uw01r_30m_srm" 
             },
             {
-                "PolisHoleinoneSingle.html", "spr_uw01r_34" 
+                "PolisHoleInOneSingle.html", "spr_uw01r_34" 
             },
             {
                 "LampiranPolisFireDaftarIsi.html", "spr_uw01r_01do" 

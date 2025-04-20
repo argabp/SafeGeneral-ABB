@@ -30,9 +30,9 @@ namespace ABB.Application.CetakSchedulePolis.Queries
 
         public int jk_wkt_ptg { get; set; }
 
-        public string tgl_mul_ptg_ind { get; set; }
+        public string? tgl_mul_ptg_ind { get; set; }
 
-        public string tgl_akh_ptg_ind { get; set; }
+        public string? tgl_akh_ptg_ind { get; set; }
 
         public string tgl_closing_ind { get; set; }
 
@@ -46,15 +46,15 @@ namespace ABB.Application.CetakSchedulePolis.Queries
 
         public string nm_okup { get; set; }
 
-        public decimal nilai_ttl_ptg { get; set; }
+        public decimal? nilai_ttl_ptg { get; set; }
 
-        public decimal pst_dis { get; set; }
+        public decimal? pst_dis { get; set; }
 
-        public decimal nilai_dis { get; set; }
+        public decimal? nilai_dis { get; set; }
 
-        public decimal pst_dis_fea { get; set; }
+        public decimal? pst_dis_fea { get; set; }
 
-        public decimal nilai_dis_fea { get; set; }
+        public decimal? nilai_dis_fea { get; set; }
 
         public string kd_mtu_symbol { get; set; }
 
@@ -66,7 +66,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
 
         public decimal nilai_prk_pkk { get; set; }
 
-        public decimal nilai_prm_tbh_01 { get; set; }
+        public decimal? nilai_prm_tbh_01 { get; set; }
 
         public decimal nilai_bia_pol { get; set; }
 
@@ -150,13 +150,13 @@ namespace ABB.Application.CetakSchedulePolis.Queries
 
         public string nm_penerangan { get; set; }
 
-        public decimal nilai_prm_tbh_02 { get; set; }
+        public decimal? nilai_prm_tbh_02 { get; set; }
         
-        public decimal nilai_prm_tbh_03 { get; set; }
+        public decimal? nilai_prm_tbh_03 { get; set; }
         
-        public decimal nilai_prm_tbh_04 { get; set; }
+        public decimal? nilai_prm_tbh_04 { get; set; }
         
-        public decimal nilai_prm_tbh_05 { get; set; }
+        public decimal? nilai_prm_tbh_05 { get; set; }
 
         public string kd_pos_rsk { get; set; }
 
@@ -164,9 +164,9 @@ namespace ABB.Application.CetakSchedulePolis.Queries
 
         public string? stnc { get; set; }
 
-        public string tgl_mul_ptg { get; set; }
+        public string? tgl_mul_ptg { get; set; }
 
-        public string tgl_akh_ptg { get; set; }
+        public string? tgl_akh_ptg { get; set; }
 
         public string kd_grp_ttg { get; set; }
 
@@ -215,7 +215,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         public  string nm_grp_oby_1 { get; set; }
 
         public DateTime? tgl_lahir { get; set; }
-        public decimal? jk_wkt { get; set; }
+        public int? jk_wkt { get; set; }
         public int? usia { get; set; }
         public decimal? jup { get; set; }
         public string? cover { get; set; }
@@ -231,7 +231,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         public string? stn_rate_prm { get; set; }
         public decimal? pst_deduct { get; set; }
         public decimal? nilai_casco { get; set; }
-        public decimal nilai_prm_casco { get; set; }
+        public decimal? nilai_prm_casco { get; set; }
         public decimal? nilai_rsk_sendiri { get; set; }
         public decimal? nilai_pap { get; set; }
         public decimal? nilai_tjh { get; set; }
@@ -264,26 +264,27 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         public decimal? nilai_prm_hh_1 { get; set; }
         public decimal? nilai_casco_3 { get; set; }
         public decimal? nilai_casco_4 { get; set; }
+        public decimal? nilai_casco_5 { get; set; }
         public decimal? nilai_prm_tkp { get; set; }
         public decimal? nilai_pap_med { get; set; }
         public decimal? nilai_prm_pap_med { get; set; }
         public decimal? nilai_pad_med { get; set; }
         public decimal? nilai_prm_pad_med { get; set; }
         public string deduct { get; set; }
-        public string nilai_prm_pkk { get; set; }
+        public decimal? nilai_prm_pkk { get; set; }
         public string thn_buat { get; set; }
         public string tempat_brkt { get; set; }
         public string tempat_tiba { get; set; }
         public string lamp_pol { get; set; }
-        public string nilai_aksesories{ get; set; }
-        public string nilai_prm_tjp {get; set; }
+        public decimal? nilai_aksesories{ get; set; }
+        public decimal? nilai_prm_tjp {get; set; }
         public string consignee {get; set; }
         public string no_po {get; set; }
         public string no_lc {get; set; }
         public string no_inv {get; set; }
         public string no_bl {get; set; }
         public string tgl_brkt { get; set; }
-        public string nilai_bond { get; set; }
+        public decimal? nilai_bond { get; set; }
         public string nm_obl { get; set; }
         public string almt_obl { get; set; }
         public string ket_nilai_bond { get; set; }
@@ -295,7 +296,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         public string jbt_principal { get; set; }
         public string nm_surety { get; set; }
         public string jbt_surety { get; set; }
-        public string charge { get; set; }
+        public decimal? charge { get; set; }
         public string nm_polis { get; set; }
         public string nm_waris_1 { get; set; }
         public string nm_waris_2 { get; set; }
@@ -304,24 +305,24 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         public string hub_waris_2 { get; set; }
         public string hub_waris_3 { get; set; }
         public string jk_wkt_ptg_ind { get; set; }
-        public string nilai_ptg_A { get; set; }
-        public string nilai_ptg_B { get; set; }
-        public string nilai_ptg_C { get; set; }
-        public string nilai_ptg_D { get; set; }
-        public string pst_A { get; set; }
-        public string pst_B { get; set; }
-        public string pst_C { get; set; }
-        public string pst_D { get; set; }
-        public string pst_E { get; set; }
-        public string stn_rate_A { get; set; }
-        public string stn_rate_B{ get; set; }
-        public string stn_rate_C { get; set; }
-        public string stn_rate_D { get; set; }
-        public string stn_rate_E { get; set; }
-        public string nilai_prm_A { get; set; }
-        public string nilai_prm_B { get; set; }
-        public string nilai_prm_C { get; set; }
-        public string nilai_prm_D { get; set; }
+        public decimal? nilai_ptg_A { get; set; }
+        public decimal? nilai_ptg_B { get; set; }
+        public decimal? nilai_ptg_C { get; set; }
+        public decimal? nilai_ptg_D { get; set; }
+        public decimal? pst_A { get; set; }
+        public decimal? pst_B { get; set; }
+        public decimal? pst_C { get; set; }
+        public decimal? pst_D { get; set; }
+        public decimal? pst_E { get; set; }
+        public decimal? stn_rate_A { get; set; }
+        public decimal? stn_rate_B{ get; set; }
+        public decimal? stn_rate_C { get; set; }
+        public decimal? stn_rate_D { get; set; }
+        public decimal? stn_rate_E { get; set; }
+        public decimal? nilai_prm_A { get; set; }
+        public decimal? nilai_prm_B { get; set; }
+        public decimal? nilai_prm_C { get; set; }
+        public decimal? nilai_prm_D { get; set; }
         public string almt_polis { get; set; }
         public string obyek_ptg { get; set; }
         public string ket_event { get; set; }
@@ -332,11 +333,14 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         public string own_risk { get; set; }
         public string kd_mtu { get; set; }
         public string kota_cab { get; set; }
-        public string nilai_ttl_prm { get; set; }
+        public decimal? nilai_ttl_prm { get; set; }
         public string no_rsk { get; set; }
         public string nm_deb { get; set; }
         public string alm_lok_ptg { get; set; }
         public string kd_usr { get; set; }
         public string tmp_lahir { get; set; }
+        public decimal? pst_tjh { get; set; }
+        public decimal? nilai_prm_phk { get; set; }
+        public decimal? nilai_ptg_phk { get; set; }
     }
 }

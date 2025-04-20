@@ -115,12 +115,12 @@ namespace ABB.Application.LaporanProduksiAsuransiKeluar.Queries
                 foreach (var data in laporanProduksiAsuransiKeluarDatas.Where(w => w.nm_cob == nama_cob))
                 {
                     sequence++;
-                    var nilai_ttl_ptg = MoneyHelper.ConvertToReportFormat(data.nilai_ttl_ptg);
-                    var pst_share = MoneyHelper.ConvertToReportFormat(data.pst_share);
-                    var nilai_prm = MoneyHelper.ConvertToReportFormat(data.nilai_prm);
-                    var nilai_kms = MoneyHelper.ConvertToReportFormat(data.nilai_kms);
-                    var nilai_hf = MoneyHelper.ConvertToReportFormat(data.nilai_ttl_ptg);
-                    var nilai_net = MoneyHelper.ConvertToReportFormat(data.nilai_ttl_ptg);
+                    var nilai_ttl_ptg = ReportHelper.ConvertToReportFormat(data.nilai_ttl_ptg);
+                    var pst_share = ReportHelper.ConvertToReportFormat(data.pst_share);
+                    var nilai_prm = ReportHelper.ConvertToReportFormat(data.nilai_prm);
+                    var nilai_kms = ReportHelper.ConvertToReportFormat(data.nilai_kms);
+                    var nilai_hf = ReportHelper.ConvertToReportFormat(data.nilai_ttl_ptg);
+                    var nilai_net = ReportHelper.ConvertToReportFormat(data.nilai_ttl_ptg);
                     stringBuilder.Append(@$"<tr>
                                                 <td style='width: 3%;  text-align: left; vertical-align: top; border: 1px solid'>{sequence}</td>
                                                 <td style='width: 20%; text-align: left; vertical-align: top; border: 1px solid'>{data.no_nota}<br>{data.tgl_nt}</td>
@@ -134,12 +134,12 @@ namespace ABB.Application.LaporanProduksiAsuransiKeluar.Queries
                                                 <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{nilai_hf}</td>
                                                 <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{nilai_net}</td>
                                             </tr>");
-                    total_sum_ins += MoneyHelper.ConvertToDecimalFormat(nilai_ttl_ptg);
-                    total_pst_share += MoneyHelper.ConvertToDecimalFormat(pst_share);
-                    total_nilai_prm += MoneyHelper.ConvertToDecimalFormat(nilai_prm);
-                    total_nilai_kms += MoneyHelper.ConvertToDecimalFormat(nilai_kms);
-                    total_nilai_hf += MoneyHelper.ConvertToDecimalFormat(nilai_hf);
-                    total_nilai_net += MoneyHelper.ConvertToDecimalFormat(nilai_net);
+                    total_sum_ins += ReportHelper.ConvertToDecimalFormat(nilai_ttl_ptg);
+                    total_pst_share += ReportHelper.ConvertToDecimalFormat(pst_share);
+                    total_nilai_prm += ReportHelper.ConvertToDecimalFormat(nilai_prm);
+                    total_nilai_kms += ReportHelper.ConvertToDecimalFormat(nilai_kms);
+                    total_nilai_hf += ReportHelper.ConvertToDecimalFormat(nilai_hf);
+                    total_nilai_net += ReportHelper.ConvertToDecimalFormat(nilai_net);
                 }
 
                 stringBuilder.Append(@$"<tr>
@@ -167,12 +167,12 @@ namespace ABB.Application.LaporanProduksiAsuransiKeluar.Queries
             
             resultTemplate = templateProfileResult.Render( new
             {
-                total_semua_sum_ins = MoneyHelper.ConvertToReportFormat(total_semua_sum_ins), 
-                total_semua_share_member = MoneyHelper.ConvertToReportFormat(total_semua_pst_share), 
-                total_semua_premi_koas = MoneyHelper.ConvertToReportFormat(total_semua_nilai_prm),
-                total_semua_commission = MoneyHelper.ConvertToReportFormat(total_semua_nilai_kms), 
-                total_semua_handling_fee = MoneyHelper.ConvertToReportFormat(total_semua_nilai_hf), 
-                total_semua_amount_due_to_you = MoneyHelper.ConvertToReportFormat(total_semua_nilai_net),
+                total_semua_sum_ins = ReportHelper.ConvertToReportFormat(total_semua_sum_ins), 
+                total_semua_share_member = ReportHelper.ConvertToReportFormat(total_semua_pst_share), 
+                total_semua_premi_koas = ReportHelper.ConvertToReportFormat(total_semua_nilai_prm),
+                total_semua_commission = ReportHelper.ConvertToReportFormat(total_semua_nilai_kms), 
+                total_semua_handling_fee = ReportHelper.ConvertToReportFormat(total_semua_nilai_hf), 
+                total_semua_amount_due_to_you = ReportHelper.ConvertToReportFormat(total_semua_nilai_net),
                 details = stringBuilder.ToString()
             } );
             

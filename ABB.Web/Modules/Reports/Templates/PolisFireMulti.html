@@ -101,55 +101,37 @@
         <td style="width: 5%;">Jenis Resiko/Okupasi</td>
         <td style="width: 1%;">:</td>
         <td style="width: 38.3%;">TERLAMPIR</td>
-        <td style="width: 25%;">- Jaminan Tambahan {{kd_cvrg_01}}</td>
-        <td style="width: 1%;">:</td>
-        <td style="width: 5%;">{{kd_mtu_symbol}}</td>
-        <td style="width: 15%; text-align: right;">{{nilai_prm_tbh_01}}</td>
+        {{view_prm_tbh_01}}
     </tr>
     <tr>
         <td style="width: 15%;">No. Kode</td>
         <td style="width: 1%;">:</td>
         <td style="width: 38.3%;">TERLAMPIR</td>
-        <td style="width: 25%;">- Jaminan Tambahan {{kd_cvrg_02}}</td>
-        <td style="width: 1%;">:</td>
-        <td style="width: 5%;">{{kd_mtu_symbol}}</td>
-        <td style="width: 15%; text-align: right;">{{nilai_prm_tbh_02}}</td>
+        {{view_prm_tbh_02}}
     </tr>
     <tr>
         <td style="width: 15%;">Suku Premi</td>
         <td style="width: 1%;">:</td>
         <td style="width: 38.3%;">{{pst_rate_prm_pkk}}{{stn_rate_prm_pkk}}</td>
-        <td style="width: 25%;">- Jaminan Tambahan {{kd_cvrg_03}}</td>
-        <td style="width: 1%;">:</td>
-        <td style="width: 5%;">{{kd_mtu_symbol}}</td>
-        <td style="width: 15%; text-align: right;">{{nilai_prm_tbh_03}}</td>
+        {{view_prm_tbh_03}}
     </tr>
     <tr>
         <td style="width: 15%;"></td>
         <td style="width: 1%;"></td>
         <td style="width: 25%;"></td>
-        <td style="width: 25%;">- Jaminan Tambahan {{kd_cvrg_04}}</td>
-        <td style="width: 1%;">:</td>
-        <td style="width: 5%;">{{kd_mtu_symbol}}</td>
-        <td style="width: 15%; text-align: right;">{{nilai_prm_tbh_04}}</td>
+        {{view_prm_tbh_04}}
     </tr>
     <tr>
         <td style="width: 15%;"></td>
         <td style="width: 1%;"></td>
         <td style="width: 25%;"></td>
-        <td style="width: 25%;">- Jaminan Tambahan {{kd_cvrg_05}}</td>
-        <td style="width: 1%;">:</td>
-        <td style="width: 5%;">{{kd_mtu_symbol}}</td>
-        <td style="width: 15%; text-align: right;" >{{nilai_prm_tbh_05}}</td>
+        {{view_prm_tbh_05}}
     </tr>
     <tr>
         <td style="width: 15%;"></td>
         <td style="width: 1%;"></td>
         <td style="width: 25%;"></td>
-        <td style="width: 25%;">- Discount</td>
-        <td style="width: 1%;">:</td>
-        <td style="width: 5%;">{{kd_mtu_symbol}}</td>
-        <td style="width: 15%; text-align: right;">{{nilai_dis}}</td>
+        {{view_nilai_dis}}
     </tr>
     <tr>
         <td style="width: 15%;"></td>
@@ -193,7 +175,7 @@
         <td style="width: 20%;">-Bea materai</td>
         <td style="width: 1%">:</td>
         <td style="padding: 0; margin: 0;">{{kd_mtu_symbol}}</td>
-        <td style="padding: 0; margin: 0; text-align: right;"">{{nilai_bia_mat}}</td>
+        <td style="padding: 0; margin: 0; text-align: right;">{{nilai_bia_mat}}</td>
     </tr>
     <tr style="height: 20px;">
         <td style="width: 1%;">{{nm_cvrg_04}}</td>
@@ -240,36 +222,11 @@
         <td></td>
         <td style="width: 10%;">Harga Pertanggungan</td>
     </tr>
-    <tr style="height: 20px;">
-        <td style="width: 1%;">1.</td>
-        <td style="width: 68%;" colspan="2">{{desk_oby_01}}</td>
-        <td></td>
-        <td style="padding: 0; margin: 0; width: 17.5%;">{{kd_mtu_symbol}} {{nilai_oby_01}}</td>
-    </tr>
-    <tr style="height: 20px;">
-        <td style="width: 1%;">2.</td>
-        <td style="width: 30%;" colspan="2">{{desk_oby_02}}</td>
-        <td></td>
-        <td style="padding: 0; margin: 0; width: 17.5%;">{{kd_mtu_symbol}} {{nilai_oby_02}}</td>
-    </tr>
-    <tr style="height: 20px;">
-        <td style="width: 1%;">3.</td>
-        <td style="width: 68%;" colspan="2">{{desk_oby_03}}</td>
-        <td></td>
-        <td style="padding: 0; margin: 0; width: 17.5%;">{{kd_mtu_symbol}} {{nilai_oby_03}}</td>
-    </tr>
-    <tr style="height: 20px;">
-        <td style="width: 1%;">4.</td>
-        <td style="width: 68%;" colspan="2">{{desk_oby_04}}</td>
-        <td></td>
-        <td style="padding: 0; margin: 0; width: 17.5%;">{{kd_mtu_symbol}} {{nilai_oby_04}}</td>
-    </tr>
-    <tr style="height: 20px;">
-        <td style="width: 1%;">5.</td>
-        <td style="width: 68%;" colspan="2">{{desk_oby_05}}</td>
-        <td></td>
-        <td style="padding: 0; margin: 0; width: 17.5%;">{{kd_mtu_symbol}} {{nilai_oby_05}}</td>
-    </tr>
+    {{view_row_desk_oby_01}}
+    {{view_row_desk_oby_02}}
+    {{view_row_desk_oby_03}}
+    {{view_row_desk_oby_04}}
+    {{view_row_desk_oby_05}}
     <tr style="height: 20px;">
         <td style="width: 1%;"></td>
         <td style="width: 68%; text-align: right; padding-right: 5px" colspan="2">Jumlah</td>
@@ -284,7 +241,7 @@
     <tr>
         <td style="width: 20%;">{{ctt_pol}}</td>
         <td></td>
-        <td style="width: 20%;" align="center">{{kt_cb}},{{tgl_closing_ind}}</td>
+        <td style="width: 20%;" align="center">{{kt_cb}}, {{tgl_closing_ind}}</td>
     </tr>
     <tr>
         <td style="width: 25%;">{{lamp_pol}}</td>

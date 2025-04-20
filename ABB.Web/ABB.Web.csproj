@@ -5447,7 +5447,7 @@
       <None Update="Modules\Reports\Templates\PolisBondingUangMuka.html">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Modules\Reports\Templates\PolisHoleinoneSingle.html">
+      <None Update="Modules\Reports\Templates\PolisHoleInOneSingle.html">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Modules\Reports\Templates\PolisPABiasaSingle.html">

@@ -114,12 +114,12 @@ namespace ABB.Application.LaporanProduksiAsuransiMasuk.Queries
                 foreach (var data in laporanProduksiAsuransiMasukDatas.Where(w => w.nm_cob == nama_cob))
                 {
                     sequence++;
-                    var nilai_ttl_ptg = MoneyHelper.ConvertToReportFormat(data.nilai_ttl_ptg) == null ? "0" : data.nilai_ttl_ptg.Value.ToString("#,##0");
-                    var nilai_prm = MoneyHelper.ConvertToReportFormat(data.nilai_prm) == null ? "0" : data.nilai_prm.Value.ToString("#,##0");
-                    var nilai_kms = MoneyHelper.ConvertToReportFormat(data.nilai_kms) == null ? "0" : data.nilai_kms.Value.ToString("#,##0");
-                    var nilai_dis = MoneyHelper.ConvertToReportFormat(data.nilai_dis) == null ? "0" : data.nilai_dis.Value.ToString("#,##0");
-                    var nilai_hf = MoneyHelper.ConvertToReportFormat(data.nilai_ttl_ptg) == null ? "0" : data.nilai_hf.Value.ToString("#,##0");
-                    var nilai_net = MoneyHelper.ConvertToReportFormat(data.nilai_ttl_ptg) == null ? "0" : data.nilai_net.Value.ToString("#,##0");
+                    var nilai_ttl_ptg = ReportHelper.ConvertToReportFormat(data.nilai_ttl_ptg) == null ? "0" : data.nilai_ttl_ptg.Value.ToString("#,##0");
+                    var nilai_prm = ReportHelper.ConvertToReportFormat(data.nilai_prm) == null ? "0" : data.nilai_prm.Value.ToString("#,##0");
+                    var nilai_kms = ReportHelper.ConvertToReportFormat(data.nilai_kms) == null ? "0" : data.nilai_kms.Value.ToString("#,##0");
+                    var nilai_dis = ReportHelper.ConvertToReportFormat(data.nilai_dis) == null ? "0" : data.nilai_dis.Value.ToString("#,##0");
+                    var nilai_hf = ReportHelper.ConvertToReportFormat(data.nilai_ttl_ptg) == null ? "0" : data.nilai_hf.Value.ToString("#,##0");
+                    var nilai_net = ReportHelper.ConvertToReportFormat(data.nilai_ttl_ptg) == null ? "0" : data.nilai_net.Value.ToString("#,##0");
                     stringBuilder.Append(@$"<tr>
                                                 <td style='width: 3%;  text-align: left; vertical-align: top; border: 1px solid'>{sequence}</td>
                                                 <td style='width: 20%; text-align: left; vertical-align: top; border: 1px solid'>{data.no_nota}<br>{data.tgl_nt}</td>
@@ -133,12 +133,12 @@ namespace ABB.Application.LaporanProduksiAsuransiMasuk.Queries
                                                 <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{nilai_hf}</td>
                                                 <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{nilai_net}</td>
                                             </tr>");
-                    total_sum_ins += MoneyHelper.ConvertToDecimalFormat(nilai_ttl_ptg);
-                    total_gross_premium += MoneyHelper.ConvertToDecimalFormat(nilai_prm);
-                    total_commision += MoneyHelper.ConvertToDecimalFormat(nilai_kms);
-                    total_discount += MoneyHelper.ConvertToDecimalFormat(nilai_dis);
-                    total_handling_fee += MoneyHelper.ConvertToDecimalFormat(nilai_hf);
-                    total_net_due_to_us += MoneyHelper.ConvertToDecimalFormat(nilai_net);
+                    total_sum_ins += ReportHelper.ConvertToDecimalFormat(nilai_ttl_ptg);
+                    total_gross_premium += ReportHelper.ConvertToDecimalFormat(nilai_prm);
+                    total_commision += ReportHelper.ConvertToDecimalFormat(nilai_kms);
+                    total_discount += ReportHelper.ConvertToDecimalFormat(nilai_dis);
+                    total_handling_fee += ReportHelper.ConvertToDecimalFormat(nilai_hf);
+                    total_net_due_to_us += ReportHelper.ConvertToDecimalFormat(nilai_net);
                 }
 
                 stringBuilder.Append(@$"<tr>
@@ -166,12 +166,12 @@ namespace ABB.Application.LaporanProduksiAsuransiMasuk.Queries
             
             resultTemplate = templateProfileResult.Render( new
             {
-                total_semua_sum_ins = MoneyHelper.ConvertToReportFormat(total_semua_sum_ins), 
-                total_semua_gross_premium = MoneyHelper.ConvertToReportFormat(total_semua_gross_premium), 
-                total_semua_commision = MoneyHelper.ConvertToReportFormat(total_semua_commision),
-                total_semua_discount = MoneyHelper.ConvertToReportFormat(total_semua_discount), 
-                total_semua_handling_fee = MoneyHelper.ConvertToReportFormat(total_semua_handling_fee), 
-                total_semua_net_due_to_us = MoneyHelper.ConvertToReportFormat(total_semua_net_due_to_us),
+                total_semua_sum_ins = ReportHelper.ConvertToReportFormat(total_semua_sum_ins), 
+                total_semua_gross_premium = ReportHelper.ConvertToReportFormat(total_semua_gross_premium), 
+                total_semua_commision = ReportHelper.ConvertToReportFormat(total_semua_commision),
+                total_semua_discount = ReportHelper.ConvertToReportFormat(total_semua_discount), 
+                total_semua_handling_fee = ReportHelper.ConvertToReportFormat(total_semua_handling_fee), 
+                total_semua_net_due_to_us = ReportHelper.ConvertToReportFormat(total_semua_net_due_to_us),
                 details = stringBuilder.ToString()
             } );
             

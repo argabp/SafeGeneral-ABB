@@ -107,13 +107,13 @@ namespace ABB.Application.RekapitulasiProduksi.Quries
                     foreach (var data in rekapitulasiProduksiDatas)
                     {
                         sequence++;
-                        var nilai_prm = MoneyHelper.ConvertToReportFormat(data.nilai_prm);
-                        var nilai_diskon = MoneyHelper.ConvertToReportFormat(data.nilai_diskon);
-                        var nilai_kms = MoneyHelper.ConvertToReportFormat(data.nilai_kms);
-                        var nilai_bia_pol = MoneyHelper.ConvertToReportFormat(data.nilai_bia_pol);
-                        var nilai_bia_mat = MoneyHelper.ConvertToReportFormat(data.nilai_bia_mat);
-                        var nilai_kms_broker = MoneyHelper.ConvertToReportFormat(data.nilai_kms_broker);
-                        var nilai_net = MoneyHelper.ConvertToReportFormat(data.nilai_net);
+                        var nilai_prm = ReportHelper.ConvertToReportFormat(data.nilai_prm);
+                        var nilai_diskon = ReportHelper.ConvertToReportFormat(data.nilai_diskon);
+                        var nilai_kms = ReportHelper.ConvertToReportFormat(data.nilai_kms);
+                        var nilai_bia_pol = ReportHelper.ConvertToReportFormat(data.nilai_bia_pol);
+                        var nilai_bia_mat = ReportHelper.ConvertToReportFormat(data.nilai_bia_mat);
+                        var nilai_kms_broker = ReportHelper.ConvertToReportFormat(data.nilai_kms_broker);
+                        var nilai_net = ReportHelper.ConvertToReportFormat(data.nilai_net);
                         
                         stringBuilder.Append(@$"<tr>
                                                     <td style='width: 3%;  text-align: left; vertical-align: top; border-left: 1px solid; border-right: 1px solid;'>{sequence}</td>
@@ -128,13 +128,13 @@ namespace ABB.Application.RekapitulasiProduksi.Quries
                                                     <td style='width: 10%; text-align: right; vertical-align: top; border-left: 1px solid; border-right: 1px solid;'>{data.jml_polis}</td>
                                                 </tr>");
 
-                        total_premi += MoneyHelper.ConvertToDecimalFormat(nilai_prm);
-                        total_diskon += MoneyHelper.ConvertToDecimalFormat(nilai_diskon);
-                        total_komisi += MoneyHelper.ConvertToDecimalFormat(nilai_kms);
-                        total_biaya_polis += MoneyHelper.ConvertToDecimalFormat(nilai_bia_pol);
-                        total_biaya_materai += MoneyHelper.ConvertToDecimalFormat(nilai_bia_mat);
-                        total_brokerage += MoneyHelper.ConvertToDecimalFormat(nilai_kms_broker);
-                        total_net_premi += MoneyHelper.ConvertToDecimalFormat(nilai_net);
+                        total_premi += ReportHelper.ConvertToDecimalFormat(nilai_prm);
+                        total_diskon += ReportHelper.ConvertToDecimalFormat(nilai_diskon);
+                        total_komisi += ReportHelper.ConvertToDecimalFormat(nilai_kms);
+                        total_biaya_polis += ReportHelper.ConvertToDecimalFormat(nilai_bia_pol);
+                        total_biaya_materai += ReportHelper.ConvertToDecimalFormat(nilai_bia_mat);
+                        total_brokerage += ReportHelper.ConvertToDecimalFormat(nilai_kms_broker);
+                        total_net_premi += ReportHelper.ConvertToDecimalFormat(nilai_net);
                         total_polis += Convert.ToDecimal(data.jml_polis);
                     }
                         
@@ -207,13 +207,13 @@ namespace ABB.Application.RekapitulasiProduksi.Quries
                         foreach (var data in rekapitulasiProduksiDatas.Where(w => w.jns_nt_msk.StartsWith(nt_msk)))
                         {
                             sequence++;
-                            var nilai_prm = MoneyHelper.ConvertToReportFormat(data.nilai_prm);
-                            var nilai_diskon = MoneyHelper.ConvertToReportFormat(data.nilai_diskon);
-                            var nilai_kms = MoneyHelper.ConvertToReportFormat(data.nilai_kms);
-                            var nilai_bia_pol = MoneyHelper.ConvertToReportFormat(data.nilai_bia_pol);
-                            var nilai_bia_mat = MoneyHelper.ConvertToReportFormat(data.nilai_bia_mat);
-                            var nilai_kms_broker = MoneyHelper.ConvertToReportFormat(data.nilai_kms_broker);
-                            var nilai_net = MoneyHelper.ConvertToReportFormat(data.nilai_net);
+                            var nilai_prm = ReportHelper.ConvertToReportFormat(data.nilai_prm);
+                            var nilai_diskon = ReportHelper.ConvertToReportFormat(data.nilai_diskon);
+                            var nilai_kms = ReportHelper.ConvertToReportFormat(data.nilai_kms);
+                            var nilai_bia_pol = ReportHelper.ConvertToReportFormat(data.nilai_bia_pol);
+                            var nilai_bia_mat = ReportHelper.ConvertToReportFormat(data.nilai_bia_mat);
+                            var nilai_kms_broker = ReportHelper.ConvertToReportFormat(data.nilai_kms_broker);
+                            var nilai_net = ReportHelper.ConvertToReportFormat(data.nilai_net);
                             
                             stringBuilder.Append(@$"<tr>
                                                         <td style='width: 3%;  text-align: left; vertical-align: top; border-left: 1px solid; border-right: 1px solid;'>{sequence}</td>
@@ -228,13 +228,13 @@ namespace ABB.Application.RekapitulasiProduksi.Quries
                                                         <td style='width: 10%; text-align: right; vertical-align: top; border-left: 1px solid; border-right: 1px solid;'>{data.jml_polis}</td>
                                                     </tr>");
                             
-                            total_premi += MoneyHelper.ConvertToDecimalFormat(nilai_prm);
-                            total_diskon += MoneyHelper.ConvertToDecimalFormat(nilai_diskon);
-                            total_komisi += MoneyHelper.ConvertToDecimalFormat(nilai_kms);
-                            total_biaya_polis += MoneyHelper.ConvertToDecimalFormat(nilai_bia_pol);
-                            total_biaya_materai += MoneyHelper.ConvertToDecimalFormat(nilai_bia_mat);
-                            total_brokerage += MoneyHelper.ConvertToDecimalFormat(nilai_kms_broker);
-                            total_net_premi += MoneyHelper.ConvertToDecimalFormat(nilai_net);
+                            total_premi += ReportHelper.ConvertToDecimalFormat(nilai_prm);
+                            total_diskon += ReportHelper.ConvertToDecimalFormat(nilai_diskon);
+                            total_komisi += ReportHelper.ConvertToDecimalFormat(nilai_kms);
+                            total_biaya_polis += ReportHelper.ConvertToDecimalFormat(nilai_bia_pol);
+                            total_biaya_materai += ReportHelper.ConvertToDecimalFormat(nilai_bia_mat);
+                            total_brokerage += ReportHelper.ConvertToDecimalFormat(nilai_kms_broker);
+                            total_net_premi += ReportHelper.ConvertToDecimalFormat(nilai_net);
                             total_polis += Convert.ToDecimal(data.jml_polis);
                         }
                         

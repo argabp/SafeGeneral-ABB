@@ -129,7 +129,7 @@
                     <td style="width: 1%; vertical-align: top;"></td>
                     <td style="vertical-align: top; text-align: justify; width: 20%;"></td>
                     <td style="width: 1%;"></td>
-                    <td colspan="4">Mulai dari {{tgl_mul_ptg_ind}} s/d {{tgl_akh_ptg_ind}} (Kedua hari tersebut pada pukul 00.00 tengah malam) waktu dimana polis di terbitkan.</td>
+                    <td colspan="4">Mulai dari {{tgl_mul_ptg_ind}} s/d {{tgl_akh_ptg_ind}}<br>(Kedua hari tersebut pada pukul 00.00 tengah malam) waktu dimana polis di terbitkan.</td>
                 </tr>
                 <tr>
                     <td>9.</td>
@@ -139,33 +139,10 @@
                     <td></td>
                     <td style="text-align: center; font-weight: bold;" colspan="2">Nilai Pertanggungan</td>
                 </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>A. Kematian karena kecelakaan</td>
-                    <td>:</td>
-                    <td style="width: 1%;">{{kd_mtu_symbol}}</td>
-                    <td style="width: 20%;">{{nilai_ptg_A}}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>B. Cacat tetap keseluruhan / Cacat tetap sebagian</td>
-                    <td>:</td>
-                    <td style="width: 1%;">{{kd_mtu_symbol}}</td>
-                    <td style="width: 20%;">{{nilai_ptg_B}}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>C. Biaya-biaya perawatan/pengobatan akibat Kecelakaan</td>
-                    <td>:</td>
-                    <td style="width: 1%;">{{kd_mtu_symbol}}</td>
-                    <td style="width: 20%;">{{nilai_ptg_C}}</td>
-                </tr>
+                {{view_jns_nilai_ptg_a}}
+                {{view_jns_nilai_ptg_b}}
+                {{view_jns_nilai_ptg_c}}
+                {{view_jns_nilai_ptg_d}}
                 <tr>
                     <td>10.</td>
                     <td>Jaminan Tambahan</td>
@@ -178,15 +155,15 @@
                     <td style="width: 1%; vertical-align: top;">11.</td>
                     <td style="width: 20%; vertical-align: top;">Suku Premi Dasar</td>
                     <td style="width: 1%;">:</td>
-                    <td style="width: 20%;">A. {{pst_A}} {{stn_rate_A}}</td>
-                    <td>C. {{pst_C}} {{stn_rate_C}}</td>
+                    {{view_pst_stn_a}}
+                    {{view_pst_stn_c}}
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;"></td>
                     <td style="width: 20%;"></td>
                     <td style="width: 1%;"></td>
-                    <td>B. {{pst_B}} {{stn_rate_B}}</td>
-                    <td>D. {{pst_B}} {{stn_rate_B}}</td>
+                    {{view_pst_stn_b}}
+                    {{view_pst_stn_d}}
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">12.</td>
@@ -205,54 +182,22 @@
                 <tr>
                     <td style="width: 3.4%; vertical-align: top;"></td>
                     <td style="width: 20%; vertical-align: top;">Premi Jaminan Dasar</td>
-                    <td style="width: 1%;">:</td>
-                    <td style="width: 1%;">- {{kd_mtu_symbol}}</td>
-                    <td>{{nilai_ptg_A}}</td>
-                    <td style="width: 1%;">x</td>
-                    <td>{{pst_A}}</td>
-                    <td>{{stn_rate_A}}</td>
-                    <td>=</td>
-                    <td style="width: 1%;">{{kd_mtu_symbol}}</td>
-                    <td>{{nilai_prm_A}}</td>
+                    {{view_perhitungan_prm_a}}
                 </tr>
                 <tr>
                     <td style="width: 3.4%; vertical-align: top;"></td>
                     <td style="width: 20%; vertical-align: top;">Premi Jaminan Tambahan</td>
-                    <td style="width: 1%;">:</td>
-                    <td>- {{kd_mtu_symbol}}</td>
-                    <td>{{nilai_ptg_B}}</td>
-                    <td>x</td>
-                    <td>{{pst_B}}</td>
-                    <td>{{stn_rate_B}}</td>
-                    <td>=</td>
-                    <td>{{kd_mtu_symbol}}</td>
-                    <td>{{nilai_prm_B}}</td>
+                    {{view_perhitungan_prm_b}}
                 </tr>
                 <tr>
                     <td style="width: 3.4%; vertical-align: top;"></td>
                     <td style="width: 20%; vertical-align: top;"></td>
-                    <td style="width: 1%;">:</td>
-                    <td>- {{kd_mtu_symbol}}</td>
-                    <td>{{nilai_ptg_C}}</td>
-                    <td>x</td>
-                    <td>{{pst_C}}</td>
-                    <td>{{stn_rate_C}}</td>
-                    <td>=</td>
-                    <td>{{kd_mtu_symbol}}</td>
-                    <td>{{nilai_prm_C}}</td>
+                    {{view_perhitungan_prm_c}}
                 </tr>
                 <tr>
                     <td style="width: 3.4%; vertical-align: top;"></td>
                     <td style="width: 20%; vertical-align: top;"></td>
-                    <td style="width: 1%;">:</td>
-                    <td>- {{kd_mtu_symbol}}</td>
-                    <td>{{nilai_ptg_D}}</td>
-                    <td>x</td>
-                    <td>{{pst_D}}</td>
-                    <td>{{stn_rate_D}}</td>
-                    <td>=</td>
-                    <td>{{kd_mtu_symbol}}</td>
-                    <td>{{nilai_prm_D}}</td>
+                    {{view_perhitungan_prm_d}}
                 </tr>
                 <tr>
                     <td style="width: 3.4%; vertical-align: top;"></td>
@@ -351,5 +296,6 @@
                 </tr>
             </table>    
         </div>
+    </div>
 </body>
 </html>
