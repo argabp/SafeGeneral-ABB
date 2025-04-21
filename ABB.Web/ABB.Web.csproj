@@ -5492,6 +5492,12 @@
       <None Update="Modules\LaporanBulananCabang\JS\laporanBulananCabang.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\LaporanBulananRekap\JS\laporanBulananRekap.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Reports\Templates\LaporanBulananRekap.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

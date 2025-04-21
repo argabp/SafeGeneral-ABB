@@ -1,0 +1,81 @@
+﻿@using Kendo.Mvc.UI
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@model ABB.Web.Modules.LaporanBulananRekap.Models.LaporanBulananRekapViewModel
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Laporan Bulanan Rekap";
+}
+<script src="~/Modules/LaporanBulananRekap/JS/laporanBulananRekap.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+<div class="flat-box">
+    
+    <form id="LaporanBulananRekapForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Cabang</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_cb" style="width: 100%" option-label="Pilih Cabang"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetCabang", "LaporanBulananRekap")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_cb" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Periode</label>
+                <div class="col-sm-6 row">
+                    <div class="col-sm-5">
+                        <kendo-datepicker for="kd_bln_mul" value="DateTime.Now"/>
+                        <span asp-validation-for="kd_bln_mul" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-2" style="align-content: center">
+                        <p style="margin-bottom: 3px">s/d</p>
+                    </div>
+                    <div class="col-sm-5">
+                        <kendo-datepicker for="kd_bln_akh" value="DateTime.Now"/>
+                        <span asp-validation-for="kd_bln_akh" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Jenis Laporan</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="jns_lap" style="width: 100%" option-label="Pilih Jenis Laporan"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetJenisLaporan", "LaporanBulananRekap")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="jns_lap" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <button type="button" id="btn-preview" class="btn btn-success space-right">
+                <span class="fa fa-search"></span> Preview
+            </button>
+        </div>
+    </form>
+</div>
+
