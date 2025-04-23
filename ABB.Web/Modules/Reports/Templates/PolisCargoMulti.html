@@ -6,7 +6,7 @@
     <title>Polis Pengangkutan Barang</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            /* font-family: Arial, sans-serif; */
         }
 
         .container {
@@ -59,7 +59,7 @@
 
         <div class="section">
             <h2>IKHTISAR</h2>
-            <table class="table">
+            <table class="table" border="1">
                 <tr>
                     <td>Nomor Polis</td>
                     <td>:</td>
@@ -180,7 +180,7 @@
                 <tr>
                     <td>Perhitungan Premi</td>
                     <td>:</td>
-                    <td>{{kd_mtu_symbol}} {{nilai_ttl_ptg}} x {{pst_rate_prm}} {{stn_rate_prm}}</td>
+                    <td>{{pst_rate_prm}} {{stn_rate_prm}} x {{kd_mtu_symbol}} {{nilai_ttl_ptg}}</td>
 					<td></td>
                     <td>=</td>
                     <td>{{kd_mtu_symbol}} {{nilai_prm}}</td>
@@ -234,30 +234,27 @@
                 <tr>
                     <td></td>
                     <td></td>
-                    <td style="text-align: center;">Dikeluarkan di</td>
-                    <td>{{kt_cb}}</td>
+                    <td></td>
+                    <td>Dikeluarkan di {{kt_cb}}</td>
                     <td colspan="2">pada tanggal {{tgl_closing}}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
-                    <td style="text-align: center;">PT. Asuransi Bhakti Bhayangkara</td>
                     <td></td>
-                    <td colspan="2"></td>
+                    <td style="text-align: left;" colspan="3">PT. Asuransi Bhakti Bhayangkara</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
-                    <td style="text-align: center;"><br><br><br><br><br><br><strong><u>Ati Nofianti, A.Md, As. K</u></strong></td>
                     <td></td>
-                    <td colspan="2"></td>
+                    <td style="text-align: left;" colspan="3"><br><br><br><br><br><br><strong><u>Ati Nofianti, A.Md, As. K</u></strong></td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
-                    <td style="text-align: center;"><strong>Kepala Divisi Underwriting</strong></td>
                     <td></td>
-                    <td colspan="2"></td>
+                    <td style="text-align: left;" colspan="3"><strong>Kepala Divisi Underwriting</strong></td>
                 </tr>
                 <tr>
                     <td colspan="6" align="center">{{footer}}</td>

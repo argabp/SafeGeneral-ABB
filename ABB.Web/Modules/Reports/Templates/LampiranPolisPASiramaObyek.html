@@ -6,7 +6,7 @@
     <title>Lampiran Polis PA Sirama Obyek</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            /* font-family: Arial, sans-serif; */
         }
 
         .container {
@@ -71,10 +71,16 @@
                 <td style='vertical-align: top; text-align: left; padding-left: 2em' colspan=11><strong>{{cover}}</strong></td>
             </tr>
             {{detail}}
-            {{summary}}
+            <tr>
+                <td style='vertical-align: top; text-align: left; border-top: 1px solid;border-bottom: 1px solid' colspan=7><strong>TOTAL</strong></td>
+                <td style='vertical-align: top; text-align: left; border-top: 1px solid;border-bottom: 1px solid'><strong>{{total_uang_pertanggungan}}</strong></td>
+                <td style='vertical-align: top; text-align: left; border-top: 1px solid;border-bottom: 1px solid'><strong>{{total_premi_dasar}}</strong></td>
+                <td style='vertical-align: top; text-align: left; border-top: 1px solid;border-bottom: 1px solid'><strong>{{total_premi_tambahan}}</strong></td>
+                <td style='vertical-align: top; text-align: left; border-top: 1px solid;border-bottom: 1px solid'><strong>{{total_premi}}</strong></td>
+            </tr>
             <tr>
                 <td style='vertical-align: top; text-align: left;' colspan=7><strong>Ket</strong></td>
-                <td style='vertical-align: top; text-align: center;' colspan=4>{{nm_cb}}, {{tgl_closing_ind}}</td>
+                <td style='vertical-align: top; text-align: center;' colspan=4>{{kd_cb}}, {{tgl_closing_ind}}</td>
             </tr>
         </table>
     </div>

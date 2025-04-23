@@ -6,7 +6,7 @@
     <title>Polis PA Sirama Multi</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            /* font-family: Arial, sans-serif; */
         }
 
         .container {
@@ -234,6 +234,201 @@
                 </tr>
 			</table>    
         </div>
+    </div>
+
+    <div class="container">
+        <div class="h1">IKHTISAR PERTANGGUNGAN</div>
+        <div class="h1">POLIS ASURANSI KECELAKAAN DIRI PRIMA (SiRAMA)</div>
+        <div class="section">
+            <table class="table">
+                <tr>
+                    <td style="width: 8%;"></td>
+                    <td style="width: 2%;">Nomor Sertifikat</td>
+                    <td style="width: 1%;">:</td>
+                    <td style="width: 1%;">{{no_pol_ttg}}</td>
+                    <td style="width: 5%;">Reg No.</td>
+                    <td style="width: 1%;">:</td>
+					<td style="width: 8%;">{{no_rsk}}</td>
+                </tr>
+			</table>
+            <table class="table">
+				<tr>
+                    <td style="width: 1%; vertical-align: top; text-align: justify;" colspan="10">Perseroan Terbatas ASURANSI BHAKTI BHAYANGKARA, selanjutnya disebut PT. ABB ,  menanggung atas dasar syarat-syarat dalam polis ini:</td>
+                </tr>
+                <tr>
+                    <td style="width: 15%; vertical-align: top; font-weight: bold; letter-spacing: 5px;">NAMA</td>
+                    <td style="vertical-align: top; text-align: justify;">:</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="7"><strong>{{nm_deb}}</strong></td>
+                </tr>
+                <tr>
+                    <td style="width: 15%; vertical-align: top; font-weight: bold; letter-spacing: 5px;">ALAMAT</td>
+                    <td style="vertical-align: top; text-align: justify;">:</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="7"><strong>{{alm_lok_ptg}}</strong></td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top; text-align: justify;" colspan="10">Seterusnya dinyatakan sebagai Penanda Tangan,  untuk pembayaran ganti rugi sebesar sisa kredit,  maksimal sebesar nilai uang pertanggungan seperti tersebut dibawah ini dalam hal:</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">Meninggal Dunia</td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;">:</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8">{{nilai_ptg_a}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">Pekerjaan</td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;">:</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8">{{kd_usr}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">Tempat dan tanggal lahir</td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;">:</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8">{{tmp_lahir}} / {{tgl_lahir}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">Alamat</td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;">:</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8">{{alm_lok_ptg}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">Jangka Waktu</td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;">:</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8">{{tgl_mul_ptg}} - {{tgl_akh_ptg}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">Catatan Polis</td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;">:</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8">{{ctt_pol}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top; text-align: justify;" colspan="10">Selanjutnya dinyatakan sebagai Peserta / Tertanggung,  akan memperoleh ganti rugi apabila mengalami risiko kecelakaan yang menyebabkan meninggal dunia dan meninggal dunia alami atau sebab-sebab lain,  kecuali meninggal dunia karena:</td>
+                </tr>
+            </table>
+            <table class="table">
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">1. </td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Bunuh diri atau dihukum mati oleh Pengadilan / Pejabat yang berwenang, kecuali apabila peristiwa itu terjadi setelah perjanjian Asuransi atau pemulihan Polis berjalan 2 (dua) tahun;</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">2. </td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Melakukan perbuatan melanggar hukum;</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">3. </td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Terlibat perkelahian,  kecuali sebagai pihak yang mempertahankan diri;</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">4. </td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Sebagai akibat perbuatan yang dilakukan oleh pihak yang berkepentingan terhadap Manfaat Asuransi;</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">5. </td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Pekerjaan atau kegemaran Peserta/Tertanggung yang mengandung risiko tinggi, seperti buruh tambang, penyelam, balap mobil, olah raga terbang layang / penerjun atau pekerjaan - pekerjaan / kegemaran - kegemaran  lainnya  yang  dapat dipersamakan dengan itu,  sepanjang resiko itu tidak dipertanggungkan; </td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">6. </td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Terlibat secara  langsung  maupun  tidak  langsung  dalam  pemberontakan,  revolusi,  perang  saudara,  kerusuhan, pengambilan kekuasaan,   ikut serta  dalam  aksi  atau  kegiatan  militer, atau aksi dari seseorang yang bertindak selaku atau berhubungan dengan organisasi manapun dengan aktifitas yang mengarah kepada penggulingan pemerintah secara "de jure" atau "de facto" atau dengan pengaruh dari terorisme.</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">7. </td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Reaksi nuklir atau kontaminasi radio aktif;</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">8. </td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Pengaruh  narkotika,  minuman  keras  yang  secara  langsung  atau  tidak  langsung  menimbulkan   kecelakaan  pada  diri  Peserta / Tertanggung;</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">9. </td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Penyakit yang disebabkan baik langsung maupun tidak langsung oleh infeksi virus HIV ( Human Immuno Deficiency Virus ) atau varian-varian virus HIV, termasuk penyakit kehilangan daya tahan tubuh/kekebalan atau AIDS (Acquired Immuno Deficiency Syndrome) dan penyakit yang sejenis ARC (AIDS Refused Complec).</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">10. </td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Kehamilan, persalinan ataupun komplikasinya sampai dengan 40 (empat puluh) hari setelah persalinan.</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;"></td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Pertanggungan ini harus sudah berakhir pada hari terakhir dari jangka waktu yang bersangkutan.</td>
+                </tr>
+                <tr style="height: 20px;">
+                    <td colspan="9"></td>
+                </tr>
+                <tr>
+                    <td colspan="7"></td>
+                    <td style="width: 30%; text-align: center;" colspan="2">{{kt_cb}}, {{tgl_closing_ind}}</td>
+                </tr>
+                <tr>
+                    <td colspan="7"></td>
+                    <td style="width: 30%; text-align: center;" colspan="2">PT. ASURANSI BHAKTI BHAYANGKARA</td>
+                </tr>
+            </table>
+            <table class="table">
+                <tr>
+                    <td style="width: 15%;">Premi Dasar</td>
+                    <td style="width: 1%;">{{kd_mtu_symbol}}</td>
+                    <td style="text-align: right; width: 10%;">{{nilai_prm_pkk}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                </tr>
+                <tr>
+                    <td style="width: 15%;">Premi Tambahan</td>
+                    <td style="width: 1%;">{{kd_mtu_symbol}}</td>
+                    <td style="text-align: right;">{{nilai_prm_tbh_01}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                </tr>
+                <tr>
+                    <td style="width: 15%;">Biaya Polis</td>
+                    <td style="width: 1%;">{{kd_mtu_symbol}}</td>
+                    <td style="text-align: right;">{{nilai_bia_pol}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                </tr>
+                <tr>
+                    <td style="width: 15%;">Materai</td>
+                    <td style="width: 1%;">{{kd_mtu_symbol}}</td>
+                    <td style="text-align: right;">{{nilai_bia_mat}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                </tr>
+                <tr>
+                    <td style="width: 15%;"></td>
+                    <td style="width: 1%;"></td>
+                    <td><hr></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                </tr>
+                <tr>
+                    <td style="width: 15%; font-weight: bold;">Jumlah</td>
+                    <td style="width: 1%; font-weight: bold;">{{kd_mtu_symbol}}</td>
+                    <td style="text-align: right; font-weight: bold; border-bottom: 1px;">{{nilai_ttl}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="4"></td>
+                    <td></td>
+                    <td></td>
+
+                    <td style="width: 30%;" colspan="2"></td>
+                </tr>
+			</table>    
+        </div>
+    </div>
     </div>
 </body>
 </html>
