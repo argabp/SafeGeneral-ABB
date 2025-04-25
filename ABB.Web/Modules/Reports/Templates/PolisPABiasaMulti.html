@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polis PA Biasa Single</title>
+    <style>
+        body {
+            /* font-family: Arial, sans-serif; */
+        }
+
+        .container {
+            width: 90%;
+            margin: auto;
+            /* border: 1px solid black; */
+            padding: 20px;
+        }
+
+        .h1 {
+            text-align: center;
+            font-size: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .section {
+            margin-top: 10px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table td {
+            padding: 8px;
+            /* border: 1px solid black; */
+			font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="h1"><u>IKHTISAR PERTANGGUNGAN ASURANSI KECELAKAAN DIRI</u></div>
+        <div class="section">
+            <table class="table">
+				<tr>
+                    <td style="width: 1%; vertical-align: top;">1. </td>
+                    <td style="vertical-align: top; text-align: justify; width: 20%;">Nomor Polis / Sertifikat</td>
+                    <td style="width: 1%;">:</td>
+                    <td style="width: 35%;">{{no_pol_ttg}}</td>
+                    <td style="width: 15%;">Ex Polis No</td>
+                    <td>:</td>
+                    <td>{{no_pol_lama}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">2. </td>
+                    <td style="vertical-align: top; text-align: justify;">Nama Pemegang Polis</td>
+                    <td>:</td>
+                    <td style="width: 35%;" colspan="5">{{nm_polis}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">3. </td>
+                    <td style="vertical-align: top; text-align: justify;">Alamat Pemegang Polis</td>
+                    <td>:</td>
+                    <td colspan="5">{{almt_polis}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">4. </td>
+                    <td style="vertical-align: top; text-align: justify;">Nama Tertanggung</td>
+                    <td>:</td>
+                    <td colspan="5">{{nm_ttg}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">5.</td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;">Tanggal Lahir</td>
+                    <td>:</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="5">{{tgl_lahir}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">6.</td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;">Alamat Tertanggung</td>
+                    <td style="vertical-align: top; text-align: justify;">:</td>
+                    <td colspan="5">{{almt_ttg}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">7.</td>
+                    <td style="vertical-align: top; text-align: justify;">Ahli Waris</td>
+                    <td>:</td>
+                    <td colspan="5"></td>
+                </tr>
+            </table>
+            <table class="table">
+                <tr>
+                    <td style="width: 2.8%; vertical-align: top;"></td>
+                    <td style="vertical-align: top; text-align: justify; width: 5%; font-weight: bold;">No.</td>
+                    <td style="vertical-align: top; text-align: justify; font-weight: bold; width: 60%;">NAMA</td>
+                    <td style="vertical-align: top; text-align: justify; font-weight: bold;" colspan="7">HUBUNGAN DG. TERTANGGUNG </td>
+                </tr>
+                <tr>
+                    <td style="width: 2.8%; vertical-align: top;"></td>
+                    <td style="vertical-align: top; text-align: justify; width: 5%;">1.</td>
+                    <td style="vertical-align: top; text-align: justify; width: 60%;">{{nm_waris_1}}</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="7">{{hub_waris_1}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 2.8%; vertical-align: top;"></td>
+                    <td style="vertical-align: top; text-align: justify; width: 5%;">2.</td>
+                    <td style="vertical-align: top; text-align: justify; width: 60%;">{{nm_waris_2}}</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="7">{{hub_waris_2}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 2.8%; vertical-align: top;"></td>
+                    <td style="vertical-align: top; text-align: justify; width: 5%;">3.</td>
+                    <td style="vertical-align: top; text-align: justify; width: 60%;">{{nm_waris_3}}</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="7">{{hub_waris_3}}</td>
+                </tr>
+            </table>
+            <table class="table">
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">8. </td>
+                    <td style="vertical-align: top; text-align: justify; width: 20%;">Jangka Waktu Pertanggungan</td>
+                    <td style="width: 1%;">:</td>
+                    <td colspan="4">{{jk_wkt_ptg}} {{jk_wkt_ptg_ind}} Bulan</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;"></td>
+                    <td style="vertical-align: top; text-align: justify; width: 20%;"></td>
+                    <td style="width: 1%;"></td>
+                    <td colspan="4">Mulai dari {{tgl_mul_ptg_ind}} s/d {{tgl_akh_ptg_ind}} (Kedua hari tersebut pada pukul 00.00 tengah malam) waktu dimana polis di terbitkan.</td>
+                </tr>
+                <tr>
+                    <td>9.</td>
+                    <td>Jenis dan Nilai Pertanggungan</td>
+                    <td>:</td>
+                    <td style="text-align: center; font-weight: bold;">Jenis Pertanggungan</td>
+                    <td></td>
+                    <td style="text-align: center; font-weight: bold;" colspan="2">Nilai Pertanggungan</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>A. Kematian karena kecelakaan</td>
+                    <td>:</td>
+                    <td style="width: 1%;">{{kd_mtu_symbol}}</td>
+                    <td style="width: 20%;">{{nilai_ptg_A}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>B. Cacat tetap keseluruhan / Cacat tetap sebagian</td>
+                    <td>:</td>
+                    <td style="width: 1%;">{{kd_mtu_symbol}}</td>
+                    <td style="width: 20%;">{{nilai_ptg_B}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>C. Biaya-biaya perawatan/pengobatan akibat Kecelakaan</td>
+                    <td>:</td>
+                    <td style="width: 1%;">{{kd_mtu_symbol}}</td>
+                    <td style="width: 20%;">{{nilai_ptg_C}}</td>
+                </tr>
+                <tr>
+                    <td>10.</td>
+                    <td>Jaminan Tambahan</td>
+                    <td>:</td>
+                    <td>Including motor cycling</td>
+                </tr>
+            </table>
+            <table class="table">
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">11.</td>
+                    <td style="width: 20%; vertical-align: top;">Suku Premi Dasar</td>
+                    <td style="width: 1%;">:</td>
+                    <td style="width: 20%;">A. {{pst_A}} {{stn_rate_A}}</td>
+                    <td>C. {{pst_C}} {{stn_rate_C}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;"></td>
+                    <td style="width: 20%;"></td>
+                    <td style="width: 1%;"></td>
+                    <td>B. {{pst_B}} {{stn_rate_B}}</td>
+                    <td>D. {{pst_B}} {{stn_rate_B}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">12.</td>
+                    <td style="width: 20%; vertical-align: top;">Kalusul tambahan</td>
+                    <td style="width: 1%;">:</td>
+                    <td colspan="2">{{ket_klausula}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">13.</td>
+                    <td style="width: 20%; vertical-align: top;">Perhitungan Premi</td>
+                    <td style="width: 1%;">:</td>
+                    <td colspan="2"></td>
+                </tr>
+            </table>
+            <table class="table">
+                <tr>
+                    <td style="width: 3.4%; vertical-align: top;"></td>
+                    <td style="width: 20%; vertical-align: top;">Premi Jaminan Dasar</td>
+                    <td style="width: 1%;">:</td>
+                    <td style="width: 1%;">- {{kd_mtu_symbol}}</td>
+                    <td>{{nilai_ptg_A}}</td>
+                    <td style="width: 1%;">x</td>
+                    <td>{{pst_A}}</td>
+                    <td>{{stn_rate_A}}</td>
+                    <td>=</td>
+                    <td style="width: 1%;">{{kd_mtu_symbol}}</td>
+                    <td>{{nilai_prm_A}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 3.4%; vertical-align: top;"></td>
+                    <td style="width: 20%; vertical-align: top;">Premi Jaminan Tambahan</td>
+                    <td style="width: 1%;">:</td>
+                    <td>- {{kd_mtu_symbol}}</td>
+                    <td>{{nilai_ptg_B}}</td>
+                    <td>x</td>
+                    <td>{{pst_B}}</td>
+                    <td>{{stn_rate_B}}</td>
+                    <td>=</td>
+                    <td>{{kd_mtu_symbol}}</td>
+                    <td>{{nilai_prm_B}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 3.4%; vertical-align: top;"></td>
+                    <td style="width: 20%; vertical-align: top;"></td>
+                    <td style="width: 1%;">:</td>
+                    <td>- {{kd_mtu_symbol}}</td>
+                    <td>{{nilai_ptg_C}}</td>
+                    <td>x</td>
+                    <td>{{pst_C}}</td>
+                    <td>{{stn_rate_C}}</td>
+                    <td>=</td>
+                    <td>{{kd_mtu_symbol}}</td>
+                    <td>{{nilai_prm_C}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 3.4%; vertical-align: top;"></td>
+                    <td style="width: 20%; vertical-align: top;"></td>
+                    <td style="width: 1%;">:</td>
+                    <td>- {{kd_mtu_symbol}}</td>
+                    <td>{{nilai_ptg_D}}</td>
+                    <td>x</td>
+                    <td>{{pst_D}}</td>
+                    <td>{{stn_rate_D}}</td>
+                    <td>=</td>
+                    <td>{{kd_mtu_symbol}}</td>
+                    <td>{{nilai_prm_D}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 3.4%; vertical-align: top;"></td>
+                    <td style="width: 20%; vertical-align: top;">- Biaya Polis</td>
+                    <td style="width: 1%;">:</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>=</td>
+                    <td>{{kd_mtu_symbol}}</td>
+                    <td>{{nilai_bia_pol}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 3.4%; vertical-align: top;"></td>
+                    <td style="width: 20%; vertical-align: top;">- Biaya Kartu</td>
+                    <td style="width: 1%;">:</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>=</td>
+                    <td>{{kd_mtu_symbol}}</td>
+                    <td>{{nilai_oby_05}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 3.4%; vertical-align: top;"></td>
+                    <td style="width: 20%; vertical-align: top;">- Biaya Materai</td>
+                    <td style="width: 1%;">:</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>=</td>
+                    <td>{{kd_mtu_symbol}}</td>
+                    <td>{{nilai_bia_mat}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 3.4%; vertical-align: top;"></td>
+                    <td style="width: 20%; vertical-align: top;"></td>
+                    <td style="width: 1%;"></td>
+                    <td colspan="8"><hr></td>
+                </tr>
+                <tr>
+                    <td style="width: 3.4%; vertical-align: top;"></td>
+                    <td style="width: 20%; vertical-align: top;"></td>
+                    <td style="width: 1%;"></td>
+                    <td style="font-weight: bold; text-align: center;" colspan="3">Total</td>
+                    <td></td>
+                    <td></td>
+                    <td>=</td>
+                    <td style="font-weight: bold;">{{kd_mtu_symbol}}</td>
+                    <td style="font-weight: bold;">{{nilai_ttl}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 3.4%; vertical-align: top;"></td>
+                    <td style="width: 20%; vertical-align: top;"></td>
+                    <td style="width: 1%;"></td>
+                    <td colspan="8"><hr style="height: 2px; border-top: 2px solid black; border-bottom: 2px solid black;"></td>
+                </tr>
+                <tr>
+                    <td style="width: 3.4%; vertical-align: top;"></td>
+                    <td style="width: 20%; vertical-align: top;"></td>
+                    <td style="width: 1%;"></td>
+                    <td style="text-align: center; padding-left: 100px;">Dibuat di</td>
+                    <td></td>
+                    <td>:</td>
+                    <td colspan="5">{{kt_cb}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 3.4%; vertical-align: top;"></td>
+                    <td style="width: 20%; vertical-align: top;"></td>
+                    <td style="width: 1%;"></td>
+                    <td style="text-align: center; padding-left: 115px;">Pada Tanggal</td>
+                    <td></td>
+                    <td>:</td>
+                    <td colspan="5">{{tgl_closing_ind}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 3.4%; vertical-align: top;"></td>
+                    <td style="width: 20%; vertical-align: top;"></td>
+                    <td style="width: 1%;"></td>
+                    <td style="text-align: center; padding-left: 122px;">Penanggung,</td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="5"></td>
+                </tr>
+                <tr>
+                    <td colspan="11" align="center">{{footer}}</td>
+                </tr>
+                <tr>
+                    <td colspan="2">{{nm_user}}</td>
+                </tr>
+            </table>    
+        </div>
+</body>
+</html>

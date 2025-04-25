@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LKP</title>
+    <style>
+        body {
+            /* font-family: Arial, sans-serif; */
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            /* border: 1px solid black; */
+            padding: 20px;
+        }
+
+        .h1 {
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .section {
+            margin-top: 10px;
+        }
+
+        .table {
+            width: 100%;
+            /* border-collapse: collapse; */
+        }
+
+        .table td {
+            padding: 8px;
+            /* border: 1px solid black; */
+			font-size: 12px;
+        }
+		p {
+			text-align: justify;
+			font-size: 13px;
+            /* font-style: italic; */
+		}
+		h2 {
+			text-align: center;
+			font-size: 12px;
+		}
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="h1">LAPORAN KERUGIAN PASTI <br> --------------------------------------------------- <br> {{no_berkas}}</div>
+        <p>Dengan ini kami sampaikan Laporan Kerugian Pasti atas Klaim dengan data sebagai berikut: </p>
+
+        <div class="section">
+            <table class="table">
+                <tr>
+                    <td style="width: 1%;">I.</td>
+                    <td style="width: 30%;" colspan="6">DATA TERTANGGUNG</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width: 1%;">1. </td>
+                    <td style="width: 30%;">Nama Tertanggung</td>
+                    <td style="width: 5%;;">:</td>
+                    <td colspan="3">{{nm_ttg}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width: 1%;">2. </td>
+                    <td style="width: 30%;">Nomor Polis</td>
+                    <td>:</td>
+                    <td colspan="3">{{no_pol_ttg}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width: 1%;">3. </td>
+                    <td style="width: 30%;">Tanggal Kejadian</td>
+                    <td>:</td>
+                    <td colspan="3">{{tgl_kej}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width: 1%;">4. </td>
+                    <td style="width: 30%;">Jenis Pertanggungan</td>
+                    <td>:</td>
+                    <td colspan="3"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width: 1%;"></td>
+                    <td style="width: 30%; padding-left: 35px;">COB : {{nm_scob}} <br> Jenis : {{kond_ptg}}</td>
+                    <td></td>
+                    <td colspan="3"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width: 1%;">5. </td>
+                    <td style="width: 30%;">Harga Pertanggungan</td>
+                    <td>:</td>
+                    <td style="width: 5%;">{{symbol}}</td>
+                    <td colspan="2">{{nilai_ttl_ptg}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width: 1%;">6. </td>
+                    <td style="width: 30%;">Obyek Pertanggungan</td>
+                    <td>:</td>
+                    <td colspan="3">{{ket_oby}}</td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="3"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width: 1%;">7. </td>
+                    <td style="width: 30%;">Periode Polis</td>
+                    <td>:</td>
+                    <td colspan="3">{{tgl_mul_ptg}} s/d {{tgl_akh_ptg}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width: 1%;">8. </td>
+                    <td style="width: 30%;">Tanggal / Lokasi Kejadian</td>
+                    <td>:</td>
+                    <td colspan="3">{{tgl_kej}} s/d {{tempat_kej}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width: 1%;">9. </td>
+                    <td style="width: 30%;">Penyebab Kerugian</td>
+                    <td>:</td>
+                    <td colspan="3">{{sebab_kerugian}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width: 1%;">10. </td>
+                    <td style="width: 30%;">Jenis Kerugian</td>
+                    <td>:</td>
+                    <td colspan="3">{{nm_sifat_kerugian}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width: 1%;">11. </td>
+                    <td style="width: 30%;">Nomor Bukti Pembayran Premi</td>
+                    <td>:</td>
+                    <td colspan="3">{{no_bukti_ins}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width: 1%;">12. </td>
+                    <td style="width: 30%;">Tanggal Pembyaran Premi</td>
+                    <td>:</td>
+                    <td colspan="3">{{tgl_ins_prm}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%;">II.</td>
+                    <td style="width: 30%;" colspan="6">DATA PENYELESAIAN</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width: 1%;">1. </td>
+                    <td style="width: 30%;">Nomor Berkas LKS</td>
+                    <td>:</td>
+                    <td colspan="3">{{no_berkas_pla}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width: 1%;">2. </td>
+                    <td style="width: 30%;">Nilai Estimasi</td>
+                    <td>:</td>
+                    <td style="width: 1%;">{{symbol}}</td>
+                    <td colspan="2">{{nilai_estimasi}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width: 1%;">3. </td>
+                    <td style="width: 30%;">Tanggal Penyelesaian Kerugian</td>
+                    <td>:</td>
+                    <td colspan="3">{{tgl_closing}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width: 1%;">4. </td>
+                    <td style="width: 30%;">Jumlah Kerugian yang diselesaikan</td>
+                    <td>:</td>
+                    <td style="width: 1%;">{{symbol}}</td>
+                    <td colspan="2">{{nilai_ttl_kl}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width: 1%;"></td>
+                    <td style="width: 30%; text-align: right;">Perincian Kerugian yang diselesaikan</td>
+                    <td style="text-align: right;">:</td>
+                    <td style="width: 1%; text-align: right;">{{nm_oby_1}}</td>
+                    <td style="width: 1%;">:</td>
+                    <td>{{nilai_kl_1}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width: 1%;"></td>
+                    <td style="width: 30%; text-align: right;"></td>
+                    <td style="text-align: right;"></td>
+                    <td style="width: 1%; text-align: right;">{{nm_oby_2}}</td>
+                    <td style="width: 1%;">:</td>
+                    <td>{{nilai_kl_2}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width: 1%;"></td>
+                    <td style="width: 30%; text-align: right;"></td>
+                    <td style="text-align: right;"></td>
+                    <td style="width: 1%; text-align: right;">{{nm_oby_3}}</td>
+                    <td style="width: 1%;">:</td>
+                    <td>{{nilai_kl_3}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width: 1%;"></td>
+                    <td style="width: 30%; text-align: right;"></td>
+                    <td style="text-align: right;"></td>
+                    <td style="width: 1%; text-align: right;">{{nm_oby_4}}</td>
+                    <td style="width: 1%;">:</td>
+                    <td>{{nilai_kl_4}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width: 1%;"></td>
+                    <td style="width: 30%; text-align: right;"></td>
+                    <td style="text-align: right;"></td>
+                    <td style="width: 1%; text-align: right;">{{nm_oby_5}}</td>
+                    <td style="width: 1%;">:</td>
+                    <td>{{nilai_kl_5}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width: 1%;"></td>
+                    <td style="width: 30%; text-align: right;"></td>
+                    <td style="text-align: right;"></td>
+                    <td style="width: 1%; text-align: right;">{{nm_oby_6}}</td>
+                    <td style="width: 1%;">:</td>
+                    <td>{{nilai_kl_6}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width: 1%;"></td>
+                    <td style="width: 30%; text-align: right;"></td>
+                    <td style="text-align: right;"></td>
+                    <td colspan="3"><hr></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width: 1%;"></td>
+                    <td style="width: 30%; text-align: right;"></td>
+                    <td style="text-align: right;"></td>
+                    <td style="width: 1%; text-align: center;">Total</td>
+                    <td style="width: 1%;">:</td>
+                    <td>{{nilai_ttl_kl}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width: 1%;">5. </td>
+                    <td style="width: 30%;">Keterangan Lain-lain</td>
+                    <td>:</td>
+                    <td colspan="3">{{ket_kl}}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width: 1%;">6. </td>
+                    <td style="width: 30%;">Validitas</td>
+                    <td>:</td>
+                    <td colspan="3">{{validitas}}</td>
+                </tr>
+            </table>
+            <table class="table">
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: center;">{{kt_cb}}, {{tgl_closing_ind}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr style="height: 60px;">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: center;"><strong><u>{{ttd}}</u> <br> <strong>jbt</strong></strong></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="10" align="center">{{footer}}</td>
+                </tr>
+			</table>
+        </div>
+    </div>
+</body>
+</html>
