@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Renewal Notice</title>
+    <style>
+        body {
+            /* font-family: Arial, sans-serif; */
+        }
+
+        .container {
+            width: 90%;
+            margin: auto;
+            /* border: 1px solid black; */
+            padding: 20px;
+        }
+
+        .h1 {
+            text-align: center;
+            font-size: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .section {
+            margin-top: 10px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table td {
+            padding: 8px;
+            /* border: 1px solid black; */
+			font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="section">
+            <table class="table">
+                <tr>
+                    <td style="height: 20px;"></td>
+                </tr>
+                <tr>
+                    <td style="width: 10%;">Nomor</td>
+                    <td style="width: 1%;">:</td>
+                    <td style="width: 45%;">{{no_surat}}</td>
+					<td>Jakarta {{tgl_print}}</td>
+
+                </tr>
+                <tr>
+                    <td>Lampiran</td>
+                    <td>:</td>
+                    <td colspan="2">{{page}}</td>
+                </tr>
+                <tr>
+                    <td>Perihal</td>
+                    <td>:</td>
+                    <td colspan="2"><strong><u>Perpanjangan Polis</u></strong></td>
+                </tr>
+			</table>
+            <table class="table">
+				<tr>
+                    <td style="height: 20px;" colspan="9"></td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top;" colspan="9"><strong>Kepada Yth. <br> {{nm_ttg}} <br> {{almt_ttg}}</strong></td>
+                </tr>
+                <tr>
+                    <td style="height: 20px; vertical-align: top;" colspan="9"></td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top;" colspan="9">Dengan hormat, <br> Dengan ini diberitahukan bahwa mengingat masa pertanggungan Asuransi :</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;"></td>
+                    <td style="vertical-align: top; text-align: justify; padding-left: 120px;" colspan="8" ><strong>{{nm_scob}}</strong></td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;" colspan="9"><strong>No. Polis : {{no_pol_ttg}}</strong></td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;" colspan="9">Keterangan Objek Pertanggungan : <br> <strong>{{ket_oby}}</strong></td>
+                </tr>
+                <tr>
+                    <td style="height: 20px; vertical-align: top;" colspan="9"></td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;" colspan="9">akan berakhir pada tanggal <strong>{{tgl_akh_ptg_ind}}</strong> dengan ini kami menawarkan kembali kiranya pertanggunagn tersebut dapat diperpanjang masa pertanggungan pada perusahaan kami sampai dengan {{tgl_renew}}. Sehubungan dengan hal tersebut, kmai mohon dapat di  informasikan kepada kami tentang persetujuan perpanjangan polis dimaksud beserta perubahan jika ada</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;" colspan="9">Demikian disampaikan dan atas perhatian dan persetujuan Bapak/Ibu sebelumnya diucapkan terima kasih.</td>
+                </tr>
+                <tr style="height: 50px;">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="width: 25%;" align="center"><div style="width: 40px; height: 30px; border: 1px solid black"></div><br>Setuju u/ diperpanjang</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="width: 25%;" align="center"><div style="width: 40px; height: 30px; border: 1px solid black"></div><br>Tidak diperpanjang</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td style="width: 20%;" colspan="4"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><strong>PT. ASURANSI PAROLAMAS</strong></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="2" align="center"><strong>Tandatangan Tertanggung</strong></td>
+                    <td></td>
+                </tr>
+                <tr style="height: 100px;">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="2">Marketing</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="2" align="center"><strong>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</strong></td>
+                    <td></td>
+                </tr>
+                <tr style="height: 30px;">
+                    <td colspan="4"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <td colspan="9">Catatan : <br> - Jika setuju diperpanjang mohon setelah ditandatangani fax kembali pada kami dengan nomor fax yang tertera dibawah. <br> - Marketing kami segera akan menghubungu Bapak/Ibu setelah kami menerima permohonan perpanjangan asuransi.</td>
+                </tr>
+                <tr>
+                    <td colspan="9" align="center">{{footer}}</td>
+                </tr>
+			</table>    
+        </div>
+</body>
+</html>
