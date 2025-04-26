@@ -5501,6 +5501,9 @@
       <None Update="Modules\RenewalNotice\JS\renewalNotice.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\LaporanKerugianSementara\JS\laporanKerugianSementara.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
