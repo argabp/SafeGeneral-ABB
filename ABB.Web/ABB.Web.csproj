@@ -5504,6 +5504,9 @@
       <None Update="Modules\LaporanKerugianSementara\JS\laporanKerugianSementara.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\LaporanKerugianPasti\JS\laporanKerugianPasti.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

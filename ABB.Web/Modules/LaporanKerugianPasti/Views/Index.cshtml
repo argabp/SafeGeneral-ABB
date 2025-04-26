@@ -1,0 +1,104 @@
+﻿@using Kendo.Mvc.UI
+@using ABB.Application.Common.Dtos
+@using ABB.Application.LaporanKerugianPasti.Queries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Laporan Kerugian Pasti";
+}
+<script src="~/Modules/LaporanKerugianPasti/JS/laporanKerugianPasti.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+@{
+    var laporans = ViewBag.Laporan as List<DropdownOptionDto>;
+}
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-8">
+            Laporan Kerugian Pasti
+        </div>
+
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<LaporanKerugianDto>()
+                .Name("AkseptasiGrid")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetLaporanKerugian", "LaporanKerugianPasti").Data("searchFilter"))
+                    .Model(model => model.Id(p => p.Id))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
+                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
+                    columns.Bound(col => col.nm_scob).Width(150).Title("Nama Sub COB");
+                    columns.Bound(col => col.no_kl).Width(150).Title("Nomor Kl");
+                    columns.Bound(col => col.no_mts).Width(150).Title("Nomor Mts");
+                    columns.Bound(col => col.nm_ttg).Width(150).Title("Nama Tertanggung");
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .ClientDetailTemplateId("template")
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit"))
+        
+                )    
+        </div>
+        
+        <script id="template" type="text/kendo-tmpl">
+            <form id="#=Id#" enctype="multipart/form-data" autocomplete="off">
+                <div class="form-group row">
+                    <div class="row col-sm-5">
+                        <label class="col-sm-6">Laporan</label>
+                        <div class="col-sm-6">
+                            <select name="laporan" class="k-dropdown">
+                                @foreach (var laporan in laporans)
+                                {
+                                    <option value="@laporan.Value">@laporan.Text</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row offset-1 col-sm-5">
+                        <label class="col-sm-6">Tanda Tangan</label>
+                        <div class="col-sm-6">
+                            <input name="tanda_tangan" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="row col-sm-5">
+                        <label class="col-sm-6">Jabatan</label>
+                        <div class="col-sm-6">
+                            <input name="jabatan" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <button type="button" onclick="viewReport(this)" class="btn btn-info space-right">
+                    <span class="fa fa-print"></span> Preview
+                </button>
+            </form>
+        </script>
+    </div>
+</div>
+
