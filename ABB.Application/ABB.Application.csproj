@@ -27,6 +27,7 @@
     <ItemGroup>
       <Folder Include="CetakNotaDanKwitansiPolis\Commands" />
       <Folder Include="CetakSchedulePolis\Commands" />
+      <Folder Include="RenewalNotices\Commands" />
       <Folder Include="RoleLevels\Queries" />
     </ItemGroup>
 
