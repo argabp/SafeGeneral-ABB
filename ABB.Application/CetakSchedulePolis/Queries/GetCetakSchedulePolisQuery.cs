@@ -102,8 +102,8 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                 return GenerateMultipleReport(reportTemplateName, cetakSchedulePolisData, templateReportHtml);
             
             var cetakSchedulePolis = cetakSchedulePolisData.FirstOrDefault();
-            var sub_total_kebakaran = cetakSchedulePolis.nilai_ttl -
-                                      (cetakSchedulePolis.nilai_bia_mat + cetakSchedulePolis.nilai_bia_pol);
+            var sub_total_kebakaran = ReportHelper.ConvertToReportFormat(cetakSchedulePolis.nilai_ttl -
+                                      (cetakSchedulePolis.nilai_bia_mat + cetakSchedulePolis.nilai_bia_pol));
 
             var nilai_ptg_a = ReportHelper.ConvertToReportFormat(cetakSchedulePolis.nilai_ptg_A);
             var tgl_mul_ptg = DateTime.TryParse(cetakSchedulePolis.tgl_mul_ptg, out _)
@@ -465,7 +465,26 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                 <td style='vertical-align: top;'>{nilai_oby_05}</td>
                 </tr>"
                 : string.Empty;
+            var pst_rate_prm_pkk = ReportHelper.ConvertToReportFormat(cetakSchedulePolis.pst_rate_prm_pkk, true);
+            var stn_rate_prm_pkk = cetakSchedulePolis.stn_rate_prm_pkk == 1 ? "%" : "%o";
+            var nilai_prk_pkk = ReportHelper.ConvertToReportFormat(cetakSchedulePolis.nilai_prk_pkk);
+            var pst_rate_prm_01 = ReportHelper.ConvertToReportFormat(cetakSchedulePolis.pst_rate_prm_01, true);
+            var stn_rate_prm_01 = cetakSchedulePolis.stn_rate_prm_01 == 1 ? "%" : "%o";
+            var pst_rate_prm_02 = ReportHelper.ConvertToReportFormat(cetakSchedulePolis.pst_rate_prm_02, true);
+            var stn_rate_prm_02 = cetakSchedulePolis.stn_rate_prm_02 == 1 ? "%" : "%o";
+            var nilai_prm_tbh_02 = ReportHelper.ConvertToReportFormat(cetakSchedulePolis.nilai_prm_tbh_02);
+            var pst_rate_prm_03 = ReportHelper.ConvertToReportFormat(cetakSchedulePolis.pst_rate_prm_03, true);
+            var stn_rate_prm_03 = cetakSchedulePolis.stn_rate_prm_03 == 1 ? "%" : "%o";
+            var nilai_prm_tbh_03 = ReportHelper.ConvertToReportFormat(cetakSchedulePolis.nilai_prm_tbh_03);
+            var pst_rate_prm_04 = ReportHelper.ConvertToReportFormat(cetakSchedulePolis.pst_rate_prm_04, true);
+            var stn_rate_prm_04 = cetakSchedulePolis.stn_rate_prm_04 == 1 ? "%" : "%o";
+            var nilai_prm_tbh_04 = ReportHelper.ConvertToReportFormat(cetakSchedulePolis.nilai_prm_tbh_04);
+            var pst_rate_prm_05 = ReportHelper.ConvertToReportFormat(cetakSchedulePolis.pst_rate_prm_05, true);
+            var stn_rate_prm_05 = cetakSchedulePolis.stn_rate_prm_05 == 1 ? "%" : "%o";
+            var nilai_prm_tbh_05 = ReportHelper.ConvertToReportFormat(cetakSchedulePolis.nilai_prm_tbh_05);
+            var nilai_prm_pad = ReportHelper.ConvertToReportFormat(cetakSchedulePolis.nilai_prm_pad);
 
+            decimal total_sub_nilai_ttl_ptg = 0;
             decimal total_nilai_ttl_ptg = 0;
             decimal total_nitai_ptg = 0;
             decimal total_prm = 0;
@@ -474,6 +493,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
             decimal total_uang_pertanggungan = 0;
             decimal total_premi_tambahan = 0;
             decimal total_premi_sirama_obyek = 0;
+            decimal total_tbh = 0;
             if (ReportHaveDetails.Contains(reportTemplateName))
             {
                 StringBuilder stringBuilder = new StringBuilder();
@@ -485,7 +505,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
 
                     if (data.nilai_ttl_ptg != null && data.nilai_ttl_ptg > 0)
                     {
-                        total_nilai_ttl_ptg += data.nilai_ttl_ptg.Value;
+                        total_sub_nilai_ttl_ptg += data.nilai_ttl_ptg.Value;
                     }
                     
                     if (data.nilai_casco != null && data.nilai_casco > 0)
@@ -550,8 +570,9 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                                             <td></td>
                                             <td></td>
                                             <td style='font-weight: bold; text-align: center;' colspan='2'>TOTAL : </td>
-                                            <td style='font-weight: bold;'>{ReportHelper.ConvertToReportFormat(total_nilai_ttl_ptg)}</td>
+                                            <td style='font-weight: bold;'>{ReportHelper.ConvertToReportFormat(total_sub_nilai_ttl_ptg)}</td>
                                         </tr>");
+                        total_nilai_ttl_ptg += total_sub_nilai_ttl_ptg;
                         break;
                     case "LampiranPolisPABiasaDaftarisi.html":
                         summary.Append($@"
@@ -582,15 +603,49 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                                 <td style='vertical-align: top; text-align: center;border-top: 1px solid;border-bottom: 1px solid;'></td>
                                 <td style='vertical-align: top; text-align: center;border-top: 1px solid;border-bottom: 1px solid;'></td>
                                 <td style='vertical-align: top; text-align: center;border-top: 1px solid;border-bottom: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-top: 1px solid;border-bottom: 1px solid;'>{ReportHelper.ConvertToReportFormat(total_nitai_ptg)}</td>
+                                <td style='vertical-align: top; text-align: right;border-top: 1px solid;border-bottom: 1px solid;'>{ReportHelper.ConvertToReportFormat(total_nitai_ptg)}</td>
                                 <td style='vertical-align: top; text-align: center;border-top: 1px solid;border-bottom: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-top: 1px solid;border-bottom: 1px solid;'>{ReportHelper.ConvertToReportFormat(total_prm)}</td>
+                                <td style='vertical-align: top; text-align: right;border-top: 1px solid;border-bottom: 1px solid;'>{ReportHelper.ConvertToReportFormat(total_prm)}</td>
                                 <td style='vertical-align: top; text-align: center;border-top: 1px solid;border-bottom: 1px solid;'></td>
                                 <td style='vertical-align: top; text-align: center;border-top: 1px solid;border-bottom: 1px solid;'></td>
                                 <td style='vertical-align: top; text-align: center;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;'></td>
                             </tr>");
                         break;
-                    
+                    case "LampiranPolisMotorDetil.html":
+                        summary.Append($@"
+                            <hr class='s1'>
+                            <!-- Total -->
+                            <h3>TOTAL PREMIUM :</h3>
+                            <table>
+                              <tr>
+                                <td>HP CASCO</td>
+                                <td>: </td>
+                                <td>{cetakSchedulePolis.symbol}</td>
+                                <td>{0}</td>
+                                <td>=</td>
+                                <td>{cetakSchedulePolis.symbol}</td>
+                                <td>{0}</td>
+                              </tr>
+                              <tr>
+                                <td>HP TJH</td>
+                                <td>: </td>
+                                <td>{cetakSchedulePolis.symbol}</td>
+                                <td>{0}</td>
+                                <td>=</td>
+                                <td>{cetakSchedulePolis.symbol}</td>
+                                <td>{0}</td>
+                              </tr>
+                              <tr>
+                                <td>PREMI</td>
+                                <td>: </td>
+                                <td></td>
+                                <td></td>
+                                <td>=</td>
+                                <td>{cetakSchedulePolis.symbol}</td>
+                                <td>{0}</td>
+                              </tr>
+                            </table>");
+                        break;
                 }
 
                 if (cetakSchedulePolis != null)
@@ -602,13 +657,13 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                         cetakSchedulePolis.jk_wkt_ptg, cetakSchedulePolis.tgl_mul_ptg_ind,
                         cetakSchedulePolis.tgl_akh_ptg_ind, cetakSchedulePolis.nm_okup,
                         cetakSchedulePolis.kd_okup, cetakSchedulePolis.nm_kls_konstr,
-                        cetakSchedulePolis.pst_rate_prm_pkk, cetakSchedulePolis.stn_rate_prm_pkk,
-                        cetakSchedulePolis.kd_mtu_symbol, cetakSchedulePolis.nilai_prk_pkk,
+                        pst_rate_prm_pkk, stn_rate_prm_pkk,
+                        cetakSchedulePolis.kd_mtu_symbol, nilai_prk_pkk,
                         cetakSchedulePolis.nm_cvrg_01, cetakSchedulePolis.kd_cvrg_01,
-                        cetakSchedulePolis.pst_rate_prm_01, cetakSchedulePolis.stn_rate_prm_01,
+                        pst_rate_prm_01, stn_rate_prm_01,
                         nilai_prm_tbh_01,cetakSchedulePolis.nm_cvrg_02, 
-                        cetakSchedulePolis.kd_cvrg_02, cetakSchedulePolis.pst_rate_prm_02, 
-                        cetakSchedulePolis.stn_rate_prm_02, cetakSchedulePolis.nilai_prm_tbh_02,
+                        cetakSchedulePolis.kd_cvrg_02, pst_rate_prm_02, 
+                        stn_rate_prm_02, nilai_prm_tbh_02,
                         cetakSchedulePolis.ket_dis, nilai_dis,
                         nilai_bia_pol, nilai_bia_mat, nilai_prm_pa,
                         cetakSchedulePolis.ket_klausula, nilai_ttl,
@@ -631,14 +686,14 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                         cetakSchedulePolis.nm_grp_oby, cetakSchedulePolis.nm_grp_oby_1,
                         sub_total_kebakaran, cetakSchedulePolis.cover, cetakSchedulePolis.tgl_closing,
                         cetakSchedulePolis.no_pol_lama,cetakSchedulePolis.st_pas,
-                        nilai_prm_pkk,cetakSchedulePolis.nilai_prm_tbh_03,
-                        cetakSchedulePolis.nilai_prm_tbh_04, cetakSchedulePolis.nilai_prm_tbh_05,
+                        nilai_prm_pkk,nilai_prm_tbh_03,
+                        nilai_prm_tbh_04, nilai_prm_tbh_05,
                         cetakSchedulePolis.kd_cvrg_03, cetakSchedulePolis.kd_cvrg_04,
                         cetakSchedulePolis.kd_cvrg_05,cetakSchedulePolis.nm_cvrg_03,
                         cetakSchedulePolis.nm_cvrg_04, cetakSchedulePolis.nm_cvrg_05,
-                        cetakSchedulePolis.pst_rate_prm_03, cetakSchedulePolis.pst_rate_prm_04,
-                        cetakSchedulePolis.pst_rate_prm_05,cetakSchedulePolis.stn_rate_prm_03,
-                        cetakSchedulePolis.stn_rate_prm_04,cetakSchedulePolis.stn_rate_prm_05,
+                        pst_rate_prm_03, pst_rate_prm_04,
+                        pst_rate_prm_05,stn_rate_prm_03,
+                        stn_rate_prm_04,stn_rate_prm_05,
                         cetakSchedulePolis.deduct,cetakSchedulePolis.lamp_pol,
                         cetakSchedulePolis.nm_merk_kend,cetakSchedulePolis.tipe_kend,
                         cetakSchedulePolis.thn_buat,cetakSchedulePolis.nilai_casco, 
@@ -646,7 +701,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                         cetakSchedulePolis.kd_jns_ptg,nilai_pad,
                         nilai_pap, nilai_tjp, nilai_rsk_sendiri,cetakSchedulePolis.desk_deduct,
                         nilai_prm_casco,nilai_prm_tjh,
-                        cetakSchedulePolis.nilai_prm_pad,nilai_prm_banjir,
+                        nilai_prm_pad,nilai_prm_banjir,
                         nilai_prm_aog,nilai_prm_hh, percentage_diskon,
                         nilai_prm_trs,nilai_prm_tjp,
                         cetakSchedulePolis.no_pol,cetakSchedulePolis.consignee,
@@ -689,7 +744,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                         view_jns_nilai_ptg_b, view_jns_nilai_ptg_c, view_jns_nilai_ptg_d, view_perhitungan_prm_a,
                         view_perhitungan_prm_b, view_perhitungan_prm_c, view_perhitungan_prm_d, view_desk_oby_2,
                         view_desk_oby_3, view_desk_oby_4, view_desk_oby_5, detail = stringBuilder.ToString(),
-                        summary, cetakSchedulePolis.nm_cb,
+                        summary, cetakSchedulePolis.nm_cb, total_nilai_ttl_ptg = ReportHelper.ConvertToReportFormat(total_nilai_ttl_ptg)
                     });
             }
             else
@@ -702,13 +757,13 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                         cetakSchedulePolis.jk_wkt_ptg, cetakSchedulePolis.tgl_mul_ptg_ind,
                         cetakSchedulePolis.tgl_akh_ptg_ind, cetakSchedulePolis.nm_okup,
                         cetakSchedulePolis.kd_okup, cetakSchedulePolis.nm_kls_konstr,
-                        cetakSchedulePolis.pst_rate_prm_pkk, cetakSchedulePolis.stn_rate_prm_pkk,
-                        cetakSchedulePolis.kd_mtu_symbol, cetakSchedulePolis.nilai_prk_pkk,
+                        pst_rate_prm_pkk, stn_rate_prm_pkk,
+                        cetakSchedulePolis.kd_mtu_symbol, nilai_prk_pkk,
                         cetakSchedulePolis.nm_cvrg_01, cetakSchedulePolis.kd_cvrg_01,
-                        cetakSchedulePolis.pst_rate_prm_01, cetakSchedulePolis.stn_rate_prm_01,
+                        pst_rate_prm_01, stn_rate_prm_01,
                         nilai_prm_tbh_01,cetakSchedulePolis.nm_cvrg_02, 
-                        cetakSchedulePolis.kd_cvrg_02, cetakSchedulePolis.pst_rate_prm_02, 
-                        cetakSchedulePolis.stn_rate_prm_02, cetakSchedulePolis.nilai_prm_tbh_02,
+                        cetakSchedulePolis.kd_cvrg_02, pst_rate_prm_02, 
+                        stn_rate_prm_02, nilai_prm_tbh_02,
                         cetakSchedulePolis.ket_dis, nilai_dis,
                         nilai_bia_pol, nilai_bia_mat, nilai_prm_pa,
                         cetakSchedulePolis.ket_klausula, nilai_ttl,
@@ -731,14 +786,14 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                         cetakSchedulePolis.nm_grp_oby, cetakSchedulePolis.nm_grp_oby_1,
                         sub_total_kebakaran, cetakSchedulePolis.cover, cetakSchedulePolis.tgl_closing,
                         cetakSchedulePolis.no_pol_lama,cetakSchedulePolis.st_pas,
-                        nilai_prm_pkk,cetakSchedulePolis.nilai_prm_tbh_03,
-                        cetakSchedulePolis.nilai_prm_tbh_04, cetakSchedulePolis.nilai_prm_tbh_05,
+                        nilai_prm_pkk,nilai_prm_tbh_03,
+                        nilai_prm_tbh_04, nilai_prm_tbh_05,
                         cetakSchedulePolis.kd_cvrg_03, cetakSchedulePolis.kd_cvrg_04,
                         cetakSchedulePolis.kd_cvrg_05,cetakSchedulePolis.nm_cvrg_03,
                         cetakSchedulePolis.nm_cvrg_04, cetakSchedulePolis.nm_cvrg_05,
-                        cetakSchedulePolis.pst_rate_prm_03, cetakSchedulePolis.pst_rate_prm_04,
-                        cetakSchedulePolis.pst_rate_prm_05,cetakSchedulePolis.stn_rate_prm_03,
-                        cetakSchedulePolis.stn_rate_prm_04,cetakSchedulePolis.stn_rate_prm_05,
+                        pst_rate_prm_03, pst_rate_prm_04,
+                        pst_rate_prm_05,stn_rate_prm_03,
+                        stn_rate_prm_04,stn_rate_prm_05,
                         cetakSchedulePolis.deduct,cetakSchedulePolis.lamp_pol,
                         cetakSchedulePolis.nm_merk_kend,cetakSchedulePolis.tipe_kend,
                         cetakSchedulePolis.thn_buat,cetakSchedulePolis.nilai_casco, 
@@ -746,7 +801,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                         cetakSchedulePolis.kd_jns_ptg,nilai_pad,
                         nilai_pap, nilai_tjp, nilai_rsk_sendiri,cetakSchedulePolis.desk_deduct,
                         nilai_prm_casco,nilai_prm_tjh,
-                        cetakSchedulePolis.nilai_prm_pad,nilai_prm_banjir,
+                        nilai_prm_pad,nilai_prm_banjir,
                         nilai_prm_aog,nilai_prm_hh, percentage_diskon,
                         nilai_prm_trs,nilai_prm_tjp,
                         cetakSchedulePolis.no_pol,cetakSchedulePolis.consignee,
@@ -788,7 +843,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                         view_pst_stn_a, view_pst_stn_b, view_pst_stn_c, view_pst_stn_d, view_jns_nilai_ptg_a,
                         view_jns_nilai_ptg_b, view_jns_nilai_ptg_c, view_jns_nilai_ptg_d, view_perhitungan_prm_a,
                         view_perhitungan_prm_b, view_perhitungan_prm_c, view_perhitungan_prm_d, view_desk_oby_2,
-                        view_desk_oby_3, view_desk_oby_4, view_desk_oby_5
+                        view_desk_oby_3, view_desk_oby_4, view_desk_oby_5, total_nilai_ttl_ptg = ReportHelper.ConvertToReportFormat(total_nilai_ttl_ptg)
                 } );
             }
             
@@ -859,7 +914,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                     return @$"
                                 <tr>
                                     <td style='vertical-align: top; text-align: center;'>{sequence}</td>
-                                    <td style='vertical-align: top; text-align: center;'>{data.nm_ttg}</td>
+                                    <td style='vertical-align: top; text-align: left;'>{data.nm_ttg}</td>
                                     <td style='vertical-align: top; text-align: center;'>{ReportHelper.ConvertDateTime(data.tgl_lahir, "dd/MM/yyyy")}</td>
                                     <td style='vertical-align: top; text-align: center;'>{tgl_mul_ptg_ind}</td>
                                     <td style='vertical-align: top; text-align: center;'>{tgl_akh_ptg_ind}</td>
@@ -888,9 +943,9 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                 case "LampiranPolisCargoDaftarisi.html":
                     return @$"<tr>
                                     <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{sequence}</td>
-                                    <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.jns_brg}</td>
-                                    <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.penerima_brg}<br>{data.tempat_brkg} / {data.tempate_tiba}</td>
-                                    <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.nm_kapal}</td>
+                                    <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'>{data.jns_brg}</td>
+                                    <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'>{data.penerima_brg}<br>{data.tempat_brkg} / {data.tempate_tiba}</td>
+                                    <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'>{data.nm_kapal}</td>
                                     <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{tgl_brkt}<br>{data.desk_kond}</td>
                                     <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm)}<br>{pst_rate_prm} {stn_rate_prm}</td>
                                     <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{pst_deduct}</td>
@@ -898,134 +953,134 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                 case "LampiranPolisMotorListing.html":
                     
                     return @$"<tr>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{sequence}</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.nm_jns_kend}/{data.nm_merk_kend}</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.thn_buat}</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.no_rangka}</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_casco)}</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{pst_rate_prm}{stn_rate_prm}</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_casco)}</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm)}</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_rsk_sendiri)}</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_pap)}</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{sequence}</td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'>{data.nm_jns_kend}/{data.nm_merk_kend}</td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'>{data.thn_buat}</td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'>{data.no_rangka}</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_casco)}</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{pst_rate_prm}{stn_rate_prm}</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_casco)}</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm)}</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_rsk_sendiri)}</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_pap)}</td>
                             </tr>
 
                             <tr>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.no_msn}</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.nm_utk}</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_tjh)}</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_pad)}</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'>{data.no_msn}</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{data.nm_utk}</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_tjh)}</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_pad)}</td>
                             </tr>
 
                             <tr>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.tipe_kend}</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.jml_tempat_ddk}</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.perlengkapan}</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>Banjir</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{pst_rate_banjir} {stn_rate_banjir}</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_banjir)}</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_tjp)}</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'>{data.tipe_kend}</td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'>{data.jml_tempat_ddk}</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{data.perlengkapan}</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>Banjir</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{pst_rate_banjir} {stn_rate_banjir}</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_banjir)}</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_tjp)}</td>
                             </tr>
 
                             <tr>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.kd_jns_ptg}</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.nm_pemilik}</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{data.no_pls}</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>Gempa Bumi</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{pst_rate_aog} {stn_rate_aog}</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_aog)}</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'>{data.kd_jns_ptg}</td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'>{data.nm_pemilik}</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{data.no_pls}</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>Gempa Bumi</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{pst_rate_aog} {stn_rate_aog}</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_aog)}</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
                             </tr>
 
                             <tr>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{tgl_mul_ptg} s/d {tgl_akh_ptg}</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>Huru-Hara</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{pst_rate_hh} {stn_rate_hh}</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_hh)}</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'>{tgl_mul_ptg} s/d {tgl_akh_ptg}</td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>Huru-Hara</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{pst_rate_hh} {stn_rate_hh}</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_hh)}</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
                             </tr>
 
                             <tr>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>TRS</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{pst_rate_trs} {stn_rate_trs}</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_trs)}</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>TRS</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{pst_rate_trs} {stn_rate_trs}</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_trs)}</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
                             </tr>
 
                             <tr>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>Kec. Diri Pap.</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>0,500 %</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_pap)}</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>Kec. Diri Pap.</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>0,500 %</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_pap)}</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
                             </tr>
 
                             <tr>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>Kec. Diri Png.</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>1,000 %</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_pad)}</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>Kec. Diri Png.</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>1,000 %</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_pad)}</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
                             </tr>
 
                             <tr>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>TJH</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_tjh)}</td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: center;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>TJH</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_tjh)}</td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
                             </tr>";
                 case "LampiranPolisMotorDetil.html":
-                    
-                    
-                    return @$"<table>
+                    return @$"
+<h3>BENTUK PERTANGGUNGAN : [ E ] ALL RISK</h3>
+                            <table>
                               <tr>
                                 <td style='width: 5%;'>{sequence}</td>
                                 <td style='width: 20%;'>MERK / JENIS / TAHUN / WARNA</td>
@@ -1223,14 +1278,6 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                                 <td style='width: 1%;'></td>
                                 <td colspan='3'>---------------------------------------------------</td>
                               </tr>
-                            </table>
-                            <hr class='s1'>
-                            <!-- Total -->
-                            <h3>TOTAL PREMIUM :</h3>
-                            <table>
-                              <tr><td>HP CASCO</td><td>: xxxxxxxxxxxxxxxxxxx</td></tr>
-                              <tr><td>HP TJH</td><td>: xxxxxxxxxxxxxxxxxxxxxx</td></tr>
-                              <tr><td><strong>PREMI</strong></td><td>: <strong>xxxxxxxxxxxxxxxxxxx</strong></td></tr>
                             </table>";
                 default:
                     return string.Empty;

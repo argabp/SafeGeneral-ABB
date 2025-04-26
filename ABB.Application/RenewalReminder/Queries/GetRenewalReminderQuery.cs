@@ -69,9 +69,9 @@ namespace ABB.Application.RenewalReminder.Queries
                                         <td style='width: 5%;  text-align: center; border: 1px solid' colspan=3>Jatuh Tempo</td>
                                     </tr>
                                     <tr>
-                                        <td style='border: 1px solid; text-align: center;'>Tanggal</td>
-                                        <td style='border: 1px solid; text-align: center;'>Bulan</td>
-                                        <td style='border: 1px solid; text-align: center;'>Tahun</td>
+                                        <td style='border: 1px solid; text-align: center; width: 2%'>Tanggal</td>
+                                        <td style='border: 1px solid; text-align: center; width: 2%'>Bulan</td>
+                                        <td style='border: 1px solid; text-align: center; width: 2%'>Tahun</td>
                                     </tr>");
 
             var groups = renewalReminderDatas.Select(s => s.nm_cob?.Trim() + "|" + s.nm_scob?.Trim()).Distinct().ToList();
@@ -105,7 +105,7 @@ namespace ABB.Application.RenewalReminder.Queries
                 }
             }
             
-            stringBuilder.Append("<tr><td style='border-top:1px solid' colspan=7></td></tr></table>");
+            stringBuilder.Append("<tr><td style='border-top:1px solid' colspan=8></td></tr></table>");
             
             var renewalReminder = renewalReminderDatas.FirstOrDefault();
             resultTemplate = templateProfileResult.Render( new

@@ -127,7 +127,7 @@ namespace ABB.Application.LaporanProduksiAsuransiMasuk.Queries
                                                 <td style='width: 20%; text-align: left; vertical-align: top; border: 1px solid'>{data.nm_ttg}</td>
                                                 <td style='width: 10%; text-align: center; vertical-align: top; border: 1px solid'>{data.no_pol_ttg}</td>
                                                 <td style='width: 5%;  text-align: right; vertical-align: top; border: 1px solid'>{nilai_ttl_ptg}</td>
-                                                <td style='width: 10%; text-align: left; vertical-align: top; border: 1px solid'>{nilai_prm}</td>
+                                                <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{nilai_prm}</td>
                                                 <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{nilai_kms}</td>
                                                 <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{nilai_dis}</td>
                                                 <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{nilai_hf}</td>

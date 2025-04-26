@@ -8,6 +8,7 @@ using ABB.Application.Common.Services;
 using ABB.Web.Models;
 using ABB.Web.Modules.Base;
 using ABB.Web.Modules.CetakSchedulePolis.Models;
+using DinkToPdf;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Http;
@@ -92,8 +93,15 @@ namespace ABB.Web.Modules.CetakSchedulePolis
                     throw new Exception("Session user tidak ditemukan");
                 
                 var reportTemplate = await Mediator.Send(command);
+
+                var reportOrientation = Orientation.Portrait;
+
+                if (model.jenisLaporan == "L")
+                {
+                    reportOrientation = Orientation.Landscape;
+                }
                 
-                _reportGeneratorService.GenerateReport("CetakSchedulePolis.pdf", reportTemplate, sessionId);
+                _reportGeneratorService.GenerateReport("CetakSchedulePolis.pdf", reportTemplate, sessionId, reportOrientation);
 
                 return Ok(new { Status = "OK", Data = sessionId});
             }

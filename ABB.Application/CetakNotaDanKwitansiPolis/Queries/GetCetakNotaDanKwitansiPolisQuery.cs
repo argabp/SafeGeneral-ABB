@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ABB.Application.CetakSchedulePolis.Queries;
 using ABB.Application.Common;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Hosting;
@@ -69,8 +70,8 @@ namespace ABB.Application.CetakNotaDanKwitansiPolis.Queries
             var cetakNotaDanKwitansiPolisData = (await _connectionFactory.QueryProc<CetakNotaDanKwitansiPolisDto>(storeProcedureName, 
                 new
                 {
-                    input_str = $"{request.kd_cb.Trim()}{request.kd_cob.Trim()}{request.kd_scob.Trim()}" +
-                                $"{request.kd_thn}{request.no_pol.Trim()}{request.no_updt}{request.nm_ttg?.Trim()}"
+                        input_str = $"{request.kd_cb.Trim()}{request.kd_cob.Trim()}{request.kd_scob.Trim()}" +
+                                    $"{request.kd_thn}{request.no_pol.Trim()}{request.no_updt}{request.nm_ttg?.Trim()}"
                 })).ToList();
             
             string reportPath = Path.Combine( _environment.ContentRootPath, "Modules", "Reports", "Templates", reportTemplateName );
@@ -78,7 +79,7 @@ namespace ABB.Application.CetakNotaDanKwitansiPolis.Queries
             string templateReportHtml = await File.ReadAllTextAsync( reportPath );
             
             if (cetakNotaDanKwitansiPolisData.Count == 0)
-                throw new NullReferenceException("Report tidak ditemukan");
+                throw new NullReferenceException("Data tidak ditemukan");
 
             Template templateProfileResult = Template.Parse( templateReportHtml );
             
@@ -88,6 +89,25 @@ namespace ABB.Application.CetakNotaDanKwitansiPolis.Queries
                 return GenerateMultipleReport(reportTemplateName, cetakNotaDanKwitansiPolisData, templateReportHtml);
             
             var cetakNotaDanKwitansiPolis = cetakNotaDanKwitansiPolisData.FirstOrDefault();
+            var nilai_01 = ReportHelper.ConvertToReportFormat(cetakNotaDanKwitansiPolis.nilai_01);
+            var nilai_02 = ReportHelper.ConvertToReportFormat(cetakNotaDanKwitansiPolis.nilai_02);
+            var nilai_03 = ReportHelper.ConvertToReportFormat(cetakNotaDanKwitansiPolis.nilai_03);
+            var nilai_04 = ReportHelper.ConvertToReportFormat(cetakNotaDanKwitansiPolis.nilai_04);
+            var nilai_ttl_ptg = ReportHelper.ConvertToReportFormat(cetakNotaDanKwitansiPolis.nilai_ttl_ptg);
+            var nilai_nt = ReportHelper.ConvertToReportFormat(cetakNotaDanKwitansiPolis.nilai_nt);
+            var total_nilai = ReportHelper.ConvertToReportFormat(cetakNotaDanKwitansiPolis.nilai_01 + cetakNotaDanKwitansiPolis.nilai_03 + cetakNotaDanKwitansiPolis.nilai_04);
+            var pst_kms = ReportHelper.ConvertToReportFormat(cetakNotaDanKwitansiPolis.pst_kms, true);
+            var nilai_net_kms = ReportHelper.ConvertToReportFormat(cetakNotaDanKwitansiPolis.nilai_net_kms);
+            var pst_ppn = ReportHelper.ConvertToReportFormat(cetakNotaDanKwitansiPolis.pst_ppn, true);
+            var nilai_ppn = ReportHelper.ConvertToReportFormat(cetakNotaDanKwitansiPolis.nilai_ppn);
+            var pst_pph = ReportHelper.ConvertToReportFormat(cetakNotaDanKwitansiPolis.pst_pph, true);
+            var nilai_pph = ReportHelper.ConvertToReportFormat(cetakNotaDanKwitansiPolis.nilai_pph);
+            var pst_lain = ReportHelper.ConvertToReportFormat(cetakNotaDanKwitansiPolis.pst_lain, true);
+            var nilai_lain = ReportHelper.ConvertToReportFormat(cetakNotaDanKwitansiPolis.nilai_lain);
+            var nilai_total = ReportHelper.ConvertToReportFormat(cetakNotaDanKwitansiPolis.nilai_net_kms +
+                                                                 cetakNotaDanKwitansiPolis.nilai_ppn +
+                                                                 cetakNotaDanKwitansiPolis.nilai_pph +
+                                                                 cetakNotaDanKwitansiPolis.nilai_lain);
             if (ReportHaveDetails.Contains(reportTemplateName))
             {
                 StringBuilder stringBuilder = new StringBuilder();
@@ -104,29 +124,30 @@ namespace ABB.Application.CetakNotaDanKwitansiPolis.Queries
                     cetakNotaDanKwitansiPolis.no_nota, cetakNotaDanKwitansiPolis.tgl_nt_ind,
                     cetakNotaDanKwitansiPolis.no_reg, cetakNotaDanKwitansiPolis.no_ref,
                     cetakNotaDanKwitansiPolis.uraian_01, kd_mtu_symbol_1 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
-                    cetakNotaDanKwitansiPolis.nilai_01, cetakNotaDanKwitansiPolis.nm_ttg,
+                    nilai_01, cetakNotaDanKwitansiPolis.nm_ttg,
                     cetakNotaDanKwitansiPolis.uraian_02, kd_mtu_symbol_5 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
-                    cetakNotaDanKwitansiPolis.nilai_02, cetakNotaDanKwitansiPolis.no_pol_ttg,
+                    nilai_02, cetakNotaDanKwitansiPolis.no_pol_ttg,
                     cetakNotaDanKwitansiPolis.uraian_03, kd_mtu_symbol_7 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
-                    cetakNotaDanKwitansiPolis.nilai_03, cetakNotaDanKwitansiPolis.periode_polis,
+                    nilai_03, cetakNotaDanKwitansiPolis.periode_polis,
                     cetakNotaDanKwitansiPolis.uraian_04, kd_mtu_symbol_8 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
-                    cetakNotaDanKwitansiPolis.nilai_04, cetakNotaDanKwitansiPolis.nm_scob,
-                    cetakNotaDanKwitansiPolis.nilai_ttl_ptg, kd_mtu_symbol_6 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
-                    cetakNotaDanKwitansiPolis.nilai_nt, cetakNotaDanKwitansiPolis.ket_nilai_nt,
+                    nilai_04, cetakNotaDanKwitansiPolis.nm_scob,
+                    nilai_ttl_ptg, kd_mtu_symbol_6 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
+                    kd_mtu_symbol_12 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
+                    nilai_nt, cetakNotaDanKwitansiPolis.ket_nilai_nt,
                     cetakNotaDanKwitansiPolis.nm_cb, cetakNotaDanKwitansiPolis.nm_rek,
                     cetakNotaDanKwitansiPolis.nm_akun, cetakNotaDanKwitansiPolis.nm_ttj_kms,
                     cetakNotaDanKwitansiPolis.almt_ttj_kms, cetakNotaDanKwitansiPolis.kt_ttj_kms,
                     cetakNotaDanKwitansiPolis.no_npwp, cetakNotaDanKwitansiPolis,
                     kd_mtu_symbol_3 = cetakNotaDanKwitansiPolis.kd_mtu_symbol, kd_mtu_symbol_2 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
                     kd_mtu_symbol_4 = cetakNotaDanKwitansiPolis.kd_mtu_symbol, cetakNotaDanKwitansiPolis.ket_nt_kms,
-                    total_nilai = cetakNotaDanKwitansiPolis.nilai_01 + cetakNotaDanKwitansiPolis.nilai_03 + cetakNotaDanKwitansiPolis.nilai_04,
-                    cetakNotaDanKwitansiPolis.nilai_net_kms, kd_mtu_symbol_11 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
-                    cetakNotaDanKwitansiPolis.pst_ppn, cetakNotaDanKwitansiPolis.nilai_ppn,
+                    total_nilai, pst_kms, nilai_lain,
+                    nilai_net_kms, kd_mtu_symbol_11 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
+                    pst_ppn, nilai_ppn,
                     pst_pph_title = cetakNotaDanKwitansiPolis.pst_pph == 2 ? "PPH 23" : "PPH 21",
-                    cetakNotaDanKwitansiPolis.pst_pph, cetakNotaDanKwitansiPolis.nilai_pph,
-                    cetakNotaDanKwitansiPolis.pst_lain, kd_mtu_symbol_9 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
+                    pst_pph, nilai_pph,
+                    pst_lain, kd_mtu_symbol_9 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
                     cetakNotaDanKwitansiPolis.kt_cb, cetakNotaDanKwitansiPolis.almt_ttg, cetakNotaDanKwitansiPolis.ket_kwi,
-                    cetakNotaDanKwitansiPolis.period_polis, cetakNotaDanKwitansiPolis.kd_mtu_symbol
+                    cetakNotaDanKwitansiPolis.period_polis, cetakNotaDanKwitansiPolis.kd_mtu_symbol, nilai_total
                 } );
             }
             else
@@ -139,29 +160,29 @@ namespace ABB.Application.CetakNotaDanKwitansiPolis.Queries
                     cetakNotaDanKwitansiPolis.no_nota, cetakNotaDanKwitansiPolis.tgl_nt_ind,
                     cetakNotaDanKwitansiPolis.no_reg, cetakNotaDanKwitansiPolis.no_ref,
                     cetakNotaDanKwitansiPolis.uraian_01, kd_mtu_symbol_1 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
-                    cetakNotaDanKwitansiPolis.nilai_01, cetakNotaDanKwitansiPolis.nm_ttg,
+                    nilai_01, cetakNotaDanKwitansiPolis.nm_ttg,
                     cetakNotaDanKwitansiPolis.uraian_02, kd_mtu_symbol_5 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
-                    cetakNotaDanKwitansiPolis.nilai_02, cetakNotaDanKwitansiPolis.no_pol_ttg,
+                    nilai_02, cetakNotaDanKwitansiPolis.no_pol_ttg,
                     cetakNotaDanKwitansiPolis.uraian_03, kd_mtu_symbol_7 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
-                    cetakNotaDanKwitansiPolis.nilai_03, cetakNotaDanKwitansiPolis.periode_polis,
+                    nilai_03, cetakNotaDanKwitansiPolis.periode_polis,
                     cetakNotaDanKwitansiPolis.uraian_04, kd_mtu_symbol_8 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
-                    cetakNotaDanKwitansiPolis.nilai_04, cetakNotaDanKwitansiPolis.nm_scob,
-                    cetakNotaDanKwitansiPolis.nilai_ttl_ptg, kd_mtu_symbol_6 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
-                    cetakNotaDanKwitansiPolis.nilai_nt, cetakNotaDanKwitansiPolis.ket_nilai_nt,
+                    nilai_04, cetakNotaDanKwitansiPolis.nm_scob,
+                    nilai_ttl_ptg, kd_mtu_symbol_6 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
+                    nilai_nt, cetakNotaDanKwitansiPolis.ket_nilai_nt,
                     cetakNotaDanKwitansiPolis.nm_cb, cetakNotaDanKwitansiPolis.nm_rek,
                     cetakNotaDanKwitansiPolis.nm_akun, cetakNotaDanKwitansiPolis.nm_ttj_kms,
                     cetakNotaDanKwitansiPolis.almt_ttj_kms, cetakNotaDanKwitansiPolis.kt_ttj_kms,
                     cetakNotaDanKwitansiPolis.no_npwp, cetakNotaDanKwitansiPolis,
                     kd_mtu_symbol_3 = cetakNotaDanKwitansiPolis.kd_mtu_symbol, kd_mtu_symbol_2 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
                     kd_mtu_symbol_4 = cetakNotaDanKwitansiPolis.kd_mtu_symbol, cetakNotaDanKwitansiPolis.ket_nt_kms,
-                    total_nilai = cetakNotaDanKwitansiPolis.nilai_01 + cetakNotaDanKwitansiPolis.nilai_03 + cetakNotaDanKwitansiPolis.nilai_04,
-                    cetakNotaDanKwitansiPolis.nilai_net_kms, kd_mtu_symbol_11 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
-                    cetakNotaDanKwitansiPolis.pst_ppn, cetakNotaDanKwitansiPolis.nilai_ppn,
+                    total_nilai, pst_kms, nilai_lain,
+                    nilai_net_kms, kd_mtu_symbol_11 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
+                    pst_ppn, nilai_ppn,
                     pst_pph_title = cetakNotaDanKwitansiPolis.pst_pph == 2 ? "PPH 23" : "PPH 21",
-                    cetakNotaDanKwitansiPolis.pst_pph, cetakNotaDanKwitansiPolis.nilai_pph,
-                    cetakNotaDanKwitansiPolis.pst_lain, kd_mtu_symbol_9 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
+                    pst_pph, nilai_pph,
+                    pst_lain, kd_mtu_symbol_9 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
                     cetakNotaDanKwitansiPolis.kt_cb, cetakNotaDanKwitansiPolis.almt_ttg, cetakNotaDanKwitansiPolis.ket_kwi,
-                    cetakNotaDanKwitansiPolis.period_polis, cetakNotaDanKwitansiPolis.kd_mtu_symbol
+                    cetakNotaDanKwitansiPolis.period_polis, cetakNotaDanKwitansiPolis.kd_mtu_symbol, nilai_total
                 } );
             }
 
