@@ -9,9 +9,9 @@ using MediatR;
 using Microsoft.Extensions.Hosting;
 using Scriban;
 
-namespace ABB.Application.PLAKoasuransi.Queries
+namespace ABB.Application.DLAKoasuransi.Queries
 {
-    public class GetPLAKoasuransiQuery : IRequest<string>
+    public class GetDLAKoasuransiQuery : IRequest<string>
     {
         public string DatabaseName { get; set; }
         public string kd_cb { get; set; }
@@ -24,23 +24,23 @@ namespace ABB.Application.PLAKoasuransi.Queries
         public string bahasa { get; set; }
     }
 
-    public class GetPLAKoasuransiQueryHandler : IRequestHandler<GetPLAKoasuransiQuery, string>
+    public class GetDLAKoasuransiQueryHandler : IRequestHandler<GetDLAKoasuransiQuery, string>
     {
         private readonly IDbConnectionFactory _connectionFactory;
         private readonly IHostEnvironment _environment;
 
-        public GetPLAKoasuransiQueryHandler(IDbConnectionFactory connectionFactory, IHostEnvironment environment)
+        public GetDLAKoasuransiQueryHandler(IDbConnectionFactory connectionFactory, IHostEnvironment environment)
         {
             _connectionFactory = connectionFactory;
             _environment = environment;
         }
 
-        public async Task<string> Handle(GetPLAKoasuransiQuery request, CancellationToken cancellationToken)
+        public async Task<string> Handle(GetDLAKoasuransiQuery request, CancellationToken cancellationToken)
         {
             _connectionFactory.CreateDbConnection(request.DatabaseName);
 
             var no_dla = request.no_dla == 0 ? 2 : request.no_dla;
-            var datas = (await _connectionFactory.QueryProc<PLAKoasuransiDto>("spr_cl03r_01", 
+            var datas = (await _connectionFactory.QueryProc<DLAKoasuransiDto>("spr_cl03r_01", 
                 new
                 {
                     input_str = $"{request.kd_cb.Trim()},{request.kd_cob.Trim()},{request.kd_scob.Trim()}," +
@@ -52,10 +52,10 @@ namespace ABB.Application.PLAKoasuransi.Queries
             switch (request.bahasa)
             {
                 case "INA":
-                    report = "PLAKoasuransiINA.html";
+                    report = "DLAKoasuransiINA.html";
                     break;
                 case "ENG":
-                    report = "PLAKoasuransiENG.html";
+                    report = "DLAKoasuransiENG.html";
                     break;
             }
             
@@ -74,9 +74,7 @@ namespace ABB.Application.PLAKoasuransi.Queries
             var nilai_ttl_ptg = ReportHelper.ConvertToReportFormat(data.nilai_ttl_ptg);
             var nilai_share_bgu = ReportHelper.ConvertToReportFormat(data.nilai_share_bgu);
             var nilai_ttl_kl = ReportHelper.ConvertToReportFormat(data.nilai_ttl_kl);
-            var pst_sor_pas = ReportHelper.ConvertToReportFormat(data.pst_sor_pas, true);
-            var nilai_jns_sor_01 = ReportHelper.ConvertToReportFormat(data.nilai_jns_sor_01);
-            var nilai_jns_sor_02 = ReportHelper.ConvertToReportFormat(data.nilai_jns_sor_02);
+            var nilai_share = ReportHelper.ConvertToReportFormat(data.nilai_ttl_kl * (data.pst_share / 100));
             var resultTemplate = templateProfileResult.Render( new
             {
                     
@@ -85,9 +83,10 @@ namespace ABB.Application.PLAKoasuransi.Queries
                 data.nm_oby, data.symbol_ptg, nilai_ttl_ptg, nilai_share_bgu,
                 tgl_mul_ptg = ReportHelper.ConvertDateTime(data.tgl_mul_ptg, "dd/MM/yyyy"), 
                 tgl_akh_ptg = ReportHelper.ConvertDateTime(data.tgl_akh_ptg, "dd/MM/yyyy"), 
-                data.tempat_kej, pst_sor_pas, data.ket_dia, data.nm_jns_sor_01,
+                data.tempat_kej, data.ket_dia, data.nm_jns_sor_01, nilai_share,
                 data.sebab_kerugian, data.nm_jns_sor_02, nilai_ttl_kl, data.no_sert, data.sifat_kerugian,
-                data.kt_cb, data.tgl_closing_ind, nilai_jns_sor_01, nilai_jns_sor_02
+                data.kt_cb, data.tgl_closing_ind, data.kd_cb, data.kd_cob, data.kd_scob,
+                data.kd_thn, data.no_kl, data.no_mts, data.no_dla
             } );
 
             return resultTemplate;

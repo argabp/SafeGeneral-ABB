@@ -5510,6 +5510,9 @@
       <None Update="Modules\PLAKoasuransi\JS\plaKoasuransi.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\DLAKoasuransi\JS\dlaKoasuransi.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
