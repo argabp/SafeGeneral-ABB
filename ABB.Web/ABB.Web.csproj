@@ -5513,6 +5513,9 @@
       <None Update="Modules\DLAKoasuransi\JS\dlaKoasuransi.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\CetakKwitansiKlaim\JS\cetakKwitansiKlaim.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

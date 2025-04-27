@@ -1,0 +1,78 @@
+﻿@using ABB.Application.CetakKwitansiKlaim.Queries
+@using Kendo.Mvc.UI
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Cetak Kwitansi Klaim";
+}
+<script src="~/Modules/CetakKwitansiKlaim/JS/cetakKwitansiKlaim.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-8">
+            Cetak Kwitansi Klaim
+        </div>
+
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<KlaimDto>()
+                .Name("CetakKwitansiKlaimGrid")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetCetakKwitansiKlaim", "CetakKwitansiKlaim").Data("searchFilter"))
+                    .Model(model => model.Id(p => p.Id))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
+                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
+                    columns.Bound(col => col.nm_scob).Width(150).Title("Nama Sub COB");
+                    columns.Bound(col => col.jns_tr).Width(150).Title("Jenis TR");
+                    columns.Bound(col => col.jns_nt_msk).Width(150).Title("Jenis Nota Masuk");
+                    columns.Bound(col => col.no_nt_msk).Width(150).Title("Nomor Nota Masuk");
+                    columns.Bound(col => col.jns_nt_kel).Width(150).Title("Jenis Nota Keluar");
+                    columns.Bound(col => col.no_nt_kel).Width(150).Title("Nomor Nota Keluar");
+                    columns.Bound(col => col.kd_thn).Width(150).Title("Tahun");
+                    columns.Bound(col => col.kd_bln).Width(150).Title("Bulan");
+                    columns.Bound(col => col.flag_posting).Width(100).Title("Flag Posting").ClientTemplate("#=booleanTemplate(data.flag_posting)#");
+                    columns.Bound(col => col.nm_ttj).Width(150).Title("Nama Tertuju");
+                    columns.Command(command =>
+                    {
+                        command.Custom("Preview")
+                            .Text(" ")
+                            .IconClass("fa fa-eye")
+                            .HtmlAttributes(new { title = "Preview" })
+                            .Click("viewReport");
+                    }).Title("Action").Width(100);
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit"))
+        
+                )    
+        </div>
+    </div>
+</div>
+
