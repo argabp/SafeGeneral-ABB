@@ -12,7 +12,7 @@ namespace ABB.Application.DLAKoasuransi.Queries
         
         public string nm_oby { get; set; }
         
-        public string symbol_ptg { get; set; }
+        public string symbol { get; set; }
         
         public decimal nilai_ttl_ptg { get; set; }
         
@@ -65,5 +65,15 @@ namespace ABB.Application.DLAKoasuransi.Queries
         public string kd_scob { get; set; }
 
         public string kd_thn { get; set; }
+
+        public string nm_pas { get; set; }
+
+        public string almt_pas { get; set; }
+
+        public string kt_pas { get; set; }
+
+        public decimal nilai_kl { get; set; }
+
+        public string footer { get; set; }
     }
 }

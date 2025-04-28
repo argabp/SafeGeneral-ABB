@@ -48,7 +48,7 @@ namespace ABB.Application.CetakNotaKlaim.Queries
                                 $"{request.jns_nt_kel},{request.no_nt_kel.Trim()},{request.flag_posting.Trim()},"
                 })).ToList();
             
-            string reportPath = Path.Combine( _environment.ContentRootPath, "Modules", "Reports", "Templates", "CetakKwitansiKlaim" );
+            string reportPath = Path.Combine( _environment.ContentRootPath, "Modules", "Reports", "Templates", "CetakNotaKlaim.html" );
             
             string templateReportHtml = await File.ReadAllTextAsync( reportPath );
             

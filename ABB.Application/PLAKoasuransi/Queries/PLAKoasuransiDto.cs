@@ -4,6 +4,18 @@ namespace ABB.Application.PLAKoasuransi.Queries
 {
     public class PLAKoasuransiDto
     {
+        public string kd_cb { get; set; }
+        
+        public string kd_cob { get; set; }
+        
+        public string kd_scob { get; set; }
+        
+        public string kd_thn { get; set; }
+        
+        public string no_kl { get; set; }
+        
+        public string no_mts { get; set; }
+        
         public string nm_ttg { get; set; }
         
         public string no_pol_ttg { get; set; }
@@ -12,7 +24,7 @@ namespace ABB.Application.PLAKoasuransi.Queries
         
         public string nm_oby { get; set; }
         
-        public string symbol_ptg { get; set; }
+        public string symbol { get; set; }
         
         public decimal nilai_ttl_ptg { get; set; }
         
@@ -51,5 +63,17 @@ namespace ABB.Application.PLAKoasuransi.Queries
         public string tempat_kej { get; set; }
 
         public string sifat_kerugian { get; set; }
+
+        public string nm_pas { get; set; }
+
+        public string almt_pas { get; set; }
+
+        public string kt_pas { get; set; }
+
+        public decimal pst_share { get; set; }
+
+        public decimal nilai_kl { get; set; }
+
+        public string footer { get; set; }
     }
 }

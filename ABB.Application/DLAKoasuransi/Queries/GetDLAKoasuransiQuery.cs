@@ -80,13 +80,14 @@ namespace ABB.Application.DLAKoasuransi.Queries
                     
                 data.no_berkas_reas, data.nm_ttg, data.no_pol_ttg, data.nm_scob, 
                 tgl_kej = ReportHelper.ConvertDateTime(data.tgl_kej, "dd/MM/yyyy"),
-                data.nm_oby, data.symbol_ptg, nilai_ttl_ptg, nilai_share_bgu,
+                data.nm_oby, data.symbol, nilai_ttl_ptg, nilai_share_bgu,
                 tgl_mul_ptg = ReportHelper.ConvertDateTime(data.tgl_mul_ptg, "dd/MM/yyyy"), 
                 tgl_akh_ptg = ReportHelper.ConvertDateTime(data.tgl_akh_ptg, "dd/MM/yyyy"), 
                 data.tempat_kej, data.ket_dia, data.nm_jns_sor_01, nilai_share,
                 data.sebab_kerugian, data.nm_jns_sor_02, nilai_ttl_kl, data.no_sert, data.sifat_kerugian,
                 data.kt_cb, data.tgl_closing_ind, data.kd_cb, data.kd_cob, data.kd_scob,
-                data.kd_thn, data.no_kl, data.no_mts, data.no_dla
+                data.kd_thn, data.no_kl, data.no_mts, request.no_dla, data.nm_pas,
+                data.almt_pas, data.kt_pas,
             } );
 
             return resultTemplate;

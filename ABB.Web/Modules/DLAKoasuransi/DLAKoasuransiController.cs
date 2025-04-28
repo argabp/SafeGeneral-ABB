@@ -64,7 +64,7 @@ namespace ABB.Web.Modules.DLAKoasuransi
                 
                 var reportTemplate = await Mediator.Send(command);
 
-                _reportGeneratorService.GenerateReport("PLAKoasuransi.pdf", reportTemplate, sessionId);
+                _reportGeneratorService.GenerateReport("DLAKoasuransi.pdf", reportTemplate, sessionId);
 
                 return Ok(new { Status = "OK", Data = sessionId});
             }

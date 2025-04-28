@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lampiran Polis Fire Daftar Isi</title>
+    <style>
+        .container {
+            width: 90%;
+            margin: auto;
+            padding: 25px;
+        }
+
+        .h1 {
+            text-align: center;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .section {
+            margin-top: 50px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table td {
+            padding: 8px;
+			font-size: 12px;
+        }
+        .table-uraian {
+        width: 95%;
+        margin: 10px auto;
+        border-collapse: collapse;
+        font-size: 12px;
+        }
+        .table-uraian th, .table-uraian td {
+            border: 1px solid black; /* Garis vertikal */
+            padding: 8px;
+        }
+        .table-uraian tr.no-border td {
+            border-bottom: none; /* Hilangkan garis bawah untuk baris tertentu */
+        }
+        .table-uraian tr.border-bottom td {
+            border-bottom: 1px solid black; /* Baris yang tetap punya garis bawah */
+        }
+        .table-uraian th {
+            text-align: center;
+            font-weight: bold;
+        }
+        .text-left {
+            text-align: left;
+        }
+        .text-right {
+            text-align: right;
+        }
+        .text-center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="section">
+            <table class="table">
+                <tr>
+                    <td style="width: 5%;">KANTOR</td>
+                    <td style="width: 1%;">:</td>
+                    <td style="width: 30%;">{{nm_cb}}</td>
+                    <td style="text-align: center;"><u>KWITANSI</u></td>
+                    <td style="text-align: right;">Jenis Nota</td>
+                    <td style="width: 1%;">:</td>
+                    <td>{{jns_tr}}.{{jns_nt_msk}}.{{jns_nt_kel}}</td>
+                </tr>
+            </table>
+            <table class="table">
+                <tr>
+                    <td style="width: 15%; vertical-align: top;">Sudah terima dari</td>
+                    <td style="vertical-align: top; text-align: justify;">:</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="3">{{nm_ttg}} <br> {{almt_kwi}} <br> {{kt_kwi}}</td>
+                    <td style="vertical-align: top; text-align: left; width: 10%;">No. L.K.P <br> No. Nota</td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;">: <br> :</td>
+                    <td style="vertical-align: top; text-align: justify;">{{no_berkas}} <br> {{no_nota}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">Uang sebesar</td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;">:</td>
+                    <td style="vertical-align: top; text-align: justify; width: 47%;" colspan="3"># {{ket_nilai_nt}} #</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">Kepada</td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;">:</td>
+                    <td style="vertical-align: top; text-align: justify; width: 47%;" colspan="3">{{nm_ttg}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;">Untuk pembayaran</td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;">:</td>
+                    <td style="vertical-align: top; text-align: justify; width: 47%;" colspan="3">{{ket_kwi}}</td>
+                </tr>
+            </table>
+            <table class="table">
+                <tr>
+                    <td style="width: 5%; vertical-align: top;">No. Polis</td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;">:</td>
+                    <td style="vertical-align: top; text-align: justify; width: 20%;">{{no_pol_ttg}}</td>
+                    <td style="vertical-align: top; text-align: justify; width: 50%;">{{no_pol_lama}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 5%; vertical-align: top;" colspan="6">Dengan diterimanya jumlah penggantian kerugian tersebut, maka segala hal yang berhubungan dengan kerugian diatas dinyatakan selesai seluruhnya dan tidak akan
+                        mengajukan tuntutan lagi atas kerugian tersebut. Dan bersama ini tertanggung memberikan Hak Subrogasi kepada PT. ASURANSI BHAKTI BAYANGKARA, segala hak yang mungkin dipunyai terhadap pihak Ketiga sebagai akibat kerugian tersebut. Dalam hal barang-barang yang hilang diperoleh kembali seluruhnya atau sebagian maka
+                        Tertanggung akan membayar kembali seluruh atau sebagian jumlah kerugian kepada PT. ASURANSI BHAKTI BAYANGKARA.
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <div style="display: flex; justify-content: center; align-items: center; padding: 10px 50px; border: 1px solid black; font-size: 12px;">
+                          <div style="flex: 1; text-align: right; padding-right: 10px;">{{kd_mtu_symbol}}</div>
+                          <div style="flex: 1; text-align: left; padding-left: 10px;">{{nilai_nt}}</div>
+                        </div>
+                      </td>
+                    <td style="width: 5%; padding-left: 30px;"></td>
+                    <td style="width: 1%;"></td>
+                    <td style="width: 70%; vertical-align: top;">{{nm_kt_cb}}, {{tgl_nt_ind}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
