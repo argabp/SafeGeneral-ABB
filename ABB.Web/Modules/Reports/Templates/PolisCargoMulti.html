@@ -12,13 +12,11 @@
         .container {
             width: 80%;
             margin: auto;
-            /* border: 1px solid black; */
             padding: 20px;
         }
 
         .h1 {
             text-align: center;
-            font-size: 14px;
             font-weight: bold;
             text-transform: uppercase;
             margin-bottom: 10px;
@@ -30,13 +28,12 @@
 
         .table {
             width: 100%;
-            /* border-collapse: collapse; */
+            border-collapse: collapse;
         }
 
         .table td {
             padding: 8px;
-            /* border: 1px solid black; */
-			font-size: 10px;
+			font-size: 12px;
         }
 		p {
 			text-align: justify;
@@ -61,7 +58,7 @@
             <h2>IKHTISAR</h2>
             <table class="table">
                 <tr>
-                    <td style="width: 30%;">Nomor Polis</td>
+                    <td style="width: 20%;">Nomor Polis</td>
                     <td>:</td>
                     <td colspan="4">{{no_pol_ttg}}</td>
                 </tr>
@@ -180,7 +177,7 @@
                 <tr>
                     <td>Perhitungan Premi</td>
                     <td>:</td>
-                    <td>{{pst_rate_prm}} {{stn_rate_prm}} x {{kd_mtu_symbol}} {{nilai_ttl_ptg}}</td>
+                    <td style="width: 40%;">{{pst_rate_prm}} {{stn_rate_prm}} x {{kd_mtu_symbol}} {{nilai_ttl_ptg}}</td>
 					<td></td>
                     <td>=</td>
                     <td>{{kd_mtu_symbol}} {{nilai_prm}}</td>
@@ -241,7 +238,7 @@
                     <td style="width: 30%;"></td>
                     <td></td>
                     <td></td>
-                    <td style="width: 15%;"></td>
+                    <td style="width: 25%;"></td>
                     <td>Dikeluarkan di {{kt_cb}} pada tanggal {{tgl_closing}}</td>
                     <td></td>
                 </tr>

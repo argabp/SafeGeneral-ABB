@@ -30,7 +30,7 @@
 
         .table {
             width: 100%;
-            /* border-collapse: collapse; */
+            border-collapse: collapse;
         }
 
         .table td {
@@ -101,8 +101,7 @@
                     <td style="width: 1%;">5. </td>
                     <td style="width: 30%;">Harga Pertanggungan</td>
                     <td>:</td>
-                    <td style="width: 5%;">{{symbol_ptg}}</td>
-                    <td colspan="2">{{nilai_ttl_ptg}}</td>
+                    <td style="width: 5%;" colspan="3">{{symbol_ptg}} {{nilai_ttl_ptg}}</td>
                 </tr>
                 <tr>
                     <td></td>
@@ -176,8 +175,7 @@
                     <td style="width: 1%;">2. </td>
                     <td style="width: 30%;">Nilai Estimasi</td>
                     <td>:</td>
-                    <td style="width: 1%;">{{symbo_ptgl}}</td>
-                    <td colspan="2">{{nilai_estimasi}}</td>
+                    <td style="width: 1%;" colspan="3">{{symbol_ptg}} {{nilai_estimasi}}</td>
                 </tr>
                 <tr>
                     <td></td>
@@ -191,15 +189,14 @@
                     <td style="width: 1%;">4. </td>
                     <td style="width: 30%;">Jumlah Kerugian yang diselesaikan</td>
                     <td>:</td>
-                    <td style="width: 1%;">{{symbol_ptg}}</td>
-                    <td colspan="2">{{nilai_ttl_kl}}</td>
+                    <td style="width: 1%;" colspan="3">{{symbol_ptg}} {{nilai_ttl_kl}}</td>
                 </tr>
                 <tr>
                     <td></td>
                     <td style="width: 1%;"></td>
                     <td style="width: 30%; text-align: right;">Perincian Kerugian yang diselesaikan</td>
                     <td style="text-align: right;">:</td>
-                    <td style="width: 1%; text-align: right;">{{nm_oby_1}}</td>
+                    <td style="width: 30%; text-align: left;">{{nm_oby_1}}</td>
                     <td style="width: 1%;">:</td>
                     <td>{{nilai_kl_1}}</td>
                 </tr>
@@ -208,7 +205,7 @@
                     <td style="width: 1%;"></td>
                     <td style="width: 30%; text-align: right;"></td>
                     <td style="text-align: right;"></td>
-                    <td style="width: 1%; text-align: right;">{{nm_oby_2}}</td>
+                    <td style="width: 1%; text-align: left;">{{nm_oby_2}}</td>
                     <td style="width: 1%;">:</td>
                     <td>{{nilai_kl_2}}</td>
                 </tr>
@@ -217,7 +214,7 @@
                     <td style="width: 1%;"></td>
                     <td style="width: 30%; text-align: right;"></td>
                     <td style="text-align: right;"></td>
-                    <td style="width: 1%; text-align: right;">{{nm_oby_3}}</td>
+                    <td style="width: 1%; text-align: left;">{{nm_oby_3}}</td>
                     <td style="width: 1%;">:</td>
                     <td>{{nilai_kl_3}}</td>
                 </tr>
@@ -226,7 +223,7 @@
                     <td style="width: 1%;"></td>
                     <td style="width: 30%; text-align: right;"></td>
                     <td style="text-align: right;"></td>
-                    <td style="width: 1%; text-align: right;">{{nm_oby_4}}</td>
+                    <td style="width: 1%; text-align: left;">{{nm_oby_4}}</td>
                     <td style="width: 1%;">:</td>
                     <td>{{nilai_kl_4}}</td>
                 </tr>
@@ -235,7 +232,7 @@
                     <td style="width: 1%;"></td>
                     <td style="width: 30%; text-align: right;"></td>
                     <td style="text-align: right;"></td>
-                    <td style="width: 1%; text-align: right;">{{nm_oby_5}}</td>
+                    <td style="width: 1%; text-align: left;">{{nm_oby_5}}</td>
                     <td style="width: 1%;">:</td>
                     <td>{{nilai_kl_5}}</td>
                 </tr>
@@ -244,7 +241,7 @@
                     <td style="width: 1%;"></td>
                     <td style="width: 30%; text-align: right;"></td>
                     <td style="text-align: right;"></td>
-                    <td style="width: 1%; text-align: right;">{{nm_oby_6}}</td>
+                    <td style="width: 1%; text-align: left;">{{nm_oby_6}}</td>
                     <td style="width: 1%;">:</td>
                     <td>{{nilai_kl_6}}</td>
                 </tr>
@@ -285,12 +282,12 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td style="text-align: center;">{{kt_cb}}, {{tgl_closing_ind}}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
                 </tr>
                 <tr style="height: 60px;">
                     <td></td>
@@ -309,11 +306,12 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td style="text-align: center;"><strong><u>{{tanda_tangan}}</u> <br> <strong>{{jabatan}}</strong></strong></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
                 </tr>
                 <tr>
                     <td colspan="10" align="center">{{footer}}</td>
