@@ -85,12 +85,3 @@ function OnKodeCOBChange(e){
     var kd_scob = $("#kd_scob").data("kendoDropDownList");
     kd_scob.dataSource.read({kd_cob : e.sender._cascadedValue});
 }
-
-function OnKodeRekananTertanggungChange(e){
-    ajaxGet(`/LaporanProduksiAsuransiKeluar/GetKodeRekananTertanggung?kd_cb=${$("#kd_cb").val()}&kd_grp_rk=${$("#kd_grp_ttg").val()}&kd_rk=${e.sender._cascadedValue}`, (returnValue) => {
-        var strings = returnValue.split(",");
-        $("#nm_ttg").getKendoTextBox().value(strings[1]);
-        $("#almt_ttg").getKendoTextArea().value(strings[4]);
-        $("#kt_ttg").getKendoTextBox().value(strings[7]);
-    });
-}

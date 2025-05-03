@@ -5,23 +5,25 @@ using System.Threading.Tasks;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Services;
 using ABB.Application.KapasitasCabangs.Queries;
-using ABB.Application.LaporanProduksiAsuransiMasuk.Queries;
+using ABB.Application.LaporanProduksiAsuransi.Queries;
+using ABB.Application.LossRecord.Queries;
 using ABB.Application.PolisInduks.Queries;
 using ABB.Application.SebabKejadians.Queries;
 using ABB.Web.Modules.Base;
-using ABB.Web.Modules.LaporanProduksiAsuransiMasuk.Models;
+using ABB.Web.Modules.LaporanProduksiAsuransi.Models;
+using ABB.Web.Modules.LossRecord.Models;
 using DinkToPdf;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ABB.Web.Modules.LaporanProduksiAsuransiMasuk
+namespace ABB.Web.Modules.LossRecord
 {
-    public class LaporanProduksiAsuransiMasukController : AuthorizedBaseController
+    public class LossRecordController : AuthorizedBaseController
     {
         private readonly IReportGeneratorService _reportGeneratorService;
         private static List<Domain.Entities.Rekanan> _rekanans;
 
-        public LaporanProduksiAsuransiMasukController(IReportGeneratorService reportGeneratorService)
+        public LossRecordController(IReportGeneratorService reportGeneratorService)
         {
             _reportGeneratorService = reportGeneratorService;
         }
@@ -36,7 +38,7 @@ namespace ABB.Web.Modules.LaporanProduksiAsuransiMasuk
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             
-            return View(new LaporanProduksiAsuransiMasukViewModel());
+            return View(new LossRecordViewModel());
         }
 
         public async Task<JsonResult> GetCabang()
@@ -76,26 +78,6 @@ namespace ABB.Web.Modules.LaporanProduksiAsuransiMasuk
             return Json(dropdownData);
         }
 
-        public async Task<JsonResult> GetSCOB(string kd_cob)
-        {
-            var dropdownData = new List<DropdownOptionDto>()
-            {
-                new DropdownOptionDto()
-                {
-                    Text = "",
-                    Value = ""
-                }
-            };
-            var result = await Mediator.Send(new GetSCOBQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"],
-                kd_cob = kd_cob
-            });
-
-            dropdownData.AddRange(result);
-            return Json(dropdownData);
-        }
-
         public async Task<JsonResult> GetKodeTertanggung()
         {
             var result = await Mediator.Send(new GetKodeTertanggungQuery()
@@ -128,23 +110,12 @@ namespace ABB.Web.Modules.LaporanProduksiAsuransiMasuk
             return Json(result);
         }
         
-        public JsonResult GetKodeMarketing()
-        {
-            var result = new List<DropdownOptionDto>()
-            {
-                new DropdownOptionDto() { Text = "", Value = "" },
-                new DropdownOptionDto() { Text = "Marketing", Value = "M" }
-            };
-
-            return Json(result);
-        }
-        
         [HttpPost]
-        public async Task<ActionResult> GenerateReport([FromBody] LaporanProduksiAsuransiMasukViewModel model)
+        public async Task<ActionResult> GenerateReport([FromBody] LossRecordViewModel model)
         {
             try
             {
-                var command = Mapper.Map<GetLaporanProduksiAsuransiMasukQuery>(model);
+                var command = Mapper.Map<GetLossRecordQuery>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
 
                 var sessionId = HttpContext.Session.GetString("SessionId");
@@ -154,7 +125,7 @@ namespace ABB.Web.Modules.LaporanProduksiAsuransiMasuk
                 
                 var reportTemplate = await Mediator.Send(command);
                 
-                _reportGeneratorService.GenerateReport("LaporanProduksiAsuransiMasuk.pdf", reportTemplate, sessionId, Orientation.Landscape);
+                _reportGeneratorService.GenerateReport("LossRecord.pdf", reportTemplate, sessionId, Orientation.Landscape);
 
                 return Ok(new { Status = "OK", Data = sessionId});
             }

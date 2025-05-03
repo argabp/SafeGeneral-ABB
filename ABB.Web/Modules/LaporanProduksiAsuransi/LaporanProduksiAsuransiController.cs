@@ -163,21 +163,5 @@ namespace ABB.Web.Modules.LaporanProduksiAsuransi
                 return Ok( new { Status = "ERROR", Message = e.InnerException == null ? e.Message : e.InnerException.Message});
             }
         }
-
-        [HttpGet]
-        public async Task<JsonResult> GetKodeRekananTertanggung(string kd_cb, string kd_grp_rk, string kd_rk)
-        {
-            var command = new GetKodeRekananTertanggungQuery()
-            {
-                kd_cb = kd_cb,
-                kd_grp_rk = kd_grp_rk,
-                kd_rk = kd_rk,
-                DatabaseName = Request.Cookies["DatabaseValue"]
-            };
-            
-            var result = await Mediator.Send(command);
-
-            return Json(result);
-        }
     }
 }

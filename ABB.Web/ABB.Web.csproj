@@ -5549,6 +5549,9 @@
       <None Update="Modules\PenyelesaianKlaim\JS\penyelesaianKlaim.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\LossRecord\JS\lossRecord.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
