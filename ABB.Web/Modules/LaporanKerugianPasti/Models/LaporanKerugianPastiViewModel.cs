@@ -18,6 +18,7 @@ namespace ABB.Web.Modules.LaporanKerugianPasti.Models
         public string laporan { get; set; }
         public string tanda_tangan { get; set; }
         public string jabatan { get; set; }
+        public string tipe_mts { get; set; }
         public void Mapping(Profile profile)
         {
             profile.CreateMap<LaporanKerugianPastiViewModel, GetLaporanKerugianPastiQuery>();

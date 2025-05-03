@@ -5540,6 +5540,12 @@
       <None Update="Modules\Reports\Templates\PolisPABiasaMulti.html">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\BukuKerugian\JS\bukuKerugian.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\OutstandingKlaim\JS\outstandingKlaim.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

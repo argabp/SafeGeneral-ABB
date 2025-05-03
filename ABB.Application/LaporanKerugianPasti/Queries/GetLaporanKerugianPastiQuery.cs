@@ -23,6 +23,8 @@ namespace ABB.Application.LaporanKerugianPasti.Queries
         public string laporan { get; set; }
         public string jabatan { get; set; }
         public string tanda_tangan { get; set; }
+
+        public string tipe_mts { get; set; }
     }
 
     public class GetLaporanKerugianPastiQueryHandler : IRequestHandler<GetLaporanKerugianPastiQuery, string>
@@ -47,8 +49,10 @@ namespace ABB.Application.LaporanKerugianPasti.Queries
                                 $"{request.kd_thn},{request.no_kl.Trim()},{request.no_mts},{request.laporan.Trim()}," +
                                 $"{request.jabatan.Trim()},{request.tanda_tangan.Trim()}"
                 })).ToList();
+
+            var report_name = request.tipe_mts.Trim() == "B" ? "LaporanKerugianPastiBeban.html" : "LaporanKerugianPasti.html";
             
-            string reportPath = Path.Combine( _environment.ContentRootPath, "Modules", "Reports", "Templates", "LaporanKerugianPasti.html" );
+            string reportPath = Path.Combine( _environment.ContentRootPath, "Modules", "Reports", "Templates", report_name );
             
             string templateReportHtml = await File.ReadAllTextAsync( reportPath );
             

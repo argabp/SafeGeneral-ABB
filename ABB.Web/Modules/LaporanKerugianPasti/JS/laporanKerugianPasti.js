@@ -31,6 +31,7 @@ function viewReport(element){
     form.laporan = formElement[0].querySelector('select[name="laporan"]').value
     form.tanda_tangan = formElement[0].querySelector('input[name="tanda_tangan"]').value
     form.jabatan = formElement[0].querySelector('input[name="jabatan"]').value
+    form.tipe_mts = dataItem.tipe_mts;
     
     ajaxPost("/LaporanKerugianPasti/GenerateReport", JSON.stringify(form),
         function (response) {
