@@ -5546,6 +5546,9 @@
       <None Update="Modules\OutstandingKlaim\JS\outstandingKlaim.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\PenyelesaianKlaim\JS\penyelesaianKlaim.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

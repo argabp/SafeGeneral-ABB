@@ -17,7 +17,6 @@ namespace ABB.Web.Modules.BukuKerugian
     public class BukuKerugianController : AuthorizedBaseController
     {
         private readonly IReportGeneratorService _reportGeneratorService;
-        private static List<Domain.Entities.Rekanan> _rekanans;
 
         public BukuKerugianController(IReportGeneratorService reportGeneratorService)
         {

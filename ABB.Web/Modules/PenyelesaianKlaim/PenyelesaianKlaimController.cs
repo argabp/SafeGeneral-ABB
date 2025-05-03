@@ -4,21 +4,21 @@ using System.Threading.Tasks;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Services;
 using ABB.Application.KapasitasCabangs.Queries;
-using ABB.Application.OutstandingKlaim.Queries;
+using ABB.Application.PenyelesaianKlaim.Queries;
 using ABB.Application.SebabKejadians.Queries;
 using ABB.Web.Modules.Base;
-using ABB.Web.Modules.OutstandingKlaim.Models;
+using ABB.Web.Modules.PenyelesaianKlaim.Models;
 using DinkToPdf;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ABB.Web.Modules.OutstandingKlaim
+namespace ABB.Web.Modules.PenyelesaianKlaim
 {
-    public class OutstandingKlaimController : AuthorizedBaseController
+    public class PenyelesaianKlaimController : AuthorizedBaseController
     {
         private readonly IReportGeneratorService _reportGeneratorService;
 
-        public OutstandingKlaimController(IReportGeneratorService reportGeneratorService)
+        public PenyelesaianKlaimController(IReportGeneratorService reportGeneratorService)
         {
             _reportGeneratorService = reportGeneratorService;
         }
@@ -28,7 +28,7 @@ namespace ABB.Web.Modules.OutstandingKlaim
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             
-            return View(new OutstandingKlaimViewModel());
+            return View(new PenyelesaianKlaimViewModel());
         }
 
         public async Task<JsonResult> GetCabang()
@@ -67,31 +67,13 @@ namespace ABB.Web.Modules.OutstandingKlaim
             dropdownData.AddRange(result);
             return Json(dropdownData);
         }
-
-        public async Task<JsonResult> GetJenisLaporan()
-        {
-            var dropdownData = new List<DropdownOptionDto>()
-            {
-                new DropdownOptionDto()
-                {
-                    Text = "Rincian",
-                    Value = "P"
-                },
-                new DropdownOptionDto()
-                {
-                    Text = "Rekap",
-                    Value = "R"
-                }
-            };
-            return Json(dropdownData);
-        }
         
         [HttpPost]
-        public async Task<ActionResult> GenerateReport([FromBody] OutstandingKlaimViewModel model)
+        public async Task<ActionResult> GenerateReport([FromBody] PenyelesaianKlaimViewModel model)
         {
             try
             {
-                var command = Mapper.Map<GetOutstandingKlaimQuery>(model);
+                var command = Mapper.Map<GetPenyelesaianKlaimQuery>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
 
                 var sessionId = HttpContext.Session.GetString("SessionId");
@@ -101,7 +83,7 @@ namespace ABB.Web.Modules.OutstandingKlaim
                 
                 var reportTemplate = await Mediator.Send(command);
                 
-                _reportGeneratorService.GenerateReport("OutstandingKlaim.pdf", reportTemplate, sessionId, Orientation.Landscape);
+                _reportGeneratorService.GenerateReport("PenyelesaianKlaim.pdf", reportTemplate, sessionId, Orientation.Landscape);
 
                 return Ok(new { Status = "OK", Data = sessionId});
             }
