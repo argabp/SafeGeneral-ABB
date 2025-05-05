@@ -11,9 +11,7 @@ namespace ABB.Web.Modules.OutstandingKlaim.Models
 
         public string kd_cob { get; set; }
         
-        public DateTime kd_mul { get; set; }
-        
-        public DateTime kd_akh { get; set; }
+        public DateTime tgl_akh { get; set; }
 
         public string jenis_laporan { get; set; }
 

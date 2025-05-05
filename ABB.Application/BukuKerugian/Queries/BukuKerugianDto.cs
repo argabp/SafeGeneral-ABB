@@ -49,5 +49,7 @@ namespace ABB.Application.BukuKerugian.Queries
         public string? nm_sifat_kerugian { get; set; }
 
         public string? nm_mtu { get; set; }
+
+        public string? kd_mtu_symbol { get; set; }
     }
 }

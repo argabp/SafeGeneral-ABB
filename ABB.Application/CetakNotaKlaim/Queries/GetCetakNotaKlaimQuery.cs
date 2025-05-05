@@ -73,7 +73,7 @@ namespace ABB.Application.CetakNotaKlaim.Queries
                 data.almt_ttg, data.flag_postr, data.nm_ttg, data.nm_ttj, data.kt_ttj,
                 data.no_berkas, data.no_pol_ttg, data.kt_ttg, data.kd_mtu_symbol,
                 data.nm_kt_cb, data.tgl_nt_ind, data.no_nota, data.nm_scob, data.nm_scob_ing,
-                data.kd_cob, data.kd_scob, data.nilai_share_bgu, data.ket_nt,
+                data.kd_cob, data.kd_scob, nilai_share_bgu = ReportHelper.ConvertToReportFormat(data.nilai_share_bgu), data.ket_nt,
                 tgl_mul_ptg = ReportHelper.ConvertDateTime(data.tgl_mul_ptg, "dd/MM/yyyy"),
                 tgl_akh_ptg = ReportHelper.ConvertDateTime(data.tgl_akh_ptg, "dd/MM/yyyy"),
                 data.uraian_01, data.uraian_02, data.uraian_03, data.uraian_04, data.uraian_05

@@ -1,11 +1,14 @@
 using System;
+using System.IO;
 using ABB.Application;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Services;
+using ABB.Domain.Models;
 using ABB.Infrastructure;
 using ABB.Infrastructure.Services;
 using ABB.Web.Extensions;
 using ABB.Web.Middleware;
+using ABB.Web.Models;
 using DinkToPdf;
 using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Builder;
@@ -14,6 +17,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using Quartz;
 
 namespace ABB.Web
@@ -50,6 +54,15 @@ namespace ABB.Web
                         .AllowCredentials();
                 } );
             } );
+            
+            var reportConfig = new ReportConfig();
+            // Or bind directly from a custom JSON file:
+            var configFilePath = Path.Combine(WebHostEnvironment.ContentRootPath, "Configs", "ReportConfig.json");
+            var configJson = File.ReadAllText(configFilePath);
+            reportConfig = JsonConvert.DeserializeObject<ReportConfig>(configJson);
+
+            services.AddSingleton(reportConfig);
+            
             services.AddSingleton(Configuration);
             services.AddSingleton(new ProgressBarDto());
             services.AddApplication();

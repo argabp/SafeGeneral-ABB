@@ -73,22 +73,22 @@ namespace ABB.Application.LossRecord.Queries
             {
                 sequence++;
                 var nilai_kl = ReportHelper.ConvertToReportFormat(data.nilai_kl);
-                stringBuilder.Append(@$"<tr>
-                                            <td style='width: 3%;  text-align: left; vertical-align: top; border: 1px solid'>{sequence}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{0}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{0}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{0}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{0}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{0}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{0}</td>
-                                        </tr>");
+                stringBuilder.Append(@$"
+                    <tr>
+                        <td style='vertical-align: top;'>{sequence}</td>
+                        <td style='vertical-align: top'>{data.no_berkas}</td>
+                        <td style='vertical-align: top;'>{ReportHelper.ConvertDateTime(data.tgl_kej, "dd MMM yyyy")}</td>
+                        <td style='vertical-align: top'>{data.kd_mtu_symbol}</td>
+                        <td style='vertical-align: top'>{nilai_kl}</td>
+                        <td style='vertical-align: top'>{data.status}</td>
+                    </tr>");
                 total_nilai_kl += ReportHelper.ConvertToDecimalFormat(nilai_kl);
             }
             
             resultTemplate = templateProfileResult.Render( new
             {
                 total_nilai_kl = ReportHelper.ConvertToReportFormat(total_nilai_kl),
-                details = stringBuilder.ToString(), lossRecordData.nm_cb,
+                details = stringBuilder.ToString(), lossRecordData.nm_cb, lossRecordData.kd_mtu_symbol,
                 lossRecordData.nm_cob, tgl_mul = lossRecordData.tgl_mul.Value.ToString("dd MMMM yyyy"),
                 tgl_akh = lossRecordData.tgl_akh.Value.ToString("dd MMMM yyyy")
             } );

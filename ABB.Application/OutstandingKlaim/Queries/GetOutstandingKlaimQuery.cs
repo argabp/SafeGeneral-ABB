@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Hosting;
@@ -18,9 +19,7 @@ namespace ABB.Application.OutstandingKlaim.Queries
         
         public string kd_cob { get; set; }
         
-        public DateTime kd_mul { get; set; }
-        
-        public DateTime kd_akh { get; set; }
+        public DateTime tgl_akh { get; set; }
 
         public string jenis_laporan { get; set; }
     }
@@ -56,7 +55,7 @@ namespace ABB.Application.OutstandingKlaim.Queries
                 new
                 {
                     input_str = $"{request.kd_cb.Trim()},{request.kd_cob.Trim()}," +
-                                $"{request.kd_mul.ToShortDateString()},{request.kd_akh.ToShortDateString()}"
+                                $"{request.tgl_akh.ToShortDateString()}"
                 })).ToList();
 
             var report_name = string.Empty;
@@ -95,22 +94,31 @@ namespace ABB.Application.OutstandingKlaim.Queries
                 switch (request.jenis_laporan)
                 {
                     case "P":
-                        
+                        stringBuilder.Append(@$"
+                            <tr>
+                                <td style='vertical-align: top;'>{sequence}.</td>
+                                <td style='vertical-align: top'>{data.kd_cb}/{data.kd_cob}{data.kd_scob}/{data.kd_thn}/{data.no_kl} <br> {data.no_pol_ttg} <br> {data.no_sert}</td>
+                                <td style='vertical-align: top;'>{data.nm_ttg}</td>
+                                <td style='vertical-align: top'>{data.nm_oby} <br> {data.sebab_kerugian} <br> {data.tempat_kej}</td>
+                                <td style='vertical-align: top'>{ReportHelper.ConvertDateTime(data.tgl_mul_ptg, "dd/MM/yyyy")} s/d {ReportHelper.ConvertDateTime(data.tgl_akh_ptg, "dd/MM/yyyy")} <br> {ReportHelper.ConvertDateTime(data.tgl_kej, "dd/MM/yyyy")} <br> {ReportHelper.ConvertDateTime(data.tgl_lapor, "dd/MM/yyyy")}</td>
+                                <td style='width: 1%; text-align: left; vertical-align: top'>{data.kd_mtu_symbol_tsi} {ReportHelper.ConvertToReportFormat(data.nilai_share_bgu)}</td>
+                                <td style='text-align: left; vertical-align: top'>{data.kd_mtu_symbol} {ReportHelper.ConvertToReportFormat(data.nilai_ttl_kl)}</td>
+                                <td style='vertical-align: top;'>{data.nm_sifat_kerugian}</td>
+                            </tr>");
                         break;
                     case "R":
-                        
+                        stringBuilder.Append(@$"
+                            <tr>
+                                <td style='vertical-align: top;'>{sequence}</td>
+                                <td style='vertical-align: top'>{data.nm_cb}</td>
+                                <td style='vertical-align: top;'>{data.nm_cob}</td>
+                                <td style='vertical-align: top'>{data.kd_mtu_symbol_tsi}</td>
+                                <td style='vertical-align: top'>{data.kd_mtu_symbol}</td>
+                                <td style='width: 1%; text-align: left; vertical-align: top'>{ReportHelper.ConvertToReportFormat(data.nilai_share_bgu)}</td>
+                                <td style='text-align: left; vertical-align: top'>{ReportHelper.ConvertToReportFormat(data.nilai_ttl_pla)}</td>
+                            </tr>");
                         break;
                 }
-                
-                stringBuilder.Append(@$"<tr>
-                                            <td style='width: 3%;  text-align: left; vertical-align: top; border: 1px solid'>{sequence}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{0}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{0}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{0}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{0}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{0}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{0}</td>
-                                        </tr>");
             }
             
             resultTemplate = templateProfileResult.Render( new

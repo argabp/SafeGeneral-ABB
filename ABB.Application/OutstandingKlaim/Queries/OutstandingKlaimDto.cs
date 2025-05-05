@@ -45,5 +45,11 @@ namespace ABB.Application.OutstandingKlaim.Queries
         public decimal? nilai_ttl_kl { get; set; }
 
         public string? nm_sifat_kerugian { get; set; }
+
+        public string? nm_ttg { get; set; }
+
+        public string? kd_mtu_symbol { get; set; }
+
+        public decimal? nilai_ttl_pla { get; set; }
     }
 }

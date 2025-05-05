@@ -33,5 +33,7 @@ namespace ABB.Application.CetakKwitansiKlaim.Queries
         public string nm_kt_cb { get; set; }
 
         public string tgl_nt_ind { get; set; }
+
+        public string ket_nilai_nt { get; set; }
     }
 }

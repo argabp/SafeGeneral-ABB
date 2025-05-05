@@ -36,7 +36,7 @@ namespace ABB.Application.LaporanKerugianSementara.Queries
 						ON p.kd_cob = cob.kd_cob
 					INNER JOIN rf05 scob
 						ON p.kd_scob = scob.kd_scob
-				WHERE cb.kd_cb = @KodeCabang AND (p.no_mts like '%'+@SearchKeyword+'%' 
+				WHERE p.tipe_mts = 'P' AND cb.kd_cb = @KodeCabang AND (p.no_mts like '%'+@SearchKeyword+'%' 
 					OR p.no_kl like '%'+@SearchKeyword+'%' 
 					OR p.no_updt like '%'+@SearchKeyword+'%' 
 					OR cb.nm_cb like '%'+@SearchKeyword+'%' 

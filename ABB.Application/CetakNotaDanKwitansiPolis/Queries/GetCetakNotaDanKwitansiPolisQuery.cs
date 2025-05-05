@@ -9,6 +9,7 @@ using ABB.Application.CetakSchedulePolis.Queries;
 using ABB.Application.Common;
 using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
+using ABB.Domain.Models;
 using MediatR;
 using Microsoft.Extensions.Hosting;
 using Scriban;
@@ -33,6 +34,7 @@ namespace ABB.Application.CetakNotaDanKwitansiPolis.Queries
     {
         private readonly IDbConnectionFactory _connectionFactory;
         private readonly IHostEnvironment _environment;
+        private readonly ReportConfig _reportConfig;
 
         private List<string> ReportHaveDetails = new List<string>()
         {
@@ -42,10 +44,12 @@ namespace ABB.Application.CetakNotaDanKwitansiPolis.Queries
         {
         };
 
-        public GetCetakNotaDanKwitansiPolisQueryHandler(IDbConnectionFactory connectionFactory, IHostEnvironment environment)
+        public GetCetakNotaDanKwitansiPolisQueryHandler(IDbConnectionFactory connectionFactory, 
+            IHostEnvironment environment, ReportConfig reportConfig)
         {
             _connectionFactory = connectionFactory;
             _environment = environment;
+            _reportConfig = reportConfig;
         }
 
         public async Task<string> Handle(GetCetakNotaDanKwitansiPolisQuery request, CancellationToken cancellationToken)
@@ -108,6 +112,9 @@ namespace ABB.Application.CetakNotaDanKwitansiPolis.Queries
                                                                  cetakNotaDanKwitansiPolis.nilai_ppn +
                                                                  cetakNotaDanKwitansiPolis.nilai_pph +
                                                                  cetakNotaDanKwitansiPolis.nilai_lain);
+
+            var reportConfig = _reportConfig.Configurations.First(w => w.Database == request.DatabaseName);
+            
             if (ReportHaveDetails.Contains(reportTemplateName))
             {
                 StringBuilder stringBuilder = new StringBuilder();
@@ -144,10 +151,11 @@ namespace ABB.Application.CetakNotaDanKwitansiPolis.Queries
                     nilai_net_kms, kd_mtu_symbol_11 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
                     pst_ppn, nilai_ppn,
                     pst_pph_title = cetakNotaDanKwitansiPolis.pst_pph == 2 ? "PPH 23" : "PPH 21",
-                    pst_pph, nilai_pph,
+                    pst_pph, nilai_pph, cetakNotaDanKwitansiPolis.almt_nota, cetakNotaDanKwitansiPolis.nm_nota,
                     pst_lain, kd_mtu_symbol_9 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
                     cetakNotaDanKwitansiPolis.kt_cb, cetakNotaDanKwitansiPolis.almt_ttg, cetakNotaDanKwitansiPolis.ket_kwi,
-                    cetakNotaDanKwitansiPolis.period_polis, cetakNotaDanKwitansiPolis.kd_mtu_symbol, nilai_total
+                    cetakNotaDanKwitansiPolis.period_polis, cetakNotaDanKwitansiPolis.kd_mtu_symbol, nilai_total,
+                    title3 = reportConfig.Title.Title3, title4 = reportConfig.Title.Title4, title6 = reportConfig.Title.Title6
                 } );
             }
             else
@@ -179,10 +187,11 @@ namespace ABB.Application.CetakNotaDanKwitansiPolis.Queries
                     nilai_net_kms, kd_mtu_symbol_11 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
                     pst_ppn, nilai_ppn,
                     pst_pph_title = cetakNotaDanKwitansiPolis.pst_pph == 2 ? "PPH 23" : "PPH 21",
-                    pst_pph, nilai_pph,
+                    pst_pph, nilai_pph, cetakNotaDanKwitansiPolis.almt_nota, cetakNotaDanKwitansiPolis.nm_nota,
                     pst_lain, kd_mtu_symbol_9 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
                     cetakNotaDanKwitansiPolis.kt_cb, cetakNotaDanKwitansiPolis.almt_ttg, cetakNotaDanKwitansiPolis.ket_kwi,
-                    cetakNotaDanKwitansiPolis.period_polis, cetakNotaDanKwitansiPolis.kd_mtu_symbol, nilai_total
+                    cetakNotaDanKwitansiPolis.period_polis, cetakNotaDanKwitansiPolis.kd_mtu_symbol, nilai_total,
+                    title3 = reportConfig.Title.Title3, title4 = reportConfig.Title.Title4, title6 = reportConfig.Title.Title6
                 } );
             }
 

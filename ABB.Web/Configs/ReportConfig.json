@@ -1,0 +1,82 @@
+{
+  "Configurations": [
+    {
+      "Database": "abb_kons",
+      "Title": {
+        "Title1": "PT. ASURANSI BHAKTI BHAYANGKARA",
+        "Title2": "ASURANSI UMUM",
+        "Title3": "Jl. Palatehan No. 5 Kebayoran Baru",
+        "Title4": "Jakarta Selatan",
+        "Title5": "Jakarta",
+        "Title6": "(021) 83701002",
+        "Title7": "www.abb.co.id",
+        "Title8": "(021) 8295975"
+      }
+    },
+    {
+      "Database": "abb_pst",
+      "Title": {
+        "Title1": "PT. ASURANSI BHAKTI BHAYANGKARA",
+        "Title2": "ASURANSI UMUM",
+        "Title3": "Jl. Palatehan No. 5 Kebayoran Baru",
+        "Title4": "Jakarta Selatan",
+        "Title5": "Jakarta",
+        "Title6": "(021) 83701002",
+        "Title7": "www.abb.co.id",
+        "Title8": "(021) 8295975"
+      }
+    },
+    {
+      "Database": "abb_kp00",
+      "Title": {
+        "Title1": "PT. ASURANSI BHAKTI BHAYANGKARA",
+        "Title2": "ASURANSI UMUM",
+        "Title3": "Jl. Palatehan No. 5 Kebayoran Baru",
+        "Title4": "Jakarta Selatan",
+        "Title5": "Jakarta",
+        "Title6": "(021) 83701002",
+        "Title7": "www.abb.co.id",
+        "Title8": ""
+      }
+    },
+    {
+      "Database": "abb_jkt",
+      "Title": {
+        "Title1": "PT. ASURANSI BHAKTI BHAYANGKARA",
+        "Title2": "ASURANSI UMUM",
+        "Title3": "Jl. Palatehan No. 5 Kebayoran Baru",
+        "Title4": "Jakarta Selatan",
+        "Title5": "Jakarta",
+        "Title6": "(021) 83701002",
+        "Title7": "www.abb.co.id",
+        "Title8": ""
+      }
+    },
+    {
+      "Database": "abb_smg",
+      "Title": {
+        "Title1": "PT. ASURANSI BHAKTI BHAYANGKARA",
+        "Title2": "ASURANSI UMUM",
+        "Title3": "Jl. Palatehan No. 5 Kebayoran Baru",
+        "Title4": "Jakarta Selatan",
+        "Title5": "Jakarta",
+        "Title6": "(021) 83701002",
+        "Title7": "www.abb.co.id",
+        "Title8": ""
+      }
+    },
+    {
+      "Database": "abb_bdg",
+      "Title": {
+        "Title1": "PT. ASURANSI BHAKTI BHAYANGKARA",
+        "Title2": "ASURANSI UMUM",
+        "Title3": "Jl. Palatehan No. 5 Kebayoran Baru",
+        "Title4": "Jakarta Selatan",
+        "Title5": "Jakarta",
+        "Title6": "(021) 83701002",
+        "Title7": "www.abb.co.id",
+        "Title8": ""
+      }
+    }
+  ]
+}

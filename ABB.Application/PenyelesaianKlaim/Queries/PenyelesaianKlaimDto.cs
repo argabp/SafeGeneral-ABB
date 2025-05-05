@@ -52,5 +52,9 @@ namespace ABB.Application.PenyelesaianKlaim.Queries
         public decimal? bia_mat { get; set; }
 
         public string? nm_mtu { get; set; }
+
+        public string? nm_ttg { get; set; }
+
+        public string? kd_mtu_symbol { get; set; }
     }
 }

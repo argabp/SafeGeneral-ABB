@@ -42,7 +42,7 @@ namespace ABB.Application.DLAKoasuransi.Queries
 
         public string kt_cb { get; set; }
 
-        public string tgl_closing_ind { get; set; }
+        public DateTime tgl_closing_ind { get; set; }
 
         public string no_berkas_reas { get; set; }
 

@@ -6,6 +6,7 @@ using ABB.Application.Common.Services;
 using ABB.Application.KapasitasCabangs.Queries;
 using ABB.Application.OutstandingKlaim.Queries;
 using ABB.Application.SebabKejadians.Queries;
+using ABB.Web.Models;
 using ABB.Web.Modules.Base;
 using ABB.Web.Modules.OutstandingKlaim.Models;
 using DinkToPdf;

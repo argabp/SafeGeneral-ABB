@@ -21,5 +21,7 @@ namespace ABB.Application.LossRecord.Queries
         public decimal? nilai_kl { get; set; }
 
         public string? nm_cob { get; set; }
+
+        public string? status { get; set; }
     }
 }

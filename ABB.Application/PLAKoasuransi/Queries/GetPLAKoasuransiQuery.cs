@@ -89,7 +89,7 @@ namespace ABB.Application.PLAKoasuransi.Queries
                 tgl_akh_ptg = ReportHelper.ConvertDateTime(data.tgl_akh_ptg, "dd/MM/yyyy"), 
                 data.tempat_kej, pst_sor_pas, data.ket_dia, data.nm_jns_sor_01,
                 data.sebab_kerugian, data.nm_jns_sor_02, nilai_ttl_kl, data.no_sert, data.sifat_kerugian,
-                data.kt_cb, data.tgl_closing_ind, nilai_jns_sor_01, nilai_jns_sor_02,
+                data.kt_cb, tgl_closing_ind = ReportHelper.ConvertDateTime(data.tgl_closing_ind, "MMM dd yyyy"), nilai_jns_sor_01, nilai_jns_sor_02,
                 data.almt_pas, data.kt_pas, data.nm_pas, pst_share, data.kd_cb,
                 data.kd_cob, data.kd_scob, data.kd_thn, data.no_kl, data.no_mts,
                 no_dla, nilai_kl, data.footer

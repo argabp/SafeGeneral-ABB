@@ -67,17 +67,18 @@ namespace ABB.Application.PenyelesaianKlaim.Queries
             {
                 sequence++;
                 var nilai_tsi_pst = ReportHelper.ConvertToReportFormat(data.nilai_share_bgu / data.pst_share_bgu);
-                var nilai_tsi = ReportHelper.ConvertToReportFormat(data.nilai_share_bgu);
-                var pst_share_bgu = ReportHelper.ConvertToReportFormat(data.pst_share_bgu, true);
-                stringBuilder.Append(@$"<tr>
-                                            <td style='width: 3%;  text-align: left; vertical-align: top; border: 1px solid'>{sequence}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{nilai_tsi_pst}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{nilai_tsi}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{0}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{0}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{0}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{pst_share_bgu}</td>
-                                        </tr>");
+                stringBuilder.Append(@$"
+                    <tr>
+                        <td style='vertical-align: top;'>1.</td>
+                        <td style='vertical-align: top'>{data.no_berkas} <br> {data.no_nota} <br> {data.no_pol_ttg}</td>
+                        <td style='vertical-align: top;'>{data.nm_ttg}</td>
+                        <td style='vertical-align: top'>{data.nm_oby} <br> {data.sebab_kerugian} <br> {data.tempat_kej}</td>
+                        <td style='vertical-align: top'>{ReportHelper.ConvertDateTime(data.tgl_closing, "dd MMM yyyy")} <br> {ReportHelper.ConvertDateTime(data.tgl_kej, "dd MMM yyyy")} <br> {ReportHelper.ConvertDateTime(data.tgl_mul_ptg, "dd MMM yyyy")}</td>
+                        <td style='width: 1%; text-align: left; vertical-align: top'>{data.kd_mtu_symbol_tsi} {nilai_tsi_pst}</td>
+                        <td style='text-align: left; vertical-align: top'>{data.kd_mtu_symbol} {ReportHelper.ConvertToReportFormat(data.nilai_ttl_pla)}</td>
+                        <td style='text-align: left; vertical-align: top'>{data.kd_mtu_symbol} {ReportHelper.ConvertToReportFormat(data.nilai_ttl_dla)}</td>
+                        <td style='vertical-align: top;'>{data.nm_flag_settled}</td>
+                    </tr>");
             }
             
             resultTemplate = templateProfileResult.Render( new

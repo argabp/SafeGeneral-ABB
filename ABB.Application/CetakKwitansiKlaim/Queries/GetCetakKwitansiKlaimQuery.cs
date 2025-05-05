@@ -66,7 +66,7 @@ namespace ABB.Application.CetakKwitansiKlaim.Queries
                 nilai_nt, data.no_sert, data.jns_tr, data.jns_nt_msk, data.jns_nt_kel,
                 data.almt_ttg, data.almt_kwi, data.nm_ttg, data.kt_kwi, data.ket_kwi,
                 data.no_berkas, data.no_pol_ttg, data.no_pol_lama, data.kd_mtu_symbol,
-                data.nm_kt_cb, data.tgl_nt_ind
+                data.nm_kt_cb, data.tgl_nt_ind, data.ket_nilai_nt
             } );
 
             return resultTemplate;

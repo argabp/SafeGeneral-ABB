@@ -72,21 +72,29 @@ namespace ABB.Application.BukuKerugian.Queries
             foreach (var data in bukuKerugianDatas)
             {
                 sequence++;
-                var nilai_tsi_pst = ReportHelper.ConvertToReportFormat(data.nilai_share_bgu / data.pst_share_bgu);
+                var nilai_tsi_pst = ReportHelper.ConvertToReportFormat(data.nilai_share_bgu / data.pst_share_bgu * 100);
                 var nilai_tsi = ReportHelper.ConvertToReportFormat(data.nilai_share_bgu);
-                var nilai_tsi_pst_idr = ReportHelper.ConvertToReportFormat(data.nilai_share_bgu_idr / data.pst_share_bgu);
+                var nilai_tsi_pst_idr = ReportHelper.ConvertToReportFormat(data.nilai_share_bgu_idr / data.pst_share_bgu * 100);
                 var nilai_ttl_kl = ReportHelper.ConvertToReportFormat(data.nilai_ttl_kl);
                 var nilai_ttl_kl_idr = ReportHelper.ConvertToReportFormat(data.nilai_ttl_kl_idr);
                 var pst_share_bgu = ReportHelper.ConvertToReportFormat(data.pst_share_bgu, true);
-                stringBuilder.Append(@$"<tr>
-                                            <td style='width: 3%;  text-align: left; vertical-align: top; border: 1px solid'>{sequence}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{nilai_tsi_pst}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{nilai_tsi}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{nilai_tsi_pst_idr}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{nilai_ttl_kl}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{nilai_ttl_kl_idr}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{pst_share_bgu}</td>
-                                        </tr>");
+                stringBuilder.Append(@$"
+                    <tr>
+                        <td>{sequence}</td>
+                        <td style='vertical-align: top'>{data.no_berkas} <br> {data.no_pol_ttg} <br> {data.no_sert}</td>
+                        <td style='vertical-align: top;'>{data.nm_ttg}</td>
+                        <td style='vertical-align: top'>{data.nm_oby} <br> {data.sebab_kerugian} <br> {data.tempat_kej}</td>
+                        <td style='vertical-align: top'>{ReportHelper.ConvertDateTime(data.tgl_mul_ptg, "dd MMM yyyy")} s/d {ReportHelper.ConvertDateTime(data.tgl_akh_ptg, "dd MMM yyyy")} <br> {ReportHelper.ConvertDateTime(data.tgl_kej, "dd MMM yyyy")} </td>
+                        <td style='width: 1%; text-align: right; vertical-align: top'>{data.kd_mtu_symbol_tsi} <br> ({pst_share_bgu} %)</td>
+                        <td style='text-align: right; vertical-align: top'>{nilai_tsi_pst} <br> {nilai_tsi} </td>
+                        <td style='text-align: left; vertical-align: top;'>{data.kd_mtu_symbol}</td>
+                        <td style='text-align: right; vertical-align: top'>{nilai_tsi_pst_idr} <br> {nilai_tsi}</td>
+                        <td style='vertical-align: top; text-align: left;'>{data.kd_mtu_symbol}</td>
+                        <td style='vertical-align: top; text-align: right;'>{nilai_ttl_kl}</td>
+                        <td style='vertical-align: top; text-align: left;'>{data.kd_mtu_symbol}</td>
+                        <td style='vertical-align: top; text-align: right;'>{nilai_ttl_kl_idr}</td>
+                        <td style='vertical-align: top;'>{data.nm_sifat_kerugian}</td>
+                    </tr>");
                 total_nilai_tsi_pst += ReportHelper.ConvertToDecimalFormat(nilai_tsi_pst);
                 total_nilai_tsi += ReportHelper.ConvertToDecimalFormat(nilai_tsi);
                 total_nilai_tsi_pst_idr += ReportHelper.ConvertToDecimalFormat(nilai_tsi_pst_idr);

@@ -38,11 +38,25 @@
             /* border: 1px solid black; */
 			font-size: 12px;
         }
+
+        .draft-watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            font-size: 80px;
+            color: #A9A9A9;
+            opacity: 0.3;
+            z-index: -1;
+            font-weight: bold;
+        }
     </style>
 </head>    
 
 <body>
 <div class="container">
+    
+        {{draft}}
+    
         <div class="h1">IKHTISAR PERTANGGUNGAN</div>
         <div class="h1">POLIS ASURANSI KECELAKAAN DIRI PRIMA (SiRAMA)</div>
         <div class="section">
