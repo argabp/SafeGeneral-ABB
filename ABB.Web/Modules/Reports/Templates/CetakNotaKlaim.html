@@ -37,56 +37,18 @@
         font-size: 12px;
         }
         .table-uraian th, .table-uraian td {
-            border: 1px solid black; /* Garis vertikal */
+            border-left: 1px solid black;
+            border-right: 1px solid black; /* Garis vertikal */
             padding: 8px;
         }
         .table-uraian tr.no-border td {
             border-bottom: none; /* Hilangkan garis bawah untuk baris tertentu */
         }
-        .table-uraian tr.border-bottom td {
+        .table-uraian tr.border-botup td {
             border-bottom: 1px solid black; /* Baris yang tetap punya garis bawah */
-        }
-        .table-uraian th {
-            text-align: center;
-            font-weight: bold;
-        }
-        .text-left {
-            text-align: left;
-        }
-        .text-right {
-            text-align: right;
-        }
-        .text-center {
-            text-align: center;
+            border-top: 1px solid black; /* Baris yang tetap punya garis bawah */
         }
 
-        /* .table-uraian {
-        width: 95%; Sesuaikan lebar tabel 
-        margin: 10px auto; Biar di tengah
-        border-collapse: collapse;
-        font-size: 12px;
-        border: 1px solid black; Border luar
-        }
-        .table-uraian td, .tabel-uraian th {
-            border: none; Hilangkan semua border kolom
-            padding: 8px;
-        }
-        .tabel-uraian tr {
-        border-bottom: 1px solid black; Garis horizontal antar baris
-        }
-        .tabel-uraian tr:last-child {
-        border-bottom: none; Hapus garis bawah baris terakhir
-        }
-        .table-uraian th {
-            text-align: center;
-            font-weight: bold;
-        }
-        .table-uraian td.text-right {
-            text-align: right;
-        }
-        .table-uraian td.text-center {
-            text-align: center;
-        } */
     </style>
 </head>
 <body>
@@ -106,7 +68,7 @@
                     <td style="width: 5%;">KANTOR</td>
                     <td style="width: 1%;">:</td>
                     <td style="width: 30%;">{{nm_cb}}</td>
-                    <td style="text-align: center;"><u>if(  {{st_nota}} = 'D','NOTA DEBET','NOTA KREDIT')</u> <br> {{no_nota}}</td>
+                    <td style="text-align: center;"><u>{{st_nota}}</u> <br> {{no_nota}}</td>
                     <td style="text-align: right;">Jenis Nota</td>
                     <td style="width: 1%;">:</td>
                     <td>{{jns_tr}}.{{jns_nt_msk}}.{{jns_nt_kel}}</td>
@@ -154,42 +116,42 @@
                 </tr>
             </table>
             <table class="table-uraian">
-                <tr>
+                <tr class="border-botup">
                     <td style="width: 20%; text-align: center; letter-spacing: 3px;">URAIAN</td>
                     <td style="width: 20%; text-align: center;">DEBET ( {{kd_mtu_symbol}} )</td>
-                    <td style="width: 20%; text-align: center;">kredit ( {{kd_mtu_symbol}} )</td>
+                    <td style="width: 20%; text-align: center;">KREDIT ( {{kd_mtu_symbol}} )</td>
                 </tr>
-                <tr>
+                <tr class="no-border">
                     <td style="width: 20%;">{{uraian_01}}</td>
                     <td style="width: 20%; text-align: right;">{{nilai_01_1}}</td>
                     <td style="width: 20%; text-align: right;">{{nilai_01}}</td>
                 </tr>
-                <tr>
+                <tr class="no-border">
                     <td style="width: 20%;">{{uraian_02}}</td>
                     <td style="width: 20%; text-align: right;">{{nilai_02_1}}</td>
                     <td style="width: 20%; text-align: right;">{{nilai_02}}</td>
                 </tr>
-                <tr>
+                <tr class="no-border">
                     <td style="width: 20%;">{{uraian_03}}</td>
                     <td style="width: 20%; text-align: right;">{{nilai_03_1}}</td>
                     <td style="width: 20%; text-align: right;">{{nilai_03}}</td>
                 </tr>
-                <tr>
+                <tr class="no-border">
                     <td style="width: 20%;">{{uraian_04}}</td>
                     <td style="width: 20%; text-align: right;">{{nilai_04_1}}</td>
                     <td style="width: 20%; text-align: right;">{{nilai_04}}</td>
                 </tr>
-                <tr>
+                <tr class="no-border">
                     <td style="width: 20%;">{{uraian_05}}</td>
                     <td style="width: 20%; text-align: right;">{{nilai_05_1}}</td>
                     <td style="width: 20%; text-align: right;">{{nilai_05}}</td>
                 </tr>
-                <tr>
+                <tr class="no-border">
                     <td style="width: 20%;">JUMLAH UNTUK</td>
                     <td style="width: 20%; text-align: right;">{{nilai_nt}}</td>
                     <td style="width: 20%; text-align: right;">{{nilai_nt}}</td>
                 </tr>
-                <tr>
+                <tr class="border-botup">
                     <td style="width: 20%;">JUMLAH</td>
                     <td style="width: 20%; text-align: right;">{{c_jumlah}}</td>
                     <td style="width: 20%; text-align: right;">{{nilai_nt}}</td>
@@ -200,7 +162,7 @@
                     <td style="width: 5%; padding-left: 30px;">Catatan</td>
                     <td style="width: 1%;">:</td>
                     <td style="width: 70%;">{{ket_nt_1}}</td>
-                    <td>{{nm_kt_cb}}, {{tgl_nt_ind}}</td>
+                    <td style="width: 60%;">{{nm_kt_cb}}, {{tgl_nt_ind}}</td>
                 </tr>
                 <tr>
                     <td style="width: 5%; padding-left: 30px;"></td>
