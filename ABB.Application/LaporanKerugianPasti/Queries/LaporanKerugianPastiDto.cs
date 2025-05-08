@@ -81,5 +81,6 @@ namespace ABB.Application.LaporanKerugianPasti.Queries
         public decimal nilai_kl_6 { get; set; }
 
         public string ket_kl { get; set; }
+        public string ket_jns { get; set; }
     }
 }

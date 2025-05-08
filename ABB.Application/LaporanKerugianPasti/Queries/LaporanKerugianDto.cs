@@ -18,5 +18,6 @@ namespace ABB.Application.LaporanKerugianPasti.Queries
         public string no_kl { get; set; }
         public Int16 no_mts { get; set; }
         public string tipe_mts { get; set; }
+        public string ket_jns { get; set; }
     }
 }

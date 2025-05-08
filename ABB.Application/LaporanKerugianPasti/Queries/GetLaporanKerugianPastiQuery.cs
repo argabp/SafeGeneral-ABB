@@ -25,6 +25,7 @@ namespace ABB.Application.LaporanKerugianPasti.Queries
         public string tanda_tangan { get; set; }
 
         public string tipe_mts { get; set; }
+        public string ket_jns { get; set; }
     }
 
     public class GetLaporanKerugianPastiQueryHandler : IRequestHandler<GetLaporanKerugianPastiQuery, string>

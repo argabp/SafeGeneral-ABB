@@ -745,7 +745,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                         view_jns_nilai_ptg_b, view_jns_nilai_ptg_c, view_jns_nilai_ptg_d, view_perhitungan_prm_a,
                         view_perhitungan_prm_b, view_perhitungan_prm_c, view_perhitungan_prm_d, view_desk_oby_2,
                         view_desk_oby_3, view_desk_oby_4, view_desk_oby_5, detail = stringBuilder.ToString(),
-                        summary, cetakSchedulePolis.nm_cb, total_nilai_ttl_ptg = ReportHelper.ConvertToReportFormat(total_nilai_ttl_ptg)
+                        summary, cetakSchedulePolis.nm_cb, total_nilai_ttl_ptg = ReportHelper.ConvertToReportFormat(total_nilai_ttl_ptg),
                     });
             }
             else
@@ -844,7 +844,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                         view_pst_stn_a, view_pst_stn_b, view_pst_stn_c, view_pst_stn_d, view_jns_nilai_ptg_a,
                         view_jns_nilai_ptg_b, view_jns_nilai_ptg_c, view_jns_nilai_ptg_d, view_perhitungan_prm_a,
                         view_perhitungan_prm_b, view_perhitungan_prm_c, view_perhitungan_prm_d, view_desk_oby_2,
-                        view_desk_oby_3, view_desk_oby_4, view_desk_oby_5, total_nilai_ttl_ptg = ReportHelper.ConvertToReportFormat(total_nilai_ttl_ptg)
+                        view_desk_oby_3, view_desk_oby_4, view_desk_oby_5, total_nilai_ttl_ptg = ReportHelper.ConvertToReportFormat(total_nilai_ttl_ptg),
                 } );
             }
             

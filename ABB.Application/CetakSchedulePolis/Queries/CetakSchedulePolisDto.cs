@@ -342,5 +342,6 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         public decimal? pst_tjh { get; set; }
         public decimal? nilai_prm_phk { get; set; }
         public decimal? nilai_ptg_phk { get; set; }
+        
     }
 }
