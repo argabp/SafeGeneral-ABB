@@ -49,53 +49,49 @@
             <table class="table">
                 <tr>
                     <td style="width: 40%;"></td>
-                    <td style="width: 8%; vertical-align: top;">KANTOR</td>
-                    <td style="vertical-align: top; text-align: justify; width: 1%;">:</td>
-                    <td style="vertical-align: top; text-align: justify; text-transform: uppercase;" colspan="6">{{nm_cb}}</td>
+                    <td style="width: 8%; vertical-align: top; font-weight: bold;">KANTOR</td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%; font-weight: bold">:</td>
+                    <td style="vertical-align: top; text-align: justify; text-transform: uppercase; font-weight: bold" colspan="6">{{nm_cb}}</td>
                 </tr>
                 <tr>
                     <td style="width: 40%;"></td>
-                    <td style="width: 8%; vertical-align: top;">PERIODE</td>
-                    <td style="vertical-align: top; text-align: justify;">:</td>
-                    <td style="vertical-align: top; text-align: justify; text-transform: uppercase;" colspan="6">{{tgl_mul}} s/d {{tgl_akh}}</td>
+                    <td style="width: 8%; vertical-align: top; font-weight: bold">PERIODE</td>
+                    <td style="vertical-align: top; text-align: justify; font-weight: bold">:</td>
+                    <td style="vertical-align: top; text-align: justify; text-transform: uppercase; font-weight: bold" colspan="6">{{tgl_mul}} s/d {{tgl_akh}}</td>
                 </tr>
                 <tr>
                     <td style="width: 40%;"></td>
-                    <td style="width: 8%; vertical-align: top;">C.O.B</td>
-                    <td style="vertical-align: top; text-align: justify;">:</td>
-                    <td style="vertical-align: top; text-align: justify; text-transform: uppercase;" colspan="6">{{nm_cob}}</td>
+                    <td style="width: 8%; vertical-align: top; font-weight: bold">C.O.B</td>
+                    <td style="vertical-align: top; text-align: justify; font-weight: bold">:</td>
+                    <td style="vertical-align: top; text-align: justify; text-transform: uppercase; font-weight: bold" colspan="6">{{nm_cob}}</td>
                 </tr>
             </table>
             <table class="table" border="1">
                 <tr>
-                    <td style="width: 1%; text-align: center; vertical-align: top;" rowspan="2">NO. </td>
-                    <td style="width: 20%; text-align: center; vertical-align: top;" rowspan="2">NOMOR BERKAS <br> NOMOR POLIS <br> NOMOR POLIS LAMA</td>
-                    <td style="width: 10%; text-align: center; vertical-align: top;" rowspan="2">TERTANGGUNG</td>
-                    <td style="width: 20%; text-align: center; vertical-align: top" rowspan="2">OBJEK PERTANGGUNGAN <br> PENYEBAB KERUGIAN <br> LOKASI KEJADIAN</td>
-                    <td style="width: 20%; text-align: center; vertical-align: top" rowspan="2">PERIODE PERTANGGUNGAN TANGGAL KEJADIAN</td>
-                    <td style="width: 20%;  text-align: center;" colspan="4">T.S.I</td>
-                    <td style="width: 20%; text-align: center;" colspan="4">NILAI LKS KERUGIAN</td>
-                    <td style="width: 20%; text-align: center; vertical-align: top" rowspan="2">KETERANGAN</td>
+                    <td style="width: 1%; text-align: center; vertical-align: top; font-weight: bold" rowspan="2">NO. </td>
+                    <td style="width: 20%; text-align: center; vertical-align: top; font-weight: bold" rowspan="2">NOMOR BERKAS <br> NOMOR POLIS <br> NOMOR POLIS LAMA</td>
+                    <td style="width: 10%; text-align: center; vertical-align: top; font-weight: bold" rowspan="2">TERTANGGUNG</td>
+                    <td style="width: 20%; text-align: center; vertical-align: top; font-weight: bold" rowspan="2">OBJEK PERTANGGUNGAN <br> PENYEBAB KERUGIAN <br> LOKASI KEJADIAN</td>
+                    <td style="width: 20%; text-align: center; vertical-align: top; font-weight: bold" rowspan="2">PERIODE PERTANGGUNGAN TANGGAL KEJADIAN</td>
+                    <td style="width: 20%;  text-align: center; font-weight: bold" colspan="2">T.S.I</td>
+                    <td style="width: 20%; text-align: center; font-weight: bold" colspan="4">NILAI LKS KERUGIAN</td>
+                    <td style="width: 20%; text-align: center; vertical-align: top; font-weight: bold" rowspan="2">KETERANGAN</td>
                 </tr>
                 <tr>
-                    <td style="text-align: center; width: 10%;" colspan="2">Original</td>
-                    <td style="text-align: center; width: 10%;" colspan="2">Rupiah</td>
-                    <td style="text-align: center; width: 10%;" colspan="2">Original</td>
-                    <td style="text-align: center; width: 10%;" colspan="2">Rupiah</td>
+                    <td style="text-align: center; width: 25%; font-weight: bold">Original</td>
+                    <td style="text-align: center; width: 25%; font-weight: bold">Rupiah</td>
+                    <td style="text-align: center; width: 25%; font-weight: bold" colspan="2">Original</td>
+                    <td style="text-align: center; width: 25%; font-weight: bold" colspan="2">Rupiah</td>
                 </tr>
                 <p style="margin-bottom: 0px;">Dalam: {{nm_mtu}}</p>
                 {{details}}
                 <tr>
                     <td></td>
                     <td style="font-weight: bold; text-align: right; padding-right: 50px;" colspan="4">TOTAL : </td>
-                    <td style="font-weight: bold; text-align: left; vertical-align: top;">{{kd_mtu_symbol}}</td>
-                    <td style="font-weight: bold; text-align: right; vertical-align: top;">{{total_nilai_tsi_pst}} <br> {{total_nilai_tsi}}</td>
-                    <td style="font-weight: bold; text-align: left; vertical-align: top;">{{kd_mtu_symbol}}</td>
-                    <td style="font-weight: bold; text-align: right; vertical-align: top;">{{total_nilai_tsi_pst_idr}} <br> {{total_nilai_tsi_idr}}</td>
-                    <td style="font-weight: bold; text-align: left; vertical-align: top;">{{kd_mtu_symbol}}</td>
-                    <td style="font-weight: bold; text-align: right; vertical-align: top;">{{total_nilai_ttl_kl}}</td>
-                    <td style="font-weight: bold; text-align: left; vertical-align: top;">{{kd_mtu_symbol}}</td>
-                    <td style="font-weight: bold; text-align: right; vertical-align: top;">{{total_nilai_ttl_kl_idr}}</td>
+                    <td style="font-weight: bold; text-align: left; vertical-align: top;">{{kd_mtu_symbol}} {{total_nilai_tsi_pst}} <br> {{total_nilai_tsi}}</td>
+                    <td style="font-weight: bold; text-align: left; vertical-align: top;">{{kd_mtu_symbol}} {{total_nilai_tsi_pst_idr}} <br> {{total_nilai_tsi_idr}}</td>
+                    <td style="font-weight: bold; text-align: left; vertical-align: top;" colspan="2">{{kd_mtu_symbol}} {{total_nilai_ttl_kl}}</td>
+                    <td style="font-weight: bold; text-align: left; vertical-align: top;" colspan="2">{{kd_mtu_symbol}} {{total_nilai_ttl_kl_idr}}</td>
                     <td style="font-weight: bold; text-align: right; vertical-align: top;"></td>
                 </tr>
             </table>
