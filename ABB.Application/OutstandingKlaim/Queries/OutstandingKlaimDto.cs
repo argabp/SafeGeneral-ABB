@@ -31,7 +31,6 @@ namespace ABB.Application.OutstandingKlaim.Queries
         public DateTime? tgl_mul_ptg { get; set; }
         
         public DateTime? tgl_akh_ptg { get; set; }
-
         public DateTime? tgl_akh { get; set; }
         
         public DateTime? tgl_kej { get; set; }
@@ -51,5 +50,7 @@ namespace ABB.Application.OutstandingKlaim.Queries
         public string? kd_mtu_symbol { get; set; }
 
         public decimal? nilai_ttl_pla { get; set; }
+
+        public string? nm_mtu { get; set; }
     }
 }

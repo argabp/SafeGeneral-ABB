@@ -4,6 +4,9 @@ namespace ABB.Application.LossRecord.Queries
 {
     public class LossRecordDto
     {
+        public string? kd_cb { get; set; }
+        public string? kd_cob { get; set; }
+        public string? kd_scob { get; set; }
         public string? nm_cb { get; set; }
 
         public string? nm_ttg { get; set; }
@@ -23,5 +26,7 @@ namespace ABB.Application.LossRecord.Queries
         public string? nm_cob { get; set; }
 
         public string? status { get; set; }
+
+        public string? kd_mtu_mts { get; set; }
     }
 }

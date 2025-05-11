@@ -90,7 +90,7 @@ namespace ABB.Application.LaporanKerugianPasti.Queries
                 request.tanda_tangan, request.jabatan, data.no_berkas_pla,
                 nilai_estimasi, data.nm_oby_1, nilai_kl_1, data.nm_oby_2, nilai_kl_2,
                 data.nm_oby_3, nilai_kl_3, data.nm_oby_4, nilai_kl_4, data.ket_kl,
-                data.nm_oby_5, nilai_kl_5, data.nm_oby_6, nilai_kl_6, 
+                data.nm_oby_5, nilai_kl_5, data.nm_oby_6, nilai_kl_6, data.ket_jns,
                 tgl_closing = ReportHelper.ConvertDateTime(data.tgl_closing, "dd/MM/yyyy"),
             } );
 

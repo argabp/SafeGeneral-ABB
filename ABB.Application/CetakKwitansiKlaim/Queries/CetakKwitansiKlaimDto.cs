@@ -35,5 +35,7 @@ namespace ABB.Application.CetakKwitansiKlaim.Queries
         public string tgl_nt_ind { get; set; }
 
         public string ket_nilai_nt { get; set; }
+
+        public string no_nota { get; set; }
     }
 }

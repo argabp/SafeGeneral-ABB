@@ -4,7 +4,9 @@ namespace ABB.Application.PenyelesaianKlaim.Queries
 {
     public class PenyelesaianKlaimDto
     {
-        
+        public string? kd_cb { get; set; }
+        public string? kd_cob { get; set; }
+        public string? kd_scob { get; set; }
         public string? nm_cb { get; set; }
 
         public DateTime? tgl_mul { get; set; }

@@ -86,9 +86,9 @@ namespace ABB.Application.BukuKerugian.Queries
                         <td style='vertical-align: top'>{data.nm_oby} <br> {data.sebab_kerugian} <br> {data.tempat_kej}</td>
                         <td style='vertical-align: top'>{ReportHelper.ConvertDateTime(data.tgl_mul_ptg, "dd MMM yyyy")} s/d {ReportHelper.ConvertDateTime(data.tgl_akh_ptg, "dd MMM yyyy")} <br> {ReportHelper.ConvertDateTime(data.tgl_kej, "dd MMM yyyy")} </td>
                         <td style='width: 1%; text-align: left; vertical-align: top'>{data.kd_mtu_symbol_tsi} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {nilai_tsi_pst} <br> ({pst_share_bgu} %) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {nilai_tsi} </td>
-                        <td style='width: 1%; text-align: left; vertical-align: top;>{data.kd_mtu_symbol} {nilai_tsi_pst_idr} <br> {nilai_tsi}</td>
-                        <td style='width: 1%; vertical-align: top; text-align: left;>{data.kd_mtu_symbol} {nilai_ttl_kl}</td>
-                        <td style='width: 1%; vertical-align: top; text-align: left;>{data.kd_mtu_symbol} {nilai_ttl_kl_idr}</td>
+                        <td style='width: 1%; text-align: left; vertical-align: top;'>{data.kd_mtu_symbol} {nilai_tsi_pst_idr} <br> {nilai_tsi}</td>
+                        <td style='width: 1%; vertical-align: top; text-align: left;'>{data.kd_mtu_symbol} {nilai_ttl_kl}</td>
+                        <td style='width: 1%; vertical-align: top; text-align: left;'>{data.kd_mtu_symbol} {nilai_ttl_kl_idr}</td>
                         <td style='vertical-align: top;'>{data.nm_sifat_kerugian}</td>
                     </tr>");
                 total_nilai_tsi_pst += ReportHelper.ConvertToDecimalFormat(nilai_tsi_pst);

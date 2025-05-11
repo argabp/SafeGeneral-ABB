@@ -62,12 +62,72 @@ namespace ABB.Application.PenyelesaianKlaim.Queries
             var penyelesaianKlaimData = penyelesaianKlaimDatas.FirstOrDefault();
 
             StringBuilder stringBuilder = new StringBuilder();
-            var sequence = 0;
-            foreach (var data in penyelesaianKlaimDatas)
+            var groups = penyelesaianKlaimDatas
+                            .Select(s => s.kd_cb + s.kd_cob + s.kd_scob).Distinct().ToList();
+
+            var firstData = true;
+            
+            foreach (var group in groups)
             {
-                sequence++;
-                var nilai_tsi_pst = ReportHelper.ConvertToReportFormat(data.nilai_share_bgu / data.pst_share_bgu);
-                stringBuilder.Append(@$"
+                var sequence = 0;
+                
+                var groupDetail = penyelesaianKlaimDatas.FirstOrDefault(w =>
+                    w.kd_cb + w.kd_cob + w.kd_scob == group);
+
+                var style = firstData ? "" : "style='page-break-before: always;'";
+                firstData = false;
+                
+                stringBuilder.Append($@"<div {style}>
+                    <table class='table'>
+                        <tr>
+                            <td style='text-transform: uppercase;'>{groupDetail.nm_cb}</td>
+                        </tr>
+                    </table>
+                    <div class='h1'>LAPORAN PENYELESAIAN KLAIM </div>
+                    <div class='section'>
+                        <table class='table'>
+                            <tr>
+                                <td style='width: 40%;'></td>
+                                <td style='width: 8%; vertical-align: top; font-weight: bold'>KANTOR</td>
+                                <td style='vertical-align: top; text-align: justify; width: 1%; font-weight: bold'>:</td>
+                                <td style='vertical-align: top; text-align: justify; text-transform: uppercase; font-weight: bold' colspan='6'>{groupDetail.nm_cb}</td>
+                            </tr>
+                            <tr>
+                                <td style='width: 40%;'></td>
+                                <td style='width: 8%; vertical-align: top; font-weight: bold'>PERIODE</td>
+                                <td style='vertical-align: top; text-align: justify; font-weight: bold'>:</td>
+                                <td style='vertical-align: top; text-align: justify; text-transform: uppercase; font-weight: bold' colspan='6'>{ReportHelper.ConvertDateTime(groupDetail.tgl_mul,"dd MMM yyyy")} s/d {ReportHelper.ConvertDateTime(groupDetail.tgl_akh,"dd MMM yyyy")}</td>
+                            </tr>
+                            <tr>
+                                <td style='width: 40%;'></td>
+                                <td style='width: 8%; vertical-align: top; font-weight: bold'>C.O.B</td>
+                                <td style='vertical-align: top; text-align: justify; font-weight: bold'>:</td>
+                                <td style='vertical-align: top; text-align: justify; text-transform: uppercase; font-weight: bold' colspan='6'>{groupDetail.nm_cob}</td>
+                            </tr>
+                        </table>
+                        <table class='table' border='1'>
+                            <tr>
+                                <td style='width: 1%; text-align: center; vertical-align: top; font-weight: bold'>NO. </td>
+                                <td style='width: 20%; text-align: center; vertical-align: top; font-weight: bold'>NOMOR BERKAS <br> NOMOR NOTA <br> NOMOR POLIS</td>
+                                <td style='width: 10%; text-align: center; vertical-align: top; font-weight: bold'>TERTANGGUNG</td>
+                                <td style='width: 20%; text-align: center; vertical-align: top; font-weight: bold'>OBJEK PERTANGGUNGAN <br> PENYEBAB KERUGIAN <br> LOKASI KEJADIAN</td>
+                                <td style='width: 20%; text-align: center; vertical-align: top; font-weight: bold'>TANGGAL PENYELESAIAN <br> TANGGAL KEJADIAN <br>PERIODE PERTANGGUNGAN</td>
+                                <td style='width: 10%; text-align: center; vertical-align: top; font-weight: bold'>T.S.I</td>
+                                <td style='width: 10%; text-align: center; vertical-align: top; font-weight: bold'>NILAI O/S</td>
+                                <td style='width: 10%; text-align: center; vertical-align: top; font-weight: bold'>PENYELESAIAN KLAIM</td>
+                                <td style='width: 20%; text-align: center; vertical-align: top; font-weight: bold'>KETERANGAN <br> <br> Bia Materai</td>
+                            </tr>
+                            <p style='margin-bottom: 0px;'>Dalam: {groupDetail.nm_mtu}</p>
+                    ");
+                
+                foreach (var data in penyelesaianKlaimDatas.Where(w =>
+                             w.kd_cb + w.kd_cob+ w.kd_scob == group))
+                {
+                    sequence++;
+                    
+                    var nilai_tsi_pst = ReportHelper.ConvertToReportFormat(data.nilai_share_bgu / data.pst_share_bgu);
+                    
+                    stringBuilder.Append(@$"
                     <tr>
                         <td style='vertical-align: top;'>1.</td>
                         <td style='vertical-align: top'>{data.no_berkas} <br> {data.no_nota} <br> {data.no_pol_ttg}</td>
@@ -79,6 +139,11 @@ namespace ABB.Application.PenyelesaianKlaim.Queries
                         <td style='text-align: left; vertical-align: top'>{data.kd_mtu_symbol} {ReportHelper.ConvertToReportFormat(data.nilai_ttl_dla)}</td>
                         <td style='vertical-align: top;'>{data.nm_flag_settled}</td>
                     </tr>");
+                }
+
+                stringBuilder.Append($@"</table>
+                                            </div>
+                                        </div>");
             }
             
             resultTemplate = templateProfileResult.Render( new

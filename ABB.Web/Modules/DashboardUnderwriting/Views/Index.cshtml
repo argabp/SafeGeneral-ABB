@@ -1,0 +1,71 @@
+@using Newtonsoft.Json
+@model ABB.Application.DashboardUnderwriting.Queries.DashboardUnderwritingDto
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Dashboard";
+}
+<script src="~/Modules/DashboardUnderwriting/JS/dashboardUnderwriting.js"></script>
+
+<style>
+    .chart--container {
+      min-height: 550px;
+      width: 100%;
+      height: 100%;
+    }
+    .card-custom:hover{
+        transform: scale(1.1);
+    }
+  </style>
+
+<div class='flat-box'>
+    <div class='row'>
+        <div class='flat-box-title col-md-12' style="justify-content: center">
+        Status Pengajuan Akseptasi
+        </div>
+    </div>
+
+    <div class='flat-box-content'>
+        <div class='row'>
+            @foreach (var data in Model.Data)
+            {
+                <section class='col-sm-3'>
+                    <div class='card card-custom' onclick="window.open('@data.url', 'mywindow');" style='cursor: pointer;width:auto; height: 120px; background: #6FA8DC'>
+                        <div class='card-body' style='display:flex'>
+                            <span class='fa @data.icon' style='font-size: 5em'></span>
+                            <p style='align-self: center; margin-left:1em'>@data.nm_status</p>
+                            <p style='position:absolute; bottom:0; right:0; font-size:2em; margin-bottom:0px; margin-right:1em'>@data.jml_data</p>
+                        </div>
+                    </div>
+                </section>
+            }
+        </div>
+    </div>
+    
+    <div class="card card-default color-palette-box">
+        <div class="card-header">
+            <p class="card-title" style="width: 100%; text-align: center; font-weight: bold; font-size: 20px;">
+                TARGET DAN REALISASI PRODUKSI UMUM CABANG DAN PEMSARAN S/D TAHUN INI
+            </p>
+            <p class="card-title" style="width: 100%; text-align: right; padding-top: 1em; padding-right: 1em; font-size: 15px;">
+                @DateTime.Now
+            </p>
+        </div>
+        <div class="card-body">
+            <input type="hidden" value="@JsonConvert.SerializeObject(Model.Graphic)" id="dashboardData">
+            @* <div class="chart"> *@
+            @*     <div class="chartjs-size-monitor"> *@
+            @*         <div class="chartjs-size-monitor-expand"> *@
+            @*             <div class=""></div></div> *@
+            @*         <div class="chartjs-size-monitor-shrink"> *@
+            @*             <div class=""></div></div></div> *@
+            @*     <canvas id="barChart" style="min-height: 250px; height: 500px; max-height: 500px; max-width: 100%; display: block; width: 572px;" width="715" height="312" class="chartjs-render-monitor"></canvas> *@
+            @* </div> *@
+            <div id="barChart" class="chart--container"></div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    
+</div>

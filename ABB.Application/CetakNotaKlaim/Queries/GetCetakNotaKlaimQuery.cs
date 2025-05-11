@@ -60,23 +60,25 @@ namespace ABB.Application.CetakNotaKlaim.Queries
             var data = datas.FirstOrDefault();
             
             var nilai_nt = ReportHelper.ConvertToReportFormat(data.nilai_nt);
-            var nilai_01 = ReportHelper.ConvertToReportFormat(data.nilai_01);
-            var nilai_02 = ReportHelper.ConvertToReportFormat(data.nilai_02);
-            var nilai_03 = ReportHelper.ConvertToReportFormat(data.nilai_03);
-            var nilai_04 = ReportHelper.ConvertToReportFormat(data.nilai_04);
-            var nilai_05 = ReportHelper.ConvertToReportFormat(data.nilai_05);
+            var nilai_01 = data.nilai_01 == 0 ? "" : ReportHelper.ConvertToReportFormat(data.nilai_01);
+            var nilai_02 = data.nilai_02 == 0 ? "" : ReportHelper.ConvertToReportFormat(data.nilai_02);
+            var nilai_03 = data.nilai_03 == 0 ? "" : ReportHelper.ConvertToReportFormat(data.nilai_03);
+            var nilai_04 = data.nilai_04 == 0 ? "" : ReportHelper.ConvertToReportFormat(data.nilai_04);
+            var nilai_05 = data.nilai_05 == 0 ? "" : ReportHelper.ConvertToReportFormat(data.nilai_05);
             var nilai_total = ReportHelper.ConvertToReportFormat(data.nilai_01 + data.nilai_02 + data.nilai_03 + data.nilai_04 + data.nilai_05);
+            var header = data.st_nota == "D" ? "NOTA DEBET" : "NOTA KREDIT";
             var resultTemplate = templateProfileResult.Render( new
             {
                 nilai_nt, nilai_01, nilai_02, nilai_03, nilai_04, nilai_05, nilai_total, 
                 data.jns_tr, data.jns_nt_msk, data.jns_nt_kel, data.nm_cb, data.almt_ttj,
                 data.almt_ttg, data.flag_postr, data.nm_ttg, data.nm_ttj, data.kt_ttj,
-                data.no_berkas, data.no_pol_ttg, data.kt_ttg, data.kd_mtu_symbol,
+                data.no_berkas, data.no_pol_ttg, data.kt_ttg, data.kd_mtu_symbol, data.kd_tl,
                 data.nm_kt_cb, data.tgl_nt_ind, data.no_nota, data.nm_scob, data.nm_scob_ing,
                 data.kd_cob, data.kd_scob, nilai_share_bgu = ReportHelper.ConvertToReportFormat(data.nilai_share_bgu), data.ket_nt,
                 tgl_mul_ptg = ReportHelper.ConvertDateTime(data.tgl_mul_ptg, "dd/MM/yyyy"),
                 tgl_akh_ptg = ReportHelper.ConvertDateTime(data.tgl_akh_ptg, "dd/MM/yyyy"),
-                data.uraian_01, data.uraian_02, data.uraian_03, data.uraian_04, data.uraian_05
+                data.uraian_01, data.uraian_02, data.uraian_03, data.uraian_04, data.uraian_05,
+                data.kd_mtu_pol_symbol, header
             } );
 
             return resultTemplate;
