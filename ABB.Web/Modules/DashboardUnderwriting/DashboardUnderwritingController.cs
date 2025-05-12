@@ -15,7 +15,7 @@ namespace ABB.Web.Modules.DashboardUnderwriting
             var model = await Mediator.Send(new GetDashboardUnderwritingQuery()
             {
                 KodeCabang = Request.Cookies["UserCabang"],
-                NamaCabang = Request.Cookies["DatabaseName"],
+                Cabang = Request.Cookies["UserCabang"],
             });
             
             return View(model);

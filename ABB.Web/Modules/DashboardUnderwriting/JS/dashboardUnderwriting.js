@@ -1,128 +1,13 @@
-// $(document).ready(function () {
-//     var dashboardData = JSON.parse($("#dashboardData").val());
-//     var produksi = [];
-//     var target = [];
-//     var nm_cab = [];
-//    
-//     dashboardData.forEach(data => {
-//         produksi.push((data.produksi_sdthnini / 1000000).toFixed(2));
-//         target.push((data.target_rkap / 1000000).toFixed(2));
-//         nm_cab.push(data.nm_cab);
-//     });
-//
-//     var areaChartData = {
-//         labels  : nm_cab,
-//         datasets: [
-//             {
-//                 label               : 'Produksi',
-//                 backgroundColor     : 'rgba(210, 214, 222, 1)',
-//                 borderColor         : 'rgba(210, 214, 222, 1)',
-//                 pointRadius         : false,
-//                 pointColor          : 'rgba(210, 214, 222, 1)',
-//                 pointStrokeColor    : '#c1c7d1',
-//                 pointHighlightFill  : '#fff',
-//                 pointHighlightStroke: 'rgba(220,220,220,1)',
-//                 data                : produksi
-//             },
-//             {
-//                 label               : 'Target',
-//                 backgroundColor     : 'rgba(60,141,188,0.9)',
-//                 borderColor         : 'rgba(60,141,188,0.8)',
-//                 pointRadius          : false,
-//                 pointColor          : '#3b8bba',
-//                 pointStrokeColor    : 'rgba(60,141,188,1)',
-//                 pointHighlightFill  : '#fff',
-//                 pointHighlightStroke: 'rgba(60,141,188,1)',
-//                 data                : target
-//             }
-//         ]
-//     }
-//    
-//     var barChartCanvas = $('#barChart').get(0).getContext('2d')
-//     var barChartData = $.extend(true, {}, areaChartData)
-//     var temp0 = areaChartData.datasets[0]
-//     var temp1 = areaChartData.datasets[1]
-//     barChartData.datasets[0] = temp1
-//     barChartData.datasets[1] = temp0
-//
-//     var barChartOptions = {
-//         responsive              : true,
-//         maintainAspectRatio     : false,
-//         datasetFill             : false,
-//         tooltips: {
-//             callbacks: {
-//                 label (t, d) {
-//                     const xLabel = d.datasets[t.datasetIndex].label;
-//                     const yLabel = t.yLabel >= 1000 ? t.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : t.yLabel;
-//                     return xLabel + ': ' + yLabel;
-//                 }
-//             }
-//         },
-//         scales: {
-//             yAxes: [
-//                 {
-//                     ticks: {
-//                         beginAtZero: true,
-//                         callback: (label, index, labels) => {
-//                             return label.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-//                         }
-//                     },
-//                     scaleLabel: {
-//                         display: true,
-//                         labelString: 'Dalam Jutaan Rupiah'
-//                     }
-//                 }
-//             ]
-//         },
-//         // plugins: [ChartDataLabels]
-//         plugins: {
-//             title: {
-//                 display: true,
-//                 text: 'Release Year of Web Frameworks',
-//                 color: 'blue',
-//                 font: {
-//                     weight: 'bold',
-//                     size: 20
-//                 }
-//             },
-//             datalabels: {
-//                 // Position of the labels 
-//                 // (start, end, center, etc.)
-//                 anchor: 'end',
-//                 // Alignment of the labels 
-//                 // (start, end, center, etc.)
-//                 align: 'end',
-//                 // Color of the labels
-//                 color: 'blue',
-//                 font: {
-//                     weight: 'bold',
-//                 },
-//                 formatter: function (value, context) {
-//                     // Display the actual data value
-//                     return value;
-//                 }
-//             }
-//         }
-//     }
-//
-//     new Chart(barChartCanvas, {
-//         type: 'bar',
-//         data: barChartData,
-//         options: barChartOptions
-//     })
-// });
-
-
 $(document).ready(function () {
     var dashboardData = JSON.parse($("#dashboardData").val());
     var produksi = [];
     var target = [];
-    var nm_cab = [];
+    var nm_cob = [];
     
     dashboardData.forEach(data => {
         produksi.push((data.produksi_sdthnini / 1000000));
         target.push((data.target_rkap / 1000000));
-        nm_cab.push(data.nm_cab.replace(" ", "<br>"));
+        nm_cob.push(data.nm_cob.replace(" ", "<br>"));
     });
     
     // ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "b55b025e438fa8a98e32482b5f768ff5"];
@@ -165,7 +50,7 @@ $(document).ready(function () {
             },
         },
         scaleX: {
-            values: nm_cab,
+            values: nm_cob,
             alpha: 0.5,
             backgroundColor: '#fff',
             borderColor: '#333',

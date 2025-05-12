@@ -27,25 +27,85 @@
 
     <div class='flat-box-content'>
         <div class='row'>
-            @foreach (var data in Model.Data)
-            {
-                <section class='col-sm-3'>
-                    <div class='card card-custom' onclick="window.open('@data.url', 'mywindow');" style='cursor: pointer;width:auto; height: 120px; background: #6FA8DC'>
-                        <div class='card-body' style='display:flex'>
-                            <span class='fa @data.icon' style='font-size: 5em'></span>
-                            <p style='align-self: center; margin-left:1em'>@data.nm_status</p>
-                            <p style='position:absolute; bottom:0; right:0; font-size:2em; margin-bottom:0px; margin-right:1em'>@data.jml_data</p>
-                        </div>
+            <section class='col-sm-3'>
+                <div class='card' onclick="window.open('@Model.Data[0].url', 'mywindow');" style='cursor: pointer;width:auto; height: 120px; background: #6FA8DC'>
+                    <div class='card-body' style='display:flex'>
+                        <span class='fa @Model.Data[0].icon' style='font-size: 5em'></span>
+                        <p style='align-self: center; margin-left:1em'>@Model.Data[0].nm_status</p>
+                        <p style='position:absolute; bottom:0; right:0; font-size:2em; margin-bottom:0px; margin-right:1em'>@Model.Data[0].jml_data</p>
                     </div>
-                </section>
-            }
+                </div>
+            </section>
+            <section class='col-sm-3'>
+                <div class='card' onclick="window.open('@Model.Data[1].url', 'mywindow');" style='cursor: pointer;width:auto; height: 120px; background: #597EAA'>
+                    <div class='card-body' style='display:flex'>
+                        <span class='fa @Model.Data[1].icon' style='font-size: 5em;'></span>
+                        <p style='align-self: center; margin-left:1em;'>@Model.Data[1].nm_status</p>
+                        <p style='position:absolute; bottom:0; right:0; font-size:2em; margin-bottom:0px; margin-right:1em;'>@Model.Data[1].jml_data</p>
+                    </div>
+                </div>
+            </section>
+            <section class='col-sm-3'>
+                <div class='card' onclick="window.open('@Model.Data[2].url', 'mywindow');" style='cursor: pointer;width:auto; height: 120px; background: #9FC5F8'>
+                    <div class='card-body' style='display:flex'>
+                        <span class='fa @Model.Data[2].icon' style='font-size: 5em; color: white'></span>
+                        <p style='align-self: center; margin-left:1em; color: white'>@Model.Data[2].nm_status</p>
+                        <p style='position:absolute; bottom:0; right:0; font-size:2em; margin-bottom:0px; margin-right:1em; color: white '>@Model.Data[2].jml_data</p>
+                    </div>
+                </div>
+            </section>
+            <section class='col-sm-3'>
+                <div class='card' onclick="window.open('@Model.Data[3].url', 'mywindow');" style='cursor: pointer;width:auto; height: 120px; background: #073763'>
+                    <div class='card-body' style='display:flex'>
+                        <span class='fa @Model.Data[3].icon' style='font-size: 5em; color: white'></span>
+                        <p style='align-self: center; margin-left:1em; color: white'>@Model.Data[3].nm_status</p>
+                        <p style='position:absolute; bottom:0; right:0; font-size:2em; margin-bottom:0px; margin-right:1em; color: white'>@Model.Data[3].jml_data</p>
+                    </div>
+                </div>
+            </section>
+            <section class='col-sm-3'>
+                <div class='card' onclick="window.open('@Model.Data[4].url', 'mywindow');" style='cursor: pointer;width:auto; height: 120px; background: #A2C4C9'>
+                    <div class='card-body' style='display:flex'>
+                        <span class='fa @Model.Data[4].icon' style='font-size: 5em'></span>
+                        <p style='align-self: center; margin-left:1em'>@Model.Data[4].nm_status</p>
+                        <p style='position:absolute; bottom:0; right:0; font-size:2em; margin-bottom:0px; margin-right:1em'>@Model.Data[4].jml_data</p>
+                    </div>
+                </div>
+            </section>
+            <section class='col-sm-3'>
+                <div class='card' onclick="window.open('@Model.Data[5].url', 'mywindow');" style='cursor: pointer;width:auto; height: 120px; background: #729FA9'>
+                    <div class='card-body' style='display:flex'>
+                        <span class='fa @Model.Data[5].icon' style='font-size: 5em; color: white'></span>
+                        <p style='align-self: center; margin-left:1em; color: white'>@Model.Data[5].nm_status</p>
+                        <p style='position:absolute; bottom:0; right:0; font-size:2em; margin-bottom:0px; margin-right:1em; color: white'>@Model.Data[5].jml_data</p>
+                    </div>
+                </div>
+            </section>
+            <section class='col-sm-3'>
+                <div class='card' onclick="window.open('@Model.Data[6].url', 'mywindow');" style='cursor: pointer;width:auto; height: 120px; background: #45818E'>
+                    <div class='card-body' style='display:flex'>
+                        <span class='fa @Model.Data[6].icon' style='font-size: 5em; color: white'></span>
+                        <p style='align-self: center; margin-left:1em; color: white'>@Model.Data[6].nm_status</p>
+                        <p style='position:absolute; bottom:0; right:0; font-size:2em; margin-bottom:0px; margin-right:1em; color: white'>@Model.Data[6].jml_data</p>
+                    </div>
+                </div>
+            </section>
+            <section class='col-sm-3'>
+                <div class='card' onclick="window.open('@Model.Data[7].url', 'mywindow');" style='cursor: pointer;width:auto; height: 120px; background: #134F5C'>
+                    <div class='card-body' style='display:flex'>
+                        <span class='fa @Model.Data[7].icon' style='font-size: 5em; color: white'></span>
+                        <p style='align-self: center; margin-left:1em; color: white'>@Model.Data[7].nm_status</p>
+                        <p style='position:absolute; bottom:0; right:0; font-size:2em; margin-bottom:0px; margin-right:1em; color: white'>@Model.Data[7].jml_data</p>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
     
     <div class="card card-default color-palette-box">
         <div class="card-header">
-            <p class="card-title" style="width: 100%; text-align: center; font-weight: bold; font-size: 20px;">
-                TARGET DAN REALISASI PRODUKSI UMUM CABANG DAN PEMSARAN S/D TAHUN INI
+            <p class="card-title" style="width: 100%; text-align: center; font-weight: bold; font-size: 16px;">
+                TARGET DAN REALISASI PRODUKSI UMUM @ViewBag.DatabaseName.ToString().ToUpper() DAN PEMASARAN
             </p>
             <p class="card-title" style="width: 100%; text-align: right; padding-top: 1em; padding-right: 1em; font-size: 15px;">
                 @DateTime.Now

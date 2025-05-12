@@ -8,6 +8,8 @@ namespace ABB.Application.DashboardUnderwriting.Queries
 
         public string nm_cab { get; set; }
 
+        public string nm_cob { get; set; }
+
         public decimal produksi_sdthnini { get; set; }
 
         public decimal target_rkap { get; set; }

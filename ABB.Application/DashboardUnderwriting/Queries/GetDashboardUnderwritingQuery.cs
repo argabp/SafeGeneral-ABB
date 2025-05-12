@@ -12,7 +12,7 @@ namespace ABB.Application.DashboardUnderwriting.Queries
     {
         public string KodeCabang { get; set; }
 
-        public string NamaCabang { get; set; }
+        public string Cabang { get; set; }
     }
 
     public class GetDashboardUnderwritingQueryHandler : IRequestHandler<GetDashboardUnderwritingQuery, DashboardUnderwritingDto>
@@ -29,6 +29,7 @@ namespace ABB.Application.DashboardUnderwriting.Queries
         {
             var urls = new Dictionary<string, string>();
             
+            urls.Add("New", "/PengaduanMasalah/SubmitView");
             urls.Add("Submitted", "/PengaduanMasalah/SubmitView");
             urls.Add("Checked", "/PengaduanMasalah/ConfirmView");
             urls.Add("Escalated", "/PengaduanMasalah/WaitingView");
@@ -39,6 +40,7 @@ namespace ABB.Application.DashboardUnderwriting.Queries
             
             var icons = new Dictionary<string, string>();
             
+            icons.Add("New", "fa-plus-circle");
             icons.Add("Submitted", "fa-location-arrow");
             icons.Add("Checked", "fa-check-square");
             icons.Add("Escalated", "fa-hand-paper");
@@ -80,9 +82,9 @@ namespace ABB.Application.DashboardUnderwriting.Queries
             var month = dateNow.Month;
             var day = dateNow.Day;
             
-            var graphic = (await _db.QueryProc<DashboardUnderwritingGraphicDto>("spr_ppc_bulanan_3", new { tgl_proses = $"{year}-{month}-{day}"  })).ToList();
+            var graphic = (await _db.QueryProc<DashboardUnderwritingGraphicDto>("spr_ppc_bulanan_1", new { kd_cb = request.KodeCabang, tgl_proses = $"{year}-{month}-{day}"  })).ToList();
 
-            dashboard.Graphic = graphic.Where(w => w.nm_cab == request.NamaCabang).ToList();
+            dashboard.Graphic = graphic;
             
             return dashboard;
         }
