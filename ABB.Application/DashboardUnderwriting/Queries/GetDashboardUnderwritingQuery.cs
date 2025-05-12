@@ -82,7 +82,7 @@ namespace ABB.Application.DashboardUnderwriting.Queries
             var month = dateNow.Month;
             var day = dateNow.Day;
             
-            var graphic = (await _db.QueryProc<DashboardUnderwritingGraphicDto>("spr_ppc_bulanan_1", new { kd_cb = request.KodeCabang, tgl_proses = $"{year}-{month}-{day}"  })).ToList();
+            var graphic = (await _db.QueryProc<DashboardUnderwritingGraphicDto>("spr_ppc_bulanan_1", new { kd_cb = request.KodeCabang, tgl_proses = "2024-01-31"  })).ToList();
 
             dashboard.Graphic = graphic;
             

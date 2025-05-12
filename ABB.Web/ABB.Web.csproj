@@ -5579,6 +5579,9 @@
       <None Update="Modules\Reports\Templates\RenewalNotice.html">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\DashboardUnderwriting\JS\dashboardUnderwriting.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

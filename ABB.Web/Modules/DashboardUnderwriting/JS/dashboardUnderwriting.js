@@ -62,7 +62,7 @@ $(document).ready(function () {
             item: {
                 fontColor: '#333',
                 offsetX : '3px',
-                fontSize: '11px'
+                fontSize: '8px'
             },
             tick: {
                 alpha: 0.2,
