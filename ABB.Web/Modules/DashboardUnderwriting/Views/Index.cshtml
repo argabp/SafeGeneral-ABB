@@ -16,11 +16,17 @@
     .card-custom:hover{
         transform: scale(1.1);
     }
+    table{
+        text-align: center;
+    }
+    thead{
+        background-color: lightblue;
+    }
   </style>
 
 <div class='flat-box'>
     <div class='row'>
-        <div class='flat-box-title col-md-12' style="justify-content: center">
+        <div class='flat-box-title col-md-12' style="justify-content: center; font-size: 14px">
         Status Pengajuan Akseptasi
         </div>
     </div>
@@ -104,13 +110,65 @@
     
     <div class="card card-default color-palette-box">
         <div class="card-header">
-            <p class="card-title" style="width: 100%; text-align: center; font-weight: bold; font-size: 16px;">
+            <p class="card-title" style="width: 100%; text-align: center; font-weight: bold; font-size: 14px;">
                 Target dan Realisasi Produksi Umum @ViewBag.DatabaseName
             </p>
             <p class="card-title" style="width: 100%; text-align: right; padding-top: 1em; padding-right: 1em; font-size: 15px;">
                 @DateTime.Now
             </p>
         </div>
+        
+        <table class="table" style="width: 50%">
+          <thead>
+            <tr>
+              <th style="width: 30%">Total Target</th>
+              <th style="width: 40%">Total Produksi</th>
+              <th>Rasio</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td id="target_rkap"></td>
+              <td class="produksi_sdthnini"></td>
+              <td id="rasio"></td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <table class="table" style="width: 50%">
+          <thead>
+            <tr>
+              <th style="width: 30%">Total Produksi s/d Tahun ini</th>
+              <th style="width: 40%">Total Produksi s/d Tahun lalu</th>
+              <th>Naik (Turun)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="produksi_sdthnini"></td>
+              <td id="produksi_sdthnlalu"></td>
+              <td id="produksi_naikTurunPerTahun"></td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <table class="table" style="width: 50%">
+            <thead>
+            <tr>
+                <th style="width: 30%">Total Produksi Bulan Ini</th>
+                <th style="width: 40%">Total Produksi Bulan lalu</th>
+                <th>Naik (Turun)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td id="produksi_blnini"></td>
+                <td id="produksi_blnlalu"></td>
+                <td id="produksi_naikTurunPerBulan"></td>
+            </tr>
+            </tbody>
+        </table>
+        
         <div class="card-body">
             <input type="hidden" value="@JsonConvert.SerializeObject(Model.Graphic)" id="dashboardData">
             @* <div class="chart"> *@
