@@ -118,36 +118,25 @@
             </p>
         </div>
         
-        <table class="table" style="width: 50%">
+        <table class="table" style="width: 100%">
           <thead>
             <tr>
-              <th style="width: 30%">Total Target</th>
-              <th style="width: 40%">Total Produksi</th>
-              <th>Rasio</th>
+              <th style="border-bottom: 1px solid #5B7595; border-top: 1px solid #5B7595; border-left: 1px solid #5B7595;">Total Target</th>
+              <th style="border-bottom: 1px solid #5B7595; border-top: 1px solid #5B7595;">Total Produksi</th>
+              <th style="border-bottom: 1px solid #5B7595; border-top: 1px solid #5B7595;">Rasio</th>
+              <th style="border-bottom: 1px solid #5B7595; border-top: 1px solid #5B7595;">Total Produksi s/d Tahun ini</th>
+              <th style="border-bottom: 1px solid #5B7595; border-top: 1px solid #5B7595;">Total Produksi s/d Tahun lalu</th>
+              <th style="border-bottom: 1px solid #5B7595; border-top: 1px solid #5B7595; border-right: 1px solid #5B7595;">Naik (Turun)</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td id="target_rkap"></td>
-              <td class="produksi_sdthnini"></td>
-              <td id="rasio"></td>
-            </tr>
-          </tbody>
-        </table>
-        
-        <table class="table" style="width: 50%">
-          <thead>
-            <tr>
-              <th style="width: 30%">Total Produksi s/d Tahun ini</th>
-              <th style="width: 40%">Total Produksi s/d Tahun lalu</th>
-              <th>Naik (Turun)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="produksi_sdthnini"></td>
-              <td id="produksi_sdthnlalu"></td>
-              <td id="produksi_naikTurunPerTahun"></td>
+              <td style="border-bottom: 1px solid #5B7595; border-left: 1px solid #5B7595;" id="target_rkap"></td>
+              <td style="border-bottom: 1px solid #5B7595;" class="produksi_sdthnini"></td>
+              <td style="border-bottom: 1px solid #5B7595;" id="rasio"></td>
+              <td style="border-bottom: 1px solid #5B7595;" class="produksi_sdthnini"></td>
+              <td style="border-bottom: 1px solid #5B7595;" id="produksi_sdthnlalu"></td>
+              <td style="border-bottom: 1px solid #5B7595; border-right: 1px solid #5B7595;" id="produksi_naikTurunPerTahun"></td>
             </tr>
           </tbody>
         </table>
@@ -155,32 +144,22 @@
         <table class="table" style="width: 50%">
             <thead>
             <tr>
-                <th style="width: 30%">Total Produksi Bulan Ini</th>
-                <th style="width: 40%">Total Produksi Bulan lalu</th>
-                <th>Naik (Turun)</th>
+                <th style="border-bottom: 1px solid #5B7595; border-top: 1px solid #5B7595; border-left: 1px solid #5B7595;">Total Produksi Bulan Ini</th>
+                <th style="border-bottom: 1px solid #5B7595; border-top: 1px solid #5B7595;">Total Produksi Bulan lalu</th>
+                <th style="border-bottom: 1px solid #5B7595; border-top: 1px solid #5B7595; border-right: 1px solid #5B7595;">Naik (Turun)</th>
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td id="produksi_blnini"></td>
-                <td id="produksi_blnlalu"></td>
-                <td id="produksi_naikTurunPerBulan"></td>
+                <td style="border-bottom: 1px solid #5B7595; border-left: 1px solid #5B7595;" id="produksi_blnini"></td>
+                <td style="border-bottom: 1px solid #5B7595;" id="produksi_blnlalu"></td>
+                <td style="border-bottom: 1px solid #5B7595; border-right: 1px solid #5B7595;" id="produksi_naikTurunPerBulan"></td>
             </tr>
             </tbody>
         </table>
         
-        <div class="card-body">
-            <input type="hidden" value="@JsonConvert.SerializeObject(Model.Graphic)" id="dashboardData">
-            @* <div class="chart"> *@
-            @*     <div class="chartjs-size-monitor"> *@
-            @*         <div class="chartjs-size-monitor-expand"> *@
-            @*             <div class=""></div></div> *@
-            @*         <div class="chartjs-size-monitor-shrink"> *@
-            @*             <div class=""></div></div></div> *@
-            @*     <canvas id="barChart" style="min-height: 250px; height: 500px; max-height: 500px; max-width: 100%; display: block; width: 572px;" width="715" height="312" class="chartjs-render-monitor"></canvas> *@
-            @* </div> *@
-            <div id="barChart" class="chart--container"></div>
-        </div>
+        <input type="hidden" value="@JsonConvert.SerializeObject(Model.Graphic)" id="dashboardData">
+        <div id="barChart" class="chart--container"></div>
     </div>
 </div>
 

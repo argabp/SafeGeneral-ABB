@@ -1,7 +1,10 @@
-function formatValue(value){
-    return value < 0
-        ? `(${Math.abs(value).toFixed(2)})`  // If negative: (0.82)
-        : value.toFixed(2);
+function formatValue(value) {
+    const formatted = Math.abs(value).toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+
+    return value < 0 ? `(${formatted})` : formatted;
 }
 
 $(document).ready(function () {
@@ -88,7 +91,8 @@ $(document).ready(function () {
             item: {
                 fontColor: '#333',
                 offsetX : '3px',
-                fontSize: '8px'
+                fontSize: '8px',
+                fontWeight: 'bold'  // <-- Add this line
             },
             tick: {
                 alpha: 0.2,
@@ -96,7 +100,14 @@ $(document).ready(function () {
             },
             shortUnit: "",
             thousandsSeparator: ".",
-            decimalsSeparator: ","
+            decimalsSeparator: ",",
+            label: {
+                text: 'Cabang / Pemasaran', // Example label (change as needed)
+                fontColor: '#333',
+                fontSize: '12px',
+                fontWeight: 'bold',
+                offsetY: '40px', // Moves label downward (adjust as needed)
+            },
         },
         scaleY: {
             label: {
