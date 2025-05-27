@@ -33,6 +33,10 @@ namespace ABB.Web.Modules.User.Models
 
         public string CreatedBy { get; set; }
 
+        public IFormFile SignatureFile { get; set; }
+
+        public string Jabatan { get; set; }
+
 
         public void Mapping(Profile profile)
         {

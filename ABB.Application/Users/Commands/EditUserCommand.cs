@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ using ABB.Domain.IdentityModels;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 
 namespace ABB.Application.Users.Commands
 {
@@ -37,6 +39,9 @@ namespace ABB.Application.Users.Commands
         public bool IsDeleted { get; set; }
         public string RoleName { get; set; }
         public IFormFile ProfilePhoto { get; set; }
+        public IFormFile SignatureFile { get; set; }
+
+        public string Jabatan { get; set; }
     }
 
     public class EditUserCommandHandler : IRequestHandler<EditUserCommand>
@@ -47,10 +52,11 @@ namespace ABB.Application.Users.Commands
         private readonly IAuditTrailService _auditService;
         private readonly IMapper _mapper;
         private readonly IDbContext _context;
+        private readonly IConfiguration _configuration;
 
         public EditUserCommandHandler(IUserManagerHelper userManager, IProfilePictureHelper pictureHelper
             , IMapper mapper, IUserHistoryService userHistoryService, IAuditTrailService auditService,
-            IDbContext context)
+            IDbContext context, IConfiguration configuration)
         {
             _userManager = userManager;
             _pictureHelper = pictureHelper;
@@ -58,6 +64,7 @@ namespace ABB.Application.Users.Commands
             _userHistoryService = userHistoryService;
             _auditService = auditService;
             _context = context;
+            _configuration = configuration;
         }
 
         public async Task<Unit> Handle(EditUserCommand request, CancellationToken cancellationToken)
@@ -81,7 +88,8 @@ namespace ABB.Application.Users.Commands
             user.LockoutEnabled = request.LockoutEnabled;
             user.UpdatedDate = DateTime.Now;
             user.UpdatedBy = request.UpdatedBy;
-            user.Photo = user.Photo ?? "default-profile-picture.png";
+            user.Photo = request.ProfilePhoto == null ? string.Empty : request.ProfilePhoto.Name;
+            user.Signature = request.SignatureFile == null ? string.Empty : request.SignatureFile.Name;
             user.IsActive = request.IsActive;
 
             var result = await _userManager.UpdateAsync(user);
@@ -126,13 +134,21 @@ namespace ABB.Application.Users.Commands
             }
         }
 
-        public async Task AddProfilePicture(EditUserCommand request, AppUser user)
+        private async Task AddProfilePicture(EditUserCommand request, AppUser user)
         {
             if (request.ProfilePhoto == null) return;
 
             user.Photo = await _pictureHelper.Upload(request.ProfilePhoto);
 
             await _userManager.UpdateAsync(user);
+        }
+
+        private async Task AddSignature(string userId, IFormFile file)
+        {
+            var path = _configuration.GetSection("UserSignature").Value.TrimEnd('/');
+            path = Path.Combine(path, userId);
+                
+            await _pictureHelper.UploadToFolder(file, path);
         }
     }
 }

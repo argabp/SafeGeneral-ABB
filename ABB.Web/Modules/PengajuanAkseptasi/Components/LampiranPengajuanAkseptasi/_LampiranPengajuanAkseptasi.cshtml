@@ -1,0 +1,24 @@
+﻿@model List<ABB.Application.PengajuanAkseptasi.Queries.PengajuanAkseptasiAttachmentDto>
+@using Kendo.Mvc.UI
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/PengajuanAkseptasi/Components/LampiranPengajuanAkseptasi/lampiranPengajuanAkseptasi.js"></script>
+
+
+<input type="hidden" id="lampiranPengajuanAkseptasiDS" value='@Html.Raw(Json.Serialize(Model))' /> 
+<div id="LampiranPengajuanAkseptasiGrid">
+</div>
+
+<div class="window-footer">
+    <button type="button" id="btn-previous-lampiranPengajuanAkseptasi" class="btn btn-primary space-right">
+        <span class="fa fa-arrow-left"></span> Previous
+    </button>
+    @* <button type="button" id="btn-finish-pesertaLampiran" class="btn btn-primary space-right"> *@
+    @*     <span class="fa fa-save"></span> Finish *@
+    @* </button> *@
+    @* <button type="button" id="btn-close-pesertaLampiran" class="btn btn-primary space-right"> *@
+    @*     <span class="fa fa-window-close"></span> Close *@
+    @* </button> *@
+</div>

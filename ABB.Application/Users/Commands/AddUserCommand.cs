@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using ABB.Application.Common.Dtos;
@@ -12,6 +13,7 @@ using ABB.Domain.IdentityModels;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 
 namespace ABB.Application.Users.Commands
 {
@@ -38,6 +40,10 @@ namespace ABB.Application.Users.Commands
 
         public bool IsDeleted { get; set; }
 
+        public IFormFile SignatureFile { get; set; }
+
+        public string Jabatan { get; set; }
+
         public void Mapping(Profile profile)
         {
             profile.CreateMap<AddUserCommand, AppUser>();
@@ -52,10 +58,11 @@ namespace ABB.Application.Users.Commands
         private readonly IAuditTrailService _auditService;
         private readonly IMapper _mapper;
         private readonly IDbContext _context;
+        private readonly IConfiguration _configuration;
 
         public AddUserCommandHandler(IUserManagerHelper userManager, IMapper mapper
             , IProfilePictureHelper pictureHelper, IUserHistoryService userHistoryService,
-            IAuditTrailService auditService, IDbContext context)
+            IAuditTrailService auditService, IDbContext context, IConfiguration configuration)
         {
             _userManager = userManager;
             _mapper = mapper;
@@ -63,6 +70,7 @@ namespace ABB.Application.Users.Commands
             _userHistoryService = userHistoryService;
             _auditService = auditService;
             _context = context;
+            _configuration = configuration;
         }
 
         public async Task<Unit> Handle(AddUserCommand request, CancellationToken cancellationToken)
@@ -71,6 +79,7 @@ namespace ABB.Application.Users.Commands
             await AddUser(request, user);
             await AddUserRole(request, user, cancellationToken);
             await AddProfilePicture(request, user);
+            await AddSignature(user.Id, request.SignatureFile);
             await AddUserHistory(request, user);
             return Unit.Value;
         }
@@ -80,8 +89,9 @@ namespace ABB.Application.Users.Commands
             user.CreatedDate = DateTime.Now;
             user.CreatedBy = request.CreatedBy;
             user.PasswordExpiredDate = DateTime.Now.AddYears(100);
-            user.Photo = user.Photo ?? "default-profile-picture.png";
-            user.Id = user.Id ?? Guid.NewGuid().ToString("N");
+            user.Photo = request.ProfilePhoto == null ? "default-profile-picture.png" : request.ProfilePhoto.Name;
+            user.Signature = request.SignatureFile == null ? string.Empty : request.SignatureFile.Name;
+            user.Id ??= Guid.NewGuid().ToString("N");
             user.LockoutEnabled = false;
             var result = await _userManager.CreateAsync(user, request.Password);
 
@@ -123,13 +133,21 @@ namespace ABB.Application.Users.Commands
             });
         }
 
-        public async Task AddProfilePicture(AddUserCommand request, AppUser user)
+        private async Task AddProfilePicture(AddUserCommand request, AppUser user)
         {
             if (request.ProfilePhoto == null) return;
 
             user.Photo = await _pictureHelper.Upload(request.ProfilePhoto);
 
             await _userManager.UpdateAsync(user);
+        }
+
+        private async Task AddSignature(string userId, IFormFile file)
+        {
+            var path = _configuration.GetSection("UserSignature").Value.TrimEnd('/');
+            path = Path.Combine(path, userId);
+                
+            await _pictureHelper.UploadToFolder(file, path);
         }
     }
 }

@@ -110,10 +110,28 @@
                         </div>
                     </div>
                 </div>
-
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-12">Tanda Tangan</label>
+                <div class="col-sm-12">
+                    <a href="/user/signatures/@Model.Signature" target="_blank">@Model.Signature</a>
+                </div>
+                <div class="col-sm-12">
+                    <div class=" switch-box">
+                        <kendo-upload name="SignatureFile" multiple="false"></kendo-upload>
+                    </div>
+                </div>
+            </div>
+                            
+            <div class="form-group">
+                <label class="col-sm-12">Jabatan</label>
+                <div class="col-sm-12">
+                    <kendo-textbox for="Jabatan" style="background-color: #FFFFE1"/>
+                    <span asp-validation-for="Jabatan" class="text-danger"></span>
+                </div>
             </div>
         </div>
-
     </div>
     <div class="window-footer">
         <button type="button" id="btn-edit-user" class="btn btn-primary space-right">Save</button>

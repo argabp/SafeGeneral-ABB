@@ -87,6 +87,10 @@ namespace ABB.Application.Common.Interfaces
         DbSet<NotaKomisiTambahan> NotaKomisiTambahan { get; set; }
         DbSet<Domain.Entities.NomorRegistrasiPolis> NomorRegistrasiPolis { get; set; }
         DbSet<CopyEndors> CopyEndors { get; set; }
+        DbSet<TRAkseptasi> TRAkseptasi { get; set; }
+        DbSet<TRAkseptasiAttachment> TRAkseptasiAttachment { get; set; }
+        DbSet<TRAkseptasiStatus> TRAkseptasiStatus { get; set; }
+        DbSet<TRAkseptasiStatusAttachment> TRAkseptasiStatusAttachment { get; set; }
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);

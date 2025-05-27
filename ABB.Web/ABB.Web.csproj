@@ -4786,6 +4786,8 @@
       <_ContentIncludedByDefault Remove="Modules\DashboardSupervisor\Views\Index.cshtml" />
       <_ContentIncludedByDefault Remove="Modules\DashboardInsurance\Views\Index.cshtml" />
       <_ContentIncludedByDefault Remove="Modules\Dashboard\Views\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="wwwroot\akseptasi\JK50C020225000010\akseptasi-resiko-other-cargo\Labware Template (1).csv" />
+      <_ContentIncludedByDefault Remove="wwwroot\akseptasi\PS11W075125000010\image (13).png" />
     </ItemGroup>
 
     <ItemGroup>
@@ -4793,9 +4795,6 @@
       <Folder Include="Modules\PostingKomisiTambahan\Models" />
       <Folder Include="Modules\PostingPolis\Models" />
       <Folder Include="wwwroot\img\profile-picture" />
-      <Folder Include="wwwroot\pengajuan-akseptasi-all" />
-      <Folder Include="wwwroot\pengajuan-akseptasi-kreditur" />
-      <Folder Include="wwwroot\proses-rekonsiliasi" />
     </ItemGroup>
 
     <ItemGroup>
@@ -5580,6 +5579,27 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Modules\DashboardUnderwriting\JS\dashboardUnderwriting.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\PengajuanAkseptasi\Components\PengajuanAkseptasi\pengajuanAkseptasi.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\PengajuanAkseptasi\JS\pengajuanAkseptasi.form.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\PengajuanAkseptasi\JS\pengajuanAkseptasi.index.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\PengajuanAkseptasi\JS\pengajuanAkseptasi.info.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\PengajuanAkseptasi\Components\LampiranPengajuanAkseptasi\lampiranPengajuanAkseptasi.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\PengajuanAkseptasi\JS\pengajuanAkseptasi.add.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\PengajuanAkseptasi\JS\pengajuanAkseptasi.view.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>

@@ -21,5 +21,9 @@ namespace ABB.Domain.IdentityModels
         public DateTime? UpdatedDate { get; set; }
         public string UpdatedBy { get; set; }
         public bool IsDeleted { get; set; }
+
+        public string Signature { get; set; }
+
+        public string Jabatan { get; set; }
     }
 }

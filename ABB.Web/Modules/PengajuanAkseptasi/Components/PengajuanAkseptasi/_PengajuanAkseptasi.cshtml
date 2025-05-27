@@ -1,0 +1,414 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.PengajuanAkseptasi.Models.PengajuanAkseptasiViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/PengajuanAkseptasi/Components/PengajuanAkseptasi/pengajuanAkseptasi.js"></script>
+
+<style>
+    p {
+        margin: 0px;
+        padding: 0px;
+    }
+    label {
+        align-content: center;
+    }
+</style>
+
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="PengajuanAkseptasiForm" enctype="multipart/form-data" autocomplete="off">
+    @Html.HiddenFor(f => f.kd_thn)
+    @Html.HiddenFor(f => f.no_aks)
+    <div class="form-group row">
+        <div class="col-sm-6">
+            <div class="form-group row">
+                <div class="row col-sm-12">
+                    <label class="col-sm-4">No. Pengajuan Akseptasi</label>
+                    <div class="col-sm-8">
+                        <kendo-textbox for="nomor_pengajuan" readonly="true" style="width: 100%"/>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="row col-sm-12">
+                    <label class="col-sm-4">Cabang</label>
+                    <div class="col-sm-8">
+                        <input type="hidden" id="temp_kd_cb" value="@Model.kd_cb">
+                        <kendo-dropdownlist for="kd_cb" style="width: 100%" on-change="OnKodeCabangChange" option-label="Pilih Cabang"
+                                            datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown">
+                            <datasource type="DataSourceTagHelperType.Custom">
+                                <transport>
+                                    <read url="@Url.Action("GetCabang", "PengajuanAkseptasi")"/>
+                                </transport>
+                            </datasource>
+                        </kendo-dropdownlist>
+                        <span asp-validation-for="kd_cb" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="row col-sm-12">
+                    <label class="col-sm-4">COB</label>
+                    <div class="col-sm-8">
+                        <input type="hidden" id="temp_kd_cob" value="@Model.kd_cob">
+                        <kendo-dropdownlist for="kd_cob" style="width: 100%" on-change="OnKodeCOBChange" option-label="Pilih COB"
+                                            datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown">
+                            <datasource type="DataSourceTagHelperType.Custom">
+                                <transport>
+                                    <read url="@Url.Action("GetCOB", "PengajuanAkseptasi")"/>
+                                </transport>
+                            </datasource>
+                        </kendo-dropdownlist>
+                        <span asp-validation-for="kd_cob" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="row col-sm-12">
+                    <label class="col-sm-4">SCOB</label>
+                    <div class="col-sm-8">
+                        <input type="hidden" id="temp_kd_scob" value="@Model.kd_scob">
+                        <kendo-dropdownlist for="kd_scob" style="width: 100%" on-change="OnKodeSCOBChange" option-label="Pilih SCOB"
+                                            datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown">
+                            <datasource type="DataSourceTagHelperType.Custom">
+                                <transport>
+                                    <read url="@Url.Action("GetSCOB", "PengajuanAkseptasi")" data="dataKodeSCOBDropDown"/>
+                                </transport>
+                            </datasource>
+                        </kendo-dropdownlist>
+                        <span asp-validation-for="kd_scob" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-4">Marketing</label>
+                <div class="col-sm-4">
+                    <input type="hidden" id="temp_kd_grp_mkt" value="@Model.kd_grp_mkt">
+                    <kendo-dropdownlist for="kd_grp_mkt" style="width: 100%" on-change="OnKodeMarketingChange" option-label="Pilih Kode Marketing"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="not-null-dropdown">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeMarketing", "PengajuanAkseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_grp_mkt" class="text-danger"></span>
+                </div>
+                <div class="col-sm-4">
+                    <input type="hidden" id="temp_kd_rk_mkt" value="@Model.kd_rk_mkt">
+                    <kendo-dropdownlist for="kd_rk_mkt" style="width: 100%" class="not-null-dropdown"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeRekanan", "PengajuanAkseptasi")" data="dataKodeMarketingDropDown"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_rk_mkt" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+            <div class="form-group row">
+                <div class="row col-sm-12">
+                    <label class="col-sm-4">Sumber Bisnis</label>
+                    <div class="col-sm-4">
+                        <input type="hidden" id="temp_kd_grp_sb_bis" value="@Model.kd_grp_sb_bis">
+                        <kendo-dropdownlist for="kd_grp_sb_bis" style="width: 100%" on-change="OnKodeSumberBisnisChange" option-label="Pilih Kode Sumber Bisnis"
+                                            datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="not-null-dropdown" >
+                            <datasource type="DataSourceTagHelperType.Custom">
+                                <transport>
+                                    <read url="@Url.Action("GetKodeTertanggung", "PengajuanAkseptasi")"/>
+                                </transport>
+                            </datasource>
+                        </kendo-dropdownlist>
+                        <span asp-validation-for="kd_grp_sb_bis" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-4">
+                        <input type="hidden" id="temp_kd_rk_sb_bis" value="@Model.kd_rk_sb_bis">
+                        <kendo-dropdownlist for="kd_rk_sb_bis" style="width: 100%" class="not-null-dropdown" 
+                                            datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                            <datasource type="DataSourceTagHelperType.Custom">
+                                <transport>
+                                    <read url="@Url.Action("GetKodeRekanan", "PengajuanAkseptasi")" data="dataKodeSumberBisnisDropDown"/>
+                                </transport>
+                            </datasource>
+                        </kendo-dropdownlist>
+                        <span asp-validation-for="kd_rk_sb_bis" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="row col-sm-12">
+                    <label class="col-sm-4">Tertanggung</label>
+                    <div class="col-sm-4">
+                        <input type="hidden" id="temp_kd_grp_ttg" value="@Model.kd_grp_ttg">
+                        <kendo-dropdownlist for="kd_grp_ttg" style="width: 100%" on-change="OnKodeTertanggungChange" option-label="Pilih Kode Tertanggung"
+                                            datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="not-null-dropdown">
+                            <datasource type="DataSourceTagHelperType.Custom">
+                                <transport>
+                                    <read url="@Url.Action("GetKodeTertanggung", "PengajuanAkseptasi")"/>
+                                </transport>
+                            </datasource>
+                        </kendo-dropdownlist>
+                        <span asp-validation-for="kd_grp_ttg" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-4">
+                        <input type="hidden" id="temp_kd_rk_ttg" value="@Model.kd_rk_ttg">
+                        <kendo-dropdownlist for="kd_rk_ttg" style="width: 100%" class="not-null-dropdown"
+                                            datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                            <datasource type="DataSourceTagHelperType.Custom">
+                                <transport>
+                                    <read url="@Url.Action("GetKodeRekanan", "PengajuanAkseptasi")" data="dataKodeTertanggungDropDown"/>
+                                </transport>
+                            </datasource>
+                        </kendo-dropdownlist>
+                        <span asp-validation-for="kd_rk_ttg" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="row col-sm-12">
+                    <label class="col-sm-4">Tanggal Pengajuan</label>
+                    <div class="col-sm-8">
+                        <kendo-datepicker for="tgl_pengajuan" style="width: 100%; background-color: #FFFFE1"/>
+                        <span asp-validation-for="tgl_pengajuan" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="row col-sm-12">
+                    <label class="col-sm-4">Periode Pertanggungan</label>
+                    <div class="col-sm-3">
+                        <kendo-datepicker for="tgl_mul_ptg" style="width: 100%; background-color: #FFFFE1"/>
+                        <span asp-validation-for="tgl_mul_ptg" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-2" style="align-content: center">
+                        <p style="text-align: center;">s/d</p>
+                    </div>
+                    <div class="col-sm-3">
+                        <kendo-datepicker for="tgl_akh_ptg" style="width: 100%; background-color: #FFFFE1"/>
+                        <span asp-validation-for="tgl_akh_ptg" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="row col-sm-12">
+                    <label class="col-sm-4">Nilai Pertanggungan</label>
+                    <div class="col-sm-4">
+                        <kendo-dropdownlist for="kd_mtu" style="width: 100%" class="not-null-dropdown"
+                                            datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                            <datasource type="DataSourceTagHelperType.Custom">
+                                <transport>
+                                    <read url="@Url.Action("GetMataUang", "PengajuanAkseptasi")"/>
+                                </transport>
+                            </datasource>
+                        </kendo-dropdownlist>
+                        <span asp-validation-for="kd_mtu" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-4">
+                        <kendo-numerictextbox decimals="2" spinners="false" for="nilai_ttl_ptg" style="width: 100%; background-color: #FFFFE1"/>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="row col-sm-12">
+                    <label class="col-sm-4">Status Polis</label>
+                    <div class="col-sm-8">
+                        <kendo-dropdownlist for="st_pas" style="width: 100%" option-label="Pilih Status Polis" class="not-null-dropdown"
+                                            datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                            <datasource type="DataSourceTagHelperType.Custom">
+                                <transport>
+                                    <read url="@Url.Action("GetStatusPolis", "PengajuanAkseptasi")"/>
+                                </transport>
+                            </datasource>
+                        </kendo-dropdownlist>
+                        <span asp-validation-for="st_pas" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="row col-sm-12">
+                    <label class="col-sm-4">Share (%)</label>
+                    <div class="col-sm-8">
+                        <kendo-numerictextbox decimals="2" spinners="false" for="pst_share" style="width: 100%; background-color: #FFFFE1"/>
+                        <span asp-validation-for="pst_share" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="row col-sm-12">
+                    <label class="col-sm-4">No. Polis Ceding</label>
+                    <div class="col-sm-8">
+                        <kendo-textbox for="no_pol_pas" style="width: 100%"/>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="row col-sm-12">
+                    <label class="col-sm-6">Leader / Member Perusahaan Asuransi</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <input type="hidden" id="temp_kd_grp_pas1" value="@Model.kd_grp_pas1">
+                    <kendo-dropdownlist for="kd_grp_pas1" style="width: 100%" on-change="On_kd_grp_pas1_change" option-label="Pilih Kode Grp Pas"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeGrpPas", "PengajuanAkseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+                <div class="col-sm-4">
+                    <input type="hidden" id="temp_kd_rk_pas1" value="@Model.kd_rk_pas1">
+                    <kendo-dropdownlist for="kd_rk_pas1" style="width: 100%"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeRekanan", "PengajuanAkseptasi")" data="dataKodeGrpPas1"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+                <div class="col-sm-3">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="pst_pas1" style="width: 100%;"/>
+                </div>
+                <div class="col-sm-1" style="align-content: center;">%</div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <input type="hidden" id="temp_kd_grp_pas2" value="@Model.kd_grp_pas2">
+                    <kendo-dropdownlist for="kd_grp_pas2" style="width: 100%" on-change="On_kd_grp_pas2_change" option-label="Pilih Kode Grp Pas"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeGrpPas", "PengajuanAkseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+                <div class="col-sm-4">
+                    <input type="hidden" id="temp_kd_rk_pas2" value="@Model.kd_rk_pas2">
+                    <kendo-dropdownlist for="kd_rk_pas2" style="width: 100%"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeRekanan", "PengajuanAkseptasi")" data="dataKodeGrpPas2"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+                <div class="col-sm-3">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="pst_pas2" style="width: 100%;"/>
+                </div>
+                <div class="col-sm-1" style="align-content: center;">%</div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <input type="hidden" id="temp_kd_grp_pas3" value="@Model.kd_grp_pas3">
+                    <kendo-dropdownlist for="kd_grp_pas3" style="width: 100%" on-change="On_kd_grp_pas3_change" option-label="Pilih Kode Grp Pas"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeGrpPas", "PengajuanAkseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+                <div class="col-sm-4">
+                    <input type="hidden" id="temp_kd_rk_pas3" value="@Model.kd_rk_pas3">
+                    <kendo-dropdownlist for="kd_rk_pas3" style="width: 100%"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeRekanan", "PengajuanAkseptasi")" data="dataKodeGrpPas3"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+                <div class="col-sm-3">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="pst_pas3" style="width: 100%;"/>
+                </div>
+                <div class="col-sm-1" style="align-content: center;">%</div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <input type="hidden" id="temp_kd_grp_pas4" value="@Model.kd_grp_pas4">
+                    <kendo-dropdownlist for="kd_grp_pas4" style="width: 100%" on-change="On_kd_grp_pas4_change" option-label="Pilih Kode Grp Pas"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeGrpPas", "PengajuanAkseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+                <div class="col-sm-4">
+                    <input type="hidden" id="temp_kd_rk_pas4" value="@Model.kd_rk_pas4">
+                    <kendo-dropdownlist for="kd_rk_pas4" style="width: 100%"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeRekanan", "PengajuanAkseptasi")" data="dataKodeGrpPas4"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+                <div class="col-sm-3">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="pst_pas4" style="width: 100%;"/>
+                </div>
+                <div class="col-sm-1" style="align-content: center;">%</div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <input type="hidden" id="temp_kd_grp_pas5" value="@Model.kd_grp_pas5">
+                    <kendo-dropdownlist for="kd_grp_pas5" style="width: 100%" on-change="On_kd_grp_pas5_change" option-label="Pilih Kode Grp Pas"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeGrpPas", "PengajuanAkseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+                <div class="col-sm-4">
+                    <input type="hidden" id="temp_kd_rk_pas5" value="@Model.kd_rk_pas5">
+                    <kendo-dropdownlist for="kd_rk_pas5" style="width: 100%"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeRekanan", "PengajuanAkseptasi")" data="dataKodeGrpPas5"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+                <div class="col-sm-3">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="pst_pas5" style="width: 100%;"/>
+                </div>
+                <div class="col-sm-1" style="align-content: center;">%</div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="col-sm-12">
+                <label class="col-sm-6">Keterangan Resiko</label>
+            </div>
+            <div class="col-sm-12">
+                <kendo-textarea name="ket_rsk" rows="50" style="width: 100%; background-color: white">@Model.ket_rsk</kendo-textarea>
+            </div>
+        </div>
+    </div>
+    </form>
+
+    <div class="window-footer">
+        <button type="button" id="btn-save-pengajuanAkseptasi" class="btn btn-success space-right">
+            <span class="fa fa-save"></span> Save
+        </button>
+        <button type="button" id="btn-next-pengajuanAkseptasi" class="btn btn-primary space-right">
+            Next <span class="fa fa-arrow-right"></span>
+        </button>
+    </div>
+</div>

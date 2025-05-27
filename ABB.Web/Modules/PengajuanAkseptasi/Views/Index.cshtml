@@ -1,0 +1,118 @@
+﻿@using Kendo.Mvc.UI
+@using ABB.Application.PengajuanAkseptasi.Queries
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Pengajuan Akseptasi";
+}
+<script src="~/Modules/PengajuanAkseptasi/JS/pengajuanAkseptasi.index.js"></script>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-4">
+            Pengajuan Akseptasi
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+        </div>
+        <div class="col-md-4">
+            <button class="flat-btn-primary" id="btnAddNewPengajuanAkseptasi">Add New Pengajuan Akseptasi</button>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        @(Html.Kendo().Grid<PengajuanAkseptasiDto>()
+        .Name("PengajuanAkseptasiGrid")
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetPengajuanAkseptasis", "PengajuanAkseptasi").Data("searchFilter"))
+        )
+        .Columns(columns =>
+        {
+            columns.Bound(col => col.Id).Hidden();
+            columns.Bound(col => col.nm_cb).Title("Cabang");
+            columns.Bound(col => col.nm_cob).Title("COB");
+            columns.Bound(col => col.nm_scob).Title("SCOB");
+            columns.Bound(col => col.nomor_pengajuan).Title("No. Pengjuan Akseptasi");
+            columns.Bound(col => col.nm_tertanggung).Title("Tertanggung");
+            columns.Bound(col => col.status).Title("Status");
+            columns.Bound(col => col.user_status).Title("User Status");
+            columns.Bound(col => col.tgl_status).Title("Tanggal Status").Format("{0: dd-MM-yyyy}");
+            columns.Command(command =>
+            {
+                command.Custom("Edit")
+                    .Text(" ")
+                    .IconClass("fa fa-pencil-alt")
+                    .HtmlAttributes(new { title = "Edit" })
+                    .Click("OnClickEditPengajuanAkseptasi");
+                command.Custom("View")
+                    .Text(" ")
+                    .IconClass("fa fa-eye")
+                    .HtmlAttributes(new { title = "View" })
+                    .Click("OnClickViewPengajuanAkseptasi");
+                command.Custom("Info")
+                    .Text(" ")
+                    .IconClass("fa fa-info-circle")
+                    .HtmlAttributes(new { title = "Info" })
+                    .Click("OnClickInfoPengajuanAkseptasi");
+                command.Custom("Submit")
+                    .Text(" ")
+                    .IconClass("fa fa-location-arrow")
+                    .HtmlAttributes(new { title = "Submit" })
+                    .Click("OnClickSubmitPengajuanAkseptasi");
+                command.Custom("Print")
+                    .Text(" ")
+                    .IconClass("fa fa-print")
+                    .HtmlAttributes(new { title = "Print" })
+                    .Click("OnClickPrintPengajuanAkseptasi");
+    
+            }).Title("Action").Width(250);
+        })
+        .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                    )
+        .Sortable()
+        .Filterable()
+        .Scrollable()
+        .Height(380)
+        .Resizable(a=>a.Columns(true))
+        .Events(ev => ev.DataBound("gridAutoFit"))
+    
+            )
+
+        @(Html.Kendo().Window()
+                    .Name("PengajuanAkseptasiWindow")
+                    .Title("Pengajuan Akseptasi Page")
+                    .Width(1200)
+                    .Modal(true)
+                    .Visible(false)
+                    .Draggable(true)
+            )
+        
+        @(Html.Kendo().Window()
+                    .Name("InfoPengjuanAkseptasiWindow")
+                    .Title("Info Pengajuan Akseptasi Page")
+                    .Width(1000)
+                    .Modal(true)
+                    .Visible(false)
+                    .Draggable(true)
+            )
+        
+        @(Html.Kendo().Window()
+                    .Name("SubmitWindow")
+                    .Title("Submit Page")
+                    .Width(500)
+                    .Modal(true)
+                    .Visible(false)
+                    .Draggable(true)
+            )
+    </div>
+</div>
+

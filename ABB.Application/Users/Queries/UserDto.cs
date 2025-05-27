@@ -17,5 +17,9 @@ namespace ABB.Application.Users.Queries
 
         public bool LockoutEnabled { get; set; }
         public bool IsDeleted { get; set; }
+
+        public string Signature { get; set; }
+
+        public string Jabatan { get; set; }
     }
 }

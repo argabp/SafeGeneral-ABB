@@ -97,6 +97,10 @@ namespace ABB.Infrastructure.Data
         public DbSet<NotaKomisiTambahan> NotaKomisiTambahan { get; set; }
         public DbSet<NomorRegistrasiPolis> NomorRegistrasiPolis { get; set; }
         public DbSet<CopyEndors> CopyEndors { get; set; }
+        public DbSet<TRAkseptasi> TRAkseptasi { get; set; }
+        public DbSet<TRAkseptasiAttachment> TRAkseptasiAttachment { get; set; }
+        public DbSet<TRAkseptasiStatus> TRAkseptasiStatus { get; set; }
+        public DbSet<TRAkseptasiStatusAttachment> TRAkseptasiStatusAttachment { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -187,6 +191,10 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new NotaKomisiTambahanMap());
             builder.ApplyConfiguration(new NomorRegistrasiPolisMap());
             builder.ApplyConfiguration(new CopyEndorsMap());
+            builder.ApplyConfiguration(new TRAkseptasiMap());
+            builder.ApplyConfiguration(new TRAkseptasiStatusMap());
+            builder.ApplyConfiguration(new TRAkseptasiStatusAttachmentMap());
+            builder.ApplyConfiguration(new TRAkseptasiAttachmentMap());
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

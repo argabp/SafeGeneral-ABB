@@ -1,0 +1,23 @@
+﻿@using Kendo.Mvc.UI
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/PengajuanAkseptasi/JS/pengajuanAkseptasi.submit.js"></script>
+
+<div class="window-body">
+    <form id="SubmitForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="col-sm-12 form-group">
+            <kendo-textarea name="keteranganSubmit" rows="5"></kendo-textarea>
+        </div>
+        <div class="col-sm-6 form-group">
+            <kendo-upload name="uploadSubmit" multiple="true"></kendo-upload>
+        </div>
+    </form>
+
+    <div class="window-footer">
+        <button type="button" id="btn-pengajuanAkseptasi-submit" class="btn btn-primary space-right">
+            Submit
+        </button>
+    </div>
+</div>

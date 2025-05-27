@@ -23,6 +23,12 @@ namespace ABB.Web.Modules.User.Models
         public string Photo { get; set; }
         public IFormFile ProfilePhoto { get; set; }
 
+        public string Signature { get; set; }
+        
+        public IFormFile SignatureFile { get; set; }
+
+        public string Jabatan { get; set; }
+
 
         public void Mapping(Profile profile)
         {

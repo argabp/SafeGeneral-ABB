@@ -4607,3 +4607,16 @@ C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modul
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modules\Reports\Templates\PenyelesaianKlaim.html
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modules\Reports\Templates\RenewalNotice.html
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modules\DashboardUnderwriting\JS\dashboardUnderwriting.js
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modules\PengajuanAkseptasi\Components\PengajuanAkseptasi\pengajuanAkseptasi.js
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\PengajuanAkseptasi\Components\LampiranPengajuanAkseptasi\_LampiranPengajuanAkseptasi.cshtml.g.cs
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\PengajuanAkseptasi\Components\PengajuanAkseptasi\_PengajuanAkseptasi.cshtml.g.cs
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\PengajuanAkseptasi\Views\Index.cshtml.g.cs
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\PengajuanAkseptasi\Views\Info.cshtml.g.cs
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\PengajuanAkseptasi\Views\View.cshtml.g.cs
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modules\PengajuanAkseptasi\Components\LampiranPengajuanAkseptasi\lampiranPengajuanAkseptasi.js
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modules\PengajuanAkseptasi\JS\pengajuanAkseptasi.form.js
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modules\PengajuanAkseptasi\JS\pengajuanAkseptasi.index.js
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modules\PengajuanAkseptasi\JS\pengajuanAkseptasi.info.js
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\PengajuanAkseptasi\Views\Add.cshtml.g.cs
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\PengajuanAkseptasi\Views\Edit.cshtml.g.cs
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modules\PengajuanAkseptasi\JS\pengajuanAkseptasi.add.js
