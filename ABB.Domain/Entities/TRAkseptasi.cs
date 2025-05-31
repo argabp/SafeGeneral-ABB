@@ -89,5 +89,9 @@ namespace ABB.Domain.Entities
         public DateTime tgl_update { get; set; }
 
         public string kd_user_update { get; set; }
+
+        public decimal? pst_dis { get; set; }
+        
+        public decimal? pst_kms { get; set; }
     }
 }

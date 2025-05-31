@@ -28,8 +28,7 @@ namespace ABB.Infrastructure.Services
 
         private readonly string[] ParentNavigation = new string[]
         {
-            "Dashboard",
-            "Setup"
+            "Dashboard"
         };
 
         private readonly string[] SubNavigation = new string[]
@@ -133,13 +132,13 @@ namespace ABB.Infrastructure.Services
                 Icon = "fa-th"
             });
 
-            await AddNavigation(new AddNavigationCommand()
-            {
-                Action = "",
-                Controller = "",
-                Text = ParentNavigation[1],
-                Icon = "fa-bars"
-            });
+            // await AddNavigation(new AddNavigationCommand()
+            // {
+            //     Action = "",
+            //     Controller = "",
+            //     Text = ParentNavigation[1],
+            //     Icon = "fa-bars"
+            // });
 
             var setupNavigation = _db.Navigation.FirstOrDefault(w => w.Text == "Setup");
 

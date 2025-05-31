@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ABB.Application.BiayaMaterais.Queries;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Exceptions;
+using ABB.Application.Common.Queries;
 using ABB.Application.KapasitasCabangs.Queries;
 using ABB.Application.PengajuanAkseptasi.Commands;
 using ABB.Application.PengajuanAkseptasi.Queries;
@@ -25,7 +26,7 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger<PengajuanAkseptasiController> _logger;
-        private static List<Domain.Entities.Rekanan> _rekanans;
+        private static List<RekananDto> _rekanans;
 
         public PengajuanAkseptasiController(IConfiguration configuration, ILogger<PengajuanAkseptasiController> logger)
         {
@@ -38,10 +39,11 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             
-            _rekanans = await Mediator.Send(new GetKodeRekananQuery()
+            _rekanans = await Mediator.Send(new GetRekanansQuery()
             {
                 DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty
             });
+            _rekanans = new List<RekananDto>();
             
             return View();
         }

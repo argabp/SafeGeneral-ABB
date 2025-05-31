@@ -21,5 +21,13 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
         public DateTime tgl_status { get; set; }
 
         public string nm_status { get; set; }
+
+        public string ket_status { get; set; }
+        
+        public string nm_user_sign { get; set; }
+        
+        public DateTime tgl_batas { get; set; }
+
+        public int reminder { get; set; }
     }
 }

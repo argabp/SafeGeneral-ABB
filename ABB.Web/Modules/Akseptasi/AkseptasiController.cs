@@ -26,14 +26,14 @@ namespace ABB.Web.Modules.Akseptasi
 {
     public class AkseptasiController : AuthorizedBaseController
     {
-        private static List<Domain.Entities.Rekanan> _rekanans;
+        private static List<RekananDto> _rekanans;
 
         public async Task<ActionResult> Index()
         {
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
 
-            _rekanans = await Mediator.Send(new GetKodeRekananQuery()
+            _rekanans = await Mediator.Send(new GetRekanansQuery()
             {
                 DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty
             });

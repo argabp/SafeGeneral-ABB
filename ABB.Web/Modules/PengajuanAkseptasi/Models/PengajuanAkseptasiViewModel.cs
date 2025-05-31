@@ -80,6 +80,10 @@ namespace ABB.Web.Modules.PengajuanAkseptasi.Models
         public string ket_rsk { get; set; }
 
         public DateTime tgl_pengajuan { get; set; }
+
+        public decimal? pst_dis { get; set; }
+        
+        public decimal? pst_kms { get; set; }
         
         public void Mapping(Profile profile)
         {

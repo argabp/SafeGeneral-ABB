@@ -73,6 +73,7 @@ namespace ABB.Application.Users.Commands
             await UpdateUser(request, user);
             await UpdateRole(request, user, cancellationToken);
             await AddProfilePicture(request, user);
+            await AddSignature(user.Id, request.SignatureFile);
             await AddUserHistory(user);
             return Unit.Value;
         }
@@ -88,9 +89,10 @@ namespace ABB.Application.Users.Commands
             user.LockoutEnabled = request.LockoutEnabled;
             user.UpdatedDate = DateTime.Now;
             user.UpdatedBy = request.UpdatedBy;
-            user.Photo = request.ProfilePhoto == null ? string.Empty : request.ProfilePhoto.Name;
-            user.Signature = request.SignatureFile == null ? string.Empty : request.SignatureFile.Name;
+            user.Photo = request.ProfilePhoto == null ? string.Empty : request.ProfilePhoto.FileName;
+            user.Signature = request.SignatureFile == null ? string.Empty : request.SignatureFile.FileName;
             user.IsActive = request.IsActive;
+            user.Jabatan = request.Jabatan;
 
             var result = await _userManager.UpdateAsync(user);
             await _auditService.Create(new AuditTrailDto()

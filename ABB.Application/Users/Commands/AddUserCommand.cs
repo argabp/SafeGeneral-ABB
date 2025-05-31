@@ -89,10 +89,11 @@ namespace ABB.Application.Users.Commands
             user.CreatedDate = DateTime.Now;
             user.CreatedBy = request.CreatedBy;
             user.PasswordExpiredDate = DateTime.Now.AddYears(100);
-            user.Photo = request.ProfilePhoto == null ? "default-profile-picture.png" : request.ProfilePhoto.Name;
-            user.Signature = request.SignatureFile == null ? string.Empty : request.SignatureFile.Name;
+            user.Photo = request.ProfilePhoto == null ? "default-profile-picture.png" : request.ProfilePhoto.FileName;
+            user.Signature = request.SignatureFile == null ? string.Empty : request.SignatureFile.FileName;
             user.Id ??= Guid.NewGuid().ToString("N");
             user.LockoutEnabled = false;
+            user.Jabatan = request.Jabatan;
             var result = await _userManager.CreateAsync(user, request.Password);
 
             await _auditService.Create(new AuditTrailDto()

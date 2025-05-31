@@ -231,6 +231,20 @@
             </div>
             <div class="form-group row">
                 <div class="row col-sm-12">
+                    <label class="col-sm-4">Diskon (%)</label>
+                    <div class="col-sm-3">
+                        <kendo-numerictextbox decimals="2" spinners="false" for="pst_dis" style="width: 100%; background-color: #FFFFE1"/>
+                        <span asp-validation-for="pst_dis" class="text-danger"></span>
+                    </div>
+                    <label class="col-sm-2">Komisi (%)</label>
+                    <div class="col-sm-3">
+                        <kendo-numerictextbox decimals="2" spinners="false" for="pst_kms" style="width: 100%; background-color: #FFFFE1"/>
+                        <span asp-validation-for="pst_kms" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="row col-sm-12">
                     <label class="col-sm-4">Share (%)</label>
                     <div class="col-sm-8">
                         <kendo-numerictextbox decimals="2" spinners="false" for="pst_share" style="width: 100%; background-color: #FFFFE1"/>

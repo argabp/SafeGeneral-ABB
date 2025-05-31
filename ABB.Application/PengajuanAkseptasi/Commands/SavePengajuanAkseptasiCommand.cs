@@ -86,6 +86,10 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
         public string ket_rsk { get; set; }
 
         public DateTime tgl_pengajuan { get; set; }
+
+        public decimal? pst_dis { get; set; }
+        
+        public decimal? pst_kms { get; set; }
         
         public void Mapping(Profile profile)
         {
@@ -97,17 +101,15 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
     {
         private readonly IDbContext _context;
         private readonly IMapper _mapper;
-        private readonly IDbConnection _dbConnection;
         private readonly ILogger<SavePengajuanAkseptasiCommandHandler> _logger;
         private readonly ICurrentUserService _user;
         private readonly IDbConnectionFactory _connectionFactory;
 
-        public SavePengajuanAkseptasiCommandHandler(IDbContext context, IMapper mapper, IDbConnection dbConnection,
+        public SavePengajuanAkseptasiCommandHandler(IDbContext context, IMapper mapper, 
             ILogger<SavePengajuanAkseptasiCommandHandler> logger, ICurrentUserService user, IDbConnectionFactory connectionFactory)
         {
             _context = context;
             _mapper = mapper;
-            _dbConnection = dbConnection;
             _logger = logger;
             _user = user;
             _connectionFactory = connectionFactory;
@@ -188,6 +190,8 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
                     entity.kd_grp_pas5 = request.kd_grp_pas5;
                     entity.kd_rk_pas5 = request.kd_rk_pas5;
                     entity.pst_pas5 = request.pst_pas5;
+                    entity.pst_dis = request.pst_dis;
+                    entity.pst_kms = request.pst_kms;
                 }
 
                 await _context.SaveChangesAsync(cancellationToken);

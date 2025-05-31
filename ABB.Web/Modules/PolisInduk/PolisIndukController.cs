@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ABB.Application.BiayaMaterais.Queries;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Exceptions;
+using ABB.Application.Common.Queries;
 using ABB.Application.KapasitasCabangs.Queries;
 using ABB.Application.PolisInduks.Commands;
 using ABB.Application.PolisInduks.Queries;
@@ -20,14 +21,14 @@ namespace ABB.Web.Modules.PolisInduk
 {
     public class PolisIndukController : AuthorizedBaseController
     {
-        private static List<Domain.Entities.Rekanan> _rekanans;
+        private static List<RekananDto> _rekanans;
 
         public async Task<ActionResult> Index()
         {
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
 
-            _rekanans = await Mediator.Send(new GetKodeRekananQuery()
+            _rekanans = await Mediator.Send(new GetRekanansQuery()
             {
                 DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty
             });

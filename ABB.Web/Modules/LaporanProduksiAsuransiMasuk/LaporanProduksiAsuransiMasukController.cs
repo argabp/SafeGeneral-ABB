@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ABB.Application.Common.Dtos;
+using ABB.Application.Common.Queries;
 using ABB.Application.Common.Services;
 using ABB.Application.KapasitasCabangs.Queries;
 using ABB.Application.LaporanProduksiAsuransiMasuk.Queries;
@@ -19,7 +20,7 @@ namespace ABB.Web.Modules.LaporanProduksiAsuransiMasuk
     public class LaporanProduksiAsuransiMasukController : AuthorizedBaseController
     {
         private readonly IReportGeneratorService _reportGeneratorService;
-        private static List<Domain.Entities.Rekanan> _rekanans;
+        private static List<RekananDto> _rekanans;
 
         public LaporanProduksiAsuransiMasukController(IReportGeneratorService reportGeneratorService)
         {
@@ -28,7 +29,7 @@ namespace ABB.Web.Modules.LaporanProduksiAsuransiMasuk
         
         public async Task<ActionResult> Index()
         {
-            _rekanans = await Mediator.Send(new GetKodeRekananQuery()
+            _rekanans = await Mediator.Send(new GetRekanansQuery()
             {
                 DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty
             });

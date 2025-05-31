@@ -4620,3 +4620,5 @@ C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modul
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\PengajuanAkseptasi\Views\Add.cshtml.g.cs
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\PengajuanAkseptasi\Views\Edit.cshtml.g.cs
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modules\PengajuanAkseptasi\JS\pengajuanAkseptasi.add.js
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modules\PengajuanAkseptasi\JS\pengajuanAkseptasi.view.js
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\PengajuanAkseptasi\Views\Submit.cshtml.g.cs

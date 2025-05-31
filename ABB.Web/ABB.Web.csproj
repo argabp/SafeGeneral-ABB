@@ -5602,6 +5602,12 @@
       <None Update="Modules\PengajuanAkseptasi\JS\pengajuanAkseptasi.view.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\Approval\JS\approval.index.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Approval\JS\approval.edit.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
