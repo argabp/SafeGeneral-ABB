@@ -17,6 +17,7 @@ namespace ABB.Web.Modules.PeruntukanKendaraan
         {
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
+            ViewBag.UserLogin = CurrentUser.UserId;
             
             return View();
         }

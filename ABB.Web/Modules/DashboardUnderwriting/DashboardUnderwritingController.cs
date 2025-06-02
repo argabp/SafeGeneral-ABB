@@ -11,6 +11,7 @@ namespace ABB.Web.Modules.DashboardUnderwriting
         {
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
+            ViewBag.UserLogin = CurrentUser.UserId;
             
             var model = await Mediator.Send(new GetDashboardUnderwritingQuery()
             {

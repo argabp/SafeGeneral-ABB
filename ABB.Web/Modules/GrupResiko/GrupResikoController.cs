@@ -17,6 +17,7 @@ namespace ABB.Web.Modules.GrupResiko
         {
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
+            ViewBag.UserLogin = CurrentUser.UserId;
             
             return View();
         }

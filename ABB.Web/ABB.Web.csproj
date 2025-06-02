@@ -5608,6 +5608,15 @@
       <None Update="Modules\Approval\JS\approval.edit.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\Reports\Templates\PengajuanAkseptasi.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\PengajuanAkseptasi\JS\pengajuanAkseptasi.submit.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\EmailTemplate\JS\emailTemplate.add.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
@@ -5634,6 +5643,9 @@
       </Content>
       <Content Remove="obj\**" />
       <Content Update="Configs\ReportConfig.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Update="wwwroot\js\notification.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
     </ItemGroup>

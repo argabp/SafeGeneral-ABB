@@ -6,16 +6,19 @@ using ABB.Application.BiayaMaterais.Queries;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Exceptions;
 using ABB.Application.Common.Queries;
+using ABB.Application.Common.Services;
 using ABB.Application.KapasitasCabangs.Queries;
 using ABB.Application.PengajuanAkseptasi.Commands;
 using ABB.Application.PengajuanAkseptasi.Queries;
 using ABB.Application.PolisInduks.Queries;
 using ABB.Application.SebabKejadians.Queries;
 using ABB.Web.Extensions;
+using ABB.Web.Hubs;
 using ABB.Web.Modules.Base;
 using ABB.Web.Modules.PengajuanAkseptasi.Models;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -25,12 +28,15 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
     public class PengajuanAkseptasiController : AuthorizedBaseController
     {
         private readonly IConfiguration _configuration;
+        private readonly IReportGeneratorService _reportGeneratorService;
         private readonly ILogger<PengajuanAkseptasiController> _logger;
         private static List<RekananDto> _rekanans;
 
-        public PengajuanAkseptasiController(IConfiguration configuration, ILogger<PengajuanAkseptasiController> logger)
+        public PengajuanAkseptasiController(IConfiguration configuration, IReportGeneratorService reportGeneratorService,
+            ILogger<PengajuanAkseptasiController> logger)
         {
             _configuration = configuration;
+            _reportGeneratorService = reportGeneratorService;
             _logger = logger;
         }
         
@@ -38,12 +44,12 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
         {
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
+            ViewBag.UserLogin = CurrentUser.UserId;
             
             _rekanans = await Mediator.Send(new GetRekanansQuery()
             {
                 DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty
             });
-            _rekanans = new List<RekananDto>();
             
             return View();
         }
@@ -113,8 +119,13 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
                 var command = Mapper.Map<ApprovalPengajuanAkseptasiCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 var result = await Mediator.Send(command);
+
+                foreach (var notifTo in result.Item2)
+                {
+                    await ApplicationHub.SendPengajuanAkseptasiNotification(notifTo, model.nomor_pengajuan, "Submit");
+                }
                 
-                return Json(new { Result = "OK", Message = result });
+                return Json(new { Result = "OK", Message = result.Item1 });
             }
             catch (Exception e)
             {
@@ -322,6 +333,31 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
             });
 
             return Json(result);
+        }
+        
+        [HttpPost]
+        public async Task<ActionResult> GenerateReport([FromBody] PengajuanAkseptasiModel model)
+        {
+            try
+            {
+                var command = Mapper.Map<GetReportPengajuanAkseptasiQuery>(model);
+                command.DatabaseName = Request.Cookies["DatabaseValue"];
+
+                var sessionId = HttpContext.Session.GetString("SessionId");
+
+                if (string.IsNullOrWhiteSpace(sessionId))
+                    throw new Exception("Session user tidak ditemukan");
+                
+                var reportTemplate = await Mediator.Send(command);
+                
+                _reportGeneratorService.GenerateReport("PengajuanAkseptasi.pdf", reportTemplate, sessionId);
+
+                return Ok(new { Status = "OK", Data = sessionId});
+            }
+            catch (Exception e)
+            {
+                return Ok( new { Status = "ERROR", Message = e.InnerException == null ? e.Message : e.InnerException.Message});
+            }
         }
     }
 }

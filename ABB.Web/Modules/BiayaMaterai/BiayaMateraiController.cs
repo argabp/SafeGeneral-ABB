@@ -19,6 +19,7 @@ namespace ABB.Web.Modules.BiayaMaterai
         {
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
+            ViewBag.UserLogin = CurrentUser.UserId;
             
             return View();
         }

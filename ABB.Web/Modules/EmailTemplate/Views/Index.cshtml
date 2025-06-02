@@ -1,0 +1,77 @@
+﻿@using Kendo.Mvc.UI
+@using ABB.Application.EmailTemplates.Queries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Email Template";
+}
+
+<script src="~/Modules/EmailTemplate/JS/emailTemplate.index.js"></script>
+<script src="~/Modules/EmailTemplate/JS/emailTemplate.form.js"></script>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-10">
+            Email Template
+        </div>
+        <div class="col-md-2">
+            <button class="flat-btn-primary" id="btnAddEmailTemplate"><span class='fa fa-plus'></span> Add</button>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        @(Html.Kendo().Grid<EmailTemplateDto>()
+        .Name("EmailTemplateGrid")
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetEmailTemplates", "EmailTemplate"))
+        )
+        .Columns(columns =>
+        {
+            columns.Bound(col => col.Id).Width(100).Title("Id");
+            columns.Bound(col => col.Name).Title("Nama");
+            columns.Command(command =>
+            {
+                command.Custom("Edit")
+                        .Text(" ")
+                        .IconClass("fa fa-pencil-alt")
+                        .HtmlAttributes(new { title="Edit"})
+                        .Click("btnEditEmailTemplate_OnClick");
+                command.Custom("Delete")
+                        .Text(" ")
+                        .IconClass("fa fa-trash")
+                        .HtmlAttributes(new { title="Delete"})
+                        .Click("btnDeleteEmailTemplate_OnClick");
+        
+            }).Title("Action").Width(150);
+        })
+        .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                    )
+        .Sortable()
+        
+        .Filterable()
+        .Scrollable()
+        .Height(400)
+        .Resizable(a=>a.Columns(true))
+        .Events(ev => ev.DataBound("gridAutoFit"))
+        
+            )
+
+        @(Html.Kendo().Window()
+            .Name("EmailTemplateWindow")
+            .Title("Email Template Page")
+            .Width(600)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+    </div>
+</div>
+

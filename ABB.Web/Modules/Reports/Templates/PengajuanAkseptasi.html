@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RESUME PENGAJUAN AKSEPTASI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .header {
+            text-align: center;
+            font-weight: bold;
+        }
+        .form-title {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-decoration: underline;
+        }
+        .form-number {
+            text-align: center;
+        }
+        table {
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        .section-title {
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            background-color: #f0f0f0;
+            border-bottom: 3px solid black;
+            border-top: 3px solid black;
+            padding-left: 8px;
+        }
+        .signature-section {
+            margin-top: 50px;
+            margin-right: 5%;
+            margin-left: 5%;
+        }
+        .signature-line {
+            display: inline-block;
+            width: 200px;
+            border-top: 1px solid black;
+            margin-right: 50px;
+            margin-top: 60px;
+        }
+        .signature-label {
+            display: inline-block;
+            width: 200px;
+            margin-right: 50px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body style="border: 3px solid black">
+<div style="background-color: #f0f0f0; border-bottom: 3px solid black">
+    <div class="header">
+        RESUME PENGAJUAN AKSEPTASI
+    </div>
+    <div class="form-number">
+        {{nomor_pengajuan}}
+    </div>
+</div>
+
+<table style="border: none">
+    <tr>
+        <td>CABANG</td>
+        <td>:</td>
+        <td>{{nm_cb}}</td>
+        <td>PERIODE AWAL</td>
+        <td>:</td>
+        <td>{{tgl_mul_ptg}}</td>
+    </tr>
+    <tr>
+        <td>COB</td>
+        <td>:</td>
+        <td>{{nm_cob}}</td>
+        <td>PERIODE AKHIR</td>
+        <td>:</td>
+        <td>{{tgl_akh_ptg}}</td>
+    </tr>
+    <tr>
+        <td>SCOB</td>
+        <td>:</td>
+        <td>{{nm_scob}}</td>
+        <td>NILAI PERTANGGUNGAN</td>
+        <td>:</td>
+        <td>{{symbol}} {{nilai_pertanggungan}}</td>
+    </tr>
+    <tr>
+        <td>MARKETING</td>
+        <td>:</td>
+        <td>{{nm_mkt}}</td>
+        <td>DISKON (%)</td>
+        <td>:</td>
+        <td>{{pst_dis}} %</td>
+    </tr>
+    <tr>
+        <td>SUMBER BISNIS</td>
+        <td>:</td>
+        <td>{{nm_sb_bis}}</td>
+        <td>KOMISI (%)</td>
+        <td>:</td>
+        <td>{{pst_kms}} %</td>
+    </tr>
+    <tr>
+        <td>TERTANGGUNG</td>
+        <td>:</td>
+        <td>{{nm_ttg}}</td>
+        <td>STATUS POLIS</td>
+        <td>:</td>
+        <td>{{st_pas}}</td>
+    </tr>
+    <tr>
+        <td>TANGGAL PENGAJUAN</td>
+        <td>:</td>
+        <td>{{tgl_pengajuan}}</td>
+        <td>SHARE</td>
+        <td>:</td>
+        <td>{{pst_share}}</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>NO POLIS CEDING</td>
+        <td>:</td>
+        <td>{{no_pol_pas}}</td>
+    </tr>
+</table>
+
+<div style="padding-left: 8px">LEADER/MEMBER PERUSAHAAN ASURANSI :</div>
+<table style="border: 1px solid black; width: 60%; margin-left: 8px">
+    <tr  style="border: 1px solid black">
+        <th style="border: 1px solid black">No</th>
+        <th style="border: 1px solid black">Nama Perusahaan</th>
+        <th style="border: 1px solid black">Share</th>
+    </tr>
+    <tr style="border: 1px solid black">
+        <td style="border: 1px solid black">1</td>
+        <td style="border: 1px solid black">{{nm_pas1}}</td>
+        <td style="border: 1px solid black">{{pst_pas1}} %</td>
+    </tr>
+    <tr style="border: 1px solid black">
+        <td style="border: 1px solid black">2</td>
+        <td style="border: 1px solid black">{{nm_pas2}}</td>
+        <td style="border: 1px solid black">{{pst_pas2}} %</td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black">3</td>
+        <td style="border: 1px solid black">{{nm_pas3}}</td>
+        <td style="border: 1px solid black">{{pst_pas3}} %</td>
+    </tr>
+    <tr style="border: 1px solid black">
+        <td style="border: 1px solid black">4</td>
+        <td style="border: 1px solid black">{{nm_pas4}}</td>
+        <td style="border: 1px solid black">{{pst_pas4}} %</td>
+    </tr>
+    <tr style="border: 1px solid black">
+        <td style="border: 1px solid black">5</td>
+        <td style="border: 1px solid black">{{nm_pas5}}</td>
+        <td style="border: 1px solid black">{{pst_pas5}} %</td>
+    </tr>
+</table>
+
+<div class="section-title">KETERANGAN RESIKO :</div>
+<div style="padding-left: 8px">{{ket_rsk}}</div>
+
+<div style="margin: 40px 5% 0 5%;">
+    <table border="1" cellspacing="0" cellpadding="0" width="100%" style="border-collapse: collapse;">
+        <tr>
+            <td width="30%" style="padding: 0; border: 1px solid black; vertical-align: top;">
+                <div style="background-color: #f0f0f0; text-align: center; padding: 8px 0; margin: 0; border-bottom: 1px solid black;">
+                    <strong>DIBUAT</strong>
+                </div>
+                <div style="padding: 10px; text-align: center;">
+                    <div style="margin: 20px 0; height: 80px; display: flex; align-items: flex-end; justify-content: center;">
+                        {{signature1}}
+                    </div>
+                    <div>{{jabatan_dibuat}}</div>
+                    <div>{{nm_dibuat}}</div>
+                    <div>{{tgl_dibuat}}</div>
+                </div>
+            </td>
+            <td width="30%" style="padding: 0; border: 1px solid black; vertical-align: top;">
+                <div style="background-color: #f0f0f0; text-align: center; padding: 8px 0; margin: 0; border-bottom: 1px solid black;">
+                    <strong>DIPERIKSA</strong>
+                </div>
+                <div style="padding: 10px; text-align: center;">
+                    <div style="margin: 20px 0; height: 80px; display: flex; align-items: flex-end; justify-content: center;">
+                        {{signature2}}
+                    </div>
+                    <div>{{jabatan_diperiksa}}</div>
+                    <div>{{nm_diperiksa}}</div>
+                    <div>{{tgl_diperiksa}}</div>
+                </div>
+            </td>
+            <td width="30%" style="padding: 0; border: 1px solid black; vertical-align: top;">
+                <div style="background-color: #f0f0f0; text-align: center; padding: 8px 0; margin: 0; border-bottom: 1px solid black;">
+                    <strong>DISETUJUI</strong>
+                </div>
+                <div style="padding: 10px; text-align: center;">
+                    <div style="margin: 20px 0; height: 80px; display: flex; align-items: flex-end; justify-content: center;">
+                        {{signature3}}
+                    </div>
+                    <div>{{jabatan_disetujui}}</div>
+                    <div>{{nm_disetujui}}</div>
+                    <div>{{tgl_disetujui}}</div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

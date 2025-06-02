@@ -24,12 +24,6 @@
          .Columns(columns =>
          {
              columns.Bound(col => col.Id).Hidden();
-             columns.Bound(col => col.kd_cb).Title("Kode Cabang");
-             columns.Bound(col => col.kd_cob).Title("Kode COB");
-             columns.Bound(col => col.kd_scob).Title("Kode Sub COB");
-             columns.Bound(col => col.kd_thn).Title("Kode Tahun");
-             columns.Bound(col => col.no_urut).Title("No Urut");
-             columns.Bound(col => col.no_aks).Title("No Akseptasi");
              columns.Bound(col => col.tgl_status).Title("Tanggal Status").Format("{0:dd MMM yyyy • HH:mm}");
              columns.Bound(col => col.nm_status).Title("Nama User");
              columns.Bound(col => col.ket_status).Title("Keterangan Status");

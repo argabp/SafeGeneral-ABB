@@ -1,5 +1,6 @@
 using ABB.Application.Common.Services;
 using ABB.Web.Filters;
+using ABB.Web.Hubs;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -16,5 +17,6 @@ namespace ABB.Web.Modules.Base
         protected ISender Mediator => _mediator ??= HttpContext.RequestServices.GetService<ISender>();
         protected IMapper Mapper => _mapper ??= HttpContext.RequestServices.GetService<IMapper>();
         protected ICurrentUserService CurrentUser => HttpContext.RequestServices.GetService<ICurrentUserService>();
+        protected ApplicationHub ApplicationHub =>  HttpContext.RequestServices.GetService<ApplicationHub>();
     }
 }

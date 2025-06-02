@@ -28,6 +28,7 @@ namespace ABB.Web.Modules.LaporanBulananRekap
         {
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
+            ViewBag.UserLogin = CurrentUser.UserId;
             
             return View(new LaporanBulananRekapViewModel());
         }

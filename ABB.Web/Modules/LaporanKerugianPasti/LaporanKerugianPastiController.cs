@@ -32,6 +32,7 @@ namespace ABB.Web.Modules.LaporanKerugianPasti
             
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
+            ViewBag.UserLogin = CurrentUser.UserId;
 
             return View();
         }

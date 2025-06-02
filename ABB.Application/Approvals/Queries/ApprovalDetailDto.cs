@@ -27,6 +27,8 @@ namespace ABB.Application.Approvals.Queries
 
         public Int16 sla { get; set; }
 
+        public string nm_status { get; set; }
+
         public void Mapping(Profile profile)
         {
             profile.CreateMap<ApprovalDetail, ApprovalDetailDto>();

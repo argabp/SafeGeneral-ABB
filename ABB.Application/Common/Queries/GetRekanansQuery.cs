@@ -35,7 +35,7 @@ namespace ABB.Application.Common.Queries
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
                 
-                return (await _connectionFactory.Query<RekananDto>("SELECT TOP 1000 kd_cb, kd_grp_rk, kd_rk, nm_rk FROM rf03")).ToList();
+                return (await _connectionFactory.Query<RekananDto>("SELECT kd_cb, kd_grp_rk, kd_rk, nm_rk FROM rf03")).ToList();
             }
             catch (Exception ex)
             {

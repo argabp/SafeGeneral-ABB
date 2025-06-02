@@ -27,6 +27,7 @@ namespace ABB.Web.Modules.PenyelesaianKlaim
         {
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
+            ViewBag.UserLogin = CurrentUser.UserId;
             
             return View(new PenyelesaianKlaimViewModel());
         }

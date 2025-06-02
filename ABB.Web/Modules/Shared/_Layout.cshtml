@@ -23,8 +23,6 @@
     <link rel="stylesheet" href="~/plugins/kendo/styles/kendo.office365.min.css">
     <link rel="stylesheet" href="~/plugins/kendo/styles/kendo.common-office365.min.css">
     <link rel="stylesheet" href="~/css/bootstrap-layout.css">
-    <!-- Toastr -->
-    <link rel="stylesheet" href="~/plugins/toastr/toastr.min.css">
 
     @await RenderSectionAsync("_Style", false)
     
@@ -98,6 +96,13 @@
         </section>
         <!-- /.content -->
     </div>
+
+    <audio id="notificationAudio" hidden>
+        <source src="~/sounds/notification.wav" type="audio/wav" allow="autoplay" />
+    </audio>
+    <div id="toastsContainerTopRight" class="toasts-top-right fixed"></div>
+    <input type="hidden" id="UserLogin" value="@ViewBag.UserLogin">
+    <input type="hidden" id="RoleLogin" value="@ViewBag.RoleLogin">
 
     @* <partial name="_Footer" /> *@
     @await Html.PartialAsync("~/Modules/Shared/_Footer.cshtml")

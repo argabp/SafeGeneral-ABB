@@ -22,6 +22,7 @@ namespace ABB.Web.Modules.Rekanan
         {
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
+            ViewBag.UserLogin = CurrentUser.UserId;
             
             ViewBag.bentukflag =  new List<IInputGroupItem>()
             {

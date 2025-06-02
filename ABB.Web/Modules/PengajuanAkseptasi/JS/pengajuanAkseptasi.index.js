@@ -47,5 +47,25 @@ function OnClickSubmitPengajuanAkseptasi(e) {
 }
 
 function OnClickPrintPengajuanAkseptasi(e) {
+    showProgressOnGrid('#PengajuanAkseptasiGrid');
+    dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     
+    var data = {
+        kd_cb: dataItem.kd_cb,
+        kd_cob: dataItem.kd_cob,
+        kd_scob: dataItem.kd_scob,
+        kd_thn: dataItem.kd_thn,
+        no_aks: dataItem.no_aks,
+    }
+    
+    ajaxPost("/PengajuanAkseptasi/GenerateReport", JSON.stringify(data),
+        function (response) {
+            if(response.Status === "OK"){
+                window.open("/Reports/" + response.Data + "/PengajuanAkseptasi.pdf",  '_blank');
+            } else {
+                showMessage('Error', response.Message);
+            }
+            closeProgressOnGrid('#PengajuanAkseptasiGrid');
+        },
+    );
 }

@@ -109,7 +109,7 @@ function initLampiranPengajuanAkseptasiGrid() {
                 editor: uploadEditor,
                 template: function (dataItem) {
                     var nomor_pengajuan = $("#nomor_pengajuan").val();
-                    return `<a href="/pengajuan-akseptasi-attachment/${nomor_pengajuan}/${dataItem.nm_dokumen}" target="_blank">${dataItem.nm_dokumen}</a>`
+                    return `<a href="/pengajuan-akseptasi-attachment/${nomor_pengajuan.replaceAll("/", "")}/${dataItem.nm_dokumen}" target="_blank">${dataItem.nm_dokumen}</a>`
                 },
                 width: "450px"
             }

@@ -93,6 +93,8 @@ namespace ABB.Application.Common.Interfaces
         DbSet<TRAkseptasiStatusAttachment> TRAkseptasiStatusAttachment { get; set; }
         DbSet<Approval> Approval { get; set; }
         DbSet<ApprovalDetail> ApprovalDetail { get; set; }
+        DbSet<EmailTemplate> EmailTemplate { get; set; }
+        DbSet<ViewTRAkseptasi> ViewTRAkseptasi { get; set; }
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);

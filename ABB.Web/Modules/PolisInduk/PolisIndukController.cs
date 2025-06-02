@@ -27,6 +27,7 @@ namespace ABB.Web.Modules.PolisInduk
         {
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
+            ViewBag.UserLogin = CurrentUser.UserId;
 
             _rekanans = await Mediator.Send(new GetRekanansQuery()
             {

@@ -103,6 +103,8 @@ namespace ABB.Infrastructure.Data
         public DbSet<TRAkseptasiStatusAttachment> TRAkseptasiStatusAttachment { get; set; }
         public DbSet<Approval> Approval { get; set; }
         public DbSet<ApprovalDetail> ApprovalDetail { get; set; }
+        public DbSet<EmailTemplate> EmailTemplate { get; set; }
+        public DbSet<ViewTRAkseptasi> ViewTRAkseptasi { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -199,6 +201,8 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new TRAkseptasiAttachmentMap());
             builder.ApplyConfiguration(new ApprovalMap());
             builder.ApplyConfiguration(new ApprovalDetailMap());
+            builder.ApplyConfiguration(new EmailTemplateMap());
+            builder.ApplyConfiguration(new ViewTRAkseptasiMap());
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

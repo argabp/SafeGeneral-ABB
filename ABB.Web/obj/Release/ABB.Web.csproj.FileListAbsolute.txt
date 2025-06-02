@@ -4622,3 +4622,17 @@ C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modules\PengajuanAkseptasi\JS\pengajuanAkseptasi.add.js
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modules\PengajuanAkseptasi\JS\pengajuanAkseptasi.view.js
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\PengajuanAkseptasi\Views\Submit.cshtml.g.cs
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\wwwroot\js\notification.js
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modules\Approval\JS\approval.edit.js
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modules\Approval\JS\approval.index.js
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modules\PengajuanAkseptasi\JS\pengajuanAkseptasi.submit.js
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modules\Reports\Templates\PengajuanAkseptasi.html
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\Approval\Views\Add.cshtml.g.cs
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\Approval\Views\AddDetail.cshtml.g.cs
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\Approval\Views\Edit.cshtml.g.cs
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\Approval\Views\EditDetail.cshtml.g.cs
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\Approval\Views\Index.cshtml.g.cs
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\EmailTemplate\Views\Add.cshtml.g.cs
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\EmailTemplate\Views\Edit.cshtml.g.cs
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\EmailTemplate\Views\Index.cshtml.g.cs
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modules\EmailTemplate\JS\emailTemplate.add.js

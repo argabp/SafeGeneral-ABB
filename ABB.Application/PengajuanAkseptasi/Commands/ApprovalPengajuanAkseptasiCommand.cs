@@ -13,7 +13,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace ABB.Application.PengajuanAkseptasi.Commands
 {
-    public class ApprovalPengajuanAkseptasiCommand : IRequest<string>
+    public class ApprovalPengajuanAkseptasiCommand : IRequest<(string, List<string>)>
     {
         public string DatabaseName { get; set; }
         public string kd_cb { get; set; }
@@ -29,28 +29,36 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
         public List<IFormFile> Files { get; set; }
     }
 
-    public class ApprovalPengajuanAkseptasiCommandHandler : IRequestHandler<ApprovalPengajuanAkseptasiCommand, string>
+    public class ApprovalPengajuanAkseptasiCommandHandler : IRequestHandler<ApprovalPengajuanAkseptasiCommand, (string, List<string>)>
     {
         private readonly IDbConnectionFactory _connectionFactory;
         private readonly IDbConnection _dbConnection;
         private readonly IConfiguration _configuration;
         private readonly IProfilePictureHelper _pictureHelper;
         private readonly ICurrentUserService _userService;
+        private readonly IEmailService _emailService;
+        private readonly IDbContextFactory _dbContextFactory;
+        private readonly IDbContext _dbContext;
 
         public ApprovalPengajuanAkseptasiCommandHandler(IDbConnectionFactory connectionFactory, IDbConnection dbConnection,
-            IConfiguration configuration, IProfilePictureHelper pictureHelper, ICurrentUserService userService)
+            IConfiguration configuration, IProfilePictureHelper pictureHelper, ICurrentUserService userService, 
+            IEmailService emailService, IDbContextFactory dbContextFactory, IDbContext dbContext)
         {
             _connectionFactory = connectionFactory;
             _dbConnection = dbConnection;
             _configuration = configuration;
             _pictureHelper = pictureHelper;
             _userService = userService;
+            _emailService = emailService;
+            _dbContextFactory = dbContextFactory;
+            _dbContext = dbContext;
         }
 
-        public async Task<string> Handle(ApprovalPengajuanAkseptasiCommand request, CancellationToken cancellationToken)
+        public async Task<(string, List<string>)> Handle(ApprovalPengajuanAkseptasiCommand request, CancellationToken cancellationToken)
         {
             _connectionFactory.CreateDbConnection(request.DatabaseName);
             var message = string.Empty;
+            var userIds = new List<string>();
             try
             {
                 message = (await _dbConnection.QueryProc<string>("sp_ApprovalPengajuanAks",
@@ -62,9 +70,9 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
                     })).First();
 
                 var no_urut = ( await _dbConnection.Query<string>($@"SELECT no_urut FROM TR_AkseptasiStatus WHERE 
-                                                                                kd_cb = {request.kd_cb} AND kd_cob = {request.kd_cob} 
-                                                                                AND kd_scob = {request.kd_scob} AND kd_thn = {request.kd_thn} AND
-                                                                                kd_thn = {request.kd_thn} Order by no_urut desc")).First();
+                                                                                kd_cb = '{request.kd_cb}' AND kd_cob = '{request.kd_cob}' 
+                                                                                AND kd_scob = '{request.kd_scob}' AND kd_thn = '{request.kd_thn}' AND
+                                                                                no_aks = '{request.no_aks}' Order by no_urut desc")).First();
                 
                 var path = _configuration.GetSection("PengajuanAkseptasiStatusAttachment").Value.TrimEnd('/');
                 var pengajuan = $@"{request.kd_cb.Trim()}{request.kd_cob.Trim()}{request.kd_scob.Trim()}{request.kd_thn}{request.no_aks}{no_urut}";
@@ -74,6 +82,27 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
                 {
                     await _pictureHelper.UploadToFolder(file, path);
                 }
+
+                var dbContext = _dbContextFactory.CreateDbContext(request.DatabaseName);
+
+                var viewAkseptasi = dbContext.ViewTRAkseptasi.FirstOrDefault(w => w.kd_cb == request.kd_cb &&
+                                                                              w.kd_cob == request.kd_cob &&
+                                                                              w.kd_scob == request.kd_scob &&
+                                                                              w.kd_thn == request.kd_thn &&
+                                                                              w.no_aks == request.no_aks);
+
+                userIds = dbContext.TRAkseptasiStatus.Where(w => w.kd_cb == request.kd_cb &&
+                                                                    w.kd_cob == request.kd_cob &&
+                                                                    w.kd_scob == request.kd_scob &&
+                                                                    w.kd_thn == request.kd_thn &&
+                                                                    w.no_aks == request.no_aks)
+                    .Select(s => s.kd_user_sign).ToList();
+                
+                userIds.Add(viewAkseptasi.kd_user_input);
+
+                var emailSends = _dbContext.User.Where(w => userIds.Distinct().Contains(w.Id)).Select(s => s.Email).ToList();
+
+                await _emailService.SendApprovalEmail(emailSends, viewAkseptasi);
             }
             catch (Exception e)
             {
@@ -81,7 +110,7 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
                 throw;
             }
 
-            return message;
+            return (message, userIds.Distinct().ToList());
         }
     }
 }

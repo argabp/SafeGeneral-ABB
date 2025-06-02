@@ -7,6 +7,7 @@ using ABB.Domain.Models;
 using ABB.Infrastructure;
 using ABB.Infrastructure.Services;
 using ABB.Web.Extensions;
+using ABB.Web.Hubs;
 using ABB.Web.Middleware;
 using ABB.Web.Models;
 using DinkToPdf;
@@ -83,6 +84,7 @@ namespace ABB.Web
             });
             // services.AddScoped<ICustomerServices, CustomerServices>();
             services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+            services.AddSingleton<ApplicationHub>();
             services.Configure<IISServerOptions>(options => { options.MaxRequestBodySize = int.MaxValue; });
             services.Configure<FormOptions>(x =>
             {
@@ -125,6 +127,7 @@ namespace ABB.Web
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}");
+                endpoints.MapHub<ApplicationHub>("/applicationHub");
             });
             initial.Execute().GetAwaiter().GetResult();
         }

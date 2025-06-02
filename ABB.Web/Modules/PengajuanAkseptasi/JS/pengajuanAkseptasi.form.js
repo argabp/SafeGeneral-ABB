@@ -3,8 +3,26 @@
 $(document).ready(function () {
     $('#PengajuanAkseptasiTab').kendoTabStrip();
 
+    showProgress('#PengajuanAkseptasiWindow');
+    
     var tabstrip = $('#PengajuanAkseptasiTab').data("kendoTabStrip");
     tabstrip.select(0);
+    
+    setTimeout(() => {
+        $("#ket_rsk").kendoEditor({
+            tools: [
+                "bold", "italic", "underline",
+                "justifyLeft", "justifyCenter", "justifyRight",
+                "insertUnorderedList", "insertOrderedList",
+                "outdent", "indent",
+                "createLink", "unlink",
+                "insertImage", "tableWizard",
+                "fontName", "fontSize", "foreColor", "backColor"
+            ],
+            // other configuration as needed
+        });
+        closeProgress('#PengajuanAkseptasiWindow');
+    }, 2000)
 });
 
 

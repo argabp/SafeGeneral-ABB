@@ -111,6 +111,7 @@ function setPengajuanAkseptasiModel(model){
 
 function savePengajuanAkseptasi(url) {
     var form = getFormData($('#PengajuanAkseptasiForm'));
+    form.ket_rsk = $("#ket_rsk").getKendoEditor().value();
     var data = JSON.stringify(form);
     ajaxPost(url,  data,
         function (response) {
@@ -209,7 +210,7 @@ function OnKodeSCOBChange(e){
     $("#temp_kd_scob").val(value);
     ajaxGet(`/PengajuanAkseptasi/GenerateKeteranganResiko?kd_cob=${$("#temp_kd_cob").val()}&kd_scob=${value}`,
         function (response) {
-            $("#ket_rsk").getKendoTextArea().value(response);
+            $("#ket_rsk").getKendoEditor().value(response);
         }
     );
 }

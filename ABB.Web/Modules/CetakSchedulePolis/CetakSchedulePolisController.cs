@@ -29,6 +29,7 @@ namespace ABB.Web.Modules.CetakSchedulePolis
         {
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
+            ViewBag.UserLogin = CurrentUser.UserId;
 
             ViewBag.JenisLaporan = new List<DropdownOptionDto>()
             {
