@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ABB.Application.Common;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Exceptions;
 using ABB.Application.KategoriJenisKendaraans.Queries;
@@ -56,7 +57,7 @@ namespace ABB.Web.Modules.PlatNomorKendaraan
                 var command = Mapper.Map<SavePlatNomorKendaraanCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Plat Nomor Kendaraan"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -81,7 +82,7 @@ namespace ABB.Web.Modules.PlatNomorKendaraan
                     DatabaseName = Request.Cookies["DatabaseValue"]
                 };
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Plat Nomor Kendaraan"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)

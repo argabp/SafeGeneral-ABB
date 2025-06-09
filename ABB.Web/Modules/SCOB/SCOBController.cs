@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using ABB.Application.Common;
 using ABB.Application.Common.Exceptions;
 using ABB.Application.SCOBs.Commands;
 using ABB.Application.SCOBs.Queries;
@@ -48,7 +49,7 @@ namespace ABB.Web.Modules.SCOB
                 var command = Mapper.Map<AddSCOBCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Add SCOB" });
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan });
             }
             catch (ValidationException ex)
             {
@@ -81,7 +82,7 @@ namespace ABB.Web.Modules.SCOB
                 var command = Mapper.Map<EditSCOBCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Edit SCOB" });
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan });
             }
             catch (ValidationException ex)
             {
@@ -103,7 +104,7 @@ namespace ABB.Web.Modules.SCOB
                     DatabaseName = Request.Cookies["DatabaseValue"]
                 });
 
-                return Json(new { Result = true, Message = "Successfully Delete SCOB" });
+                return Json(new { Result = true, Message = Constant.DataDisimpan });
             }
             catch (Exception ex)
             {

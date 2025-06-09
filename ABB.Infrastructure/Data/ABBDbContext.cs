@@ -105,6 +105,7 @@ namespace ABB.Infrastructure.Data
         public DbSet<ApprovalDetail> ApprovalDetail { get; set; }
         public DbSet<EmailTemplate> EmailTemplate { get; set; }
         public DbSet<ViewTRAkseptasi> ViewTRAkseptasi { get; set; }
+        public DbSet<AkseptasiProduk> AkseptasiProduk { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -203,6 +204,7 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new ApprovalDetailMap());
             builder.ApplyConfiguration(new EmailTemplateMap());
             builder.ApplyConfiguration(new ViewTRAkseptasiMap());
+            builder.ApplyConfiguration(new AkseptasiProdukMap());
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

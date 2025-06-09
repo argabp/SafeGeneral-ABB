@@ -29,19 +29,19 @@ namespace ABB.Application.DashboardUnderwriting.Queries
         {
             var urls = new Dictionary<string, string>();
             
-            urls.Add("New", "/PengaduanMasalah/SubmitView");
-            urls.Add("Submitted", "/PengaduanMasalah/SubmitView");
-            urls.Add("Checked", "/PengaduanMasalah/ConfirmView");
-            urls.Add("Escalated", "/PengaduanMasalah/WaitingView");
-            urls.Add("Approved", "/PengaduanMasalah/ResponseView");
-            urls.Add("Rejected", "/PengaduanMasalah/ProcessView");
-            urls.Add("Revised", "/PengaduanMasalah/CheckinView");
-            urls.Add("Canceled", "/PengaduanMasalah/ReopenView");
+            urls.Add("New", "/PengajuanAkseptasi/Index?");
+            urls.Add("Submited", "/PengajuanAkseptasi/Index?");
+            urls.Add("Checked", "/PengajuanAkseptasi/Index?");
+            urls.Add("Escalated", "/PengajuanAkseptasi/Index?");
+            urls.Add("Approved", "/PengajuanAkseptasi/Index?");
+            urls.Add("Rejected", "/PengajuanAkseptasi/Index?");
+            urls.Add("Revised", "/PengajuanAkseptasi/Index?");
+            urls.Add("Canceled", "/PengajuanAkseptasi/Index?");
             
             var icons = new Dictionary<string, string>();
             
             icons.Add("New", "fa-plus-circle");
-            icons.Add("Submitted", "fa-location-arrow");
+            icons.Add("Submited", "fa-location-arrow");
             icons.Add("Checked", "fa-check-square");
             icons.Add("Escalated", "fa-hand-paper");
             icons.Add("Approved", "fa-child");

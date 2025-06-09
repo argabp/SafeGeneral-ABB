@@ -43,7 +43,7 @@ namespace ABB.Web.Modules.BiayaMaterai
                 var command = Mapper.Map<SaveBiayaMateraiCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Biaya Materai"});
+                return Json(new { Result = "OK", Message = "Data Berhasil Disimpan"});
             }
             catch (ValidationException ex)
             {
@@ -68,7 +68,7 @@ namespace ABB.Web.Modules.BiayaMaterai
                     DatabaseName = Request.Cookies["DatabaseValue"]
                 };
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Biaya Materai"});
+                return Json(new { Result = "OK", Message = "Data Berhasil Disimpan"});
 
             }
             catch (Exception ex)

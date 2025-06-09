@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ABB.Application.Common;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Exceptions;
 using ABB.Application.Rekanans.Commands;
@@ -69,7 +70,7 @@ namespace ABB.Web.Modules.TertanggungPrincipal
                 var command = Mapper.Map<SaveTertanggungPrincipalCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty;
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Tertanggung & Principal"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -93,7 +94,7 @@ namespace ABB.Web.Modules.TertanggungPrincipal
                 var command = Mapper.Map<DeleteTertanggungPrincipalCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Tertanggung & Principal"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)
@@ -110,7 +111,7 @@ namespace ABB.Web.Modules.TertanggungPrincipal
                 var command = Mapper.Map<SaveDetailTertanggungPrincipalCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Detail Tertanggung & Principal"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)
@@ -127,7 +128,7 @@ namespace ABB.Web.Modules.TertanggungPrincipal
                 var command = Mapper.Map<DeleteDetailTertanggungPrincipalCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Detail Tertanggung & Principal"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {

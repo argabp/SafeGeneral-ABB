@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using ABB.Application.Common;
 using ABB.Application.KapasitasCabangs.Queries;
 using ABB.Application.NomorRegistrasiPolis.Commands;
 using ABB.Application.NomorRegistrasiPolis.Queries;
@@ -67,7 +68,7 @@ namespace ABB.Web.Modules.NomorRegistrasiPolis
                 var command = Mapper.Map<SaveNomorRegistrasiPolisCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Nota"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {

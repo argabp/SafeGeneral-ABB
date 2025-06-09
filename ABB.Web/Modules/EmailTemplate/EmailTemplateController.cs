@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using ABB.Application.Common;
 using ABB.Application.Common.Exceptions;
 using ABB.Application.EmailTemplates.Commands;
 using ABB.Application.EmailTemplates.Queries;
@@ -46,7 +47,7 @@ namespace ABB.Web.Modules.EmailTemplate
                 var command = Mapper.Map<AddEmailTemplateCommand>(model);
                 await Mediator.Send(command);
 
-                return Json(new { Result = "OK", Message = "Successfully Add Email Template" });
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan });
             }
             catch (ValidationException ex)
             {
@@ -79,7 +80,7 @@ namespace ABB.Web.Modules.EmailTemplate
                 var commnad = Mapper.Map<EditEmailTemplateCommand>(model);
                 await Mediator.Send(commnad);
                 
-                return Json(new { Result = "OK", Message = "Successfully Edit Email Template" });
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan });
             }
             catch (ValidationException ex)
             {
@@ -101,7 +102,7 @@ namespace ABB.Web.Modules.EmailTemplate
             {
                 await Mediator.Send(new DeleteEmailTemplateCommand() { Id = id });
                 
-                return Json(new { Result = "OK", Message = "Successfully Delete Email Template`"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception e)
             {

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using ABB.Application.Common;
 using ABB.Application.Common.Exceptions;
 using ABB.Application.Users.Commands;
 using ABB.Application.Users.Queries;
@@ -63,7 +64,7 @@ namespace ABB.Web.Modules.User
                 command.UserName = command.UserName?.ToLower();
                 await Mediator.Send(command);
 
-                return Json(new { Result = "OK", Message = "Successfully Add User" });
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan });
             }
             catch (ValidationException ex)
             {
@@ -94,7 +95,7 @@ namespace ABB.Web.Modules.User
                 var command = Mapper.Map<EditUserCommand>(model);
                 command.UpdatedBy = CurrentUser.UserId;
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Edit User" });
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan });
             }
             catch (ValidationException ex)
             {
@@ -123,7 +124,7 @@ namespace ABB.Web.Modules.User
                 var command = Mapper.Map<ChangePasswordCommand>(model);
                 command.UpdatedBy = CurrentUser.UserId;
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Change Password" });
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan });
             }
             catch (ValidationException ex)
             {
@@ -135,7 +136,7 @@ namespace ABB.Web.Modules.User
         public async Task<IActionResult> Delete(string id)
         {
             await Mediator.Send(new DeleteUserCommand() { Id = id });
-            return Json(new { Result = "OK", Message = "Successfully Delete User" });
+            return Json(new { Result = "OK", Message = Constant.DataDisimpan });
         }
     }
 }

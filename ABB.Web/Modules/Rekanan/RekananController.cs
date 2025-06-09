@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ABB.Application.Common;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Exceptions;
 using ABB.Application.Rekanans.Commands;
@@ -65,7 +66,7 @@ namespace ABB.Web.Modules.Rekanan
             {
                 var command = Mapper.Map<SaveRekananCommand>(model);
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Rekanan"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -89,7 +90,7 @@ namespace ABB.Web.Modules.Rekanan
                 var command = Mapper.Map<DeleteRekananCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Rekanan"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)
@@ -106,7 +107,7 @@ namespace ABB.Web.Modules.Rekanan
                 var command = Mapper.Map<SaveDetailRekananCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Detail Rekanan"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)
@@ -123,7 +124,7 @@ namespace ABB.Web.Modules.Rekanan
                 var command = Mapper.Map<DeleteDetailRekananCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Detail Rekanan"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {

@@ -64,9 +64,14 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
             var wwwroot = Path.Combine(_hostEnvironment.ContentRootPath, "wwwroot");
             var path = _configuration.GetSection("UserSignature").Value.TrimEnd('/').TrimStart('/');
 
-            var signature1 = ConvertImageToBase64Html(Path.Combine(wwwroot, path, data.user_id_dibuat, data.ttd_dibuat.Replace("\\", "/")));
-            var signature2 = ConvertImageToBase64Html(Path.Combine(wwwroot, path, data.user_id_diperiksa, data.ttd_diperiksa.Replace("\\", "/")));
-            var signature3 = ConvertImageToBase64Html(Path.Combine(wwwroot, path, data.user_id_disetujui, data.ttd_disetujui.Replace("\\", "/")));
+            var signature1 = ConvertImageToBase64Html(Path.Combine(wwwroot, path, data.user_id_dibuat ?? string.Empty, data.ttd_dibuat?.Replace("\\", "/") ?? string.Empty));
+            var signature2 = ConvertImageToBase64Html(Path.Combine(wwwroot, path, data.user_id_diperiksa ?? string.Empty, data.ttd_diperiksa?.Replace("\\", "/") ?? string.Empty));
+            var signature3 = ConvertImageToBase64Html(Path.Combine(wwwroot, path, data.user_id_disetujui ?? string.Empty, data.ttd_disetujui?.Replace("\\", "/") ?? string.Empty));
+
+            var tgl_dibuat = data.tgl_dibuat == null ? string.Empty : data.tgl_dibuat.Value.ToString("dd MMM yyyy hh:mm:ss");
+            var tgl_diperiksa = data.tgl_diperiksa == null ? string.Empty : data.tgl_diperiksa.Value.ToString("dd MMM yyyy hh:mm:ss");
+            var tgl_disetujui = data.tgl_disetujui == null ? string.Empty : data.tgl_disetujui.Value.ToString("dd MMM yyyy hh:mm:ss");
+            
             var resultTemplate = templateProfileResult.Render( new
             {
                 data.nm_cb, data.nm_cob, data.nm_scob, data.nm_mkt, data.nm_sb_bis,
@@ -84,10 +89,7 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
                 data.nm_pas5, pst_pas5 = ReportHelper.ConvertToReportFormat(data.pst_pas5, true),
                 data.ket_rsk, signature1, signature2, signature3, data.jabatan_dibuat, data.jabatan_diperiksa,
                 data.jabatan_disetujui, data.nm_dibuat, data.nm_diperiksa, data.nm_disetujui,
-                tgl_dibuat = data.tgl_dibuat.Value.ToString("dd MMM yyyy"),
-                tgl_diperiksa = data.tgl_diperiksa.Value.ToString("dd MMM yyyy"),
-                tgl_disetujui = data.tgl_disetujui.Value.ToString("dd MMM yyyy"),
-                data.nomor_pengajuan
+                tgl_dibuat, tgl_diperiksa, tgl_disetujui, data.nomor_pengajuan
             } );
 
             return resultTemplate;
@@ -97,6 +99,9 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
         {
             try
             {
+
+                if (!File.Exists(imagePath))
+                    return string.Empty;
                 
                 // Read the image file
                 byte[] imageBytes = File.ReadAllBytes(imagePath);

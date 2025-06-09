@@ -12,32 +12,42 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
     {
         public string SearchKeyword { get; set; }
 
-        public string kd_cb { get; set; }
+        public string DatabaseName { get; set; }
     }
 
     public class GetPengajuanAkseptasisQueryHandler : IRequestHandler<GetPengajuanAkseptasisQuery, List<PengajuanAkseptasiDto>>
     {
-        private readonly IDbConnection _db;
+        private readonly IDbConnectionFactory _dbConnectionFactory;
 
-        public GetPengajuanAkseptasisQueryHandler(IDbConnection db)
+        public GetPengajuanAkseptasisQueryHandler(IDbConnectionFactory dbConnectionFactory)
         {
-            _db = db;
+            _dbConnectionFactory = dbConnectionFactory;
         }
 
         public async Task<List<PengajuanAkseptasiDto>> Handle(GetPengajuanAkseptasisQuery request,
             CancellationToken cancellationToken)
         {
+            _dbConnectionFactory.CreateDbConnection(request.DatabaseName);
             var results =
-                await _db.QueryProc<PengajuanAkseptasiDto>("sp_PENGAJUANAKSEPTASI_GetPengajuanAkseptasi", new { request.SearchKeyword, request.kd_cb });
+                (await _dbConnectionFactory.Query<PengajuanAkseptasiDto>(@"SELECT * FROM v_TR_Akseptasi Where (nm_cb like '%'+@SearchKeyword+'%'
+			                                                                        OR nm_cob like '%'+@SearchKeyword+'%'
+			                                                                        OR nm_scob like '%'+@SearchKeyword+'%'
+			                                                                        OR nm_tertanggung like '%'+@SearchKeyword+'%'
+			                                                                        OR nomor_pengajuan like '%'+@SearchKeyword+'%'
+			                                                                        OR tgl_status like '%'+@SearchKeyword+'%'
+			                                                                        OR status like '%'+@SearchKeyword+'%'
+			                                                                        OR user_status like '%'+@SearchKeyword+'%'
+			                                                                        OR tgl_pengajuan like '%'+@SearchKeyword+'%'
+			                                                                        OR @SearchKeyword = '' OR @SearchKeyword is null
+		                                                                        )", new { request.SearchKeyword })).ToList();
 
-            var pengajuanAkseptasiDtos = results as PengajuanAkseptasiDto[] ?? results.ToArray();
-            foreach (var result in pengajuanAkseptasiDtos)
+            foreach (var result in results)
             {
                 result.Id =
                     $"{result.kd_cb.Trim()}{result.kd_cob.Trim()}{result.kd_scob.Trim()}{result.kd_thn}{result.no_aks}";
             }
             
-            return pengajuanAkseptasiDtos.ToList();
+            return results.ToList();
         }
     }
 }

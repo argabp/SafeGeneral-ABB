@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ABB.Application.BiayaMaterais.Queries;
+using ABB.Application.Common;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Exceptions;
 using ABB.Application.Common.Queries;
@@ -57,7 +58,7 @@ namespace ABB.Web.Modules.PolisInduk
                 var command = Mapper.Map<AddPolisIndukCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Add Polis Induk"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -79,7 +80,7 @@ namespace ABB.Web.Modules.PolisInduk
                 var command = Mapper.Map<EditPolisIndukCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Edit Polis Induk"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -104,7 +105,7 @@ namespace ABB.Web.Modules.PolisInduk
                     DatabaseName = Request.Cookies["DatabaseValue"]
                 };
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Polis Induk"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)

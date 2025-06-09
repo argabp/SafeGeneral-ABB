@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using ABB.Application.Common;
 using ABB.Application.Coverages.Commands;
 using ABB.Application.Coverages.Queries;
 using ABB.Application.Kotas.Commands;
@@ -42,7 +43,7 @@ namespace ABB.Web.Modules.Coverage
                 var command = Mapper.Map<SaveCoverageCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Coverage"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {
@@ -58,7 +59,7 @@ namespace ABB.Web.Modules.Coverage
                 var command = Mapper.Map<DeleteCoverageCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Coverage"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {

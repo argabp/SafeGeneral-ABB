@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ABB.Application.Approvals.Commands;
 using ABB.Application.Approvals.Queries;
+using ABB.Application.Common;
 using ABB.Application.KapasitasCabangs.Queries;
 using ABB.Application.PolisInduks.Queries;
 using ABB.Application.SebabKejadians.Queries;
@@ -63,7 +64,7 @@ namespace ABB.Web.Modules.Approval
                 var command = Mapper.Map<AddApprovalCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Add Approval"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)
@@ -97,7 +98,7 @@ namespace ABB.Web.Modules.Approval
                 var command = Mapper.Map<EditApprovalCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Edit Approval"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)
@@ -114,7 +115,7 @@ namespace ABB.Web.Modules.Approval
                 var command = Mapper.Map<DeleteApprovalCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Approval"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)
@@ -141,7 +142,7 @@ namespace ABB.Web.Modules.Approval
                 var command = Mapper.Map<AddApprovalDetailCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Add Approval Detail"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)
@@ -176,7 +177,7 @@ namespace ABB.Web.Modules.Approval
                 var command = Mapper.Map<EditApprovalDetailCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Edit Approval Detail"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)
@@ -193,7 +194,7 @@ namespace ABB.Web.Modules.Approval
                 var command = Mapper.Map<DeleteApprovalDetailCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Approval Detail"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)

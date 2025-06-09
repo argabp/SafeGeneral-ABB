@@ -17,7 +17,7 @@ namespace ABB.Domain.Entities
 
         public Int16 no_urut { get; set; }
 
-        public Int16 kd_dokumen { get; set; }
+        public Int16 no_dokumen { get; set; }
 
         public string nm_dokumen { get; set; }
     }

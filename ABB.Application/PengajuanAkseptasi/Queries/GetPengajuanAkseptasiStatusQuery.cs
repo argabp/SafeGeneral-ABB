@@ -21,22 +21,34 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
         public string kd_thn { get; set; }
 
         public string no_aks { get; set; }
+
+        public string DatabaseName { get; set; }
     }
 
     public class GetPengajuanAkseptasiStatusQueryHandler : IRequestHandler<GetPengajuanAkseptasiStatusQuery, List<PengajuanAkseptasiStatusDto>>
     {
-        private readonly IDbConnection _db;
+        private readonly IDbConnectionFactory _dbConnectionFactory;
 
-        public GetPengajuanAkseptasiStatusQueryHandler(IDbConnection db)
+        public GetPengajuanAkseptasiStatusQueryHandler(IDbConnectionFactory dbConnectionFactory)
         {
-            _db = db;
+            _dbConnectionFactory = dbConnectionFactory;
         }
 
         public async Task<List<PengajuanAkseptasiStatusDto>> Handle(GetPengajuanAkseptasiStatusQuery request,
             CancellationToken cancellationToken)
         {
+            _dbConnectionFactory.CreateDbConnection(request.DatabaseName);
             var result =
-                (await _db.QueryProc<PengajuanAkseptasiStatusDto>("sp_PENGAJUANAKSEPTASI_GetPengajuanAkseptasiStatus",
+                (await _dbConnectionFactory.Query<PengajuanAkseptasiStatusDto>(@"Select *
+	                                                            From v_TR_Akseptasi_history p 
+	                                                            Where @kd_cb = p.kd_cb AND @kd_cob = p.kd_cob
+			                                                            AND @kd_scob = p.kd_scob AND @kd_thn = p.kd_thn
+			                                                            AND @no_aks = p.no_aks
+			                                                            AND (CONVERT(varchar(15), p.tgl_status, 106) like '%'+@SearchKeyword+'%'
+			                                                            OR p.nm_status like '%'+@SearchKeyword+'%'
+			                                                            OR p.nm_user like '%'+@SearchKeyword+'%'
+			                                                            OR @SearchKeyword = '' OR @SearchKeyword is null
+		                                                            )",
                     new
                     {
                         request.SearchKeyword, request.kd_cb, request.kd_cob,

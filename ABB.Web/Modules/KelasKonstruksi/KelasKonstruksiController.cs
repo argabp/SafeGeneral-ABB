@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using ABB.Application.Common;
 using ABB.Application.KelasKonsturksis.Commands;
 using ABB.Application.KelasKonsturksis.Queries;
 using ABB.Web.Modules.Base;
@@ -39,7 +40,7 @@ namespace ABB.Web.Modules.KelasKonstruksi
                 var command = Mapper.Map<SaveKelasKonstruksiCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Kelas Konstruksi"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {
@@ -55,7 +56,7 @@ namespace ABB.Web.Modules.KelasKonstruksi
                 var command = Mapper.Map<DeleteKelasKonstruksiCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Kelas Konstruksi"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {

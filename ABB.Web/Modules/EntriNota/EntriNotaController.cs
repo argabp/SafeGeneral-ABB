@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using ABB.Application.BiayaMaterais.Queries;
+using ABB.Application.Common;
 using ABB.Application.EntriNotas.Commands;
 using ABB.Application.EntriNotas.Queries;
 using ABB.Web.Modules.Base;
@@ -110,7 +111,7 @@ namespace ABB.Web.Modules.EntriNota
                 var command = Mapper.Map<SaveEntriNotaCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Nota"});
+                return Json(new { Result = "OK", Message = "Data Berhasil Disimpan"});
             }
             catch (Exception ex)
             {
@@ -126,7 +127,7 @@ namespace ABB.Web.Modules.EntriNota
                 var command = Mapper.Map<SaveEntriNotaCancelCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Cancel Nota"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {

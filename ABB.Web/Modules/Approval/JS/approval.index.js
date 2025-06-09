@@ -27,7 +27,7 @@ function btnEditApprovalDetail(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     console.log('dataItem', dataItem);
-    openWindow('#ApprovalWindow', `/Approval/EditDetail?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_status=${dataItem.kd_status}`, 'Edit');
+    openWindow('#ApprovalWindow', `/Approval/EditDetail?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_status=${dataItem.kd_status}&nilai_limit_awal=${dataItem.nilai_limit_awal}&nilai_limit_akhir=${dataItem.nilai_limit_akhir}`, 'Edit');
 }
 
 function onAddApproval(){
@@ -126,9 +126,11 @@ function onDeleteApprovalDetail(e){
                 kd_cob: dataItem.kd_cob,
                 kd_scob: dataItem.kd_scob,
                 kd_status: dataItem.kd_status,
+                nilai_limit_awal: dataItem.nilai_limit_awal,
+                nilai_limit_akhir: dataItem.nilai_limit_akhir
             }
             
-            showProgressOnGrid("#grid_Detail_" + dataItem.Id);
+            showProgressOnGrid("#ApprovalGrid");
 
             ajaxPost("/Approval/DeleteDetail", JSON.stringify(data),
                 function (response) {
@@ -137,8 +139,8 @@ function onDeleteApprovalDetail(e){
                     } else
                         showMessage('Error', response.Message);
 
-                    refreshGrid("#grid_Detail_" + dataItem.Id );
-                    closeProgressOnGrid("#grid_Detail_" + dataItem.Id);
+                    refreshGrid("#ApprovalGrid");
+                    closeProgressOnGrid("#ApprovalGrid");
                 }
             );
         }

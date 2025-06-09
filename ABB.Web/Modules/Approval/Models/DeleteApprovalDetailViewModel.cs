@@ -15,6 +15,10 @@ namespace ABB.Web.Modules.Approval.Models
 
         public Int16 kd_status { get; set; }
 
+        public decimal nilai_limit_awal { get; set; }
+
+        public decimal nilai_limit_akhir { get; set; }
+
         public void Mapping(Profile profile)
         {
             profile.CreateMap<DeleteApprovalDetailViewModel, DeleteApprovalDetailCommand>();

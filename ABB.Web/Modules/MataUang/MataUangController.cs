@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using ABB.Application.Common;
 using ABB.Application.MataUangs.Commands;
 using ABB.Application.MataUangs.Queries;
 using ABB.Web.Modules.Base;
@@ -54,7 +55,7 @@ namespace ABB.Web.Modules.MataUang
                 var command = Mapper.Map<AddMataUangCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Add Mata Uang"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)
@@ -71,7 +72,7 @@ namespace ABB.Web.Modules.MataUang
                 var command = Mapper.Map<EditMataUangCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Edit Mata Uang"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)
@@ -88,7 +89,7 @@ namespace ABB.Web.Modules.MataUang
                 var command = Mapper.Map<DeleteMataUangCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Mata Uang"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)
@@ -105,7 +106,7 @@ namespace ABB.Web.Modules.MataUang
                 var command = Mapper.Map<AddDetailMataUangCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Add Detail Mata Uang"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {
@@ -120,7 +121,7 @@ namespace ABB.Web.Modules.MataUang
             {
                 var command = Mapper.Map<EditDetailMataUangCommand>(model);
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Edit Detail Mata Uang"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)
@@ -137,7 +138,7 @@ namespace ABB.Web.Modules.MataUang
                 var command = Mapper.Map<DeleteDetailMataUangCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Detail Mata Uang"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {

@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using ABB.Application.Common;
 using ABB.Application.Common.Exceptions;
 using ABB.Application.Modules.Commends;
 using ABB.Application.Modules.Queries;
@@ -47,7 +48,7 @@ namespace ABB.Web.Modules.Module
             try
             {
                 await Mediator.Send(Mapper.Map<AddModuleCommand>(model));
-                return Json(new { Result = "OK", Message = "Successfully Add Module" });
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan });
             }
             catch (ValidationException ex)
             {
@@ -74,7 +75,7 @@ namespace ABB.Web.Modules.Module
             try
             {
                 await Mediator.Send(Mapper.Map<EditModuleCommand>(model));
-                return Json(new { Result = "OK", Message = "Successfully Edit Module" });
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan });
             }
             catch (ValidationException ex)
             {
@@ -92,7 +93,7 @@ namespace ABB.Web.Modules.Module
             {
                 await Mediator.Send(new DeleteModuleCommand() { Id = id });
 
-                return Json(new { Result = true, Message = "Successfully Delete Module" });
+                return Json(new { Result = true, Message = Constant.DataDisimpan });
             }
             catch (Exception ex)
             {

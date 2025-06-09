@@ -23,7 +23,7 @@ namespace ABB.Application.Approvals.Queries
 
         public async Task<List<DropdownOptionDto>> Handle(GetKodeUserSignQuery request, CancellationToken cancellationToken)
         {
-            return (await _connection.Query<DropdownOptionDto>("Select UserId Value, FirstName + ' ' + LastName Text From MS_User")).ToList();
+            return (await _connection.Query<DropdownOptionDto>("Select UserId Value, ISNULL(FirstName, '') + ' ' + ISNULL(LastName, '') Text From MS_User")).ToList();
         }
     }
 }

@@ -4788,6 +4788,17 @@
       <_ContentIncludedByDefault Remove="Modules\Dashboard\Views\Index.cshtml" />
       <_ContentIncludedByDefault Remove="wwwroot\akseptasi\JK50C020225000010\akseptasi-resiko-other-cargo\Labware Template (1).csv" />
       <_ContentIncludedByDefault Remove="wwwroot\akseptasi\PS11W075125000010\image (13).png" />
+      <_ContentIncludedByDefault Remove="Modules\AkseptasiProduk\Views\Approved.cshtml" />
+      <_ContentIncludedByDefault Remove="Modules\AkseptasiProduk\Views\Checked.cshtml" />
+      <_ContentIncludedByDefault Remove="Modules\AkseptasiProduk\Views\Escalated.cshtml" />
+      <_ContentIncludedByDefault Remove="Modules\AkseptasiProduk\Views\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="Modules\AkseptasiProduk\Views\Info.cshtml" />
+      <_ContentIncludedByDefault Remove="Modules\AkseptasiProduk\Views\Rejected.cshtml" />
+      <_ContentIncludedByDefault Remove="Modules\AkseptasiProduk\Views\Revised.cshtml" />
+      <_ContentIncludedByDefault Remove="Modules\AkseptasiProduk\Views\View.cshtml" />
+      <_ContentIncludedByDefault Remove="Modules\AkseptasiProduk\Models\Views\Add.cshtml" />
+      <_ContentIncludedByDefault Remove="Modules\AkseptasiProduk\Models\Views\Edit.cshtml" />
+      <_ContentIncludedByDefault Remove="Modules\AkseptasiProduk\Models\Views\Index.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
@@ -5581,9 +5592,6 @@
       <None Update="Modules\DashboardUnderwriting\JS\dashboardUnderwriting.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Modules\PengajuanAkseptasi\Components\PengajuanAkseptasi\pengajuanAkseptasi.js">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
       <None Update="Modules\PengajuanAkseptasi\JS\pengajuanAkseptasi.form.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
@@ -5617,6 +5625,66 @@
       <None Update="Modules\EmailTemplate\JS\emailTemplate.add.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\ApprovalAkseptasi\JS\approvalAkseptasi.form.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\ApprovalAkseptasi\JS\approvalAkseptasi.index.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\ApprovalAkseptasi\JS\approvalAkseptasi.info.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\ApprovalAkseptasi\JS\approvalAkseptasi.view.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\ApprovalAkseptasi\JS\approvalAkseptasi.checked.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\ApprovalAkseptasi\JS\approvalAkseptasi.approved.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\ApprovalAkseptasi\JS\approvalAkseptasi.escalated.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\ApprovalAkseptasi\JS\approvalAkseptasi.rejected.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\ApprovalAkseptasi\JS\approvalAkseptasi.revised.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Shared\Components\LampiranPengajuanAkseptasi\lampiranPengajuanAkseptasi.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Shared\Components\PengajuanAkseptasi\pengajuanAkseptasi.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\EmailTemplate\JS\emailTemplate.edit.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\EmailTemplate\JS\emailTemplate.form.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\EmailTemplate\JS\emailTemplate.index.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\AkseptasiProduk\JS\approvalAkseptasi.form.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\AkseptasiProduk\JS\approvalAkseptasi.index.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\AkseptasiProduk\Models\JS\akseptasiProduk.index.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\AkseptasiProduk\Models\JS\akseptasiProduk.edit.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\AkseptasiProduk\JS\akseptasiProduk.edit.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\AkseptasiProduk\JS\akseptasiProduk.index.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
@@ -5646,6 +5714,9 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
       <Content Update="wwwroot\js\notification.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Update="wwwroot\img\new_logo.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
     </ItemGroup>

@@ -38,8 +38,9 @@
             columns.Bound(col => col.nm_cb).Title("Cabang");
             columns.Bound(col => col.nm_cob).Title("COB");
             columns.Bound(col => col.nm_scob).Title("SCOB");
-            columns.Bound(col => col.nomor_pengajuan).Title("No. Pengjuan Akseptasi");
+            columns.Bound(col => col.nomor_pengajuan).Title("No. Pengajuan Akseptasi");
             columns.Bound(col => col.nm_tertanggung).Title("Tertanggung");
+            columns.Bound(col => col.tgl_pengajuan).Title("Tanggal Pengajuan").Format("{0: dd-MM-yyyy}");
             columns.Bound(col => col.status).Title("Status");
             columns.Bound(col => col.user_status).Title("User Status");
             columns.Bound(col => col.tgl_status).Title("Tanggal Status").Format("{0: dd-MM-yyyy}");
@@ -83,7 +84,7 @@
         .Scrollable()
         .Height(380)
         .Resizable(a=>a.Columns(true))
-        .Events(ev => ev.DataBound("gridAutoFit"))
+        .Events(ev => ev.DataBound("setButtonActions"))
     
             )
 
@@ -97,9 +98,9 @@
             )
         
         @(Html.Kendo().Window()
-                    .Name("InfoPengjuanAkseptasiWindow")
+                    .Name("InfoPengajuanAkseptasiWindow")
                     .Title("Info Pengajuan Akseptasi Page")
-                    .Width(1000)
+                    .Width(1200)
                     .Modal(true)
                     .Visible(false)
                     .Draggable(true)

@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using ABB.Application.BiayaPerSubCOBs.Queries;
+using ABB.Application.Common;
 using ABB.Application.Common.Exceptions;
 using ABB.Application.KapasitasCabangs.Queries;
 using ABB.Application.KodeKonfirmasis.Commands;
@@ -48,7 +49,7 @@ namespace ABB.Web.Modules.KodeKonfirmasi
                 command.UserId = CurrentUser.UserId;
                 var kodeKonfirmasi = await Mediator.Send(command);
                 return PartialView("Add", Mapper.Map<KodeKonfirmasiViewModel>(kodeKonfirmasi));
-                // return Json(new { Result = "OK", Message = "Successfully Add Kode Konfirmasi"});
+                // return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -78,7 +79,7 @@ namespace ABB.Web.Modules.KodeKonfirmasi
                     DatabaseName = Request.Cookies["DatabaseValue"]
                 };
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Kode Konfirmasi"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)

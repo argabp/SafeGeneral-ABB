@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ABB.Application.Common;
 using ABB.Application.Common.Exceptions;
 using ABB.Application.RoleRoutes.Commands;
 using ABB.Application.RoleRoutes.Queries;
@@ -63,7 +64,7 @@ namespace ABB.Web.Modules.RoleRoute
                 }
 
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Edit Role for Route" });
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan });
             }
             catch (ValidationException ex)
             {

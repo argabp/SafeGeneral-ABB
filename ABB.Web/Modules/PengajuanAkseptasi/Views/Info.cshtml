@@ -24,10 +24,12 @@
          .Columns(columns =>
          {
              columns.Bound(col => col.Id).Hidden();
-             columns.Bound(col => col.tgl_status).Title("Tanggal Status").Format("{0:dd MMM yyyy • HH:mm}");
-             columns.Bound(col => col.nm_status).Title("Nama User");
+             columns.Bound(col => col.no_urut).Width(75).Title("No");
+             columns.Bound(col => col.nm_user).Title("Nama User Proses");
+             columns.Bound(col => col.tgl_status).Title("Tanggal Proses").Format("{0:dd MMM yyyy • HH:mm}");
+             columns.Bound(col => col.nm_status).Title("Status");
              columns.Bound(col => col.ket_status).Title("Keterangan Status");
-             columns.Bound(col => col.nm_user_sign).Title("Nama User Signature");
+             columns.Bound(col => col.nm_user_sign).Title("Nama User Sign");
              columns.Bound(col => col.tgl_batas).Title("Tanggal Batas").Format("{0:dd MMM yyyy • HH:mm}");
              columns.Bound(col => col.reminder).Title("Reminder");
          })
@@ -51,7 +53,7 @@
         .Name("grid_#=Id#")
         .Columns(columns =>
         {
-            columns.Bound(o => o.nm_dokumen).ClientTemplate("<a href='/pengajuan-akseptasi-status-attachment/#= Id #/\\#: nm_dokumen \\#' target='_blank'>\\#: nm_dokumen \\#</a>");
+            columns.Bound(o => o.nm_dokumen).Title("Nama Dokumen").ClientTemplate("<a href='/pengajuan-akseptasi-status-attachment/#= Id #/\\#: nm_dokumen \\#' target='_blank'>\\#: nm_dokumen \\#</a>");
         })
         .DataSource(dataSource => dataSource
             .Ajax()

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ABB.Application.Common;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Kapals.Commands;
 using ABB.Application.Kapals.Queries;
@@ -53,7 +54,7 @@ namespace ABB.Web.Modules.Kapal
                 var command = Mapper.Map<SaveKapalCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Kapal"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {
@@ -72,7 +73,7 @@ namespace ABB.Web.Modules.Kapal
                     DatabaseName = Request.Cookies["DatabaseValue"]
                 };
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Kapal"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)

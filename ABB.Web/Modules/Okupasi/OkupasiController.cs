@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ABB.Application.Common;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Okupasis.Commands;
 using ABB.Application.Okupasis.Queries;
@@ -77,7 +78,7 @@ namespace ABB.Web.Modules.Okupasi
                 var command = Mapper.Map<AddOkupasiCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Add Okupasi"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)
@@ -94,7 +95,7 @@ namespace ABB.Web.Modules.Okupasi
                 var command = Mapper.Map<EditOkupasiCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Edit Okupasi"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)
@@ -111,7 +112,7 @@ namespace ABB.Web.Modules.Okupasi
                 var command = Mapper.Map<DeleteOkupasiCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Okupasi"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)
@@ -128,7 +129,7 @@ namespace ABB.Web.Modules.Okupasi
                 var command = Mapper.Map<SaveDetailOkupasiCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Detail Okupasi"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)
@@ -145,7 +146,7 @@ namespace ABB.Web.Modules.Okupasi
                 var command = Mapper.Map<DeleteDetailOkupasiCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Detail Okupasi"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {

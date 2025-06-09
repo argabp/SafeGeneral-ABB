@@ -29,5 +29,7 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
         public DateTime tgl_batas { get; set; }
 
         public int reminder { get; set; }
+
+        public string nm_user { get; set; }
     }
 }

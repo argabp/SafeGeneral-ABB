@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ABB.Application.Common;
 using ABB.Application.Common.Dtos;
 using ABB.Application.PertanggunganKendaraans.Commands;
 using ABB.Application.PertanggunganKendaraans.Queries;
@@ -66,14 +67,14 @@ namespace ABB.Web.Modules.PertanggunganKendaraan
                     var command = Mapper.Map<AddPertanggunganKendaraanCommand>(model);
                     command.DatabaseName = Request.Cookies["DatabaseValue"];
                     await Mediator.Send(command);
-                    return Json(new { Result = "OK", Message = "Successfully Add Pertanggungan Kendaraan"});
+                    return Json(new { Result = "OK", Message = Constant.DataDisimpan});
                 }
                 else
                 {
                     var command = Mapper.Map<EditPertanggunganKendaraanCommand>(model);  
                     command.DatabaseName = Request.Cookies["DatabaseValue"];
                     await Mediator.Send(command);
-                    return Json(new { Result = "OK", Message = "Successfully Edit Pertanggungan Kendaraan"});
+                    return Json(new { Result = "OK", Message = Constant.DataDisimpan});
                 }
             }
             catch (Exception ex)
@@ -94,7 +95,7 @@ namespace ABB.Web.Modules.PertanggunganKendaraan
                     kd_cob = kd_cob,
                     DatabaseName = Request.Cookies["DatabaseValue"]
                 });
-                return Json(new { Result = "OK", Message = "Successfully Delete Pertanggungan Kendaraan"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)
@@ -113,14 +114,14 @@ namespace ABB.Web.Modules.PertanggunganKendaraan
                     var command = Mapper.Map<AddDetailPertanggunganKendaraanCommand>(model);
                     command.DatabaseName = Request.Cookies["DatabaseValue"];
                     await Mediator.Send(command);
-                    return Json(new { Result = "OK", Message = "Successfully Add Detail Pertanggungan Kendaraan"});
+                    return Json(new { Result = "OK", Message = Constant.DataDisimpan});
                 }
                 else
                 {
                     var command = Mapper.Map<EditDetailPertanggunganKendaraanCommand>(model); 
                     command.DatabaseName = Request.Cookies["DatabaseValue"]; 
                     await Mediator.Send(command);
-                    return Json(new { Result = "OK", Message = "Successfully Edit Detail Pertanggungan Kendaraan"});
+                    return Json(new { Result = "OK", Message = Constant.DataDisimpan});
                 }
 
             }
@@ -143,7 +144,7 @@ namespace ABB.Web.Modules.PertanggunganKendaraan
                     no_urut = no_urut,
                     DatabaseName = Request.Cookies["DatabaseValue"]
                 });
-                return Json(new { Result = "OK", Message = "Successfully Delete Detail Pertanggungan Kendaraan"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {

@@ -5,7 +5,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ABB.Web.Modules.PengajuanAkseptasi.Components.LampiranPengajuanAkseptasi
+namespace ABB.Web.Modules.Shared.Components.LampiranPengajuanAkseptasi
 {
     public class LampiranPengajuanAkseptasiViewComponent : ViewComponent
     {

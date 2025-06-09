@@ -31,8 +31,6 @@ namespace ABB.Application.Approvals.Queries
         public async Task<List<ApprovalDto>> Handle(GetApprovalsQuery request,
             CancellationToken cancellationToken)
         {
-            await Task.Delay(0, cancellationToken);
-            
             try
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);

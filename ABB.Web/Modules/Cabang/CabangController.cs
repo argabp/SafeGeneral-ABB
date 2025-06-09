@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using ABB.Application.Cabangs.Commands;
 using ABB.Application.Cabangs.Queries;
+using ABB.Application.Common;
 using ABB.Application.Common.Exceptions;
 using ABB.Web.Extensions;
 using ABB.Web.Modules.Base;
@@ -48,7 +49,7 @@ namespace ABB.Web.Modules.Cabang
                 var command = Mapper.Map<AddCabangCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Add Cabang" });
+                return Json(new { Result = "OK", Message = "Data Berhasil Disimpan" });
             }
             catch (ValidationException ex)
             {
@@ -81,7 +82,7 @@ namespace ABB.Web.Modules.Cabang
                 var command = Mapper.Map<EditCabangCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Edit Cabang" });
+                return Json(new { Result = "OK", Message = "Data Berhasil Disimpan" });
             }
             catch (ValidationException ex)
             {
@@ -100,7 +101,7 @@ namespace ABB.Web.Modules.Cabang
                 await Mediator.Send(new DeleteCabangCommand() { kd_cb = kd_cb, 
                     DatabaseName = Request.Cookies["DatabaseValue"]});
 
-                return Json(new { Result = true, Message = "Successfully Delete Cabang" });
+                return Json(new { Result = true, Message = Constant.DataDisimpan });
             }
             catch (Exception ex)
             {

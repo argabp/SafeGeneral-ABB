@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using ABB.Application.Common;
 using ABB.Application.GrupObyeks.Commands;
 using ABB.Application.GrupObyeks.Queries;
 using ABB.Web.Modules.Base;
@@ -39,7 +40,7 @@ namespace ABB.Web.Modules.GrupObyek
                 var command = Mapper.Map<SaveGrupObyekCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Grup Obyek"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {
@@ -55,7 +56,7 @@ namespace ABB.Web.Modules.GrupObyek
                 var command = Mapper.Map<DeleteGrupObyekCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Grup Obyek"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {

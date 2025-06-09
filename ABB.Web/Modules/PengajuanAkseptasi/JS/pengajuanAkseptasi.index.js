@@ -16,7 +16,7 @@ function openPengajuanAkseptasiWindow(url, title) {
 
 function btnAddPengajuanAkseptasi_Click() {
     $('#btnAddNewPengajuanAkseptasi').click(function () {
-        openPengajuanAkseptasiWindow('/PengajuanAkseptasi/Add', 'Add New Pengajuan Akseptasi');
+        openPengajuanAkseptasiWindow('/PengajuanAkseptasi/Add', 'Add');
     });
 }
 
@@ -24,26 +24,26 @@ function OnClickEditPengajuanAkseptasi(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     console.log('dataItem', dataItem);
-    openPengajuanAkseptasiWindow(`/PengajuanAkseptasi/Edit?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_aks=${dataItem.no_aks}`, 'Edit Pengajuan Akseptasi');
+    openPengajuanAkseptasiWindow(`/PengajuanAkseptasi/Edit?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_aks=${dataItem.no_aks}`, 'Edit');
 }
 
 function OnClickViewPengajuanAkseptasi(e) {
     e.preventDefault();
     dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     console.log('dataItem', dataItem);
-    openPengajuanAkseptasiWindow(`/PengajuanAkseptasi/View?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_aks=${dataItem.no_aks}`, 'View Pengajuan Akseptasi');
+    openPengajuanAkseptasiWindow(`/PengajuanAkseptasi/View?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_aks=${dataItem.no_aks}`, 'View');
 }
 
 function OnClickInfoPengajuanAkseptasi(e) {
     e.preventDefault();
     dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     console.log('dataItem', dataItem);
-    openWindow('#InfoPengjuanAkseptasiWindow',`/PengajuanAkseptasi/Info`, 'Info Pengajuan Akseptasi');
+    openWindow('#InfoPengajuanAkseptasiWindow',`/PengajuanAkseptasi/Info`, 'Info');
 }
 
 function OnClickSubmitPengajuanAkseptasi(e) {
     dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-    openWindow('#SubmitWindow',`/PengajuanAkseptasi/SubmitView`, 'Submit Pengajuan Akseptasi');
+    openWindow('#SubmitWindow',`/PengajuanAkseptasi/SubmitView`, 'Submit');
 }
 
 function OnClickPrintPengajuanAkseptasi(e) {
@@ -68,4 +68,21 @@ function OnClickPrintPengajuanAkseptasi(e) {
             closeProgressOnGrid('#PengajuanAkseptasiGrid');
         },
     );
+}
+
+function setButtonActions(e){
+    var grid = this;
+
+    // Loop through data items and rows
+    grid.tbody.find("tr").each(function() {
+        var dataItem = grid.dataItem(this);
+
+        if (dataItem.status !== "New" && dataItem.status !== "Revised") {
+            // Hide the custom button in this row
+            $(this).find(".k-grid-Edit").hide(); // "custom" is the command name
+            $(this).find(".k-grid-Submit").hide(); // "custom" is the command name
+        }
+    });
+    
+    gridAutoFit(grid);
 }

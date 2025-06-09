@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using ABB.Application.Common;
 using ABB.Application.Common.Exceptions;
 using ABB.Application.LimitTreaties.Commands;
 using ABB.Application.LimitTreaties.Queries;
@@ -44,7 +45,7 @@ namespace ABB.Web.Modules.LimitTreaty
                 var command = Mapper.Map<SaveLimitTreatyCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Limit Treaty"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -69,7 +70,7 @@ namespace ABB.Web.Modules.LimitTreaty
                     DatabaseName = Request.Cookies["DatabaseValue"]
                 };
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Limit Treaty"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)

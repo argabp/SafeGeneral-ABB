@@ -1,0 +1,130 @@
+﻿@using Kendo.Mvc.UI
+@using ABB.Application.ApprovalAkseptasis.Queries
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Approval Akseptasi";
+}
+<script src="~/Modules/ApprovalAkseptasi/JS/approvalAkseptasi.index.js"></script>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-4">
+            Approval Akseptasi
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        @(Html.Kendo().Grid<ApprovalAkseptasiDto>()
+        .Name("ApprovalAkseptasiGrid")
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetApprovalAkseptasis", "ApprovalAkseptasi").Data("searchFilter"))
+        )
+        .Columns(columns =>
+        {
+            columns.Bound(col => col.Id).Hidden();
+            columns.Bound(col => col.nm_cb).Title("Cabang");
+            columns.Bound(col => col.nm_cob).Title("COB");
+            columns.Bound(col => col.nm_scob).Title("SCOB");
+            columns.Bound(col => col.nomor_pengajuan).Title("No. Pengajuan Akseptasi");
+            columns.Bound(col => col.nm_tertanggung).Title("Tertanggung");
+            columns.Bound(col => col.status).Title("Status");
+            columns.Bound(col => col.user_status).Title("User Status");
+            columns.Bound(col => col.tgl_status).Title("Tanggal Status").Format("{0: dd-MM-yyyy}");
+            columns.Command(command =>
+            {
+                command.Custom("View")
+                    .Text(" ")
+                    .IconClass("fa fa-eye")
+                    .HtmlAttributes(new { title = "View" })
+                    .Click("OnClickViewApprovalAkseptasi");
+                command.Custom("Info")
+                    .Text(" ")
+                    .IconClass("fa fa-info-circle")
+                    .HtmlAttributes(new { title = "Info" })
+                    .Click("OnClickInfoApprovalAkseptasi");
+                command.Custom("Checked")
+                    .Text(" ")
+                    .IconClass("fa fa-check-square")
+                    .HtmlAttributes(new { title = "Checked" })
+                    .Click("OnClickCheckedApprovalAkseptasi");
+                command.Custom("Escalated")
+                    .Text(" ")
+                    .IconClass("fa fa-hand-paper")
+                    .HtmlAttributes(new { title = "Escalated" })
+                    .Click("OnClickEscalatedApprovalAkseptasi");
+                command.Custom("Approved")
+                    .Text(" ")
+                    .IconClass("fa fa-child")
+                    .HtmlAttributes(new { title = "Approved" })
+                    .Click("OnClickApprovedApprovalAkseptasi");
+                command.Custom("Rejected")
+                    .Text(" ")
+                    .IconClass("fa fa-times-circle")
+                    .HtmlAttributes(new { title = "Rejected" })
+                    .Click("OnClickRejectedApprovalAkseptasi");
+                command.Custom("Revised")
+                    .Text(" ")
+                    .IconClass("fa fa-edit")
+                    .HtmlAttributes(new { title = "Revised" })
+                    .Click("OnClickRevisedApprovalAkseptasi");
+                command.Custom("Print")
+                    .Text(" ")
+                    .IconClass("fa fa-print")
+                    .HtmlAttributes(new { title = "Print" })
+                    .Click("OnClickPrintApprovalAkseptasi");
+    
+            }).Title("Action").Width(300);
+        })
+        .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                    )
+        .Sortable()
+        .Filterable()
+        .Scrollable()
+        .Height(380)
+        .Resizable(a=>a.Columns(true))
+        .Events(ev => ev.DataBound("setButtonActions"))
+    
+            )
+
+        @(Html.Kendo().Window()
+                    .Name("PengajuanAkseptasiWindow")
+                    .Title("Approval Akseptasi Page")
+                    .Width(1200)
+                    .Modal(true)
+                    .Visible(false)
+                    .Draggable(true)
+            )
+        
+        @(Html.Kendo().Window()
+                    .Name("InfoApprovalAkseptasiWindow")
+                    .Title("Info Approval Akseptasi Page")
+                    .Width(1200)
+                    .Modal(true)
+                    .Visible(false)
+                    .Draggable(true)
+            )
+        
+        @(Html.Kendo().Window()
+                    .Name("ApprovalWindow")
+                    .Title("Approval Page")
+                    .Width(500)
+                    .Modal(true)
+                    .Visible(false)
+                    .Draggable(true)
+            )
+    </div>
+</div>
+

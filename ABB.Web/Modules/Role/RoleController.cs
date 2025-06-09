@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ABB.Application.Common;
 using ABB.Application.Common.Exceptions;
 using ABB.Application.Common.Services;
 using ABB.Application.Roles.Commends;
@@ -67,7 +68,7 @@ namespace ABB.Web.Modules.Role
             {
                 model.UserId = _currentUserService.UserId;
                 await Mediator.Send(Mapper.Map<AddRoleCommand>(model));
-                return Json(new { Result = "OK", Message = "Successfully Add Role" });
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan });
             }
             catch (ValidationException ex)
             {
@@ -92,7 +93,7 @@ namespace ABB.Web.Modules.Role
             {
                 model.UserId = _currentUserService.UserId;
                 await Mediator.Send(Mapper.Map<EditRoleCommand>(model));
-                return Json(new { Result = "OK", Message = "Successfully Edit Role" });
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan });
             }
             catch (ValidationException ex)
             {
@@ -108,7 +109,7 @@ namespace ABB.Web.Modules.Role
         {
             var deleted = await Mediator.Send(new DeleteRoleCommand() { Id = id });
 
-            return Json(new { Result = deleted, Message = "Successfully Delete Role" });
+            return Json(new { Result = deleted, Message = Constant.DataDisimpan });
         }
     }
 }

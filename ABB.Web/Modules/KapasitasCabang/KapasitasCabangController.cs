@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ABB.Application.Akuisisis.Commands;
 using ABB.Application.Akuisisis.Queries;
 using ABB.Application.BiayaPerSubCOBs.Queries;
+using ABB.Application.Common;
 using ABB.Application.Common.Exceptions;
 using ABB.Application.KapasitasCabangs.Commands;
 using ABB.Application.KapasitasCabangs.Queries;
@@ -48,7 +49,7 @@ namespace ABB.Web.Modules.KapasitasCabang
                 var command = Mapper.Map<SaveKapasitasCabangCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Kapasitas Cabang"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -76,7 +77,7 @@ namespace ABB.Web.Modules.KapasitasCabang
                     DatabaseName = Request.Cookies["DatabaseValue"]
                 };
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Kapasitas Cabang"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)

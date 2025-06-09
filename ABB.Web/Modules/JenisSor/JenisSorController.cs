@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ABB.Application.Common;
 using ABB.Application.Common.Dtos;
 using ABB.Application.JenisSors.Commands;
 using ABB.Application.JenisSors.Queries;
@@ -53,7 +54,7 @@ namespace ABB.Web.Modules.JenisSor
                 var command = Mapper.Map<SaveJenisSorCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Jenis Sor"});
+                return Json(new { Result = "OK", Message = "Data Berhasil Disimpan"});
             }
             catch (Exception ex)
             {
@@ -72,7 +73,7 @@ namespace ABB.Web.Modules.JenisSor
                     DatabaseName = Request.Cookies["DatabaseValue"]
                 };
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Jenis Sor"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)

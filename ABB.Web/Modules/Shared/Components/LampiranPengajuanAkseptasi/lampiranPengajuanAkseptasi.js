@@ -88,7 +88,7 @@ function initLampiranPengajuanAkseptasiGrid() {
             { 
                 field: "kd_dokumen", title: "Nama Dokumen", width: 150,
                 editor: function (container, options) {
-                    if(options.model.no_dokumen === undefined)
+                    if(options.model.kd_dokumen === undefined)
                         dropDownEditor({
                             container: container,
                             options: options,
@@ -116,6 +116,10 @@ function initLampiranPengajuanAkseptasiGrid() {
         ],
         editable: {
             mode: "inline",
+        },
+        cancel: function(e) {
+            var grid = $("#LampiranPengajuanAkseptasiGrid").data("kendoGrid");
+            grid.dataSource.read();
         }
     });
 }

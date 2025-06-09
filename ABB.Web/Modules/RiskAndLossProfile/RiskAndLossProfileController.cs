@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using ABB.Application.Common;
 using ABB.Application.Common.Exceptions;
 using ABB.Application.RiskAndLossProfiles.Commands;
 using ABB.Application.RiskAndLossProfiles.Queries;
@@ -44,7 +45,7 @@ namespace ABB.Web.Modules.RiskAndLossProfile
                 var command = Mapper.Map<SaveRiskAndLossProfileCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Risk And Loss Profile"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -69,7 +70,7 @@ namespace ABB.Web.Modules.RiskAndLossProfile
                     DatabaseName = Request.Cookies["DatabaseValue"]
                 };
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Risk And Loss Profile"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)

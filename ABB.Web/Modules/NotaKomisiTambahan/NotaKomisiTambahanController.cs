@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ABB.Application.BiayaMaterais.Queries;
+using ABB.Application.Common;
 using ABB.Application.Common.Dtos;
 using ABB.Application.EntriNotas.Queries;
 using ABB.Application.NotaKomisiTambahans.Commands;
@@ -96,7 +97,7 @@ namespace ABB.Web.Modules.NotaKomisiTambahan
                     DatabaseName = Request.Cookies["DatabaseValue"]
                 };
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Nota Tambahan"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)
@@ -132,7 +133,7 @@ namespace ABB.Web.Modules.NotaKomisiTambahan
                 var command = Mapper.Map<SaveNotaKomisiTambahanCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Nota Komisi Tambahan"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {

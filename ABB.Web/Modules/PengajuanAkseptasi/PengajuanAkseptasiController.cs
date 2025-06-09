@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ABB.Application.BiayaMaterais.Queries;
+using ABB.Application.Common;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Exceptions;
 using ABB.Application.Common.Queries;
@@ -56,7 +57,7 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
         
         public async Task<ActionResult> GetPengajuanAkseptasis([DataSourceRequest] DataSourceRequest request, string searchkeyword)
         {
-            var ds = await Mediator.Send(new GetPengajuanAkseptasisQuery() { SearchKeyword = searchkeyword, kd_cb = Request.Cookies["UserCabang"]});
+            var ds = await Mediator.Send(new GetPengajuanAkseptasisQuery() { SearchKeyword = searchkeyword, DatabaseName = Request.Cookies["DatabaseValue"]});
             return Json(ds.AsQueryable().ToDataSourceResult(request));
         }
         
@@ -85,6 +86,7 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
         public async Task<ActionResult> GetPengajuanAkseptasiStatus([DataSourceRequest] DataSourceRequest request, PengajuanAkseptasiStatusViewModel model)
         {
             var query = Mapper.Map<GetPengajuanAkseptasiStatusQuery>(model);
+            query.DatabaseName = Request.Cookies["DatabaseValue"];
             var result = await Mediator.Send(query);
             return Json(result.AsQueryable().ToDataSourceResult(request));
         }
@@ -92,6 +94,7 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
         public async Task<IActionResult> GetLampiranPengajuanAkseptasiStatus([DataSourceRequest] DataSourceRequest request, PengajuanAkseptasiStatusAttachmentViewModel model)
         {
             var query = Mapper.Map<GetPengajuanAkseptasiStatusAttachmentsQuery>(model);
+            query.DatabaseName = Request.Cookies["DatabaseValue"];
             var result = await Mediator.Send(query);
             return Json(result.AsQueryable().ToDataSourceResult(request));
         }
@@ -156,7 +159,7 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 
                 var entity = await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Pengajuan Akseptasi", Model = entity});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan, Model = entity});
             }
             catch (ValidationException ex)
             {
@@ -167,7 +170,7 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
                 return Json(new { Result = "ERROR", ex.Message });
             }
 
-            return PartialView("~/Modules/PengajuanAkseptasi/Components/PengajuanAkseptasi/_PengajuanAkseptasi.cshtml" ,model);
+            return PartialView("~/Modules/Shared/Components/PengajuanAkseptasi/_PengajuanAkseptasi.cshtml" ,model);
         }
 
         public async Task<IActionResult> SaveLampiranPengajuanAkseptasi(PengajuanAkseptasiAttachmentViewModel model)
@@ -176,7 +179,7 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
             {
                 var command = Mapper.Map<SavePengajuanAkspetasiAttachmentCommand>(model);
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Lampiran" });
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan });
         
             }
             catch (ValidationException ex)
@@ -199,7 +202,7 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
                 var command = Mapper.Map<DeletePengajuanAkseptasiAttachmentCommand>(model);
                 await Mediator.Send(command);
 
-                return Json(new { Result = "OK", Message = "Successfully Delete Lampiran" });
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan });
             }
             catch (Exception e)
             {

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using ABB.Application.Common;
 using ABB.Application.Kotas.Commands;
 using ABB.Application.Kotas.Queries;
 using ABB.Web.Modules.Base;
@@ -39,7 +40,7 @@ namespace ABB.Web.Modules.Kota
                 var command = Mapper.Map<SaveKotaCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Kota"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {
@@ -55,7 +56,7 @@ namespace ABB.Web.Modules.Kota
                 var command = Mapper.Map<DeleteKotaCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Kota"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {

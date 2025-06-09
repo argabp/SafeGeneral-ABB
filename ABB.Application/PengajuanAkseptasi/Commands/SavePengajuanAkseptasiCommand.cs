@@ -192,6 +192,7 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
                     entity.pst_pas5 = request.pst_pas5;
                     entity.pst_dis = request.pst_dis;
                     entity.pst_kms = request.pst_kms;
+                    entity.tgl_pengajuan = request.tgl_pengajuan;
                 }
 
                 await _context.SaveChangesAsync(cancellationToken);

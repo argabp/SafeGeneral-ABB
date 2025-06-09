@@ -595,15 +595,28 @@ function loadDataSource(args, type) {
   ctl.setDataSource(dataSource);
 }
 function autoFitAllColumn($this, customColumn = []) {
-  $this.columns.forEach(function (item, index) {
-    if (item.width != undefined || item.width > 1) customColumn.push(index);
-  });
-
-  for (var i = 0; i < $this.columns.length; i++) {
-    if (i !== 0 && !customColumn.includes(i)) {
-      $this.autoFitColumn(i);
+  if($this.columns === undefined) {
+    $this.sender.columns.forEach(function (item, index) {
+      if (item.width != undefined || item.width > 1) customColumn.push(index);
+    });
+    
+    for (var i = 0; i < $this.sender.columns.length; i++) {
+      if (i !== 0 && !customColumn.includes(i)) {
+        $this.sender.autoFitColumn(i);
+      }
+    }
+  }else{
+    $this.columns.forEach(function (item, index) {
+      if (item.width != undefined || item.width > 1) customColumn.push(index);
+    });
+    
+    for (var i = 0; i < $this.columns.length; i++) {
+      if (i !== 0 && !customColumn.includes(i)) {
+        $this.autoFitColumn(i);
+      }
     }
   }
+
 }
 function initSortableGrid(id) {
   var grid = $(id).data("kendoGrid");
@@ -650,9 +663,8 @@ function searchFilter() {
     searchkeyword: $("#SearchKeyword").val(),
   };
 }
-function gridAutoFit(e) {
-  var $this = this;
-  autoFitAllColumn($this);
+function gridAutoFit(grid) {
+  autoFitAllColumn(grid);
 }
 function directAddTemplate(instance, url, type) {
   var value = instance.input.val();

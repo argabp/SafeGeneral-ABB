@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using ABB.Application.Common;
 using ABB.Application.GrupResikos.Commands;
 using ABB.Application.GrupResikos.Queries;
 using ABB.Web.Modules.Base;
@@ -54,7 +55,7 @@ namespace ABB.Web.Modules.GrupResiko
                 var command = Mapper.Map<AddGrupResikoCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Add Grup Resiko"});
+                return Json(new { Result = "OK", Message = "Data Berhasil Disimpan"});
 
             }
             catch (Exception ex)
@@ -71,7 +72,7 @@ namespace ABB.Web.Modules.GrupResiko
                 var command = Mapper.Map<EditGrupResikoCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Edit Grup Resiko"});
+                return Json(new { Result = "OK", Message = "Data Berhasil Disimpan"});
 
             }
             catch (Exception ex)
@@ -88,7 +89,7 @@ namespace ABB.Web.Modules.GrupResiko
                 var command = Mapper.Map<DeleteGrupResikoCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Grup Resiko"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)
@@ -105,7 +106,7 @@ namespace ABB.Web.Modules.GrupResiko
                 var command = Mapper.Map<AddDetailGrupResikoCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Add Detail Grup Resiko"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {
@@ -121,7 +122,7 @@ namespace ABB.Web.Modules.GrupResiko
                 var command = Mapper.Map<EditDetailGrupResikoCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Edit Detail Grup Resiko"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)
@@ -138,7 +139,7 @@ namespace ABB.Web.Modules.GrupResiko
                 var command = Mapper.Map<DeleteDetailGrupResikoCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Detail Grup Resiko"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {

@@ -7,6 +7,7 @@ using ABB.Application.Akseptasis.Queries;
 using ABB.Application.Alokasis.Commands;
 using ABB.Application.Alokasis.Queries;
 using ABB.Application.BiayaMaterais.Queries;
+using ABB.Application.Common;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Exceptions;
 using ABB.Application.Common.Queries;
@@ -63,7 +64,7 @@ namespace ABB.Web.Modules.Akseptasi
                 var command = Mapper.Map<SaveAkseptasiCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 var entity = await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Akseptasi", entity.no_aks});
+                return Json(new { Result = "OK", Message = "Data Berhasil Disimpan", entity.no_aks});
             }
             catch (ValidationException ex)
             {
@@ -94,7 +95,7 @@ namespace ABB.Web.Modules.Akseptasi
                     DatabaseName = Request.Cookies["DatabaseValue"]
                 };
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Akseptasi"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)
@@ -111,7 +112,7 @@ namespace ABB.Web.Modules.Akseptasi
                 var command = Mapper.Map<ClosingAkseptasiCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Closing Akseptasi"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -133,7 +134,7 @@ namespace ABB.Web.Modules.Akseptasi
                 var command = Mapper.Map<CopyResikoCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Copy Resiko"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -237,7 +238,7 @@ namespace ABB.Web.Modules.Akseptasi
                 var command = Mapper.Map<SaveKeteranganEndorsmentCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Keterangan Endorsment"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -454,7 +455,7 @@ namespace ABB.Web.Modules.Akseptasi
                 var command = Mapper.Map<SaveAkseptasiResikoCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Akseptasi Resiko"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -542,7 +543,7 @@ namespace ABB.Web.Modules.Akseptasi
                     DatabaseName = Request.Cookies["DatabaseValue"]
                 };
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Akseptasi Resiko"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)
@@ -584,7 +585,7 @@ namespace ABB.Web.Modules.Akseptasi
                 var command = Mapper.Map<SaveAkseptasiCoverageCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Akseptasi Coverage"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -663,7 +664,7 @@ namespace ABB.Web.Modules.Akseptasi
                     DatabaseName = Request.Cookies["DatabaseValue"]
                 };
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Akseptasi Coverage"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)
@@ -705,7 +706,7 @@ namespace ABB.Web.Modules.Akseptasi
                 var command = Mapper.Map<SaveAkseptasiObyekCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Akseptasi Obyek"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -785,7 +786,7 @@ namespace ABB.Web.Modules.Akseptasi
                     DatabaseName = Request.Cookies["DatabaseValue"]
                 };
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Akseptasi Obyek"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)
@@ -996,7 +997,7 @@ namespace ABB.Web.Modules.Akseptasi
                 fireCommand.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(fireCommand);
                 
-                return Json(new { Result = "OK", Message = "Successfully Save Akseptasi Other"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -1023,7 +1024,7 @@ namespace ABB.Web.Modules.Akseptasi
                 motorCommand.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(motorCommand);
                 
-                return Json(new { Result = "OK", Message = "Successfully Save Akseptasi Other"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -1066,7 +1067,7 @@ namespace ABB.Web.Modules.Akseptasi
                 var command = Mapper.Map<SaveAkseptasiOtherMotorDetailCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Akseptasi Resiko Other Motor Detail"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -1153,7 +1154,7 @@ namespace ABB.Web.Modules.Akseptasi
                     DatabaseName = Request.Cookies["DatabaseValue"]
                 };
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Akseptasi Resiko Other Motor Detail"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)
@@ -1174,7 +1175,7 @@ namespace ABB.Web.Modules.Akseptasi
                 motorCommand.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(motorCommand);
                 
-                return Json(new { Result = "OK", Message = "Successfully Save Akseptasi Other"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -1217,7 +1218,7 @@ namespace ABB.Web.Modules.Akseptasi
                 var command = Mapper.Map<SaveAkseptasiOtherCargoDetailCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Akseptasi Resiko Other Cargo Detail"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -1293,7 +1294,7 @@ namespace ABB.Web.Modules.Akseptasi
                     DatabaseName = Request.Cookies["DatabaseValue"]
                 };
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Akseptasi Resiko Other Cargo Detail"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
         
             }
             catch (Exception ex)
@@ -1315,7 +1316,7 @@ namespace ABB.Web.Modules.Akseptasi
                 bondingCommand.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(bondingCommand);
                 
-                return Json(new { Result = "OK", Message = "Successfully Save Akseptasi Other"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -1342,7 +1343,7 @@ namespace ABB.Web.Modules.Akseptasi
                 paCommand.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(paCommand);
                 
-                return Json(new { Result = "OK", Message = "Successfully Save Akseptasi Other"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -1369,7 +1370,7 @@ namespace ABB.Web.Modules.Akseptasi
                 hullCommand.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(hullCommand);
                 
-                return Json(new { Result = "OK", Message = "Successfully Save Akseptasi Other"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -1396,7 +1397,7 @@ namespace ABB.Web.Modules.Akseptasi
                 hullCommand.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(hullCommand);
                 
-                return Json(new { Result = "OK", Message = "Successfully Save Akseptasi Other"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -1444,7 +1445,7 @@ namespace ABB.Web.Modules.Akseptasi
                 var command = Mapper.Map<SaveDetailAlokasiCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Akseptasi Alokasi"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -1531,7 +1532,7 @@ namespace ABB.Web.Modules.Akseptasi
                     DatabaseName = Request.Cookies["DatabaseValue"]
                 };
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Akseptasi Alokasi"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)
@@ -1778,7 +1779,7 @@ namespace ABB.Web.Modules.Akseptasi
                 var command = Mapper.Map<CopyEndorsUpdateDeleteCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Copy Endors Delete"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -1800,7 +1801,7 @@ namespace ABB.Web.Modules.Akseptasi
                 var command = Mapper.Map<CopyEndorsUpdateDeleteCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Copy Endors Update"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -1822,7 +1823,7 @@ namespace ABB.Web.Modules.Akseptasi
                 var command = Mapper.Map<CopyEndorsInsertCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Copy Endors Insert"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -2423,7 +2424,7 @@ namespace ABB.Web.Modules.Akseptasi
                 var command = Mapper.Map<SaveAkseptasiPranotaCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Akseptasi Pranota"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -2469,7 +2470,7 @@ namespace ABB.Web.Modules.Akseptasi
                 var command = Mapper.Map<SaveAkseptasiPranotaKoasCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Akseptasi Pranota Koas"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -2556,7 +2557,7 @@ namespace ABB.Web.Modules.Akseptasi
                     DatabaseName = Request.Cookies["DatabaseValue"]
                 };
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Akseptasi Pranota Koas"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)

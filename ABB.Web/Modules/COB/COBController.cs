@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using ABB.Application.COBs.Commands;
 using ABB.Application.COBs.Queries;
+using ABB.Application.Common;
 using ABB.Application.Common.Exceptions;
 using ABB.Web.Extensions;
 using ABB.Web.Modules.Base;
@@ -48,7 +49,7 @@ namespace ABB.Web.Modules.COB
                 var command = Mapper.Map<AddCOBCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Add COB" });
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan });
             }
             catch (ValidationException ex)
             {
@@ -81,7 +82,7 @@ namespace ABB.Web.Modules.COB
                 var command = Mapper.Map<EditCOBCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Edit COB" });
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan });
             }
             catch (ValidationException ex)
             {
@@ -103,7 +104,7 @@ namespace ABB.Web.Modules.COB
                     DatabaseName = Request.Cookies["DatabaseValue"]
                 });
 
-                return Json(new { Result = true, Message = "Successfully Delete COB" });
+                return Json(new { Result = true, Message = Constant.DataDisimpan });
             }
             catch (Exception ex)
             {

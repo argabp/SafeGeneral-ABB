@@ -6,7 +6,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ABB.Web.Modules.PengajuanAkseptasi.Components.PengajuanAkseptasi
+namespace ABB.Web.Modules.Shared.Components.PengajuanAkseptasi
 {
     public class PengajuanAkseptasiViewComponent : ViewComponent
     {
@@ -37,7 +37,9 @@ namespace ABB.Web.Modules.PengajuanAkseptasi.Components.PengajuanAkseptasi
                     pst_pas2 = 0,
                     pst_pas3 = 0,
                     pst_pas4 = 0,
-                    pst_pas5 = 0
+                    pst_pas5 = 0,
+                    pst_dis = 0,
+                    pst_kms = 0
                 });
             }
 

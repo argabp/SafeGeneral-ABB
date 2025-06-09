@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ABB.Application.BiayaMaterais.Queries;
 using ABB.Application.BiayaPerSubCOBs.Commands;
 using ABB.Application.BiayaPerSubCOBs.Queries;
+using ABB.Application.Common;
 using ABB.Application.Common.Exceptions;
 using ABB.Application.SebabKejadians.Queries;
 using ABB.Web.Extensions;
@@ -45,7 +46,7 @@ namespace ABB.Web.Modules.BiayaPerSubCOB
                 var command = Mapper.Map<SaveBiayaPerSubCOBCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Biaya Per Sub COB"});
+                return Json(new { Result = "OK", Message = "Data Berhasil Disimpan"});
             }
             catch (ValidationException ex)
             {
@@ -68,7 +69,7 @@ namespace ABB.Web.Modules.BiayaPerSubCOB
                     { kd_mtu = kd_mtu, kd_cob = kd_cob, kd_scob = kd_scob, 
                         DatabaseName = Request.Cookies["DatabaseValue"]};
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Biaya Per Sub COB"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)

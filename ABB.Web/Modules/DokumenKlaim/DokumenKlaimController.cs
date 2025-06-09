@@ -45,7 +45,7 @@ namespace ABB.Web.Modules.DokumenKlaim
                 var command = Mapper.Map<SaveDokumenKlaimCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Dokumen Klaim"});
+                return Json(new { Result = "OK", Message = "Data Berhasil Disimpan"});
             }
             catch (ValidationException ex)
             {
@@ -70,7 +70,7 @@ namespace ABB.Web.Modules.DokumenKlaim
                     DatabaseName = Request.Cookies["DatabaseValue"]
                 };
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Dokumen Klaim"});
+                return Json(new { Result = "OK", Message = "Data Berhasil Disimpan"});
 
             }
             catch (Exception ex)

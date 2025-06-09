@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ABB.Application.Common;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Exceptions;
 using ABB.Application.Lokasis.Commands;
@@ -86,7 +87,7 @@ namespace ABB.Web.Modules.Lokasi
                 var command = Mapper.Map<SaveProvinsiCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Provinsi"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {
@@ -102,7 +103,7 @@ namespace ABB.Web.Modules.Lokasi
                 var command = Mapper.Map<DeleteProvinsiCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Provinsi"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {
@@ -118,7 +119,7 @@ namespace ABB.Web.Modules.Lokasi
                 var command = Mapper.Map<SaveKabupatenCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Kabupaten"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -138,7 +139,7 @@ namespace ABB.Web.Modules.Lokasi
                 var command = Mapper.Map<DeleteKabupatenCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Kabupaten"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {
@@ -154,7 +155,7 @@ namespace ABB.Web.Modules.Lokasi
                 var command = Mapper.Map<SaveKecamatanCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Kecamatan"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -174,7 +175,7 @@ namespace ABB.Web.Modules.Lokasi
                 var command = Mapper.Map<DeleteKecamatanCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Kecamatan"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {
@@ -190,7 +191,7 @@ namespace ABB.Web.Modules.Lokasi
                 var command = Mapper.Map<SaveKelurahanCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Kelurahan"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (ValidationException ex)
             {
@@ -210,7 +211,7 @@ namespace ABB.Web.Modules.Lokasi
                 var command = Mapper.Map<DeleteKelurahanCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Kelurahan"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)
@@ -236,7 +237,7 @@ namespace ABB.Web.Modules.Lokasi
                 var command = Mapper.Map<SaveLokasiResikoCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Lokasi Resiko"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {
@@ -252,7 +253,7 @@ namespace ABB.Web.Modules.Lokasi
                 var command = Mapper.Map<DeleteLokasiResikoCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Lokasi Resiko"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {
@@ -278,7 +279,7 @@ namespace ABB.Web.Modules.Lokasi
                 var command = Mapper.Map<SaveDetailLokasiResikoCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Detail Lokasi Resiko"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {
@@ -294,7 +295,7 @@ namespace ABB.Web.Modules.Lokasi
                 var command = Mapper.Map<DeleteDetailLokasiResikoCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Detail Lokasi Resiko"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {

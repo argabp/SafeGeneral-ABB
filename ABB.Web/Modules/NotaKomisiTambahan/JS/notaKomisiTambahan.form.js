@@ -140,7 +140,6 @@ function OnNomorAkseptasiChange(e){
 }
 
 function onPercentageNotaChange(e){
-    debugger;
     ajaxGet(`/NotaKomisiTambahan/GetNilaiAndPercentage?kd_mtu=${$("#kd_mtu").val()}
                 &tgl_nt=${$("#tgl_nt").val()}&pst_nt=${e.sender.value()}&nilai_nt=${$("#nilai_nt").val()}
                 &jns_nt_kel=${$("#jns_nt_kel").val()}&kd_grp_ttj=${$("#kd_grp_ttj").val()}&uraian=${$("#uraian").val()}

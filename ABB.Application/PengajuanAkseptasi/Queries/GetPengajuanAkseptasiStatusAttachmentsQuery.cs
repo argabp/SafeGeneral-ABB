@@ -21,22 +21,30 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
         public string no_aks { get; set; }
         
         public Int16 no_urut { get; set; }
+
+        public string DatabaseName { get; set; }
     }
 
     public class GetPengajuanAkseptasiStatusAttachmentsQueryHandler : IRequestHandler<GetPengajuanAkseptasiStatusAttachmentsQuery, List<PengajuanAkseptasiStatusAttachmentDto>>
     {
-        private readonly IDbConnection _db;
+        private readonly IDbConnectionFactory _dbConnectionFactory;
 
-        public GetPengajuanAkseptasiStatusAttachmentsQueryHandler(IDbConnection db)
+        public GetPengajuanAkseptasiStatusAttachmentsQueryHandler(IDbConnectionFactory dbConnectionFactory)
         {
-            _db = db;
+            _dbConnectionFactory = dbConnectionFactory;
         }
 
         public async Task<List<PengajuanAkseptasiStatusAttachmentDto>> Handle(GetPengajuanAkseptasiStatusAttachmentsQuery request,
             CancellationToken cancellationToken)
         {
+            _dbConnectionFactory.CreateDbConnection(request.DatabaseName);
             var result =
-                (await _db.QueryProc<PengajuanAkseptasiStatusAttachmentDto>("sp_PENGAJUANAKSEPTASI_GetPengajuanAkseptasiStatusAttachment",
+                (await _dbConnectionFactory.Query<PengajuanAkseptasiStatusAttachmentDto>(@"
+                                                                                                Select p.*
+                                                                                                    From TR_AkseptasiStatusAttachment p 
+                                                                                                Where @kd_cb = p.kd_cb AND @kd_cob = p.kd_cob
+                                                                                                AND @kd_scob = p.kd_scob AND @kd_thn = p.kd_thn
+                                                                                                AND @no_aks = p.no_aks AND @no_urut = p.no_urut",
                     new
                     {
                         request.kd_cb, request.kd_cob, request.kd_scob, 

@@ -50,7 +50,7 @@ namespace ABB.Web.Modules.Account
             try
             {
                 await Mediator.Send(Mapper.Map<ChangeUserProfileCommand>(model.UserProfile));
-                return Json(new { Result = "OK", Message = "Successfully Change Profile" });
+                return Json(new { Result = "OK", Message = "Data Berhasil Disimpan" });
             }
             catch (ValidationException ex)
             {
@@ -71,7 +71,7 @@ namespace ABB.Web.Modules.Account
             try
             {
                 await Mediator.Send(Mapper.Map<ChangeCurrentPasswordCommand>(model.UserPassword));
-                return Json(new { Result = "OK", Message = "Successfully Change Password" });
+                return Json(new { Result = "OK", Message = "Data Berhasil Disimpan" });
             }
             catch (ValidationException ex)
             {

@@ -1,6 +1,5 @@
 ﻿$(document).ready(function () {
     btnPengajuanAkseptasiSubmit();
-    btnLookUp();
 });
 
 function btnPengajuanAkseptasiSubmit(){
@@ -20,7 +19,6 @@ function pengajuanAkseptasiSubmit(){
     form.append("kd_scob", dataItem.kd_scob);
     form.append("kd_thn", dataItem.kd_thn);
     form.append("no_aks", dataItem.no_aks);
-    form.append("no_updt", dataItem.no_updt);
     form.append("kd_user_status", dataItem.kd_user_status);
     form.append("nomor_pengajuan", dataItem.nomor_pengajuan);
     form.append("kd_status", 2);

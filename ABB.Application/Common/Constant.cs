@@ -197,5 +197,7 @@ namespace ABB.Application.Common
 
         public static readonly string FooterReport = @"</body>
                                                         </html>";
+
+        public static readonly string DataDisimpan = "Data Berhasil Disimpan";
     }
 }

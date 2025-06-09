@@ -107,6 +107,8 @@ function setPengajuanAkseptasiModel(model){
     $("#kd_cb").getKendoDropDownList().readonly(true);
     $("#kd_cob").getKendoDropDownList().readonly(true);
     $("#kd_scob").getKendoDropDownList().readonly(true);
+    $("#kd_thn").val(model.kd_thn);
+    $("#no_aks").val(model.no_aks);
 }
 
 function savePengajuanAkseptasi(url) {

@@ -47,7 +47,8 @@ namespace ABB.Application.Approvals.Commands
             {
                 var dbContext = _contextFactory.CreateDbContext(request.DatabaseName);
                 var approvalDetail = dbContext.ApprovalDetail.FirstOrDefault(w => w.kd_cb == request.kd_cb
-                    && w.kd_cob == request.kd_cob && w.kd_scob == request.kd_scob && w.kd_status == request.kd_status);
+                    && w.kd_cob == request.kd_cob && w.kd_scob == request.kd_scob && w.kd_status == request.kd_status
+                    && w.nilai_limit_awal == request.nilai_limit_awal && w.nilai_limit_akhir == request.nilai_limit_akhir);
 
                 if (approvalDetail != null)
                 {

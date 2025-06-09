@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using ABB.Application.Common;
 using ABB.Application.PeruntukanKendaraans.Commands;
 using ABB.Application.PeruntukanKendaraans.Queries;
 using ABB.Web.Modules.Base;
@@ -39,7 +40,7 @@ namespace ABB.Web.Modules.PeruntukanKendaraan
                 var command = Mapper.Map<SavePeruntukanKendaraanCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Peruntukan Kendaraan"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {
@@ -55,7 +56,7 @@ namespace ABB.Web.Modules.PeruntukanKendaraan
                 var command = Mapper.Map<DeletePeruntukanKendaraanCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Peruntukan Kendaraan"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {

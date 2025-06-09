@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using ABB.Application.Common;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Exceptions;
 using ABB.Application.UserCabangs.Commands;
@@ -52,7 +53,7 @@ namespace ABB.Web.Modules.UserCabang
                 }
 
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Add User Cabang" });
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan });
             }
             catch (ValidationException ex)
             {
@@ -102,7 +103,7 @@ namespace ABB.Web.Modules.UserCabang
                 }
 
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Edit User Cabang" });
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan });
             }
             catch (ValidationException ex)
             {
@@ -119,7 +120,7 @@ namespace ABB.Web.Modules.UserCabang
         public async Task<IActionResult> Delete(string id)
         {
             await Mediator.Send(new DeleteUserCabangCommand() { userid = id });
-            return Json(new { Result = "OK", Message = "Successfully Delete User Cabang" });
+            return Json(new { Result = "OK", Message = Constant.DataDisimpan });
         }
 
         public async Task<ActionResult> GetCabangs()

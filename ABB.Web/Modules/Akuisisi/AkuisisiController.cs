@@ -46,7 +46,7 @@ namespace ABB.Web.Modules.Akuisisi
                 var command = Mapper.Map<SaveAkuisisiCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Akuisisi"});
+                return Json(new { Result = "OK", Message = "Data Berhasil Disimpan"});
             }
             catch (ValidationException ex)
             {
@@ -73,7 +73,7 @@ namespace ABB.Web.Modules.Akuisisi
                         DatabaseName = Request.Cookies["DatabaseValue"]
                     };
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Delete Akuisisi"});
+                return Json(new { Result = "OK", Message = "Data Berhasil Disimpan"});
 
             }
             catch (Exception ex)

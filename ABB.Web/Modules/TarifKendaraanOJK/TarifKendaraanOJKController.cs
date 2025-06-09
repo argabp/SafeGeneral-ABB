@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ABB.Application.Common;
 using ABB.Application.Common.Dtos;
 using ABB.Application.TarifKendaraanOJKs.Commands;
 using ABB.Application.TarifKendaraanOJKs.Queries;
@@ -102,7 +103,7 @@ namespace ABB.Web.Modules.TarifKendaraanOJK
                 var command = Mapper.Map<SaveTarifKendaraanOJKCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Successfully Save Tarif Kendaraan OJK"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {
@@ -123,7 +124,7 @@ namespace ABB.Web.Modules.TarifKendaraanOJK
                     no_kategori = no_kategori,
                     DatabaseName = Request.Cookies["DatabaseValue"]
                 });
-                return Json(new { Result = "OK", Message = "Successfully Delete Tarif Kendaraan OJK"});
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
             }
             catch (Exception ex)

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using ABB.Application.Common.Services;
+using ABB.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -69,7 +70,8 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
                         request.kd_status, tgl_status = DateTime.Now, request.keterangan
                     })).First();
 
-                var no_urut = ( await _dbConnection.Query<string>($@"SELECT no_urut FROM TR_AkseptasiStatus WHERE 
+
+                var no_urut = ( await _dbConnection.Query<Int16>($@"SELECT no_urut FROM TR_AkseptasiStatus WHERE 
                                                                                 kd_cb = '{request.kd_cb}' AND kd_cob = '{request.kd_cob}' 
                                                                                 AND kd_scob = '{request.kd_scob}' AND kd_thn = '{request.kd_thn}' AND
                                                                                 no_aks = '{request.no_aks}' Order by no_urut desc")).First();
@@ -77,11 +79,30 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
                 var path = _configuration.GetSection("PengajuanAkseptasiStatusAttachment").Value.TrimEnd('/');
                 var pengajuan = $@"{request.kd_cb.Trim()}{request.kd_cob.Trim()}{request.kd_scob.Trim()}{request.kd_thn}{request.no_aks}{no_urut}";
                 path = Path.Combine(path, pengajuan.Replace("/", string.Empty));
-
+                Int16 sequence = 0;
+                var statusAttachments = new List<TRAkseptasiStatusAttachment>();
                 foreach (var file in request.Files)
                 {
                     await _pictureHelper.UploadToFolder(file, path);
+
+                    sequence++;
+
+                    statusAttachments.Add(new TRAkseptasiStatusAttachment()
+                    {
+                        no_urut = no_urut,
+                        kd_cb = request.kd_cb,
+                        kd_cob = request.kd_cob,
+                        kd_scob = request.kd_scob,
+                        kd_thn = request.kd_thn,
+                        no_aks = request.no_aks,
+                        no_dokumen = sequence,
+                        nm_dokumen = file.FileName
+                    });
                 }
+                
+                _dbContext.TRAkseptasiStatusAttachment.AddRange(statusAttachments);
+
+                await _dbContext.SaveChangesAsync(cancellationToken);
 
                 var dbContext = _dbContextFactory.CreateDbContext(request.DatabaseName);
 
