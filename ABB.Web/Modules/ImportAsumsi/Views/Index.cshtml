@@ -1,0 +1,40 @@
+﻿@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Import Asumsi";
+}
+<script src="~/Modules/ImportAsumsi/JS/importAsumsi.js"></script>
+
+<div class="flat-box" id="container-cancel-csm">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Import Asumsi
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <form id="ImportAsumsiForm" enctype="multipart/form-data" autocomplete="off">
+            <div>
+                <div class="row form-group">
+                    <div class="row col-sm-6">
+                        <label class="col-sm-3">File</label>
+                        <div class="col-sm-7">
+                            <kendo-upload name="asumsiFile" multiple="false"></kendo-upload>
+                        </div>
+                        <div class="col-sm-2">
+                            <button type="button" id="btn-upload-asumsi" class="btn btn-primary" style="width: 100%">
+                                <span class="fa fa-upload"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

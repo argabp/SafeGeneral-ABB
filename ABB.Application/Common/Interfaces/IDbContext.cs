@@ -96,6 +96,10 @@ namespace ABB.Application.Common.Interfaces
         DbSet<EmailTemplate> EmailTemplate { get; set; }
         DbSet<ViewTRAkseptasi> ViewTRAkseptasi { get; set; }
         DbSet<AkseptasiProduk> AkseptasiProduk { get; set; }
+        DbSet<Asumsi> Asumsi { get; set; }
+        DbSet<AsumsiDetail> AsumsiDetail { get; set; }
+        DbSet<AsumsiPeriode> AsumsiPeriode { get; set; }
+        DbSet<PeriodeProsesModel> PeriodeProses { get; set; }
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);

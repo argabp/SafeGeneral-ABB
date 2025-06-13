@@ -106,6 +106,10 @@ namespace ABB.Infrastructure.Data
         public DbSet<EmailTemplate> EmailTemplate { get; set; }
         public DbSet<ViewTRAkseptasi> ViewTRAkseptasi { get; set; }
         public DbSet<AkseptasiProduk> AkseptasiProduk { get; set; }
+        public DbSet<Asumsi> Asumsi { get; set; }
+        public DbSet<AsumsiDetail> AsumsiDetail { get; set; }
+        public DbSet<AsumsiPeriode> AsumsiPeriode { get; set; }
+        public DbSet<PeriodeProsesModel> PeriodeProses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -205,6 +209,10 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new EmailTemplateMap());
             builder.ApplyConfiguration(new ViewTRAkseptasiMap());
             builder.ApplyConfiguration(new AkseptasiProdukMap());
+            builder.ApplyConfiguration(new AsumsiMap());
+            builder.ApplyConfiguration(new AsumsiDetailMap());
+            builder.ApplyConfiguration(new AsumsiPeriodeMap());
+            builder.ApplyConfiguration(new PeriodeProsesMap());
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

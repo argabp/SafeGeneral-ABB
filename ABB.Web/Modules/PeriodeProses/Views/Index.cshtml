@@ -1,0 +1,58 @@
+﻿@using Kendo.Mvc.UI
+@using ABB.Application.PeriodeProses.Queries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Periode Proses";
+}
+<script src="~/Modules/PeriodeProses/JS/periodeProses.index.js"></script>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Periode Proses
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        @(Html.Kendo().Grid<PeriodeProsesDto>()
+            .Name("PeriodeProsesGrid")
+            .Editable(editable => editable.Mode(GridEditMode.InLine))
+            .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetPeriodeProses", "PeriodeProses").Data("searchFilter"))
+                .Model(w => w.Id(e => e.Id))
+            )
+            .ToolBar(t => t.Create())
+            .Columns(columns =>
+            {
+                columns.Bound(col => col.PeriodeProses).Format("{0: dd-MM-yyyy}").EditorTemplateName("KendoDateEditor").Editable("editPeriodeProses");
+                columns.Bound(col => col.FlagProses).EditorTemplateName("KendoSwitch");
+                columns.Command(command =>
+                {
+                    command.Edit();
+                    command.Custom("Delete")
+                        .Text("Delete")
+                        .IconClass("k-icon k-i-delete")
+                        .HtmlAttributes(new { title="Delete"})
+                        .Click("onDeletePeriodeProses");
+                }).Width(200);
+            })
+            .Pageable(pager => pager
+                .Refresh(true)
+                .Info(true)
+                .PageSizes(true)
+            )
+            .Sortable()
+            .Filterable()
+            .Scrollable()
+            .Height(380)
+            .Resizable(a=>a.Columns(true))
+            .Events(ev => ev.DataBound("gridAutoFit").Save("onSavePeriodeProses")))
+    </div>
+</div>
+

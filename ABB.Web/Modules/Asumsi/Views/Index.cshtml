@@ -1,0 +1,164 @@
+﻿@using Kendo.Mvc.UI
+@using ABB.Domain.Entities
+@using ABB.Application.Asumsis.Queries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Asumsi";
+}
+<script src="~/Modules/Asumsi/JS/asumsi.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Asumsi
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<Asumsi>()
+                .Name("AsumsiGrid")
+                .ToolBar(toolbar => toolbar.Create())
+                .Editable(editable => editable.Mode(GridEditMode.InLine))
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetAsumsi", "Asumsi").Data("searchFilter"))
+                    .Model(model => model.Id(p => p.KodeAsumsi))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.KodeAsumsi).Width(150).Title("Kode Asumsi").Editable("editKodeAsumsi");
+                    columns.Bound(col => col.NamaAsumsi).Width(150).Title("Nama Asumsi");
+                    columns.Command(command =>
+                    {
+                        command.Edit();
+                        command.Custom("Delete")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeleteAsumsi");
+                    }).Width(200);
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .ClientDetailTemplateId("template")
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit").Save("onSaveAsumsi"))
+        
+                )    
+        </div>
+        
+        <script id="template" type="text/kendo-tmpl">
+            @(Html.Kendo().TabStrip()
+                    .Name("tabStrip_#=KodeAsumsi#")
+                    .SelectedIndex(0)
+                    .Animation(animation => animation.Open(open => open.Fade(FadeDirection.In)))
+                    .Items(items =>
+                    {
+                        items.Add().Text("Periode").Content(@<text>
+                            @(Html.Kendo().Grid<AsumsiPeriodeDto>()
+                                .Name("grid_Periode_#=KodeAsumsi#") // template expression, to be evaluated in the master context
+                                .ToolBar(toolbar => toolbar.Create())
+                                .Editable(editable => editable.Mode(GridEditMode.InLine))
+                                .DataSource(dataSource => dataSource.Ajax()
+                                    .Read(read => read.Action("GetAsumsiPeriode", "Asumsi", new { kodeAsumsi = "#=KodeAsumsi#" }))//.Data("getAsumsiPeriodeParam"))
+                                    .Model(m => m.Id(p => p.Id))
+                                )
+                                .Columns(columns =>
+                                {
+                                    columns.Bound(col => col.KodeAsumsi).Width(150).Title("Kode Asumsi").Editable("editReadOnlyField");
+                                    columns.Bound(col => col.KodeProduk).Width(150).Title("Kode Produk").Editable("editKodeProduk");
+                                    columns.Bound(col => col.PeriodeProses).Width(200).Title("Periode Proses").Format("{0: dd-MM-yyyy}").EditorTemplateName("KendoDateEditor").Editable("editPeriodeProses");
+                                    columns.Command(command =>
+                                    {
+                                        command.Edit();
+                                        command.Custom("DeletePeriode")
+                                            .Text("Delete")
+                                            .IconClass("k-icon k-i-delete")
+                                            .HtmlAttributes(new { title="Delete"})
+                                            .Click("onDeleteAsumsiPeriode");
+                                    }).Width(200);
+                                })
+                                .Pageable(pager => pager
+                                    .Refresh(true)
+                                    .Info(true)
+                                    .PageSizes(true)
+                                )
+                                .Sortable()
+                                .Selectable()
+                                .Filterable()
+                                .Scrollable()
+                                .Height(380)
+                                .Resizable(a=>a.Columns(true))
+                                .Events(ev => ev.DataBound("gridAutoFit").Change("onAsumsiPeriodeChange").Save("onSaveAsumsiPeriode").Edit("onEditAsumsiPeriode"))
+                                .ToClientTemplate())
+                        </text>
+                        );
+                        items.Add().Text("Detail").Content(
+                            @<text>
+                        @(Html.Kendo().Grid<AsumsiDetailDto>()
+                            .Name("grid_Detail#=KodeAsumsi#")
+                            .ToolBar(toolbar => toolbar.Create())
+                            .Editable(editable => editable.Mode(GridEditMode.InLine))
+                            .DataSource(dataSource => dataSource.Ajax()
+                                .Read(read => read.Action("GetAsumsiDetail", "Asumsi").Data("getAsumsiDetailParam"))
+                                .Model(m =>
+                                {
+                                    m.Id(p => p.Id);
+                                })
+                            )
+                            .Columns(columns =>
+                            {
+                                columns.Bound(col => col.KodeAsumsi).Width(150).Title("Kode Asumsi").Editable("editReadOnlyField");
+                                columns.Bound(col => col.KodeProduk).Width(150).Title("Kode Produk").Editable("editReadOnlyField");
+                                columns.Bound(col => col.PeriodeProses).Width(200).Title("Periode Proses").Format("{0: dd-MM-yyyy}").EditorTemplateName("KendoDateEditor").Editable("editReadOnlyField");
+                                columns.Bound(col => col.Thn).Width(100).Title("Tahun").Editable("editTahun");
+                                columns.Bound(col => col.Persentase).Width(150).Title("Persentase").EditorTemplateName("KendoNumericTextBox");
+                                columns.Command(command =>
+                                {
+                                    command.Edit();
+                                    command.Custom("DeleteDetail")
+                                        .Text("Delete")
+                                        .IconClass("k-icon k-i-delete")
+                                        .HtmlAttributes(new { title="Delete"})
+                                        .Click("onDeleteAsumsiDetail");
+                                }).Width(200);
+                            })
+                            .Pageable(pager => pager
+                                        .Refresh(true)
+                                        .Info(true)
+                                        .PageSizes(true)
+                                        )
+                            .Sortable()
+                                .Filterable()
+                            .Scrollable()
+                            .Height(380)
+                            .Resizable(a=>a.Columns(true))
+                            .Events(ev => ev.DataBound("gridAutoFit").Save("onSaveAsumsiDetail").Edit("onEditAsumsiDetail"))
+                            .ToClientTemplate())
+                        </text>
+                        );
+                    })
+                    .ToClientTemplate())
+        </script>
+    </div>
+</div>
+
