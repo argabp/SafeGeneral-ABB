@@ -84,6 +84,8 @@ namespace ABB.Web.Modules.PengajuanAkseptasi.Models
         public decimal? pst_dis { get; set; }
         
         public decimal? pst_kms { get; set; }
+
+        public bool? flag_approved { get; set; }
         
         public void Mapping(Profile profile)
         {

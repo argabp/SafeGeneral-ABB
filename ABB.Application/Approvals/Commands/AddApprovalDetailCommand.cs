@@ -19,11 +19,9 @@ namespace ABB.Application.Approvals.Commands
 
         public string kd_scob { get; set; }
 
+        public string kd_user { get; set; }
+
         public Int16 kd_status { get; set; }
-
-        public decimal nilai_limit_awal { get; set; }
-
-        public decimal nilai_limit_akhir { get; set; }
 
         public string kd_user_sign { get; set; }
 
@@ -53,8 +51,7 @@ namespace ABB.Application.Approvals.Commands
                     kd_cob = request.kd_cob,
                     kd_scob = request.kd_scob,
                     kd_status = request.kd_status,
-                    nilai_limit_awal = request.nilai_limit_awal,
-                    nilai_limit_akhir = request.nilai_limit_akhir,
+                    kd_user = request.kd_user,
                     kd_user_sign = request.kd_user_sign,
                     sla = request.sla
                 };

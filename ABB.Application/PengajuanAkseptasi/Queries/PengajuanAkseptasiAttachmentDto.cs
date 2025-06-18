@@ -14,12 +14,12 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
 
         public string no_aks { get; set; }
 
-        public Int16 kd_jns_dokumen { get; set; }
-
         public Int16 kd_dokumen { get; set; }
 
         public string nm_dokumen { get; set; }
 
         public string dokumenName { get; set; }
+
+        public bool? flag_wajib { get; set; }
     }
 }

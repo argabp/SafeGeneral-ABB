@@ -68,9 +68,9 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
             var signature2 = ConvertImageToBase64Html(Path.Combine(wwwroot, path, data.user_id_diperiksa ?? string.Empty, data.ttd_diperiksa?.Replace("\\", "/") ?? string.Empty));
             var signature3 = ConvertImageToBase64Html(Path.Combine(wwwroot, path, data.user_id_disetujui ?? string.Empty, data.ttd_disetujui?.Replace("\\", "/") ?? string.Empty));
 
-            var tgl_dibuat = data.tgl_dibuat == null ? string.Empty : data.tgl_dibuat.Value.ToString("dd MMM yyyy hh:mm:ss");
-            var tgl_diperiksa = data.tgl_diperiksa == null ? string.Empty : data.tgl_diperiksa.Value.ToString("dd MMM yyyy hh:mm:ss");
-            var tgl_disetujui = data.tgl_disetujui == null ? string.Empty : data.tgl_disetujui.Value.ToString("dd MMM yyyy hh:mm:ss");
+            var tgl_dibuat = data.tgl_dibuat == null ? string.Empty : data.tgl_dibuat.Value.ToString("dd MMM yyyy HH:mm:ss");
+            var tgl_diperiksa = data.tgl_diperiksa == null ? string.Empty : data.tgl_diperiksa.Value.ToString("dd MMM yyyy HH:mm:ss");
+            var tgl_disetujui = data.tgl_disetujui == null ? string.Empty : data.tgl_disetujui.Value.ToString("dd MMM yyyy HH:mm:ss");
             
             var resultTemplate = templateProfileResult.Render( new
             {

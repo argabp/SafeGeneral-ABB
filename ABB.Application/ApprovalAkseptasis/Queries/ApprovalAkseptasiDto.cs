@@ -33,5 +33,7 @@ namespace ABB.Application.ApprovalAkseptasis.Queries
         public DateTime tgl_status { get; set; }
 
         public string kd_user_status { get; set; }
+
+        public bool? flag_approved { get; set; }
     }
 }

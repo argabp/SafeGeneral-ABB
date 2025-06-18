@@ -151,7 +151,8 @@ namespace ABB.Web.Modules.Approval
             }
         }
         
-        public async Task<IActionResult> EditDetail(string kd_cb, string kd_cob, string kd_scob, Int16 kd_status)
+        public async Task<IActionResult> EditDetail(string kd_cb, string kd_cob, string kd_scob, Int16 kd_status,
+                string kd_user, string kd_user_sign)
         {
             var detail = await Mediator.Send(new GetApprovalDetailQuery()
             {
@@ -159,6 +160,8 @@ namespace ABB.Web.Modules.Approval
                 kd_cob = kd_cob,
                 kd_scob = kd_scob,
                 kd_status = kd_status,
+                kd_user = kd_user,
+                kd_user_sign = kd_user_sign,
                 DatabaseName = Request.Cookies["DatabaseValue"]
             });
 

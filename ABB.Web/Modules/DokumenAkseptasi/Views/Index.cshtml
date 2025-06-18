@@ -1,0 +1,133 @@
+﻿@using Kendo.Mvc.UI
+@using ABB.Application.DokumenAkseptasis.Queries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Dokumen Akseptasi";
+}
+<script src="~/Modules/DokumenAkseptasi/JS/dokumenAkseptasi.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Dokumen Akseptasi
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+        </div>
+        <div class="col-md-2">
+            <button class="flat-btn-primary" onclick="btnAddDokumenAkseptasi()">Add Dokumen Akseptasi</button>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<DokumenAkseptasiDto>()
+                .Name("DokumenAkseptasiGrid")
+                .Editable(editable => editable.Mode(GridEditMode.InLine))
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetDokumenAkseptasis", "DokumenAkseptasi").Data("searchFilter"))
+                    .Model(model => model.Id(p => p.Id))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.nm_cob).Title("Nama COB");
+                    columns.Bound(col => col.nm_scob).Title("Nama Sub COB");
+                    columns.Bound(col => col.nm_dokumenakseptasi).Title("Nama Dokumen Akseptasi");
+                    columns.Command(command =>
+                    {
+                        command.Custom("EditDokumenAkseptasi")
+                            .Text("Edit")
+                            .IconClass("fa fa-pencil-alt")
+                            .HtmlAttributes(new { title = "Edit" })
+                            .Click("btnEditDokumenAkseptasi");
+                        command.Custom("DeleteDokumenAkseptasi")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeleteDokumenAkseptasi");
+                    }).Width(200);
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .ClientDetailTemplateId("template")
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit"))
+        
+                )    
+        </div>
+        
+        <script id="template" type="text/kendo-tmpl">
+            <div class="row">
+                <div class="col-md-4 k-button k-button-icontext">
+                    <button style="border: none;" onclick="btnAddDokumenAkseptasiDetail('#=kd_cob#', '#=kd_scob#')">+ ADD NEW RECORD</button>
+                </div>
+            </div>
+            @(Html.Kendo().Grid<DokumenAkseptasiDetilDto>()
+                .Name("grid_Detail_#=Id#") // template expression, to be evaluated in the master context
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetDokumenAkseptasiDetails", "DokumenAkseptasi", new { kd_cob = "#=kd_cob#", kd_scob = "#=kd_scob#" }))
+                    .Model(m => m.Id(p => p.Id))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.nm_dokumen).Title("Nama Dokumen");
+                    columns.Bound(col => col.flag_wajib).Title("Flag Wajib");
+                    columns.Command(command =>
+                    {
+                        command.Custom("EditDokumenAkseptasiDetail")
+                            .Text("Edit")
+                            .IconClass("fa fa-pencil-alt")
+                            .HtmlAttributes(new { title = "Edit" })
+                            .Click("btnEditDokumenAkseptasiDetail");
+                        command.Custom("DeleteDokumenAkseptasiDetail")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeleteDokumenAkseptasiDetail");
+                    }).Width(200);
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Selectable()
+                .Filterable()
+                .Scrollable()
+                .Height(380)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit"))
+                .ToClientTemplate())
+        </script>
+
+        @(Html.Kendo().Window()
+            .Name("DokumenAkseptasiWindow")
+            .Title("DokumenAkseptasi")
+            .Width(500)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+    </div>
+</div>
+

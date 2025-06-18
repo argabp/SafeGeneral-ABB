@@ -23,8 +23,6 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
 
         public string no_aks { get; set; }
 
-        public Int16 kd_jns_dokumen { get; set; }
-
         public Int16 kd_dokumen { get; set; }
     }
 
@@ -53,8 +51,7 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
                     w.kd_cob == request.kd_cob
                     && w.kd_scob == request.kd_scob &&
                     w.kd_thn == request.kd_thn
-                    && w.no_aks == request.no_aks &&
-                    w.kd_jns_dokumen == request.kd_jns_dokumen
+                    && w.no_aks == request.no_aks
                     && w.kd_dokumen == request.kd_dokumen);
 
                 var akseptasi = _context.TRAkseptasi.FirstOrDefault(w => w.kd_cb == request.kd_cb &&

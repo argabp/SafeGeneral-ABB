@@ -90,6 +90,8 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
         public decimal? pst_dis { get; set; }
         
         public decimal? pst_kms { get; set; }
+
+        public bool? flag_approved { get; set; }
         
         public void Mapping(Profile profile)
         {
@@ -193,6 +195,7 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
                     entity.pst_dis = request.pst_dis;
                     entity.pst_kms = request.pst_kms;
                     entity.tgl_pengajuan = request.tgl_pengajuan;
+                    entity.flag_approved = request.flag_approved;
                 }
 
                 await _context.SaveChangesAsync(cancellationToken);

@@ -109,6 +109,7 @@ function setPengajuanAkseptasiModel(model){
     $("#kd_scob").getKendoDropDownList().readonly(true);
     $("#kd_thn").val(model.kd_thn);
     $("#no_aks").val(model.no_aks);
+    $("#nomor_pengajuan").getKendoTextBox().value(model.nomor_pengajuan);
 }
 
 function savePengajuanAkseptasi(url) {

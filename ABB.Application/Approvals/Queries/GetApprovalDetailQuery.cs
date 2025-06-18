@@ -19,6 +19,10 @@ namespace ABB.Application.Approvals.Queries
         public string kd_scob { get; set; }
 
         public Int16 kd_status { get; set; }
+
+        public string kd_user { get; set; }
+
+        public string kd_user_sign { get; set; }
     }
 
     public class GetApprovalDetailQueryHandler : IRequestHandler<GetApprovalDetailQuery, ApprovalDetailDto>
@@ -38,7 +42,9 @@ namespace ABB.Application.Approvals.Queries
             var approval = dbContext.ApprovalDetail.FirstOrDefault(approval => approval.kd_cb.Trim() == request.kd_cb.Trim()
                                                                          && approval.kd_cob.Trim() == request.kd_cob.Trim()
                                                                          && approval.kd_scob.Trim() == request.kd_scob.Trim()
-                                                                         && approval.kd_status == request.kd_status);
+                                                                         && approval.kd_status == request.kd_status
+                                                                         && approval.kd_user == request.kd_user
+                                                                         && approval.kd_user_sign == request.kd_user_sign);
 
             if (approval == null)
                 throw new NullReferenceException();

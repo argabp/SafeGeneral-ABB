@@ -9,7 +9,7 @@ namespace ABB.Infrastructure.Data.Mapping
         public void Configure(EntityTypeBuilder<TRAkseptasiAttachment> builder)
         {
             builder.ToTable("TR_AkseptasiAttachment", "dbo");
-            builder.HasKey(k => new { k.kd_cb, k.kd_cob, k.kd_scob, k.kd_thn, k.no_aks, k.kd_jns_dokumen, k.kd_dokumen });
+            builder.HasKey(k => new { k.kd_cb, k.kd_cob, k.kd_scob, k.kd_thn, k.no_aks, k.kd_dokumen });
         }
     }
 }

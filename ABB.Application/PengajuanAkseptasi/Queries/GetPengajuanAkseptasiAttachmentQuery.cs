@@ -39,9 +39,8 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
             var lampirans = (await _db.Query<PengajuanAkseptasiAttachmentDto>(
                 @$"SELECT a.*, d.nm_dokumen dokumenName FROM TR_AkseptasiAttachment a
                                 INNER JOIN MS_DokumenDetil d
-                                    ON a.kd_jns_dokumen = d.kd_jns_dokumen
-                                        AND a.kd_dokumen = d.kd_dokumen
-                                   WHERE a.kd_cb = '{request.kd_cb}' AND d.kd_jns_dokumen = 1 AND 
+                                    ON a.kd_dokumen = d.kd_dokumen
+                                   WHERE a.kd_cb = '{request.kd_cb}' AND 
                                a.kd_cob = '{request.kd_cob}' AND a.kd_scob = '{request.kd_scob}' AND a.kd_thn = '{request.kd_thn}' AND
                                a.no_aks = '{request.no_aks}'")).ToList();
 

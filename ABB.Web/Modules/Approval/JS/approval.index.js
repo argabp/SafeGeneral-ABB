@@ -27,7 +27,7 @@ function btnEditApprovalDetail(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     console.log('dataItem', dataItem);
-    openWindow('#ApprovalWindow', `/Approval/EditDetail?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_status=${dataItem.kd_status}&nilai_limit_awal=${dataItem.nilai_limit_awal}&nilai_limit_akhir=${dataItem.nilai_limit_akhir}`, 'Edit');
+    openWindow('#ApprovalWindow', `/Approval/EditDetail?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_status=${dataItem.kd_status}&kd_user=${dataItem.kd_user}&kd_user_sign=${dataItem.kd_user_sign}`, 'Edit');
 }
 
 function onAddApproval(){
@@ -126,8 +126,8 @@ function onDeleteApprovalDetail(e){
                 kd_cob: dataItem.kd_cob,
                 kd_scob: dataItem.kd_scob,
                 kd_status: dataItem.kd_status,
-                nilai_limit_awal: dataItem.nilai_limit_awal,
-                nilai_limit_akhir: dataItem.nilai_limit_akhir
+                kd_user: dataItem.kd_user,
+                kd_user_sign: dataItem.kd_user_sign
             }
             
             showProgressOnGrid("#ApprovalGrid");
@@ -152,4 +152,10 @@ function OnKodeCOBChange(e){
     $("#temp_kd_cob").val(value);
     var kd_scob = $("#kd_scob").data("kendoDropDownList");
     kd_scob.dataSource.read({kd_cob : e.sender._cascadedValue});
+}
+
+function dataKodeSCOBDropDown(){
+    return {
+        kd_cob: $("#temp_kd_cob").val().trim()
+    }
 }

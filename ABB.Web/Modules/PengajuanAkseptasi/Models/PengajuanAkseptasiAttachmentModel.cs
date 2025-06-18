@@ -18,8 +18,6 @@ namespace ABB.Web.Modules.PengajuanAkseptasi.Models
 
         public string no_aks { get; set; }
 
-        public Int16 kd_jns_dokumen { get; set; }
-
         public Int16 kd_dokumen { get; set; }
         
         public void Mapping(Profile profile)

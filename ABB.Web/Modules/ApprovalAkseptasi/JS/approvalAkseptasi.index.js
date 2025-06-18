@@ -82,16 +82,14 @@ function setButtonActions(e){
     // Loop through data items and rows
     grid.tbody.find("tr").each(function() {
         var dataItem = grid.dataItem(this);
-
-        if (dataItem.status !== "Submited") {
+        
+        if (dataItem.flag_approved != "1") {
             // Hide the custom button in this row
-            $(this).find(".k-grid-Checked").hide(); // "custom" is the command name
-        }
-
-        if (dataItem.status !== "Checked") {
-            // Hide the custom button in this row
-            $(this).find(".k-grid-Escalated").hide(); // "custom" is the command name
             $(this).find(".k-grid-Approved").hide(); // "custom" is the command name
+            $(this).find(".k-grid-Rejected").hide(); // "custom" is the command name
+            $(this).find(".k-grid-Escalated").hide(); // "custom" is the command name
+        } else {
+            $(this).find(".k-grid-Checked").hide(); // "custom" is the command name
         }
     });
 

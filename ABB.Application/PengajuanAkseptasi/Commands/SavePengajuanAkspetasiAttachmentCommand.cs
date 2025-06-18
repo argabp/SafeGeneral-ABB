@@ -27,11 +27,11 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
 
         public string no_aks { get; set; }
 
-        public Int16 kd_jns_dokumen { get; set; }
-
         public Int16 kd_dokumen { get; set; }
 
         public string nm_dokumen { get; set; }
+
+        public bool? flag_wajib { get; set; }
         
         public IFormFile File { get; set; }
 
@@ -73,8 +73,7 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
                                                                           w.kd_cob == request.kd_cob
                                                                           && w.kd_scob == request.kd_scob &&
                                                                           w.kd_thn == request.kd_thn
-                                                                          && w.no_aks == request.no_aks &&
-                                                                          w.kd_jns_dokumen == request.kd_jns_dokumen
+                                                                          && w.no_aks == request.no_aks
                                                                           && w.kd_dokumen == request.kd_dokumen);
                 
                 var nomor_pengajuan = _context.TRAkseptasi.FirstOrDefault(w => w.kd_cb == request.kd_cb &&
@@ -93,9 +92,11 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
                 }
                 else
                 {
-                    _mapper.Map(request, entity);
-                    
-                    entity.nm_dokumen = request.File.FileName;
+                    if (request.File != null)
+                    {
+                        entity.nm_dokumen = request.File.FileName;
+                    }
+                    entity.flag_wajib = request.flag_wajib;
                 }
 
                 await _context.SaveChangesAsync(cancellationToken);

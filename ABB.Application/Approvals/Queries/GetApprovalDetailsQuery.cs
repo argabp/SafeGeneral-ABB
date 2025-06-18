@@ -39,9 +39,11 @@ namespace ABB.Application.Approvals.Queries
             try
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
-                var results = (await _connectionFactory.Query<ApprovalDetailDto>(@"SELECT ad.*, s.nm_status, ISNULL(u.FirstName, '') + ' ' + ISNULL(u.LastName, '') nm_user_sign FROM MS_ApprovalDetil ad 
-                                INNER JOIN MS_User u 
-                                    ON u.UserId = ad.kd_user_sign
+                var results = (await _connectionFactory.Query<ApprovalDetailDto>(@"SELECT ad.*, s.nm_status, ISNULL(u1.FirstName, '') + ' ' + ISNULL(u1.LastName, '') nm_user_sign, ISNULL(u2.FirstName, '') + ' ' + ISNULL(u2.LastName, '') nm_user FROM MS_ApprovalDetilSign ad 
+                                INNER JOIN MS_User u1 
+                                    ON u1.UserId = ad.kd_user_sign
+                                INNER JOIN MS_User u2 
+                                    ON u2.UserId = ad.kd_user
                                 INNER JOIN MS_Status s 
                                     ON s.kd_status = ad.kd_status
                                 WHERE kd_cb = @kd_cb 

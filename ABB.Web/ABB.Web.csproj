@@ -5694,6 +5694,27 @@
       <None Update="Modules\ImportNotaRisiko\JS\importNotaRisiko.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\PeriodeProses\JS\periodeProses.index.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\DokumenDetil\JS\dokumenDetil.index.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\DokumenAkseptasi\JS\dokumenAkseptasi.index.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\DokumenAkseptasi\JS\dokumenAkseptasi.edit.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\DokumenAkseptasi\JS\dokumenAkseptasiDetail.edit.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\LimitAkseptasi\JS\limitAkseptasi.index.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\LimitAkseptasi\JS\limitAkseptasi.edit.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

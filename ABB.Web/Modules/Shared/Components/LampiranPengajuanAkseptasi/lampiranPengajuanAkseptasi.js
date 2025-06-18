@@ -13,48 +13,6 @@ function btnPreviousLampiranPengajuanAkseptasi(){
     });
 }
 
-function btnFinishPesertaLampiran(){
-    $('#btn-finish-pesertaLampiran').click(function () {
-        showProgress("#PesertaWindow")
-        
-        var kd_cb = $("#kd_cb").val();
-        var kd_product = $("#kd_product").val();
-        var no_sppa = $("#no_sppa").val();
-        var kd_rk = $("#kd_rk").val();
-        var kd_thn = $("#kd_thn").val();
-        var no_updt = $("#no_updt").val();
-
-        var form = {};
-
-        form.kd_cb = kd_cb;
-        form.kd_product = kd_product;
-        form.no_sppa = no_sppa;
-        form.kd_rk = kd_rk;
-        form.kd_thn = kd_thn;
-        form.no_updt = no_updt;
-
-        var data = JSON.stringify(form);
-
-        ajaxPost("/Peserta/FinishPeserta", data,
-            function (response) {
-                if (response.Result == "ERROR")
-                    showMessage('Error', response.Message);
-                else
-                    closeWindow("#PesertaWindow");
-
-                refreshGrid("#PesertaGrid");
-                closeProgress("#PesertaWindow")
-            }
-        );
-    });
-}
-
-function btnClosePesertaLampiran(){
-    $('#btn-close-pesertaLampiran').click(function () {
-        closeWindow("#PesertaWindow");
-    });
-}
-
 function parameterLampiran() {
     return {
         kd_cb: $("#kd_cb").val(),
@@ -112,6 +70,23 @@ function initLampiranPengajuanAkseptasiGrid() {
                     return `<a href="/pengajuan-akseptasi-attachment/${nomor_pengajuan.replaceAll("/", "")}/${dataItem.nm_dokumen}" target="_blank">${dataItem.nm_dokumen}</a>`
                 },
                 width: "450px"
+            },
+            {
+                field: "flag_wajib", title: "Wajib",
+                editor: function (container, options) {checkBoxEditor({
+                    container: container,
+                    options: options})
+                },
+                template: function (dataItem) {
+                    var result;
+                    if (dataItem.flag_wajib === true) {
+                        result = `<i class="fas fa-check-circle fa-lg" style = "color:var(--jade-green)" ></i>`;
+                    } else {
+                        result = `<i class="fas fa-times-circle fa-lg" style = "color:var(--coral-red)" ></i>`;
+                    }
+                    return result;
+                },
+                width: "450px"
             }
         ],
         editable: {
@@ -129,12 +104,13 @@ function loadLampiranPengajuanAkseptasiDS() {
     loadInlineGridDS({
         gridId: '#LampiranPengajuanAkseptasiGrid',
         arrayObj: lampiranPengajuanAkseptasi,
-        fieldKey: "kd_jns_dokumen",
+        fieldKey: "kd_dokumen",
         model: {
-            id: "kd_jns_dokumen",
+            id: "kd_dokumen",
             fields: {
                 kd_dokumen: { type: "numeric" },
-                nm_dokumen: { type: "string" }
+                nm_dokumen: { type: "string" },
+                flag_wajib: { type: "boolean" },
             }
         }
     });
@@ -153,9 +129,9 @@ function saveLampiranPengajuanAkseptasi(e){
     var kd_scob = $("#kd_scob").val();
     var kd_thn = $("#kd_thn").val();
     var no_aks = $("#no_aks").val();
-    var kd_jns_dokumen = 1;
     var kd_dokumen = e.model.kd_dokumen.Value === undefined ?  e.model.kd_dokumen : parseInt(e.model.kd_dokumen.Value);
     var file = $("#nm_dokumen")[0].files[0];
+    var flag_wajib = e.model.flag_wajib;
     
     var form = new FormData();
 
@@ -164,9 +140,9 @@ function saveLampiranPengajuanAkseptasi(e){
     form.append("kd_scob", kd_scob);
     form.append("kd_thn", kd_thn);
     form.append("no_aks", no_aks);
-    form.append("kd_jns_dokumen", kd_jns_dokumen);
     form.append("kd_dokumen", kd_dokumen);
     form.append("File", file);
+    form.append("flag_wajib", flag_wajib);
     
     ajaxUpload("/PengajuanAkseptasi/SaveLampiranPengajuanAkseptasi", form, function (response) {
         closeProgressOnGrid("#LampiranPengajuanAkseptasiGrid");
@@ -200,7 +176,6 @@ function deleteLampiran(event){
             form.kd_scob = kd_scob;
             form.kd_thn = kd_thn;
             form.no_aks = no_aks;
-            form.kd_jns_dokumen = dataItem.kd_jns_dokumen;
             form.kd_dokumen = dataItem.kd_dokumen;
 
             var data = JSON.stringify(form);

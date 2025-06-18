@@ -110,6 +110,11 @@ namespace ABB.Infrastructure.Data
         public DbSet<AsumsiDetail> AsumsiDetail { get; set; }
         public DbSet<AsumsiPeriode> AsumsiPeriode { get; set; }
         public DbSet<PeriodeProsesModel> PeriodeProses { get; set; }
+        public DbSet<DokumenDetil> DokumenDetil { get; set; }
+        public DbSet<DokumenAkseptasi> DokumenAkseptasi { get; set; }
+        public DbSet<DokumenAkseptasiDetil> DokumenAkseptasiDetil { get; set; }
+        public DbSet<LimitAkseptasi> LimitAkseptasi { get; set; }
+        public DbSet<LimitAkseptasiDetil> LimitAkseptasiDetil { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -213,6 +218,11 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new AsumsiDetailMap());
             builder.ApplyConfiguration(new AsumsiPeriodeMap());
             builder.ApplyConfiguration(new PeriodeProsesMap());
+            builder.ApplyConfiguration(new DokumenDetilMap());
+            builder.ApplyConfiguration(new DokumenAkseptasiDetilMap());
+            builder.ApplyConfiguration(new DokumenAkseptasiMap());
+            builder.ApplyConfiguration(new LimitAkseptasiMap());
+            builder.ApplyConfiguration(new LimitAkseptasiDetilMap());
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

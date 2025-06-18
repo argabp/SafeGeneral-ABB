@@ -33,5 +33,7 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
         public DateTime tgl_status { get; set; }
 
         public DateTime tgl_pengajuan { get; set; }
+
+        public string kd_user_input { get; set; }
     }
 }

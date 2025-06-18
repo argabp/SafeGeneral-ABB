@@ -33,7 +33,7 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
                 return (await _connectionFactory.Query<DropdownOptionDto>("SELECT RTRIM(LTRIM(kd_dokumen)) Value, nm_dokumen Text " +
-                                                                          "FROM MS_DokumenDetil WHERE kd_jns_dokumen = 1")).ToList();
+                                                                          "FROM MS_DokumenDetil")).ToList();
             }
             catch (Exception ex)
             {

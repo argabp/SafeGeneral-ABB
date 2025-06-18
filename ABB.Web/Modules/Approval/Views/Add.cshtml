@@ -13,7 +13,7 @@
                                     datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                     <datasource type="DataSourceTagHelperType.Custom">
                         <transport>
-                            <read url="@Url.Action("GetCabang", "KapasitasCabang")"/>
+                            <read url="@Url.Action("GetCabang", "Approval")"/>
                         </transport>
                     </datasource>
                 </kendo-dropdownlist>
@@ -23,11 +23,12 @@
         <div class="form-group col-sm-12">
             <label class="col-sm-12">Kode COB</label>
             <div class="col-sm-12">
+                <input type="hidden" id="temp_kd_cob" value="@Model.kd_cob">
                 <kendo-dropdownlist for="kd_cob" style="width: 100%" class="primary-dropdown" on-change="OnKodeCOBChange" option-label="Pilih COB"
                                     datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                     <datasource type="DataSourceTagHelperType.Custom">
                         <transport>
-                            <read url="@Url.Action("GetCOB", "KapasitasCabang")"/>
+                            <read url="@Url.Action("GetCOB", "Approval")"/>
                         </transport>
                     </datasource>
                 </kendo-dropdownlist>
@@ -42,7 +43,7 @@
                                     datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                     <datasource type="DataSourceTagHelperType.Custom">
                         <transport>
-                            <read url="@Url.Action("GetSCOB", "KapasitasCabang")"/>
+                            <read url="@Url.Action("GetSCOB", "Approval")" data="dataKodeSCOBDropDown"/>
                         </transport>
                     </datasource>
                 </kendo-dropdownlist>

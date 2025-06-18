@@ -4,13 +4,25 @@
 @addTagHelper *, Kendo.Mvc
 @addTagHelper *, ABB.Web
 
-<script src="~/Modules/Approval/JS/approval.detail.edit.js"></script>
-
 <div class="window-body" style="background-color: lightgray">
     <form id="ApprovalDetailForm" enctype="multipart/form-data" autocomplete="off">
         @Html.HiddenFor(p => p.kd_cb)
         @Html.HiddenFor(p => p.kd_cob)
         @Html.HiddenFor(p => p.kd_scob)
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">User</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="kd_user" style="width: 100%" class="primary-dropdown" readonly="true"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetKodeUserSign", "Approval")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="kd_user" class="text-danger"></span>
+            </div>
+        </div>
         <div class="form-group col-sm-12">
             <label class="col-sm-12">Kode Status</label>
             <div class="col-sm-12">
@@ -26,23 +38,9 @@
             </div>
         </div>
         <div class="form-group col-sm-12">
-            <label class="col-sm-12">Nilai Limit Awal</label>
-            <div class="col-sm-12">
-                <kendo-numerictextbox for="nilai_limit_awal" style="width: 100%; background-color: #00FFFF" readonly="true"/>
-                <span asp-validation-for="nilai_limit_awal" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group col-sm-12">
-            <label class="col-sm-12">Nilai Limit Akhir</label>
-            <div class="col-sm-12">
-                <kendo-numerictextbox for="nilai_limit_akhir" style="width: 100%; background-color: #00FFFF" readonly="true"/>
-                <span asp-validation-for="nilai_limit_akhir" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group col-sm-12">
             <label class="col-sm-12">User Sign</label>
             <div class="col-sm-12">
-                <kendo-dropdownlist for="kd_user_sign" style="width: 100%" class="not-null-dropdown"
+                <kendo-dropdownlist for="kd_user_sign" style="width: 100%" class="primary-dropdown" readonly="true"
                                     datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                     <datasource type="DataSourceTagHelperType.Custom">
                         <transport>

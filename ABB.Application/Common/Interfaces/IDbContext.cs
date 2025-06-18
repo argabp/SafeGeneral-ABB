@@ -100,6 +100,11 @@ namespace ABB.Application.Common.Interfaces
         DbSet<AsumsiDetail> AsumsiDetail { get; set; }
         DbSet<AsumsiPeriode> AsumsiPeriode { get; set; }
         DbSet<PeriodeProsesModel> PeriodeProses { get; set; }
+        DbSet<DokumenDetil> DokumenDetil { get; set; }
+        DbSet<DokumenAkseptasi> DokumenAkseptasi { get; set; }
+        DbSet<DokumenAkseptasiDetil> DokumenAkseptasiDetil { get; set; }
+        DbSet<LimitAkseptasi> LimitAkseptasi { get; set; }
+        DbSet<LimitAkseptasiDetil> LimitAkseptasiDetil { get; set; }
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);

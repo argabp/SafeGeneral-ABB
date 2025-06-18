@@ -1,0 +1,130 @@
+﻿@using Kendo.Mvc.UI
+@using ABB.Application.LimitAkseptasis.Quries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Limit Akseptasi";
+}
+<script src="~/Modules/LimitAkseptasi/JS/limitAkseptasi.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Setup Limit Akseptasi
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+        </div>
+        <div class="col-md-2">
+            <button class="flat-btn-primary" onclick="btnAddLimitAkseptasi()">Add Limit Akseptasi</button>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<LimitAkseptasiDto>()
+                .Name("LimitAkseptasiGrid")
+                .Editable(editable => editable.Mode(GridEditMode.InLine))
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetLimitAkseptasis", "LimitAkseptasi").Data("searchFilter"))
+                    .Model(model => model.Id(p => p.Id))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.nm_cb).Title("Nama Cabang");
+                    columns.Bound(col => col.nm_cob).Title("Nama COB");
+                    columns.Bound(col => col.nm_scob).Title("Nama Sub COB");
+                    columns.Bound(col => col.nm_limit).Title("Nama Limit Akseptasi");
+                    columns.Command(command =>
+                    {
+                        command.Custom("EditLimitAkseptasi")
+                            .Text("Edit")
+                            .IconClass("fa fa-pencil-alt")
+                            .HtmlAttributes(new { title = "Edit" })
+                            .Click("btnEditLimitAkseptasi");
+                        command.Custom("DeleteLimitAkseptasi")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeleteLimitAkseptasi");
+                    }).Width(200);
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .ClientDetailTemplateId("template")
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit"))
+        
+                )    
+        </div>
+        
+        <script id="template" type="text/kendo-tmpl">
+            <div class="row">
+                <div class="col-md-4 k-button k-button-icontext">
+                    <button style="border: none;" onclick="btnAddLimitAkseptasiDetail('#=kd_cb#', '#=kd_cob#', '#=kd_scob#')">+ ADD NEW RECORD</button>
+                </div>
+            </div>
+            @(Html.Kendo().Grid<LimitAkseptasiDetilDto>()
+                .Name("grid_Detail_#=Id#") // template expression, to be evaluated in the master context
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetLimitAkseptasiDetails", "LimitAkseptasi", new { kd_cb = "#=kd_cb#", kd_cob = "#=kd_cob#", kd_scob = "#=kd_scob#" }))//.Data("getAsumsiPeriodeParam"))
+                    .Model(m => m.Id(p => p.Id))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.nm_user).Title("Nama User");
+                    columns.Bound(col => col.nilai_limit_awal).Title("Nilai Limit Awal").Format("{0:n2}");
+                    columns.Bound(col => col.nilai_limit_akhir).Title("Nilai Limit Akhir").Format("{0:n2}");
+                    columns.Command(command =>
+                    {
+                        command.Custom("DeleteLimitAkseptasiDetail")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeleteLimitAkseptasiDetail");
+                    }).Width(200);
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Selectable()
+                .Filterable()
+                .Scrollable()
+                .Height(380)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit"))
+                .ToClientTemplate())
+        </script>
+
+        @(Html.Kendo().Window()
+            .Name("LimitAkseptasiWindow")
+            .Title("LimitAkseptasi")
+            .Width(500)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+    </div>
+</div>
+

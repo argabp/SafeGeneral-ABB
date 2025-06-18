@@ -1,0 +1,74 @@
+﻿@using ABB.Application.DokumenDetils.Queries
+@using Kendo.Mvc.UI
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Dokumen Detil";
+}
+
+<script src="~/Modules/DokumenDetil/JS/dokumenDetil.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+    #kd_dokumen{
+        background-color: #00FFFF;
+    }
+    #nm_dokumen{
+        background-color: #FFFFE1;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Dokumen Detil
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<DokumenDetilDto>()
+                .Name("DokumenDetilGrid")
+                .ToolBar(toolbar => toolbar.Create())
+                .Editable(editable => editable.Mode(GridEditMode.InLine))
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetDokumenDetils", "DokumenDetil"))
+                    .Model(model => model.Id(p => p.kd_dokumen))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.kd_dokumen).Width(100).Title("Kode Dokumen").Editable("disableGridTextboxWhenEdit");
+                    columns.Bound(col => col.nm_dokumen).Width(200).Title("Nama Dokumen");
+                    columns.Command(command =>
+                    {
+                        command.Edit();
+                        command.Custom("DeleteDokumenDetil")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeleteDokumenDetil");
+                    }).Width(200);
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit").Save("onSaveDokumenDetil"))
+
+                )
+        </div>
+    </div>
+</div>
