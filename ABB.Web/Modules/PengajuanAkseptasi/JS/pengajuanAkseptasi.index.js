@@ -43,7 +43,12 @@ function OnClickInfoPengajuanAkseptasi(e) {
 
 function OnClickSubmitPengajuanAkseptasi(e) {
     dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-    openWindow('#SubmitWindow',`/PengajuanAkseptasi/SubmitView`, 'Submit');
+    openWindow('#ApprovalWindow',`/PengajuanAkseptasi/Submit`, 'Submit');
+}
+
+function OnClickBatalAkseptasiPengajuanAkseptasi(e) {
+    dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    openWindow('#ApprovalWindow',`/PengajuanAkseptasi/BatalAkseptasi`, 'Batal Akseptasi');
 }
 
 function OnClickPrintPengajuanAkseptasi(e) {
@@ -87,6 +92,11 @@ function setButtonActions(e){
             // Hide the custom button in this row
             $(this).find(".k-grid-Edit").hide(); // "custom" is the command name
             $(this).find(".k-grid-Submit").hide(); // "custom" is the command name
+        }
+        
+        if(dataItem.flag_closing !== "N" && dataItem.status !== "Approved"){
+            // Hide the custom button in this row
+            $(this).find(".k-grid-BatalAkseptasi").hide(); // "custom" is the command name
         }
     });
     

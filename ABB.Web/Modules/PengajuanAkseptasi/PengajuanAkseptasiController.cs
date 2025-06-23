@@ -110,12 +110,17 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
             return Json(result);
         }
 
-        public IActionResult SubmitView()
+        public IActionResult Submit()
         {
-            return View("Submit");
+            return View();
+        }
+
+        public IActionResult BatalAkseptasi()
+        {
+            return View();
         }
         
-        public async Task<IActionResult> Submit(SubmitPengajuanAkseptasiModel model)
+        public async Task<IActionResult> ApprovalAkseptasi(ApprovalPengajuanAkseptasiModel model)
         {
             try
             {

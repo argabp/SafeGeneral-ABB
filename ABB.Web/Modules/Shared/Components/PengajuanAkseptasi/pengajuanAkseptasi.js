@@ -129,6 +129,7 @@ function savePengajuanAkseptasi(url) {
                 if (response.Model != undefined) {
                     setPengajuanAkseptasiModel(response.Model);
                 }
+                refreshGridLampiranPengajuanAkseptasi();
             }
             else if (response.Result == "ERROR")
                 showMessage("Error", response.Message);

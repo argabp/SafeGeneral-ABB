@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ABB.Application.Common.Helpers;
@@ -8,6 +9,7 @@ using ABB.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Primitives;
 using Scriban;
 
 namespace ABB.Application.PengajuanAkseptasi.Queries
@@ -60,7 +62,6 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
 
             var data = datas.FirstOrDefault();
             
-            
             var wwwroot = Path.Combine(_hostEnvironment.ContentRootPath, "wwwroot");
             var path = _configuration.GetSection("UserSignature").Value.TrimEnd('/').TrimStart('/');
 
@@ -71,6 +72,8 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
             var tgl_dibuat = data.tgl_dibuat == null ? string.Empty : data.tgl_dibuat.Value.ToString("dd MMM yyyy HH:mm:ss");
             var tgl_diperiksa = data.tgl_diperiksa == null ? string.Empty : data.tgl_diperiksa.Value.ToString("dd MMM yyyy HH:mm:ss");
             var tgl_disetujui = data.tgl_disetujui == null ? string.Empty : data.tgl_disetujui.Value.ToString("dd MMM yyyy HH:mm:ss");
+
+            var keterangan_resiko = GenerateKeteranganDokumen(data);
             
             var resultTemplate = templateProfileResult.Render( new
             {
@@ -89,13 +92,91 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
                 data.nm_pas5, pst_pas5 = ReportHelper.ConvertToReportFormat(data.pst_pas5, true),
                 data.ket_rsk, signature1, signature2, signature3, data.jabatan_dibuat, data.jabatan_diperiksa,
                 data.jabatan_disetujui, data.nm_dibuat, data.nm_diperiksa, data.nm_disetujui,
-                tgl_dibuat, tgl_diperiksa, tgl_disetujui, data.nomor_pengajuan
+                tgl_dibuat, tgl_diperiksa, tgl_disetujui, data.nomor_pengajuan, keterangan_resiko
             } );
 
             return resultTemplate;
         }
+
+        private string GenerateKeteranganDokumen(ReportPengajuanAkseptasiDto reportPengajuanAkseptasiDto)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            var nm_dokumen1 = string.IsNullOrWhiteSpace(reportPengajuanAkseptasiDto.nm_dokumen1) ? string.Empty : reportPengajuanAkseptasiDto.nm_dokumen1;
+            var st_dokumen1 = reportPengajuanAkseptasiDto.st_dokumen1 != null && reportPengajuanAkseptasiDto.st_dokumen1.Value ? "checked" : string.Empty;
+            var nm_dokumen2 = string.IsNullOrWhiteSpace(reportPengajuanAkseptasiDto.nm_dokumen2) ? string.Empty : reportPengajuanAkseptasiDto.nm_dokumen2;
+            var st_dokumen2 = reportPengajuanAkseptasiDto.st_dokumen2 != null && reportPengajuanAkseptasiDto.st_dokumen2.Value ? "checked" : string.Empty;
+            var nm_dokumen3 = string.IsNullOrWhiteSpace(reportPengajuanAkseptasiDto.nm_dokumen3) ? string.Empty : reportPengajuanAkseptasiDto.nm_dokumen3;
+            var st_dokumen3 = reportPengajuanAkseptasiDto.st_dokumen3 != null && reportPengajuanAkseptasiDto.st_dokumen3.Value ? "checked" : string.Empty;
+            var nm_dokumen4 = string.IsNullOrWhiteSpace(reportPengajuanAkseptasiDto.nm_dokumen4) ? string.Empty : reportPengajuanAkseptasiDto.nm_dokumen4;
+            var st_dokumen4 = reportPengajuanAkseptasiDto.st_dokumen4 != null && reportPengajuanAkseptasiDto.st_dokumen4.Value ? "checked" : string.Empty;
+            var nm_dokumen5 = string.IsNullOrWhiteSpace(reportPengajuanAkseptasiDto.nm_dokumen5) ? string.Empty : reportPengajuanAkseptasiDto.nm_dokumen5;
+            var st_dokumen5 = reportPengajuanAkseptasiDto.st_dokumen5 != null && reportPengajuanAkseptasiDto.st_dokumen5.Value ? "checked" : string.Empty;
+            var nm_dokumen6 = string.IsNullOrWhiteSpace(reportPengajuanAkseptasiDto.nm_dokumen6) ? string.Empty : reportPengajuanAkseptasiDto.nm_dokumen6;
+            var st_dokumen6 = reportPengajuanAkseptasiDto.st_dokumen6 != null && reportPengajuanAkseptasiDto.st_dokumen6.Value ? "checked" : string.Empty;
+            var nm_dokumen7 = string.IsNullOrWhiteSpace(reportPengajuanAkseptasiDto.nm_dokumen7) ? string.Empty : reportPengajuanAkseptasiDto.nm_dokumen7;
+            var st_dokumen7 = reportPengajuanAkseptasiDto.st_dokumen7 != null && reportPengajuanAkseptasiDto.st_dokumen7.Value ? "checked" : string.Empty;
+            var nm_dokumen8 = string.IsNullOrWhiteSpace(reportPengajuanAkseptasiDto.nm_dokumen8) ? string.Empty : reportPengajuanAkseptasiDto.nm_dokumen8;
+            var st_dokumen8 = reportPengajuanAkseptasiDto.st_dokumen8 != null && reportPengajuanAkseptasiDto.st_dokumen8.Value ? "checked" : string.Empty;
+            var nm_dokumen9 = string.IsNullOrWhiteSpace(reportPengajuanAkseptasiDto.nm_dokumen9) ? string.Empty : reportPengajuanAkseptasiDto.nm_dokumen9;
+            var st_dokumen9 = reportPengajuanAkseptasiDto.st_dokumen9 != null && reportPengajuanAkseptasiDto.st_dokumen9.Value ? "checked" : string.Empty;
+            var nm_dokumen10 = string.IsNullOrWhiteSpace(reportPengajuanAkseptasiDto.nm_dokumen10) ? string.Empty : reportPengajuanAkseptasiDto.nm_dokumen10;
+            var st_dokumen10 = reportPengajuanAkseptasiDto.st_dokumen10 != null && reportPengajuanAkseptasiDto.st_dokumen10.Value ? "checked" : string.Empty;
+            
+            sb.Append(@"
+<table cellspacing='0' cellpadding='5' width='100%'  style='margin-bottom: 0px'>");
+            
+            sb.Append($"<tr><td style='width: 25%'>{nm_dokumen1}</td>");
+            sb.Append(string.IsNullOrWhiteSpace(nm_dokumen1)
+                ? "<td style='width: 25%'></td>"
+                : $"<td style='width: 25%'><input type='checkbox' {st_dokumen1} /></td>");
+            sb.Append($"<td style='width: 25%'>{nm_dokumen6}</td>");
+            sb.Append(string.IsNullOrWhiteSpace(nm_dokumen6)
+                ? "<td style='width: 25%'></td>"
+                : $"<td style='width: 25%'><input type='checkbox' {st_dokumen6} /></td></tr>");
+            
+            sb.Append($"<tr><td style='width: 25%'>{nm_dokumen2}</td>");
+            sb.Append(string.IsNullOrWhiteSpace(nm_dokumen2)
+                ? "<td style='width: 25%'></td>"
+                : $"<td style='width: 25%'><input type='checkbox' {st_dokumen2} /></td>");
+            sb.Append($"<td style='width: 25%'>{nm_dokumen7}</td>");
+            sb.Append(string.IsNullOrWhiteSpace(nm_dokumen7)
+                ? "<td style='width: 25%'></td>"
+                : $"<td style='width: 25%'><input type='checkbox' {st_dokumen7} /></td></tr>");
+            
+            sb.Append($"<tr><td style='width: 25%'>{nm_dokumen3}</td>");
+            sb.Append(string.IsNullOrWhiteSpace(nm_dokumen3)
+                ? "<td></td>"
+                : $"<td style='width: 25%'><input type='checkbox' {st_dokumen3} /></td>");
+            sb.Append($"<td style='width: 25%'>{nm_dokumen8}</td>");
+            sb.Append(string.IsNullOrWhiteSpace(nm_dokumen8)
+                ? "<td style='width: 25%'></td>"
+                : $"<td style='width: 25%'><input type='checkbox' {st_dokumen8} /></td></tr>");
+            
+            sb.Append($"<tr><td style='width: 25%'>{nm_dokumen4}</td>");
+            sb.Append(string.IsNullOrWhiteSpace(nm_dokumen4)
+                ? "<td style='width: 25%'></td>"
+                : $"<td style='width: 25%'><input type='checkbox' {st_dokumen4} /></td>");
+            sb.Append($"<td style='width: 25%'>{nm_dokumen9}</td>");
+            sb.Append(string.IsNullOrWhiteSpace(nm_dokumen9)
+                ? "<td style='width: 25%'></td>"
+                : $"<td style='width: 25%'><input type='checkbox' {st_dokumen9} /></td></tr>");
+            
+            sb.Append($"<tr><td style='width: 25%'>{nm_dokumen5}</td>");
+            sb.Append(string.IsNullOrWhiteSpace(nm_dokumen5)
+                ? "<td style='width: 25%'></td>"
+                : $"<td style='width: 25%'><input type='checkbox' {st_dokumen5} /></td>");
+            sb.Append($"<td style='width: 25%'>{nm_dokumen10}</td>");
+            sb.Append(string.IsNullOrWhiteSpace(nm_dokumen10)
+                ? "<td style='width: 25%'></td>"
+                : $"<td style='width: 25%'><input type='checkbox' {st_dokumen10} /></td></tr>");
+
+            sb.Append("</table>");
+            
+            return sb.ToString();
+        }
         
-        public static string ConvertImageToBase64Html(string imagePath)
+        private string ConvertImageToBase64Html(string imagePath)
         {
             try
             {

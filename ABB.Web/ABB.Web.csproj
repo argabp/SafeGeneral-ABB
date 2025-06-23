@@ -5715,6 +5715,9 @@
       <None Update="Modules\LimitAkseptasi\JS\limitAkseptasi.edit.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\PengajuanAkseptasi\JS\pengajuanAkseptasi.batalAkseptasi.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

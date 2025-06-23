@@ -4,7 +4,7 @@
 
 function btnPengajuanAkseptasiSubmit(){
     $('#btn-pengajuanAkseptasi-submit').click(function () {
-        showProgress('#SubmitWindow');
+        showProgress('#ApprovalWindow');
         setTimeout(function () {
             pengajuanAkseptasiSubmit();
         }, 500);
@@ -23,24 +23,24 @@ function pengajuanAkseptasiSubmit(){
     form.append("nomor_pengajuan", dataItem.nomor_pengajuan);
     form.append("kd_status", 2);
     form.append("tgl_status", Date());
-    form.append("keterangan", $("#keteranganSubmit").val());
+    form.append("keterangan", $("#keteranganApproval").val());
     
-    $("#uploadSubmit").getKendoUpload().getFiles().forEach((data, index) => {
+    $("#uploadApproval").getKendoUpload().getFiles().forEach((data, index) => {
         form.append("Files", data.rawFile);
     });
 
-    ajaxUpload("/PengajuanAkseptasi/Submit", form, function (response) {
-        closeProgress("#SubmitWindow");
+    ajaxUpload("/PengajuanAkseptasi/ApprovalAkseptasi", form, function (response) {
+        closeProgress("#ApprovalWindow");
         if (response.Result == "OK") {
             showMessage('Success', response.Message);
-            closeWindow("#SubmitWindow");
+            closeWindow("#ApprovalWindow");
         }
         else if (response.Result == "ERROR"){
             showMessage('Error', response.Message);
-            closeWindow("#SubmitWindow");
+            closeWindow("#ApprovalWindow");
         }
         else
-            $("#SubmitWindow").html(response);
+            $("#ApprovalWindow").html(response);
 
         refreshGrid("#PengajuanAkseptasiGrid");
     })

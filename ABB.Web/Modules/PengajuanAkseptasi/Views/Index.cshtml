@@ -66,6 +66,11 @@
                     .IconClass("fa fa-location-arrow")
                     .HtmlAttributes(new { title = "Submit" })
                     .Click("OnClickSubmitPengajuanAkseptasi");
+                command.Custom("BatalAkseptasi")
+                    .Text(" ")
+                    .IconClass("fa fa-ban")
+                    .HtmlAttributes(new { title = "Batal Akseptasi" })
+                    .Click("OnClickBatalAkseptasiPengajuanAkseptasi");
                 command.Custom("Print")
                     .Text(" ")
                     .IconClass("fa fa-print")
@@ -107,8 +112,8 @@
             )
         
         @(Html.Kendo().Window()
-                    .Name("SubmitWindow")
-                    .Title("Submit Page")
+                    .Name("ApprovalWindow")
+                    .Title("Approval Page")
                     .Width(500)
                     .Modal(true)
                     .Visible(false)

@@ -99,5 +99,45 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
         public DateTime? tgl_disetujui { get; set; }
 
         public string? user_id_disetujui { get; set; }
+
+        public string? nm_dokumen1 { get; set; }
+        
+        public bool? st_dokumen1 { get; set; }
+
+        public string? nm_dokumen2 { get; set; }
+        
+        public bool? st_dokumen2 { get; set; }
+
+        public string? nm_dokumen3 { get; set; }
+        
+        public bool? st_dokumen3 { get; set; }
+
+        public string? nm_dokumen4 { get; set; }
+        
+        public bool? st_dokumen4 { get; set; }
+
+        public string? nm_dokumen5 { get; set; }
+        
+        public bool? st_dokumen5 { get; set; }
+
+        public string? nm_dokumen6 { get; set; }
+        
+        public bool? st_dokumen6 { get; set; }
+
+        public string? nm_dokumen7 { get; set; }
+        
+        public bool? st_dokumen7 { get; set; }
+
+        public string? nm_dokumen8 { get; set; }
+        
+        public bool? st_dokumen8 { get; set; }
+
+        public string? nm_dokumen9 { get; set; }
+        
+        public bool? st_dokumen9 { get; set; }
+
+        public string? nm_dokumen10 { get; set; }
+        
+        public bool? st_dokumen10 { get; set; }
     }
 }

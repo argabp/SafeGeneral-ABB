@@ -95,5 +95,6 @@ namespace ABB.Domain.Entities
         public decimal? pst_kms { get; set; }
 
         public bool? flag_approved { get; set; }
+        public string? flag_closing { get; set; }
     }
 }

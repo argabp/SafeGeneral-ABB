@@ -143,9 +143,9 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
                 var nomor_pengajuan = (await _connectionFactory.QueryProc<string>("sp_GenerateNomorPengajuanAks",
                     new { request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn, no_aks })).FirstOrDefault();
 
+                var dateNow = DateTime.Now;
                 if (entity == null)
                 {
-                    var dateNow = DateTime.Now;
                     
                     trAkseptasi.no_aks = no_aks;
                     trAkseptasi.nomor_pengajuan = nomor_pengajuan;
@@ -156,6 +156,8 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
                     trAkseptasi.tgl_status = dateNow;
                     trAkseptasi.kd_user_update = string.Empty;
                     trAkseptasi.tgl_update = dateNow;
+                    trAkseptasi.flag_approved = false;
+                    trAkseptasi.flag_closing = "N";
 
                     _context.TRAkseptasi.Add(trAkseptasi);
                 }
@@ -195,10 +197,12 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
                     entity.pst_dis = request.pst_dis;
                     entity.pst_kms = request.pst_kms;
                     entity.tgl_pengajuan = request.tgl_pengajuan;
-                    entity.flag_approved = request.flag_approved;
                 }
 
                 await _context.SaveChangesAsync(cancellationToken);
+
+                await _connectionFactory.QueryProc<string>("sp_InsertDokumenPengajuanAks",
+                    new { request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn, no_aks });
             }
             catch (Exception ex)
             {
