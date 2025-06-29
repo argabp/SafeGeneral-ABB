@@ -13,17 +13,16 @@ namespace ABB.Application.Asumsis.Queries
     public class GetAsumsiQuery : IRequest<List<Asumsi>>
     {
         public string SearchKeyword { get; set; }
-        public string DatabaseName { get; set; }
     }
 
     public class GetAsumsiQueryHandler : IRequestHandler<GetAsumsiQuery, List<Asumsi>>
     {
-        private readonly IDbContextFactory _dbContextFactory;
+        private readonly IDbContextCSM _dbContextCsm;
         private readonly ILogger<GetAsumsiQueryHandler> _logger;
 
-        public GetAsumsiQueryHandler(IDbContextFactory dbContextFactory, ILogger<GetAsumsiQueryHandler> logger)
+        public GetAsumsiQueryHandler(IDbContextCSM dbContextCsm, ILogger<GetAsumsiQueryHandler> logger)
         {
-            _dbContextFactory = dbContextFactory;
+            _dbContextCsm = dbContextCsm;
             _logger = logger;
         }
 
@@ -35,8 +34,7 @@ namespace ABB.Application.Asumsis.Queries
             var result = new List<Asumsi>();
             try
             {
-                var dbContext = _dbContextFactory.CreateDbContext(request.DatabaseName);
-                result = dbContext.Asumsi.ToList();
+                result = _dbContextCsm.Asumsi.ToList();
             }
             catch (Exception ex)
             {

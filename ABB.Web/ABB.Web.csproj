@@ -4803,6 +4803,7 @@
 
     <ItemGroup>
       <Folder Include="Logs" />
+      <Folder Include="Modules\CancelCSM\Models" />
       <Folder Include="Modules\PostingKomisiTambahan\Models" />
       <Folder Include="Modules\PostingPolis\Models" />
       <Folder Include="wwwroot\img\profile-picture" />
@@ -5716,6 +5717,72 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Modules\PengajuanAkseptasi\JS\pengajuanAkseptasi.batalAkseptasi.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\CancelCSM\JS\cancelCSM.index.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\HasilCSM\JS\hasilCSM.index.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\InforceInwardFakultatif\JS\inforceInwardFakultatif.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\InforceInwardTreatyProporsional\JS\inforceInwardTreatyProporsional.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\InforceOutwardTreatyNonProporsional\JS\inforceOutwardTreatyNonProporsional.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\KlaimRisikoHartaBenda\JS\klaimRisikoHartaBenda.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\KlaimRisikoKendaraan\JS\klaimRisikoKendaraan.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\NotaRisiko\Components\InitialPaa\initialPAA.component.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\NotaRisiko\Components\IntialLiability\intialLiability.component.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\NotaRisiko\Components\IntialRelease\intialRelease.component.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\NotaRisiko\Components\Subsequent\subsequent.component.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\NotaRisiko\Components\SubsequentPAA\subsequentPAA.component.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\NotaRisiko\JS\notaRisiko.index.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\NotaRisiko\JS\notaRisiko.index_old.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\NotaRisiko\JS\notaRisiko.view.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\OutstandingKlaimProduksiUmum\JS\outstandingKlaimProduksiUmum.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\PolisInfoceProduksiUmum\JS\polisInfoceProduksiUmum.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\PostingNotaRisiko\JS\postingNotaRisiko.index.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\ProfilRisikoHartaBenda\JS\profilRisikoHartaBenda.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\ProfilRisikoKendaraan\JS\profilRisikoKendaraan.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\ProsesCSM\JS\prosesCSM.index.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\SettledKlaimProduksiUmum\JS\settledKlaimProduksiUmum.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>

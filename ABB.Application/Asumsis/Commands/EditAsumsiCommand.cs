@@ -13,18 +13,17 @@ namespace ABB.Application.Asumsis.Commands
         public string KodeAsumsi { get; set; }
 
         public string NamaAsumsi { get; set; }
-        public string DatabaseName { get; set; }
     }
 
     public class EditAsumsiCommandHandler : IRequestHandler<EditAsumsiCommand>
     {
-        private readonly IDbContextFactory _dbContextFactory;
+        private readonly IDbContextCSM _dbContextCsm;
         private readonly ILogger<EditAsumsiCommandHandler> _logger;
 
-        public EditAsumsiCommandHandler(IDbContextFactory dbContextFactory,
+        public EditAsumsiCommandHandler(IDbContextCSM dbContextCsm,
             ILogger<EditAsumsiCommandHandler> logger)
         {
-            _dbContextFactory = dbContextFactory;
+            _dbContextCsm = dbContextCsm;
             _logger = logger;
         }
 
@@ -32,13 +31,12 @@ namespace ABB.Application.Asumsis.Commands
         {
             try
             {
-                var dbContext = _dbContextFactory.CreateDbContext(request.DatabaseName);
-                var asumsi = dbContext.Asumsi.FirstOrDefault(w => w.KodeAsumsi == request.KodeAsumsi);
+                var asumsi = _dbContextCsm.Asumsi.FirstOrDefault(w => w.KodeAsumsi == request.KodeAsumsi);
 
                 if (asumsi != null)
                     asumsi.NamaAsumsi = request.NamaAsumsi;
 
-                await dbContext.SaveChangesAsync(cancellationToken);
+                await _dbContextCsm.SaveChangesAsync(cancellationToken);
             }
             catch (Exception ex)
             {

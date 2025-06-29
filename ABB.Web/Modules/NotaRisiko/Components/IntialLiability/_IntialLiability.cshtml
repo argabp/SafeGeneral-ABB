@@ -1,0 +1,17 @@
+﻿@using Kendo.Mvc.UI
+@model List<ABB.Domain.Entities.IntialLiability>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/NotaRisiko/Components/IntialLiability/intialLiability.component.js"></script>
+
+<input type="hidden" id="intialLiabilityDS" value='@Html.Raw(Json.Serialize(Model))' /> 
+<div id="IntialLiabilityGrid" >
+</div>
+
+<div class="window-footer">
+    <button type="button" id="btn-next-intialLiability" class="btn btn-primary space-right">
+        Next <span class="fa fa-arrow-right"></span>
+    </button>
+</div>

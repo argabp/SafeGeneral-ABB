@@ -106,10 +106,6 @@ namespace ABB.Infrastructure.Data
         public DbSet<EmailTemplate> EmailTemplate { get; set; }
         public DbSet<ViewTRAkseptasi> ViewTRAkseptasi { get; set; }
         public DbSet<AkseptasiProduk> AkseptasiProduk { get; set; }
-        public DbSet<Asumsi> Asumsi { get; set; }
-        public DbSet<AsumsiDetail> AsumsiDetail { get; set; }
-        public DbSet<AsumsiPeriode> AsumsiPeriode { get; set; }
-        public DbSet<PeriodeProsesModel> PeriodeProses { get; set; }
         public DbSet<DokumenDetil> DokumenDetil { get; set; }
         public DbSet<DokumenAkseptasi> DokumenAkseptasi { get; set; }
         public DbSet<DokumenAkseptasiDetil> DokumenAkseptasiDetil { get; set; }
@@ -214,10 +210,6 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new EmailTemplateMap());
             builder.ApplyConfiguration(new ViewTRAkseptasiMap());
             builder.ApplyConfiguration(new AkseptasiProdukMap());
-            builder.ApplyConfiguration(new AsumsiMap());
-            builder.ApplyConfiguration(new AsumsiDetailMap());
-            builder.ApplyConfiguration(new AsumsiPeriodeMap());
-            builder.ApplyConfiguration(new PeriodeProsesMap());
             builder.ApplyConfiguration(new DokumenDetilMap());
             builder.ApplyConfiguration(new DokumenAkseptasiDetilMap());
             builder.ApplyConfiguration(new DokumenAkseptasiMap());

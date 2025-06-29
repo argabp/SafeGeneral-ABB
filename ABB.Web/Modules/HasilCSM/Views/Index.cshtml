@@ -1,0 +1,110 @@
+﻿@using ABB.Domain.Entities
+@using Kendo.Mvc.UI
+@model ABB.Web.Modules.HasilCSM.Models.HasilCSMViewModel
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Hasil CSM";
+}
+<script src="~/Modules/HasilCSM/JS/hasilCSM.index.js"></script>
+
+<div class="flat-box" id="container-cancel-csm">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Hasil Perhitungan CSM
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <form id="HasilCSMForm" enctype="multipart/form-data" autocomplete="off">
+            <div>
+                <div class="row form-group">
+                    <div class="row col-sm-6">
+                        <label class="col-sm-4">Tipe Transaksi</label>
+                        <div class="col-sm-8">
+                            <kendo-dropdownlist for="TipeTransaksi" option-label="Pilih Tipe Transaksi"
+                                                datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                                <datasource type="DataSourceTagHelperType.Custom">
+                                    <transport>
+                                        <read url="@Url.Action("GetTipeTransaksi", "CancelCSM")"/>
+                                    </transport>
+                                </datasource>
+                            </kendo-dropdownlist>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="row col-sm-6">
+                        <label class="col-sm-4">Kode Metode</label>
+                        <div class="col-sm-8">
+                            <kendo-dropdownlist for="KodeMetode" option-label="Pilih Kode Metode"
+                                                datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                                <datasource type="DataSourceTagHelperType.Custom">
+                                    <transport>
+                                        <read url="@Url.Action("GetKodeMetode", "CancelCSM")"/>
+                                    </transport>
+                                </datasource>
+                            </kendo-dropdownlist>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="row col-sm-6">
+                        <label class="col-sm-4">Periode</label>
+                        <div class="col-sm-8">
+                            <kendo-dropdownlist for="Periode" option-label="Pilih Periode"
+                                                datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                                <datasource type="DataSourceTagHelperType.Custom">
+                                    <transport>
+                                        <read url="@Url.Action("GetPeriodeProses", "HasilCSM")"/>
+                                    </transport>
+                                </datasource>
+                            </kendo-dropdownlist>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="row col-sm-6">
+                        <label class="col-sm-4">Perhitungan</label>
+                        <div class="col-sm-6">
+                            <kendo-dropdownlist for="Perhitungan" option-label="Pilih Perhitungan" on-change="onChangePerhitungan"
+                                                datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                                <datasource type="DataSourceTagHelperType.Custom">
+                                    <transport>
+                                        <read url="@Url.Action("GetPerhitungan", "HasilCSM")"/>
+                                    </transport>
+                                </datasource>
+                            </kendo-dropdownlist>
+                        </div>
+                        <div class="col-sm-2">
+                            <button type="button" id="btn-refresh-grid" class="btn btn-primary" style="width: 100%">
+                                <span class="fa fa-redo"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group" id="divPengukuran" style="display: none">
+                    <div class="row col-sm-6">
+                        <label class="col-sm-4">Pengukuran</label>
+                        <div class="col-sm-8">
+                            <kendo-dropdownlist for="Pengukuran" option-label="Pilih Pengukuran"
+                                                datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                                <datasource type="DataSourceTagHelperType.Custom">
+                                    <transport>
+                                        <read url="@Url.Action("GetPengukuran", "HasilCSM")"/>
+                                    </transport>
+                                </datasource>
+                            </kendo-dropdownlist>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

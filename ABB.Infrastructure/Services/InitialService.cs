@@ -55,10 +55,10 @@ namespace ABB.Infrastructure.Services
             try
             {
                 await _mediator.Send(new GenerateRouteCommand());
-                await GenerateNavigations();
-                await CreateDefaultRoles();
-                await CreateAdminUser();
-                await RegisterAdminToRole();
+                // await GenerateNavigations();
+                // await CreateDefaultRoles();
+                // await CreateAdminUser();
+                // await RegisterAdminToRole();
                 await MapNavigationToAdmin();
                 await MapRouteToAdmin();
             }
@@ -132,13 +132,13 @@ namespace ABB.Infrastructure.Services
                 Icon = "fa-th"
             });
 
-            // await AddNavigation(new AddNavigationCommand()
-            // {
-            //     Action = "",
-            //     Controller = "",
-            //     Text = ParentNavigation[1],
-            //     Icon = "fa-bars"
-            // });
+            await AddNavigation(new AddNavigationCommand()
+            {
+                Action = "",
+                Controller = "",
+                Text = ParentNavigation[1],
+                Icon = "fa-bars"
+            });
 
             var setupNavigation = _db.Navigation.FirstOrDefault(w => w.Text == "Setup");
 

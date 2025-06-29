@@ -1,0 +1,17 @@
+﻿@using Kendo.Mvc.UI
+@model List<ABB.Domain.Entities.Subsequent>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/NotaRisiko/Components/Subsequent/subsequent.component.js"></script>
+
+<input type="hidden" id="subsequentDS" value='@Html.Raw(Json.Serialize(Model))' /> 
+<div id="SubsequentGrid" >
+</div>
+
+<div class="window-footer">
+    <button type="button" id="btn-previous-subsequent" class="btn btn-primary space-right">
+        <span class="fa fa-arrow-left"></span> Previous
+    </button>
+</div>

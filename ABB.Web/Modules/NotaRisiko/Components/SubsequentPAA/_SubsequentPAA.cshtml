@@ -1,0 +1,17 @@
+﻿@using Kendo.Mvc.UI
+@model List<ABB.Domain.Entities.SubsequentPAA>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/NotaRisiko/Components/SubsequentPAA/subsequentPAA.component.js"></script>
+
+<input type="hidden" id="subsequentPAADS" value='@Html.Raw(Json.Serialize(Model))' /> 
+<div id="SubsequentPAAGrid" >
+</div>
+
+<div class="window-footer">
+    <button type="button" id="btn-previous-subsequentPAA" class="btn btn-primary space-right">
+        <span class="fa fa-arrow-left"></span> Previous
+    </button>
+</div>

@@ -21,12 +21,12 @@ namespace ABB.Application.Asumsis.Commands
 
     public class DeleteAsumsiDetailCommandHandler : IRequestHandler<DeleteAsumsiDetailCommand>
     {
-        private readonly IDbConnectionFactory _dbConnectionFactory;
+        private readonly IDbConnectionCSM _dbConnectionCsm;
         private readonly ILogger<DeleteAsumsiDetailCommandHandler> _logger;
 
-        public DeleteAsumsiDetailCommandHandler(IDbConnectionFactory dbConnectionFactory, ILogger<DeleteAsumsiDetailCommandHandler> logger)
+        public DeleteAsumsiDetailCommandHandler(IDbConnectionCSM dbConnectionCsm, ILogger<DeleteAsumsiDetailCommandHandler> logger)
         {
-            _dbConnectionFactory = dbConnectionFactory;
+            _dbConnectionCsm = dbConnectionCsm;
             _logger = logger;
         }
 
@@ -35,8 +35,7 @@ namespace ABB.Application.Asumsis.Commands
         {
             try
             {
-                _dbConnectionFactory.CreateDbConnection(request.DatabaseName);
-                await _dbConnectionFactory.QueryProc("sp_DeleteAsumsiDetail",
+                await _dbConnectionCsm.QueryProc("sp_DeleteAsumsiDetail",
                     new
                     {
                         request.KodeAsumsi, request.KodeProduk, request.PeriodeProses, request.Thn

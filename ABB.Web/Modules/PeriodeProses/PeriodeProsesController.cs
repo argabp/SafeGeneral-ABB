@@ -24,10 +24,7 @@ namespace ABB.Web.Modules.PeriodeProses
 
         public async Task<ActionResult> GetPeriodeProses([DataSourceRequest] DataSourceRequest request)
         {
-            var ds = await Mediator.Send(new GetPeriodeProsesQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"]
-            });
+            var ds = await Mediator.Send(new GetPeriodeProsesQuery());
             return Json(ds.AsQueryable().ToDataSourceResult(request));
         }
         
@@ -37,7 +34,6 @@ namespace ABB.Web.Modules.PeriodeProses
             try
             {
                 var command = Mapper.Map<AddPeriodeProsesCommand>(model);
-                command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
                 return Json(new { Result = "OK", Message = "Successfully Add Periode Proses"});
 
@@ -54,7 +50,6 @@ namespace ABB.Web.Modules.PeriodeProses
             try
             {
                 var command = Mapper.Map<EditPeriodeProsesCommand>(model);
-                command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
                 return Json(new { Result = "OK", Message = "Successfully Edit Periode Proses"});
 
@@ -71,7 +66,6 @@ namespace ABB.Web.Modules.PeriodeProses
             try
             {
                 var command = Mapper.Map<DeletePeriodeProsesCommand>(model);
-                command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
                 return Json(new { Result = "OK", Message = "Successfully Delete Periode Proses"});
 

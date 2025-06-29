@@ -25,8 +25,7 @@ namespace ABB.Web.Modules.ImportNotaRisiko
             {
                 await Mediator.Send(new ImportNotaRisikoQuery()
                 {
-                    File = file,
-                    DatabaseName = Request.Cookies["DatabaseValue"]
+                    File = file
                 });
                 
                 return Json("Berhasil mengunggah Nota Risiko");

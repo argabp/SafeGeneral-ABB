@@ -11,16 +11,15 @@ namespace ABB.Application.PeriodeProses.Queries
 {
     public class GetPeriodeProsesQuery : IRequest<List<PeriodeProsesDto>>
     {
-        public string DatabaseName { get; set; }
     }
 
     public class GetPeriodeProsesQueryHandler : IRequestHandler<GetPeriodeProsesQuery, List<PeriodeProsesDto>>
     {
-        private readonly IDbContextFactory _dbContextFactory;
+        private readonly IDbContextCSM _dbContextCsm;
 
-        public GetPeriodeProsesQueryHandler(IDbContextFactory dbContextFactory)
+        public GetPeriodeProsesQueryHandler(IDbContextCSM dbContextCsm)
         {
-            _dbContextFactory = dbContextFactory;
+            _dbContextCsm = dbContextCsm;
         }
 
         public async Task<List<PeriodeProsesDto>> Handle(GetPeriodeProsesQuery request,
@@ -28,8 +27,7 @@ namespace ABB.Application.PeriodeProses.Queries
         {
             await Task.Delay(0, cancellationToken);
 
-            var dbContext = _dbContextFactory.CreateDbContext(request.DatabaseName);
-            List<PeriodeProsesModel> periodeProses = dbContext.PeriodeProses.ToList();
+            List<PeriodeProsesModel> periodeProses = _dbContextCsm.PeriodeProses.ToList();
             List<PeriodeProsesDto> periodeProsesDtos = new List<PeriodeProsesDto>();
 
             for (int sequence = 0; sequence < periodeProses.Count; sequence++)

@@ -1,0 +1,126 @@
+﻿@using ABB.Domain.Entities
+@using Kendo.Mvc.UI
+@model ABB.Web.Modules.ProsesCSM.Models.ProsesCSMViewModel
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Cancel CSM";
+}
+<script src="~/Modules/CancelCSM/JS/cancelCSM.index.js"></script>
+
+<div class="flat-box" id="container-cancel-csm">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Cancel Perhitungan CSM
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <form id="CancelCSMForm" enctype="multipart/form-data" autocomplete="off">
+            <div>
+                <dif class="row form-group">
+                    <div class="row col-sm-6">
+                        <label class="col-sm-4">Tipe Transaksi</label>
+                        <div class="col-sm-8">
+                            <kendo-dropdownlist for="TipeTransaksi" option-label="Pilih Tipe Transaksi"
+                                                datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                                <datasource type="DataSourceTagHelperType.Custom">
+                                    <transport>
+                                        <read url="@Url.Action("GetTipeTransaksi", "CancelCSM")"/>
+                                    </transport>
+                                </datasource>
+                            </kendo-dropdownlist>
+                        </div>
+                    </div>
+                </dif>
+                <div class="row form-group">
+                    <div class="row col-sm-6">
+                        <label class="col-sm-4">Kode Metode</label>
+                        <div class="col-sm-6">
+                            <kendo-dropdownlist for="KodeMetode" option-label="Pilih Kode Metode"
+                                                datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                                <datasource type="DataSourceTagHelperType.Custom">
+                                    <transport>
+                                        <read url="@Url.Action("GetKodeMetode", "CancelCSM")"/>
+                                    </transport>
+                                </datasource>
+                            </kendo-dropdownlist>
+                        </div>
+                        <div class="col-sm-2">
+                            <button type="button" id="btn-refresh-grid" class="btn btn-primary" style="width: 100%">
+                                <span class="fa fa-redo"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div style="justify-content: right; gap: 1em; padding-bottom: 1em;" class="col-sm-6 row">
+            <button type="button" id="btn-proses" class="btn btn-primary">
+                <span class="fa fa-check-circle"></span> Proses
+            </button>
+            <button type="button" id="btn-proses-all" class="btn btn-primary">
+                <span class="fa fa-check-circle"></span> Proses All
+            </button>
+        </div>
+        
+        <div class="progress" style="height: 2.5em">
+          <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated active" role="progressbar"
+               aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+          </div>
+          <div>
+            
+          </div>
+        </div>
+        <div class="text-center" style="padding-top: 0.5em">
+          <p id="progressBarMessage" style="font-size: 1em;"></p>
+        </div>
+        
+        @(Html.Kendo().Grid<ViewSourceDataCancel>()
+                    .Name("ViewSourceDataCancelGrid")
+                    .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetViewSourceData", "CancelCSM").Data("dataViewSourceDataCancel"))
+                        .Model(w => w.Id(e => e.Id))
+                        .ServerOperation(false)
+            )
+                    .Columns(columns =>
+                    {
+                        columns.Select().Width(50);
+                        columns.Bound(col => col.PeriodeProses).Title("Periode Proses").Format("{0:dd MMM yyyy}");
+                        columns.Bound(col => col.Id).Width(100).Title("Id");
+                        columns.Bound(col => col.JenisTransaksi).Title("Jenis Transaksi");
+                        columns.Bound(col => col.TipeTransaksi).Title("Tipe Transaksi");
+                        columns.Bound(col => col.NoReferensi).Title("No. Referensi 1");
+                        columns.Bound(col => col.NoReferensi2).Title("No. Referensi 2");
+                        columns.Bound(col => col.NamaReferensi).Title("Nama Referensi");
+                        columns.Bound(col => col.PeriodeAwal).Title("Periode Awal").Format("{0:dd MMM yyyy}");
+                        columns.Bound(col => col.PeriodeAkhir).Title("Periode Akhir").Format("{0:dd MMM yyyy}");
+                        columns.Bound(col => col.JktWaktuHari).Title("JKT Waktu Hari");
+                        columns.Bound(col => col.Mtu).Title("MTU");
+                        columns.Bound(col => col.Premi).Title("Premi");
+                        columns.Bound(col => col.Disc).Title("Disc");
+                        columns.Bound(col => col.Komisi).Title("Komisi");
+                        columns.Bound(col => col.BiaAkusisi).Title("Bia Akuisisi");
+                        columns.Bound(col => col.Netto).Title("Netto");
+                        columns.Bound(col => col.FlagProses).Title("FlagProcess");
+                    })
+                    .Pageable(pager => pager
+                        .Refresh(true)
+                        .Info(true)
+                        .PageSizes(true)
+            )
+                    .Sortable()
+                    .Filterable()
+                    .Scrollable()
+                    .Height(380)
+                    .PersistSelection()
+                    .Resizable(a=>a.Columns(true))
+                    .Events(ev => ev.DataBound("gridAutoFit")))
+    </div>
+</div>
+

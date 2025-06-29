@@ -19,18 +19,17 @@ namespace ABB.Application.Asumsis.Commands
         public Int16 Thn { get; set; }
 
         public decimal Persentase { get; set; }
-        public string DatabaseName { get; set; }
     }
 
     public class AddAsumsiDetailCommandHandler : IRequestHandler<AddAsumsiDetailCommand>
     {
-        private readonly IDbContextFactory _dbContextFactory;
+        private readonly IDbContextCSM _dbContextCsm;
         private readonly ILogger<AddAsumsiDetailCommandHandler> _logger;
 
-        public AddAsumsiDetailCommandHandler(IDbContextFactory dbContextFactory,
+        public AddAsumsiDetailCommandHandler(IDbContextCSM dbContextCsm,
             ILogger<AddAsumsiDetailCommandHandler> logger)
         {
-            _dbContextFactory = dbContextFactory;
+            _dbContextCsm = dbContextCsm;
             _logger = logger;
         }
 
@@ -38,7 +37,6 @@ namespace ABB.Application.Asumsis.Commands
         {
             try
             {
-                var dbContext = _dbContextFactory.CreateDbContext(request.DatabaseName);
                 var asumsiDetail = new AsumsiDetail()
                 {
                     KodeAsumsi = request.KodeAsumsi,
@@ -48,9 +46,9 @@ namespace ABB.Application.Asumsis.Commands
                     Persentase = request.Persentase
                 };
 
-                dbContext.AsumsiDetail.Add(asumsiDetail);
+                _dbContextCsm.AsumsiDetail.Add(asumsiDetail);
 
-                await dbContext.SaveChangesAsync(cancellationToken);
+                await _dbContextCsm.SaveChangesAsync(cancellationToken);
             }
             catch (Exception ex)
             {

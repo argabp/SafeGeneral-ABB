@@ -1,0 +1,26 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.NotaRisiko.Models.NotaRisikoViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/NotaRisiko/JS/notaRisiko.view.js"></script>
+
+<div class="window-body">
+    <div id="notaRisikoTab">
+        <ul>
+            <li class="k-active">
+                Initial
+            </li>
+            <li>
+                Subsequent
+            </li>
+        </ul>
+        <div id="tabInitialPAA">
+            <vc:initial-paa model="@Model"></vc:initial-paa>
+        </div>
+        <div id="tabSubsequentPAA">
+            <vc:subsequent-paa model="@Model"></vc:subsequent-paa>
+        </div>
+    </div>
+</div>

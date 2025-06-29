@@ -15,18 +15,17 @@ namespace ABB.Application.Asumsis.Commands
         public string KodeProduk { get; set; }
 
         public DateTime PeriodeProses { get; set; }
-        public string DatabaseName { get; set; }
     }
 
     public class AddAsumsiPeriodeCommandHandler : IRequestHandler<AddAsumsiPeriodeCommand>
     {
-        private readonly IDbContextFactory _dbContextFactory;
+        private readonly IDbContextCSM _dbContextCsm;
         private readonly ILogger<AddAsumsiPeriodeCommandHandler> _logger;
 
-        public AddAsumsiPeriodeCommandHandler(IDbContextFactory dbContextFactory,
+        public AddAsumsiPeriodeCommandHandler(IDbContextCSM dbContextCsm,
             ILogger<AddAsumsiPeriodeCommandHandler> logger)
         {
-            _dbContextFactory = dbContextFactory;
+            _dbContextCsm = dbContextCsm;
             _logger = logger;
         }
 
@@ -41,10 +40,9 @@ namespace ABB.Application.Asumsis.Commands
                     PeriodeProses = request.PeriodeProses.Date
                 };
 
-                var dbContext = _dbContextFactory.CreateDbContext(request.DatabaseName);
-                dbContext.AsumsiPeriode.Add(asumsiPeriode);
+                _dbContextCsm.AsumsiPeriode.Add(asumsiPeriode);
 
-                await dbContext.SaveChangesAsync(cancellationToken);
+                await _dbContextCsm.SaveChangesAsync(cancellationToken);
             }
             catch (Exception ex)
             {

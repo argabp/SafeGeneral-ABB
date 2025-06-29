@@ -1,0 +1,32 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.NotaRisiko.Models.NotaRisikoViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/NotaRisiko/JS/notaRisiko.view.js"></script>
+
+<div class="window-body">
+    <div id="notaRisikoTab">
+        <ul>
+            <li class="k-active">
+                Initial Liability
+            </li>
+            @* <li> *@
+            @*     Intial Release *@
+            @* </li> *@
+            <li>
+                Subsequent
+            </li>
+        </ul>
+        <div id="tabIntialLiability">
+            <vc:intial-liability model="@Model"></vc:intial-liability>
+        </div>
+        @* <div id="tabIntialRelease"> *@
+        @*     <vc:intial-release model="@Model"></vc:intial-release> *@
+        @* </div> *@
+        <div id="tabSubsequent">
+            <vc:subsequent model="@Model"></vc:subsequent>
+        </div>
+    </div>
+</div>

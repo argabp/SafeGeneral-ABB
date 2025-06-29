@@ -12,18 +12,17 @@ namespace ABB.Application.Asumsis.Commands
         public string KodeAsumsi { get; set; }
 
         public string NamaAsumsi { get; set; }
-        public string DatabaseName { get; set; }
     }
 
     public class AddAsumsiCommandHandler : IRequestHandler<AddAsumsiCommand>
     {
-        private readonly IDbContextFactory _dbContextFactory;
+        private readonly IDbContextCSM _dbContextCsm;
         private readonly ILogger<AddAsumsiCommandHandler> _logger;
 
-        public AddAsumsiCommandHandler(IDbContextFactory dbContextFactory,
+        public AddAsumsiCommandHandler(IDbContextCSM dbContextCsm,
                                         ILogger<AddAsumsiCommandHandler> logger)
         {
-            _dbContextFactory = dbContextFactory;
+            _dbContextCsm = dbContextCsm;
             _logger = logger;
         }
 
@@ -37,10 +36,9 @@ namespace ABB.Application.Asumsis.Commands
                     NamaAsumsi = request.NamaAsumsi
                 };
 
-                var dbContext = _dbContextFactory.CreateDbContext(request.DatabaseName);
-                dbContext.Asumsi.Add(asumsi);
+                _dbContextCsm.Asumsi.Add(asumsi);
 
-                await dbContext.SaveChangesAsync(cancellationToken);
+                await _dbContextCsm.SaveChangesAsync(cancellationToken);
             }
             catch (Exception ex)
             {

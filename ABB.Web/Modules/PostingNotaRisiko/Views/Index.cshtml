@@ -1,0 +1,65 @@
+﻿@using Kendo.Mvc.UI
+@using ABB.Domain.Entities
+@using Microsoft.Extensions.Configuration
+@model ABB.Web.Modules.PostingNotaRisiko.Models.PostingNotaRisikoViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Nota Risiko";
+}
+<script src="~/Modules/PostingNotaRisiko/JS/postingNotaRisiko.index.js"></script>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Posting Nota Risiko
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <form id="PostingNotaRisikoForm" enctype="multipart/form-data" autocomplete="off">
+            <div>
+                <div class="row form-group">
+                    <div class="row col-sm-6">
+                        <label class="col-sm-4">Tipe Transaksi</label>
+                        <div class="col-sm-8">
+                            <kendo-dropdownlist for="TipeTransaksi" option-label="Pilih Tipe Transaksi"
+                                                datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                                <datasource type="DataSourceTagHelperType.Custom">
+                                    <transport>
+                                        <read url="@Url.Action("GetTipeTransaksi", "PostingNotaRisiko")"/>
+                                    </transport>
+                                </datasource>
+                            </kendo-dropdownlist>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="row col-sm-6">
+                        <label class="col-sm-4">Periode</label>
+                        <div class="col-sm-6">
+                            <kendo-dropdownlist for="PeriodeProses" option-label="Pilih Periode"
+                                                datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                                <datasource type="DataSourceTagHelperType.Custom">
+                                    <transport>
+                                        <read url="@Url.Action("GetPeriodeProses", "PostingNotaRisiko")"/>
+                                    </transport>
+                                </datasource>
+                            </kendo-dropdownlist>
+                        </div>
+                        <div class="col-sm-2">
+                            <button type="button" id="btn-posting" class="btn btn-primary" style="width: 100%; padding: 7px 20px 7px 20px">
+                                <span>Posting</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

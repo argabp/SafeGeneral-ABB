@@ -1,0 +1,59 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.OutstandingKlaimProduksiUmum.Models.OutstandingKlaimProduksiUmumModel
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Outstanding Klaim";
+}
+<script src="~/Modules/OutstandingKlaimProduksiUmum/JS/outstandingKlaimProduksiUmum.js"></script>
+
+<div class="flat-box" id="container-cancel-csm">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Outstanding Klaim
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <form id="OutstandingKlaimProduksiUmumForm" enctype="multipart/form-data" autocomplete="off">
+            <div>
+                <div class="row form-group">
+                    <div class="row col-md-6">
+                        <div class="col-md-4" style="align-self: center">
+                            <label>Tanggal Akhir</label>
+                        </div>
+                        <div class="col-md-8">
+                            <kendo-datepicker for="TanggalAkhir" value="@DateTime.Now" style="width: 100%" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="row col-sm-6">
+                        <label class="col-sm-4">Kode Cabang</label>
+                        <div class="col-sm-6">
+                            <kendo-dropdownlist for="KodeCabang"
+                                                datavaluefield="kd_cb" datatextfield="nm_cb" filter="FilterType.Contains">
+                                <datasource type="DataSourceTagHelperType.Custom">
+                                    <transport>
+                                        <read url="@Url.Action("GetCabang", "OutstandingKlaimProduksiUmum")"/>
+                                    </transport>
+                                </datasource>
+                            </kendo-dropdownlist>
+                        </div>
+                        <div class="col-sm-2">
+                            <button type="button" id="btn-refresh-grid" class="btn btn-primary" style="width: 100%">
+                                <span class="fa fa-redo"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

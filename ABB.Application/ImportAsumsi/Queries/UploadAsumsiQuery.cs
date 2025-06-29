@@ -13,20 +13,19 @@ namespace ABB.Application.ImportAsumsi.Queries
     public class UploadAsumsiQuery : IRequest
     {
         public IFormFile File { get; set; }
-        public string DatabaseName { get; set; }
     }
     
     public class UploadAsumsiQueryHandler : IRequestHandler<UploadAsumsiQuery>
     {
-        private readonly IDbConnectionFactory _dbConnectionFactory;
+        private readonly IDbConnectionCSM _dbConnectionCsm;
         private readonly ILogger<UploadAsumsiQueryHandler> _logger;
         private readonly IProfilePictureHelper _pictureHelper;
         private readonly IConfiguration _configuration;
 
-        public UploadAsumsiQueryHandler(IDbConnectionFactory dbConnectionFactory, ILogger<UploadAsumsiQueryHandler> logger,
+        public UploadAsumsiQueryHandler(IDbConnectionCSM dbConnectionCsm, ILogger<UploadAsumsiQueryHandler> logger,
             IProfilePictureHelper pictureHelper, IConfiguration configuration)
         {
-            _dbConnectionFactory = dbConnectionFactory;
+            _dbConnectionCsm = dbConnectionCsm;
             _logger = logger;
             _pictureHelper = pictureHelper;
             _configuration = configuration;
@@ -40,8 +39,7 @@ namespace ABB.Application.ImportAsumsi.Queries
                 
                 var path = await _pictureHelper.UploadToFolder(request.File, asumsiPath);
                 
-                _dbConnectionFactory.CreateDbConnection(request.DatabaseName);
-                await _dbConnectionFactory.QueryProc("sp_UploadAsumsi",
+                await _dbConnectionCsm.QueryProc("sp_UploadAsumsi",
                     new
                     {
                         Path = path

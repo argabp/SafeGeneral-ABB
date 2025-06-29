@@ -25,8 +25,7 @@ namespace ABB.Web.Modules.ImportAsumsi
             {
                 await Mediator.Send(new UploadAsumsiQuery()
                 {
-                    File = file,
-                    DatabaseName = Request.Cookies["DatabaseValue"]
+                    File = file
                 });
                 
                 return Json("Berhasil mengunggah Asumsi");

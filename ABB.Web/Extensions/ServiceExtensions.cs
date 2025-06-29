@@ -104,6 +104,10 @@ namespace ABB.Web.Extensions
                 .AddDefaultTokenProviders();
             services.AddScoped(typeof(IDbContext), typeof(ABBDbContext));
             
+            string connectionStringCSM = configuration.GetConnectionString("ABBConnectionCSM");
+            services.AddDbContext<ABBDbContextCSM>(c => c.UseSqlServer(connectionStringCSM));
+            services.AddScoped(typeof(IDbContextCSM), typeof(ABBDbContextCSM));
+            
             services.AddSingleton<IDbContextFactory, DbContextFactory>();
             services.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
             services.AddHttpContextAccessor();

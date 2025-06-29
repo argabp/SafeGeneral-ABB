@@ -13,18 +13,17 @@ namespace ABB.Application.PeriodeProses.Commands
         public DateTime PeriodeProses { get; set; }
 
         public bool FlagProses { get; set; }
-        public string DatabaseName { get; set; }
     }
 
     public class EditPeriodeProsesCommandHandler : IRequestHandler<EditPeriodeProsesCommand>
     {
-        private readonly IDbContextFactory _dbContextFactory;
+        private readonly IDbContextCSM _dbContextCsm;
         private readonly ILogger<EditPeriodeProsesCommandHandler> _logger;
 
-        public EditPeriodeProsesCommandHandler(IDbContextFactory dbContextFactory,
+        public EditPeriodeProsesCommandHandler(IDbContextCSM dbContextCsm,
             ILogger<EditPeriodeProsesCommandHandler> logger)
         {
-            _dbContextFactory = dbContextFactory;
+            _dbContextCsm = dbContextCsm;
             _logger = logger;
         }
 
@@ -32,12 +31,11 @@ namespace ABB.Application.PeriodeProses.Commands
         {
             try
             {
-                var dbContext = _dbContextFactory.CreateDbContext(request.DatabaseName);
-                var periodeProses = dbContext.PeriodeProses.Find(request.PeriodeProses);
+                var periodeProses = _dbContextCsm.PeriodeProses.Find(request.PeriodeProses);
 
                 periodeProses.FlagProses = request.FlagProses;
 
-                await dbContext.SaveChangesAsync(cancellationToken);
+                await _dbContextCsm.SaveChangesAsync(cancellationToken);
             }
             catch (Exception ex)
             {

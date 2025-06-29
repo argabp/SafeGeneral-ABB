@@ -14,17 +14,16 @@ namespace ABB.Application.Asumsis.Commands
         public string KodeProduk { get; set; }
 
         public DateTime PeriodeProses { get; set; }
-        public string DatabaseName { get; set; }
     }
 
     public class DeleteAsumsiPeriodeCommandHandler : IRequestHandler<DeleteAsumsiPeriodeCommand>
     {
-        private readonly IDbConnectionFactory _dbConnectionFactory;
+        private readonly IDbConnectionCSM _dbConnectionCsm;
         private readonly ILogger<DeleteAsumsiPeriodeCommandHandler> _logger;
 
-        public DeleteAsumsiPeriodeCommandHandler(IDbConnectionFactory dbConnectionFactory, ILogger<DeleteAsumsiPeriodeCommandHandler> logger)
+        public DeleteAsumsiPeriodeCommandHandler(IDbConnectionCSM dbConnectionCsm, ILogger<DeleteAsumsiPeriodeCommandHandler> logger)
         {
-            _dbConnectionFactory = dbConnectionFactory;
+            _dbConnectionCsm = dbConnectionCsm;
             _logger = logger;
         }
 
@@ -33,8 +32,7 @@ namespace ABB.Application.Asumsis.Commands
         {
             try
             {
-                _dbConnectionFactory.CreateDbConnection(request.DatabaseName);
-                await _dbConnectionFactory.QueryProc("sp_DeleteAsumsiPeriode",
+                await _dbConnectionCsm.QueryProc("sp_DeleteAsumsiPeriode",
                     new
                     {
                         request.KodeAsumsi, request.KodeProduk, request.PeriodeProses

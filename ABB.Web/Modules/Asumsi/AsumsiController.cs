@@ -26,8 +26,7 @@ namespace ABB.Web.Modules.Asumsi
         {
             var ds = await Mediator.Send(new GetAsumsiQuery() 
             { 
-                SearchKeyword = searchkeyword,
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                SearchKeyword = searchkeyword
             });
             return Json(ds.AsQueryable().ToDataSourceResult(request));
         }
@@ -39,8 +38,7 @@ namespace ABB.Web.Modules.Asumsi
             
             var ds = await Mediator.Send(new GetAsumsiPeriodeQuery()
             {
-                KodeAsumsi = kodeAsumsi,
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                KodeAsumsi = kodeAsumsi
             });
             
             return Json(ds.AsQueryable().ToDataSourceResult(request));
@@ -55,8 +53,7 @@ namespace ABB.Web.Modules.Asumsi
             { 
                 KodeAsumsi = kodeAsumsi,
                 KodeProduk = kodeProduk,
-                PeriodeProses = periodeProses,
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                PeriodeProses = periodeProses
             });
             return Json(ds.AsQueryable().ToDataSourceResult(request));
         }
@@ -67,7 +64,6 @@ namespace ABB.Web.Modules.Asumsi
             try
             {
                 var command = Mapper.Map<AddAsumsiCommand>(model);
-                command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
                 return Json(new { Result = "OK", Message = "Successfully Add Asumsi"});
 
@@ -84,7 +80,6 @@ namespace ABB.Web.Modules.Asumsi
             try
             {
                 var command = Mapper.Map<EditAsumsiCommand>(model);
-                command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
                 return Json(new { Result = "OK", Message = "Successfully Edit Asumsi"});
 
@@ -101,7 +96,6 @@ namespace ABB.Web.Modules.Asumsi
             try
             {
                 var command = Mapper.Map<DeleteAsumsiCommand>(model);
-                command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
                 return Json(new { Result = "OK", Message = "Successfully Delete Asumsi"});
 
@@ -118,7 +112,6 @@ namespace ABB.Web.Modules.Asumsi
             try
             {
                 var command = Mapper.Map<AddAsumsiPeriodeCommand>(model);
-                command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
                 return Json(new { Result = "OK", Message = "Successfully Add Asumsi Periode"});
             }
@@ -134,7 +127,6 @@ namespace ABB.Web.Modules.Asumsi
             try
             {
                 var command = Mapper.Map<DeleteAsumsiPeriodeCommand>(model);
-                command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
                 return Json(new { Result = "OK", Message = "Successfully Delete Asumsi Periode"});
             }
@@ -150,7 +142,6 @@ namespace ABB.Web.Modules.Asumsi
             try
             {
                 var command = Mapper.Map<AddAsumsiDetailCommand>(model);
-                command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
                 return Json(new { Result = "OK", Message = "Successfully Add Asumsi Detail"});
             }
@@ -166,7 +157,6 @@ namespace ABB.Web.Modules.Asumsi
             try
             {
                 var command = Mapper.Map<EditAsumsiDetailCommand>(model);
-                command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
                 return Json(new { Result = "OK", Message = "Successfully Edit Asumsi Detail"});
             }
@@ -182,7 +172,6 @@ namespace ABB.Web.Modules.Asumsi
             try
             {
                 var command = Mapper.Map<DeleteAsumsiDetailCommand>(model);
-                command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
                 return Json(new { Result = "OK", Message = "Successfully Delete Asumsi Detail"});
             }

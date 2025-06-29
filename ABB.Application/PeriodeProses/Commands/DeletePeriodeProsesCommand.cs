@@ -12,17 +12,16 @@ namespace ABB.Application.PeriodeProses.Commands
         public DateTime PeriodeProses { get; set; }
 
         public bool FlagProses { get; set; }
-        public string DatabaseName { get; set; }
     }
 
     public class DeletePeriodeProsesCommandHandler : IRequestHandler<DeletePeriodeProsesCommand>
     {
-        private readonly IDbContextFactory _dbContextFactory;
+        private readonly IDbContextCSM _dbContextCsm;
         private readonly ILogger<DeletePeriodeProsesCommandHandler> _logger;
 
-        public DeletePeriodeProsesCommandHandler(IDbContextFactory dbContextFactory, ILogger<DeletePeriodeProsesCommandHandler> logger)
+        public DeletePeriodeProsesCommandHandler(IDbContextCSM dbContextCsm, ILogger<DeletePeriodeProsesCommandHandler> logger)
         {
-            _dbContextFactory = dbContextFactory;
+            _dbContextCsm = dbContextCsm;
             _logger = logger;
         }
 
@@ -31,12 +30,11 @@ namespace ABB.Application.PeriodeProses.Commands
         {
             try
             {
-                var dbContext = _dbContextFactory.CreateDbContext(request.DatabaseName);
-                var periodeProses = dbContext.PeriodeProses.Find(request.PeriodeProses);
+                var periodeProses = _dbContextCsm.PeriodeProses.Find(request.PeriodeProses);
 
-                dbContext.PeriodeProses.Remove(periodeProses);
+                _dbContextCsm.PeriodeProses.Remove(periodeProses);
 
-                await dbContext.SaveChangesAsync(cancellationToken);
+                await _dbContextCsm.SaveChangesAsync(cancellationToken);
             }
             catch (Exception ex)
             {

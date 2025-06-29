@@ -16,17 +16,16 @@ namespace ABB.Application.Asumsis.Queries
         public string KodeProduk { get; set; }
 
         public DateTime PeriodeProses { get; set; }
-        public string DatabaseName { get; set; }
     }
 
     public class GetAsumsiDetailQueryHandler : IRequestHandler<GetAsumsiDetailQuery, List<AsumsiDetailDto>>
     {
-        private readonly IDbConnectionFactory _dbConnectionFactory;
+        private readonly IDbConnectionCSM _dbConnectionCsm;
         private readonly ILogger<GetAsumsiDetailQueryHandler> _logger;
 
-        public GetAsumsiDetailQueryHandler(IDbConnectionFactory dbConnectionFactory, ILogger<GetAsumsiDetailQueryHandler> logger)
+        public GetAsumsiDetailQueryHandler(IDbConnectionCSM dbConnectionCsm, ILogger<GetAsumsiDetailQueryHandler> logger)
         {
-            _dbConnectionFactory = dbConnectionFactory;
+            _dbConnectionCsm = dbConnectionCsm;
             _logger = logger;
         }
 
@@ -40,8 +39,7 @@ namespace ABB.Application.Asumsis.Queries
             {
                 var periodeProses = request.PeriodeProses.ToString("yyyy-MM-dd HH:mm:ss");
                 
-                _dbConnectionFactory.CreateDbConnection(request.DatabaseName);
-                result = (await _dbConnectionFactory.Query<AsumsiDetailDto>(
+                result = (await _dbConnectionCsm.Query<AsumsiDetailDto>(
                     "SELECT KodeAsumsi + KodeProduk + CONVERT(VARCHAR, PeriodeProses, 126) + CONVERT(VARCHAR, Thn) AS Id," +
                     "KodeAsumsi, KodeProduk, PeriodeProses, Thn, Persentase" +
                     " FROM MS_AsumsiDetail WHERE KodeAsumsi = @KodeAsumsi" +

@@ -96,10 +96,6 @@ namespace ABB.Application.Common.Interfaces
         DbSet<EmailTemplate> EmailTemplate { get; set; }
         DbSet<ViewTRAkseptasi> ViewTRAkseptasi { get; set; }
         DbSet<AkseptasiProduk> AkseptasiProduk { get; set; }
-        DbSet<Asumsi> Asumsi { get; set; }
-        DbSet<AsumsiDetail> AsumsiDetail { get; set; }
-        DbSet<AsumsiPeriode> AsumsiPeriode { get; set; }
-        DbSet<PeriodeProsesModel> PeriodeProses { get; set; }
         DbSet<DokumenDetil> DokumenDetil { get; set; }
         DbSet<DokumenAkseptasi> DokumenAkseptasi { get; set; }
         DbSet<DokumenAkseptasiDetil> DokumenAkseptasiDetil { get; set; }
