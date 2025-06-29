@@ -4,6 +4,8 @@
 @addTagHelper *, Kendo.Mvc
 @addTagHelper *, ABB.Web
 
+<script src="~/Modules/TertanggungPrincipal/JS/rekanan.add.js"></script>
+
 <div class="window-body">
     <form id="RekananForm" enctype="multipart/form-data" autocomplete="off">
         <div class="form-group col-sm-12">
@@ -51,7 +53,7 @@
         <div class="form-group col-sm-12">
             <label class="col-sm-12">Kota Rekanan</label>
             <div class="col-sm-12">
-                <kendo-dropdownlist for="kd_kota" style="width: 100%"
+                <kendo-dropdownlist for="kt" style="width: 100%"
                                     datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                     <datasource type="DataSourceTagHelperType.Custom">
                         <transport>
@@ -59,7 +61,7 @@
                         </transport>
                     </datasource>
                 </kendo-dropdownlist>
-                <span asp-validation-for="kd_kota" class="text-danger"></span>
+                <span asp-validation-for="kt" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group col-sm-12">
@@ -81,6 +83,16 @@
                     </datasource>
                 </kendo-dropdownlist>
                 <span asp-validation-for="flag_sic" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <input type="hidden" id="tempFlag_konv" value="@Model.no_fax">
+            <label class="col-sm-6">No Fax</label>
+            <div class="col-sm-6">
+                <label>
+                    <input type="checkbox" class="k-checkbox" id="no_fax_rekanan"/>
+                </label>
+                <span asp-validation-for="no_fax" class="text-danger"></span>
             </div>
         </div>
     </form>

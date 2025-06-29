@@ -59,8 +59,8 @@ namespace ABB.Infrastructure.Services
                 // await CreateDefaultRoles();
                 // await CreateAdminUser();
                 // await RegisterAdminToRole();
-                await MapNavigationToAdmin();
-                await MapRouteToAdmin();
+                // await MapNavigationToAdmin();
+                // await MapRouteToAdmin();
             }
             catch (Exception ex)
             {

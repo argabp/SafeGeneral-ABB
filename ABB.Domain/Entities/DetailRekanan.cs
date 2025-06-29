@@ -125,5 +125,7 @@ namespace ABB.Domain.Entities
         public string? siup { get; set; }
 
         public decimal? penghasilan { get; set; }
+
+        public string? kelamin { get; set; }
     }
 }

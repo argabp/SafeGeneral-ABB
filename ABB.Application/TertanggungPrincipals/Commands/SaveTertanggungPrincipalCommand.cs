@@ -106,8 +106,11 @@ namespace ABB.Application.TertanggungPrincipals.Commands
                 }
                 else
                 {
-                    _mapper.Map(request, rekanan);
-                    rekanan.no_ktp ??= string.Empty;
+                    rekanan.nm_rk = request.nm_rk;
+                    rekanan.kt = request.kt;
+                    rekanan.almt = request.almt;
+                    rekanan.flag_sic = request.flag_sic;
+                    rekanan.no_fax = request.no_fax;
                 }
 
                 await dbContext.SaveChangesAsync(cancellationToken);

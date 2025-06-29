@@ -10,8 +10,10 @@ function onSaveRekanan(){
         nm_rk: $("#nm_rk").val(),
         flag_sic: $("#flag_sic").val(),
         almt: $("#almt").val(),
-        kd_kota: $("#kd_kota").val()
+        kt: $("#kt").val(),
+        no_fax: $("#no_fax_rekanan")[0].checked ? "Y" : "N"
     }
+    
     showProgress('#RekananWindow');
     
     ajaxPost(url, JSON.stringify(data),
@@ -229,10 +231,6 @@ function onSaveDetailRekananIndividu(){
         tujuanpolisflag = "1"
     else if($("input[name='tujuanpolisflag']")[1].checked)
         tujuanpolisflag = "2"
-    else if($("input[name='tujuanpolisflag']")[2].checked)
-        tujuanpolisflag = "3"
-    else if($("input[name='tujuanpolisflag']")[3].checked)
-        tujuanpolisflag = "4"
 
     data.tujuanpolisflag = tujuanpolisflag;
     

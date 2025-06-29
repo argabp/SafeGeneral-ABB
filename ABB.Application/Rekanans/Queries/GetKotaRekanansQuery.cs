@@ -32,7 +32,7 @@ namespace ABB.Application.Rekanans.Queries
             try
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
-                return (await _connectionFactory.Query<DropdownOptionDto>("SELECT kd_kota Value, nm_kota Text FROM rf07_00"))
+                return (await _connectionFactory.Query<DropdownOptionDto>("SELECT nm_kab Value, nm_kab Text FROM v_rf07_01"))
                     .ToList();
             }
             catch (Exception ex)

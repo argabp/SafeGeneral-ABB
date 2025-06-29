@@ -5785,6 +5785,12 @@
       <None Update="Modules\SettledKlaimProduksiUmum\JS\settledKlaimProduksiUmum.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\TertanggungPrincipal\JS\rekanan.add.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\TertanggungPrincipal\JS\rekanan.edit.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

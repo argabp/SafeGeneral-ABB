@@ -134,6 +134,8 @@ namespace ABB.Application.TertanggungPrincipals.Commands
         public string? siup { get; set; }
 
         public decimal? penghasilan { get; set; }
+
+        public string? kelamin { get; set; }
         
         public void Mapping(Profile profile)
         {

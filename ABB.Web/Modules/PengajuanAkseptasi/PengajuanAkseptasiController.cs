@@ -46,6 +46,7 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
+            ViewBag.KodeCabang = Request.Cookies["UserCabang"].Trim();
             
             _rekanans = await Mediator.Send(new GetRekanansQuery()
             {

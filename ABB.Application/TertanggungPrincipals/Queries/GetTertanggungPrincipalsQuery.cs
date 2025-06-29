@@ -23,14 +23,12 @@ namespace ABB.Application.TertanggungPrincipals.Queries
     public class GetTertanggungPrincipalsQueryHandler : IRequestHandler<GetTertanggungPrincipalsQuery, List<RekananDto>>
     {
         private readonly IDbConnectionFactory _connectionFactory;
-        private readonly IDbContextFactory _contextFactory;
         private readonly ILogger<GetTertanggungPrincipalsQueryHandler> _logger;
 
         public GetTertanggungPrincipalsQueryHandler(IDbConnectionFactory connectionFactory, 
-            IDbContextFactory contextFactory, ILogger<GetTertanggungPrincipalsQueryHandler> logger)
+            ILogger<GetTertanggungPrincipalsQueryHandler> logger)
         {
             _connectionFactory = connectionFactory;
-            _contextFactory = contextFactory;
             _logger = logger;
         }
 
@@ -39,17 +37,6 @@ namespace ABB.Application.TertanggungPrincipals.Queries
         {
             try
             {
-                var dbContext = _contextFactory.CreateDbContext(request.DatabaseName);
-                var module = dbContext.Module.Find(int.Parse(request.ModuleType));
-                string suffix = string.Empty;
-                if(module != null)
-                    switch (module.Name.ToLower())
-                    {
-                        case "underwriting":
-                            suffix += " AND g.nm_grp_rk IN ('Tertanggung', 'Principal')";
-                            break;
-                    }
-                
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
                 var rekanans = (await _connectionFactory.Query<RekananDto>(@"SELECT r.kd_cb + r.kd_grp_rk + r.kd_rk AS Id,
                 r.kd_cb, r.kd_grp_rk, r.kd_rk,
@@ -62,7 +49,7 @@ namespace ABB.Application.TertanggungPrincipals.Queries
                 ON r.kd_grp_rk = g.kd_grp_rk
                 INNER JOIN rf07_00 k
                 ON r.kd_kota = k.kd_kota
-                WHERE c.kd_cb = @KodeCabang" + suffix, new { request.KodeCabang })).ToList();
+                WHERE c.kd_cb = @KodeCabang AND g.nm_grp_rk IN ('Tertanggung', 'Principal', 'Bank')", new { request.KodeCabang })).ToList();
 
                 foreach (var rekanan in rekanans)
                     rekanan.nm_sic = rekanan.flag_sic == "R" ? "Retail" : "Corporate";

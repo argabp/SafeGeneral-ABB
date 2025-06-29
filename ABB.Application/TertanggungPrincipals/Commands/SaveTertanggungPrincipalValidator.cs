@@ -18,9 +18,9 @@ namespace ABB.Application.TertanggungPrincipals.Commands
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty().WithMessage("Nama Rekanan Wajib Diisi");
             
-            RuleFor(p => p.kd_kota)
+            RuleFor(p => p.kt)
                 .Cascade(CascadeMode.Stop)
-                .NotEmpty().WithMessage("Kode Kota Wajib Diisi");
+                .NotEmpty().WithMessage("Kota Wajib Diisi");
             
             RuleFor(p => p.almt)
                 .Cascade(CascadeMode.Stop)

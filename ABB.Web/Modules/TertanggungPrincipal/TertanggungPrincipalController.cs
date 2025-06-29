@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using ABB.Application.Common;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Exceptions;
-using ABB.Application.Rekanans.Commands;
 using ABB.Application.Rekanans.Queries;
 using ABB.Application.TertanggungPrincipals.Commands;
 using ABB.Application.TertanggungPrincipals.Queries;
@@ -16,6 +15,7 @@ using ABB.Web.Modules.Rekanan.Models;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
+using GetKodeGroupRekanansQuery = ABB.Application.TertanggungPrincipals.Queries.GetKodeGroupRekanansQuery;
 
 namespace ABB.Web.Modules.TertanggungPrincipal
 {
@@ -26,6 +26,7 @@ namespace ABB.Web.Modules.TertanggungPrincipal
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
+            ViewBag.KodeCabang = Request.Cookies["UserCabang"];
             
             ViewBag.bentukflag =  new List<IInputGroupItem>()
             {
@@ -213,6 +214,17 @@ namespace ABB.Web.Modules.TertanggungPrincipal
             return PartialView(view, detailDetailRekanan == null
                     ? new SaveDetailRekananViewModel()
                     : Mapper.Map<SaveDetailRekananViewModel>(detailDetailRekanan));
+        }
+        
+        public JsonResult GetKelamin()
+        {
+            var result = new List<DropdownOptionDto>()
+            {
+                new DropdownOptionDto() { Text = "Laki-laki", Value = "1" },
+                new DropdownOptionDto() { Text = "Perempuan", Value = "0" }
+            };
+
+            return Json(result);
         }
     }
 }

@@ -6,4 +6,6 @@ $(document).ready(function () {
     tabstrip.disable(tabstrip.items()[1]);
 
     $("#btn-next-pengajuanAkseptasi").prop("disabled", true);
+    
+    $("#kd_cb").getKendoDropDownList().value($("#KodeCabang").val());
 });
