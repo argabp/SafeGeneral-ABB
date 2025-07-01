@@ -15,7 +15,7 @@
                                     datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                     <datasource type="DataSourceTagHelperType.Custom">
                         <transport>
-                            <read url="@Url.Action("GetKodeCabang", "Rekanan")"/>
+                            <read url="@Url.Action("GetKodeCabang", "TertanggungPrincipal")"/>
                         </transport>
                     </datasource>
                 </kendo-dropdownlist>
@@ -29,7 +29,7 @@
                                     datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                     <datasource type="DataSourceTagHelperType.Custom">
                         <transport>
-                            <read url="@Url.Action("GetKodeGroupRekanan", "Rekanan")"/>
+                            <read url="@Url.Action("GetKodeGroupRekanan", "TertanggungPrincipal")"/>
                         </transport>
                     </datasource>
                 </kendo-dropdownlist>
@@ -57,7 +57,7 @@
                                     datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                     <datasource type="DataSourceTagHelperType.Custom">
                         <transport>
-                            <read url="@Url.Action("GetKotaRekanan", "Rekanan")"/>
+                            <read url="@Url.Action("GetKotaRekanan", "TertanggungPrincipal")"/>
                         </transport>
                     </datasource>
                 </kendo-dropdownlist>
@@ -78,7 +78,7 @@
                                     datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                     <datasource type="DataSourceTagHelperType.Custom">
                         <transport>
-                            <read url="@Url.Action("GetFlagSic", "Rekanan")"/>
+                            <read url="@Url.Action("GetFlagSic", "TertanggungPrincipal")"/>
                         </transport>
                     </datasource>
                 </kendo-dropdownlist>
@@ -87,7 +87,7 @@
         </div>
         <div class="form-group col-sm-12">
             <input type="hidden" id="tempNo_fax" value="@Model.no_fax">
-            <label class="col-sm-6">No Fax</label>
+            <label class="col-sm-6">Aktif</label>
             <div class="col-sm-6">
                 <label>
                     <input type="checkbox" class="k-checkbox" id="no_fax_rekanan"/>

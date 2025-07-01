@@ -5791,6 +5791,9 @@
       <None Update="Modules\TertanggungPrincipal\JS\rekanan.edit.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\DataPolisOJK\JS\dataPolisOJK.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

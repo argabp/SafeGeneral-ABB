@@ -118,6 +118,7 @@ function onSaveDetailRekananIndividu(){
         no_fax: $("#no_fax").val(),
         website: $("#website").val(),
         dirinstitusi: $("#dirinstitusi").val(),
+        kelamin: $("#kelamin").val()
     }
     
     var bentukflag = "";

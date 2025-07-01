@@ -91,9 +91,11 @@ namespace ABB.Application.TertanggungPrincipals.Commands
                 var rekanan = dbContext.Rekanan.FirstOrDefault(w => w.kd_cb == request.kd_cb
                                                                     && w.kd_grp_rk == request.kd_grp_rk
                                                                     && w.kd_rk == request.kd_rk);
-
+                
                 if (rekanan == null)
                 {
+                    request.kd_kota = "00";
+                    
                     _connectionFactory.CreateDbConnection(request.DatabaseName);
                     var result = (await _connectionFactory.QueryProc<string>("spe_rf03e_01",
                         new { request.kd_cb, request.kd_grp_rk, kd_rk_induk = "100", request.kd_kota })).FirstOrDefault();
