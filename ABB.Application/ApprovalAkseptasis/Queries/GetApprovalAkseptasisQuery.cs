@@ -46,7 +46,7 @@ namespace ABB.Application.ApprovalAkseptasis.Queries
 						ON p.kd_cob = cob.kd_cob
 					INNER JOIN rf05 scob
 						ON p.kd_scob = scob.kd_scob
-				WHERE cb.kd_cb = @KodeCabang AND p.kd_user_status = @UserId AND p.status NOT IN ('New', 'Revised', 'Cancel', 'Approved') AND (p.user_status like '%'+@SearchKeyword+'%' 
+				WHERE cb.kd_cb = @KodeCabang AND p.kd_user_status = @UserId AND p.status NOT IN ('New', 'Cancel', 'Approved') AND (p.user_status like '%'+@SearchKeyword+'%' 
 					OR cb.nm_cb like '%'+@SearchKeyword+'%' 
 					OR cob.nm_cob like '%'+@SearchKeyword+'%' 
 					OR scob.nm_scob like '%'+@SearchKeyword+'%' 

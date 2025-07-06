@@ -13,6 +13,16 @@
         <div class="col-sm-6 form-group">
             <kendo-upload name="upload" multiple="true"></kendo-upload>
         </div>
+        <div class="col-sm-12 form-group">
+            <kendo-dropdownlist name="kd_user_sign" style="width: 100%" option-label="Pilih User Sign"
+                                datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                <datasource type="DataSourceTagHelperType.Custom">
+                    <transport>
+                        <read url="@Url.Action("GetUserSignRevised", "ApprovalAkseptasi")" data="dataUserSignRevised"/>
+                    </transport>
+                </datasource>
+            </kendo-dropdownlist>
+        </div>
     </form>
 
     <div class="window-footer">

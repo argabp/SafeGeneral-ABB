@@ -26,7 +26,7 @@ namespace ABB.Application.Akseptasis.Queries
         public async Task<List<AkseptasiDto>> Handle(GetAkseptasisQuery request, CancellationToken cancellationToken)
         {
             _connectionFactory.CreateDbConnection(request.DatabaseName);
-            return (await _connectionFactory.Query<AkseptasiDto>(@"SELECT p.*, cb.nm_cb, cob.nm_cob, scob.nm_scob
+            return (await _connectionFactory.Query<AkseptasiDto>(@"SELECT p.*, cb.nm_cb, cob.nm_cob, scob.nm_scob, RTRIM(LTRIM(p.kd_cb)) + '.' + RTRIM(LTRIM(p.kd_cob)) + RTRIM(LTRIM(p.kd_scob)) + '.' + p.kd_thn + '.' + p.no_aks nomor_akseptasi
 				FROM uw01a p
 					INNER JOIN rf01 cb
 						ON p.kd_cb = cb.kd_cb

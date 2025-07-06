@@ -4640,7 +4640,6 @@ C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modul
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modules\ApprovalAkseptasi\JS\approvalAkseptasi.info.js
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modules\ApprovalAkseptasi\JS\approvalAkseptasi.rejected.js
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modules\ApprovalAkseptasi\JS\approvalAkseptasi.revised.js
-C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modules\ApprovalAkseptasi\JS\approvalAkseptasi.view.js
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modules\Shared\Components\LampiranPengajuanAkseptasi\lampiranPengajuanAkseptasi.js
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modules\Shared\Components\PengajuanAkseptasi\pengajuanAkseptasi.js
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\ApprovalAkseptasi\Views\Approved.cshtml.g.cs
@@ -4650,7 +4649,6 @@ C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\ApprovalAkseptasi\Views\Info.cshtml.g.cs
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\ApprovalAkseptasi\Views\Rejected.cshtml.g.cs
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\ApprovalAkseptasi\Views\Revised.cshtml.g.cs
-C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\ApprovalAkseptasi\Views\View.cshtml.g.cs
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\Shared\Components\LampiranPengajuanAkseptasi\_LampiranPengajuanAkseptasi.cshtml.g.cs
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\Shared\Components\PengajuanAkseptasi\_PengajuanAkseptasi.cshtml.g.cs
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modules\EmailTemplate\JS\emailTemplate.edit.js
@@ -4738,3 +4736,5 @@ C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modul
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modules\TertanggungPrincipal\JS\rekanan.edit.js
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modules\DataPolisOJK\JS\dataPolisOJK.js
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\DataPolisOJK\Views\Index.cshtml.g.cs
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\ApprovalAkseptasi\Views\Edit.cshtml.g.cs
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modules\Reports\Templates\KeteranganPengajuanAkseptasi.html

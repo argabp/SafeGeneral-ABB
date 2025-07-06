@@ -72,7 +72,7 @@ namespace ABB.Web.Modules.ApprovalAkseptasi
         }
         
         [HttpGet]
-        public  IActionResult View(PengajuanAkseptasiModel parameterModel)
+        public  IActionResult Edit(PengajuanAkseptasiModel parameterModel)
         {
             return PartialView(parameterModel);
         }
@@ -168,6 +168,28 @@ namespace ABB.Web.Modules.ApprovalAkseptasi
             }
         }
         
+        public async Task<IActionResult> ApprovalAkseptasiRev(ApprovalAkseptasiEscModel model)
+        {
+            try
+            {
+                var command = Mapper.Map<ApprovalAkseptasiRevCommand>(model);
+                command.DatabaseName = Request.Cookies["DatabaseValue"];
+                var result = await Mediator.Send(command);
+
+                foreach (var notifTo in result.Item2)
+                {
+                    await ApplicationHub.SendPengajuanAkseptasiNotification(notifTo, model.nomor_pengajuan, "Submit");
+                }
+                
+                return Json(new { Result = "OK", Message = result.Item1 });
+            }
+            catch (Exception e)
+            {
+                return Json(new
+                    { Result = "ERROR", Message = e.InnerException == null ? e.Message : e.InnerException.Message });
+            }
+        }
+        
         public async Task<JsonResult> GetCabang()
         {
             var result = await Mediator.Send(new GetCabangQuery()
@@ -205,7 +227,8 @@ namespace ABB.Web.Modules.ApprovalAkseptasi
             {
                 new DropdownOptionDto() { Text = "Leader (Sebagai Leader Koasuransi)", Value = "L" },
                 new DropdownOptionDto() { Text = "Member (Sebagai Member Koasuransi)", Value = "M" },
-                new DropdownOptionDto() { Text = "Transaksi Direct", Value = "O" }
+                new DropdownOptionDto() { Text = "Transaksi Direct", Value = "O" },
+                new DropdownOptionDto() { Text = "Inward Fakultatif", Value = "C" }
             };
 
             return Json(result);
@@ -320,12 +343,52 @@ namespace ABB.Web.Modules.ApprovalAkseptasi
                 return Ok( new { Status = "ERROR", Message = e.InnerException == null ? e.Message : e.InnerException.Message});
             }
         }
+        
+        [HttpPost]
+        public async Task<ActionResult> GenerateKeteranganReport([FromBody] PengajuanAkseptasiModel model)
+        {
+            try
+            {
+                var command = Mapper.Map<GetReportKeteranganPengajuanAkseptasiQuery>(model);
+                command.DatabaseName = Request.Cookies["DatabaseValue"];
 
+                var sessionId = HttpContext.Session.GetString("SessionId");
+
+                if (string.IsNullOrWhiteSpace(sessionId))
+                    throw new Exception("Session user tidak ditemukan");
+                
+                var reportTemplate = await Mediator.Send(command);
+                
+                _reportGeneratorService.GenerateReport("KeteranganApprovalAkseptasi.pdf", reportTemplate, sessionId);
+
+                return Ok(new { Status = "OK", Data = sessionId});
+            }
+            catch (Exception e)
+            {
+                return Ok( new { Status = "ERROR", Message = e.InnerException == null ? e.Message : e.InnerException.Message});
+            }
+        }
+        
         public async Task<JsonResult> GetUserSign()
         {
             var result = await Mediator.Send(new GetUserSignQuery()
             {
                 DatabaseName = Request.Cookies["DatabaseValue"]
+            });
+
+            return Json(result);
+        }
+
+        public async Task<JsonResult> GetUserSignRevised(string kd_cb, string kd_cob, string kd_scob, string kd_thn, string no_aks)
+        {
+            var result = await Mediator.Send(new GetUserSignRevisedQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                kd_cb = kd_cb,
+                kd_cob = kd_cob,
+                kd_scob = kd_scob,
+                kd_thn = kd_thn,
+                no_aks = no_aks
             });
 
             return Json(result);

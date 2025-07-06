@@ -33,7 +33,6 @@ namespace ABB.Application.ApprovalAkseptasis.Commands
     public class ApprovalAkseptasiCommandHandler : IRequestHandler<ApprovalAkseptasiCommand, (string, List<string>)>
     {
         private readonly IDbConnectionFactory _connectionFactory;
-        private readonly IDbConnection _dbConnection;
         private readonly IConfiguration _configuration;
         private readonly IProfilePictureHelper _pictureHelper;
         private readonly ICurrentUserService _userService;
@@ -41,12 +40,11 @@ namespace ABB.Application.ApprovalAkseptasis.Commands
         private readonly IDbContextFactory _dbContextFactory;
         private readonly IDbContext _dbContext;
 
-        public ApprovalAkseptasiCommandHandler(IDbConnectionFactory connectionFactory, IDbConnection dbConnection,
+        public ApprovalAkseptasiCommandHandler(IDbConnectionFactory connectionFactory,
             IConfiguration configuration, IProfilePictureHelper pictureHelper, ICurrentUserService userService, 
             IEmailService emailService, IDbContextFactory dbContextFactory, IDbContext dbContext)
         {
             _connectionFactory = connectionFactory;
-            _dbConnection = dbConnection;
             _configuration = configuration;
             _pictureHelper = pictureHelper;
             _userService = userService;
@@ -62,7 +60,7 @@ namespace ABB.Application.ApprovalAkseptasis.Commands
             var userIds = new List<string>();
             try
             {
-                message = (await _dbConnection.QueryProc<string>("sp_ApprovalPengajuanAks",
+                    message = (await _connectionFactory.QueryProc<string>("sp_ApprovalPengajuanAks",
                     new
                     {
                         request.kd_cb, request.kd_cob, request.kd_scob,
@@ -70,7 +68,7 @@ namespace ABB.Application.ApprovalAkseptasis.Commands
                         request.kd_status, tgl_status = DateTime.Now, request.keterangan
                     })).First();
 
-                var no_urut = ( await _dbConnection.Query<Int16>($@"SELECT no_urut FROM TR_AkseptasiStatus WHERE 
+                var no_urut = ( await _connectionFactory.Query<Int16>($@"SELECT no_urut FROM TR_AkseptasiStatus WHERE 
                                                                                 kd_cb = '{request.kd_cb}' AND kd_cob = '{request.kd_cob}' 
                                                                                 AND kd_scob = '{request.kd_scob}' AND kd_thn = '{request.kd_thn}' AND
                                                                                 no_aks = '{request.no_aks}' Order by no_urut desc")).First();
@@ -98,12 +96,12 @@ namespace ABB.Application.ApprovalAkseptasis.Commands
                         nm_dokumen = file.FileName
                     });
                 }
-                
-                _dbContext.TRAkseptasiStatusAttachment.AddRange(statusAttachments);
-
-                await _dbContext.SaveChangesAsync(cancellationToken);
 
                 var dbContext = _dbContextFactory.CreateDbContext(request.DatabaseName);
+                
+                dbContext.TRAkseptasiStatusAttachment.AddRange(statusAttachments);
+
+                await dbContext.SaveChangesAsync(cancellationToken);
 
                 var viewAkseptasi = dbContext.ViewTRAkseptasi.FirstOrDefault(w => w.kd_cb == request.kd_cb &&
                                                                               w.kd_cob == request.kd_cob &&

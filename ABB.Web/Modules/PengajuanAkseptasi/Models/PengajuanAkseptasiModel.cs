@@ -23,6 +23,7 @@ namespace ABB.Web.Modules.PengajuanAkseptasi.Models
             profile.CreateMap<PengajuanAkseptasiModel, GetPengajuanAkseptasiAttachmentQuery>();
             profile.CreateMap<PengajuanAkseptasiModel, GetPengajuanAkseptasiQuery>();
             profile.CreateMap<PengajuanAkseptasiModel, GetReportPengajuanAkseptasiQuery>();
+            profile.CreateMap<PengajuanAkseptasiModel, GetReportKeteranganPengajuanAkseptasiQuery>();
         }
     }
 }

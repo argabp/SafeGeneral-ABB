@@ -42,11 +42,11 @@
             columns.Bound(col => col.tgl_status).Title("Tanggal Status").Format("{0: dd-MM-yyyy}");
             columns.Command(command =>
             {
-                command.Custom("View")
+                command.Custom("EditAkseptasi")
                     .Text(" ")
-                    .IconClass("fa fa-eye")
-                    .HtmlAttributes(new { title = "View" })
-                    .Click("OnClickViewApprovalAkseptasi");
+                    .IconClass("fa fa-pencil-alt")
+                    .HtmlAttributes(new { title = "Edit" })
+                    .Click("btnClickEditApprovalAkseptasi");
                 command.Custom("Info")
                     .Text(" ")
                     .IconClass("fa fa-info-circle")

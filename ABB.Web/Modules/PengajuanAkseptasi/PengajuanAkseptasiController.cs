@@ -46,7 +46,6 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
-            ViewBag.KodeCabang = Request.Cookies["UserCabang"].Trim();
             
             _rekanans = await Mediator.Send(new GetRekanansQuery()
             {
@@ -147,6 +146,7 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
         public  IActionResult Add()
         {
             var model = new PengajuanAkseptasiModel();
+            model.kd_cb = Request.Cookies["UserCabang"].Trim();
             return PartialView(model);
         }
 
@@ -253,7 +253,8 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
             {
                 new DropdownOptionDto() { Text = "Leader (Sebagai Leader Koasuransi)", Value = "L" },
                 new DropdownOptionDto() { Text = "Member (Sebagai Member Koasuransi)", Value = "M" },
-                new DropdownOptionDto() { Text = "Transaksi Direct", Value = "O" }
+                new DropdownOptionDto() { Text = "Transaksi Direct", Value = "O" },
+                new DropdownOptionDto() { Text = "Inward Fakultatif", Value = "C" }
             };
 
             return Json(result);
@@ -362,6 +363,83 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
                 _reportGeneratorService.GenerateReport("PengajuanAkseptasi.pdf", reportTemplate, sessionId);
 
                 return Ok(new { Status = "OK", Data = sessionId});
+            }
+            catch (Exception e)
+            {
+                return Ok( new { Status = "ERROR", Message = e.InnerException == null ? e.Message : e.InnerException.Message});
+            }
+        }
+        
+        [HttpPost]
+        public async Task<ActionResult> GenerateKeteranganReport([FromBody] PengajuanAkseptasiModel model)
+        {
+            try
+            {
+                var command = Mapper.Map<GetReportKeteranganPengajuanAkseptasiQuery>(model);
+                command.DatabaseName = Request.Cookies["DatabaseValue"];
+
+                var sessionId = HttpContext.Session.GetString("SessionId");
+
+                if (string.IsNullOrWhiteSpace(sessionId))
+                    throw new Exception("Session user tidak ditemukan");
+                
+                var reportTemplate = await Mediator.Send(command);
+                
+                _reportGeneratorService.GenerateReport("KeteranganPengajuanAkseptasi.pdf", reportTemplate, sessionId);
+
+                return Ok(new { Status = "OK", Data = sessionId});
+            }
+            catch (Exception e)
+            {
+                return Ok( new { Status = "ERROR", Message = e.InnerException == null ? e.Message : e.InnerException.Message});
+            }
+        }
+        
+        public async Task<ActionResult> GeneratePstShare(string st_pas)
+        {
+            try
+            {
+                var result = await Mediator.Send(new GeneratePstShareQuery()
+                {
+                    DatabaseName = Request.Cookies["DatabaseValue"],
+                    st_pas = st_pas
+                });
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return Ok( new { Status = "ERROR", Message = e.InnerException == null ? e.Message : e.InnerException.Message});
+            }
+        }
+        
+        public async Task<JsonResult> GetKodeTol(string kd_cob)
+        {
+            var command = new GetKodeTolQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                kd_cob = kd_cob
+            };
+            
+            var result = await Mediator.Send(command);
+
+            return Json(result);
+        }
+        
+        public async Task<ActionResult> GenerateNilaiLimit(string kd_cob, string kd_tol, decimal pst_share, decimal nilai_ttl_ptg)
+        {
+            try
+            {
+                var result = await Mediator.Send(new GenerateNilaiLimitQuery()
+                {
+                    DatabaseName = Request.Cookies["DatabaseValue"],
+                    kd_cob = kd_cob,
+                    kd_tol = kd_tol,
+                    pst_share = pst_share,
+                    nilai_ttl_ptg = nilai_ttl_ptg
+                });
+
+                return Ok(result);
             }
             catch (Exception e)
             {

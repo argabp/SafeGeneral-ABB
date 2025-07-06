@@ -221,7 +221,8 @@ namespace ABB.Web.Modules.PolisInduk
             {
                 new DropdownOptionDto() { Text = "Leader (Sebagai Leader Koasuransi)", Value = "L" },
                 new DropdownOptionDto() { Text = "Member (Sebagai Member Koasuransi)", Value = "M" },
-                new DropdownOptionDto() { Text = "Transaksi Direct", Value = "O" }
+                new DropdownOptionDto() { Text = "Transaksi Direct", Value = "O" },
+                new DropdownOptionDto() { Text = "Inward Fakultatif", Value = "C" }
             };
 
             return Json(result);

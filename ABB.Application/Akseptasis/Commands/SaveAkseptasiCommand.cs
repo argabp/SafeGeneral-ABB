@@ -145,6 +145,8 @@ namespace ABB.Application.Akseptasis.Commands
         public string? st_aks { get; set; }
 
         public IFormFile file { get; set; }
+
+        public string? nomor_pengajuan { get; set; }
         
         public void Mapping(Profile profile)
         {
@@ -226,27 +228,54 @@ namespace ABB.Application.Akseptasis.Commands
                     {
                         request.wpc, nopol_induk = request.no_pol_induk
                     });
-            
-                    _mapper.Map(request, entity);
 
-                    if(entity.kd_cb.Length != 5)
-                        for (int sequence = entity.kd_cb.Length; sequence < 5; sequence++)
-                        {
-                            entity.kd_cb += " ";
-                        }
-            
-                    if(entity.kd_cob.Length != 2)
-                        for (int sequence = entity.kd_cob.Length; sequence < 2; sequence++)
-                        {
-                            entity.kd_cob += " ";
-                        }
-
-                    if(entity.kd_scob.Length != 5)
-                        for (int sequence = entity.kd_scob.Length; sequence < 5; sequence++)
-                        {
-                            entity.kd_scob += " ";
-                        }
-            
+                    entity.no_endt = request.no_endt;
+                    entity.link_file = request.link_file;
+                    entity.nomor_pengajuan = request.nomor_pengajuan;
+                    entity.no_pol_induk = request.no_pol_induk;
+                    entity.no_renew = request.no_renew;
+                    entity.kd_updt = request.kd_updt;
+                    entity.thn_uw = request.thn_uw;
+                    entity.no_pol_lama = request.no_pol_lama;
+                    entity.st_aks = request.st_aks;
+                    entity.kd_grp_sb_bis = request.kd_grp_sb_bis;
+                    entity.kd_rk_sb_bis = request.kd_rk_sb_bis;
+                    entity.kd_grp_ttg = request.kd_grp_ttg;
+                    entity.kd_rk_ttg = request.kd_rk_ttg;
+                    entity.nm_ttg = request.nm_ttg;
+                    entity.almt_ttg = request.almt_ttg;
+                    entity.kt_ttg = request.kt_ttg;
+                    entity.nm_qq = request.nm_qq;
+                    entity.tgl_mul_ptg = request.tgl_mul_ptg;
+                    entity.tgl_akh_ptg = request.tgl_akh_ptg;
+                    entity.pst_share_bgu = request.pst_share_bgu;
+                    entity.jk_wkt_ptg = request.jk_wkt_ptg;
+                    entity.faktor_prd = request.faktor_prd;
+                    entity.st_pas = request.st_pas;
+                    entity.st_cover = request.st_cover;
+                    entity.kd_grp_pas = request.kd_grp_pas;
+                    entity.kd_rk_pas = request.kd_rk_pas;
+                    entity.kd_grp_brk = request.kd_grp_brk;
+                    entity.kd_rk_brk = request.kd_rk_brk;
+                    entity.kd_grp_bank = request.kd_grp_bank;
+                    entity.kd_rk_bank = request.kd_rk_bank;
+                    entity.kd_grp_mkt = request.kd_grp_mkt;
+                    entity.kd_rk_mkt = request.kd_rk_mkt;
+                    entity.no_pol_pas = request.no_pol_pas;
+                    entity.ctt_pol = request.ctt_pol;
+                    entity.lamp_pol = request.lamp_pol;
+                    entity.ket_klausula = request.ket_klausula;
+                    entity.flag_konv = request.flag_konv;
+                    entity.no_survey = request.no_survey;
+                    entity.tgl_ttd = request.tgl_ttd;
+                    entity.wpc = request.wpc;
+                    entity.tgl_input = request.tgl_input;
+                    entity.tgl_updt = request.tgl_updt;
+                    entity.tgl_closing = request.tgl_closing;
+                    entity.kd_usr_input = request.kd_usr_input;
+                    entity.kd_usr_updt = request.kd_usr_updt;
+                    entity.kd_usr_closing = request.kd_usr_closing;
+                    
                     await dbContext.SaveChangesAsync(cancellationToken);
 
                     return entity;

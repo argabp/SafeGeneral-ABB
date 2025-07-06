@@ -40,7 +40,8 @@ namespace ABB.Web.Modules.Shared.Components.PengajuanAkseptasi
                     pst_pas5 = 0,
                     pst_dis = 0,
                     pst_kms = 0,
-                    flag_approved = false
+                    flag_approved = false,
+                    kd_cb = model.kd_cb
                 });
             }
 

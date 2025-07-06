@@ -32,8 +32,8 @@ namespace ABB.Application.ApprovalAkseptasis.Queries
             try
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
-                return (await _connectionFactory.Query<DropdownOptionDto>("SELECT UserId Value, ISNULL(u.FirstName, '') + ' ' + ISNULL(u.LastName, '') Text " +
-                                                                          "FROM MS_User u")).ToList();
+                return (await _connectionFactory.Query<DropdownOptionDto>("SELECT kd_user Value, nm_user_sign Text " +
+                                                                          "FROM v_user_esc")).ToList();
             }
             catch (Exception ex)
             {

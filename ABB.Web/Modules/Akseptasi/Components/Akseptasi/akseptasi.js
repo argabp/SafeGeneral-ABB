@@ -202,7 +202,7 @@ function OnKodeCabangChange(e){
     kd_rk_mkt.dataSource.read({kd_grp_rk : $("#kd_grp_mkt").val(), kd_cb: e.sender._cascadedValue});
     var value = e.sender._cascadedValue;
     $("#temp_kd_cb").val(value);
-    var no_aks = value.trim() + $("#kd_cob").val().trim() + $("#kd_scob").val().trim() + $("#kd_thn").val().trim() + $("#no_aks").val().trim();
+    var no_aks = value.trim() + "." + $("#kd_cob").val().trim() + $("#kd_scob").val().trim() + "." + $("#kd_thn").val().trim() + "." + $("#no_aks").val().trim();
     $("#temp_nomor_akseptasi").val(no_aks);
 }
 
@@ -211,14 +211,14 @@ function OnKodeCOBChange(e){
     $("#temp_kd_cob").val(value);
     var kd_scob = $("#kd_scob").data("kendoDropDownList");
     kd_scob.dataSource.read({kd_cob : e.sender._cascadedValue});
-    var no_aks = $("#kd_cb").val().trim() + value.trim() + $("#kd_scob").val().trim() + $("#kd_thn").val().trim() + $("#no_aks").val().trim();
+    var no_aks = $("#kd_cb").val().trim() + "." + value.trim() + $("#kd_scob").val().trim() + "." + $("#kd_thn").val().trim() + "." + $("#no_aks").val().trim();
     $("#temp_nomor_akseptasi").val(no_aks);
 }
 
 function OnKodeSCOBChange(e){
     var value = e.sender._cascadedValue;
     $("#temp_kd_scob").val(value);
-    var no_aks = $("#kd_cb").val().trim() + $("#kd_cob").val().trim() + value.trim() + $("#kd_thn").val().trim() + $("#no_aks").val().trim();
+    var no_aks = $("#kd_cb").val().trim() + "." + $("#kd_cob").val().trim() + value.trim() + "." + $("#kd_thn").val().trim() + "." + $("#no_aks").val().trim();
     $("#temp_nomor_akseptasi").val(no_aks);
 }
 

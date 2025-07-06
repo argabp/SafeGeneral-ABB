@@ -139,6 +139,8 @@ namespace ABB.Web.Modules.Akseptasi.Models
 
         public bool IsEdit { get; set; }
 
+        public string? nomor_pengajuan { get; set; }
+
         public void Mapping(Profile profile)
         {
             profile.CreateMap<AkseptasiDto, AkseptasiViewModel>();

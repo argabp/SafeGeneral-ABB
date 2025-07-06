@@ -5635,9 +5635,6 @@
       <None Update="Modules\ApprovalAkseptasi\JS\approvalAkseptasi.info.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Modules\ApprovalAkseptasi\JS\approvalAkseptasi.view.js">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
       <None Update="Modules\ApprovalAkseptasi\JS\approvalAkseptasi.checked.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
@@ -5792,6 +5789,9 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Modules\DataPolisOJK\JS\dataPolisOJK.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Reports\Templates\KeteranganPengajuanAkseptasi.html">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>

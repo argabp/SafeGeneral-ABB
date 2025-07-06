@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KETERANGAN STATUS AKSEPTASI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .header {
+            text-align: center;
+            font-weight: bold;
+        }
+        .form-title {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-decoration: underline;
+        }
+        .form-number {
+            text-align: center;
+        }
+        table {
+            border-collapse: collapse;
+            margin: 15px;
+        }
+        th, td {
+            text-align: left;
+        }
+    </style>
+</head>
+<body style="border: 3px solid black">
+<div style="background-color: #f0f0f0; border-bottom: 3px solid black">
+    <div class="header">
+        KETERANGAN STATUS AKSEPTASI
+    </div>
+    <div class="form-number">
+        {{nomor_pengajuan}}
+    </div>
+</div>
+
+<table style="border: 1px solid black; width: 95%;">
+    <tr style="border: 1px solid black">
+        <th style="border: 1px solid black">NI</th>
+        <th style="border: 1px solid black">USER</th>
+        <th style="border: 1px solid black">TANGGAL PROSES</th>
+        <th style="border: 1px solid black">STATUS</th>
+        <th style="border: 1px solid black">KETERANGAN</th>
+    </tr>
+    {{detail}}
+</table>
+
+</body>
+</html>
