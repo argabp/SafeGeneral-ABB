@@ -58,9 +58,6 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
                 throw new NullReferenceException("Data tidak ditemukan");
 
             Template templateProfileResult = Template.Parse( templateReportHtml );
-
-            var wwwroot = Path.Combine(_hostEnvironment.ContentRootPath, "wwwroot");
-            var path = _configuration.GetSection("UserSignature").Value.TrimEnd('/').TrimStart('/');
             
             var detail = new StringBuilder();
             var counter = 0;
@@ -71,12 +68,12 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
                 
                 var tgl_dibuat = data.tgl_status == null ? string.Empty : data.tgl_status.Value.ToString("dd MMM yyyy HH:mm:ss");
 
-                detail.Append($@"<tr>
-                    <td style='border: 1px solid black'>{counter}</td>
-                    <td style='border: 1px solid black'>{data.nm_user}</td>
-                    <td style='border: 1px solid black'>{tgl_dibuat}</td>
-                    <td style='border: 1px solid black'>{data.nm_status}</td>
-                    <td style='border: 1px solid black'>{data.ket_status}</td>
+                detail.Append($@"<tr style='border: 1px dashed black'>
+                    <td style='border: 1px dashed black'>{counter}</td>
+                    <td style='border: 1px dashed black'>{data.nm_user}</td>
+                    <td style='border: 1px dashed black'>{tgl_dibuat}</td>
+                    <td style='border: 1px dashed black'>{data.nm_status}</td>
+                    <td style='border: 1px dashed black'>{data.ket_status}</td>
                 </tr>");
             }
             

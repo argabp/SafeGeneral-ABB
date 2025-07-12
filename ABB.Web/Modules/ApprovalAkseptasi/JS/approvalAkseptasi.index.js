@@ -68,21 +68,11 @@ function OnClickPrintApprovalAkseptasi(e) {
         function (response) {
             if(response.Status === "OK"){
                 window.open("/Reports/" + response.Data + "/ApprovalAkseptasi.pdf",  '_blank');
-            } else {
-                showMessage('Error', response.Message);
-            }
-            closeProgressOnGrid('#ApprovalAkseptasiGrid');
-        },
-    );
-
-    ajaxPost("/ApprovalAkseptasi/GenerateKeteranganReport", JSON.stringify(data),
-        function (response) {
-            if(response.Status === "OK"){
                 window.open("/Reports/" + response.Data + "/KeteranganApprovalAkseptasi.pdf",  '_blank');
             } else {
                 showMessage('Error', response.Message);
             }
-            closeProgressOnGrid('#PengajuanAkseptasiGrid');
+            closeProgressOnGrid('#ApprovalAkseptasiGrid');
         },
     );
 }

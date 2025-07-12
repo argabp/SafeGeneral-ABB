@@ -67,16 +67,6 @@ function OnClickPrintPengajuanAkseptasi(e) {
         function (response) {
             if(response.Status === "OK"){
                 window.open("/Reports/" + response.Data + "/PengajuanAkseptasi.pdf",  '_blank');
-            } else {
-                showMessage('Error', response.Message);
-            }
-            closeProgressOnGrid('#PengajuanAkseptasiGrid');
-        },
-    );
-    
-    ajaxPost("/PengajuanAkseptasi/GenerateKeteranganReport", JSON.stringify(data),
-        function (response) {
-            if(response.Status === "OK"){
                 window.open("/Reports/" + response.Data + "/KeteranganPengajuanAkseptasi.pdf",  '_blank');
             } else {
                 showMessage('Error', response.Message);

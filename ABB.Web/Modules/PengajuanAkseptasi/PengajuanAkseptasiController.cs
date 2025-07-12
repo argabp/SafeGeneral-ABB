@@ -360,32 +360,8 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
                 
                 var reportTemplate = await Mediator.Send(command);
                 
-                _reportGeneratorService.GenerateReport("PengajuanAkseptasi.pdf", reportTemplate, sessionId);
-
-                return Ok(new { Status = "OK", Data = sessionId});
-            }
-            catch (Exception e)
-            {
-                return Ok( new { Status = "ERROR", Message = e.InnerException == null ? e.Message : e.InnerException.Message});
-            }
-        }
-        
-        [HttpPost]
-        public async Task<ActionResult> GenerateKeteranganReport([FromBody] PengajuanAkseptasiModel model)
-        {
-            try
-            {
-                var command = Mapper.Map<GetReportKeteranganPengajuanAkseptasiQuery>(model);
-                command.DatabaseName = Request.Cookies["DatabaseValue"];
-
-                var sessionId = HttpContext.Session.GetString("SessionId");
-
-                if (string.IsNullOrWhiteSpace(sessionId))
-                    throw new Exception("Session user tidak ditemukan");
-                
-                var reportTemplate = await Mediator.Send(command);
-                
-                _reportGeneratorService.GenerateReport("KeteranganPengajuanAkseptasi.pdf", reportTemplate, sessionId);
+                _reportGeneratorService.GenerateReport("PengajuanAkseptasi.pdf", reportTemplate.Item1, sessionId);
+                _reportGeneratorService.GenerateReport("KeteranganPengajuanAkseptasi.pdf", reportTemplate.Item2, sessionId);
 
                 return Ok(new { Status = "OK", Data = sessionId});
             }

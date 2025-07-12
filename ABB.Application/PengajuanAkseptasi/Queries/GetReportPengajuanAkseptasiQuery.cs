@@ -14,7 +14,7 @@ using Scriban;
 
 namespace ABB.Application.PengajuanAkseptasi.Queries
 {
-    public class GetReportPengajuanAkseptasiQuery : IRequest<string>
+    public class GetReportPengajuanAkseptasiQuery : IRequest<(string, string)>
     {
         public string DatabaseName { get; set; }
         public string kd_cb { get; set; }
@@ -24,7 +24,7 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
         public string no_aks { get; set; }
     }
 
-    public class GetReportPengajuanAkseptasiQueryHandler : IRequestHandler<GetReportPengajuanAkseptasiQuery, string>
+    public class GetReportPengajuanAkseptasiQueryHandler : IRequestHandler<GetReportPengajuanAkseptasiQuery, (string, string)>
     {
         private readonly IDbConnectionFactory _connectionFactory;
         private readonly IHostEnvironment _environment;
@@ -40,7 +40,7 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
             _hostEnvironment = hostEnvironment;
         }
 
-        public async Task<string> Handle(GetReportPengajuanAkseptasiQuery request, CancellationToken cancellationToken)
+        public async Task<(string, string)> Handle(GetReportPengajuanAkseptasiQuery request, CancellationToken cancellationToken)
         {
             _connectionFactory.CreateDbConnection(request.DatabaseName);
 
@@ -57,22 +57,22 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
             
             if (datas.Count == 0)
                 throw new NullReferenceException("Data tidak ditemukan");
-
+            
             Template templateProfileResult = Template.Parse( templateReportHtml );
-
+            
             var data = datas.FirstOrDefault();
             
             var wwwroot = Path.Combine(_hostEnvironment.ContentRootPath, "wwwroot");
             var path = _configuration.GetSection("UserSignature").Value.TrimEnd('/').TrimStart('/');
-
+            
             var signature1 = ConvertImageToBase64Html(Path.Combine(wwwroot, path, data.user_id_dibuat ?? string.Empty, data.ttd_dibuat?.Replace("\\", "/") ?? string.Empty));
             var signature2 = ConvertImageToBase64Html(Path.Combine(wwwroot, path, data.user_id_diperiksa ?? string.Empty, data.ttd_diperiksa?.Replace("\\", "/") ?? string.Empty));
             var signature3 = ConvertImageToBase64Html(Path.Combine(wwwroot, path, data.user_id_disetujui ?? string.Empty, data.ttd_disetujui?.Replace("\\", "/") ?? string.Empty));
-
+            
             var tgl_dibuat = data.tgl_dibuat == null ? string.Empty : data.tgl_dibuat.Value.ToString("dd MMM yyyy HH:mm:ss");
             var tgl_diperiksa = data.tgl_diperiksa == null ? string.Empty : data.tgl_diperiksa.Value.ToString("dd MMM yyyy HH:mm:ss");
             var tgl_disetujui = data.tgl_disetujui == null ? string.Empty : data.tgl_disetujui.Value.ToString("dd MMM yyyy HH:mm:ss");
-
+            
             var keterangan_resiko = GenerateKeteranganDokumen(data);
             
             var resultTemplate = templateProfileResult.Render( new
@@ -95,7 +95,46 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
                 tgl_dibuat, tgl_diperiksa, tgl_disetujui, data.nomor_pengajuan, keterangan_resiko
             } );
 
-            return resultTemplate;
+            var secondDatas = (await _connectionFactory.QueryProc<ReportKeteranganPengajuanAkseptasiDto>("sp_KeteranganStatusAks", 
+                new
+                {
+                    input_str = $"{request.kd_cb.Trim()},{request.kd_cob.Trim()},{request.kd_scob.Trim()}," +
+                                $"{request.kd_thn},{request.no_aks.Trim()}"
+                })).ToList();
+            
+            string secondReportPath = Path.Combine( _environment.ContentRootPath, "Modules", "Reports", "Templates", "KeteranganPengajuanAkseptasi.html" );
+            
+            string secondTemplateReportHtml = await File.ReadAllTextAsync( secondReportPath );
+            
+            if (secondDatas.Count == 0)
+                throw new NullReferenceException("Data tidak ditemukan");
+
+            Template secondTemplateProfileResult = Template.Parse( secondTemplateReportHtml );
+            
+            var detail = new StringBuilder();
+            var counter = 0;
+            
+            foreach (var secondData in secondDatas)
+            {
+                counter++;
+                
+                var second_tgl_dibuat = secondData.tgl_status == null ? string.Empty : secondData.tgl_status.Value.ToString("dd MMM yyyy HH:mm:ss");
+
+                detail.Append($@"<tr style='border: 1px dashed black'>
+                    <td style='border: 1px dashed black'>{counter}</td>
+                    <td style='border: 1px dashed black'>{secondData.nm_user}</td>
+                    <td style='border: 1px dashed black'>{second_tgl_dibuat}</td>
+                    <td style='border: 1px dashed black'>{secondData.nm_status}</td>
+                    <td style='border: 1px dashed black'>{secondData.ket_status}</td>
+                </tr>");
+            }
+            
+            var secondResultTemplate = secondTemplateProfileResult.Render( new
+            {
+                secondDatas[0].nomor_pengajuan, detail = detail.ToString() 
+            } );
+
+            return (resultTemplate, secondResultTemplate);
         }
 
         private string GenerateKeteranganDokumen(ReportPengajuanAkseptasiDto reportPengajuanAkseptasiDto)
