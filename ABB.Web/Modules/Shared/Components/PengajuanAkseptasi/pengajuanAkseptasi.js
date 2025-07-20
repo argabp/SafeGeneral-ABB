@@ -209,6 +209,7 @@ function OnKodeCOBChange(e){
     kd_scob.dataSource.read({kd_cob : e.sender._cascadedValue});
     var kd_tol = $("#kd_tol").data("kendoDropDownList");
     kd_tol.dataSource.read({kd_cob : e.sender._cascadedValue});
+    kd_tol.trigger("change");
 }
 
 function OnKodeSCOBChange(e){
@@ -227,8 +228,6 @@ function OnStatusPolisChange(e){
     });
 }
 
-
-
 function OnNilaiPertanggunganChange(e){
     ajaxGet(`/PengajuanAkseptasi/GenerateNilaiLimit?kd_cob=${$("#kd_cob").val()}&kd_tol=${$("#kd_tol").val()}&pst_share=${$("#pst_share").val()}&nilai_ttl_ptg=${e.sender.value()}`, (returnValue) => {
         $("#nilai_ttl_ptg_limit").getKendoNumericTextBox().value(returnValue);
@@ -239,4 +238,16 @@ function dataTableOfLimit(){
     return {
         kd_cob: $("#kd_cob").val()
     }
+}
+
+function OnTableOfLimitChange(e){
+    ajaxGet(`/PengajuanAkseptasi/GetPstTol?kd_cob=${$("#kd_cob").val()}&kd_tol=` + e.sender._cascadedValue, (returnValue) => {
+        $("#pst_tol").getKendoNumericTextBox().value(returnValue);
+    });
+}
+
+function OnPstShareChange(e){
+    ajaxGet(`/PengajuanAkseptasi/GetPstKoas?pst_share=` + e.sender.value(), (returnValue) => {
+        $("#pst_koas").getKendoNumericTextBox().value(returnValue);
+    });
 }

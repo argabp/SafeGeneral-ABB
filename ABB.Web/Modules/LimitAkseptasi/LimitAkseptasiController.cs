@@ -39,13 +39,14 @@ namespace ABB.Web.Modules.LimitAkseptasi
         }
 
         public async Task<ActionResult> GetLimitAkseptasiDetails([DataSourceRequest] DataSourceRequest request, 
-            string kd_cb, string kd_cob, string kd_scob)
+            string kd_cb, string kd_cob, string kd_scob, int thn)
         {
             var ds = await Mediator.Send(new GetLimitAkseptasiDetilsQuery()
             {
                 kd_cb = kd_cb,
                 kd_cob = kd_cob,
                 kd_scob = kd_scob,
+                thn = thn,
                 DatabaseName = Request.Cookies["DatabaseValue"]
             });
             
@@ -74,13 +75,14 @@ namespace ABB.Web.Modules.LimitAkseptasi
             }
         }
 
-        public async Task<IActionResult> Edit(string kd_cb, string kd_cob, string kd_scob)
+        public async Task<IActionResult> Edit(string kd_cb, string kd_cob, string kd_scob, int thn)
         {
             var limitAkseptasi = await Mediator.Send(new GetLimitAkseptasiQuery()
             {
                 kd_cb = kd_cb,
                 kd_cob = kd_cob,
                 kd_scob = kd_scob,
+                thn = thn,
                 DatabaseName = Request.Cookies["DatabaseValue"]
             });
 
@@ -125,13 +127,14 @@ namespace ABB.Web.Modules.LimitAkseptasi
             }
         }
 
-        public IActionResult AddDetail(string kd_cb, string kd_cob, string kd_scob)
+        public IActionResult AddDetail(string kd_cb, string kd_cob, string kd_scob, int thn)
         {
             return View(new LimitAkseptasiDetilViewModel()
             {
                 kd_cb = kd_cb,
                 kd_cob = kd_cob,
-                kd_scob = kd_scob
+                kd_scob = kd_scob,
+                thn = thn
             });
         }
 
@@ -149,6 +152,42 @@ namespace ABB.Web.Modules.LimitAkseptasi
             catch (Exception ex)
             {
                 return Json(new { Result = "ERROR", ex.Message });
+            }
+        }
+
+        public async Task<IActionResult> EditDetil(string kd_cb, string kd_cob, string kd_scob, int thn, string kd_user)
+        {
+            var limitAkseptasiDetil = await Mediator.Send(new GetLimitAkseptasiDetilQuery()
+            {
+                kd_cb = kd_cb,
+                kd_cob = kd_cob,
+                kd_scob = kd_scob,
+                thn = thn,
+                kd_user = kd_user,
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            });
+
+            limitAkseptasiDetil.kd_cb = kd_cb.Trim();
+            limitAkseptasiDetil.kd_cob = kd_cob.Trim();
+            limitAkseptasiDetil.kd_scob = kd_scob.Trim();
+            
+            return View("EditDetail",Mapper.Map<LimitAkseptasiDetilViewModel>(limitAkseptasiDetil));
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> EditDetail([FromBody] LimitAkseptasiDetilViewModel model)
+        {
+            try
+            {
+                var command = Mapper.Map<EditLimitAkseptasiDetilCommand>(model);
+                command.DatabaseName = Request.Cookies["DatabaseValue"];
+                await Mediator.Send(command);
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", Message = ex.Message });
             }
         }
         

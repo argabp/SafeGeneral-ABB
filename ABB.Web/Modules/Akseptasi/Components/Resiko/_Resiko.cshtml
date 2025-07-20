@@ -16,13 +16,13 @@
         </div>
         <div class="offset-2"></div>
         <div class="col-md-2">
+            <button class="flat-btn-primary" style="height: 1em" id="btnAddNewAkseptasiResiko">Add New Resiko</button>
+        </div>
+        <div class="col-md-2">
             <button class="flat-btn-primary" style="height: 1em" id="btnCopyResiko">Copy</button>
         </div>
         <div class="col-md-2">
             <button class="flat-btn-primary" style="height: 1em" id="btnCopyEndorsResiko">Copy Endors</button>
-        </div>
-        <div class="col-md-2">
-            <button class="flat-btn-primary" style="height: 1em" id="btnAddNewAkseptasiResiko">Add New Resiko</button>
         </div>
     </div>
     
@@ -34,9 +34,13 @@
         )
         .Columns(columns =>
         {
-            columns.Bound(col => col.no_rsk).Width(50).Title("Nomor Resiko");
-            columns.Bound(col => col.no_updt).Width(50).Title("Nomor Update");
-            columns.Bound(col => col.ket_rsk).Width(150).Title("Keterangan Resiko");
+            columns.Bound(col => col.no_rsk).Width(150).Title("Nomor Resiko");
+            columns.Bound(col => col.kd_endt).Width(150).Title("Kode Endors").ClientTemplate("#= data.kd_endt == 'I' ? 'Insert' : 'Delete' #");
+            columns.Bound(col => col.ket_rsk).Width(200).Title("Keterangan Resiko");
+            columns.Bound(col => col.nilai_ttl_ptg).Width(200).Title("Total Pertanggungan");
+            columns.Bound(col => col.nilai_prm).Width(150).Title("Premi");
+            columns.Bound(col => col.nilai_dis).Width(100).Title("Diskon");
+            columns.Bound(col => col.nilai_kms).Width(100).Title("Komisi");
             columns.Command(command =>
             {
                 command.Custom("EditAkseptasiResiko")

@@ -17,8 +17,8 @@
 </style>
 
 @{
-    var nomor_aksepatsi = Model.kd_cb.Trim() + Model.kd_cob.Trim() +
-                          Model.kd_scob.Trim() + Model.kd_thn.Trim() + Model.no_aks.Trim();
+    var nomor_aksepatsi = Model.kd_cb.Trim() + "." + Model.kd_cob.Trim() +
+                          Model.kd_scob.Trim() + "." + Model.kd_thn.Trim() + "." + Model.no_aks.Trim();
     var resiko_nilai_prm = (double)Model.nilai_prm;
     var resiko_nilai_ttl_ptg = (double)Model.nilai_ttl_ptg;
     var resiko_pst_dis = (double)Model.pst_dis;
@@ -26,12 +26,13 @@
     var resiko_pst_kms = (double)Model.pst_kms;
     var resiko_nilai_kms = (double)Model.nilai_kms;
     var resiko_pst_share_bgu = Model.pst_share_bgu == null ? 0 : (double)Model.pst_share_bgu;
-    var faktor_prd = Model.faktor_prd == null ? 0 : (double)Model.faktor_prd;
+    var resiko_faktor_prd = Model.faktor_prd == null ? 0 : (double)Model.faktor_prd;
 }
 
 <div class="window-body" style="background-color: lightgray">
     <form id="ResikoForm" enctype="multipart/form-data" autocomplete="off">
         @Html.HiddenFor(h => h.nilai_kl)
+        @Html.HiddenFor(h => h.nilai_insentif)
         <input type="hidden" id="resiko_kd_thn">
         <div class="form-group row">
             <div class="row col-sm-6">
@@ -74,7 +75,7 @@
             <div class="row col-sm-12">
                 <label class="col-sm-3">Keterangan Resiko</label>
                 <div class="col-sm-9">
-                    <kendo-textarea name="ket_rsk" rows="2" style="width: 100%">@Model.ket_rsk</kendo-textarea>
+                    <kendo-textarea name="ket_rsk" rows="2" style="width: 100%; background: white">@Model.ket_rsk</kendo-textarea>
                     <span asp-validation-for="ket_rsk" class="text-danger"></span>
                 </div>
             </div>
@@ -114,13 +115,6 @@
                     <span asp-validation-for="stn_rate_prm" class="text-danger"></span>
                 </div>
             </div>
-            <div class="row col-sm-6">
-                <label class="col-sm-6">Insentif</label>
-                <div class="col-sm-6">
-                    <kendo-numerictextbox decimals="2" spinners="false" for="nilai_insentif" style="width: 100%"/>
-                    <span asp-validation-for="nilai_insentif" class="text-danger"></span>
-                </div>
-            </div>
         </div>
         <div class="form-group row">
             <div class="row col-sm-6">
@@ -149,14 +143,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Faktor Jangka Waktu</label>
                 <div class="col-sm-6">
-                    <kendo-dropdownlist name="resiko_jk_wkt_ptg" style="width: 100%"
-                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
-                        <datasource type="DataSourceTagHelperType.Custom">
-                            <transport>
-                                <read url="@Url.Action("GetJangkaWaktu", "Akseptasi")"/>
-                            </transport>
-                        </datasource>
-                    </kendo-dropdownlist>
+                    <kendo-numerictextbox spinners="false" format="#" name="resiko_jk_wkt_ptg" value="@Model.jk_wkt_ptg" style="width: 100%; background-color: #FFFFE1"/>
                 </div>
             </div>
         </div>
@@ -181,7 +168,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Kode T O L</label>
                 <div class="col-sm-6">
-                    <kendo-dropdownlist for="kd_tol" style="width: 100%"
+                    <kendo-dropdownlist for="kd_tol" style="width: 100%" option-label="Pilih Kode T O L"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -195,7 +182,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Faktor Periode</label>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox spinners="false" name="resiko_faktor_prd" value="@faktor_prd" style="width: 100%"/>
+                    <kendo-numerictextbox spinners="false" name="resiko_faktor_prd" value="@resiko_faktor_prd" style="width: 100%"/>
                 </div>
             </div>
         </div>
@@ -203,7 +190,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Kode Kemendagri</label>
                 <div class="col-sm-6">
-                    <kendo-dropdownlist for="kode" style="width: 100%"
+                    <kendo-dropdownlist for="kode" style="width: 100%" option-label="Pilih Kode Kemendagri"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>

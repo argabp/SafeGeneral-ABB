@@ -17,6 +17,8 @@ namespace ABB.Application.LimitAkseptasis.Quries
         public string kd_cob { get; set; }
 
         public string kd_scob { get; set; }
+
+        public int thn { get; set; }
     }
 
     public class GetLimitAkseptasiQueryHandler : IRequestHandler<GetLimitAkseptasiQuery, LimitAkseptasiDto>
@@ -35,7 +37,8 @@ namespace ABB.Application.LimitAkseptasis.Quries
             var dbContext = _contextFactory.CreateDbContext(request.DatabaseName);
             var limitAkseptasi = dbContext.LimitAkseptasi.FirstOrDefault(limitAkseptasi => limitAkseptasi.kd_cb.Trim() == request.kd_cb.Trim()
                                                                          && limitAkseptasi.kd_cob.Trim() == request.kd_cob.Trim()
-                                                                         && limitAkseptasi.kd_scob.Trim() == request.kd_scob.Trim());
+                                                                         && limitAkseptasi.kd_scob.Trim() == request.kd_scob.Trim()
+                                                                         && limitAkseptasi.thn == request.thn);
 
             if (limitAkseptasi == null)
                 throw new NullReferenceException();

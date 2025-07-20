@@ -32,7 +32,8 @@ namespace ABB.Application.NomorRegistrasiPolis.Queries
 					INNER JOIN rf04 cob
 						ON p.kd_cob = cob.kd_cob
 					INNER JOIN rf05 scob
-						ON p.kd_scob = scob.kd_scob
+						ON p.kd_cob = scob.kd_cob
+						AND p.kd_scob = scob.kd_scob
 				WHERE (p.no_reff like '%'+@SearchKeyword+'%' 
 					OR p.no_pol_ttg like '%'+@SearchKeyword+'%' 
 					OR cb.nm_cb like '%'+@SearchKeyword+'%' 

@@ -41,7 +41,8 @@ namespace ABB.Application.Approvals.Queries
 					INNER JOIN rf04 cob
 						ON p.kd_cob = cob.kd_cob
 					INNER JOIN rf05 scob
-						ON p.kd_scob = scob.kd_scob
+						ON p.kd_cob = scob.kd_cob
+						AND p.kd_scob = scob.kd_scob
 				WHERE cb.kd_cb = @KodeCabang AND (p.nm_approval like '%'+@SearchKeyword+'%' 
 					OR cb.nm_cb like '%'+@SearchKeyword+'%' 
 					OR cob.nm_cob like '%'+@SearchKeyword+'%' 

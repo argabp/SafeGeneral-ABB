@@ -90,6 +90,12 @@ function setButtonActions(e){
             $(this).find(".k-grid-BatalAkseptasi").hide(); // "custom" is the command name
         }
         
+        if($("#UserLogin").val() != dataItem.kd_user_status){
+            $(this).find(".k-grid-Edit").hide(); // "custom" is the command name
+            $(this).find(".k-grid-Submit").hide(); // "custom" is the command name
+            $(this).find(".k-grid-BatalAkseptasi").hide(); // "custom" is the command name
+        }
+        
         if (dataItem.status !== "New" && dataItem.status !== "Revised") {
             // Hide the custom button in this row
             $(this).find(".k-grid-Edit").hide(); // "custom" is the command name

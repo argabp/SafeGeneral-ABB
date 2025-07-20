@@ -93,9 +93,13 @@ function btnSaveAkseptasi_Click() {
 function setAkseptasiModel(model){
     $("#no_endt").val(model.no_endt);
     $("#link_file").val(model.link_file);
+    $("#no_pol_ttg").val(model.no_pol_ttg);
+    $("#no_aks").val(model.no_aks);
     $("#kd_cb").getKendoDropDownList().readonly(true);
     $("#kd_cob").getKendoDropDownList().readonly(true);
     $("#kd_scob").getKendoDropDownList().readonly(true);
+    var no_aks = model.kd_cb.trim() + "." + model.kd_cob.trim() + model.kd_scob.trim() + "." + model.kd_thn + "." + model.no_aks.trim();
+    $("#temp_nomor_akseptasi").val(no_aks);
 }
 
 function saveAkseptasi(url) {
@@ -116,8 +120,6 @@ function saveAkseptasi(url) {
                 var tabstrip = $('#akseptasiTab').data("kendoTabStrip");
                 tabstrip.enable(tabstrip.items()[1]);
                 tabstrip.enable(tabstrip.items()[2]);
-                
-                $("#no_aks").val(response.no_aks);
 
                 if (response.Model != undefined) {
                     setAkseptasiModel(response.Model);
@@ -230,21 +232,22 @@ function OnPolisIndukChange(e){
         $("#faktor_prd").getKendoNumericTextBox().value(returnValue[3].split(",")[1]);
         returnValue[4].split(",")[1] == "Y" ? $("#flag_konv").prop("checked", true) : $("#flag_konv").prop("checked", false);
         $("#kd_cb").getKendoDropDownList().value(returnValue[5].split(",")[1]);
+        $("#kd_cb").getKendoDropDownList().trigger("change");
         $("#kd_cob").getKendoDropDownList().value(returnValue[6].split(",")[1]);
+        $("#kd_cob").getKendoDropDownList().trigger("change");
         $("#kd_grp_bank").getKendoDropDownList().value(returnValue[7].split(",")[1]);
+        $("#kd_grp_bank").getKendoDropDownList().trigger("change");
         $("#kd_grp_brk").getKendoDropDownList().value(returnValue[8].split(",")[1]);
+        $("#kd_grp_brk").getKendoDropDownList().trigger("change");
         $("#kd_grp_mkt").getKendoDropDownList().value(returnValue[9].split(",")[1]);
+        $("#kd_grp_mkt").getKendoDropDownList().trigger("change");
         $("#kd_grp_pas").getKendoDropDownList().value(returnValue[10].split(",")[1]);
+        $("#kd_grp_pas").getKendoDropDownList().trigger("change");
         $("#kd_grp_sb_bis").getKendoDropDownList().value(returnValue[11].split(",")[1]);
+        $("#kd_grp_sb_bis").getKendoDropDownList().trigger("change");
         $("#kd_grp_ttg").getKendoDropDownList().value(returnValue[12].split(",")[1]);
-        $("#kd_rk_bank").getKendoDropDownList().value(returnValue[13].split(",")[1]);
-        $("#kd_rk_brk").getKendoDropDownList().value(returnValue[14].split(",")[1]);
-        $("#kd_rk_mkt").getKendoDropDownList().value(returnValue[15].split(",")[1]);
-        $("#kd_rk_pas").getKendoDropDownList().value(returnValue[16].split(",")[1]);
-        $("#kd_rk_sb_bis").getKendoDropDownList().value(returnValue[17].split(",")[1]);
-        $("#kd_rk_ttg").getKendoDropDownList().value(returnValue[18].split(",")[1]);
-        $("#kd_scob").getKendoDropDownList().value(returnValue[19].split(",")[1]);
-        $("#kd_thn").getKendoTextBox().value(returnValue[20].split(",")[1]);
+        $("#kd_grp_ttg").getKendoDropDownList().trigger("change");
+        $("#kd_thn").val(returnValue[20].split(",")[1]);
         $("#ket_klausula").getKendoTextArea().value(returnValue[21].split(",")[1]);
         $("#kt_ttg").getKendoTextBox().value(returnValue[22].split(",")[1]);
         $("#lamp_pol").getKendoTextArea().value(returnValue[23].split(",")[1]);
@@ -255,6 +258,17 @@ function OnPolisIndukChange(e){
         $("#st_pas").getKendoDropDownList().value(returnValue[28].split(",")[1]);
         $("#thn_uw").getKendoNumericTextBox().value(returnValue[29].split(",")[1]);
         $("#wpc").getKendoNumericTextBox().value(returnValue[30].split(",")[1]);
+        
+        setTimeout(() => {
+            $("#kd_rk_bank").getKendoDropDownList().value(returnValue[13].split(",")[1]);
+            $("#kd_rk_brk").getKendoDropDownList().value(returnValue[14].split(",")[1]);
+            $("#kd_rk_mkt").getKendoDropDownList().value(returnValue[15].split(",")[1]);
+            $("#kd_rk_pas").getKendoDropDownList().value(returnValue[16].split(",")[1]);
+            $("#kd_rk_sb_bis").getKendoDropDownList().value(returnValue[17].split(",")[1]);
+            $("#kd_rk_ttg").getKendoDropDownList().value(returnValue[18].split(",")[1]);
+            $("#kd_scob").getKendoDropDownList().value(returnValue[19].split(",")[1]);
+            $("#kd_scob").getKendoDropDownList().trigger("change");
+        }, 500);
     });
 }
 
@@ -264,5 +278,23 @@ function OnKodeRekananTertanggungChange(e){
         $("#nm_ttg").getKendoTextBox().value(strings[1]);
         $("#almt_ttg").getKendoTextArea().value(strings[4]);
         $("#kt_ttg").getKendoTextBox().value(strings[7]);
+    });
+}
+
+function OnKodeRekananSumberBisnisChange(e){
+    ajaxGet(`/Akseptasi/GetKodeAkseptasi?st_pas=${$("#st_pas").val()}&kd_grp_sb_bis=${$("#kd_grp_sb_bis").val()}&kd_rk_sb_bis=${e.sender._cascadedValue}`, (returnValue) => {        
+        $("#kd_grp_pas").getKendoDropDownList().value(returnValue[2].split(",")[1]);
+        $("#kd_grp_pas").getKendoDropDownList().trigger("change");
+        $("#kd_grp_brk").getKendoDropDownList().value(returnValue[1].split(",")[1]);
+        $("#kd_grp_brk").getKendoDropDownList().trigger("change");
+        $("#kd_grp_bank").getKendoDropDownList().value(returnValue[0].split(",")[1]);
+        $("#kd_grp_bank").getKendoDropDownList().trigger("change");
+        
+        setTimeout(() => {
+            $("#kd_rk_pas").getKendoDropDownList().value(returnValue[6].split(",")[1]);
+            $("#kd_rk_brk").getKendoDropDownList().value(returnValue[4].split(",")[1]);
+            $("#kd_rk_bank").getKendoDropDownList().value(returnValue[3].split(",")[1]);
+        }, 500);
+        
     });
 }

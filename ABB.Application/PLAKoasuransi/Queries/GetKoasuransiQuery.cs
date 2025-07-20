@@ -35,7 +35,8 @@ namespace ABB.Application.PLAKoasuransi.Queries
 					INNER JOIN rf04 cob
 						ON p.kd_cob = cob.kd_cob
 					INNER JOIN rf05 scob
-						ON p.kd_scob = scob.kd_scob
+						ON p.kd_cob = scob.kd_cob
+						AND p.kd_scob = scob.kd_scob
 				WHERE cb.kd_cb = @KodeCabang AND (p.no_mts like '%'+@SearchKeyword+'%' 
 					OR p.no_kl like '%'+@SearchKeyword+'%' 
 					OR p.st_tipe_pla like '%'+@SearchKeyword+'%' 

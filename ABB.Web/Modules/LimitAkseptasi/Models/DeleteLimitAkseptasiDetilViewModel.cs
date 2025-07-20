@@ -13,11 +13,9 @@ namespace ABB.Web.Modules.LimitAkseptasi.Models
 
         public string kd_scob { get; set; }
 
+        public int thn { get; set; }
+
         public string kd_user { get; set; }
-
-        public decimal nilai_limit_awal { get; set; }
-
-        public decimal nilai_limit_akhir { get; set; }
 
         public void Mapping(Profile profile)
         {

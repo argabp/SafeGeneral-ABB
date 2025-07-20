@@ -9,7 +9,7 @@ namespace ABB.Infrastructure.Data.Mapping
         public void Configure(EntityTypeBuilder<LimitAkseptasi> builder)
         {
             builder.ToTable("MS_LimitAkseptasi", "dbo");
-            builder.HasKey(k => new { k.kd_cb, k.kd_cob, k.kd_scob });
+            builder.HasKey(k => new { k.kd_cb, k.kd_cob, k.kd_scob, k.thn });
         }
     }
 }

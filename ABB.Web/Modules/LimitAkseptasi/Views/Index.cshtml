@@ -42,9 +42,13 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.nm_cb).Title("Nama Cabang");
+                    columns.Bound(col => col.nm_cb).Title("Nama Cabang").Width(150);
                     columns.Bound(col => col.nm_cob).Title("Nama COB");
                     columns.Bound(col => col.nm_scob).Title("Nama Sub COB");
+                    columns.Bound(col => col.thn).Title("Tahun");
+                    columns.Bound(col => col.nilai_kapasitas).Title("Nilai Kapasitas");
+                    columns.Bound(col => col.pst_limit_cb).Title("Limit Cabang (%)");
+                    columns.Bound(col => col.maks_panel).Title("Maks Panel");
                     columns.Bound(col => col.nm_limit).Title("Nama Limit Akseptasi");
                     columns.Command(command =>
                     {
@@ -79,22 +83,26 @@
         <script id="template" type="text/kendo-tmpl">
             <div class="row">
                 <div class="col-md-4 k-button k-button-icontext">
-                    <button style="border: none;" onclick="btnAddLimitAkseptasiDetail('#=kd_cb#', '#=kd_cob#', '#=kd_scob#')">+ ADD NEW RECORD</button>
+                    <button style="border: none;" onclick="btnAddLimitAkseptasiDetail('#=kd_cb#', '#=kd_cob#', '#=kd_scob#', '#=thn#')">+ ADD NEW RECORD</button>
                 </div>
             </div>
             @(Html.Kendo().Grid<LimitAkseptasiDetilDto>()
                 .Name("grid_Detail_#=Id#") // template expression, to be evaluated in the master context
                 .DataSource(dataSource => dataSource.Ajax()
-                    .Read(read => read.Action("GetLimitAkseptasiDetails", "LimitAkseptasi", new { kd_cb = "#=kd_cb#", kd_cob = "#=kd_cob#", kd_scob = "#=kd_scob#" }))//.Data("getAsumsiPeriodeParam"))
+                    .Read(read => read.Action("GetLimitAkseptasiDetails", "LimitAkseptasi", new { kd_cb = "#=kd_cb#", kd_cob = "#=kd_cob#", kd_scob = "#=kd_scob#", thn = "#=thn#" }))//.Data("getAsumsiPeriodeParam"))
                     .Model(m => m.Id(p => p.Id))
                 )
                 .Columns(columns =>
                 {
                     columns.Bound(col => col.nm_user).Title("Nama User");
-                    columns.Bound(col => col.nilai_limit_awal).Title("Nilai Limit Awal").Format("{0:n2}");
-                    columns.Bound(col => col.nilai_limit_akhir).Title("Nilai Limit Akhir").Format("{0:n2}");
+                    columns.Bound(col => col.pst_limit).Title("Limit (%)");
                     columns.Command(command =>
                     {
+                        command.Custom("EditLimitAkseptasiDetil")
+                            .Text("Edit")
+                            .IconClass("fa fa-pencil-alt")
+                            .HtmlAttributes(new { title = "Edit" })
+                            .Click("btnEditLimitAkseptasiDetil");
                         command.Custom("DeleteLimitAkseptasiDetail")
                             .Text("Delete")
                             .IconClass("k-icon k-i-delete")

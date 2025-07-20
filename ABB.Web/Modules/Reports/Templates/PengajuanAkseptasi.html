@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            margin: 0px;
         }
         .header {
             text-align: center;
@@ -68,28 +68,28 @@
     </div>
 </div>
 
-<table style="border: none">
+<table style="border: none; margin-top: 20px">
     <tr>
         <td style="padding-left: 1em">CABANG</td>
         <td style="padding-left: 1em">:</td>
         <td style="padding-left: 1em">{{nm_cb}}</td>
-        <td style="padding-left: 2em">PERIODE AWAL</td>
+        <td style="padding-left: 2em">STATUS POLIS</td>
         <td style="padding-left: 2em">:</td>
-        <td style="padding-left: 2em">{{tgl_mul_ptg}}</td>
+        <td style="padding-left: 2em">{{st_pas}}</td>
     </tr>
     <tr>
         <td style="padding-left: 1em">COB</td>
         <td style="padding-left: 1em">:</td>
         <td style="padding-left: 1em">{{nm_cob}}</td>
-        <td style="padding-left: 2em">PERIODE AKHIR</td>
+        <td style="padding-left: 2em">SHARE (%)</td>
         <td style="padding-left: 2em">:</td>
-        <td style="padding-left: 2em">{{tgl_akh_ptg}}</td>
+        <td style="padding-left: 2em">{{pst_share}}</td>
     </tr>
     <tr>
         <td style="padding-left: 1em">SCOB</td>
         <td style="padding-left: 1em">:</td>
         <td style="padding-left: 1em">{{nm_scob}}</td>
-        <td style="padding-left: 2em">NILAI PERTANGGUNGAN</td>
+        <td style="padding-left: 2em">NILAI TSI 100%</td>
         <td style="padding-left: 2em">:</td>
         <td style="padding-left: 2em">{{symbol}} {{nilai_pertanggungan}}</td>
     </tr>
@@ -97,70 +97,116 @@
         <td style="padding-left: 1em">MARKETING</td>
         <td style="padding-left: 1em">:</td>
         <td style="padding-left: 1em">{{nm_mkt}}</td>
-        <td style="padding-left: 2em">DISKON (%)</td>
+        <td style="padding-left: 2em">NILAI TSI SHARE (%)</td>
         <td style="padding-left: 2em">:</td>
-        <td style="padding-left: 2em">{{pst_dis}} %</td>
+        <td style="padding-left: 2em">{{symbol}} {{nilai_tsi_share}}</td>
     </tr>
     <tr>
         <td style="padding-left: 1em">SUMBER BISNIS</td>
         <td style="padding-left: 1em">:</td>
         <td style="padding-left: 1em">{{nm_sb_bis}}</td>
-        <td style="padding-left: 2em">KOMISI (%)</td>
+        <td style="padding-left: 2em">DISKON (%)</td>
         <td style="padding-left: 2em">:</td>
-        <td style="padding-left: 2em">{{pst_kms}} %</td>
+        <td style="padding-left: 2em">{{pst_dis}}%</td>
     </tr>
     <tr>
         <td style="padding-left: 1em">TERTANGGUNG</td>
         <td style="padding-left: 1em">:</td>
         <td style="padding-left: 1em">{{nm_ttg}}</td>
-        <td style="padding-left: 2em">STATUS POLIS</td>
+        <td style="padding-left: 2em">KOMISI (%)</td>
         <td style="padding-left: 2em">:</td>
-        <td style="padding-left: 2em">{{st_pas}}</td>
+        <td style="padding-left: 2em">{{pst_kms}}%</td>
     </tr>
     <tr>
         <td style="padding-left: 1em">TANGGAL PENGAJUAN</td>
         <td style="padding-left: 1em">:</td>
         <td style="padding-left: 1em">{{tgl_pengajuan}}</td>
-        <td style="padding-left: 2em">SHARE</td>
-        <td style="padding-left: 2em">:</td>
-        <td style="padding-left: 2em">{{pst_share}}</td>
-    </tr>
-    <tr>
-        <td style="padding-left: 1em"></td>
-        <td style="padding-left: 1em"></td>
-        <td style="padding-left: 1em"></td>
         <td style="padding-left: 2em">NO POLIS CEDING</td>
         <td style="padding-left: 2em">:</td>
         <td style="padding-left: 2em">{{no_pol_pas}}</td>
     </tr>
+    <tr>
+        <td style="padding-left: 1em">PERIODE AWAL</td>
+        <td style="padding-left: 1em">:</td>
+        <td style="padding-left: 1em">{{tgl_mul_ptg}}</td>
+        <td style="padding-left: 2em">TABLE OF LIMIT</td>
+        <td style="padding-left: 2em">:</td>
+        <td style="padding-left: 2em"></td>
+    </tr>
+    <tr>
+        <td style="padding-left: 1em">PERIODE AKHIR</td>
+        <td style="padding-left: 1em">:</td>
+        <td style="padding-left: 1em">{{tgl_akh_ptg}}</td>
+        <td style="padding-left: 2em" colspan=3>{{nm_tol}}</td>
+    </tr>
 </table>
 
-<div style="padding-left: 1em">LEADER/MEMBER PERUSAHAAN ASURANSI :</div>
+<div style="padding-left: 1em;">PANEL KOASURANSI MAKS : {{maks_panel}} PANEL</div>
+<div style="padding-left: 1em; font-weight: bold"><u>LEADER/MEMBER PERUSAHAAN ASURANSI :</U></div>
 <table style="border: 1px solid black; width: 60%; margin-left: 1em">
     <tr style="border: 1px solid black">
-        <td style="border: 1px solid black">1</td>
+        <td style="border: 1px solid black; width: 10%">1</td>
         <td style="border: 1px solid black">{{nm_pas1}}</td>
-        <td style="border: 1px solid black">{{pst_pas1}} %</td>
+        <td style="border: 1px solid black; width: 20%; text-align: right">{{pst_pas1}}%</td>
     </tr>
     <tr style="border: 1px solid black">
         <td style="border: 1px solid black">2</td>
         <td style="border: 1px solid black">{{nm_pas2}}</td>
-        <td style="border: 1px solid black">{{pst_pas2}} %</td>
+        <td style="border: 1px solid black; text-align: right">{{pst_pas2}}%</td>
     </tr>
     <tr>
         <td style="border: 1px solid black">3</td>
         <td style="border: 1px solid black">{{nm_pas3}}</td>
-        <td style="border: 1px solid black">{{pst_pas3}} %</td>
+        <td style="border: 1px solid black; text-align: right">{{pst_pas3}}%</td>
     </tr>
     <tr style="border: 1px solid black">
         <td style="border: 1px solid black">4</td>
         <td style="border: 1px solid black">{{nm_pas4}}</td>
-        <td style="border: 1px solid black">{{pst_pas4}} %</td>
+        <td style="border: 1px solid black; text-align: right">{{pst_pas4}}%</td>
     </tr>
     <tr style="border: 1px solid black">
         <td style="border: 1px solid black">5</td>
         <td style="border: 1px solid black">{{nm_pas5}}</td>
-        <td style="border: 1px solid black">{{pst_pas5}} %</td>
+        <td style="border: 1px solid black; text-align: right">{{pst_pas5}}%</td>
+    </tr>
+</table>
+
+<div style="padding-left: 1em; font-weight: bold"><u>PERHITUNGAN LIMIT CABANG/PEMASARAN:</U></div>
+<div style="padding-left: 1em;">TABLE OF LIMIT : {{symbol}} {{nilai_kapasitas}} * {{pst_tol}}% = {{nilai_kapasitas_tty1}} </div>
+<table style="border: 1px solid black; width: 80%; margin-left: 1em">
+    <tr style="border: 1px solid black">
+        <td style="border: 1px solid black; text-align: center" colspan=2>SCHEME CO-INS</td>
+        <td style="border: 1px solid black; text-align: center">KAPASITAS TREATY</td>
+        <td style="border: 1px solid black; text-align: center">LIMIT TSI {{pst_limit_cab}}%</td>
+        <td style="border: 1px solid black; text-align: center">LIMIT SHARE MAKS</td>
+    </tr>
+    <tr style="border: 1px solid black">
+        <td style="border: 1px solid black">> {{pst_mul1}}</td>
+        <td style="border: 1px solid black; text-align: right">{{pst_koas1}}%</td>
+        <td style="border: 1px solid black; text-align: right">{{symbol}} {{nilai_kapasitas_tty1}}</td>
+        <td style="border: 1px solid black; text-align: right">{{symbol}} {{nilai_limit_tsi1}}</td>
+        <td style="border: 1px solid black; text-align: right">{{nilai_limit_sharemax1}}%</td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black">≥ {{pst_mul2}}% - {{pst_akh2}}%</td>
+        <td style="border: 1px solid black; text-align: right">{{pst_koas2}}%</td>
+        <td style="border: 1px solid black; text-align: right">{{symbol}} {{nilai_kapasitas_tty2}}</td>
+        <td style="border: 1px solid black; text-align: right">{{symbol}} {{nilai_limit_tsi2}}</td>
+        <td style="border: 1px solid black; text-align: right">{{nilai_limit_sharemax2}}%</td>
+    </tr>
+    <tr style="border: 1px solid black">
+        <td style="border: 1px solid black">≥ {{pst_mul3}}% - {{pst_akh3}}%</td>
+        <td style="border: 1px solid black; text-align: right">{{pst_koas3}}%</td>
+        <td style="border: 1px solid black; text-align: right">{{symbol}} {{nilai_kapasitas_tty3}}</td>
+        <td style="border: 1px solid black; text-align: right">{{symbol}} {{nilai_limit_tsi3}}</td>
+        <td style="border: 1px solid black; text-align: right">{{nilai_limit_sharemax3}}%</td>
+    </tr>
+    <tr style="border: 1px solid black">
+        <td style="border: 1px solid black">≤ {{pst_mul4}}%</td>
+        <td style="border: 1px solid black; text-align: right">{{pst_koas4}}%</td>
+        <td style="border: 1px solid black; text-align: right">{{symbol}} {{nilai_kapasitas_tty4}}</td>
+        <td style="border: 1px solid black; text-align: right">{{symbol}} {{nilai_limit_tsi4}}</td>
+        <td style="border: 1px solid black; text-align: right">{{nilai_limit_sharemax4}}%</td>
     </tr>
 </table>
 

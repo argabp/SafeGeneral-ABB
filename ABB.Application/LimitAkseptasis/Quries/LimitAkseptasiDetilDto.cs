@@ -18,9 +18,9 @@ namespace ABB.Application.LimitAkseptasis.Quries
 
         public string nm_user { get; set; }
 
-        public decimal nilai_limit_awal { get; set; }
-
-        public decimal nilai_limit_akhir { get; set; }
+        public int thn { get; set; }
+        
+        public decimal pst_limit { get; set; }
 
         public void Mapping(Profile profile)
         {

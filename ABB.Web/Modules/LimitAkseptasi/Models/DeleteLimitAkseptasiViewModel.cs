@@ -12,6 +12,8 @@ namespace ABB.Web.Modules.LimitAkseptasi.Models
 
         public string kd_scob { get; set; }
 
+        public int thn { get; set; }
+
         public void Mapping(Profile profile)
         {
             profile.CreateMap<DeleteLimitAkseptasiViewModel, DeleteLimitAkseptasiCommand>();

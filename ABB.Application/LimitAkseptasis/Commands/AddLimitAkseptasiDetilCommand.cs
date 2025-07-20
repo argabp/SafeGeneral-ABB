@@ -3,36 +3,45 @@ using System.Threading;
 using System.Threading.Tasks;
 using ABB.Application.Common.Interfaces;
 using ABB.Domain.Entities;
+using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.LimitAkseptasis.Commands
 {
-    public class AddLimitAkseptasiDetilCommand : IRequest
+    public class AddLimitAkseptasiDetilCommand : IRequest, IMapFrom<LimitAkseptasiDetil>
     {
         public string DatabaseName { get; set; }
+        
         public string kd_cb { get; set; }
 
         public string kd_cob { get; set; }
 
         public string kd_scob { get; set; }
 
+        public int thn { get; set; }
+
         public string kd_user { get; set; }
 
-        public decimal nilai_limit_awal { get; set; }
+        public decimal pst_limit { get; set; }
 
-        public decimal nilai_limit_akhir { get; set; }
+        public void Mapping(Profile profile)
+        {
+            profile.CreateMap<AddLimitAkseptasiDetilCommand, LimitAkseptasiDetil>();
+        }
     }
 
     public class AddLimitAkseptasiDetilCommandHandler : IRequestHandler<AddLimitAkseptasiDetilCommand>
     {
         private readonly IDbContextFactory _contextFactory;
+        private readonly IMapper _mapper;
         private readonly ILogger<AddLimitAkseptasiDetilCommandHandler> _logger;
 
-        public AddLimitAkseptasiDetilCommandHandler(IDbContextFactory contextFactory,
+        public AddLimitAkseptasiDetilCommandHandler(IDbContextFactory contextFactory, IMapper mapper,
             ILogger<AddLimitAkseptasiDetilCommandHandler> logger)
         {;
             _contextFactory = contextFactory;
+            _mapper = mapper;
             _logger = logger;
         }
 
@@ -41,15 +50,7 @@ namespace ABB.Application.LimitAkseptasis.Commands
             try
             {
                 var dbContext = _contextFactory.CreateDbContext(request.DatabaseName);
-                var limitAkseptasiDetil = new LimitAkseptasiDetil()
-                {
-                    kd_cb = request.kd_cb,
-                    kd_cob = request.kd_cob,
-                    kd_scob = request.kd_scob,
-                    kd_user = request.kd_user,
-                    nilai_limit_awal = request.nilai_limit_awal,
-                    nilai_limit_akhir = request.nilai_limit_akhir
-                };
+                var limitAkseptasiDetil = _mapper.Map<LimitAkseptasiDetil>(request);
 
                 dbContext.LimitAkseptasiDetil.Add(limitAkseptasiDetil);
 

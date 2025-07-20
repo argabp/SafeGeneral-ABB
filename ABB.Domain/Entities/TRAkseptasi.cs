@@ -100,5 +100,9 @@ namespace ABB.Domain.Entities
         public decimal? nilai_ttl_ptg_limit { get; set; }
         
         public string? kd_tol { get; set; }
+
+        public decimal? pst_tol { get; set; }
+
+        public decimal? pst_koas { get; set; }
     }
 }

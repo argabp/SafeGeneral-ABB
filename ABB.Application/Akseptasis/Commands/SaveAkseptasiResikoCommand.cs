@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ABB.Application.Common.Interfaces;
@@ -110,32 +111,40 @@ namespace ABB.Application.Akseptasis.Commands
                 {
                     var akseptasiResiko = _mapper.Map<AkseptasiResiko>(request);
 
+                    var no_rsk = (await _connectionFactory.QueryProc<string>("spe_uw02e_02", new
+                        {
+                            request.kd_cb, request.kd_cob, request.kd_scob, 
+                            request.kd_thn, request.no_aks, request.no_updt
+                        }))
+                        .First();
+
+                    akseptasiResiko.no_rsk = Convert.ToInt16(no_rsk.Split(",")[1]);
+                    
                     dbContext.AkseptasiResiko.Add(akseptasiResiko);
 
                     await dbContext.SaveChangesAsync(cancellationToken);
-
                 }
                 else
                 {
-                    _mapper.Map(request, entity);
-
-                    if(entity.kd_cb.Length != 5)
-                        for (int sequence = entity.kd_cb.Length; sequence < 5; sequence++)
-                        {
-                            entity.kd_cb += " ";
-                        }
-            
-                    if(entity.kd_cob.Length != 2)
-                        for (int sequence = entity.kd_cob.Length; sequence < 2; sequence++)
-                        {
-                            entity.kd_cob += " ";
-                        }
-
-                    if(entity.kd_scob.Length != 5)
-                        for (int sequence = entity.kd_scob.Length; sequence < 5; sequence++)
-                        {
-                            entity.kd_scob += " ";
-                        }
+                    entity.nilai_kl = request.nilai_kl;
+                    entity.nilai_insentif = request.nilai_insentif;
+                    entity.ket_rsk = request.ket_rsk;
+                    entity.kd_mtu_prm = request.kd_mtu_prm;
+                    entity.pst_rate_prm = request.pst_rate_prm;
+                    entity.stn_rate_prm = request.stn_rate_prm;
+                    entity.nilai_prm = request.nilai_prm;
+                    entity.nilai_ttl_ptg = request.nilai_ttl_ptg;
+                    entity.pst_dis = request.pst_dis;
+                    entity.nilai_dis = request.nilai_dis;
+                    entity.jk_wkt_ptg = request.jk_wkt_ptg;
+                    entity.pst_kms = request.pst_kms;
+                    entity.nilai_kms = request.nilai_kms;
+                    entity.pst_share_bgu = request.pst_share_bgu;
+                    entity.kd_tol = request.kd_tol;
+                    entity.faktor_prd = request.faktor_prd;
+                    entity.kode = request.kode;
+                    entity.tgl_mul_ptg = request.tgl_mul_ptg;
+                    entity.tgl_akh_ptg = request.tgl_akh_ptg;
             
                     await dbContext.SaveChangesAsync(cancellationToken);
                 }

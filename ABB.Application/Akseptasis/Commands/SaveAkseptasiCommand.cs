@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
+using ABB.Application.Common.Services;
 using ABB.Domain.Entities;
 using AutoMapper;
 using MediatR;
@@ -162,10 +163,12 @@ namespace ABB.Application.Akseptasis.Commands
         private readonly IProfilePictureHelper _profilePictureHelper;
         private readonly IConfiguration _configuration;
         private readonly ILogger<SaveAkseptasiCommandHandler> _logger;
+        private readonly ICurrentUserService _currentUserService;
 
         public SaveAkseptasiCommandHandler(IDbContextFactory contextFactory, IMapper mapper,
             IDbConnectionFactory connectionFactory, IProfilePictureHelper profilePictureHelper,
-            IConfiguration configuration, ILogger<SaveAkseptasiCommandHandler> logger)
+            IConfiguration configuration, ILogger<SaveAkseptasiCommandHandler> logger,
+            ICurrentUserService currentUserService)
         {
             _contextFactory = contextFactory;
             _mapper = mapper;
@@ -173,6 +176,7 @@ namespace ABB.Application.Akseptasis.Commands
             _profilePictureHelper = profilePictureHelper;
             _configuration = configuration;
             _logger = logger;
+            _currentUserService = currentUserService;
         }
 
         public async Task<Akseptasi> Handle(SaveAkseptasiCommand request, CancellationToken cancellationToken)
@@ -180,6 +184,14 @@ namespace ABB.Application.Akseptasis.Commands
             try
             {
                 var dbContext = _contextFactory.CreateDbContext(request.DatabaseName);
+
+                var result = (await _connectionFactory.QueryProc<string>("spe_uw02e_25_01", new
+                {
+                    request.wpc, nopol_induk = request.no_pol_induk
+                })).First();
+
+                if (!string.IsNullOrWhiteSpace(result))
+                    throw new Exception(result);
                 
                 var entity = await dbContext.Akseptasi.FindAsync(request.kd_cb, 
                     request.kd_cob, request.kd_scob, request.kd_thn, request.no_aks, request.no_updt);
@@ -195,12 +207,24 @@ namespace ABB.Application.Akseptasis.Commands
                             request.kd_scob, request.kd_thn
                         }))
                         .ToList();
+                    
+                    var no_pol_ttg = (await _connectionFactory.QueryProc<string?>("spe_uw02e_00", new
+                        {
+                            input_str =  $"{request.kd_cb},{request.kd_cob},{request.kd_scob},{request.kd_thn}," +
+                                         $"{request.no_updt},{request.st_pas},{request.no_aks},{request.st_cover}"
+                        }))
+                        .FirstOrDefault();
 
                     var akseptasi = _mapper.Map<Akseptasi>(request);
                 
                     akseptasi.no_aks = no_aks[0].Split(",")[1];
                     akseptasi.no_updt = 0;
                     akseptasi.no_endt = "0";
+                    akseptasi.tgl_input = DateTime.Now;
+                    akseptasi.tgl_updt = DateTime.Now;
+                    akseptasi.kd_usr_input = _currentUserService.UserId;
+                    akseptasi.kd_usr_updt = _currentUserService.UserId;
+                    akseptasi.no_pol_ttg = no_pol_ttg?.Split(",")[1];
                 
                     var path = _configuration.GetSection("Akseptasi").Value.TrimEnd('/');
                     path = Path.Combine(path, request.kd_cb + request.kd_cob + request.kd_scob + 

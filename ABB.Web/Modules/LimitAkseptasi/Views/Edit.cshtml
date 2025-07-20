@@ -53,6 +53,34 @@
             </div>
         </div>
         <div class="form-group col-sm-12">
+            <label class="col-sm-12">Tahun</label>
+            <div class="col-sm-12">
+                <kendo-datepicker for="thn" format="yyyy" readonly="true" depth="CalendarView.Decade" start="CalendarView.Decade" style="width: 100%; background-color: #00FFFF" />
+                <span asp-validation-for="thn" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Nilai Kapasitas</label>
+            <div class="col-sm-12">
+                <kendo-numerictextbox spinners="false" for="nilai_kapasitas" decimals="0" style="width: 100%;"/>
+                <span asp-validation-for="nilai_kapasitas" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Limit Cabang (%)</label>
+            <div class="col-sm-12">
+                <kendo-numerictextbox for="pst_limit_cb" decimals="2" max="100" style="width: 100%;"/>
+                <span asp-validation-for="pst_limit_cb" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Maks Panel</label>
+            <div class="col-sm-12">
+                <kendo-numerictextbox for="maks_panel" decimals="0" format="#" style="width: 100%;"/>
+                <span asp-validation-for="maks_panel" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
             <label class="col-sm-12">Nama Limit Akseptasi</label>
             <div class="col-sm-12">
                 <kendo-textbox for="nm_limit" style="width: 100%; background-color: #FFFFE1"/>

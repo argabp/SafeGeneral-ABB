@@ -18,6 +18,8 @@ namespace ABB.Application.LimitAkseptasis.Quries
         public string kd_cob { get; set; }
 
         public string kd_scob { get; set; }
+
+        public int thn { get; set; }
     }
 
     public class GetLimitAkseptasiDetilsQueryHandler : IRequestHandler<GetLimitAkseptasiDetilsQuery, List<LimitAkseptasiDetilDto>>
@@ -42,9 +44,9 @@ namespace ABB.Application.LimitAkseptasis.Quries
                 var results = (await _connectionFactory.Query<LimitAkseptasiDetilDto>(@"SELECT ad.*, ISNULL(u2.FirstName, '') + ' ' + ISNULL(u2.LastName, '') nm_user FROM MS_LimitAkseptasiDetil ad 
                                 INNER JOIN MS_User u2 
                                     ON u2.UserId = ad.kd_user
-                                WHERE kd_cb = @kd_cb 
+                                WHERE kd_cb = @kd_cb AND thn = @thn
                                   AND kd_cob = @kd_cob AND kd_scob = @kd_scob",
-                    new { request.kd_cb, request.kd_cob, request.kd_scob })).ToList();
+                    new { request.kd_cb, request.kd_cob, request.kd_scob, request.thn })).ToList();
 
                 var sequence = 0;
                 foreach (var result in results)

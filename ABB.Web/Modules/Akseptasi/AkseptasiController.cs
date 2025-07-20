@@ -64,7 +64,7 @@ namespace ABB.Web.Modules.Akseptasi
                 var command = Mapper.Map<SaveAkseptasiCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 var entity = await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = "Data Berhasil Disimpan", entity.no_aks});
+                return Json(new { Result = "OK", Message = "Data Berhasil Disimpan", Model = entity });
             }
             catch (ValidationException ex)
             {
@@ -184,7 +184,7 @@ namespace ABB.Web.Modules.Akseptasi
         {
             var viewModel = new AkseptasiParameterViewModel()
             {
-                kd_cb = string.Empty,
+                kd_cb = Request.Cookies["UserCabang"],
                 kd_cob = string.Empty,
                 kd_scob = string.Empty,
                 kd_thn = string.Empty,
@@ -334,10 +334,8 @@ namespace ABB.Web.Modules.Akseptasi
         {
             var result = new List<DropdownOptionDto>()
             {
-                new DropdownOptionDto() { Text = "Ag Perorangan Lepas", Value = "0" },
-                new DropdownOptionDto() { Text = "Ag Perorangan Kontrak", Value = "1" },
+                new DropdownOptionDto() { Text = "Agen Perorangan Lepas", Value = "0" },
                 new DropdownOptionDto() { Text = "Broker", Value = "2" },
-                new DropdownOptionDto() { Text = "Ag Lembaga Lepas", Value = "3" }
             };
 
             return Json(result);
@@ -423,6 +421,22 @@ namespace ABB.Web.Modules.Akseptasi
             return Json(result);
         }
 
+        [HttpGet]
+        public async Task<JsonResult> GetKodeAkseptasi(string st_pas, string kd_grp_sb_bis, string kd_rk_sb_bis)
+        {
+            var command = new GenerateKodeAkseptasiQuery()
+            {
+                st_pas = st_pas,
+                kd_grp_sb_bis = kd_grp_sb_bis,
+                kd_rk_sb_bis = kd_rk_sb_bis,
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            };
+            
+            var result = await Mediator.Send(command);
+
+            return Json(result);
+        }
+
         #endregion
 
         #region Resiko View
@@ -497,9 +511,12 @@ namespace ABB.Web.Modules.Akseptasi
             viewModel.nilai_insentif = 0;
             viewModel.nilai_kl = 0;
             viewModel.nilai_ttl_ptg = 0;
-            viewModel.faktor_prd = 0;
-            viewModel.pst_share_bgu = 0;
-            
+            viewModel.pst_share_bgu = 100;
+            viewModel.tgl_mul_ptg = DateTime.Now;
+            viewModel.tgl_akh_ptg = DateTime.Now.AddYears(1);
+            viewModel.jk_wkt_ptg = Convert.ToInt16((viewModel.tgl_akh_ptg.Value - viewModel.tgl_mul_ptg.Value).TotalDays);
+            viewModel.faktor_prd = 100;
+
             return PartialView(viewModel);
         }
 
@@ -640,6 +657,8 @@ namespace ABB.Web.Modules.Akseptasi
                 kd_endt = kd_endt,
                 kd_cvrg = kd_cvrg
             });
+
+            akseptasiResiko.kd_cvrg = akseptasiResiko.kd_cvrg.Trim();
             
             return PartialView(Mapper.Map<AkseptasiResikoCoverageViewModel>(akseptasiResiko));
         }
@@ -672,6 +691,18 @@ namespace ABB.Web.Modules.Akseptasi
             {
                 return Json(new { Result = "ERROR", Message = ex.Message });
             }
+        }
+        
+        [HttpGet]
+        public async Task<JsonResult> GetFlagPKK(string kd_cvrg)
+        {
+            var result = await Mediator.Send(new GetFlagPKKQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                kd_cvrg = kd_cvrg
+            });
+
+            return Json(result);
         }
 
         #endregion

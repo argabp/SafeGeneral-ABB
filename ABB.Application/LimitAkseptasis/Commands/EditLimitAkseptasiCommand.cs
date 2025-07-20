@@ -11,13 +11,21 @@ namespace ABB.Application.LimitAkseptasis.Commands
     public class EditLimitAkseptasiCommand : IRequest
     {
         public string DatabaseName { get; set; }
+        
         public string kd_cb { get; set; }
 
         public string kd_cob { get; set; }
 
         public string kd_scob { get; set; }
 
+        public int thn { get; set; }
+
         public string nm_limit { get; set; }
+
+        public decimal? pst_limit_cb { get; set; }
+
+        public Int16? maks_panel { get; set; }
+        public decimal? nilai_kapasitas { get; set; }
     }
 
     public class EditLimitAkseptasiCommandHandler : IRequestHandler<EditLimitAkseptasiCommand>
@@ -38,11 +46,16 @@ namespace ABB.Application.LimitAkseptasis.Commands
             {
                 var dbContext = _contextFactory.CreateDbContext(request.DatabaseName);
                 var limitAkseptasi = dbContext.LimitAkseptasi.FirstOrDefault(w =>
-                    w.kd_cb == request.kd_cb && w.kd_cob == request.kd_cob && w.kd_scob == request.kd_scob);
+                    w.kd_cb == request.kd_cb && w.kd_cob == request.kd_cob 
+                                             && w.kd_scob == request.kd_scob
+                                             && w.thn == request.thn);
 
                 if (limitAkseptasi != null)
                 {
                     limitAkseptasi.nm_limit = request.nm_limit;
+                    limitAkseptasi.pst_limit_cb = request.pst_limit_cb;
+                    limitAkseptasi.maks_panel = request.maks_panel;
+                    limitAkseptasi.nilai_kapasitas = request.nilai_kapasitas;
                     
                     await dbContext.SaveChangesAsync(cancellationToken);
                 }

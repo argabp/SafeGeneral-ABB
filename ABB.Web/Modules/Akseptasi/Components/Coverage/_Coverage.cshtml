@@ -8,7 +8,7 @@
         <div class="col-md-4">
             <input type="text" class="search-field-top" style="height: 1em" id="SearchKeywordCoverage" placeholder="Search"/>
         </div>
-        <div class="offset-5"></div>
+        <div class="offset-1"></div>
         <div class="col-md-2">
             <button class="flat-btn-primary" style="height: 1em" id="btnAddNewAkseptasiCoverage">Add New Coverage</button>
         </div>
@@ -23,6 +23,7 @@
         .Columns(columns =>
         {
             columns.Bound(col => col.kd_cvrg).Width(150).Title("Kode Coverage");
+            columns.Bound(col => col.kd_cvrg).Width(150).Title("Rate Premi").ClientTemplate("#= pst_rate_prm # #= stn_rate_prm == 1 ? '%' : '%o' #");
             columns.Command(command =>
             {
                 command.Custom("EditAkseptasiCoverage")

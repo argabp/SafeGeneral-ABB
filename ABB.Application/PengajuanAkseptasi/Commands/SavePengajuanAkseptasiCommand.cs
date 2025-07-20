@@ -96,6 +96,10 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
         public decimal? nilai_ttl_ptg_limit { get; set; }
         
         public string? kd_tol { get; set; }
+
+        public decimal? pst_tol { get; set; }
+
+        public decimal? pst_koas { get; set; }
         
         public void Mapping(Profile profile)
         {
@@ -203,11 +207,16 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
                     entity.tgl_pengajuan = request.tgl_pengajuan;
                     entity.nilai_ttl_ptg_limit = request.nilai_ttl_ptg_limit;
                     entity.kd_tol = request.kd_tol;
+                    entity.pst_tol = request.pst_tol;
+                    entity.pst_koas = request.pst_koas;
                 }
 
                 await _context.SaveChangesAsync(cancellationToken);
 
                 await _connectionFactory.QueryProc<string>("sp_InsertDokumenPengajuanAks",
+                    new { request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn, no_aks });
+                
+                await _connectionFactory.QueryProc<string>("sp_InsertLimitPengajuanAks",
                     new { request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn, no_aks });
             }
             catch (Exception ex)

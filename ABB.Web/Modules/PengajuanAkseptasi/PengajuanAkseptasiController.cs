@@ -422,5 +422,32 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
                 return Ok( new { Status = "ERROR", Message = e.InnerException == null ? e.Message : e.InnerException.Message});
             }
         }
+        
+        public async Task<JsonResult> GetPstTol(string kd_cob, string kd_tol)
+        {
+            var command = new GeneratePstTolQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                kd_cob = kd_cob,
+                kd_tol = kd_tol
+            };
+            
+            var result = await Mediator.Send(command);
+
+            return Json(result);
+        }
+        
+        public async Task<JsonResult> GetPstKoas(decimal pst_share)
+        {
+            var command = new GeneratePstKoasQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                pst_share = pst_share
+            };
+            
+            var result = await Mediator.Send(command);
+
+            return Json(result);
+        }
     }
 }

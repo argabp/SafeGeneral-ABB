@@ -17,8 +17,8 @@
 </style>
 
 @{
-    var nomor_aksepatsi = Model.kd_cb.Trim() + Model.kd_cob.Trim() +
-                          Model.kd_scob.Trim() + Model.kd_thn.Trim() + Model.no_aks.Trim();
+    var nomor_aksepatsi = Model.kd_cb.Trim() + "." + Model.kd_cob.Trim() +
+                          Model.kd_scob.Trim() + "." + Model.kd_thn.Trim() + "." + Model.no_aks.Trim();
     var resiko_obyek_nilai_ttl_ptg = (double) Model.nilai_ttl_ptg;
     var pst_adj = (double) Model.pst_adj;
 }
@@ -73,7 +73,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Kode Group Obyek</label>
                 <div class="col-sm-6">
-                    <kendo-dropdownlist for="kd_grp_oby" style="width: 100%" class="not-null-dropdown"
+                    <kendo-dropdownlist for="kd_grp_oby" style="width: 100%" class="not-null-dropdown" option-label="Pilih Group Obyek"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -94,12 +94,12 @@
             </div>
         </div>
         <div class="form-group row">
-            <div class="row col-sm-6">
-                <label class="col-sm-6">Nilai Pertanggungan</label>
+            <div class="row col-sm-12">
+                <label class="col-sm-3">Nilai Pertanggungan</label>
                 <div class="col-sm-3">
                     <kendo-numerictextbox decimals="2" spinners="false" name="resiko_obyek_nilai_ttl_ptg" value="@resiko_obyek_nilai_ttl_ptg" style="width: 100%; background-color: #FFFFE1"/>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-1">
                     <kendo-numerictextbox decimals="2" spinners="false" for="pst_adj" value="@pst_adj" style="width: 100%; background-color: #FFFFE1"/>
                 </div>
             </div>

@@ -16,11 +16,18 @@ function btnEditLimitAkseptasi(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     console.log('dataItem', dataItem);
-    openWindow('#LimitAkseptasiWindow', `/LimitAkseptasi/Edit?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}`, 'Edit');
+    openWindow('#LimitAkseptasiWindow', `/LimitAkseptasi/Edit?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&thn=${dataItem.thn}`, 'Edit');
 }
 
-function btnAddLimitAkseptasiDetail(kd_cb, kd_cob, kd_scob){
-    openWindow('#LimitAkseptasiWindow', `/LimitAkseptasi/AddDetail?kd_cb=${kd_cb}&kd_cob=${kd_cob}&kd_scob=${kd_scob}`, 'Add Detail');
+function btnAddLimitAkseptasiDetail(kd_cb, kd_cob, kd_scob, thn){
+    openWindow('#LimitAkseptasiWindow', `/LimitAkseptasi/AddDetail?kd_cb=${kd_cb}&kd_cob=${kd_cob}&kd_scob=${kd_scob}&thn=${thn}`, 'Add Detail');
+}
+
+function btnEditLimitAkseptasiDetil(e) {
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    console.log('dataItem', dataItem);
+    openWindow('#LimitAkseptasiWindow', `/LimitAkseptasi/EditDetil?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&thn=${dataItem.thn}&kd_user=${dataItem.kd_user}`, 'Edit Detail');
 }
 
 function onAddLimitAkseptasi(){
@@ -31,6 +38,11 @@ function onAddLimitAkseptasi(){
 function onEditLimitAkseptasi(){
     showProgress('#LimitAkseptasiWindow');
     onSaveLimitAkseptasi("/LimitAkseptasi/Edit");
+}
+
+function onEditLimitAkseptasiDetail(){
+    showProgress('#LimitAkseptasiWindow');
+    onSaveLimitAkseptasiDetail("/LimitAkseptasi/EditDetail");
 }
 
 function onSaveLimitAkseptasi(url){
@@ -62,7 +74,8 @@ function onDeleteLimitAkseptasi(e){
             var data = {
                 kd_cb: dataItem.kd_cb,
                 kd_cob: dataItem.kd_cob,
-                kd_scob: dataItem.kd_scob
+                kd_scob: dataItem.kd_scob,
+                thn: dataItem.thn
             }
 
             ajaxPost("/LimitAkseptasi/Delete", JSON.stringify(data),
@@ -89,7 +102,7 @@ function onSaveLimitAkseptasiDetail(url){
     var form = getFormData($('#LimitAkseptasiDetailForm'));
 
     var data = JSON.stringify(form);
-
+    
     ajaxPost(url, data,
         function (response) {
             refreshGrid("#LimitAkseptasiGrid");
@@ -113,10 +126,8 @@ function onDeleteLimitAkseptasiDetail(e){
                 kd_cb: dataItem.kd_cb,
                 kd_cob: dataItem.kd_cob,
                 kd_scob: dataItem.kd_scob,
-                kd_status: dataItem.kd_status,
-                kd_user: dataItem.kd_user,
-                nilai_limit_awal: dataItem.nilai_limit_awal,
-                nilai_limit_akhir: dataItem.nilai_limit_akhir
+                thn: dataItem.thn,
+                kd_user: dataItem.kd_user
             }
             
             showProgressOnGrid("#LimitAkseptasiGrid");

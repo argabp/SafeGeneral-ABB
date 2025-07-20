@@ -26,7 +26,7 @@ function saveAkseptasiResiko(url) {
     form.kd_scob = $("#kd_scob").val();
     form.kd_thn = $("#kd_thn").val();
     form.no_aks = $("#no_aks").val();
-    form.no_updt = $("#resiko_no_updt").val();
+    form.no_updt = $("#no_updt").val();
     form.tgl_mul_ptg = $("#resiko_tgl_mul_ptg").val();
     form.tgl_akh_ptg = $("#resiko_tgl_akh_ptg").val();
     form.nilai_prm = $("#resiko_nilai_prm").val();
@@ -35,6 +35,7 @@ function saveAkseptasiResiko(url) {
     form.nilai_dis = $("#resiko_nilai_dis").val();
     form.pst_kms = $("#resiko_pst_kms").val();
     form.nilai_kms = $("#resiko_nilai_kms").val();
+    form.no_pol_ttg = $("#no_pol_ttg").val();
     
     var data = JSON.stringify(form);
     

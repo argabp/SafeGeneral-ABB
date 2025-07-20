@@ -92,7 +92,35 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
                 data.nm_pas5, pst_pas5 = ReportHelper.ConvertToReportFormat(data.pst_pas5, true),
                 data.ket_rsk, signature1, signature2, signature3, data.jabatan_dibuat, data.jabatan_diperiksa,
                 data.jabatan_disetujui, data.nm_dibuat, data.nm_diperiksa, data.nm_disetujui,
-                tgl_dibuat, tgl_diperiksa, tgl_disetujui, data.nomor_pengajuan, keterangan_resiko
+                tgl_dibuat, tgl_diperiksa, tgl_disetujui, data.nomor_pengajuan, keterangan_resiko,
+                nilai_tsi_share = ReportHelper.ConvertToReportFormat(data.nilai_tsi_share), data.nm_tol,
+                data.maks_panel, nilai_kapasitas = ReportHelper.ConvertToReportFormat(data.nilai_kapasitas),
+                pst_tol = ReportHelper.ConvertToReportFormat(data.pst_tol, true),
+                pst_mul1 = ReportHelper.ConvertToReportFormat(data.pst_mul1, true),
+                pst_akh1 = ReportHelper.ConvertToReportFormat(data.pst_akh1, true),
+                pst_koas1 = ReportHelper.ConvertToReportFormat(data.pst_koas1, true),
+                nilai_kapasitas_tty1 = ReportHelper.ConvertToReportFormat(data.nilai_kapasitas_tty1),
+                nilai_limit_tsi1 = ReportHelper.ConvertToReportFormat(data.nilai_limit_tsi1),
+                nilai_limit_sharemax1 = ReportHelper.ConvertToReportFormat(data.nilai_limit_sharemax1, true),
+                pst_mul2 = ReportHelper.ConvertToReportFormat(data.pst_mul2, true),
+                pst_akh2 = ReportHelper.ConvertToReportFormat(data.pst_akh2, true),
+                pst_koas2 = ReportHelper.ConvertToReportFormat(data.pst_koas2, true),
+                nilai_kapasitas_tty2 = ReportHelper.ConvertToReportFormat(data.nilai_kapasitas_tty2),
+                nilai_limit_tsi2 = ReportHelper.ConvertToReportFormat(data.nilai_limit_tsi2),
+                nilai_limit_sharemax2 = ReportHelper.ConvertToReportFormat(data.nilai_limit_sharemax2, true),
+                pst_mul3 = ReportHelper.ConvertToReportFormat(data.pst_mul3, true),
+                pst_akh3 = ReportHelper.ConvertToReportFormat(data.pst_akh3, true),
+                pst_koas3 = ReportHelper.ConvertToReportFormat(data.pst_koas3, true),
+                nilai_kapasitas_tty3 = ReportHelper.ConvertToReportFormat(data.nilai_kapasitas_tty3),
+                nilai_limit_tsi3 = ReportHelper.ConvertToReportFormat(data.nilai_limit_tsi3),
+                nilai_limit_sharemax3 = ReportHelper.ConvertToReportFormat(data.nilai_limit_sharemax3, true),
+                pst_mul4 = ReportHelper.ConvertToReportFormat(data.pst_mul4, true),
+                pst_akh4 = ReportHelper.ConvertToReportFormat(data.pst_akh4, true),
+                pst_koas4 = ReportHelper.ConvertToReportFormat(data.pst_koas4, true),
+                nilai_kapasitas_tty4 = ReportHelper.ConvertToReportFormat(data.nilai_kapasitas_tty4),
+                nilai_limit_tsi4 = ReportHelper.ConvertToReportFormat(data.nilai_limit_tsi4),
+                nilai_limit_sharemax4 = ReportHelper.ConvertToReportFormat(data.nilai_limit_sharemax4, true),
+                pst_limit_cab = ReportHelper.ConvertToReportFormat(data.pst_limit_cab, true)
             } );
 
             var secondDatas = (await _connectionFactory.QueryProc<ReportKeteranganPengajuanAkseptasiDto>("sp_KeteranganStatusAks", 
@@ -105,10 +133,14 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
             string secondReportPath = Path.Combine( _environment.ContentRootPath, "Modules", "Reports", "Templates", "KeteranganPengajuanAkseptasi.html" );
             
             string secondTemplateReportHtml = await File.ReadAllTextAsync( secondReportPath );
-            
-            if (secondDatas.Count == 0)
-                throw new NullReferenceException("Data tidak ditemukan");
 
+            var nomor_pengajuan = string.Empty;
+
+            if (secondDatas.Any())
+            {
+                nomor_pengajuan = secondDatas[0].nomor_pengajuan;
+            }
+            
             Template secondTemplateProfileResult = Template.Parse( secondTemplateReportHtml );
             
             var detail = new StringBuilder();
@@ -131,7 +163,7 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
             
             var secondResultTemplate = secondTemplateProfileResult.Render( new
             {
-                secondDatas[0].nomor_pengajuan, detail = detail.ToString() 
+                nomor_pengajuan, detail = detail.ToString() 
             } );
 
             return (resultTemplate, secondResultTemplate);

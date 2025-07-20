@@ -22,12 +22,14 @@ function saveAkseptasiObyek(url) {
     form.no_updt = $("#resiko_obyek_no_updt").val();
     form.no_rsk = resiko.no_rsk;
     form.kd_endt = resiko.kd_endt;
+    form.no_pol_ttg = $("#no_pol_ttg").val();
     
     var data = JSON.stringify(form);
     
     ajaxPost(url, data,
         function (response) {
             refreshGrid("#AkseptasiObyekGrid");
+            refreshGrid("#AkseptasiResikoGrid");
             if (response.Result == "OK") {
                 showMessage('Success', response.Message);
                 closeWindow('#AkseptasiObyekWindow');

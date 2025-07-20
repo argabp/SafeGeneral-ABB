@@ -22,15 +22,17 @@ function saveAkseptasiCoverage(url) {
     form.kd_scob = $("#kd_scob").val();
     form.kd_thn = $("#kd_thn").val();
     form.no_aks = $("#no_aks").val();
-    form.no_updt = $("#resiko_coverage_no_updt").val();
+    form.no_updt = $("#no_updt").val();
     form.no_rsk = resiko.no_rsk;
     form.kd_endt = resiko.kd_endt;
+    form.no_pol_ttg = $("#no_pol_ttg").val();
     
     var data = JSON.stringify(form);
     
     ajaxPost(url, data,
         function (response) {
             refreshGrid("#AkseptasiCoverageGrid");
+            refreshGrid("#AkseptasiResikoGrid");
             if (response.Result == "OK") {
                 showMessage('Success', response.Message);
                 closeWindow('#AkseptasiCoverageWindow');
@@ -43,4 +45,11 @@ function saveAkseptasiCoverage(url) {
             closeProgress('#AkseptasiCoverageWindow');
         }
     );
+}
+
+function OnKodeCoverageChange(e){
+    ajaxGet(`/Akseptasi/GetFlagPKK?kd_cvrg=${e.sender._cascadedValue}`, (returnValue) => {
+        var strings = returnValue.split(",");
+        $("#flag_pkk").getKendoDropDownList().value(strings[1]);
+    });
 }

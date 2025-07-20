@@ -33,7 +33,7 @@ namespace ABB.Application.Akseptasis.Commands
 
         public decimal pst_rate_prm { get; set; }
 
-        public Int16 stn_rate_prm { get; set; }
+        public byte stn_rate_prm { get; set; }
 
         public decimal pst_dis { get; set; }
 
@@ -86,28 +86,20 @@ namespace ABB.Application.Akseptasis.Commands
                 }
                 else
                 {
-                    _mapper.Map(request, entity);
-
-                    if(entity.kd_cb.Length != 5)
-                        for (int sequence = entity.kd_cb.Length; sequence < 5; sequence++)
-                        {
-                            entity.kd_cb += " ";
-                        }
-            
-                    if(entity.kd_cob.Length != 2)
-                        for (int sequence = entity.kd_cob.Length; sequence < 2; sequence++)
-                        {
-                            entity.kd_cob += " ";
-                        }
-
-                    if(entity.kd_scob.Length != 5)
-                        for (int sequence = entity.kd_scob.Length; sequence < 5; sequence++)
-                        {
-                            entity.kd_scob += " ";
-                        }
+                    entity.flag_pkk = request.flag_pkk;
+                    entity.pst_dis = request.pst_dis;
+                    entity.pst_rate_prm = request.pst_rate_prm;
+                    entity.stn_rate_prm = request.stn_rate_prm;
+                    entity.pst_kms = request.pst_kms;
             
                     await dbContext.SaveChangesAsync(cancellationToken);
                 }
+
+                await _connectionFactory.QueryProc<string>("spe_uw02e_20", new
+                {
+                    request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn,
+                    request.no_aks, request.no_updt, request.no_rsk, request.kd_endt
+                });
 
                 return Unit.Value;
             }

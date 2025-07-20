@@ -39,7 +39,8 @@ namespace ABB.Application.NotaKomisiTambahans.Queries
 				INNER JOIN rf04 cob
 					ON p.kd_cob = cob.kd_cob
 				INNER JOIN rf05 scob
-					ON p.kd_scob = scob.kd_scob")).ToList();
+						ON p.kd_cob = scob.kd_cob
+						AND p.kd_scob = scob.kd_scob")).ToList();
 
             var id = 0;
             foreach (var data in datas)

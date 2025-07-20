@@ -17,8 +17,8 @@
 </style>
 
 @{
-    var nomor_aksepatsi = Model.kd_cb.Trim() + Model.kd_cob.Trim() +
-                          Model.kd_scob.Trim() + Model.kd_thn.Trim() + Model.no_aks.Trim();
+    var nomor_aksepatsi = Model.kd_cb.Trim() + "." + Model.kd_cob.Trim() +
+                          Model.kd_scob.Trim() + "." + Model.kd_thn.Trim() + "." + Model.no_aks.Trim();
 }
 
 <div class="window-body" style="background-color: lightgray">
@@ -26,6 +26,7 @@
     @Html.HiddenFor(h => h.no_endt)
     @Html.HiddenFor(h => h.link_file)
     @Html.HiddenFor(h => h.IsEdit)
+    @Html.HiddenFor(h => h.no_pol_ttg)
     <div class="form-group row">
         <div class="row col-sm-6">
             <label class="col-sm-6">Kode Cabang</label>
@@ -45,7 +46,7 @@
         <div class="row col-sm-6">
             <label class="col-sm-6">Nomor Pengajuan</label>
             <div class="col-sm-6">
-                <kendo-textbox for="nomor_pengajuan" style="width: 100%"/>
+                <kendo-textbox for="nomor_pengajuan" readonly="true" style="width: 100%"/>
                 <span asp-validation-for="nomor_pengajuan" class="text-danger"></span>
             </div>
         </div>
@@ -126,7 +127,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Kode Update</label>
                 <div class="col-sm-6">
-                    <kendo-textbox for="kd_updt" style="width: 100%"/>
+                    <kendo-textbox for="kd_updt" readonly="true" style="width: 100%"/>
                     <span asp-validation-for="kd_updt" class="text-danger"></span>
                 </div>
             </div>
@@ -184,7 +185,7 @@
             <div class="row col-sm-6">
                 <div class="col-sm-6">
                     <input type="hidden" id="temp_kd_rk_sb_bis" value="@Model.kd_rk_sb_bis">
-                    <kendo-dropdownlist for="kd_rk_sb_bis" style="width: 100%" class="not-null-dropdown" 
+                    <kendo-dropdownlist for="kd_rk_sb_bis" style="width: 100%" class="not-null-dropdown" on-change="OnKodeRekananSumberBisnisChange"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>

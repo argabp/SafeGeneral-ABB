@@ -51,9 +51,15 @@ namespace ABB.Web.Modules.Akseptasi.Components.Akseptasi
                 akseptasiViewModel.st_aks = "1";
                 akseptasiViewModel.flag_dis_fleet = "N";
                 akseptasiViewModel.kd_thn = DateTime.Now.ToString("yy");
-                akseptasiViewModel.kd_cb = string.Empty;
+                akseptasiViewModel.kd_cb = model.kd_cb.Trim();
                 akseptasiViewModel.kd_cob = string.Empty;
                 akseptasiViewModel.kd_scob = string.Empty;
+                akseptasiViewModel.tgl_mul_ptg = DateTime.Now;
+                akseptasiViewModel.tgl_akh_ptg = DateTime.Now.AddYears(1);
+                akseptasiViewModel.jk_wkt_ptg = Convert.ToInt16((akseptasiViewModel.tgl_akh_ptg - akseptasiViewModel.tgl_mul_ptg).TotalDays);
+                akseptasiViewModel.tgl_ttd = DateTime.Now;
+                akseptasiViewModel.tgl_closing = DateTime.Now;
+                akseptasiViewModel.tgl_input = DateTime.Now;
                 
                 return View("_Akseptasi", akseptasiViewModel);
             }

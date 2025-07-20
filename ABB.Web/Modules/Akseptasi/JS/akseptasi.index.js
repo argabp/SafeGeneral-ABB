@@ -15,7 +15,7 @@ function openAkseptasiWindow(url, title) {
 
 function btnAddAkseptasi_Click() {
     $('#btnAddNewAkseptasi').click(function () {
-        openAkseptasiWindow('/Akseptasi/Add', 'Add New Akseptasi');
+        openAkseptasiWindow('/Akseptasi/Add', 'Add New Akseptasi Polis');
         resiko = null;
     });
 }

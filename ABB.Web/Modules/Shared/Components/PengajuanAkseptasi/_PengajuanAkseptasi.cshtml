@@ -196,9 +196,9 @@
             </div>
             <div class="form-group row">
                 <div class="row col-sm-12">
-                    <label class="col-sm-4">Table of Limit (TOL)</label>
-                    <div class="col-sm-8">
-                        <kendo-dropdownlist for="kd_tol" style="width: 100%"
+                    <label class="col-sm-4">Table of Limit (TOL) (%)</label>
+                    <div class="col-sm-6">
+                        <kendo-dropdownlist for="kd_tol" style="width: 100%" on-change="OnTableOfLimitChange"
                                             datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                             <datasource type="DataSourceTagHelperType.Custom">
                                 <transport>
@@ -207,6 +207,9 @@
                             </datasource>
                         </kendo-dropdownlist>
                         <span asp-validation-for="kd_tol" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-2">
+                        <kendo-numerictextbox decimals="2" readonly="true" spinners="false" for="pst_tol" style="width: 100%;"/>
                     </div>
                 </div>
             </div>
@@ -229,9 +232,14 @@
             <div class="form-group row">
                 <div class="row col-sm-12">
                     <label class="col-sm-4">Share (%)</label>
-                    <div class="col-sm-8">
-                        <kendo-numerictextbox decimals="2" spinners="false" for="pst_share" style="width: 100%; background-color: #FFFFE1"/>
+                    <div class="col-sm-3">
+                        <kendo-numerictextbox decimals="2" spinners="false" for="pst_share" on-change="OnPstShareChange" style="width: 100%; background-color: #FFFFE1"/>
                         <span asp-validation-for="pst_share" class="text-danger"></span>
+                    </div>
+                    <label class="col-sm-3">Scheme Co-Ins(%)</label>
+                    <div class="col-sm-2">
+                        <kendo-numerictextbox decimals="2" spinners="false" readonly="true" for="pst_koas" style="width: 100%; background-color: #FFFFE1"/>
+                        <span asp-validation-for="pst_koas" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -256,7 +264,7 @@
             </div>
             <div class="form-group row">
                 <div class="row col-sm-12">
-                    <label class="col-sm-4">Nilai Pertanggungan Limit</label>
+                    <label class="col-sm-4">Nilai Pertanggungan Share</label>
                     <div class="col-sm-8">
                         <kendo-numerictextbox decimals="2" spinners="false" for="nilai_ttl_ptg_limit" style="width: 100%;" readonly="true" />
                     </div>

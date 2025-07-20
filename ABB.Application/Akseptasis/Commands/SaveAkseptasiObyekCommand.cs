@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ABB.Application.Common.Interfaces;
@@ -77,6 +78,16 @@ namespace ABB.Application.Akseptasis.Commands
                 {
                     var akseptasiObyek = _mapper.Map<AkseptasiObyek>(request);
 
+                    var no_oby = (await _connectionFactory.QueryProc<string>("spe_uw06e_01", new
+                        {
+                            request.kd_cb, request.kd_cob, request.kd_scob, 
+                            request.kd_thn, request.no_aks, request.no_updt,
+                            request.no_rsk, request.kd_endt, t_name = "01"
+                        }))
+                        .First();
+
+                    akseptasiObyek.no_oby = Convert.ToInt16(no_oby.Split(",")[1]);
+                    
                     dbContext.AkseptasiObyek.Add(akseptasiObyek);
 
                     await dbContext.SaveChangesAsync(cancellationToken);
@@ -84,29 +95,21 @@ namespace ABB.Application.Akseptasis.Commands
                 }
                 else
                 {
-                    _mapper.Map(request, entity);
-
-                    if(entity.kd_cb.Length != 5)
-                        for (int sequence = entity.kd_cb.Length; sequence < 5; sequence++)
-                        {
-                            entity.kd_cb += " ";
-                        }
-            
-                    if(entity.kd_cob.Length != 2)
-                        for (int sequence = entity.kd_cob.Length; sequence < 2; sequence++)
-                        {
-                            entity.kd_cob += " ";
-                        }
-
-                    if(entity.kd_scob.Length != 5)
-                        for (int sequence = entity.kd_scob.Length; sequence < 5; sequence++)
-                        {
-                            entity.kd_scob += " ";
-                        }
+                    entity.kd_grp_oby = request.kd_grp_oby;
+                    entity.desk_oby = request.desk_oby;
+                    entity.nilai_ttl_ptg = request.nilai_ttl_ptg;
+                    entity.pst_adj = request.pst_adj;
             
                     await dbContext.SaveChangesAsync(cancellationToken);
                 }
 
+                await _connectionFactory.QueryProc<string>("spe_uw02e_20", new
+                {
+                    request.kd_cb, request.kd_cob, request.kd_scob,
+                    request.kd_thn, request.no_aks, request.no_updt,
+                    request.no_rsk, request.kd_endt
+                });
+                    
                 return Unit.Value;
             }
             catch (Exception e)

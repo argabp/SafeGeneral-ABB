@@ -32,10 +32,16 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
 
         public DateTime tgl_status { get; set; }
 
+        public string? ket_status { get; set; }
+
         public DateTime tgl_pengajuan { get; set; }
 
         public string kd_user_input { get; set; }
 
         public string? flag_closing { get; set; }
+
+        public string kd_user_status { get; set; }
+
+        public string? flag_appproved { get; set; }
     }
 }

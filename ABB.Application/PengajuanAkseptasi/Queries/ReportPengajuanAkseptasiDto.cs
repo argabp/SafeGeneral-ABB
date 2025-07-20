@@ -139,5 +139,65 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
         public string? nm_dokumen10 { get; set; }
         
         public bool? st_dokumen10 { get; set; }
+
+        public decimal? nilai_tsi_share { get; set; }
+
+        public string? nm_tol { get; set; }
+
+        public int? maks_panel { get; set; }
+
+        public decimal? nilai_kapasitas { get; set; }
+
+        public decimal? pst_tol { get; set; }
+
+        public decimal? pst_mul1 { get; set; }
+
+        public decimal? pst_akh1 { get; set; }
+
+        public decimal? pst_koas1 { get; set; }
+
+        public decimal? nilai_kapasitas_tty1 { get; set; }
+
+        public decimal? nilai_limit_tsi1 { get; set; }
+
+        public decimal? nilai_limit_sharemax1 { get; set; }
+
+        public decimal? pst_mul2 { get; set; }
+
+        public decimal? pst_akh2 { get; set; }
+
+        public decimal? pst_koas2 { get; set; }
+
+        public decimal? nilai_kapasitas_tty2 { get; set; }
+
+        public decimal? nilai_limit_tsi2 { get; set; }
+
+        public decimal? nilai_limit_sharemax2 { get; set; }
+
+        public decimal? pst_mul3 { get; set; }
+
+        public decimal? pst_akh3 { get; set; }
+
+        public decimal? pst_koas3 { get; set; }
+
+        public decimal? nilai_kapasitas_tty3 { get; set; }
+
+        public decimal? nilai_limit_tsi3 { get; set; }
+
+        public decimal? nilai_limit_sharemax3 { get; set; }
+
+        public decimal? pst_mul4 { get; set; }
+
+        public decimal? pst_akh4 { get; set; }
+
+        public decimal? pst_koas4 { get; set; }
+
+        public decimal? nilai_kapasitas_tty4 { get; set; }
+
+        public decimal? nilai_limit_tsi4 { get; set; }
+
+        public decimal? nilai_limit_sharemax4 { get; set; }
+
+        public decimal? pst_limit_cab { get; set; }
     }
 }

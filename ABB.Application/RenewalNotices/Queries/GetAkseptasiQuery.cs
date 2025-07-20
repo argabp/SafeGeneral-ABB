@@ -35,7 +35,8 @@ namespace ABB.Application.RenewalNotices.Queries
 					INNER JOIN rf04 cob
 						ON p.kd_cob = cob.kd_cob
 					INNER JOIN rf05 scob
-						ON p.kd_scob = scob.kd_scob
+						ON p.kd_cob = scob.kd_cob
+						AND p.kd_scob = scob.kd_scob
 					LEFT JOIN MS_User u
 						ON u.UserId = p.kd_usr_input
 				WHERE cb.kd_cb = @KodeCabang AND (p.no_pol like '%'+@SearchKeyword+'%' 
