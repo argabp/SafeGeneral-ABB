@@ -27,7 +27,7 @@ function btnAddAkseptasiPranotaKoas_Click() {
         openAkseptasiPranotaKoasWindow(`/Akseptasi/AddPranotaKoas?kd_cb=${$("#kd_cb").val()}&kd_cob=${$("#kd_cob").val()}
                                         &kd_scob=${$("#kd_scob").val()}&kd_thn=${$("#kd_thn").val()}
                                         &no_aks=${$("#no_aks").val()}&no_updt=${$("#no_updt").val()}
-                                        &kd_mtu=${$("#kd_mtu").val()}`, 'Add New Akseptasi Pranota Koas');
+                                        &kd_mtu=${$("#kd_mtu").val()}`, 'Add New Pranota Koas');
     });
 }
 
@@ -39,7 +39,7 @@ function btnEditAkseptasiPranotaKoas_OnClick(e) {
                                     &kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}
                                     &no_aks=${dataItem.no_aks}&no_updt=${dataItem.no_updt}
                                     &kd_mtu=${dataItem.kd_mtu}&kd_grp_pas=${dataItem.kd_grp_pas}
-                                    &kd_rk_pas=${dataItem.kd_rk_pas}`, 'Edit Akseptasi Pranota Koas');
+                                    &kd_rk_pas=${dataItem.kd_rk_pas}`, 'Edit Pranota Koas');
 }
 function btnDeleteAkseptasiPranotaKoas_OnClick(e) {
     e.preventDefault();

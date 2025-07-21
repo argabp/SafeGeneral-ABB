@@ -28,6 +28,7 @@ namespace ABB.Web.Modules.Akseptasi
     public class AkseptasiController : AuthorizedBaseController
     {
         private static List<RekananDto> _rekanans;
+        private static IEnumerable<LokasiResikoDto> _lokasiResiko;
 
         public async Task<ActionResult> Index()
         {
@@ -36,6 +37,11 @@ namespace ABB.Web.Modules.Akseptasi
             ViewBag.UserLogin = CurrentUser.UserId;
 
             _rekanans = await Mediator.Send(new GetRekanansQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty
+            });
+            
+            _lokasiResiko = await Mediator.Send(new GetLokasiResikoQuery()
             {
                 DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty
             });
@@ -54,6 +60,20 @@ namespace ABB.Web.Modules.Akseptasi
                 KodeCabang = Request.Cookies["UserCabang"] ?? string.Empty
             });
 
+            
+            var statusPolis = new List<DropdownOptionDto>()
+            {
+                new DropdownOptionDto() { Text = "Leader (Sebagai Leader Koasuransi)", Value = "L" },
+                new DropdownOptionDto() { Text = "Member (Sebagai Member Koasuransi)", Value = "M" },
+                new DropdownOptionDto() { Text = "Transaksi Direct", Value = "O" },
+                new DropdownOptionDto() { Text = "Inward Fakultatif", Value = "C" }
+            };
+
+            foreach (var data in ds)
+            {
+                data.st_pas = statusPolis.FirstOrDefault(w => w.Value == data.st_pas)?.Text ?? string.Empty;
+            }
+            
             return Json(ds.AsQueryable().ToDataSourceResult(request));
         }
 
@@ -537,6 +557,8 @@ namespace ABB.Web.Modules.Akseptasi
                 no_rsk = no_rsk,
                 kd_endt = kd_endt
             });
+
+            akseptasiResiko.kd_tol = akseptasiResiko.kd_tol?.Trim();
             
             return PartialView(Mapper.Map<AkseptasiResikoViewModel>(akseptasiResiko));
         }
@@ -705,6 +727,26 @@ namespace ABB.Web.Modules.Akseptasi
             return Json(result);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> CheckCoverage(string kd_cob, string kd_scob)
+        {
+            var result = await Mediator.Send(new CheckCoverageCommand()
+            {
+                kd_cob = kd_cob,
+                kd_scob = kd_scob,
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            });
+
+            if (string.IsNullOrWhiteSpace(result.Item1))
+            {
+                return PartialView("~/Modules/Akseptasi/Views/EmptyWithMessage.cshtml", result.Item2);
+            }
+            else
+            {
+                return PartialView("~/Modules/Akseptasi/Components/Coverage/_Coverage.cshtml", new AkseptasiResikoCoverageViewModel());
+            }
+        }
+
         #endregion
 
         #region Obyek
@@ -768,9 +810,6 @@ namespace ABB.Web.Modules.Akseptasi
             viewModel.kd_endt = "I";
             viewModel.nilai_ttl_ptg = 0;
             viewModel.pst_adj = 100;
-            
-            //TODO harcoded
-            viewModel.no_oby = 1;
 
             return PartialView(viewModel);
         }
@@ -824,6 +863,34 @@ namespace ABB.Web.Modules.Akseptasi
             catch (Exception ex)
             {
                 return Json(new { Result = "ERROR", Message = ex.Message });
+            }
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> CheckObyek(string kd_cob, string kd_scob, decimal? pst_share)
+        {
+            var result = await Mediator.Send(new CheckObyekCommand()
+            {
+                kd_cob = kd_cob,
+                kd_scob = kd_scob,
+                pst_share = pst_share ?? 0,
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            });
+            
+
+            if (string.IsNullOrWhiteSpace(result.Item1))
+            {
+                return View("~/Modules/Akseptasi/Views/EmptyWithMessage.cshtml", result.Item2);
+            }
+
+            var resultView = result.Item1.Split(",")[2];
+            switch (Constant.AkseptasiObyekViewMapping[resultView])
+            {
+                case "_ObyekFire":
+                    return View("~/Modules/Akseptasi/Components/Obyek/_ObyekFire.cshtml",
+                        new AkseptasiResikoObyekViewModel());
+                default:
+                    return View("~/Modules/Akseptasi/Views/EmptyWithMessage.cshtml");
             }
         }
 
@@ -1017,6 +1084,182 @@ namespace ABB.Web.Modules.Akseptasi
                     return NotFound();
             }
         }
+        
+        [HttpPost]
+        public async Task<IActionResult> CheckOther([FromBody] AkseptasiResikoParameterViewModel model)
+        {
+            
+            var result = await Mediator.Send(new CheckOtherCommand()
+            {
+                kd_cob = model.kd_cob,
+                kd_scob = model.kd_scob,
+                pst_share = model.pst_share ?? 0,
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            });
+            
+
+            if (string.IsNullOrWhiteSpace(result.Item1))
+            {
+                return View("~/Modules/Akseptasi/Views/EmptyWithMessage.cshtml", result.Item2);
+            }
+
+            var resultView = result.Item1.Split(",")[2];
+            switch (Constant.AkseptasiOtherViewMapping[resultView])
+            {
+                case "_OtherBonding":
+                    var akseptasiBondingViewModel = new AkseptasiResikoOtherBondingViewModel()
+                    {
+                        kd_cb = model.kd_cb.Trim(),
+                        kd_cob = model.kd_cob.Trim(),
+                        kd_scob = model.kd_scob.Trim(),
+                        kd_thn = model.kd_thn.Trim(),
+                        no_updt = model.no_updt,
+                        no_aks = model.no_aks
+                    };
+                    
+                    var bondingCommand = Mapper.Map<GetAkseptasiOtherBondingQuery>(model);
+                    bondingCommand.DatabaseName = Request.Cookies["DatabaseValue"];
+                    var bondingResult = await Mediator.Send(bondingCommand);
+
+                    if (bondingResult == null)
+                    {
+                        akseptasiBondingViewModel.grp_obl = "004";
+                        akseptasiBondingViewModel.grp_kontr = "005";
+                        akseptasiBondingViewModel.kd_rumus = "F";
+                        akseptasiBondingViewModel.grp_jns_pekerjaan = "012";
+                        akseptasiBondingViewModel.kd_grp_obl = "O";
+                        akseptasiBondingViewModel.kd_grp_surety = "5";
+                    
+                        return View("~/Modules/Akseptasi/Components/Other/_OtherBonding.cshtml", akseptasiBondingViewModel);
+                    }
+                
+                    Mapper.Map(bondingResult, akseptasiBondingViewModel);
+                    akseptasiBondingViewModel.kd_cb = akseptasiBondingViewModel.kd_cb.Trim();
+                    akseptasiBondingViewModel.kd_cob = akseptasiBondingViewModel.kd_cob.Trim();
+                    akseptasiBondingViewModel.kd_scob = akseptasiBondingViewModel.kd_scob.Trim();
+
+                    return View("~/Modules/Akseptasi/Components/Other/_OtherBonding.cshtml", akseptasiBondingViewModel);
+                case "_OtherCargo":
+                    return View("~/Modules/Akseptasi/Components/Other/_OtherCargo.cshtml", model);
+                case "_OtherMotor":
+                    return View("~/Modules/Akseptasi/Components/Other/_OtherMotor.cshtml", model);
+                case "_OtherFire":
+                    var akseptasiFireViewModel = new AkseptasiResikoOtherFireViewModel()
+                    {
+                        kd_cb = model.kd_cb.Trim(),
+                        kd_cob = model.kd_cob.Trim(),
+                        kd_scob = model.kd_scob.Trim(),
+                        kd_thn = model.kd_thn.Trim(),
+                        no_updt = model.no_updt,
+                        no_aks = model.no_aks
+                    };
+                    
+                    var fireCommand = Mapper.Map<GetAkseptasiOtherFireQuery>(model);
+                    fireCommand.DatabaseName = Request.Cookies["DatabaseValue"];
+                    var fireResult = await Mediator.Send(fireCommand);
+
+                    if (fireResult == null)
+                    {
+                        akseptasiFireViewModel.kd_penerangan = "1";
+                        akseptasiFireViewModel.kategori_gd = "E";
+
+                        return View("~/Modules/Akseptasi/Components/Other/_OtherFire.cshtml", akseptasiFireViewModel);
+                    }
+                
+                    Mapper.Map(fireResult, akseptasiFireViewModel);
+                    akseptasiFireViewModel.kd_cb = akseptasiFireViewModel.kd_cb.Trim();
+                    akseptasiFireViewModel.kd_cob = akseptasiFireViewModel.kd_cob.Trim();
+                    akseptasiFireViewModel.kd_scob = akseptasiFireViewModel.kd_scob.Trim();
+                    
+                    return View("~/Modules/Akseptasi/Components/Other/_OtherFire.cshtml", akseptasiFireViewModel);
+                case "_OtherHull":
+                    var akseptasiHullViewModel = new AkseptasiResikoOtherHullViewModel()
+                    {
+                        kd_cb = model.kd_cb.Trim(),
+                        kd_cob = model.kd_cob.Trim(),
+                        kd_scob = model.kd_scob.Trim(),
+                        kd_thn = model.kd_thn.Trim(),
+                        no_updt = model.no_updt,
+                        no_aks = model.no_aks
+                    };
+                    
+                    var hullCommand = Mapper.Map<GetAkseptasiOtherFireQuery>(model);
+                    hullCommand.DatabaseName = Request.Cookies["DatabaseValue"];
+                    var hullResult = await Mediator.Send(hullCommand);
+
+                    if (hullResult == null)
+                    {
+                        return View("~/Modules/Akseptasi/Components/Other/_OtherHull.cshtml", akseptasiHullViewModel);
+                    }
+                
+                    Mapper.Map(hullResult, akseptasiHullViewModel);
+                    akseptasiHullViewModel.kd_cb = akseptasiHullViewModel.kd_cb.Trim();
+                    akseptasiHullViewModel.kd_cob = akseptasiHullViewModel.kd_cob.Trim();
+                    akseptasiHullViewModel.kd_scob = akseptasiHullViewModel.kd_scob.Trim();
+                    akseptasiHullViewModel.merk_kapal = akseptasiHullViewModel.merk_kapal?.Trim();
+                    akseptasiHullViewModel.kd_kapal = akseptasiHullViewModel.kd_kapal.Trim();
+                    
+                    return View("~/Modules/Akseptasi/Components/Other/_OtherHull.cshtml", akseptasiHullViewModel);
+                case "_OtherPA":
+                    var akseptasiPaViewModel = new AkseptasiResikoOtherPAViewModel()
+                    {
+                        kd_cb = model.kd_cb.Trim(),
+                        kd_cob = model.kd_cob.Trim(),
+                        kd_scob = model.kd_scob.Trim(),
+                        kd_thn = model.kd_thn.Trim(),
+                        no_updt = model.no_updt,
+                        no_aks = model.no_aks
+                    };
+                    
+                    var paCommand = Mapper.Map<GetAkseptasiOtherPAQuery>(model);
+                    paCommand.DatabaseName = Request.Cookies["DatabaseValue"];
+                    var paResult = await Mediator.Send(paCommand);
+
+                    if (paResult == null)
+                    {
+                        akseptasiPaViewModel.thn_akh = "1";
+                        akseptasiPaViewModel.nilai_harga_ptg = 0;
+                        akseptasiPaViewModel.pst_rate_std = 0;
+                        akseptasiPaViewModel.pst_rate_bjr = 0;
+                        akseptasiPaViewModel.pst_rate_tl = 0;
+                        akseptasiPaViewModel.pst_rate_gb = 0;
+                        akseptasiPaViewModel.nilai_prm_std = 0;
+                        akseptasiPaViewModel.nilai_prm_bjr = 0;
+                        akseptasiPaViewModel.nilai_prm_tl = 0;
+                        akseptasiPaViewModel.nilai_bia_adm = 0;
+                        akseptasiPaViewModel.nilai_prm_btn = 0;
+                        akseptasiPaViewModel.flag_std = "2";
+                        akseptasiPaViewModel.flag_bjr = "2";
+                        akseptasiPaViewModel.flag_tl = "1";
+                        akseptasiPaViewModel.flag_gb = "1";
+                        akseptasiPaViewModel.pst_rate_phk = 0;
+                        akseptasiPaViewModel.nilai_prm_phk = 0;
+                        akseptasiPaViewModel.nilai_bia_mat = 0;
+                        akseptasiPaViewModel.nilai_ptg_std = 0;
+                        akseptasiPaViewModel.nilai_ptg_bjr = 0;
+                        akseptasiPaViewModel.nilai_ptg_tl = 0;
+                        akseptasiPaViewModel.nilai_ptg_gb = 0;
+                        akseptasiPaViewModel.nilai_ptg_hh = 0;
+                        akseptasiPaViewModel.stn_rate_std = 10;
+                        akseptasiPaViewModel.stn_rate_bjr = 10;
+                        akseptasiPaViewModel.stn_rate_gb = 10;
+                        akseptasiPaViewModel.stn_rate_tl = 10;
+                        akseptasiPaViewModel.stn_rate_phk = 0;
+                        akseptasiPaViewModel.kd_grp_asj = "5";
+                    
+                        return View("~/Modules/Akseptasi/Components/Other/_OtherPA.cshtml", akseptasiPaViewModel);
+                    }
+                
+                    Mapper.Map(paResult, akseptasiPaViewModel);
+                    akseptasiPaViewModel.kd_cb = akseptasiPaViewModel.kd_cb.Trim();
+                    akseptasiPaViewModel.kd_cob = akseptasiPaViewModel.kd_cob.Trim();
+                    akseptasiPaViewModel.kd_scob = akseptasiPaViewModel.kd_scob.Trim();
+
+                    return View("~/Modules/Akseptasi/Components/Other/_OtherPA.cshtml", akseptasiPaViewModel);
+                default:
+                    return View("~/Modules/Akseptasi/Views/EmptyWithMessage.cshtml");
+            }
+        }
 
         #region Other Fire
 
@@ -1193,6 +1436,34 @@ namespace ABB.Web.Modules.Akseptasi
             {
                 return Json(new { Result = "ERROR", Message = ex.Message });
             }
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> GetLokasiResikoDetail(string kd_lok_rsk)
+        {
+            var result = await Mediator.Send(new GetLokasiResikoDetailQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                kd_lok_rsk = kd_lok_rsk
+            });
+            
+            return Ok(result);
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> GetKodeOkupasiDetail(string kd_zona, string kd_kls_konstr, 
+            string kd_okup, string kd_scob)
+        {
+            var result = await Mediator.Send(new GetKodeOkupasiDetailQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                kd_zona = kd_zona,
+                kd_kls_konstr = kd_kls_konstr,
+                kd_okup = kd_okup,
+                kd_scob = kd_scob
+            });
+            
+            return Ok(result);
         }
 
         #endregion
@@ -2019,15 +2290,20 @@ namespace ABB.Web.Modules.Akseptasi
 
             return Json(result);
         }
-        
-        public async Task<JsonResult> GetLokasiResiko()
-        {
-            var result = await Mediator.Send(new GetLokasiResikoQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"]
-            });
 
-            return Json(result);
+        public IActionResult LokasiResiko()
+        {
+            return View();
+        }
+        
+        public async Task<JsonResult> GetLokasiResiko([DataSourceRequest] DataSourceRequest request)
+        {
+            // var result = await Mediator.Send(new GetLokasiResikoQuery()
+            // {
+            //     DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty
+            // });
+            
+            return Json(_lokasiResiko.ToDataSourceResult(request));
         }
         
         public async Task<JsonResult> GetKodePropinsi()

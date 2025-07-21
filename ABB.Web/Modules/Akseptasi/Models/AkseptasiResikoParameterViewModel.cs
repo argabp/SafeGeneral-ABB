@@ -23,6 +23,8 @@ namespace ABB.Web.Modules.Akseptasi.Models
 
         public string kd_endt { get; set; }
 
+        public decimal? pst_share { get; set; }
+
         public void Mapping(Profile profile)
         {
             profile.CreateMap<AkseptasiResikoParameterViewModel, GetAkseptasiOtherFireQuery>();

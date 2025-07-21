@@ -208,16 +208,17 @@ namespace ABB.Application.Akseptasis.Commands
                         }))
                         .ToList();
                     
-                    var no_pol_ttg = (await _connectionFactory.QueryProc<string?>("spe_uw02e_00", new
-                        {
-                            input_str =  $"{request.kd_cb},{request.kd_cob},{request.kd_scob},{request.kd_thn}," +
-                                         $"{request.no_updt},{request.st_pas},{request.no_aks},{request.st_cover}"
-                        }))
-                        .FirstOrDefault();
-
                     var akseptasi = _mapper.Map<Akseptasi>(request);
                 
                     akseptasi.no_aks = no_aks[0].Split(",")[1];
+                    
+                    var no_pol_ttg = (await _connectionFactory.QueryProc<string?>("spe_uw02e_00", new
+                        {
+                            input_str =  $"{request.kd_cb},{request.kd_cob},{request.kd_scob},{request.kd_thn}," +
+                                         $"{request.no_updt},{request.st_pas},{akseptasi.no_aks},{request.st_cover}"
+                        }))
+                        .FirstOrDefault();
+                    
                     akseptasi.no_updt = 0;
                     akseptasi.no_endt = "0";
                     akseptasi.tgl_input = DateTime.Now;

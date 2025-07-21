@@ -27,8 +27,9 @@ function saveAkseptasiResikoOtherCargo(url) {
     form.append("kd_thn", $("#kd_thn").val())
     form.append("no_aks", $("#no_aks").val())
     form.append("no_updt", $("#resiko_other_no_updt").val())
-    form.append("no_rsk", resiko.no_rsk)
-    form.append("kd_endt", resiko.kd_endt)
+    form.append("no_rsk", resiko.no_rsk);
+    form.append("kd_endt", resiko.kd_endt);
+    form.append("no_pol_ttg", $("#no_pol_ttg").val());
 
     $("#linkFileOtherCargo").getKendoUpload().getFiles().forEach((data, index) => {
         form.append("file", data.rawFile);

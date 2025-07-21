@@ -9,8 +9,7 @@ namespace ABB.Web.Modules.Akseptasi.Components.Obyek
         public async Task<IViewComponentResult> InvokeAsync(AkseptasiResikoParameterViewModel model)
         {
             
-            // return View("_Coverage", akseptasiViewModel);
-            return View("_Obyek", new AkseptasiResikoObyekViewModel());
+            return View("~/Modules/Akseptasi/Views/Empty.cshtml");
         }
     }
 }

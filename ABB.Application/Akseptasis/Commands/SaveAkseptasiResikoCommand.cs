@@ -102,6 +102,14 @@ namespace ABB.Application.Akseptasis.Commands
             try
             {
                 var dbContext = _contextFactory.CreateDbContext(request.DatabaseName);
+
+                var result = (await _connectionFactory.QueryProc<string>("spe_uw02e_25_02", new
+                {
+                    request.kd_tol, request.kode
+                })).First();
+
+                if (!string.IsNullOrWhiteSpace(result))
+                    throw new Exception(result);
                 
                 var entity = await dbContext.AkseptasiResiko.FindAsync(request.kd_cb, 
                     request.kd_cob, request.kd_scob, request.kd_thn, request.no_aks, request.no_updt, 

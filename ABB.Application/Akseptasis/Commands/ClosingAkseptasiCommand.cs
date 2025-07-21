@@ -38,7 +38,6 @@ namespace ABB.Application.Akseptasis.Commands
                 });
 
             return Unit.Value;
-
         }
     }
 }

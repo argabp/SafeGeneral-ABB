@@ -17,8 +17,8 @@
 </style>
 
 @{
-    var nomor_aksepatsi = Model.kd_cb.Trim() + Model.kd_cob.Trim() +
-                          Model.kd_scob.Trim() + Model.kd_thn.Trim() + Model.no_aks.Trim();
+    var nomor_aksepatsi = Model.kd_cb.Trim() + "." + Model.kd_cob.Trim() +
+                          Model.kd_scob.Trim() + "." + Model.kd_thn.Trim() + "." + Model.no_aks.Trim();
 }
 <div class="window-body" style="background-color: lightgray">
     <form id="OtherBondingForm" enctype="multipart/form-data" autocomplete="off">
@@ -195,7 +195,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Alamat</label>
                 <div class="col-sm-6">
-                    <kendo-textarea name="almt_obl" rows="2" style="width: 100%">@Model.almt_obl</kendo-textarea>
+                    <kendo-textarea name="almt_obl" rows="2" style="width: 100%; background: white">@Model.almt_obl</kendo-textarea>
                     <span asp-validation-for="almt_obl" class="text-danger"></span>
                 </div>
             </div>

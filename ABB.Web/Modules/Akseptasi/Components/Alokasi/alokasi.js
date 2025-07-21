@@ -23,7 +23,7 @@ function openAkseptasiAlokasiWindow(url, title) {
 
 function btnAddAkseptasiAlokasi_Click() {
     $('#btnAddNewAkseptasiAlokasi').click(function () {
-        openAkseptasiAlokasiWindow(`/Akseptasi/AddDetailAlokasi?kd_cb=${$("#kd_cb").val().trim()}&kd_cob=${$("#kd_cob").val().trim()}&kd_scob=${$("#kd_scob").val().trim()}&kd_thn=${$("#kd_thn").val().trim()}&no_rsk=${resiko.no_rsk}`, 'Add New Akseptasi Alokasi');
+        openAkseptasiAlokasiWindow(`/Akseptasi/AddDetailAlokasi?kd_cb=${$("#kd_cb").val().trim()}&kd_cob=${$("#kd_cob").val().trim()}&kd_scob=${$("#kd_scob").val().trim()}&kd_thn=${$("#kd_thn").val().trim()}&no_rsk=${resiko.no_rsk}`, 'Add New Alokasi');
     });
 }
 function btnEditAkseptasiAlokasi_OnClick(e) {
@@ -36,7 +36,7 @@ function btnEditAkseptasiAlokasi_OnClick(e) {
                                     &no_rsk=${dataItem.no_rsk}&kd_endt=${dataItem.kd_endt}
                                     &no_updt_reas=${dataItem.no_updt_reas}&kd_jns_sor=${dataItem.kd_jns_sor}
                                     &kd_grp_sor=${dataItem.kd_grp_sor}&kd_rk_sor=${dataItem.kd_rk_sor}
-                                    &kd_grp_sb_bis=${dataItem.kd_grp_sb_bis}`, 'Edit Akseptasi Alokasi');
+                                    &kd_grp_sb_bis=${dataItem.kd_grp_sb_bis}`, 'Edit Alokasi');
 }
 function btnDeleteAkseptasiAlokasi_OnClick(e) {
     e.preventDefault();

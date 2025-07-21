@@ -10,12 +10,12 @@ using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.Akseptasis.Queries
 {
-    public class GetLokasiResikoQuery : IRequest<List<DropdownOptionDto>>
+    public class GetLokasiResikoQuery : IRequest<IEnumerable<LokasiResikoDto>>
     {
         public string DatabaseName { get; set; }
     }
 
-    public class GetLokasiResikoQueryHandler : IRequestHandler<GetLokasiResikoQuery, List<DropdownOptionDto>>
+    public class GetLokasiResikoQueryHandler : IRequestHandler<GetLokasiResikoQuery, IEnumerable<LokasiResikoDto>>
     {
         private readonly IDbConnectionFactory _connectionFactory;
         private readonly ILogger<GetLokasiResikoQueryHandler> _logger;
@@ -26,14 +26,13 @@ namespace ABB.Application.Akseptasis.Queries
             _logger = logger;
         }
 
-        public async Task<List<DropdownOptionDto>> Handle(GetLokasiResikoQuery request,
+        public async Task<IEnumerable<LokasiResikoDto>> Handle(GetLokasiResikoQuery request,
             CancellationToken cancellationToken)
         {
             try
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
-                return (await _connectionFactory.Query<DropdownOptionDto>("SELECT RTRIM(LTRIM(kd_lok_rsk)) Value, gedung Text " +
-                                                                          "FROM rf25d")).ToList();
+                return (await _connectionFactory.Query<LokasiResikoDto>("SELECT RTRIM(LTRIM(kd_pos)) + LTRIM(RTRIM(kd_lok_rsk)) Id, * FROM rf25d")).AsEnumerable();
             }
             catch (Exception ex)
             {

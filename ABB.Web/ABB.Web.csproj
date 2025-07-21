@@ -5794,6 +5794,9 @@
       <None Update="Modules\Reports\Templates\KeteranganPengajuanAkseptasi.html">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\Akseptasi\JS\akseptasi.lokasiResiko.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

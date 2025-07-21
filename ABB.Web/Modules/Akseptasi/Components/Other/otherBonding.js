@@ -77,6 +77,7 @@ function saveAkseptasiResikoOther(url) {
     form.no_updt = $("#resiko_other_bonding_no_updt").val();
     form.no_rsk = resiko.no_rsk;
     form.kd_endt = $("#resiko_other_bonding_kd_endt").val();
+    form.no_pol_ttg = $("#no_pol_ttg").val();
 
     var data = JSON.stringify(form);
 

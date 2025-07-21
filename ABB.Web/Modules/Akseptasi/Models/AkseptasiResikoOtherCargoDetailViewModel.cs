@@ -38,7 +38,7 @@ namespace ABB.Web.Modules.Akseptasi.Models
         
         public string no_po { get; set; }
         
-        public string no_pol_ttg { get; set; }
+        public string? no_pol_ttg { get; set; }
 
         public void Mapping(Profile profile)
         {

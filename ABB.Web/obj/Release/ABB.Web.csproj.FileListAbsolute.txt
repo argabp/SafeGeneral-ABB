@@ -4293,12 +4293,10 @@ C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\Akseptasi\Components\Akseptasi\_Akseptasi.cshtml.g.cs
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\Akseptasi\Components\Alokasi\_Alokasi.cshtml.g.cs
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\Akseptasi\Components\Coverage\_Coverage.cshtml.g.cs
-C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\Akseptasi\Components\Obyek\_Obyek.cshtml.g.cs
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\Akseptasi\Components\OtherCargoDetail\_OtherCargoDetail.cshtml.g.cs
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\Akseptasi\Components\OtherCargo\_OtherCargo.cshtml.g.cs
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\Akseptasi\Components\OtherMotorDetail\_OtherMotorDetail.cshtml.g.cs
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\Akseptasi\Components\OtherMotor\_OtherMotor.cshtml.g.cs
-C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\Akseptasi\Components\Other\_DefaultOther.cshtml.g.cs
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\Akseptasi\Components\Other\_OtherBonding.cshtml.g.cs
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\Akseptasi\Components\Other\_OtherCargo.cshtml.g.cs
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\Akseptasi\Components\Other\_OtherFire.cshtml.g.cs
@@ -4738,3 +4736,8 @@ C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modul
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\DataPolisOJK\Views\Index.cshtml.g.cs
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\ApprovalAkseptasi\Views\Edit.cshtml.g.cs
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modules\Reports\Templates\KeteranganPengajuanAkseptasi.html
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\Akseptasi\Views\Empty.cshtml.g.cs
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\Akseptasi\Views\EmptyWithMessage.cshtml.g.cs
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\bin\Release\Modules\Akseptasi\JS\akseptasi.lokasiResiko.js
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\Akseptasi\Components\Obyek\_ObyekFire.cshtml.g.cs
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Web\obj\Release\Razor\Modules\Akseptasi\Views\LokasiResiko.cshtml.g.cs

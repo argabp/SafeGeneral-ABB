@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ABB.Application.Common.Interfaces;
@@ -95,6 +96,14 @@ namespace ABB.Application.Akseptasis.Commands
                     request.kd_cob, request.kd_scob, request.kd_thn, request.no_aks, request.no_updt, 
                     request.no_rsk, request.kd_endt);
             
+                var result = (await _connectionFactory.QueryProc<string>("spe_uw02e_97", new
+                {
+                    request.kd_pos_rsk, request.kd_lok_rsk
+                })).First();
+
+                if (!string.IsNullOrWhiteSpace(result))
+                    throw new Exception(result);
+                
                 if (entity == null)
                 {
                     var akseptasiOther = _mapper.Map<AkseptasiOtherFire>(request);
@@ -106,26 +115,23 @@ namespace ABB.Application.Akseptasis.Commands
                 }
                 else
                 {
-                    _mapper.Map(request, entity);
+                    entity.kd_zona = request.kd_zona;
+                    entity.kd_lok_rsk = request.kd_lok_rsk;
+                    entity.almt_rsk = request.almt_rsk;
+                    entity.kt_rsk = request.kt_rsk;
+                    entity.kd_pos_rsk = request.kd_pos_rsk;
+                    entity.kd_penerangan = request.kd_penerangan;
+                    entity.kd_prop = request.kd_prop;
+                    entity.kd_kls_konstr = request.kd_kls_konstr;
+                    entity.kd_kab = request.kd_kab;
+                    entity.kd_okup = request.kd_okup;
+                    entity.kd_kec = request.kd_kec;
+                    entity.ket_okup = request.ket_okup;
+                    entity.kd_kel = request.kd_kel;
+                    entity.kategori_gd = request.kategori_gd;
+                    entity.umur_gd = request.umur_gd;
+                    entity.jml_lantai = request.jml_lantai;
 
-                    if(entity.kd_cb.Length != 5)
-                        for (int sequence = entity.kd_cb.Length; sequence < 5; sequence++)
-                        {
-                            entity.kd_cb += " ";
-                        }
-            
-                    if(entity.kd_cob.Length != 2)
-                        for (int sequence = entity.kd_cob.Length; sequence < 2; sequence++)
-                        {
-                            entity.kd_cob += " ";
-                        }
-
-                    if(entity.kd_scob.Length != 5)
-                        for (int sequence = entity.kd_scob.Length; sequence < 5; sequence++)
-                        {
-                            entity.kd_scob += " ";
-                        }
-            
                     await dbContext.SaveChangesAsync(cancellationToken);
                 }
 

@@ -17,8 +17,8 @@
 </style>
 
 @{
-    var nomor_aksepatsi = Model.kd_cb.Trim() + Model.kd_cob.Trim() +
-                          Model.kd_scob.Trim() + Model.kd_thn.Trim() + Model.no_aks.Trim();
+    var nomor_aksepatsi = Model.kd_cb.Trim() + "." + Model.kd_cob.Trim() +
+                          Model.kd_scob.Trim() + "." + Model.kd_thn.Trim() + "." + Model.no_aks.Trim();
     var resiko_other_pst_rate_prm = (double) Model.pst_rate_prm;
     var resiko_other_stn_rate_prm = (double) Model.stn_rate_prm;
     var resiko_other_nilai_bia_pol = Model.nilai_bia_pol == null ? 0 : (double) Model.nilai_bia_pol;

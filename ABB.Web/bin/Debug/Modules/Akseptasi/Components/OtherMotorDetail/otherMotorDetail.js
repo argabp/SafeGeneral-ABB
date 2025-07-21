@@ -26,7 +26,7 @@ function btnAddAkseptasiOtherMotorDetail_Click() {
     $('#btnAddNewAkseptasiOtherMotorDetail').click(function () {
         openAkseptasiOtherMotorDetailWindow(`/Akseptasi/AddOtherMotorDetail?kd_cb=${$("#kd_cb").val()}&kd_cob=${$("#kd_cob").val()}
                                         &kd_scob=${$("#kd_scob").val()}&kd_thn=${$("#kd_thn").val()}
-                                        &no_aks=${$("#no_aks").val()}&no_updt=${$("#no_updt").val()}`, 'Add New Akseptasi Other Motor Detail');
+                                        &no_aks=${$("#no_aks").val()}&no_updt=${$("#no_updt").val()}`, 'Add New Other Motor Detail');
     });
 }
 
@@ -38,7 +38,7 @@ function btnEditAkseptasiOtherMotorDetail_OnClick(e) {
                                     &kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}
                                     &no_aks=${dataItem.no_aks}&no_updt=${dataItem.no_updt}
                                     &no_rsk=${dataItem.no_rsk}&kd_endt=${dataItem.kd_endt}
-                                    &thn_ptg_kend=${dataItem.thn_ptg_kend}`, 'Edit Akseptasi Other Motor Detail');
+                                    &thn_ptg_kend=${dataItem.thn_ptg_kend}`, 'Edit Other Motor Detail');
 }
 function btnDeleteAkseptasiOtherMotorDetail_OnClick(e) {
     e.preventDefault();

@@ -41,6 +41,7 @@ function saveAkseptasiOtherMotorDetail(url) {
     form.no_updt = $("#other_motor_detail_no_updt").val();
     form.no_rsk = resiko.no_rsk;
     form.kd_endt = $("#resiko_other_motor_detail_kd_endt").val();
+    form.no_pol_ttg = $("#no_pol_ttg").val();
     
     var data = JSON.stringify(form);
     

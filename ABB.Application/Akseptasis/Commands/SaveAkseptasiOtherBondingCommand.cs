@@ -136,25 +136,31 @@ namespace ABB.Application.Akseptasis.Commands
                 }
                 else
                 {
-                    _mapper.Map(request, entity);
-
-                    if(entity.kd_cb.Length != 5)
-                        for (int sequence = entity.kd_cb.Length; sequence < 5; sequence++)
-                        {
-                            entity.kd_cb += " ";
-                        }
-            
-                    if(entity.kd_cob.Length != 2)
-                        for (int sequence = entity.kd_cob.Length; sequence < 2; sequence++)
-                        {
-                            entity.kd_cob += " ";
-                        }
-
-                    if(entity.kd_scob.Length != 5)
-                        for (int sequence = entity.kd_scob.Length; sequence < 5; sequence++)
-                        {
-                            entity.kd_scob += " ";
-                        }
+                    entity.kd_rk_surety = request.kd_rk_surety;
+                    entity.no_kontr = request.no_kontr;
+                    entity.kd_grp_prc = request.kd_grp_prc;
+                    entity.kd_rumus = request.kd_rumus;
+                    entity.nm_kons = request.nm_kons;
+                    entity.ket_pjs = request.ket_pjs;
+                    entity.nm_principal = request.nm_principal;
+                    entity.tgl_tr = request.tgl_tr;
+                    entity.jbt_principal = request.jbt_principal;
+                    entity.kd_obl = request.kd_obl;
+                    entity.kd_rk_obl = request.kd_rk_obl;
+                    entity.nm_obl = request.nm_obl;
+                    entity.almt_obl = request.almt_obl;
+                    entity.kt_obl = request.kt_obl;
+                    entity.kd_kontr = request.kd_kontr;
+                    entity.nilai_kontr = request.nilai_kontr;
+                    entity.tgl_kontrak = request.tgl_kontrak;
+                    entity.nilai_bond = request.nilai_bond;
+                    entity.jns_pekerjaan = request.jns_pekerjaan;
+                    entity.ket_rincian_kontr = request.ket_rincian_kontr;
+                    entity.tgl_lelang = request.tgl_lelang;
+                    entity.tmpt_lelang = request.tmpt_lelang;
+                    entity.ba_serah_trm = request.ba_serah_trm;
+                    entity.tgl_terbit = request.tgl_terbit;
+                    entity.kd_bag = request.kd_bag;
             
                     await dbContext.SaveChangesAsync(cancellationToken);
                 }

@@ -86,26 +86,13 @@ namespace ABB.Application.Akseptasis.Commands
                 }
                 else
                 {
-                    _mapper.Map(request, entity);
+                    entity.turnamen = request.turnamen;
+                    entity.lokasi = request.lokasi;
+                    entity.jml_peserta = request.jml_peserta;
+                    entity.spek_hole = request.spek_hole;
+                    entity.hadiah = request.hadiah;
+                    entity.own_risk = request.own_risk;
 
-                    if(entity.kd_cb.Length != 5)
-                        for (int sequence = entity.kd_cb.Length; sequence < 5; sequence++)
-                        {
-                            entity.kd_cb += " ";
-                        }
-            
-                    if(entity.kd_cob.Length != 2)
-                        for (int sequence = entity.kd_cob.Length; sequence < 2; sequence++)
-                        {
-                            entity.kd_cob += " ";
-                        }
-
-                    if(entity.kd_scob.Length != 5)
-                        for (int sequence = entity.kd_scob.Length; sequence < 5; sequence++)
-                        {
-                            entity.kd_scob += " ";
-                        }
-            
                     await dbContext.SaveChangesAsync(cancellationToken);
                 }
 

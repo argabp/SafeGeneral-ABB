@@ -2,6 +2,7 @@
     btnPreviousOther();
     btnSaveAkseptasiResikoOther_Click();
     setTimeout(setOtherFireEditedValue, 2000);
+    btnOpenLokasResiko();
 });
 
 function setOtherFireEditedValue(){
@@ -37,13 +38,18 @@ function btnPreviousOther(){
     });
 }
 
-
 function btnSaveAkseptasiResikoOther_Click() {
     $('#btn-save-akseptasiResikoOtherFire').click(function () {
         showProgress('#AkseptasiWindow');
         setTimeout(function () {
             saveAkseptasiResikoOther('/Akseptasi/SaveAkseptasiOtherFire')
         }, 500);
+    });
+}
+
+function btnOpenLokasResiko() {
+    $('#lokasi-resiko').click(function () {
+        openWindow('#LokasiResikoWindow', "/Akseptasi/LokasiResiko", "Lokasi Resiko");
     });
 }
 
@@ -57,6 +63,7 @@ function saveAkseptasiResikoOther(url) {
     form.no_updt = $("#resiko_other_fire_no_updt").val();
     form.no_rsk = resiko.no_rsk;
     form.kd_endt = $("#resiko_other_fire_kd_endt").val();
+    form.no_pol_ttg = $("#no_pol_ttg").val();
 
     var data = JSON.stringify(form);
 
@@ -91,4 +98,33 @@ function OnKodeKecamatanChange(e){
     var value = e.sender._cascadedValue;
     var kd_kel = $("#kd_kel").data("kendoDropDownList");
     kd_kel.dataSource.read({kd_prop: $("#kd_prop").val(), kd_kab: $("#kd_kab").val(), kd_kec: value });
+}
+
+function onLokasiResikoChange(e){
+    debugger;
+    ajaxGet("/Akseptasi/GetLokasiResikoDetail?kd_lok_rsk=" + e.sender._cascadedValue, (returnValue) => {
+        $("#almt_rsk").getKendoTextArea().value(returnValue[0].split(",")[1]);
+        $("#kd_pos_rsk").getKendoTextBox().value(returnValue[4].split(",")[1]);
+        $("#kd_prop").getKendoDropDownList().value(returnValue[5].split(",")[1]);
+        $("#kd_prop").getKendoDropDownList().trigger("change");
+        $("#kt_rsk").getKendoTextBox().value(returnValue[6].split(",")[1]);
+        
+        setTimeout(() => {
+            $("#kd_kab").getKendoDropDownList().value(returnValue[1].split(",")[1]);
+            $("#kd_kab").getKendoDropDownList().trigger("change");
+            setTimeout(() => {
+                $("#kd_kec").getKendoDropDownList().value(returnValue[2].split(",")[1]);
+                $("#kd_kec").getKendoDropDownList().trigger("change");
+                setTimeout(() => {
+                    $("#kd_kel").getKendoDropDownList().value(returnValue[3].split(",")[1]);
+                }, 500);
+            }, 500);
+        }, 500);
+    });
+}
+
+function onKodeOkpasiChange(e){
+    ajaxGet(`/Akseptasi/GetKodeOkupasiDetail?kd_zona=${$("#kd_zona").val()}&kd_kls_konst=${$("#kd_kls_konst").val()}&kd_okup=${e.sender._cascadedValue}&kd_scob=${$("#kd_scob").val()}`, (returnValue) => {
+        $("#ket_okup").getKendoTextArea().value(returnValue[0].split(",")[1]);
+    });
 }

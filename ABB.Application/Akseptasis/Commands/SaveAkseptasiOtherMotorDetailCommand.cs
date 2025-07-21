@@ -123,25 +123,27 @@ namespace ABB.Application.Akseptasis.Commands
                 }
                 else
                 {
-                    _mapper.Map(request, entity);
-
-                    if(entity.kd_cb.Length != 5)
-                        for (int sequence = entity.kd_cb.Length; sequence < 5; sequence++)
-                        {
-                            entity.kd_cb += " ";
-                        }
-            
-                    if(entity.kd_cob.Length != 2)
-                        for (int sequence = entity.kd_cob.Length; sequence < 2; sequence++)
-                        {
-                            entity.kd_cob += " ";
-                        }
-
-                    if(entity.kd_scob.Length != 5)
-                        for (int sequence = entity.kd_scob.Length; sequence < 5; sequence++)
-                        {
-                            entity.kd_scob += " ";
-                        }
+                    entity.thn_ptg_kend = request.thn_ptg_kend;
+                    entity.nilai_casco = request.nilai_casco;
+                    entity.nilai_prm_casco = request.nilai_prm_casco;
+                    entity.kd_jns_ptg_thn = request.kd_jns_ptg_thn;
+                    entity.nilai_rsk_sendiri = request.nilai_rsk_sendiri;
+                    entity.nilai_prm_aog = request.nilai_prm_aog;
+                    entity.nilai_prm_hh = request.nilai_prm_hh;
+                    entity.nilai_tjh = request.nilai_tjh;
+                    entity.nilai_prm_tjh = request.nilai_prm_tjh;
+                    entity.nilai_tjp = request.nilai_tjp;
+                    entity.nilai_prm_tjp = request.nilai_prm_tjp;
+                    entity.nilai_pap = request.nilai_pap;
+                    entity.nilai_prm_pap = request.nilai_prm_pap;
+                    entity.nilai_pad = request.nilai_pad;
+                    entity.nilai_prm_pad = request.nilai_prm_pad;
+                    entity.nilai_pap_med = request.nilai_pap_med;
+                    entity.nilai_prm_pap_med = request.nilai_prm_pap_med;
+                    entity.nilai_pad_med = request.nilai_pad_med;
+                    entity.nilai_prm_pad_med = request.nilai_prm_pad_med;
+                    entity.nilai_prm_trs = request.nilai_prm_trs;
+                    entity.nilai_prm_banjir = request.nilai_prm_banjir;
             
                     await dbContext.SaveChangesAsync(cancellationToken);
                 }

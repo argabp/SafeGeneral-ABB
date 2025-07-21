@@ -1,0 +1,65 @@
+﻿@using ABB.Application.Akseptasis.Queries
+@using Kendo.Mvc.UI
+
+<script src="~/Modules/Akseptasi/Components/Obyek/obyek.js"></script>
+
+<div class="window-body">
+    <div class="row">
+        <div class="col-md-4">
+            <input type="text" class="search-field-top" style="height: 1em" id="SearchKeywordObyek" placeholder="Search"/>
+        </div>
+        <div class="offset-1"></div>
+        <div class="col-md-2">
+            <button class="flat-btn-primary" style="height: 1em" id="btnAddNewAkseptasiObyek">Add New Obyek</button>
+        </div>
+    </div>
+    
+    @(Html.Kendo().Grid<AkseptasiObyekDto>()
+        .Name("AkseptasiObyekGrid")
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetAkseptasiObyeks", "Akseptasi").Data("searchFilterObyek"))
+            .Model(model => model.Id(p => p.no_oby))
+        )
+        .Columns(columns =>
+        {
+            columns.Bound(col => col.no_oby).Width(150).Title("Nomor Obyek");
+            columns.Bound(col => col.desk_oby).Width(150).Title("Uraian Pertanggungan");
+            columns.Bound(col => col.nilai_ttl_ptg).Width(150).Title("Nilai Pertanggungan");
+            columns.Command(command =>
+            {
+                command.Custom("EditAkseptasiObyek")
+                    .Text("Edit")
+                    .IconClass("fa fa-pencil-alt")
+                    .HtmlAttributes(new { title = "Edit" })
+                    .Click("btnEditAkseptasiObyek_OnClick");
+                command.Custom("DeleteAkseptasiObyek")
+                    .Text("Delete")
+                    .IconClass("k-icon k-i-delete")
+                    .HtmlAttributes(new { title = "Delete" })
+                    .Click("btnDeleteAkseptasiObyek_OnClick");
+            }).Width(200);
+        })
+        .Pageable(pager => pager
+            .Refresh(true)
+            .Info(true)
+            .PageSizes(true)
+        )
+        .Sortable()
+        .Filterable()
+        .AutoBind(false)
+        .Scrollable()
+        .Height(450)
+        .Resizable(a => a.Columns(true))
+        .Events(ev => ev.DataBound("gridAutoFit"))
+    
+        )
+    
+    <div class="window-footer">
+        <button type="button" id="btn-previous-akseptasiResikoObyek" class="btn btn-primary space-right">
+            <span class="fa fa-arrow-left"></span> Previous
+        </button>
+        <button type="button" id="btn-next-akseptasiResikoObyek" class="btn btn-primary space-right">
+            Next <span class="fa fa-arrow-right"></span>
+        </button>
+    </div>
+</div>

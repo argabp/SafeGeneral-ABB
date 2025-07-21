@@ -208,25 +208,66 @@ namespace ABB.Application.Akseptasis.Commands
                 }
                 else
                 {
-                    _mapper.Map(request, entity);
-
-                    if(entity.kd_cb.Length != 5)
-                        for (int sequence = entity.kd_cb.Length; sequence < 5; sequence++)
-                        {
-                            entity.kd_cb += " ";
-                        }
-            
-                    if(entity.kd_cob.Length != 2)
-                        for (int sequence = entity.kd_cob.Length; sequence < 2; sequence++)
-                        {
-                            entity.kd_cob += " ";
-                        }
-
-                    if(entity.kd_scob.Length != 5)
-                        for (int sequence = entity.kd_scob.Length; sequence < 5; sequence++)
-                        {
-                            entity.kd_scob += " ";
-                        }
+                    entity.thn_buat = request.thn_buat;
+                    entity.warna_kend = request.warna_kend;
+                    entity.kd_jns_kend = request.kd_jns_kend;
+                    entity.jml_tempat_ddk = request.jml_tempat_ddk;
+                    entity.grp_merk_kend = request.grp_merk_kend;
+                    entity.jml_pap = request.jml_pap;
+                    entity.kd_merk_kend = request.kd_merk_kend;
+                    entity.kd_jns_ptg = request.kd_jns_ptg;
+                    entity.no_pls = request.no_pls;
+                    entity.kd_utk = request.kd_utk;
+                    entity.no_rangka = request.no_rangka;
+                    entity.kd_guna = request.kd_guna;
+                    entity.no_msn = request.no_msn;
+                    entity.no_pinj = request.no_pinj;
+                    entity.tgl_mul_ptg = request.tgl_mul_ptg;
+                    entity.tgl_akh_ptg = request.tgl_akh_ptg;
+                    entity.nm_qq = request.nm_qq;
+                    entity.kpsts_msn = request.kpsts_msn;
+                    entity.almt_qq = request.almt_qq;
+                    entity.nilai_bia_pol = request.nilai_bia_pol;
+                    entity.kt_qq = request.kt_qq;
+                    entity.validitas = request.validitas;
+                    entity.kd_wilayah = request.kd_wilayah;
+                    entity.nilai_casco = request.nilai_casco;
+                    entity.pst_rate_prm = request.pst_rate_prm;
+                    entity.stn_rate_prm = request.stn_rate_prm;
+                    entity.nilai_prm_casco = request.nilai_prm_casco;
+                    entity.nilai_tjp = request.nilai_tjp;
+                    entity.pst_rate_tjp = request.pst_rate_tjp;
+                    entity.stn_rate_tjp = request.stn_rate_tjp;
+                    entity.nilai_prm_tjp = request.nilai_prm_tjp;
+                    entity.flag_hh = request.flag_hh;
+                    entity.pst_rate_hh = request.pst_rate_hh;
+                    entity.stn_rate_hh = request.stn_rate_hh;
+                    entity.nilai_prm_hh = request.nilai_prm_hh;
+                    entity.nilai_pap = request.nilai_pap;
+                    entity.pst_rate_pap = request.pst_rate_pap;
+                    entity.stn_rate_pap = request.stn_rate_pap;
+                    entity.nilai_prm_pap = request.nilai_prm_pap;
+                    entity.flag_aog = request.flag_aog;
+                    entity.pst_rate_aog = request.pst_rate_aog;
+                    entity.stn_rate_aog = request.stn_rate_aog;
+                    entity.nilai_prm_aog = request.nilai_prm_aog;
+                    entity.nilai_pad = request.nilai_pad;
+                    entity.pst_rate_pad = request.pst_rate_pad;
+                    entity.stn_rate_pad = request.stn_rate_pad;
+                    entity.nilai_prm_pad = request.nilai_prm_pad;
+                    entity.flag_banjir = request.flag_banjir;
+                    entity.pst_rate_banjir = request.pst_rate_banjir;
+                    entity.stn_rate_banjir = request.stn_rate_banjir;
+                    entity.nilai_prm_banjir = request.nilai_prm_banjir;
+                    entity.flag_trs = request.flag_trs;
+                    entity.pst_rate_trs = request.pst_rate_trs;
+                    entity.stn_rate_trs = request.stn_rate_trs;
+                    entity.nilai_prm_trs = request.nilai_prm_trs;
+                    entity.nilai_tjh = request.nilai_tjh;
+                    entity.pst_rate_tjh = request.pst_rate_tjh;
+                    entity.stn_rate_tjh = request.stn_rate_tjh;
+                    entity.nilai_prm_tjh = request.nilai_prm_tjh;
+                    entity.nilai_rsk_sendiri = request.nilai_rsk_sendiri;
             
                     await dbContext.SaveChangesAsync(cancellationToken);
                 }

@@ -25,6 +25,7 @@ function saveAkseptasiOtherCargoDetail(url) {
     form.no_bl = $("#resiko_other_cargo_detail_no_bl").val();
     form.no_inv = $("#resiko_other_cargo_detail_no_inv").val();
     form.no_po = $("#resiko_other_cargo_detail_no_po").val();
+    form.no_pol_ttg = $("#no_pol_ttg").val();
     
     var data = JSON.stringify(form);
     

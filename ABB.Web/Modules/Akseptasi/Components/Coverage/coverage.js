@@ -33,7 +33,7 @@ function btnAddAkseptasiCoverage_Click() {
         openAkseptasiCoverageWindow(`/Akseptasi/AddCoverage?kd_cb=${$("#kd_cb").val()}&kd_cob=${$("#kd_cob").val()}
                                         &kd_scob=${$("#kd_scob").val()}&kd_thn=${$("#kd_thn").val()}
                                         &no_aks=${$("#no_aks").val()}&no_updt=${$("#no_updt").val()}
-                                        &no_rsk=${resiko.no_rsk}&kd_endt=${resiko.kd_endt}`, 'Add New Akseptasi Coverage');
+                                        &no_rsk=${resiko.no_rsk}&kd_endt=${resiko.kd_endt}`, 'Add New Coverage');
     });
 }
 function btnEditAkseptasiCoverage_OnClick(e) {
@@ -44,7 +44,7 @@ function btnEditAkseptasiCoverage_OnClick(e) {
                                     &kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}
                                     &no_aks=${dataItem.no_aks}&no_updt=${dataItem.no_updt}
                                     &no_rsk=${dataItem.no_rsk}&kd_endt=${dataItem.kd_endt}
-                                    &kd_cvrg=${dataItem.kd_cvrg}`, 'Edit Akseptasi Coverage');
+                                    &kd_cvrg=${dataItem.kd_cvrg}`, 'Edit Coverage');
 }
 function btnDeleteAkseptasiCoverage_OnClick(e) {
     e.preventDefault();

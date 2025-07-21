@@ -29,6 +29,7 @@ function saveAkseptasiResikoOther(url) {
     form.no_updt = $("#resiko_other_hole_in_one_no_updt").val();
     form.no_rsk = resiko.no_rsk;
     form.kd_endt = $("#resiko_other_hole_in_one_kd_endt").val();
+    form.no_pol_ttg = $("#no_pol_ttg").val();
 
     var data = JSON.stringify(form);
 

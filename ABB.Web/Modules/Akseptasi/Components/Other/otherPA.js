@@ -55,6 +55,7 @@ function saveAkseptasiResikoOther(url) {
     form.tgl_mul_ptg = $("#resiko_other_pa_tgl_mul_ptg").val();
     form.tgl_akh_ptg = $("#resiko_other_pa_tgl_akh_ptg").val();
     form.tgl_input = $("#resiko_other_pa_tgl_input").val();
+    form.no_pol_ttg = $("#no_pol_ttg").val();
 
     var data = JSON.stringify(form);
 

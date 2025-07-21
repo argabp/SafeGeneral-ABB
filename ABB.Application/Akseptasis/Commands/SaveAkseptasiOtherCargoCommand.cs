@@ -129,27 +129,33 @@ namespace ABB.Application.Akseptasis.Commands
                 }
                 else
                 {
-                    _mapper.Map(request, entity);
-
-                    if(entity.kd_cb.Length != 5)
-                        for (int sequence = entity.kd_cb.Length; sequence < 5; sequence++)
-                        {
-                            entity.kd_cb += " ";
-                        }
-            
-                    if(entity.kd_cob.Length != 2)
-                        for (int sequence = entity.kd_cob.Length; sequence < 2; sequence++)
-                        {
-                            entity.kd_cob += " ";
-                        }
-
-                    if(entity.kd_scob.Length != 5)
-                        for (int sequence = entity.kd_scob.Length; sequence < 5; sequence++)
-                        {
-                            entity.kd_scob += " ";
-                        }
+                    entity.kd_kapal = request.kd_kapal;
+                    entity.nm_kapal = request.nm_kapal;
+                    entity.no_bl = request.no_bl;
+                    entity.no_po = request.no_po;
+                    entity.no_inv = request.no_inv;
+                    entity.no_lc = request.no_lc;
+                    entity.tgl_brkt = request.tgl_brkt;
+                    entity.tempat_brkt = request.tempat_brkt;
+                    entity.tempat_tiba = request.tempat_tiba;
+                    entity.tempat_transit = request.tempat_transit;
+                    entity.consignee = request.consignee;
+                    entity.kd_kond = request.kd_kond;
+                    entity.pst_deduct = request.pst_deduct;
+                    entity.kond_sps = request.kond_sps;
+                    entity.survey = request.survey;
+                    entity.st_transit = request.st_transit;
+                    
+                    var pathAkseptasi = _configuration.GetSection("Akseptasi").Value.TrimEnd('/');
+                    var path = _configuration.GetSection("AkseptasiResikoOtherCargo").Value.TrimEnd('/');
+                    path = Path.Combine(pathAkseptasi.Replace("/", ""), request.kd_cb + request.kd_cob + request.kd_scob + 
+                                                                        request.kd_thn + request.no_aks + request.no_updt, path.Replace("/", ""));
+                    
+                    entity.link_file = path;
             
                     await dbContext.SaveChangesAsync(cancellationToken);
+
+                    await _profilePictureHelper.UploadToFolder(request.file, path);
                 }
 
                 return Unit.Value;

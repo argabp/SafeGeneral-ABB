@@ -13,7 +13,8 @@
 });
 
 function onSelect(e) {
-    if($(e.item).find("> .k-link").text().trim() == "Alokasi")
+    var tabName = $(e.item).find("> .k-link").text().trim();
+    if(tabName == "Alokasi")
     {
         showProgress('#AkseptasiWindow');
         
@@ -40,6 +41,57 @@ function onSelect(e) {
                 else
                     showMessage("Error", response);
                 
+                closeProgress('#AkseptasiWindow');
+            }
+        );
+    }
+    else if(tabName == "Coverage")
+    {
+        showProgress('#AkseptasiWindow');
+
+        ajaxGet(`/Akseptasi/CheckCoverage?kd_cob=${$("#kd_cob").val()}&kd_scob=${$("#kd_scob").val()}`,
+            function (response) {
+                $("#tabCoverage").html(response);
+                if($("#AkseptasiCoverageGrid").getKendoGrid() != undefined){
+                    refreshGrid("#AkseptasiCoverageGrid");
+                }
+                closeProgress('#AkseptasiWindow');
+            }
+        );
+    }
+    else if(tabName == "Obyek")
+    {
+        showProgress('#AkseptasiWindow');
+
+        ajaxGet(`/Akseptasi/CheckObyek?kd_cob=${$("#kd_cob").val()}&kd_scob=${$("#kd_scob").val()}&pst_share=${resiko.pst_share_bgu}`,
+            function (response) {
+                $("#tabObyek").html(response);
+                if($("#AkseptasiObyekGrid").getKendoGrid() != undefined){
+                    refreshGrid("#AkseptasiObyekGrid");
+                }
+                closeProgress('#AkseptasiWindow');
+            }
+        );
+    }
+    else if(tabName == "Others")
+    {
+        showProgress('#AkseptasiWindow');
+
+        var dataOther = {
+            kd_cb: $("#kd_cb").val(),
+            kd_cob: $("#kd_cob").val(),
+            kd_scob: $("#kd_scob").val(),
+            kd_thn: $("#kd_thn").val(),
+            no_aks: $("#no_aks").val(),
+            no_updt: $("#no_updt").val(),
+            no_rsk: resiko.no_rsk,
+            kd_endt: resiko.kd_endt,
+            pst_share: resiko.pst_share_bgu,
+        }
+        
+        ajaxPost(`/Akseptasi/CheckOther`, JSON.stringify(dataOther),
+            function (response) {
+                $("#tabOther").html(response);
                 closeProgress('#AkseptasiWindow');
             }
         );

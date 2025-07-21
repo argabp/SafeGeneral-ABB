@@ -44,7 +44,7 @@ namespace ABB.Application.Akseptasis.Commands
         
         public string no_po { get; set; }
         
-        public string no_pol_ttg { get; set; }
+        public string? no_pol_ttg { get; set; }
         
         public void Mapping(Profile profile)
         {
@@ -96,25 +96,12 @@ namespace ABB.Application.Akseptasis.Commands
                 }
                 else
                 {
-                    _mapper.Map(request, entity);
-
-                    if(entity.kd_cb.Length != 5)
-                        for (int sequence = entity.kd_cb.Length; sequence < 5; sequence++)
-                        {
-                            entity.kd_cb += " ";
-                        }
-            
-                    if(entity.kd_cob.Length != 2)
-                        for (int sequence = entity.kd_cob.Length; sequence < 2; sequence++)
-                        {
-                            entity.kd_cob += " ";
-                        }
-
-                    if(entity.kd_scob.Length != 5)
-                        for (int sequence = entity.kd_scob.Length; sequence < 5; sequence++)
-                        {
-                            entity.kd_scob += " ";
-                        }
+                    entity.jns_angkut = request.jns_angkut;
+                    entity.kd_angkut = request.kd_angkut;
+                    entity.nm_angkut = request.nm_angkut;
+                    entity.no_bl = request.no_bl;
+                    entity.no_po = request.no_po;
+                    entity.no_inv = request.no_inv;
             
                     await dbContext.SaveChangesAsync(cancellationToken);
                 }

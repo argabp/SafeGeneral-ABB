@@ -32,7 +32,7 @@ namespace ABB.Application.Akseptasis.Queries
             try
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
-                return (await _connectionFactory.Query<DropdownOptionDto>("SELECT RTRIM(LTRIM(kd_okup)) Value, nm_okup Text " +
+                return (await _connectionFactory.Query<DropdownOptionDto>("SELECT RTRIM(LTRIM(kd_okup)) Value, '(' + RTRIM(LTRIM(kd_okup)) + ') ' + nm_okup Text " +
                                                                           "FROM rf11")).ToList();
             }
             catch (Exception ex)

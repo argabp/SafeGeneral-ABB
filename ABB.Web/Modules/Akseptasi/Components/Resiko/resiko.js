@@ -28,7 +28,7 @@ function btnAddAkseptasiResiko_Click() {
         openAkseptasiResikoWindow(`/Akseptasi/AddResiko?kd_cb=${$("#kd_cb").val()}&kd_cob=${$("#kd_cob").val()}
                                         &kd_scob=${$("#kd_scob").val()}&kd_thn=${$("#kd_thn").val()}
                                         &no_aks=${$("#no_aks").val()}&no_updt=${$("#no_updt").val()}
-                                        &tgl_mul_ptg=${$("#tgl_mul_ptg").val()}&tgl_akh_ptg=${$("#tgl_akh_ptg").val()}`, 'Add New Akseptasi Resiko');
+                                        &tgl_mul_ptg=${$("#tgl_mul_ptg").val()}&tgl_akh_ptg=${$("#tgl_akh_ptg").val()}`, 'Add New Resiko');
     });
 }
 function btnEditAkseptasiResiko_OnClick(e) {
@@ -38,7 +38,7 @@ function btnEditAkseptasiResiko_OnClick(e) {
     openAkseptasiResikoWindow(`/Akseptasi/EditResiko?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}
                                     &kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}
                                     &no_aks=${dataItem.no_aks}&no_updt=${dataItem.no_updt}
-                                    &no_rsk=${dataItem.no_rsk}&kd_endt=${dataItem.kd_endt}`, 'Edit Akseptasi Resiko');
+                                    &no_rsk=${dataItem.no_rsk}&kd_endt=${dataItem.kd_endt}`, 'Edit Resiko');
 }
 function btnDeleteAkseptasiResiko_OnClick(e) {
     e.preventDefault();
@@ -95,10 +95,10 @@ function OnResikoChange(e){
     var tabstrip = $('#resikoTab').data("kendoTabStrip");
     if(resiko.kd_endt === "I")
     {
-        refreshGrid("#AkseptasiCoverageGrid");
-        refreshGrid("#AkseptasiObyekGrid");
+        // refreshGrid("#AkseptasiCoverageGrid");
+        // refreshGrid("#AkseptasiObyekGrid");
         // refreshGrid("#AlokasiGrid");
-        refreshTabOther();
+        // refreshTabOther();
         tabstrip.enable(tabstrip.items()[1]);
         tabstrip.enable(tabstrip.items()[2]);
         tabstrip.enable(tabstrip.items()[3]);

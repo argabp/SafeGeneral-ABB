@@ -60,6 +60,7 @@ function saveAkseptasiResikoOther(url) {
     form.flag_banjir = $("#flag_banjir")[0].checked ? "Y" : "N";
     form.flag_aog = $("#flag_aog")[0].checked ? "Y" : "N";
     form.flag_trs = $("#flag_trs")[0].checked ? "Y" : "N";
+    form.no_pol_ttg = $("#no_pol_ttg").val();
 
     var data = JSON.stringify(form);
 

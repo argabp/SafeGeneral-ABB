@@ -17,8 +17,8 @@
 </style>
 
 @{
-    var nomor_aksepatsi = Model.kd_cb.Trim() + Model.kd_cob.Trim() +
-                          Model.kd_scob.Trim() + Model.kd_thn.Trim() + Model.no_aks.Trim();
+    var nomor_aksepatsi = Model.kd_cb.Trim() + "." + Model.kd_cob.Trim() +
+                          Model.kd_scob.Trim() + "." + Model.kd_thn.Trim() + "." + Model.no_aks.Trim();
     var akseptasi_other_motor_detail_nilai_casco = (double)Model.nilai_casco;
     var akseptasi_other_motor_detail_nilai_prm_casco = (double)Model.nilai_prm_casco;
     var akseptasi_other_motor_detail_nilai_rsk_sendiri = (double)Model.nilai_rsk_sendiri;

@@ -199,5 +199,70 @@ namespace ABB.Application.Common
                                                         </html>";
 
         public static readonly string DataDisimpan = "Data Berhasil Disimpan";
+        
+        public static readonly IDictionary<string, string> AkseptasiObyekViewMapping = new Dictionary<string, string>()
+        {
+            {
+                "d_uw02e_06_01_f", "_ObyekFire"
+            },
+            {
+                "d_uw02e_06_04_t", "Empty"
+            },
+            {
+                "d_uw02e_06_02u_t", "Empty"
+            },
+            {
+                "d_uw02e_06_01_t", "Empty"
+            },
+            {
+                "d_uw02e_06_08_f", "Empty"
+            },
+            {
+                "d_uw02e_06_03_f", "Empty"
+            },
+            {
+                "d_uw02e_06_08_t", "Empty"
+            },
+            {
+                "d_uw02e_06_09_t", "Empty"
+            }
+        };
+        
+        public static readonly IDictionary<string, string> AkseptasiOtherViewMapping = new Dictionary<string, string>()
+        {
+            {
+                "d_uw02e_04_01_f", "_OtherFire"
+            },
+            {
+                "d_uw02e_04_02s_f", "_OtherMotor"
+            },
+            {
+                "d_uw02e_04_02_he_f", "_OtherMotor"
+            },
+            {
+                "d_uw02e_04_02_f", "Empty"
+            },
+            {
+                "d_uw02e_04_10_f", "Empty"
+            },
+            {
+                "d_uw02e_04_07_f", "_OtherPA"
+            },
+            {
+                "d_uw02e_04_08_f", "Empty"
+            },
+            {
+                "d_uw02e_04_03_f", "_OtherCargo"
+            },
+            {
+                "d_uw02e_04_05_f", "_OtherBonding"
+            },
+            {
+                "d_uw02e_04_04_f", "_OtherBonding"
+            },
+            {
+                "d_uw02e_04_06_f", "_OtherHull"
+            }
+        };
     }
 }

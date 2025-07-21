@@ -1,0 +1,34 @@
+﻿@using ABB.Application.Akseptasis.Queries
+@using Kendo.Mvc.UI
+
+<script src="~/Modules/Akseptasi/JS/akseptasi.lokasiResiko.js"></script>
+
+<div class="window-body">
+    @(Html.Kendo().Grid<LokasiResikoDto>()
+        .Name("LokasiResikoGrid")
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetLokasiResiko", "Akseptasi"))
+            .Model(model => model.Id(p => p.Id))
+        )
+        .Columns(columns =>
+        {
+            columns.Bound(col => col.kd_pos).Width(100).Title("Kode Pos");
+            columns.Bound(col => col.kd_lok_rsk).Width(150).Title("Kode Lokasi Resiko");
+            columns.Bound(col => col.gedung).Width(150).Title("Gedung");
+            columns.Bound(col => col.alamat).Width(150).Title("Alamat");
+        })
+        .Pageable(pager => pager
+            .Refresh(true)
+            .Info(true)
+            .PageSizes(true)
+        )
+        .Sortable()
+        .Filterable()
+        .Scrollable()
+        .Selectable()
+        .Height(450)
+        .Resizable(a => a.Columns(true))
+        .Events(ev => ev.DataBound("gridAutoFit").Change("OnLokasiResikoChange"))
+    
+        )
+</div>

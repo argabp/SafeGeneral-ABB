@@ -17,8 +17,8 @@
 </style>
 
 @{
-    var nomor_aksepatsi = Model.kd_cb.Trim() + Model.kd_cob.Trim() +
-                          Model.kd_scob.Trim() + Model.kd_thn.Trim() + Model.no_aks.Trim();
+    var nomor_aksepatsi = Model.kd_cb.Trim() + "." + Model.kd_cob.Trim() +
+                          Model.kd_scob.Trim() + "." + Model.kd_thn.Trim() + "." + Model.no_aks.Trim();
 }
 
 <div class="window-body" style="background-color: lightgray">
@@ -186,16 +186,6 @@
         <div class="form-group row">
             <div class="row col-sm-6">
                 <label class="col-sm-6">Survey</label>
-                @* <div class="col-sm-6"> *@
-                @*     <kendo-dropdownlist for="kd_kond" style="width: 100%" *@
-                @*                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains"> *@
-                @*         <datasource type="DataSourceTagHelperType.Custom"> *@
-                @*             <transport> *@
-                @*                 <read url="@Url.Action("GetKondisiPtg", "Akseptasi")"/> *@
-                @*             </transport> *@
-                @*         </datasource> *@
-                @*     </kendo-dropdownlist> *@
-                @* </div> *@
                 <div class="col-sm-6">
                     <kendo-textarea name="survey" rows="2" style="width: 100%">@Model.survey</kendo-textarea>
                 </div>
