@@ -1,0 +1,35 @@
+﻿@using ABB.Web.Modules.Akseptasi.Components.Coverage
+@using ABB.Web.Modules.Akseptasi.Components.Obyek
+@using ABB.Web.Modules.Akseptasi.Components.Other
+@using ABB.Web.Modules.Akseptasi.Components.Resiko
+@model ABB.Web.Modules.Akseptasi.Models.AkseptasiResikoParameterViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/Akseptasi/Components/Other/otherMotor.js"></script>
+
+<div class="window-body">
+    <div id="resikoOtherTab">
+        <ul>
+            <li class="k-active">
+                Motor
+            </li>
+            <li>
+                Motor Detail
+            </li>
+        </ul>
+        <div id="tabResikoMotor">
+            <vc:other-motor model="@Model"></vc:other-motor>
+        </div>
+        <div id="tabResikoMotorDetail">
+            <vc:other-motor-detail model="@Model"></vc:other-motor-detail>
+        </div>
+    </div>
+    
+    <div class="window-footer">
+        <button type="button" id="btn-previous-akseptasiResikoOther" class="btn btn-primary space-right">
+            <span class="fa fa-arrow-left"></span> Previous
+        </button>
+    </div>
+</div>

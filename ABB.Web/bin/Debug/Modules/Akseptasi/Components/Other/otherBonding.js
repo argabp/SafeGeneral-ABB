@@ -83,6 +83,7 @@ function saveAkseptasiResikoOther(url) {
 
     ajaxPost(url, data,
         function (response) {
+            refreshGrid("#AkseptasiResikoGrid");
             if (response.Result == "OK") {
                 showMessage('Success', response.Message);
             }
@@ -94,4 +95,12 @@ function saveAkseptasiResikoOther(url) {
             closeProgress('#AkseptasiWindow');
         }
     );
+}
+
+function OnKodeObligeeChange(e){
+    var value = e.sender.value();
+    ajaxGet(`/Akseptasi/GenerateNameAandAddressObligee?kd_cb=${$("#kd_cb").val()}&kd_rk_obl=${value}`, (returnValue) => {
+        $("#nm_obl").getKendoTextArea().value(returnValue.split(",")[1]);
+        $("#almt_obl").getKendoTextArea().value(returnValue.split(",")[4]);
+    });
 }

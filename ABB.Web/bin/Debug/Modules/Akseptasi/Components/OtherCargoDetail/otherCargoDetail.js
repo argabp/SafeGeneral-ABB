@@ -26,7 +26,7 @@ function btnAddAkseptasiOtherCargoDetail_Click() {
     $('#btnAddNewAkseptasiOtherCargoDetail').click(function () {
         openAkseptasiOtherCargoDetailWindow(`/Akseptasi/AddOtherCargoDetail?kd_cb=${$("#kd_cb").val()}&kd_cob=${$("#kd_cob").val()}
                                         &kd_scob=${$("#kd_scob").val()}&kd_thn=${$("#kd_thn").val()}
-                                        &no_aks=${$("#no_aks").val()}&no_updt=${$("#no_updt").val()}`, 'Add New Other Cargo Detail');
+                                        &no_aks=${$("#no_aks").val()}&no_updt=${$("#no_updt").val()}`, 'Add New Alat Angkut');
     });
 }
 
@@ -38,12 +38,12 @@ function btnEditAkseptasiOtherCargoDetail_OnClick(e) {
                                     &kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}
                                     &no_aks=${dataItem.no_aks}&no_updt=${dataItem.no_updt}
                                     &no_rsk=${dataItem.no_rsk}&kd_endt=${dataItem.kd_endt}
-                                    &no_urut=${dataItem.no_urut}`, 'Edit Other Cargo Detail');
+                                    &no_urut=${dataItem.no_urut}`, 'Edit Other  Alat Angkut');
 }
 function btnDeleteAkseptasiOtherCargoDetail_OnClick(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-    showConfirmation('Confirmation', `Are you sure you want to delete Akseptasi Resiko Other Cargo Detail?`,
+    showConfirmation('Confirmation', `Are you sure you want to delete Alat Angkut?`,
         function () {
             showProgressOnGrid('#AkseptasiOtherCargoDetailGrid');
             setTimeout(function () { deleteAkseptasiOtherCargoDetail(dataItem); }, 500);

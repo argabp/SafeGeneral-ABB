@@ -36,6 +36,8 @@ namespace ABB.Web.Modules.Akseptasi.Models
 
         public string? no_pol_ttg { get; set; }
 
+        public decimal? pst_share { get; set; }
+
         public void Mapping(Profile profile)
         {
             profile.CreateMap<AkseptasiObyekDto, AkseptasiResikoObyekViewModel>();

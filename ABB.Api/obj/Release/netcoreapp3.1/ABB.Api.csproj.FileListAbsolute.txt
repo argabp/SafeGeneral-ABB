@@ -110,3 +110,11 @@ C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Api\obj\Release\netcoreapp3.1\AB
 C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Api\obj\Release\netcoreapp3.1\ABB.Api.pdb
 C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Api\obj\Release\netcoreapp3.1\ABB.Api.genruntimeconfig.cache
 C:\Users\Formulatrix\RiderProjects\Mine\ABB\ABB.Api\bin\Release\netcoreapp3.1\MimeMapping.dll
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Api\obj\Release\netcoreapp3.1\ABB.Api.csprojAssemblyReference.cache
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Api\obj\Release\netcoreapp3.1\ABB.Api.AssemblyInfoInputs.cache
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Api\obj\Release\netcoreapp3.1\ABB.Api.AssemblyInfo.cs
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Api\obj\Release\netcoreapp3.1\ABB.Api.csproj.CoreCompileInputs.cache
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Api\obj\Release\netcoreapp3.1\ABB.Api.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Api\obj\Release\netcoreapp3.1\ABB.Api.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Api\obj\Release\netcoreapp3.1\ABB.Api.dll
+C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Api\obj\Release\netcoreapp3.1\ABB.Api.pdb

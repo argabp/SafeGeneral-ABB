@@ -21,7 +21,6 @@
                           Model.kd_scob.Trim() + "." + Model.kd_thn.Trim() + "." + Model.no_aks.Trim();
     var resiko_other_pst_rate_prm = (double) Model.pst_rate_prm;
     var resiko_other_stn_rate_prm = (double) Model.stn_rate_prm;
-    var resiko_other_nilai_bia_pol = Model.nilai_bia_pol == null ? 0 : (double) Model.nilai_bia_pol;
 }
 
 <div class="window-body" style="background-color: lightgray">
@@ -234,31 +233,12 @@
                     <kendo-textbox name="resiko_other_nm_qq" value="@Model.nm_qq" style="width: 100%"/>
                 </div>
             </div>
-            <div class="row col-sm-6">
-                <label class="col-sm-6">Cabang</label>
-                <div class="col-sm-6">
-                    <kendo-dropdownlist for="kpsts_msn" style="width: 100%"
-                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
-                        <datasource type="DataSourceTagHelperType.Custom">
-                            <transport>
-                                <read url="@Url.Action("GetKapasitasMesin", "Akseptasi")"/>
-                            </transport>
-                        </datasource>
-                    </kendo-dropdownlist>
-                </div>
-            </div>
         </div>
         <div class="form-group row">
             <div class="row col-sm-6">
                 <label class="col-sm-6">Alamat</label>
                 <div class="col-sm-6">
                     <kendo-textarea name="almt_qq" rows="2" style="width: 100%">@Model.almt_qq</kendo-textarea>
-                </div>
-            </div>
-            <div class="row col-sm-6">
-                <label class="col-sm-6">Biaya Polis</label>
-                <div class="col-sm-6">
-                    <kendo-numerictextbox spinners="false" decimals="2" name="resiko_other_nilai_bia_pol" value="@resiko_other_nilai_bia_pol" style="width: 100%"/>
                 </div>
             </div>
         </div>
@@ -316,7 +296,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-2">Casco *)</label>
                 <div class="col-sm-3">
-                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_casco" style="width: 100%; background-color: #FFFFE1"/>
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_casco" style="width: 100%; background-color: #FFFFE1" />
                     <span asp-validation-for="nilai_casco" class="text-danger"></span>
                 </div>
                 <div class="col-sm-2">

@@ -54,7 +54,6 @@ function saveAkseptasiResikoOther(url) {
     form.pst_rate_prm = $("#resiko_other_pst_rate_prm").val();
     form.stn_rate_prm = $("#resiko_other_stn_rate_prm").val();
     form.nm_qq = $("#resiko_other_nm_qq").val();
-    form.nilai_bia_pol = $("#resiko_other_nilai_bia_pol").val();
     
     form.flag_hh = $("#flag_hh")[0].checked ? "Y" : "N";
     form.flag_banjir = $("#flag_banjir")[0].checked ? "Y" : "N";

@@ -36,7 +36,7 @@ namespace ABB.Application.Common.Queries
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
                 return (await _connectionFactory.Query<DropdownOptionDto>(
                     "SELECT RTRIM(LTRIM(kd_rsk)) Value, desk_rsk Text " +
-                    "FROM rf10d WHERE kd_grp_rsk = kd_grp_rsk", new { request.kd_grp_rsk })).ToList();
+                    "FROM rf10d WHERE kd_grp_rsk = @kd_grp_rsk", new { request.kd_grp_rsk })).ToList();
             }
             catch (Exception ex)
             {

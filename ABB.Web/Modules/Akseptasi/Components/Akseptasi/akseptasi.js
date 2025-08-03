@@ -15,7 +15,8 @@ function dataKodeTertanggungDropDown(){
 function dataKodeSumberBisnisDropDown(){
     return {
         kd_grp_rk: $("#temp_kd_grp_sb_bis").val().trim(),
-        kd_cb: $("#temp_kd_cb").val().trim()
+        kd_cb: $("#temp_kd_cb").val().trim(),
+        no_fax: "Y"
     }
 }
 
@@ -215,6 +216,12 @@ function OnKodeCOBChange(e){
     kd_scob.dataSource.read({kd_cob : e.sender._cascadedValue});
     var no_aks = $("#kd_cb").val().trim() + "." + value.trim() + $("#kd_scob").val().trim() + "." + $("#kd_thn").val().trim() + "." + $("#no_aks").val().trim();
     $("#temp_nomor_akseptasi").val(no_aks);
+    
+    if(value == "E"){
+        $("#RekayasaDiv").show();
+    } else {
+        $("#RekayasaDiv").hide();
+    }
 }
 
 function OnKodeSCOBChange(e){
@@ -296,5 +303,12 @@ function OnKodeRekananSumberBisnisChange(e){
             $("#kd_rk_bank").getKendoDropDownList().value(returnValue[3].split(",")[1]);
         }, 500);
         
+    });
+}
+
+function OnJkWktMainChange(e){
+    ajaxGet(`/Akseptasi/GetTglAkhPtg?jk_wkt_main=${e.sender.value()}&tgl_akh_ptg=${$("#tgl_akh_ptg").val()}`, (returnValue) => {        
+        $("#tgl_akh_ptg").getKendoDatePicker().value(new Date(returnValue.split(",")[1]));
+        $("#tgl_akh_ptg").getKendoDatePicker().trigger("change");
     });
 }

@@ -9,5 +9,7 @@ namespace ABB.Application.Common.Queries
         public string kd_cb { get; set; }
 
         public string nm_rk { get; set; }
+
+        public string no_fax { get; set; }
     }
 }

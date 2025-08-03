@@ -5274,7 +5274,7 @@
       <None Update="Modules\Akseptasi\Components\Coverage\coverage.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Modules\Akseptasi\Components\Obyek\obyek.js">
+      <None Update="Modules\Akseptasi\Components\Obyek\obyekFire.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Modules\Akseptasi\Components\Other\otherFire.js">
@@ -5795,6 +5795,12 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Modules\Akseptasi\JS\akseptasi.lokasiResiko.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Akseptasi\Components\Obyek\obyekFireFull.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Akseptasi\Components\Other\otherMotorOld.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>

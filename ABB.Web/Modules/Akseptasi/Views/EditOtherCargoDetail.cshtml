@@ -70,7 +70,8 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Jenis Angkut</label>
                 <div class="col-sm-6">
-                    <kendo-dropdownlist for="jns_angkut" style="width: 100%" class="not-null-dropdown"
+                    <kendo-dropdownlist for="jns_angkut" style="width: 100%" class="not-null-dropdown" on-change="OnJenisAngkutChange"
+                                        option-label="Pilih Jenis Angkut"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -85,7 +86,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Kode Kapal</label>
                 <div class="col-sm-6">
-                    <kendo-dropdownlist for="kd_angkut" style="width: 100%"
+                    <kendo-dropdownlist for="kd_angkut" style="width: 100%" on-change="OnKodeKapalChange" option-label="Pilih Kode Kapal"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -98,7 +99,7 @@
         </div>
         <div class="form-group row">
             <div class="row col-sm-6">
-                <label class="col-sm-6">No. Alat Angkut</label>
+                <label class="col-sm-6" id="label_nm_angkut"></label>
                 <div class="col-sm-6">
                     <kendo-textbox for="nm_angkut" style="width: 100%; background-color: #FFFFE1"/>
                 </div>
@@ -106,7 +107,7 @@
         </div>
         <div class="form-group row">
             <div class="row col-sm-6">
-                <label class="col-sm-6">No. Surat Jalan/DO</label>
+                <label class="col-sm-6" id="label_no_bl"></label>
                 <div class="col-sm-6">
                     <kendo-textbox name="resiko_other_cargo_detail_no_bl" value="@Model.no_bl" style="width: 100%"/>
                 </div>

@@ -33,8 +33,8 @@ namespace ABB.Application.Akseptasis.Queries
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
                 return (await _connectionFactory.Query<DropdownOptionDto>(
-                    "SELECT RTRIM(LTRIM(kd_jns_ptg)) Value, ket_klasula + ' ' + desk Text " +
-                    "FROM dp01")).ToList();
+                    "SELECT RTRIM(LTRIM(kd_jns_ptg)) Value, kd_jns_ptg + ' | ' + desk Text " +
+                    "FROM dp01 WHERE kd_scob = '00'")).ToList();
             }
             catch (Exception ex)
             {

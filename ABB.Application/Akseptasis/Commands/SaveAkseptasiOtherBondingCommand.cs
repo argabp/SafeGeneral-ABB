@@ -55,8 +55,6 @@ namespace ABB.Application.Akseptasis.Commands
 
         public decimal? nilai_kontr { get; set; }
 
-        public string? no_kontr { get; set; }
-
         public string? ket_rincian_kontr { get; set; }
 
         public DateTime? tgl_terbit { get; set; }
@@ -64,8 +62,6 @@ namespace ABB.Application.Akseptasis.Commands
         public DateTime? tgl_lelang { get; set; }
 
         public DateTime? tgl_tr { get; set; }
-
-        public string? ket_pjs { get; set; }
 
         public string? no_pol_ttg { get; set; }
 
@@ -137,11 +133,9 @@ namespace ABB.Application.Akseptasis.Commands
                 else
                 {
                     entity.kd_rk_surety = request.kd_rk_surety;
-                    entity.no_kontr = request.no_kontr;
                     entity.kd_grp_prc = request.kd_grp_prc;
                     entity.kd_rumus = request.kd_rumus;
                     entity.nm_kons = request.nm_kons;
-                    entity.ket_pjs = request.ket_pjs;
                     entity.nm_principal = request.nm_principal;
                     entity.tgl_tr = request.tgl_tr;
                     entity.jbt_principal = request.jbt_principal;
@@ -164,6 +158,13 @@ namespace ABB.Application.Akseptasis.Commands
             
                     await dbContext.SaveChangesAsync(cancellationToken);
                 }
+
+                await _connectionFactory.QueryProc<string>("spe_uw02e_20", new
+                {
+                    request.kd_cb, request.kd_cob, request.kd_scob,
+                    request.kd_thn, request.no_aks, request.no_updt,
+                    request.no_rsk, request.kd_endt
+                });
 
                 return Unit.Value;
             }

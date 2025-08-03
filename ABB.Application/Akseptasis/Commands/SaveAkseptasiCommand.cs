@@ -237,6 +237,11 @@ namespace ABB.Application.Akseptasis.Commands
                     {
                         request.wpc, nopol_induk = request.no_pol_induk
                     });
+
+                    if (akseptasi.kd_cob.Trim() != "E")
+                    {
+                        akseptasi.tgl_maintenance = null;
+                    }
                 
                     dbContext.Akseptasi.Add(akseptasi);
 
@@ -300,6 +305,11 @@ namespace ABB.Application.Akseptasis.Commands
                     entity.kd_usr_input = request.kd_usr_input;
                     entity.kd_usr_updt = request.kd_usr_updt;
                     entity.kd_usr_closing = request.kd_usr_closing;
+
+                    if (entity.kd_cob.Trim() == "E")
+                    {
+                        entity.tgl_maintenance = request.tgl_maintenance;
+                    }
                     
                     await dbContext.SaveChangesAsync(cancellationToken);
 

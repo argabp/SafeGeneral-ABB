@@ -44,8 +44,6 @@ namespace ABB.Web.Modules.Akseptasi.Models
 
         public decimal? thn_buat { get; set; }
 
-        public string? kpsts_msn { get; set; }
-
         public byte? jml_tempat_ddk { get; set; }
 
         public string kd_jns_ptg { get; set; }

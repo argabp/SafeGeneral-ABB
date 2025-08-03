@@ -23,6 +23,7 @@ function saveAkseptasiObyek(url) {
     form.no_rsk = resiko.no_rsk;
     form.kd_endt = resiko.kd_endt;
     form.no_pol_ttg = $("#no_pol_ttg").val();
+    form.pst_share = resiko.pst_share_bgu;
     
     var data = JSON.stringify(form);
     
@@ -42,4 +43,11 @@ function saveAkseptasiObyek(url) {
             closeProgress('#AkseptasiObyekWindow');
         }
     );
+}
+
+function OnNilaiPtg100Change(e){
+    // ajaxGet(`/Akseptasi/GetNilaiPtg?pst_share=${$("#pst_share").val()}&kd_grp_sb_bis=${$("#kd_grp_sb_bis").val()}&kd_rk_sb_bis=${e.sender.value()}`, (returnValue) => {
+    //     $("#tgl_akh_ptg").getKendoDatePicker().value(returnValue.split(",")[1]);
+    //     $("#tgl_akh_ptg").getKendoDatePicker().trigger("change");
+    // });
 }

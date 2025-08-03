@@ -305,6 +305,20 @@
                 </div>
             </div>
         </div>
+        <div class="form-group row" style="display: none" id="RekayasaDiv">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Mulai Periode Maintenance</label>
+                <div class="col-sm-6 row">
+                    <div class="col-sm-6">
+                        <kendo-datepicker for="tgl_maintenance" style="width: 100%;"/>
+                        <span asp-validation-for="tgl_maintenance" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" format="#" name="jk_wkt_main" style="width: 100%;" on-change="OnJkWktMainChange"/>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="form-group row">
             <div class="row col-sm-6">
                 <label class="col-sm-6">Status Polis</label>

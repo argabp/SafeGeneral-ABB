@@ -101,22 +101,21 @@ function OnKodeKecamatanChange(e){
 }
 
 function onLokasiResikoChange(e){
-    debugger;
-    ajaxGet("/Akseptasi/GetLokasiResikoDetail?kd_lok_rsk=" + e.sender._cascadedValue, (returnValue) => {
+    ajaxGet("/Akseptasi/GetLokasiResikoDetail?kd_lok_rsk=" + e.sender._value, (returnValue) => {
         $("#almt_rsk").getKendoTextArea().value(returnValue[0].split(",")[1]);
         $("#kd_pos_rsk").getKendoTextBox().value(returnValue[4].split(",")[1]);
-        $("#kd_prop").getKendoDropDownList().value(returnValue[5].split(",")[1]);
+        $("#kd_prop").getKendoDropDownList().value(returnValue[5].split(",")[1].trim());
         $("#kd_prop").getKendoDropDownList().trigger("change");
         $("#kt_rsk").getKendoTextBox().value(returnValue[6].split(",")[1]);
         
         setTimeout(() => {
-            $("#kd_kab").getKendoDropDownList().value(returnValue[1].split(",")[1]);
+            $("#kd_kab").getKendoDropDownList().value(returnValue[1].split(",")[1].trim());
             $("#kd_kab").getKendoDropDownList().trigger("change");
             setTimeout(() => {
-                $("#kd_kec").getKendoDropDownList().value(returnValue[2].split(",")[1]);
+                $("#kd_kec").getKendoDropDownList().value(returnValue[2].split(",")[1].trim());
                 $("#kd_kec").getKendoDropDownList().trigger("change");
                 setTimeout(() => {
-                    $("#kd_kel").getKendoDropDownList().value(returnValue[3].split(",")[1]);
+                    $("#kd_kel").getKendoDropDownList().value(returnValue[3].split(",")[1].trim());
                 }, 500);
             }, 500);
         }, 500);

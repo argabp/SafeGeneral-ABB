@@ -77,9 +77,16 @@
                 </div>
             </div>
             <div class="row col-sm-6">
-                <label class="col-sm-6">Nomor Kontrak</label>
+                <label class="col-sm-6">Group Obligee</label>
                 <div class="col-sm-6">
-                    <kendo-textbox for="no_kontr" style="width: 100%"/>
+                    <kendo-dropdownlist for="kd_obl" style="width: 100%" class="not-null-dropdown" option-label="Pilih Group Obligee"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetGroupObligee", "Akseptasi")" data="dataGroupObligeeDropDown"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
                 </div>
             </div>
         </div>
@@ -87,7 +94,14 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Kode Principal</label>
                 <div class="col-sm-3">
-                    <kendo-textbox for="kd_grp_prc" style="width: 100%; background-color: #FFFFE1" on-change="OnChangeKodePrincipal" />
+                    <kendo-dropdownlist for="kd_grp_prc" style="width: 100%" class="not-null-dropdown" on-change="OnChangeKodePrincipal"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodePrincipal", "Akseptasi")" data="dataKodePrincipalDropDown"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
                 </div>
                 <div class="col-sm-3">
                     <kendo-dropdownlist for="kd_rk_prc" style="width: 100%"
@@ -101,77 +115,9 @@
                 </div>
             </div>
             <div class="row col-sm-6">
-                <label class="col-sm-6">Kode Rumus</label>
-                <div class="col-sm-6">
-                    <kendo-dropdownlist for="kd_rumus" style="width: 100%" class="not-null-dropdown"
-                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
-                        <datasource type="DataSourceTagHelperType.Custom">
-                            <transport>
-                                <read url="@Url.Action("GetKodeRumus", "Akseptasi")"/>
-                            </transport>
-                        </datasource>
-                    </kendo-dropdownlist>
-                </div>
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="row col-sm-6">
-                <label class="col-sm-6">Nama Konsorsium</label>
-                <div class="col-sm-6">
-                    <kendo-textarea name="nm_kons" rows="2" style="width: 100%">@Model.nm_kons</kendo-textarea>
-                    <span asp-validation-for="nm_kons" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="row col-sm-6">
-                <label class="col-sm-6">Ket. Pemenang Lelang</label>
-                <div class="col-sm-6">
-                    <kendo-textbox for="ket_pjs" style="width: 100%"/>
-                </div>
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="row col-sm-6">
-                <label class="col-sm-6">TTD Principal</label>
-                <div class="col-sm-6">
-                    <kendo-textbox for="nm_principal" style="width: 100%"/>
-                </div>
-            </div>
-            <div class="row col-sm-6">
-                <label class="col-sm-6">Tanggal Transaksi</label>
-                <div class="col-sm-6">
-                    <kendo-datepicker for="tgl_tr" value="DateTime.Now" style="width: 100%"/>
-                    <span asp-validation-for="tgl_tr" class="text-danger"></span>
-                </div>
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="row col-sm-6">
-                <label class="col-sm-6">Jabatan Principal</label>
-                <div class="col-sm-6">
-                    <kendo-textbox for="jbt_principal" style="width: 100%"/>
-                </div>
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="row col-sm-6">
-                <label class="col-sm-6">Group Obligee</label>
-                <div class="col-sm-6">
-                    <kendo-dropdownlist for="kd_obl" style="width: 100%" class="not-null-dropdown"
-                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
-                        <datasource type="DataSourceTagHelperType.Custom">
-                            <transport>
-                                <read url="@Url.Action("GetGroupObligee", "Akseptasi")" data="dataGroupObligeeDropDown"/>
-                            </transport>
-                        </datasource>
-                    </kendo-dropdownlist>
-                </div>
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="row col-sm-6">
                 <label class="col-sm-6">Kode Obligee</label>
                 <div class="col-sm-6">
-                    <kendo-dropdownlist for="kd_rk_obl" style="width: 100%"
+                    <kendo-dropdownlist for="kd_rk_obl" style="width: 100%" option-label="Pilih Kode Obligee" on-change="OnKodeObligeeChange"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -184,6 +130,13 @@
         </div>
         <div class="form-group row">
             <div class="row col-sm-6">
+                <label class="col-sm-6">Nama Konsorsium</label>
+                <div class="col-sm-6">
+                    <kendo-textarea name="nm_kons" rows="2" style="width: 100%; background: white">@Model.nm_kons</kendo-textarea>
+                    <span asp-validation-for="nm_kons" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
                 <label class="col-sm-6">Nama Obliguee</label>
                 <div class="col-sm-6">
                     <kendo-textarea name="nm_obl" rows="2" style="width: 100%; background-color: #FFFFE1">@Model.nm_obl</kendo-textarea>
@@ -193,6 +146,12 @@
         </div>
         <div class="form-group row">
             <div class="row col-sm-6">
+                <label class="col-sm-6">TTD Principal</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="nm_principal" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
                 <label class="col-sm-6">Alamat</label>
                 <div class="col-sm-6">
                     <kendo-textarea name="almt_obl" rows="2" style="width: 100%; background: white">@Model.almt_obl</kendo-textarea>
@@ -201,6 +160,12 @@
             </div>
         </div>
         <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Jabatan Principal</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="jbt_principal" style="width: 100%"/>
+                </div>
+            </div>
             <div class="row col-sm-6">
                 <label class="col-sm-6">Kota</label>
                 <div class="col-sm-6">
@@ -212,11 +177,24 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Group Kontrak</label>
                 <div class="col-sm-6">
-                    <kendo-dropdownlist for="kd_kontr" style="width: 100%" class="not-null-dropdown"
+                    <kendo-dropdownlist for="kd_kontr" style="width: 100%" class="not-null-dropdown" option-label="Pilih Group Kontrak"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
                                 <read url="@Url.Action("GetKodeKontrak", "Akseptasi")" data="dataGroupKontrakDropDown" />
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Rumus</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_rumus" style="width: 100%" class="not-null-dropdown"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeRumus", "Akseptasi")"/>
                             </transport>
                         </datasource>
                     </kendo-dropdownlist>
@@ -252,7 +230,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Kode Pekerjaan</label>
                 <div class="col-sm-6">
-                    <kendo-dropdownlist for="jns_pekerjaan" style="width: 100%" class="not-null-dropdown"
+                    <kendo-dropdownlist for="jns_pekerjaan" style="width: 100%" class="not-null-dropdown" option-label="Pilih Kode Pekerjaan"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -267,7 +245,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Deskripsi Pekejraan</label>
                 <div class="col-sm-6">
-                    <kendo-textarea name="ket_rincian_kontr" rows="2" style="width: 100%">@Model.ket_rincian_kontr</kendo-textarea>
+                    <kendo-textarea name="ket_rincian_kontr" rows="2" style="width: 100%; background: white">@Model.ket_rincian_kontr</kendo-textarea>
                     <span asp-validation-for="ket_rincian_kontr" class="text-danger"></span>
                 </div>
             </div>
@@ -303,6 +281,15 @@
                 <div class="col-sm-6">
                     <kendo-datepicker for="tgl_terbit" value="DateTime.Now" style="width: 100%"/>
                     <span asp-validation-for="tgl_terbit" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Tanggal Transaksi</label>
+                <div class="col-sm-6">
+                    <kendo-datepicker for="tgl_tr" value="DateTime.Now" style="width: 100%"/>
+                    <span asp-validation-for="tgl_tr" class="text-danger"></span>
                 </div>
             </div>
         </div>

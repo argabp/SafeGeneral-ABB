@@ -45,3 +45,26 @@ function saveAkseptasiOtherCargoDetail(url) {
         }
     );
 }
+
+function OnJenisAngkutChange(e){
+    switch(e.sender._cascadedValue){
+        case "01":
+            $("#label_nm_angkut").text("No. Alat Angkut");
+            $("#label_no_bl").text("No. Surat Jalan/DO");
+            break;
+        case "02":
+            $("#label_nm_angkut").text("Nama Kapal");
+            $("#label_no_bl").text("No. B/L");
+            break;
+        case "03":
+            $("#label_nm_angkut").text("No. Penerbangan");
+            $("#label_no_bl").text("No. AWB");
+            break;
+    }
+}
+
+function OnKodeKapalChange(e){
+    ajaxGet(`/Akseptasi/GenerateNamaAngkut?kd_angkut=${e.sender._cascadedValue}`, (returnValue) => {
+        $("#nm_angkut").getKendoTextBox().value(returnValue.split(",")[1]);
+    });
+}

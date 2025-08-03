@@ -50,8 +50,6 @@ namespace ABB.Web.Modules.Akseptasi.Models
 
         public decimal? nilai_kontr { get; set; }
 
-        public string? no_kontr { get; set; }
-
         public string? ket_rincian_kontr { get; set; }
 
         public DateTime? tgl_terbit { get; set; }
@@ -59,8 +57,6 @@ namespace ABB.Web.Modules.Akseptasi.Models
         public DateTime? tgl_lelang { get; set; }
 
         public DateTime? tgl_tr { get; set; }
-
-        public string? ket_pjs { get; set; }
 
         public string? no_pol_ttg { get; set; }
 

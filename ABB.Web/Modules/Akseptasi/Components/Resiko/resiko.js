@@ -28,7 +28,8 @@ function btnAddAkseptasiResiko_Click() {
         openAkseptasiResikoWindow(`/Akseptasi/AddResiko?kd_cb=${$("#kd_cb").val()}&kd_cob=${$("#kd_cob").val()}
                                         &kd_scob=${$("#kd_scob").val()}&kd_thn=${$("#kd_thn").val()}
                                         &no_aks=${$("#no_aks").val()}&no_updt=${$("#no_updt").val()}
-                                        &tgl_mul_ptg=${$("#tgl_mul_ptg").val()}&tgl_akh_ptg=${$("#tgl_akh_ptg").val()}`, 'Add New Resiko');
+                                        &tgl_mul_ptg=${$("#tgl_mul_ptg").val()}&tgl_akh_ptg=${$("#tgl_akh_ptg").val()}
+                                        &pst_share_bgu=${$("#pst_share_bgu").val()}&faktor_prd=${$("#faktor_prd").val()}`, 'Add New Resiko');
     });
 }
 function btnEditAkseptasiResiko_OnClick(e) {
@@ -190,6 +191,6 @@ function openCopyEndorsWindow(url, title) {
 
 function btnCopyEndorsResiko_OnClick() {
     $('#btnCopyEndorsResiko').click(function () {
-        openCopyEndorsWindow("/Akseptasi/CopyEndors", "Copy Endors")
+        openCopyEndorsWindow("/Akseptasi/CopyEndors", "Copy Endors");
     });
 }

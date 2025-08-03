@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ABB.Application.Common.Interfaces;
@@ -48,8 +49,6 @@ namespace ABB.Application.Akseptasis.Commands
         public string no_msn { get; set; }
 
         public decimal? thn_buat { get; set; }
-
-        public string? kpsts_msn { get; set; }
 
         public byte? jml_tempat_ddk { get; set; }
 
@@ -196,7 +195,22 @@ namespace ABB.Application.Akseptasis.Commands
                 var entity = await dbContext.AkseptasiOtherMotor.FindAsync(request.kd_cb, 
                     request.kd_cob, request.kd_scob, request.kd_thn, request.no_aks, request.no_updt, 
                     request.no_rsk, request.kd_endt);
-            
+                
+                var result = (await _connectionFactory.QueryProc<string>("spe_uw02e_50", new
+                {
+                    request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn,
+                    request.no_aks, request.no_updt, no_polisi = request.no_pls, request.no_rangka,
+                    request.no_msn, request.kd_jns_kend, request.kd_wilayah, request.kd_jns_ptg,
+                    request.nilai_casco, request.pst_rate_prm, request.flag_banjir, request.flag_aog,
+                    request.flag_hh, request.flag_trs, request.nilai_tjh, request.nilai_tjp,
+                    request.nilai_pap, request.nilai_pad, request.pst_rate_banjir, request.pst_rate_aog,
+                    request.pst_rate_hh, request.pst_rate_trs, request.pst_rate_tjh, request.pst_rate_tjp,
+                    request.pst_rate_pap, request.pst_rate_pad
+                })).FirstOrDefault();
+
+                if (!string.IsNullOrWhiteSpace(result))
+                    throw new Exception(result);
+                
                 if (entity == null)
                 {
                     var akseptasiOther = _mapper.Map<AkseptasiOtherMotor>(request);
@@ -225,7 +239,6 @@ namespace ABB.Application.Akseptasis.Commands
                     entity.tgl_mul_ptg = request.tgl_mul_ptg;
                     entity.tgl_akh_ptg = request.tgl_akh_ptg;
                     entity.nm_qq = request.nm_qq;
-                    entity.kpsts_msn = request.kpsts_msn;
                     entity.almt_qq = request.almt_qq;
                     entity.nilai_bia_pol = request.nilai_bia_pol;
                     entity.kt_qq = request.kt_qq;
@@ -271,6 +284,13 @@ namespace ABB.Application.Akseptasis.Commands
             
                     await dbContext.SaveChangesAsync(cancellationToken);
                 }
+
+                await _connectionFactory.QueryProc<string>("spe_uw02e_20", new
+                {
+                    request.kd_cb, request.kd_cob, request.kd_scob,
+                    request.kd_thn, request.no_aks, request.no_updt,
+                    request.no_rsk, request.kd_endt
+                });
 
                 return Unit.Value;
             }

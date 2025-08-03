@@ -1,6 +1,14 @@
 ﻿$(document).ready(function () {
     btnPreviousOther();
     btnSaveAkseptasiResikoOther_Click();
+    
+    if($("#kd_cob").val().trim() == "H"){
+        $("#label_no_rangka").text("Nomor IMO");
+        $("#label_no_msn").text("Nomor Register");
+    }else {
+        $("#label_no_rangka").text("Nomor Rangka");
+        $("#label_no_msn").text("Nomor Mesin");
+    }
 });
 
 function btnPreviousOther(){
@@ -34,6 +42,7 @@ function saveAkseptasiResikoOther(url) {
 
     ajaxPost(url, data,
         function (response) {
+            refreshGrid("#AkseptasiResikoGrid");
             if (response.Result == "OK") {
                 showMessage('Success', response.Message);
             }
@@ -45,4 +54,32 @@ function saveAkseptasiResikoOther(url) {
             closeProgress('#AkseptasiWindow');
         }
     );
+}
+
+function OnKodeKapalChange(e){
+    ajaxGet(`/Akseptasi/GenerateDataKapal?kd_kapal=${e.sender.value()}`, (returnValue) => {
+        for (let data of returnValue){
+            if(data == null) {
+                continue;
+            }
+            
+            var property = data.split(",")[0];
+            var value = data.split(",")[1];
+            
+            switch (property){
+                case "grt":
+                    $("#grt").getKendoNumericTextBox().value(value);
+                    break;
+                case "merk_kapal":
+                    $("#merk_kapal").getKendoDropDownList().value(value);
+                    break;
+                case "nm_kapal":
+                    $("#nm_kapal").getKendoTextBox().value(value);
+                    break;
+                case "thn_buat":
+                    $("#thn_buat").getKendoNumericTextBox().value(value);
+                    break;
+            }
+        }
+    });
 }

@@ -36,7 +36,7 @@ namespace ABB.Application.Akseptasis.Queries
             try
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
-                return (await _connectionFactory.Query<DropdownOptionDto>("SELECT RTRIM(LTRIM(kd_cb)) Value, nm_rk Text " +
+                return (await _connectionFactory.Query<DropdownOptionDto>("SELECT RTRIM(LTRIM(kd_rk)) Value, nm_rk Text " +
                                                                           "FROM rf03 WHERE kd_cb = @kd_cb AND kd_grp_rk = @kd_grp_surety", new { request.kd_cb, request.kd_grp_surety })).ToList();
             }
             catch (Exception ex)

@@ -23,9 +23,9 @@ namespace ABB.Application.Akseptasis.Commands
 
         public string no_aks { get; set; }
 
-        public Int16 no_updt { get; set; }
+        public int no_updt { get; set; }
 
-        public Int16 no_rsk { get; set; }
+        public int no_rsk { get; set; }
 
         public string kd_endt { get; set; }
 
@@ -235,6 +235,13 @@ namespace ABB.Application.Akseptasis.Commands
                     
                     await dbContext.SaveChangesAsync(cancellationToken);
                 }
+
+                await _connectionFactory.QueryProc<string>("spe_uw02e_20", new
+                {
+                    request.kd_cb, request.kd_cob, request.kd_scob,
+                    request.kd_thn, request.no_aks, request.no_updt,
+                    request.no_rsk, request.kd_endt
+                });
 
                 return Unit.Value;
             }

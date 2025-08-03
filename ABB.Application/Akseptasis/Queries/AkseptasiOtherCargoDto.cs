@@ -29,8 +29,6 @@ namespace ABB.Application.Akseptasis.Queries
 
         public string? kd_kond { get; set; }
 
-        public decimal? pst_deduct { get; set; }
-
         public DateTime? tgl_brkt { get; set; }
 
         public string? no_bl { get; set; }

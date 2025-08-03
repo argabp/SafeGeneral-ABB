@@ -61,7 +61,8 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Kode Kapal</label>
                 <div class="col-sm-6">
-                    <kendo-dropdownlist for="kd_kapal" style="width: 100%" class="not-null-dropdown"
+                    <kendo-dropdownlist for="kd_kapal" style="width: 100%" class="not-null-dropdown" option-label="Pilih Kode Kapal"
+                                        on-change="OnKodeKapalChange"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -84,7 +85,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Jenis Kapal</label>
                 <div class="col-sm-6">
-                    <kendo-dropdownlist for="merk_kapal" style="width: 100%"
+                    <kendo-dropdownlist for="merk_kapal" style="width: 100%" option-label="Pilih Jenis Kapal"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -97,7 +98,7 @@
         </div>
         <div class="form-group row">
             <div class="row col-sm-6">
-                <label class="col-sm-6">Nomor Rangka</label>
+                <label class="col-sm-6" id="label_no_rangka"></label>
                 <div class="col-sm-6">
                     <kendo-textbox for="no_rangka" style="width: 100%; background-color: #FFFFE1"/>
                 </div>
@@ -105,7 +106,7 @@
         </div>
         <div class="form-group row">
             <div class="row col-sm-6">
-                <label class="col-sm-6">Nomor Mesin</label>
+                <label class="col-sm-6" id="label_no_msn"></label>
                 <div class="col-sm-6">
                     <kendo-textbox for="no_msn" style="width: 100%; background-color: #FFFFE1"/>
                 </div>

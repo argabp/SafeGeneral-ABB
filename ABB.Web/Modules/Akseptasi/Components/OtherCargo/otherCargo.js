@@ -49,3 +49,9 @@ function saveAkseptasiResikoOtherCargo(url) {
         }
     );
 }
+
+function OnKodeAlatAngkutChange(e){
+    ajaxGet(`/Akseptasi/GenerateNamaKapal?kd_kapal=${e.sender._cascadedValue}`, (returnValue) => {
+        $("#nm_kapal").getKendoTextBox().value(returnValue.split(",")[1]);
+    });
+}

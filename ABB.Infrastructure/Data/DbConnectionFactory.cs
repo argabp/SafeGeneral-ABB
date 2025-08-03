@@ -14,6 +14,7 @@ namespace ABB.Infrastructure.Data
     public class DbConnectionFactory : IDbConnectionFactory
     {
         private readonly IConfiguration _configuration;
+        private string ConnectionString;
 
         public DbConnectionFactory(IConfiguration configuration)
         {
@@ -23,8 +24,8 @@ namespace ABB.Infrastructure.Data
         // Implementation of the interface method
         public void CreateDbConnection(string databaseName)
         {
-            var connectionString = string.Format(_configuration.GetConnectionString("UserConnection"), databaseName);
-            var connection = new SqlConnection(connectionString);
+            ConnectionString = string.Format(_configuration.GetConnectionString("UserConnection"), databaseName);
+            var connection = new SqlConnection(ConnectionString);
             Connection = connection;
         }
         
@@ -47,7 +48,9 @@ namespace ABB.Infrastructure.Data
 
         public async Task<IEnumerable<T>> QueryProc<T>(string query, object param = null)
         {
-            return await Connection.QueryAsync<T>(query, param, commandType: CommandType.StoredProcedure, commandTimeout:1000);
+            await using var connection = new SqlConnection(ConnectionString);
+            await connection.OpenAsync();
+            return await connection.QueryAsync<T>(query, param, commandType: CommandType.StoredProcedure, commandTimeout:1000);
         }
 
         public async Task<dynamic> QueryFirstProc(string query, object param = null)

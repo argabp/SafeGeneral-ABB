@@ -1,6 +1,14 @@
 ﻿$(document).ready(function () {
     btnPreviousOther();
     btnSaveAkseptasiResikoOther_Click();
+    
+    if($("#kd_cob").val().trim() == "H"){
+        $("#label_no_rangka").text("Nomor IMO");
+        $("#label_no_msn").text("Nomor Register");
+    }else {
+        $("#label_no_rangka").text("Nomor Rangka");
+        $("#label_no_msn").text("Nomor Mesin");
+    }
 });
 
 function btnPreviousOther(){
@@ -34,6 +42,7 @@ function saveAkseptasiResikoOther(url) {
 
     ajaxPost(url, data,
         function (response) {
+            refreshGrid("#AkseptasiResikoGrid");
             if (response.Result == "OK") {
                 showMessage('Success', response.Message);
             }
@@ -45,4 +54,13 @@ function saveAkseptasiResikoOther(url) {
             closeProgress('#AkseptasiWindow');
         }
     );
+}
+
+function OnKodeKapalChange(e){
+    ajaxGet(`/Akseptasi/GenerateDataKapal?kd_kapal=${e.sender.value()}`, (returnValue) => {
+        $("#grt").getKendoNumericTextBox().value(returnValue[0].split(",")[1]);
+        $("#merk_kapal").getKendoDropDownList().value(returnValue[1].split(",")[1]);
+        $("#nm_kapal").getKendoTextBox().value(returnValue[2].split(",")[1]);
+        $("#thn_buat").getKendoNumericTextBox().value(returnValue[3].split(",")[1]);
+    });
 }

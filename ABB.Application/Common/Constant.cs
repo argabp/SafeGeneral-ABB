@@ -203,7 +203,7 @@ namespace ABB.Application.Common
         public static readonly IDictionary<string, string> AkseptasiObyekViewMapping = new Dictionary<string, string>()
         {
             {
-                "d_uw02e_06_01_f", "_ObyekFire"
+                "d_uw02e_06_01_f", "_ObyekFireFull"
             },
             {
                 "d_uw02e_06_04_t", "Empty"
@@ -215,7 +215,7 @@ namespace ABB.Application.Common
                 "d_uw02e_06_01_t", "Empty"
             },
             {
-                "d_uw02e_06_08_f", "Empty"
+                "d_uw02e_06_08_f", "_ObyekFire"
             },
             {
                 "d_uw02e_06_03_f", "Empty"
@@ -249,7 +249,7 @@ namespace ABB.Application.Common
                 "d_uw02e_04_07_f", "_OtherPA"
             },
             {
-                "d_uw02e_04_08_f", "Empty"
+                "d_uw02e_04_08_f", "_OtherHoleInOne"
             },
             {
                 "d_uw02e_04_03_f", "_OtherCargo"

@@ -76,6 +76,7 @@ namespace ABB.Web.Modules.Akseptasi.Components.OtherMotor
                 akseptasiMotorViewModel.stn_rate_pap = 1;
                 akseptasiMotorViewModel.pst_rate_pad = 0;
                 akseptasiMotorViewModel.stn_rate_pad = 1;
+                akseptasiMotorViewModel.kd_endt = "I";
 
                 return View("_OtherMotor", akseptasiMotorViewModel);
             }

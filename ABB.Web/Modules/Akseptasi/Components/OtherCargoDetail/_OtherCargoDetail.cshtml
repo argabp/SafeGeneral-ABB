@@ -10,7 +10,7 @@
         </div>
         <div class="offset-5"></div>
         <div class="col-md-2">
-            <button class="flat-btn-primary" style="height: 1em" id="btnAddNewAkseptasiOtherCargoDetail">Add New Other Cargo Detail</button>
+            <button class="flat-btn-primary" style="height: 1em" id="btnAddNewAkseptasiOtherCargoDetail">Add New</button>
         </div>
     </div>
     
@@ -23,6 +23,7 @@
         .Columns(columns =>
         {
             columns.Bound(col => col.no_urut).Width(150).Title("No Urut");
+            columns.Bound(col => col.nm_angkut).Width(150).Title("Nama Angkut");
             columns.Command(command =>
             {
                 command.Custom("EditAkseptasiOtherCargoDetail")

@@ -39,8 +39,6 @@ namespace ABB.Application.Akseptasis.Commands
 
         public string? kd_kond { get; set; }
 
-        public decimal? pst_deduct { get; set; }
-
         public DateTime? tgl_brkt { get; set; }
 
         public string? no_bl { get; set; }
@@ -141,7 +139,6 @@ namespace ABB.Application.Akseptasis.Commands
                     entity.tempat_transit = request.tempat_transit;
                     entity.consignee = request.consignee;
                     entity.kd_kond = request.kd_kond;
-                    entity.pst_deduct = request.pst_deduct;
                     entity.kond_sps = request.kond_sps;
                     entity.survey = request.survey;
                     entity.st_transit = request.st_transit;

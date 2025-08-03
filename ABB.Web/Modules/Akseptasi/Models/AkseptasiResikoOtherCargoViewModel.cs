@@ -31,8 +31,6 @@ namespace ABB.Web.Modules.Akseptasi.Models
 
         public string? kd_kond { get; set; }
 
-        public decimal? pst_deduct { get; set; }
-
         public DateTime? tgl_brkt { get; set; }
 
         public string? no_bl { get; set; }
