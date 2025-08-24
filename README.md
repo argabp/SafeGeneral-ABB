@@ -197,23 +197,23 @@ FluentValidation is used for request validation, and the validation logic is app
 
    ```csharp
    public async Task<IActionResult> CreateUser([FromBody] UserViewModel model)
-        {
-            try
-            {
-                var command = Mapper.Map<CreateUserCommand>(model);
-                command.DatabaseName = Request.Cookies["DatabaseValue"];
-                await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
-            }
-            catch (ValidationException ex)
-            {
-                ModelState.AddModelErrors(ex);
-            }
-            catch (Exception ex)
-            {
-                return Json(new { Result = "ERROR", Message = ex.Message });
-            }
-            
-            return PartialView(model);
-        }
+   {
+       try
+       {
+           var command = Mapper.Map<CreateUserCommand>(model);
+           command.DatabaseName = Request.Cookies["DatabaseValue"];
+           await Mediator.Send(command);
+           return Json(new { Result = "OK", Message = Constant.DataDisimpan});
+       }
+       catch (ValidationException ex)
+       {
+           ModelState.AddModelErrors(ex);
+       }
+       catch (Exception ex)
+       {
+           return Json(new { Result = "ERROR", Message = ex.Message });
+       }
+       
+       return PartialView(model);
+   }
    ```
