@@ -4815,25 +4815,25 @@
 
     <ItemGroup>
       <Reference Include="Telerik.Reporting">
-        <HintPath>..\..\..\..\.nuget\packages\ontrace.reporting\1.0.0\lib\netcoreapp3.1\Telerik.Reporting.dll</HintPath>
+        <HintPath>..\..\..\..\.nuget\packages\abb.reporting\1.0.0\lib\netcoreapp3.1\Telerik.Reporting.dll</HintPath>
       </Reference>
       <Reference Include="Telerik.Reporting.Data.Schema">
-        <HintPath>..\..\..\..\.nuget\packages\ontrace.reporting\1.0.0\lib\netcoreapp3.1\Telerik.Reporting.Data.Schema.dll</HintPath>
+        <HintPath>..\..\..\..\.nuget\packages\abb.reporting\1.0.0\lib\netcoreapp3.1\Telerik.Reporting.Data.Schema.dll</HintPath>
       </Reference>
       <Reference Include="Telerik.Reporting.JsonSerialization">
-        <HintPath>..\..\..\..\.nuget\packages\ontrace.reporting\1.0.0\lib\netcoreapp3.1\Telerik.Reporting.JsonSerialization.dll</HintPath>
+        <HintPath>..\..\..\..\.nuget\packages\abb.reporting\1.0.0\lib\netcoreapp3.1\Telerik.Reporting.JsonSerialization.dll</HintPath>
       </Reference>
       <Reference Include="Telerik.Reporting.OpenXmlRendering.2.7.2">
-        <HintPath>..\..\..\..\.nuget\packages\ontrace.reporting\1.0.0\lib\netcoreapp3.1\Telerik.Reporting.OpenXmlRendering.2.7.2.dll</HintPath>
+        <HintPath>..\..\..\..\.nuget\packages\abb.reporting\1.0.0\lib\netcoreapp3.1\Telerik.Reporting.OpenXmlRendering.2.7.2.dll</HintPath>
       </Reference>
       <Reference Include="Telerik.Reporting.Services.AspNetCore">
-        <HintPath>..\..\..\..\.nuget\packages\ontrace.reporting\1.0.0\lib\netcoreapp3.1\Telerik.Reporting.Services.AspNetCore.dll</HintPath>
+        <HintPath>..\..\..\..\.nuget\packages\abb.reporting\1.0.0\lib\netcoreapp3.1\Telerik.Reporting.Services.AspNetCore.dll</HintPath>
       </Reference>
       <Reference Include="Telerik.Reporting.WebServiceDataSource">
-        <HintPath>..\..\..\..\.nuget\packages\ontrace.reporting\1.0.0\lib\netcoreapp3.1\Telerik.Reporting.WebServiceDataSource.dll</HintPath>
+        <HintPath>..\..\..\..\.nuget\packages\abb.reporting\1.0.0\lib\netcoreapp3.1\Telerik.Reporting.WebServiceDataSource.dll</HintPath>
       </Reference>
       <Reference Include="Telerik.WebReportDesigner.Services">
-        <HintPath>..\..\..\..\.nuget\packages\ontrace.reporting\1.0.0\lib\netcoreapp3.1\Telerik.WebReportDesigner.Services.dll</HintPath>
+        <HintPath>..\..\..\..\.nuget\packages\abb.reporting\1.0.0\lib\netcoreapp3.1\Telerik.WebReportDesigner.Services.dll</HintPath>
       </Reference>
     </ItemGroup>
 
