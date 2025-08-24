@@ -13,9 +13,11 @@ namespace ABB.Application.EntriNotas.Queries
             Details = new List<DetailNotaDto>();
         }
         
-        public string Id { get; set; }
+        public int Id { get; set; }
         
         public string kd_cb { get; set; }
+
+        public string nm_cb { get; set; }
 
         public string jns_tr { get; set; }
 
@@ -33,7 +35,11 @@ namespace ABB.Application.EntriNotas.Queries
 
         public string kd_cob { get; set; }
 
+        public string nm_cob { get; set; }
+
         public string kd_scob { get; set; }
+        
+        public string nm_scob { get; set; }
 
         public string no_pol { get; set; }
 
@@ -82,6 +88,8 @@ namespace ABB.Application.EntriNotas.Queries
         public decimal? nilai_lain { get; set; }
 
         public List<DetailNotaDto> Details { get; set; }
+
+        public string? bayar { get; set; }
 
         public void Mapping(Profile profile)
         {

@@ -35,14 +35,6 @@ namespace ABB.Application.Akseptasis.Commands
 
         public decimal? nilai_dis { get; set; }
 
-        public decimal? pst_dis_fea { get; set; }
-
-        public decimal? nilai_dis_fea { get; set; }
-
-        public decimal? pst_dis_fleet { get; set; }
-
-        public decimal? nilai_dis_fleet { get; set; }
-
         public decimal? nilai_insentif { get; set; }
 
         public decimal? nilai_bia_pol { get; set; }
@@ -63,8 +55,6 @@ namespace ABB.Application.Akseptasis.Commands
 
         public decimal? nilai_bia_supl { get; set; }
 
-        public decimal? nilai_bia_pu { get; set; }
-
         public decimal? nilai_bia_pbtl { get; set; }
 
         public decimal? nilai_bia_form { get; set; }
@@ -74,8 +64,6 @@ namespace ABB.Application.Akseptasis.Commands
         public decimal? pst_pjk { get; set; }
 
         public decimal? nilai_pjk { get; set; }
-
-        public decimal? nilai_ttl_kms { get; set; }
 
         public decimal? nilai_ttl_bia { get; set; }
 
@@ -126,25 +114,19 @@ namespace ABB.Application.Akseptasis.Commands
                 }
                 else
                 {
-                    _mapper.Map(request, entity);
-
-                    if(entity.kd_cb.Length != 5)
-                        for (int sequence = entity.kd_cb.Length; sequence < 5; sequence++)
-                        {
-                            entity.kd_cb += " ";
-                        }
-            
-                    if(entity.kd_cob.Length != 2)
-                        for (int sequence = entity.kd_cob.Length; sequence < 2; sequence++)
-                        {
-                            entity.kd_cob += " ";
-                        }
-
-                    if(entity.kd_scob.Length != 5)
-                        for (int sequence = entity.kd_scob.Length; sequence < 5; sequence++)
-                        {
-                            entity.kd_scob += " ";
-                        }
+                    entity.nilai_prm = request.nilai_prm;
+                    entity.pst_dis = request.pst_dis;
+                    entity.nilai_dis = request.nilai_dis;
+                    entity.nilai_bia_pol = request.nilai_bia_pol;
+                    entity.pst_kms = request.pst_kms;
+                    entity.nilai_kms = request.nilai_kms;
+                    entity.nilai_bia_mat = request.nilai_bia_mat;
+                    entity.pst_hf = request.pst_hf;
+                    entity.nilai_hf = request.nilai_hf;
+                    entity.nilai_bia_form = request.nilai_bia_form;
+                    entity.pst_kms_reas = request.pst_kms_reas;
+                    entity.nilai_kms_reas = request.nilai_kms_reas;
+                    entity.nilai_ttl_ptg = request.nilai_ttl_ptg;
             
                     await dbContext.SaveChangesAsync(cancellationToken);
                 }

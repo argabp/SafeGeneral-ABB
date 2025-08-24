@@ -58,9 +58,28 @@ function saveAkseptasiResikoOther(url) {
 
 function OnKodeKapalChange(e){
     ajaxGet(`/Akseptasi/GenerateDataKapal?kd_kapal=${e.sender.value()}`, (returnValue) => {
-        $("#grt").getKendoNumericTextBox().value(returnValue[0].split(",")[1]);
-        $("#merk_kapal").getKendoDropDownList().value(returnValue[1].split(",")[1]);
-        $("#nm_kapal").getKendoTextBox().value(returnValue[2].split(",")[1]);
-        $("#thn_buat").getKendoNumericTextBox().value(returnValue[3].split(",")[1]);
+        for (let data of returnValue){
+            if(data == null) {
+                continue;
+            }
+            
+            var property = data.split(",")[0];
+            var value = data.split(",")[1];
+            
+            switch (property){
+                case "grt":
+                    $("#grt").getKendoNumericTextBox().value(value);
+                    break;
+                case "merk_kapal":
+                    $("#merk_kapal").getKendoDropDownList().value(value);
+                    break;
+                case "nm_kapal":
+                    $("#nm_kapal").getKendoTextBox().value(value);
+                    break;
+                case "thn_buat":
+                    $("#thn_buat").getKendoNumericTextBox().value(value);
+                    break;
+            }
+        }
     });
 }

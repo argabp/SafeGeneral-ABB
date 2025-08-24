@@ -8,8 +8,6 @@ namespace ABB.Web.Modules.Akseptasi.Components.Resiko
     {
         public async Task<IViewComponentResult> InvokeAsync(AkseptasiResikoParameterViewModel model)
         {
-            
-            // return View("_Coverage", akseptasiViewModel);
             return View("_Resiko", new AkseptasiResikoViewModel());
         }
     }

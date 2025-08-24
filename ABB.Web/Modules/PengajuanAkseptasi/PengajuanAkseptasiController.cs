@@ -32,6 +32,13 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
         private readonly IReportGeneratorService _reportGeneratorService;
         private readonly ILogger<PengajuanAkseptasiController> _logger;
         private static List<RekananDto> _rekanans;
+        private static List<DropdownOptionDto> _cabangs;
+        private static List<DropdownOptionDto> _cobs;
+        private static List<DropdownOptionDto> _kodeTertanggung;
+        private static List<SCOBDto> _scobs;
+        private static List<DropdownOptionDto> _documentNames;
+        private static List<DropdownOptionDto> _mataUangs;
+        private static List<RF48Dto> _kodeTols;
 
         public PengajuanAkseptasiController(IConfiguration configuration, IReportGeneratorService reportGeneratorService,
             ILogger<PengajuanAkseptasiController> logger)
@@ -50,6 +57,41 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
             _rekanans = await Mediator.Send(new GetRekanansQuery()
             {
                 DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty
+            });
+            
+            _cabangs =  await Mediator.Send(new GetCabangQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            });
+            
+            _cobs = await Mediator.Send(new GetCobQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            });
+            
+            _scobs = await Mediator.Send(new GetAllSCOBQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            });
+            
+            _kodeTertanggung = await Mediator.Send(new GetKodeTertanggungQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            });
+            
+            _mataUangs = await Mediator.Send(new GetMataUangQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            });
+            
+            _documentNames = await Mediator.Send(new GetDokumensQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            });
+            
+            _kodeTols = await Mediator.Send(new GetAllRF48Query()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"]
             });
             
             return View();
@@ -216,33 +258,31 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
             }
         }
         
-        public async Task<JsonResult> GetCabang()
+        public JsonResult GetCabang()
         {
-            var result = await Mediator.Send(new GetCabangQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"]
-            });
-
-            return Json(result);
+            return Json(_cabangs);
         }
 
-        public async Task<JsonResult> GetCOB()
+        public JsonResult GetCOB()
         {
-            var result = await Mediator.Send(new GetCobQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"]
-            });
-
-            return Json(result);
+            return Json(_cobs);
         }
 
-        public async Task<JsonResult> GetSCOB(string kd_cob)
+        public JsonResult GetSCOB(string kd_cob)
         {
-            var result = await Mediator.Send(new GetSCOBQuery()
+            var result = new List<DropdownOptionDto>();
+
+            if (string.IsNullOrWhiteSpace(kd_cob))
+                kd_cob = string.Empty;
+            
+            foreach (var scob in _scobs.Where(w => w.kd_cob == kd_cob.Trim()))
             {
-                DatabaseName = Request.Cookies["DatabaseValue"],
-                kd_cob = kd_cob
-            });
+                result.Add(new DropdownOptionDto()
+                {
+                    Text = scob.nm_scob,
+                    Value = scob.kd_scob
+                });
+            }
 
             return Json(result);
         }
@@ -260,18 +300,13 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
             return Json(result);
         }
         
-        public async Task<JsonResult> GetKodeTertanggung()
+        public JsonResult GetKodeTertanggung()
         {
-            var result = await Mediator.Send(new GetKodeTertanggungQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"]
-            });
-
-            return Json(result);
+            return Json(_kodeTertanggung);
         }
         
         [HttpGet]
-        public async Task<JsonResult> GetKodeRekanan(string kd_grp_rk, string kd_cb)
+        public JsonResult GetKodeRekanan(string kd_grp_rk, string kd_cb)
         {
             var result = new List<DropdownOptionDto>();
 
@@ -307,16 +342,9 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
             return Json(result);
         }
         
-        public async Task<JsonResult> GetDocumentNames()
+        public JsonResult GetDocumentNames()
         {
-            var command = new GetDokumensQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"]
-            };
-            
-            var result = await Mediator.Send(command);
-
-            return Json(result);
+            return Json(_documentNames);
         }
         
         [HttpGet]
@@ -335,14 +363,9 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
             return Json(result);
         }
 
-        public async Task<JsonResult> GetMataUang()
+        public JsonResult GetMataUang()
         {
-            var result = await Mediator.Send(new GetMataUangQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"]
-            });
-
-            return Json(result);
+            return Json(_mataUangs);
         }
         
         [HttpPost]
@@ -389,15 +412,21 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
             }
         }
         
-        public async Task<JsonResult> GetKodeTol(string kd_cob)
+        public JsonResult GetKodeTol(string kd_cob)
         {
-            var command = new GetKodeTolQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"],
-                kd_cob = kd_cob
-            };
+            var result = new List<DropdownOptionDto>();
+
+            if (string.IsNullOrWhiteSpace(kd_cob))
+                kd_cob = string.Empty;
             
-            var result = await Mediator.Send(command);
+            foreach (var tol in _kodeTols.Where(w => w.kd_cob == kd_cob.Trim()))
+            {
+                result.Add(new DropdownOptionDto()
+                {
+                    Text = tol.nm_tol,
+                    Value = tol.kd_tol
+                });
+            }
 
             return Json(result);
         }

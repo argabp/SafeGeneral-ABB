@@ -39,7 +39,7 @@ namespace ABB.Application.Akseptasis.Queries
 	        try
 	        {
 		        _connectionFactory.CreateDbConnection(request.DatabaseName);
-		        return (await _connectionFactory.Query<AkseptasiResikoDto>(@"SELECT p.*, CONVERT(VARCHAR(100), p.no_rsk) + p.kd_endt Id
+		        var results = (await _connectionFactory.Query<AkseptasiResikoDto>(@"SELECT p.* 
 				FROM uw04a p
 				WHERE p.kd_cb = @KodeCabang AND 
 				      p.kd_cob = @kd_cob AND 
@@ -50,7 +50,16 @@ namespace ABB.Application.Akseptasis.Queries
 			        new { request.SearchKeyword, request.KodeCabang, 
 				        request.kd_cob, request.kd_scob, request.kd_thn,
 				        request.no_aks, request.no_updt
-			        })).ToList();;
+			        })).ToList();
+
+		        var sequence = 0;
+		        foreach (var result in results)
+		        {
+			        result.Id = sequence;
+			        sequence++;
+		        }
+
+		        return results;
 	        }
 	        catch (Exception e)
 	        {

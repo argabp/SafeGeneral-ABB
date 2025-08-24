@@ -209,7 +209,7 @@
                         <span asp-validation-for="kd_tol" class="text-danger"></span>
                     </div>
                     <div class="col-sm-2">
-                        <kendo-numerictextbox decimals="2" readonly="true" spinners="false" for="pst_tol" style="width: 100%;"/>
+                        <kendo-numerictextbox decimals="2" readonly="true" spinners="false" max="100" for="pst_tol" style="width: 100%;"/>
                     </div>
                 </div>
             </div>
@@ -233,12 +233,12 @@
                 <div class="row col-sm-12">
                     <label class="col-sm-4">Share (%)</label>
                     <div class="col-sm-3">
-                        <kendo-numerictextbox decimals="2" spinners="false" for="pst_share" on-change="OnPstShareChange" style="width: 100%; background-color: #FFFFE1"/>
+                        <kendo-numerictextbox decimals="2" max="100" spinners="false" for="pst_share" on-change="OnPstShareChange" style="width: 100%; background-color: #FFFFE1"/>
                         <span asp-validation-for="pst_share" class="text-danger"></span>
                     </div>
                     <label class="col-sm-3">Scheme Co-Ins(%)</label>
                     <div class="col-sm-2">
-                        <kendo-numerictextbox decimals="2" spinners="false" readonly="true" for="pst_koas" style="width: 100%; background-color: #FFFFE1"/>
+                        <kendo-numerictextbox decimals="2" max="100" spinners="false" readonly="true" for="pst_koas" style="width: 100%; background-color: #FFFFE1"/>
                         <span asp-validation-for="pst_koas" class="text-danger"></span>
                     </div>
                 </div>
@@ -274,12 +274,12 @@
                 <div class="row col-sm-12">
                     <label class="col-sm-4">Diskon (%)</label>
                     <div class="col-sm-3">
-                        <kendo-numerictextbox decimals="2" spinners="false" for="pst_dis" style="width: 100%; background-color: #FFFFE1"/>
+                        <kendo-numerictextbox decimals="2" max="100" spinners="false" for="pst_dis" style="width: 100%; background-color: #FFFFE1"/>
                         <span asp-validation-for="pst_dis" class="text-danger"></span>
                     </div>
                     <label class="col-sm-2">Komisi (%)</label>
                     <div class="col-sm-3">
-                        <kendo-numerictextbox decimals="2" spinners="false" for="pst_kms" style="width: 100%; background-color: #FFFFE1"/>
+                        <kendo-numerictextbox decimals="2" max="100" spinners="false" for="pst_kms" style="width: 100%; background-color: #FFFFE1"/>
                         <span asp-validation-for="pst_kms" class="text-danger"></span>
                     </div>
                 </div>
@@ -321,7 +321,7 @@
                     </kendo-dropdownlist>
                 </div>
                 <div class="col-sm-3">
-                    <kendo-numerictextbox decimals="2" spinners="false" for="pst_pas1" style="width: 100%;"/>
+                    <kendo-numerictextbox decimals="2" max="100" spinners="false" for="pst_pas1" style="width: 100%;"/>
                 </div>
                 <div class="col-sm-1" style="align-content: center;">%</div>
             </div>
@@ -349,7 +349,7 @@
                     </kendo-dropdownlist>
                 </div>
                 <div class="col-sm-3">
-                    <kendo-numerictextbox decimals="2" spinners="false" for="pst_pas2" style="width: 100%;"/>
+                    <kendo-numerictextbox decimals="2" max="100" spinners="false" for="pst_pas2" style="width: 100%;"/>
                 </div>
                 <div class="col-sm-1" style="align-content: center;">%</div>
             </div>
@@ -377,7 +377,7 @@
                     </kendo-dropdownlist>
                 </div>
                 <div class="col-sm-3">
-                    <kendo-numerictextbox decimals="2" spinners="false" for="pst_pas3" style="width: 100%;"/>
+                    <kendo-numerictextbox decimals="2" max="100" spinners="false" for="pst_pas3" style="width: 100%;"/>
                 </div>
                 <div class="col-sm-1" style="align-content: center;">%</div>
             </div>
@@ -405,7 +405,7 @@
                     </kendo-dropdownlist>
                 </div>
                 <div class="col-sm-3">
-                    <kendo-numerictextbox decimals="2" spinners="false" for="pst_pas4" style="width: 100%;"/>
+                    <kendo-numerictextbox decimals="2" max="100" spinners="false" for="pst_pas4" style="width: 100%;"/>
                 </div>
                 <div class="col-sm-1" style="align-content: center;">%</div>
             </div>
@@ -433,7 +433,7 @@
                     </kendo-dropdownlist>
                 </div>
                 <div class="col-sm-3">
-                    <kendo-numerictextbox decimals="2" spinners="false" for="pst_pas5" style="width: 100%;"/>
+                    <kendo-numerictextbox decimals="2" max="100" spinners="false" for="pst_pas5" style="width: 100%;"/>
                 </div>
                 <div class="col-sm-1" style="align-content: center;">%</div>
             </div>

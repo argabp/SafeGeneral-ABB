@@ -69,5 +69,7 @@ namespace ABB.Domain.Entities
         public decimal? pst_lain { get; set; }
 
         public decimal? nilai_lain { get; set; }
+
+        public string? bayar { get; set; }
     }
 }

@@ -15,7 +15,6 @@ function btnSaveAkseptasiResiko_Click() {
     });
 }
 
-
 function saveAkseptasiResiko(url) {
     var form = getFormData($('#ResikoForm'));
     form.jk_wkt_ptg = $("#resiko_jk_wkt_ptg").val();

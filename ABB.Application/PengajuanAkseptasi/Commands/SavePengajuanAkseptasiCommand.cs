@@ -132,11 +132,14 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
             {
                 request.kd_thn = request.tgl_pengajuan.ToString("yy");
             }
-            
+
             var trAkseptasi = _mapper.Map<TRAkseptasi>(request);
 
             try
             {
+                await _connectionFactory.QueryProc<string>("sp_ValidasiAkseptasi",
+                    new { request.kd_cob, request.kd_scob, request.kd_thn, request.pst_dis, request.pst_kms });
+                
                 var entity = _context.TRAkseptasi.FirstOrDefault(w => w.kd_cb == request.kd_cb &&
                                                                       w.kd_cob == request.kd_cob
                                                                       && w.kd_scob == request.kd_scob &&

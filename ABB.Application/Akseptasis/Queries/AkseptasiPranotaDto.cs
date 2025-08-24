@@ -7,6 +7,8 @@ namespace ABB.Application.Akseptasis.Queries
 {
     public class AkseptasiPranotaDto : IMapFrom<AkseptasiPranota>
     {
+        public int Id { get; set; }
+        
         public string kd_cb { get; set; }
 
         public string kd_cob { get; set; }
@@ -57,8 +59,6 @@ namespace ABB.Application.Akseptasis.Queries
 
         public decimal? nilai_bia_supl { get; set; }
 
-        public decimal? nilai_bia_pu { get; set; }
-
         public decimal? nilai_bia_pbtl { get; set; }
 
         public decimal? nilai_bia_form { get; set; }
@@ -76,6 +76,8 @@ namespace ABB.Application.Akseptasis.Queries
         public decimal? nilai_ttl_ptg { get; set; }
 
         public string? no_pol_ttg { get; set; }
+
+        public string? nm_mtu { get; set; }
         
         public void Mapping(Profile profile)
         {

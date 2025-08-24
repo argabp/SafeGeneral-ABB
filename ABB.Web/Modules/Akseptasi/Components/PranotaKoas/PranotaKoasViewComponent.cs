@@ -8,8 +8,8 @@ namespace ABB.Web.Modules.Akseptasi.Components.PranotaKoas
     {
         public async Task<IViewComponentResult> InvokeAsync(AkseptasiPranotaParameterViewModel model)
         {
+            return View("~/Modules/Akseptasi/Views/Empty.cshtml");
             
-            // return View("_Coverage", akseptasiViewModel);
             return View("_PranotaKoas", new AkseptasiPranotaKoasViewModel());
         }
     }

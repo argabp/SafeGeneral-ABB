@@ -83,6 +83,8 @@ namespace ABB.Application.EntriNotas.Commands
         public decimal? nilai_lain { get; set; }
 
         public List<DetailNotaDto> Details { get; set; }
+
+        public string? bayar { get; set; }
     }
 
     public class SaveEntriNotaCommandHandler : IRequestHandler<SaveEntriNotaCommand>
@@ -137,6 +139,7 @@ namespace ABB.Application.EntriNotas.Commands
                 nota.nilai_lain = request.nilai_lain;
                 nota.flag_cancel = request.flag_cancel;
                 nota.flag_posting = request.flag_posting;
+                nota.bayar = request.bayar;
 
                 await dbContext.SaveChangesAsync(cancellationToken);
             }

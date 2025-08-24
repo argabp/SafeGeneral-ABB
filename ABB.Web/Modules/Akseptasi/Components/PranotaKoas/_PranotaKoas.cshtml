@@ -10,7 +10,7 @@
         </div>
         <div class="offset-5"></div>
         <div class="col-md-2">
-            <button class="flat-btn-primary" style="height: 1em" id="btnAddNewAkseptasiPranotaKoas">Add New Pranota Koas</button>
+            <button class="flat-btn-primary" style="height: 1em" id="btnAddNewAkseptasiPranotaKoas">Add New Koasuransi Member</button>
         </div>
     </div>
     
@@ -22,7 +22,12 @@
         )
         .Columns(columns =>
         {
-            columns.Bound(col => col.Id).Width(150).Title("Nomor Koas");
+            columns.Bound(col => col.Id).Width(150).Title("Nama Rekanan");
+            columns.Bound(col => col.pst_share).Width(150).Title("Share (%)").Format("{0:n2}");
+            columns.Bound(col => col.nilai_prm).Width(150).Title("Premi").Format("{0:n2}");
+            columns.Bound(col => col.nilai_dis).Width(150).Title("Diskon").Format("{0:n2}");
+            columns.Bound(col => col.nilai_hf).Width(150).Title("Handling Fee").Format("{0:n2}");
+            columns.Bound(col => col.nilai_kms).Width(150).Title("Komisi").Format("{0:n2}");
             columns.Command(command =>
             {
                 command.Custom("EditAkseptasiPranotaKoas")
@@ -35,7 +40,7 @@
                     .IconClass("k-icon k-i-delete")
                     .HtmlAttributes(new { title = "Delete" })
                     .Click("btnDeleteAkseptasiPranotaKoas_OnClick");
-            }).Width(200);
+            }).Width(200).Title("Action");
         })
         .Pageable(pager => pager
             .Refresh(true)

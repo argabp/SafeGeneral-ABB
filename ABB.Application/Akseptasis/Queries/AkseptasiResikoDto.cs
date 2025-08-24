@@ -7,7 +7,7 @@ namespace ABB.Application.Akseptasis.Queries
 {
     public class AkseptasiResikoDto : IMapFrom<AkseptasiResiko>
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         
         public string kd_cb { get; set; }
 

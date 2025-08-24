@@ -83,6 +83,8 @@ namespace ABB.Web.Modules.EntriNota.Models
 
         public List<DetailNotaViewModel> Details { get; set; }
 
+        public string? bayar { get; set; }
+
         public void Mapping(Profile profile)
         {
             profile.CreateMap<NotaDto, NotaViewModel>();

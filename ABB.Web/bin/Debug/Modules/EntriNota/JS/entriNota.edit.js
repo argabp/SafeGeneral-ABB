@@ -1,5 +1,6 @@
 ﻿$(document).ready(function () {
     btnSaveEntriNota_Click();
+    btnCancelEntriNota_Click();
     setTimeout(setEntriNotaEditedValue, 1000);
 });
 
@@ -23,6 +24,15 @@ function btnSaveEntriNota_Click() {
     });
 }
 
+function btnCancelEntriNota_Click() {
+    $('#btn-cancel-entriNota').click(function () {
+        showProgress('#EntriNotaWindow');
+        setTimeout(function () {
+            cancelEntriNota('/EntriNota/NotaCancel')
+        }, 500);
+    });
+}
+
 function saveEntriNota(url){
     var form = getFormData($('#EntriNotaForm'));
     var grid = $("#DetailEntriNotaGrid").data("kendoGrid");
@@ -41,6 +51,15 @@ function saveEntriNota(url){
 
             closeProgress("#EntriNotaWindow");
             closeWindow("#EntriNotaWindow")
+        }
+    );
+}
+
+function cancelEntriNota(url){
+    ajaxGet(url + `?kd_cb=${$("#kd_cb").val()}&kd_cob=${$("#kd_cob").val()}&kd_scob=${$("#kd_scob").val()}&kd_thn=${$("#kd_thn").val()}&no_pol=${$("#no_pol").val()}&no_updt=${$("#no_updt").val()}`,
+        function (response) {
+            $("#EntriNotaWindow").html(response);
+            closeProgress('#EntriNotaWindow');
         }
     );
 }

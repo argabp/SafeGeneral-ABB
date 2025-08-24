@@ -1,208 +1,69 @@
-﻿@using Kendo.Mvc.UI
-@model ABB.Web.Modules.Akseptasi.Models.AkseptasiPranotaViewModel
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@addTagHelper *, Kendo.Mvc
-@addTagHelper *, ABB.Web
+﻿@using ABB.Application.Akseptasis.Queries
+@using Kendo.Mvc.UI
 
 <script src="~/Modules/Akseptasi/Components/Pranota/pranota.js"></script>
 
 <style>
-    p {
-        margin: 0px;
-        padding: 0px;
-    }
-    label {
-        align-content: center;
+    .flat-btn-primary{
+        padding: 10px 0px;
     }
 </style>
 
-@{
-    var nomor_aksepatsi = Model.kd_cb.Trim() + Model.kd_cob.Trim() +
-                          Model.kd_scob.Trim() + Model.kd_thn.Trim() + Model.no_aks.Trim();
-}
-
-<div class="window-body" style="background-color: lightgray">
-    <form id="PranotaForm" enctype="multipart/form-data" autocomplete="off">
-    @Html.HiddenFor(h => h.IsEditPranota)
-        <div class="form-group row">
-            <div class="row col-sm-6">
-                <label class="col-sm-6">Nomor Akseptasi</label>
-                <div class="col-sm-6">
-                    <kendo-textbox name="temp_pranota_nomor_akseptasi" value="@nomor_aksepatsi" readonly="true" style="width: 100%"/>
-                </div>
-            </div>
-            <div class="row col-sm-6">
-                <label class="col-sm-6">Nomor Update</label>
-                <div class="col-sm-6">
-                    <kendo-textbox name="pranota_no_updt" value="@Model.no_updt" readonly="true" style="width: 100%"/>
-                </div>
-            </div>
+<div class="window-body">
+    <div class="row">
+        <div class="col-md-4">
+            <input type="text" class="search-field-top" style="height: 1em" id="SearchKeywordPranota" placeholder="Search"/>
         </div>
-        <div class="form-group row">
-            <div class="row col-sm-6">
-                <label class="col-sm-6">Kode Mata Uang</label>
-                <div class="col-sm-6">
-                    <kendo-dropdownlist for="kd_mtu" style="width: 100%" option-label="Pilih Mata Uang" class="primary-dropdown"
-                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
-                        <datasource type="DataSourceTagHelperType.Custom">
-                            <transport>
-                                <read url="@Url.Action("GetMataUang", "Akseptasi")"/>
-                            </transport>
-                        </datasource>
-                    </kendo-dropdownlist>
-                    <span asp-validation-for="kd_mtu" class="text-danger"></span>
-                </div>
-            </div>
+        <div class="offset-2"></div>
+        <div class="col-md-2">
+            <button class="flat-btn-primary" style="height: 1em" id="btnRecalculatePremi">Recalculate Premi</button>
         </div>
-        <fieldset>
-            <legend>Diskon</legend>
-            <div class="form-group row">
-                <div class="row col-sm-6">
-                    <label class="col-sm-6">Premi</label>
-                    <div class="col-sm-6">
-                        <kendo-numerictextbox decimals="2" spinners="false" for="nilai_prm" style="width: 100%"/>
-                        <span asp-validation-for="pst_dis" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="row col-sm-6">
-                    <label class="col-sm-6">Premi PA</label>
-                    <div class="col-sm-6">
-                        <kendo-numerictextbox decimals="2" spinners="false" for="nilai_bia_pu" style="width: 100%"/>
-                        <span asp-validation-for="nilai_bia_pu" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="row col-sm-6">
-                    <label class="col-sm-6">Diskon</label>
-                    <div class="col-sm-2">
-                        <kendo-numerictextbox decimals="2" spinners="false" for="pst_dis" style="width: 100%"/>
-                        <span asp-validation-for="pst_dis" class="text-danger"></span>
-                    </div>
-                    <div class="col-sm-4">
-                        <kendo-numerictextbox decimals="2" spinners="false" for="nilai_dis" style="width: 100%"/>
-                        <span asp-validation-for="nilai_dis" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="row col-sm-6">
-                    <label class="col-sm-6">Diskon FEA</label>
-                    <div class="col-sm-2">
-                        <kendo-numerictextbox decimals="2" spinners="false" for="pst_dis_fea" style="width: 100%"/>
-                        <span asp-validation-for="pst_dis_fea" class="text-danger"></span>
-                    </div>
-                    <div class="col-sm-4">
-                        <kendo-numerictextbox decimals="2" spinners="false" for="nilai_dis_fea" style="width: 100%"/>
-                        <span asp-validation-for="nilai_dis_fea" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="row col-sm-6">
-                    <label class="col-sm-6">Diskon Fleet</label>
-                    <div class="col-sm-2">
-                        <kendo-numerictextbox decimals="2" spinners="false" for="pst_dis_fleet" style="width: 100%"/>
-                        <span asp-validation-for="pst_dis" class="text-danger"></span>
-                    </div>
-                    <div class="col-sm-4">
-                        <kendo-numerictextbox decimals="2" spinners="false" for="nilai_dis_fleet" style="width: 100%"/>
-                        <span asp-validation-for="nilai_dis_fleet" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="row col-sm-6">
-                    <label class="col-sm-6">Total Komisi</label>
-                    <div class="col-sm-6">
-                        <kendo-numerictextbox decimals="2" spinners="false" for="nilai_ttl_kms" style="width: 100%"/>
-                        <span asp-validation-for="nilai_ttl_kms" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-        </fieldset>
-        <fieldset>
-            <legend>Biaya</legend>
-            <div class="form-group row">
-                <div class="row col-sm-6">
-                    <label class="col-sm-6">Biaya Polis</label>
-                    <div class="col-sm-6">
-                        <kendo-numerictextbox decimals="2" spinners="false" for="nilai_bia_pol" style="width: 100%"/>
-                        <span asp-validation-for="nilai_bia_pol" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="row col-sm-6">
-                    <label class="col-sm-6">Biaya Materai & Kwitansi</label>
-                    <div class="col-sm-6">
-                        <kendo-numerictextbox decimals="2" spinners="false" for="nilai_bia_mat" style="width: 100%"/>
-                        <span asp-validation-for="nilai_bia_mat" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="row col-sm-6">
-                    <label class="col-sm-6">Biaya Kartu</label>
-                    <div class="col-sm-6">
-                        <kendo-numerictextbox decimals="2" spinners="false" for="nilai_bia_form" style="width: 100%"/>
-                        <span asp-validation-for="nilai_bia_form" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-        </fieldset>
-        <fieldset>
-            <legend>Komisi</legend>
-            <div class="form-group row">
-                <div class="row col-sm-6">
-                    <label class="col-sm-6">Komisi</label>
-                    <div class="col-sm-2">
-                        <kendo-numerictextbox decimals="2" spinners="false" for="pst_kms" style="width: 100%"/>
-                        <span asp-validation-for="pst_kms" class="text-danger"></span>
-                    </div>
-                    <div class="col-sm-4">
-                        <kendo-numerictextbox decimals="2" spinners="false" for="nilai_kms" style="width: 100%"/>
-                        <span asp-validation-for="nilai_kms" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="row col-sm-6">
-                    <label class="col-sm-6">Handling Fee</label>
-                    <div class="col-sm-2">
-                        <kendo-numerictextbox decimals="2" spinners="false" for="pst_hf" style="width: 100%"/>
-                        <span asp-validation-for="pst_hf" class="text-danger"></span>
-                    </div>
-                    <div class="col-sm-4">
-                        <kendo-numerictextbox decimals="2" spinners="false" for="nilai_hf" style="width: 100%"/>
-                        <span asp-validation-for="nilai_hf" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="row col-sm-6">
-                    <label class="col-sm-6">Komisi Koas/Reas</label>
-                    <div class="col-sm-2">
-                        <kendo-numerictextbox decimals="2" spinners="false" for="pst_kms_reas" style="width: 100%"/>
-                        <span asp-validation-for="pst_kms_reas" class="text-danger"></span>
-                    </div>
-                    <div class="col-sm-4">
-                        <kendo-numerictextbox decimals="2" spinners="false" for="nilai_kms_reas" style="width: 100%"/>
-                        <span asp-validation-for="nilai_kms_reas" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="row col-sm-6">
-                    <label class="col-sm-6">Total Pertanggungan</label>
-                    <div class="col-sm-6">
-                        <kendo-numerictextbox decimals="2" spinners="false" for="nilai_ttl_ptg" style="width: 100%"/>
-                    </div>
-                </div>
-            </div>
-        </fieldset>
-    </form>
+    </div>
+    
+    @(Html.Kendo().Grid<AkseptasiPranotaDto>()
+        .Name("AkseptasiPranotaGrid")
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetAkseptasiPranotas", "Akseptasi").Data("searchFilterPranota"))
+            .Model(model => model.Id(p => p.Id))
+        )
+        .Columns(columns =>
+        {
+            columns.Bound(col => col.nm_mtu).Width(150).Title("Mata Uang");
+            columns.Bound(col => col.nilai_prm).Width(150).Title("Premi");
+            columns.Bound(col => col.nilai_dis).Width(150).Title("Diskon");
+            columns.Bound(col => col.nilai_kms).Width(150).Title("Komisi");
+            columns.Bound(col => col.nilai_kms_reas).Width(150).Title("Komisi Reasuransi");
+            columns.Bound(col => col.nilai_ttl_ptg).Width(150).Title("Total Pertanggungan");
+            columns.Command(command =>
+            {
+                command.Custom("EditAkseptasiPranota")
+                    .Text("Edit")
+                    .IconClass("fa fa-pencil-alt")
+                    .HtmlAttributes(new { title = "Edit" })
+                    .Click("btnEditAkseptasiPranota_OnClick");
+                command.Custom("DeleteAkseptasiPranota")
+                    .Text("Delete")
+                    .IconClass("k-icon k-i-delete")
+                    .HtmlAttributes(new { title = "Delete" })
+                    .Click("btnDeleteAkseptasiPranota_OnClick");
+            }).Width(200).Title("Action");
+        })
+        .Pageable(pager => pager
+            .Refresh(true)
+            .Info(true)
+            .PageSizes(true)
+        )
+        .Sortable()
+        .Filterable()
+        .Scrollable()
+        .Selectable()
+        .Height(450)
+        .Resizable(a => a.Columns(true))
+        .Events(ev => ev.DataBound("gridAutoFit").Change("OnPranotaChange"))
 
+        )
+    
     <div class="window-footer">
-        <button type="button" id="btn-save-akseptasiPranota" class="btn btn-success space-right">
-            <span class="fa fa-save"></span> Save
-        </button>
         <button type="button" id="btn-next-akseptasiPranota" class="btn btn-primary space-right">
             Next <span class="fa fa-arrow-right"></span>
         </button>

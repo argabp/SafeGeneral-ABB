@@ -24,9 +24,7 @@ function openAkseptasiOtherCargoDetailWindow(url, title) {
 
 function btnAddAkseptasiOtherCargoDetail_Click() {
     $('#btnAddNewAkseptasiOtherCargoDetail').click(function () {
-        openAkseptasiOtherCargoDetailWindow(`/Akseptasi/AddOtherCargoDetail?kd_cb=${$("#kd_cb").val()}&kd_cob=${$("#kd_cob").val()}
-                                        &kd_scob=${$("#kd_scob").val()}&kd_thn=${$("#kd_thn").val()}
-                                        &no_aks=${$("#no_aks").val()}&no_updt=${$("#no_updt").val()}`, 'Add New Alat Angkut');
+        openAkseptasiOtherCargoDetailWindow(`/Akseptasi/AddOtherCargoDetail?kd_cb=${$("#kd_cb").val()}&kd_cob=${$("#kd_cob").val()}&kd_scob=${$("#kd_scob").val()}&kd_thn=${$("#kd_thn").val()}&no_aks=${$("#no_aks").val()}&no_updt=${$("#no_updt").val()}`, 'Add New Alat Angkut');
     });
 }
 
@@ -34,11 +32,7 @@ function btnEditAkseptasiOtherCargoDetail_OnClick(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     console.log('dataItem', dataItem);
-    openAkseptasiOtherCargoDetailWindow(`/Akseptasi/EditOtherCargoDetail?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}
-                                    &kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}
-                                    &no_aks=${dataItem.no_aks}&no_updt=${dataItem.no_updt}
-                                    &no_rsk=${dataItem.no_rsk}&kd_endt=${dataItem.kd_endt}
-                                    &no_urut=${dataItem.no_urut}`, 'Edit Other  Alat Angkut');
+    openAkseptasiOtherCargoDetailWindow(`/Akseptasi/EditOtherCargoDetail?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_aks=${dataItem.no_aks}&no_updt=${dataItem.no_updt}&no_rsk=${dataItem.no_rsk}&kd_endt=${dataItem.kd_endt}&no_urut=${dataItem.no_urut}`, 'Edit Other  Alat Angkut');
 }
 function btnDeleteAkseptasiOtherCargoDetail_OnClick(e) {
     e.preventDefault();
@@ -65,10 +59,7 @@ function searchFilterOtherCargoDetail() {
 }
 
 function deleteAkseptasiOtherCargoDetail(dataItem) {
-    ajaxGet(`/Akseptasi/DeleteOtherCargoDetail?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}
-                &kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_aks=${dataItem.no_aks}
-                &no_updt=${dataItem.no_updt}&no_rsk=${dataItem.no_rsk}&kd_endt=${dataItem.kd_endt}
-                &no_urut=${dataItem.no_urut}`, function (response) {
+    ajaxGet(`/Akseptasi/DeleteOtherCargoDetail?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_aks=${dataItem.no_aks}&no_updt=${dataItem.no_updt}&no_rsk=${dataItem.no_rsk}&kd_endt=${dataItem.kd_endt}&no_urut=${dataItem.no_urut}`, function (response) {
         if (response.Result) {
             showMessage('Success', 'Data has been deleted');
             refreshGrid("#AkseptasiOtherCargoDetailGrid");

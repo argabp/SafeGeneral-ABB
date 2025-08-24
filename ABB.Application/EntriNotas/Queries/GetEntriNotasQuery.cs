@@ -29,15 +29,27 @@ namespace ABB.Application.EntriNotas.Queries
         public async Task<List<NotaDto>> Handle(GetEntriNotasQuery request,
             CancellationToken cancellationToken)
         {
-            await Task.Delay(0, cancellationToken);
-            
             try
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
-                return (await _connectionFactory.Query<NotaDto>("SELECT RTRIM(LTRIM(kd_cb)) + RTRIM(LTRIM(jns_tr)) " +
-                                                                "+ RTRIM(LTRIM(jns_nt_msk)) + RTRIM(LTRIM(kd_thn)) + " +
-                                                                "RTRIM(LTRIM(kd_bln)) + RTRIM(LTRIM(no_nt_msk)) + " +
-                                                                "RTRIM(LTRIM(jns_nt_kel)) + RTRIM(LTRIM(no_nt_kel)) Id, * FROM uw08e")).ToList();
+                var results = (await _connectionFactory.Query<NotaDto>(@"SELECT p.*, cb.nm_cb, cob.nm_cob, scob.nm_scob FROM uw08e p 
+					INNER JOIN rf01 cb
+						ON p.kd_cb = cb.kd_cb
+					INNER JOIN rf04 cob
+						ON p.kd_cob = cob.kd_cob
+					INNER JOIN rf05 scob
+						ON p.kd_cob = scob.kd_cob
+						AND p.kd_scob = scob.kd_scob
+					WHERE p.flag_cancel = 'N' AND p.flag_posting = 'N'")).ToList();
+
+                var sequence = 1;
+                foreach (var result in results)
+                {
+                    result.Id = sequence;
+                    sequence++;
+                }
+
+                return results;
             }
             catch (Exception ex)
             {

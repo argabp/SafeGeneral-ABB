@@ -25,22 +25,17 @@ function openAkseptasiResikoWindow(url, title) {
 
 function btnAddAkseptasiResiko_Click() {
     $('#btnAddNewAkseptasiResiko').click(function () {
-        openAkseptasiResikoWindow(`/Akseptasi/AddResiko?kd_cb=${$("#kd_cb").val()}&kd_cob=${$("#kd_cob").val()}
-                                        &kd_scob=${$("#kd_scob").val()}&kd_thn=${$("#kd_thn").val()}
-                                        &no_aks=${$("#no_aks").val()}&no_updt=${$("#no_updt").val()}
-                                        &tgl_mul_ptg=${$("#tgl_mul_ptg").val()}&tgl_akh_ptg=${$("#tgl_akh_ptg").val()}
-                                        &pst_share_bgu=${$("#pst_share_bgu").val()}&faktor_prd=${$("#faktor_prd").val()}`, 'Add New Resiko');
+        openAkseptasiResikoWindow(`/Akseptasi/AddResiko?kd_cb=${$("#kd_cb").val()}&kd_cob=${$("#kd_cob").val()}&kd_scob=${$("#kd_scob").val()}&kd_thn=${$("#kd_thn").val()}&no_aks=${$("#no_aks").val()}&no_updt=${$("#no_updt").val()}&tgl_mul_ptg=${$("#tgl_mul_ptg").val()}&tgl_akh_ptg=${$("#tgl_akh_ptg").val()}&pst_share_bgu=${$("#pst_share_bgu").val()}&faktor_prd=${$("#faktor_prd").val()}`, 'Add New Resiko');
     });
 }
+
 function btnEditAkseptasiResiko_OnClick(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     console.log('dataItem', dataItem);
-    openAkseptasiResikoWindow(`/Akseptasi/EditResiko?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}
-                                    &kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}
-                                    &no_aks=${dataItem.no_aks}&no_updt=${dataItem.no_updt}
-                                    &no_rsk=${dataItem.no_rsk}&kd_endt=${dataItem.kd_endt}`, 'Edit Resiko');
+    openAkseptasiResikoWindow(`/Akseptasi/EditResiko?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_aks=${dataItem.no_aks}&no_updt=${dataItem.no_updt}&no_rsk=${dataItem.no_rsk}&kd_endt=${dataItem.kd_endt}`, 'Edit Resiko');
 }
+
 function btnDeleteAkseptasiResiko_OnClick(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
@@ -51,6 +46,7 @@ function btnDeleteAkseptasiResiko_OnClick(e) {
         }
     );
 }
+
 function searchFilterResiko() {
     return {
         searchkeyword: $("#SearchKeywordResiko").val(),

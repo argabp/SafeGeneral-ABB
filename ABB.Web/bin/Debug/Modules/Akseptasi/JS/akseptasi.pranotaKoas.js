@@ -1,6 +1,8 @@
 ﻿$(document).ready(function () {
     btnSaveAkseptasiPranotaKoas_Click();
     setTimeout(setPranotaKoasEditedValue, 2000);
+    
+    $("#premi_100").getKendoNumericTextBox().value(Number(pranota.nilai_prm) / Number($("#pst_share_bgu").val()));
 });
 
 function setPranotaKoasEditedValue(){
@@ -23,10 +25,11 @@ function saveAkseptasiPranotaKoas(url) {
     form.kd_rk_pas = $("#pranota_koas_kd_rk_pas").val();
     form.nilai_dis = $("#pranota_koas_nilai_dis").val();
     form.nilai_hf = $("#pranota_koas_nilai_hf").val();
-    form.nilai_kl = $("#pranota_koas_nilai_kl").val();
+    form.nilai_kms = $("#pranota_koas_nilai_kms").val();
     form.nilai_prm = $("#pranota_koas_nilai_prm").val();
     form.pst_dis = $("#pranota_koas_pst_dis").val();
     form.pst_hf = $("#pranota_koas_pst_hf").val();
+    form.pst_kms = $("#pranota_koas_pst_kms").val();
     form.pst_share = $("#pranota_koas_pst_share").val();
     form.kd_cb = $("#kd_cb").val();
     form.kd_cob = $("#kd_cob").val();
@@ -63,5 +66,30 @@ function dataKodeRekananPranotaKoasDropDown(){
 
 function OnKodeRekananPranotaKoasChange(e){
     var pranota_koas_kd_rk_pas = $("#pranota_koas_kd_rk_pas").data("kendoDropDownList");
+    $("#temp_pranota_koas_kd_grp_pas").val(e.sender._cascadedValue);
     pranota_koas_kd_rk_pas.dataSource.read({kd_grp_rk : e.sender._cascadedValue, kd_cb: $("#kd_cb").val()});
+}
+
+function OnPranotaKoasPstShareChange(e){
+    ajaxGet(`/Akseptasi/GenerateNilaiPrmKoas?pst_share=${e.sender.value()}&nilai_prm_leader=${$("#premi_100").val()}&pst_hf=${$("#pranota_koas_pst_hf").val()}`, (returnValue) => {
+        $("#pranota_koas_nilai_prm").getKendoNumericTextBox().value(returnValue.split(",")[1]);
+    });
+}
+
+function OnPranotaKoasPstDisChange(e){
+    ajaxGet(`/Akseptasi/GenerateNilaiDisKoas?pst_dis=${e.sender.value()}&nilai_prm=${$("#pranota_koas_nilai_prm").val()}`, (returnValue) => {
+        $("#pranota_koas_nilai_dis").getKendoNumericTextBox().value(returnValue.split(",")[1]);
+    });
+}
+
+function OnPranotaKoasPstHfChange(e){
+    ajaxGet(`/Akseptasi/GenerateNilaiPrmKoas?pst_share=${$("#pranota_koas_pst_share").val()}&nilai_prm_leader=${$("#pranota_koas_nilai_prm").val()}&pst_hf=${e.sender.value()}`, (returnValue) => {
+        $("#pranota_koas_nilai_hf").getKendoNumericTextBox().value(returnValue.split(",")[1]);
+    });
+}
+
+function OnPranotaKoasPstKmsChange(e){
+    ajaxGet(`/Akseptasi/GenerateNilaiKmsKoas?pst_kms=${e.sender.value()}&nilai_prm=${$("#pranota_koas_nilai_prm").val()}&nilai_dis=${$("#pranota_koas_nilai_dis").val()}`, (returnValue) => {
+        $("#pranota_koas_nilai_kms").getKendoNumericTextBox().value(returnValue.split(",")[1]);
+    });
 }

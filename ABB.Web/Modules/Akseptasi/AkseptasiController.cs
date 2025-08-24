@@ -131,8 +131,8 @@ namespace ABB.Web.Modules.Akseptasi
             {
                 var command = Mapper.Map<ClosingAkseptasiCommand>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
-                await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
+                var result = await Mediator.Send(command);
+                return Json(new { Result = "OK", Message = result.Item2 });
             }
             catch (ValidationException ex)
             {
@@ -524,7 +524,7 @@ namespace ABB.Web.Modules.Akseptasi
         
         [HttpGet]
         public IActionResult AddResiko(string kd_cb, string kd_cob,
-            string kd_scob, string kd_thn, string no_aks, 
+            string kd_scob, string kd_thn, string no_aks, short no_updt,
             DateTime tgl_mul_ptg, DateTime tgl_akh_ptg, decimal pst_share_bgu, 
             decimal? faktor_prd)
         {
@@ -537,7 +537,7 @@ namespace ABB.Web.Modules.Akseptasi
             viewModel.no_aks = no_aks;
             viewModel.tgl_mul_ptg = tgl_mul_ptg;
             viewModel.tgl_akh_ptg = tgl_akh_ptg;
-            viewModel.no_updt = 0;
+            viewModel.no_updt = no_updt;
             viewModel.kd_endt = "I";
             viewModel.kd_mtu_prm = "001";
             viewModel.pst_rate_prm = 0;
@@ -3335,7 +3335,26 @@ namespace ABB.Web.Modules.Akseptasi
         #region Pranota View
 
         #region Tertanggung
+        
+        public async Task<ActionResult> GetAkseptasiPranotas([DataSourceRequest] DataSourceRequest request, 
+            string searchkeyword, string kd_cb, string kd_cob, string kd_scob, 
+            string kd_thn, string no_aks, Int16 no_updt)
+        {
+            var ds = await Mediator.Send(new GetAkseptasiPranotasQuery()
+            {
+                SearchKeyword = searchkeyword,
+                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                KodeCabang = kd_cb,
+                kd_cob = kd_cob,
+                kd_scob = kd_scob,
+                kd_thn = kd_thn,
+                no_aks = no_aks,
+                no_updt = no_updt
+            });
 
+            return Json(ds.AsQueryable().ToDataSourceResult(request));
+        }
+        
         [HttpPost]
         public async Task<IActionResult> SaveAkseptasiPranota([FromBody] AkseptasiPranotaViewModel model)
         {
@@ -3357,11 +3376,153 @@ namespace ABB.Web.Modules.Akseptasi
 
             return PartialView("~/Modules/Akseptasi/Components/Pranota/_Pranota.cshtml");
         }
+        
+        [HttpGet]
+        public IActionResult AddPranota(string kd_cb, string kd_cob,
+            string kd_scob, string kd_thn, string no_aks, short no_updt)
+        {
+            var viewModel = new AkseptasiPranotaViewModel();
+
+            viewModel.nilai_prm = 0;
+            viewModel.pst_dis = 0;
+            viewModel.nilai_dis = 0;
+            viewModel.nilai_insentif = 0;
+            viewModel.nilai_bia_pol = 0;
+            viewModel.nilai_bia_mat = 0;
+            viewModel.pst_kms = 0;
+            viewModel.nilai_kms = 0;
+            viewModel.pst_hf = 0;
+            viewModel.nilai_hf = 0;
+            viewModel.pst_kms_reas = 0;
+            viewModel.nilai_kms_reas = 0;
+            viewModel.nilai_bia_supl = 0;
+            viewModel.nilai_bia_pbtl = 0;
+            viewModel.nilai_bia_form = 0;
+            viewModel.nilai_kl = 0;
+            viewModel.pst_pjk = 0;
+            viewModel.nilai_pjk = 0;
+            viewModel.nilai_ttl_bia = 0;
+            viewModel.nilai_ttl_ptg = 0;
+            viewModel.nilai_ttl_ptg = 0;
+            viewModel.kd_cb = kd_cb.Trim();
+            viewModel.kd_cob = kd_cob.Trim();
+            viewModel.kd_scob = kd_scob.Trim();
+            viewModel.kd_thn = kd_thn.Trim();
+            viewModel.no_updt = no_updt;
+            viewModel.no_aks = no_aks;
+
+            return PartialView(viewModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditPranota(string kd_cb, string kd_cob,
+            string kd_scob, string kd_thn, string no_aks, short no_updt, string kd_mtu)
+        {
+            var akseptasiPranota = await Mediator.Send(new GetAkseptasiPranotaQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                kd_cb = kd_cb,
+                kd_cob = kd_cob,
+                kd_scob = kd_scob,
+                kd_thn = kd_thn,
+                no_aks = no_aks,
+                no_updt = no_updt,
+                kd_mtu = kd_mtu
+            });
+            
+            return PartialView(Mapper.Map<AkseptasiPranotaViewModel>(akseptasiPranota));
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> DeletePranota(string kd_cb, string kd_cob,
+            string kd_scob, string kd_thn, string no_aks, short no_updt, string kd_mtu)
+        {
+            try
+            {
+                var command = new DeleteAkseptasiPranotaCommand()
+                {
+                    kd_cb = kd_cb,
+                    kd_cob = kd_cob,
+                    kd_scob = kd_scob,
+                    kd_thn = kd_thn,
+                    no_aks = no_aks,
+                    no_updt = no_updt,
+                    kd_mtu = kd_mtu,
+                    DatabaseName = Request.Cookies["DatabaseValue"]
+                };
+                await Mediator.Send(command);
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", Message = ex.Message });
+            }
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> CheckPranota(string kd_cb, string kd_cob,
+            string kd_scob, string kd_thn, string no_aks, short no_updt)
+        {
+            await Mediator.Send(new CheckPranotaCommand()
+            {
+                kd_cb = kd_cb,
+                kd_cob = kd_cob,
+                kd_scob = kd_scob,
+                kd_thn = kd_thn,
+                no_aks = no_aks,
+                no_updt = no_updt,
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            });
+            
+            return View("~/Modules/Akseptasi/Components/Pranota/_Pranota.cshtml");
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> RecalculatePremi(string kd_cb, string kd_cob,
+            string kd_scob, string kd_thn, string no_aks, short no_updt)
+        {
+            await Mediator.Send(new RecalculatePremiQuery()
+            {
+                kd_cb = kd_cb,
+                kd_cob = kd_cob,
+                kd_scob = kd_scob,
+                kd_thn = kd_thn,
+                no_aks = no_aks,
+                no_updt = no_updt,
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            });
+            
+            return Ok();
+        }
 
         #endregion
 
         #region Koasuransi
-
+        
+        [HttpGet]
+        public async Task<IActionResult> CheckKoasuransi(string kd_cb, string kd_cob,
+            string kd_scob, string kd_thn, string no_aks, short no_updt)
+        {
+            var result = await Mediator.Send(new CheckKoasuransiCommand()
+            {
+                kd_cb = kd_cb,
+                kd_cob = kd_cob,
+                kd_scob = kd_scob,
+                kd_thn = kd_thn,
+                no_aks = no_aks,
+                no_updt = no_updt,
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            });
+            
+            if (string.IsNullOrWhiteSpace(result.Item1))
+            {
+                return View("~/Modules/Akseptasi/Views/EmptyWithMessage.cshtml", result.Item2);
+            }
+            
+            return View("~/Modules/Akseptasi/Components/PranotaKoas/_PranotaKoas.cshtml", new AkseptasiPranotaKoasViewModel());
+        }
+        
         public async Task<ActionResult> GetAkseptasiPranotaKoass([DataSourceRequest] DataSourceRequest request, 
             string searchkeyword, string kd_cb, string kd_cob, string kd_scob, 
             string kd_thn, string no_aks, Int16 no_updt, string kd_mtu)
@@ -3425,7 +3586,7 @@ namespace ABB.Web.Modules.Akseptasi
             viewModel.nilai_dis = 0;
             viewModel.pst_kms = 0;
             viewModel.nilai_kms = 0;
-            viewModel.pst_hf = decimal.Parse("2.50");
+            viewModel.pst_hf = 0;
             viewModel.nilai_hf = 0;
             viewModel.nilai_kl = 0;
             viewModel.pst_pjk = 0;
@@ -3484,6 +3645,44 @@ namespace ABB.Web.Modules.Akseptasi
             {
                 return Json(new { Result = "ERROR", Message = ex.Message });
             }
+        }
+        
+        public async Task<JsonResult> GenerateNilaiPrmKoas(decimal pst_share, decimal nilai_prm_leader, decimal pst_hf)
+        {
+            var result = await Mediator.Send(new GenerateNilaiPrmKoasQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                pst_share = pst_share,
+                nilai_prm_leader = nilai_prm_leader,
+                pst_hf = pst_hf
+            });
+
+            return Json(result);
+        }
+        
+        public async Task<JsonResult> GenerateNilaiDisKoas(decimal pst_dis, decimal nilai_prm)
+        {
+            var result = await Mediator.Send(new GenerateNilaiDisKoasQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                pst_dis = pst_dis,
+                nilai_prm = nilai_prm
+            });
+
+            return Json(result);
+        }
+        
+        public async Task<JsonResult> GenerateNilaiKmsKoas(decimal pst_kms, decimal nilai_prm, decimal nilai_dis)
+        {
+            var result = await Mediator.Send(new GenerateNilaiKmsKoasQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                pst_kms = pst_kms,
+                nilai_prm = nilai_prm,
+                nilai_dis = nilai_dis
+            });
+
+            return Json(result);
         }
 
         #endregion

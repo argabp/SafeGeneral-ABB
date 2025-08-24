@@ -1,0 +1,169 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.Akseptasi.Models.AkseptasiPranotaViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/Akseptasi/JS/akseptasi.pranota.js"></script>
+
+<style>
+    p {
+        margin: 0px;
+        padding: 0px;
+    }
+    label {
+        align-content: center;
+    }
+</style>
+
+@{
+    var nomor_aksepatsi = Model.kd_cb.Trim() + "." + Model.kd_cob.Trim() +
+                          Model.kd_scob.Trim() + "." + Model.kd_thn.Trim() + "." + Model.no_aks.Trim();
+}
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="PranotaForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Akseptasi</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="temp_pranota_nomor_akseptasi" value="@nomor_aksepatsi" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Update</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="pranota_no_updt" value="@Model.no_updt" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Mata Uang</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_mtu" style="width: 100%" option-label="Pilih Mata Uang" class="primary-dropdown"
+                                        readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetMataUang", "Akseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_mtu" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-12" style="font-size: 20px">Premi Diskon</label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Premi</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="nilai_prm" style="width: 100%"/>
+                    <span asp-validation-for="nilai_prm" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Diskon</label>
+                <div class="col-sm-2">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="pst_dis" style="width: 100%"/>
+                    <span asp-validation-for="pst_dis" class="text-danger"></span>
+                </div>
+                <div class="col-sm-4">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="nilai_dis" style="width: 100%"/>
+                    <span asp-validation-for="nilai_dis" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-12" style="font-size: 20px">Biaya</label>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-12" style="font-size: 20px">Komisi</label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Biaya Polis</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="nilai_bia_pol" style="width: 100%"/>
+                    <span asp-validation-for="nilai_bia_pol" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Komisi</label>
+                <div class="col-sm-2">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="pst_kms" style="width: 100%"/>
+                    <span asp-validation-for="pst_kms" class="text-danger"></span>
+                </div>
+                <div class="col-sm-4">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="nilai_kms" style="width: 100%"/>
+                    <span asp-validation-for="nilai_kms" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Biaya Materai & Kwitansi</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="nilai_bia_mat" style="width: 100%"/>
+                    <span asp-validation-for="nilai_bia_mat" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Handling Fee</label>
+                <div class="col-sm-2">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="pst_hf" style="width: 100%"/>
+                    <span asp-validation-for="pst_hf" class="text-danger"></span>
+                </div>
+                <div class="col-sm-4">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="nilai_hf" style="width: 100%"/>
+                    <span asp-validation-for="nilai_hf" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Biaya Kartu</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="nilai_bia_form" style="width: 100%"/>
+                    <span asp-validation-for="nilai_bia_form" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Komisi Koas/Reas</label>
+                <div class="col-sm-2">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="pst_kms_reas" style="width: 100%"/>
+                    <span asp-validation-for="pst_kms_reas" class="text-danger"></span>
+                </div>
+                <div class="col-sm-4">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="nilai_kms_reas" style="width: 100%"/>
+                    <span asp-validation-for="nilai_kms_reas" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Total Pertanggungan</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="nilai_ttl_ptg" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="window-footer">
+        <button type="button" id="btn-save-akseptasiPranota" class="btn btn-success space-right">
+            <span class="fa fa-save"></span> Save
+        </button>
+    </div>
+</div>

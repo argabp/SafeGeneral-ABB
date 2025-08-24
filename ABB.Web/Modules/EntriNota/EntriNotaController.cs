@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ABB.Application.BiayaMaterais.Queries;
 using ABB.Application.Common;
+using ABB.Application.Common.Dtos;
 using ABB.Application.EntriNotas.Commands;
 using ABB.Application.EntriNotas.Queries;
 using ABB.Web.Modules.Base;
@@ -44,6 +46,26 @@ namespace ABB.Web.Modules.EntriNota
             var data = await Mediator.Send(command);
             
             return PartialView(Mapper.Map<NotaViewModel>(data));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> NotaCancel(string kd_cb, string kd_cob, string kd_scob, 
+            string kd_thn, string no_pol, Int16 no_updt)
+        {
+            var command = new GetNotaCancelQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                kd_cb = kd_cb,
+                kd_cob = kd_cob,
+                kd_scob = kd_scob,
+                kd_thn = kd_thn,
+                no_pol = no_pol,
+                no_updt = no_updt
+            };
+            
+            var data = await Mediator.Send(command);
+            
+            return PartialView("Edit", Mapper.Map<NotaViewModel>(data));
         }
 
         [HttpGet]
@@ -168,6 +190,61 @@ namespace ABB.Web.Modules.EntriNota
                 no_pol = no_pol,
                 no_updt = no_updt,
                 kd_grp_ttj = kd_grp_ttj,
+            });
+
+            return Json(result);
+        }
+        
+        public JsonResult GetCaraBayar()
+        {
+            var result = new List<DropdownOptionDto>()
+            {
+                new DropdownOptionDto() { Text = "Single Premium", Value = "1" },
+                new DropdownOptionDto() { Text = "Bulanan", Value = "2" },
+                new DropdownOptionDto() { Text = "Triwulanan", Value = "3" },
+                new DropdownOptionDto() { Text = "Semesteran", Value = "4" },
+                new DropdownOptionDto() { Text = "Tahunan", Value = "5" },
+                new DropdownOptionDto() { Text = "Lainnya", Value = "6" }
+            };
+
+            return Json(result);
+        }
+        
+        public async Task<JsonResult> GenerateEntriNotaData(string kd_cb, string kd_grp_rk, string kd_rk)
+        {
+            var result = await Mediator.Send(new GenerateEntriNotaDataQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                kd_cb = kd_cb,
+                kd_grp_rk = kd_grp_rk,
+                kd_rk = kd_rk
+            });
+
+            return Json(result);
+        }
+        
+        public async Task<JsonResult> GenerateNilaiAng(decimal pst_ang, decimal nilai_nt, decimal nilai_ppn, decimal nilai_pph)
+        {
+            var result = await Mediator.Send(new GenerateNilaiAngQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                pst_ang = pst_ang,
+                nilai_nt = nilai_nt,
+                nilai_ppn = nilai_ppn,
+                nilai_pph = nilai_pph
+            });
+
+            return Json(result);
+        }
+
+        public async Task<JsonResult> ValidateSaveDetailNota(string no_pol, decimal nilai_nt, decimal nilai_ang)
+        {
+            var result = await Mediator.Send(new ValidateSaveDetailNotaCommand()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                no_pol = no_pol,
+                nilai_nt = nilai_nt,
+                nilai_ang = nilai_ang
             });
 
             return Json(result);

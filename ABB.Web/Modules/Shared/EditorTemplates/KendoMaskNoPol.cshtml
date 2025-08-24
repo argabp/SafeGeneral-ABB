@@ -1,0 +1,5 @@
+﻿@using Kendo.Mvc.UI
+@model string
+@(Html.Kendo().MaskedTextBoxFor(m => m)
+    .Mask("00.000.00.0000.0000-0") // your desired mask
+    .HtmlAttributes(new { style = "width:100%;" }))

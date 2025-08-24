@@ -60,7 +60,7 @@ function closingAkseptasi(dataItem){
     var data = JSON.stringify(form);
     ajaxPost(`/Akseptasi/ClosingAkseptasi`, data,  function (response) {
         if (response.Result === "OK") {
-            showMessage('Success', 'Data has closed');
+            showMessage('Closing Successfully', 'Data has closed');
             refreshGrid("#AkseptasiGrid");
         }
         else {

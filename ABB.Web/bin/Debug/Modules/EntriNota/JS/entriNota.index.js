@@ -1,22 +1,12 @@
 ﻿function openEntriNotaWindow(url, title) {
     openWindow('#EntriNotaWindow', url, title);
 }
-function openEntriNotaCancelWindow(url, title) {
-    openWindow('#EntriNotaCancelWindow', url, title);
-}
 
 function onEditEntriNota(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     console.log('dataItem', dataItem);
-    openEntriNotaWindow(`/EntriNota/Edit?kd_cb=${dataItem.kd_cb}&jns_tr=${dataItem.jns_tr}&jns_nt_msk=${dataItem.jns_nt_msk}&kd_thn=${dataItem.kd_thn}&kd_bln=${dataItem.kd_bln}&no_nt_msk=${dataItem.no_nt_msk}&jns_nt_kel=${dataItem.jns_nt_kel}&no_nt_kel=${dataItem.no_nt_kel}`, 'Edit Entri Nota');
-}
-
-function onCancelEntriNota(e) {
-    e.preventDefault();
-    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-    console.log('dataItem', dataItem);
-    openEntriNotaCancelWindow(`/EntriNota/Cancel?kd_cb=${dataItem.kd_cb}&jns_tr=${dataItem.jns_tr}&jns_nt_msk=${dataItem.jns_nt_msk}&kd_thn=${dataItem.kd_thn}&kd_bln=${dataItem.kd_bln}&no_nt_msk=${dataItem.no_nt_msk}&jns_nt_kel=${dataItem.jns_nt_kel}&no_nt_kel=${dataItem.no_nt_kel}`, 'Edit Entri Nota');
+    openEntriNotaWindow(`/EntriNota/Edit?kd_cb=${dataItem.kd_cb}&jns_tr=${dataItem.jns_tr}&jns_nt_msk=${dataItem.jns_nt_msk}&kd_thn=${dataItem.kd_thn}&kd_bln=${dataItem.kd_bln}&no_nt_msk=${dataItem.no_nt_msk}&jns_nt_kel=${dataItem.jns_nt_kel}&no_nt_kel=${dataItem.no_nt_kel}`, 'Edit Nota Tertanggung');
 }
 
 function dataKodeTertujuDropDown(){
@@ -64,4 +54,21 @@ function onDeleteDetailNota(e){
             }
         }
     );
+}
+
+function onEntriNotaDataBound(e) {
+    var grid = $("#EntriNotaGrid").data("kendoGrid");
+    grid.tbody.find("tr").each(function() {
+        var dataItem = grid.dataItem(this);
+        if (dataItem.flag_posting == "Y") {
+            $(this).find("a[title='Edit']").hide();
+        }
+    });
+}
+
+function OnKodeRkTTJChange(e){
+    ajaxGet(`/EntriNota/GenerateEntriNotaData?kd_rk=${e.sender.value()}&kd_cb=${$("#kd_cb").val()}&kd_grp_rk=${$("#kd_grp_ttj").val()}`, (returnValue) => {
+        $("#almt_ttj").getKendoTextArea().value(returnValue.split(",")[1]);
+        $("#kt_ttj").getKendoTextBox().value(returnValue.split(",")[4]);
+    });
 }

@@ -73,7 +73,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Nomor Polis</label>
                 <div class="col-sm-6">
-                    <kendo-textbox for="no_pol_ttg" readonly="true" style="width: 100%"/>
+                    <kendo-maskedtextbox mask="00.000.00.0000.0000-0" for="no_pol_ttg" readonly="true" style="width: 100%"/>
                 </div>
             </div>
         </div>
@@ -97,7 +97,7 @@
             <div class="row col-sm-6">
                 <div class="col-sm-6">
                     <input type="hidden" id="temp_kd_rk_ttj" value="@Model.kd_rk_ttj">
-                    <kendo-dropdownlist for="kd_rk_ttj" style="width: 100%"
+                    <kendo-dropdownlist for="kd_rk_ttj" style="width: 100%" on-change="OnKodeRkTTJChange"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -137,18 +137,18 @@
             </div>
         </div>
         <div class="form-group row">
-            <div class="row col-sm-6">
-                <label class="col-sm-6">Keterangan Nota</label>
-                <div class="col-sm-6">
+            <div class="row col-sm-9">
+                <label class="col-sm-4">Keterangan Nota</label>
+                <div class="col-sm-8">
                     <kendo-textarea name="ket_nt" rows="2" style="width: 100%; background-color: white">@Model.ket_nt</kendo-textarea>
                     <span asp-validation-for="ket_nt" class="text-danger"></span>
                 </div>
             </div>
         </div>
         <div class="form-group row">
-            <div class="row col-sm-6">
-                <label class="col-sm-6">Keterangan Kwitansi</label>
-                <div class="col-sm-6">
+            <div class="row col-sm-9">
+                <label class="col-sm-4">Keterangan Kwitansi</label>
+                <div class="col-sm-8">
                     <kendo-textarea name="ket_kwi" rows="2" style="width: 100%; background-color: white">@Model.ket_kwi</kendo-textarea>
                     <span asp-validation-for="ket_kwi" class="text-danger"></span>
                 </div>
@@ -158,7 +158,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Nilai Nota</label>
                 <div class="col-sm-3">
-                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_nt" style="width: 100%; background-color: #FFFFE1"/>
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_nt" readonly="true" style="width: 100%; background-color: #FFFFE1"/>
                     <span asp-validation-for="nilai_nt" class="text-danger"></span>
                 </div>
             </div>
@@ -167,7 +167,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Tanggal Nota</label>
                 <div class="col-sm-6">
-                    <kendo-datepicker for="tgl_nt" style="width: 100%"/>
+                    <kendo-datepicker for="tgl_nt" readonly="true" style="width: 100%"/>
                     <span asp-validation-for="ket_kwi" class="text-danger"></span>
                 </div>
             </div>
@@ -176,11 +176,11 @@
             <div class="row col-sm-6">
                 <label class="col-sm-3">Nilai PPN</label>
                 <div class="col-sm-3">
-                    <kendo-numerictextbox spinners="false" decimals="2" for="pst_ppn" style="width: 100%; background-color: #FFFFE1"/>
+                    <kendo-numerictextbox spinners="false" readonly="true" decimals="2" for="pst_ppn" style="width: 100%; background-color: #FFFFE1"/>
                     <span asp-validation-for="pst_ppn" class="text-danger"></span>
                 </div>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_ppn" style="width: 100%;"/>
+                    <kendo-numerictextbox spinners="false" readonly="true" decimals="2" for="nilai_ppn" style="width: 100%;"/>
                     <span asp-validation-for="nilai_ppn" class="text-danger"></span>
                 </div>
             </div>
@@ -189,7 +189,7 @@
                 <input type="hidden" id="tempFlag_cancel" value="@Model.flag_cancel">
                 <div class="col-sm-6">
                     <label>
-                        <input type="checkbox" class="k-checkbox" id="flag_cancel"/> Cancel
+                        <input type="checkbox" disabled class="k-checkbox" id="flag_cancel"/> Cancel
                     </label>
                 </div>
             </div>
@@ -198,11 +198,11 @@
             <div class="row col-sm-6">
                 <label class="col-sm-3">Nilai PPH</label>
                 <div class="col-sm-3">
-                    <kendo-numerictextbox spinners="false" decimals="2" for="pst_pph" style="width: 100%; background-color: #FFFFE1"/>
+                    <kendo-numerictextbox spinners="false" readonly="true" decimals="2" for="pst_pph" style="width: 100%; background-color: #FFFFE1"/>
                     <span asp-validation-for="pst_pph" class="text-danger"></span>
                 </div>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_pph" style="width: 100%;"/>
+                    <kendo-numerictextbox spinners="false" readonly="true" decimals="2" for="nilai_pph" style="width: 100%;"/>
                     <span asp-validation-for="nilai_pph" class="text-danger"></span>
                 </div>
             </div>
@@ -211,7 +211,7 @@
                 <input type="hidden" id="tempFlag_posting" value="@Model.flag_posting">
                 <div class="col-sm-6">
                     <label>
-                        <input type="checkbox" class="k-checkbox" id="flag_posting"/> Posting
+                        <input type="checkbox" disabled class="k-checkbox" id="flag_posting"/> Posting
                     </label>
                 </div>
             </div>
@@ -220,12 +220,26 @@
             <div class="row col-sm-6">
                 <label class="col-sm-3">Jasa Koperasi</label>
                 <div class="col-sm-3">
-                    <kendo-numerictextbox spinners="false" decimals="2" for="pst_lain" style="width: 100%;"/>
+                    <kendo-numerictextbox spinners="false" readonly="true" decimals="2" for="pst_lain" style="width: 100%;"/>
                     <span asp-validation-for="pst_lain" class="text-danger"></span>
                 </div>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_lain" style="width: 100%;"/>
+                    <kendo-numerictextbox spinners="false" readonly="true" decimals="2" for="nilai_lain" style="width: 100%;"/>
                     <span asp-validation-for="nilai_lain" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Cara Bayar</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="bayar" style="width: 100%" option-label="Pilih Cara Bayar"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetCaraBayar", "EntriNota")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="bayar" class="text-danger"></span>
                 </div>
             </div>
         </div>
@@ -246,7 +260,7 @@
                 {
                     columns.Bound(col => col.tgl_ang).Width(150).Title("Tanggal Angsuran").Format("{0: dd-MM-yyyy}").EditorTemplateName("KendoDateEditor");
                     columns.Bound(col => col.tgl_jth_tempo).Width(150).Title("Tanggal Jatuh Tempo").Format("{0: dd-MM-yyyy}").EditorTemplateName("KendoDateEditor");
-                    columns.Bound(col => col.pst_ang).Width(200).Title("Angsuran (%)").Format("{0:n2}").EditorTemplateName("KendoNumericTextBoxTwoDecimal");//.ClientFooterTemplate("Total: #= sum ? kendo.toString(sum, 'n2') : '0.00' #");
+                    columns.Bound(col => col.pst_ang).Width(200).Title("Nilai Angsuran").Format("{0:n2}").EditorTemplateName("KendoNumericTextBoxTwoDecimal");//.ClientFooterTemplate("Total: #= sum ? kendo.toString(sum, 'n2') : '0.00' #");
                     columns.Bound(col => col.nilai_ang).Width(200).Title("Jumlah Angsuran").Format("{0:n2}").EditorTemplateName("KendoNumericTextBoxTwoDecimal");//.ClientFooterTemplate("Total: #= sum ? kendo.toString(sum, 'n2') : '0.00' #");
                     columns.Command(command =>
                     {
@@ -256,7 +270,7 @@
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteDetailNota");
-                    }).Width(200);
+                    }).Width(200).Title("Action");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)
@@ -269,16 +283,17 @@
                 .Scrollable()
                 .Height(380)
                 .Resizable(a=>a.Columns(true))
-                .Events(ev => ev.DataBound("OnDetailNotaDataBound").Edit("onEditDetailNota"))
+                .Events(ev => ev.DataBound("OnDetailNotaDataBound").Edit("onEditDetailNota").Save("onSaveDetailNota"))
                 ) 
         </div>
         <div class="form-group row">
-            <h5 class="col-sm-6">Total Presentase Angsuran & Nilai Angsuran</h5>
-            <h5 class="col-sm-3" id="totalPersentaseAngsuran"></h5>
-            <h5 class="col-sm-3" id="totalAngsuran"></h5>
+            <p class="col-sm-6" style="font-weight: bold;">Total Angsuran (%) & Nilai Angsuran</p>
+            <p class="col-sm-3" style="font-weight: bold;" id="totalPersentaseAngsuran"></p>
+            <p class="col-sm-3" style="font-weight: bold;" id="totalAngsuran"></p>
         </div>
     </div>
     <div class="window-footer">
+        <button type="button" id="btn-cancel-entriNota" class="btn btn-primary space-right">Nota Cancel</button>
         <button type="button" id="btn-save-entriNota" class="btn btn-primary space-right">Save</button>
     </div>
 </form>

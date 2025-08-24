@@ -17,15 +17,16 @@
 </style>
 
 @{
-    var nomor_aksepatsi = Model.kd_cb.Trim() + Model.kd_cob.Trim() +
-                          Model.kd_scob.Trim() + Model.kd_thn.Trim() + Model.no_aks.Trim();
+    var nomor_aksepatsi = Model.kd_cb.Trim() + "." + Model.kd_cob.Trim() +
+                          Model.kd_scob.Trim() + "." + Model.kd_thn.Trim() + "." + Model.no_aks.Trim();
     var pranota_koas_pst_share = Model.pst_share == null ? 0 : (double)Model.pst_share;
     var pranota_koas_nilai_prm = Model.nilai_prm == null ? 0 : (double)Model.nilai_prm;
-    var pranota_koas_nilai_kl = Model.nilai_kl == null ? 0 : (double)Model.nilai_kl;
     var pranota_koas_pst_dis = Model.pst_dis == null ? 0 : (double)Model.pst_dis;
     var pranota_koas_nilai_dis = Model.nilai_dis == null ? 0 : (double)Model.nilai_dis;
     var pranota_koas_pst_hf = Model.pst_hf == null ? 0 : (double)Model.pst_hf;
     var pranota_koas_nilai_hf = Model.nilai_hf == null ? 0 : (double)Model.nilai_hf;
+    var pranota_koas_pst_kms = Model.pst_kms == null ? 0 : (double)Model.pst_kms;
+    var pranota_koas_nilai_kms = Model.nilai_kms == null ? 0 : (double)Model.nilai_kms;
 }
 
 <div class="window-body" style="background-color: lightgray">
@@ -60,9 +61,9 @@
             </div>
             <div class="row col-sm-6">
                 <label class="col-sm-6">Premi 100%</label>
-                @* <div class="col-sm-6"> *@
-                @*     <kendo-textbox name="resiko_coverage_no_rsk" value="@Model.no_rsk" readonly="true" style="width: 100%"/> *@
-                @* </div> *@
+                <div class="col-sm-6">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="premi_100" readonly="true" style="width: 100%"/>
+                </div>
             </div>
         </div>
         <div class="form-group row">
@@ -70,7 +71,8 @@
                 <label class="col-sm-3">Kode Rekanan</label>
                 <div class="row col-sm-9">
                     <div class="col-sm-6">
-                        <kendo-dropdownlist name="pranota_koas_kd_grp_pas" style="width: 100%" on-change="OnKodeRekananPranotaKoasChange" option-label="Pilih Kode Rekanan"
+                    <input type="hidden" id="temp_pranota_koas_kd_grp_pas" value="@Model.kd_grp_pas">
+                        <kendo-dropdownlist name="pranota_koas_kd_grp_pas" style="width: 100%" on-change="OnKodeRekananPranotaKoasChange" option-label="Pilih Kode Rekanan" value="@Model.kd_grp_pas"
                                             datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown">
                             <datasource type="DataSourceTagHelperType.Custom">
                                 <transport>
@@ -80,7 +82,8 @@
                         </kendo-dropdownlist>
                     </div>
                     <div class="col-sm-6">
-                        <kendo-dropdownlist name="pranota_koas_kd_rk_pas" style="width: 100%" class="primary-dropdown"
+                    <input type="hidden" id="temp_pranota_koas_kd_rk_pas" value="@Model.kd_rk_pas">
+                        <kendo-dropdownlist name="pranota_koas_kd_rk_pas" style="width: 100%" class="primary-dropdown" value="@Model.kd_rk_pas"
                                             datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                             <datasource type="DataSourceTagHelperType.Custom">
                                 <transport>
@@ -96,7 +99,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Share (%)</label>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox decimals="2" spinners="false" name="pranota_koas_pst_share" value="@pranota_koas_pst_share" style="width: 100%"/>
+                    <kendo-numerictextbox decimals="2" spinners="false" name="pranota_koas_pst_share" value="@pranota_koas_pst_share" on-change="OnPranotaKoasPstShareChange" style="width: 100%"/>
                 </div>
             </div>
         </div>
@@ -108,9 +111,14 @@
                 </div>
             </div>
             <div class="row col-sm-6">
-                <label class="col-sm-6">Klaim</label>
-                <div class="col-sm-6">
-                    <kendo-numerictextbox decimals="2" spinners="false" name="pranota_koas_nilai_kl" value="@pranota_koas_nilai_kl" style="width: 100%"/>
+                <label class="col-sm-6">Komisi</label>
+                <div class="col-sm-2">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="pranota_koas_pst_kms" value="@pranota_koas_pst_kms" on-change="OnPranotaKoasPstKmsChange" style="width: 100%"/>
+                    <span asp-validation-for="pst_kms" class="text-danger"></span>
+                </div>
+                <div class="col-sm-4">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="pranota_koas_nilai_kms" value="@pranota_koas_nilai_kms" style="width: 100%"/>
+                    <span asp-validation-for="nilai_kms" class="text-danger"></span>
                 </div>
             </div>
         </div>
@@ -118,7 +126,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Diskon</label>
                 <div class="col-sm-2">
-                    <kendo-numerictextbox decimals="2" spinners="false" name="pranota_koas_pst_dis" value="@pranota_koas_pst_dis" style="width: 100%"/>
+                    <kendo-numerictextbox decimals="2" spinners="false" name="pranota_koas_pst_dis" value="@pranota_koas_pst_dis" on-change="OnPranotaKoasPstDisChange" style="width: 100%"/>
                     <span asp-validation-for="pst_dis" class="text-danger"></span>
                 </div>
                 <div class="col-sm-4">
@@ -129,7 +137,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Handling Fee</label>
                 <div class="col-sm-2">
-                    <kendo-numerictextbox decimals="2" spinners="false" name="pranota_koas_pst_hf" value="@pranota_koas_pst_hf" style="width: 100%"/>
+                    <kendo-numerictextbox decimals="2" spinners="false" name="pranota_koas_pst_hf" value="@pranota_koas_pst_hf" on-change="OnPranotaKoasPstHfChange" style="width: 100%"/>
                     <span asp-validation-for="pst_hf" class="text-danger"></span>
                 </div>
                 <div class="col-sm-4">

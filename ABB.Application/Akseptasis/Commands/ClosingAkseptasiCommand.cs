@@ -7,7 +7,7 @@ using MediatR;
 
 namespace ABB.Application.Akseptasis.Commands
 {
-    public class ClosingAkseptasiCommand : IRequest
+    public class ClosingAkseptasiCommand : IRequest<(string, string, string)>
     {
         public string DatabaseName { get; set; }
         public string kd_cb { get; set; }
@@ -18,7 +18,7 @@ namespace ABB.Application.Akseptasis.Commands
         public string no_updt { get; set; }
     }
 
-    public class ClosingAkseptasiCommandHandler : IRequestHandler<ClosingAkseptasiCommand>
+    public class ClosingAkseptasiCommandHandler : IRequestHandler<ClosingAkseptasiCommand, (string, string, string)>
     {
         private readonly IDbConnectionFactory _connectionFactory;
 
@@ -27,17 +27,15 @@ namespace ABB.Application.Akseptasis.Commands
             _connectionFactory = connectionFactory;
         }
 
-        public async Task<Unit> Handle(ClosingAkseptasiCommand request, CancellationToken cancellationToken)
+        public async Task<(string, string, string)> Handle(ClosingAkseptasiCommand request, CancellationToken cancellationToken)
         {
             _connectionFactory.CreateDbConnection(request.DatabaseName);
-            await _connectionFactory.QueryProc("spp_uw01p_02",
+            return (await _connectionFactory.QueryProc<(string, string, string)>("spp_uw01p_02",
                 new
                 {
                     request.kd_cb, request.kd_cob, request.kd_scob,
                     request.kd_thn, request.no_aks, request.no_updt
-                });
-
-            return Unit.Value;
+                })).FirstOrDefault();
         }
     }
 }

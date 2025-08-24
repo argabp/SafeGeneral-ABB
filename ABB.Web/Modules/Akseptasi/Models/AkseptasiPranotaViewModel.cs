@@ -30,14 +30,6 @@ namespace ABB.Web.Modules.Akseptasi.Models
 
         public decimal? nilai_dis { get; set; }
 
-        public decimal? pst_dis_fea { get; set; }
-
-        public decimal? nilai_dis_fea { get; set; }
-
-        public decimal? pst_dis_fleet { get; set; }
-
-        public decimal? nilai_dis_fleet { get; set; }
-
         public decimal? nilai_insentif { get; set; }
 
         public decimal? nilai_bia_pol { get; set; }
@@ -58,8 +50,6 @@ namespace ABB.Web.Modules.Akseptasi.Models
 
         public decimal? nilai_bia_supl { get; set; }
 
-        public decimal? nilai_bia_pu { get; set; }
-
         public decimal? nilai_bia_pbtl { get; set; }
 
         public decimal? nilai_bia_form { get; set; }
@@ -70,15 +60,11 @@ namespace ABB.Web.Modules.Akseptasi.Models
 
         public decimal? nilai_pjk { get; set; }
 
-        public decimal? nilai_ttl_kms { get; set; }
-
         public decimal? nilai_ttl_bia { get; set; }
 
         public decimal? nilai_ttl_ptg { get; set; }
 
         public string? no_pol_ttg { get; set; }
-
-        public bool IsEditPranota { get; set; }
 
         public void Mapping(Profile profile)
         {

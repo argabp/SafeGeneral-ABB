@@ -93,6 +93,8 @@ namespace ABB.Application.Akseptasis.Commands
                 {
                     var akseptasiPranotaKoas = _mapper.Map<AkseptasiPranotaKoas>(request);
 
+                    akseptasiPranotaKoas.kd_prm = "PRM";
+                    
                     dbContext.AkseptasiPranotaKoas.Add(akseptasiPranotaKoas);
 
                     await dbContext.SaveChangesAsync(cancellationToken);
@@ -100,25 +102,14 @@ namespace ABB.Application.Akseptasis.Commands
                 }
                 else
                 {
-                    _mapper.Map(request, entity);
-
-                    if(entity.kd_cb.Length != 5)
-                        for (int sequence = entity.kd_cb.Length; sequence < 5; sequence++)
-                        {
-                            entity.kd_cb += " ";
-                        }
-            
-                    if(entity.kd_cob.Length != 2)
-                        for (int sequence = entity.kd_cob.Length; sequence < 2; sequence++)
-                        {
-                            entity.kd_cob += " ";
-                        }
-
-                    if(entity.kd_scob.Length != 5)
-                        for (int sequence = entity.kd_scob.Length; sequence < 5; sequence++)
-                        {
-                            entity.kd_scob += " ";
-                        }
+                    entity.pst_share = request.pst_share;
+                    entity.nilai_prm = request.nilai_prm;
+                    entity.pst_kms = request.pst_kms;
+                    entity.nilai_kms = request.nilai_kms;
+                    entity.pst_dis = request.pst_dis;
+                    entity.nilai_dis = request.nilai_dis;;
+                    entity.pst_hf = request.pst_hf;
+                    entity.nilai_hf = request.nilai_hf;
             
                     await dbContext.SaveChangesAsync(cancellationToken);
                 }

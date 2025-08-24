@@ -98,7 +98,9 @@ namespace ABB.Infrastructure.Data
 
         public async Task<IEnumerable<T>> Query<T>(string query, object param = null)
         {
-            return await Connection.QueryAsync<T>(query, param, commandTimeout:1000);
+            await using var connection = new SqlConnection(ConnectionString);
+            await connection.OpenAsync();
+            return await connection.QueryAsync<T>(query, param, commandTimeout:1000);
         }
 
         public async Task<dynamic> QueryFirst(string query, object param = null)

@@ -1,22 +1,12 @@
 ﻿function openEntriNotaWindow(url, title) {
     openWindow('#EntriNotaWindow', url, title);
 }
-function openEntriNotaCancelWindow(url, title) {
-    openWindow('#EntriNotaCancelWindow', url, title);
-}
 
 function onEditEntriNota(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     console.log('dataItem', dataItem);
-    openEntriNotaWindow(`/EntriNota/Edit?kd_cb=${dataItem.kd_cb}&jns_tr=${dataItem.jns_tr}&jns_nt_msk=${dataItem.jns_nt_msk}&kd_thn=${dataItem.kd_thn}&kd_bln=${dataItem.kd_bln}&no_nt_msk=${dataItem.no_nt_msk}&jns_nt_kel=${dataItem.jns_nt_kel}&no_nt_kel=${dataItem.no_nt_kel}`, 'Edit Entri Nota');
-}
-
-function onCancelEntriNota(e) {
-    e.preventDefault();
-    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-    console.log('dataItem', dataItem);
-    openEntriNotaCancelWindow(`/EntriNota/Cancel?kd_cb=${dataItem.kd_cb}&jns_tr=${dataItem.jns_tr}&jns_nt_msk=${dataItem.jns_nt_msk}&kd_thn=${dataItem.kd_thn}&kd_bln=${dataItem.kd_bln}&no_nt_msk=${dataItem.no_nt_msk}&jns_nt_kel=${dataItem.jns_nt_kel}&no_nt_kel=${dataItem.no_nt_kel}`, 'Edit Entri Nota');
+    openEntriNotaWindow(`/EntriNota/Edit?kd_cb=${dataItem.kd_cb}&jns_tr=${dataItem.jns_tr}&jns_nt_msk=${dataItem.jns_nt_msk}&kd_thn=${dataItem.kd_thn}&kd_bln=${dataItem.kd_bln}&no_nt_msk=${dataItem.no_nt_msk}&jns_nt_kel=${dataItem.jns_nt_kel}&no_nt_kel=${dataItem.no_nt_kel}`, 'Edit Nota Tertanggung');
 }
 
 function dataKodeTertujuDropDown(){
@@ -45,6 +35,55 @@ function onEditDetailNota(dataItem){
         dataItem.model.jns_nt_kel = $("#jns_nt_kel").val().trim();
         dataItem.model.no_nt_kel = $("#no_nt_kel").val().trim();
     }
+
+    if (e.container.find("input[name='pst_ang']").length) {
+        var numericTextbox = e.container.find("input[name='pst_ang']").data("kendoNumericTextBox");
+        if (numericTextbox) {
+            numericTextbox.bind("change", function () {
+                onPstAngChange(e.model, numericTextbox.value());
+            });
+        }
+    }
+}
+
+function onPstAngChange(model, newPstAngValue) {
+    // Example logic:
+    // Set nilai_ang = newPstAngValue * 2 (just an example)
+    model.set("nilai_ang", newPstAngValue * 2);
+
+    // Update tgl_jth_tempo by adding 10 days to tgl_ang (example)
+    var tglAng = model.get("tgl_ang");
+    if (tglAng) {
+        var newDate = new Date(tglAng);
+        newDate.setDate(newDate.getDate() + 10);
+        model.set("tgl_jth_tempo", newDate);
+    }
+
+    // If you want to update tgl_ang as well (example: set today’s date)
+    // model.set("tgl_ang", new Date());
+
+    // The `model.set()` calls will automatically update the UI in the grid inline editor
+}
+
+function onSaveDetailNota(e) {
+    var model = e.model;
+
+    // Example validation: pst_ang must be > 0
+    if (model.pst_ang <= 0) {
+        alert("Nilai Angsuran (pst_ang) harus lebih besar dari 0.");
+        e.preventDefault(); // Cancel the save, keep editing
+        return;
+    }
+
+    // Add other validation rules as needed
+    // Example: nilai_ang must be >= pst_ang
+    if (model.nilai_ang < model.pst_ang) {
+        alert("Jumlah Angsuran (nilai_ang) harus lebih besar atau sama dengan Nilai Angsuran (pst_ang).");
+        e.preventDefault();
+        return;
+    }
+
+    // If all validations pass, the save will proceed normally
 }
 
 function onDeleteDetailNota(e){
@@ -64,4 +103,21 @@ function onDeleteDetailNota(e){
             }
         }
     );
+}
+
+function onEntriNotaDataBound(e) {
+    var grid = $("#EntriNotaGrid").data("kendoGrid");
+    grid.tbody.find("tr").each(function() {
+        var dataItem = grid.dataItem(this);
+        if (dataItem.flag_posting == "Y") {
+            $(this).find("a[title='Edit']").hide();
+        }
+    });
+}
+
+function OnKodeRkTTJChange(e){
+    ajaxGet(`/EntriNota/GenerateEntriNotaData?kd_rk=${e.sender.value()}&kd_cb=${$("#kd_cb").val()}&kd_grp_rk=${$("#kd_grp_ttj").val()}`, (returnValue) => {
+        $("#almt_ttj").getKendoTextArea().value(returnValue.split(",")[1]);
+        $("#kt_ttj").getKendoTextBox().value(returnValue.split(",")[4]);
+    });
 }

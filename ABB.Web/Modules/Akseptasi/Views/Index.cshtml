@@ -68,14 +68,14 @@
                         command.Custom("DeleteAkseptasi")
                             .Text("Delete")
                             .IconClass("k-icon k-i-delete")
-                            .HtmlAttributes(new { title="Delete"})
+                            .HtmlAttributes(new { title = "Delete" })
                             .Click("btnDeleteAkseptasi_OnClick");
                         command.Custom("KeteranganEndorsment")
                             .Text("KeteranganEndorsment")
                             .IconClass("fa fa-indent")
-                            .HtmlAttributes(new { title="KeteranganEndorsment"})
+                            .HtmlAttributes(new { title = "KeteranganEndorsment" })
                             .Click("btnKeteranganEndorsment_OnClick");
-                    }).Width(200);
+                    }).Width(200).Title("Action");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)
@@ -122,6 +122,15 @@
         @(Html.Kendo().Window()
             .Name("AkseptasiObyekWindow")
             .Title("Akseptasi Obyek")
+            .Width(1000)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+        
+        @(Html.Kendo().Window()
+            .Name("AkseptasiPranotaWindow")
+            .Title("Akseptasi Pranota")
             .Width(1000)
             .Modal(true)
             .Visible(false)
