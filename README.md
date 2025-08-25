@@ -1,5 +1,7 @@
 # SafeGeneral-ABB
-This app selects the database based on the user login.
+This application dynamically selects the database based on the user’s login. During startup, it may take additional time due to the execution of database seeders. Since the database is determined per user, the application uses HTML templates for generating reports. These templates are processed with Scriban and exported to PDF using DinkToPdf, with the output stored in a temporary directory.
+
+Because report generation and previewing are manual processes, the application also includes a scheduler that periodically cleans up the temporary directory to manage storage efficiently.
 
 ## Table of Contents
 
