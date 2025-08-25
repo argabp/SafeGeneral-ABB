@@ -1,4 +1,5 @@
 # SafeGeneral-ABB
+This app selects the database based on the user login.
 
 ## Table of Contents
 
