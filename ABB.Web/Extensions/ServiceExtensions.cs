@@ -108,6 +108,10 @@ namespace ABB.Web.Extensions
             services.AddDbContext<ABBDbContextCSM>(c => c.UseSqlServer(connectionStringCSM));
             services.AddScoped(typeof(IDbContextCSM), typeof(ABBDbContextCSM));
             
+            string connectionStringPstNota = configuration.GetConnectionString("ABBConnectionPstNota");
+            services.AddDbContext<ABBDbContextPstNota>(c => c.UseSqlServer(connectionStringPstNota));
+            services.AddScoped(typeof(ABBDbContextPstNota), typeof(ABBDbContextPstNota));
+            
             services.AddSingleton<IDbContextFactory, DbContextFactory>();
             services.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
             services.AddHttpContextAccessor();
