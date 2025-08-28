@@ -12,6 +12,7 @@ namespace ABB.Infrastructure
         {
             services.AddScoped(typeof(IDbConnection), typeof(ABBDbConnection));
             services.AddScoped(typeof(IDbConnectionCSM), typeof(ABBDbConnectionCSM));
+            services.AddScoped(typeof(IDbConnectionPstNota), typeof(ABBDbConnectionPstNota));
             services.AddSingleton(typeof(ILog), typeof(Logger));
             services.RegisterAssemblyPublicNonGenericClasses()
                 .Where(x => x.Name.EndsWith("Service") || x.Name.EndsWith("Helper"))
