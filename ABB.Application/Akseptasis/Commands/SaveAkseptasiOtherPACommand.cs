@@ -232,6 +232,7 @@ namespace ABB.Application.Akseptasis.Commands
                     entity.pst_rate_phk = request.pst_rate_phk;
                     entity.stn_rate_phk = request.stn_rate_phk;
                     entity.nilai_prm_phk = request.nilai_prm_phk;
+                    entity.no_endt = request.no_endt;
                     
                     await dbContext.SaveChangesAsync(cancellationToken);
                 }

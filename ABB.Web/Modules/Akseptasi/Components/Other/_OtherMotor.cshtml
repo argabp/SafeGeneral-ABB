@@ -25,6 +25,7 @@
 
 <div class="window-body" style="background-color: lightgray">
     <form id="OtherForm" enctype="multipart/form-data" autocomplete="off">
+        @Html.HiddenFor(h => h.grp_jns_kend)
         <div class="form-group row">
             <div class="row col-sm-6">
                 <label class="col-sm-3">Nomor Akseptasi</label>
@@ -128,8 +129,8 @@
         <div class="form-group row">
             <div class="row col-sm-6">
                 <label class="col-sm-3">Tipe Kendaraan</label>
+                <div class="col-sm-5">
                 <input type="hidden" id="temp_kd_merk_kend" value="@Model.kd_merk_kend">
-                <div class="col-sm-9">
                     <kendo-dropdownlist for="kd_merk_kend" style="width: 100%" class="not-null-dropdown" option-label="Pilih Tipe Kendaraan"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
@@ -138,6 +139,9 @@
                             </transport>
                         </datasource>
                     </kendo-dropdownlist>
+                </div>
+                <div class="col-sm-4">
+                    <kendo-textbox for="tipe_kend" style="width: 100%"/>
                 </div>
             </div>
             <div class="row col-sm-6">

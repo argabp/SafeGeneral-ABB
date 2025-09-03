@@ -281,6 +281,7 @@ namespace ABB.Application.Akseptasis.Commands
                     entity.stn_rate_tjh = request.stn_rate_tjh;
                     entity.nilai_prm_tjh = request.nilai_prm_tjh;
                     entity.nilai_rsk_sendiri = request.nilai_rsk_sendiri;
+                    entity.tipe_kend = request.tipe_kend;
             
                     await dbContext.SaveChangesAsync(cancellationToken);
                 }

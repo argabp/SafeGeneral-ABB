@@ -52,6 +52,8 @@ namespace ABB.Application.Akseptasis.Queries
         public decimal? nilai_pjk { get; set; }
 
         public string? no_pol_ttg { get; set; }
+
+        public string? nm_rk { get; set; }
         
         public void Mapping(Profile profile)
         {

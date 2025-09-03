@@ -39,8 +39,12 @@ namespace ABB.Application.Akseptasis.Queries
         public async Task<List<AkseptasiPranotaKoasDto>> Handle(GetAkseptasiPranotaKoassQuery request, CancellationToken cancellationToken)
         {
             _connectionFactory.CreateDbConnection(request.DatabaseName);
-            return (await _connectionFactory.Query<AkseptasiPranotaKoasDto>(@"SELECT p.*, p.kd_grp_pas + p.kd_rk_pas Id
+            return (await _connectionFactory.Query<AkseptasiPranotaKoasDto>(@"SELECT r.nm_rk, p.*, p.kd_grp_pas + p.kd_rk_pas Id
 				FROM uw03a p
+					INNER JOIN rf03 r
+						ON p.kd_cb = r.kd_cb
+				    		AND p.kd_grp_pas = r.kd_grp_rk
+							AND p.kd_rk_pas = r.kd_rk
 				WHERE p.kd_cb = @KodeCabang AND 
 				      p.kd_cob = @kd_cob AND 
 				      p.kd_scob = @kd_scob AND 

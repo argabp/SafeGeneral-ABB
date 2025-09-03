@@ -35,7 +35,7 @@ namespace ABB.Application.Akseptasis.Queries
         public async Task<string> Handle(RecalculatePremiQuery request, CancellationToken cancellationToken)
         {
             _connectionFactory.CreateDbConnection(request.DatabaseName);
-            var results = (await _connectionFactory.QueryProc<(string, string, string)>("spe_uw02e_25", new
+            var results = (await _connectionFactory.QueryProc<(string, string, string)>("spp_uw02e_02", new
             {
                 request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn,
                 request.no_aks, request.no_updt

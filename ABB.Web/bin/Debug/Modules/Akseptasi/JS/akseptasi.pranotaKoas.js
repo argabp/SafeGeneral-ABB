@@ -2,7 +2,7 @@
     btnSaveAkseptasiPranotaKoas_Click();
     setTimeout(setPranotaKoasEditedValue, 2000);
     
-    $("#premi_100").getKendoNumericTextBox().value(Number(pranota.nilai_prm) / Number($("#pst_share_bgu").val()));
+    $("#premi_100").getKendoNumericTextBox().value(Number(pranota.nilai_prm));
 });
 
 function setPranotaKoasEditedValue(){
@@ -36,7 +36,7 @@ function saveAkseptasiPranotaKoas(url) {
     form.kd_scob = $("#kd_scob").val();
     form.kd_thn = $("#kd_thn").val();
     form.no_aks = $("#no_aks").val();
-    form.no_updt = $("#pranota_koas_no_updt").val();
+    form.no_updt = pranota.no_updt;
     
     var data = JSON.stringify(form);
     

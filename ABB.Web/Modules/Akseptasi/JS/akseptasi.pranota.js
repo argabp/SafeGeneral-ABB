@@ -25,6 +25,7 @@ function saveAkseptasiPranota(url) {
 
     ajaxPost(url, data,
         function (response) {
+            refreshGrid("#AkseptasiPranotaGrid");
             if (response.Result == "OK") {
                 showMessage('Success', response.Message);
                 closeWindow('#AkseptasiPranotaWindow');

@@ -108,7 +108,7 @@ function OnPstRatePrmChange(e){
 }
 
 function OnHuruHaraChange(e){
-    ajaxGet(`/Akseptasi/GeneratePstRateHH?kd_jns_kend=${$("#kd_jns_kend").val()}&kd_wilayah=${$("#kd_wilayah").val()}&kd_jns_ptg=${$("#kd_jns_ptg").val()}&nilai_casco=${$("#nilai_casco").val()}&flag_hh=${e.checked}`, (returnValue) => {
+    ajaxGet(`/Akseptasi/GeneratePstRateHH?kd_jns_kend=${$("#kd_jns_kend").val()}&kd_wilayah=${$("#kd_wilayah").val()}&kd_jns_ptg=${$("#kd_jns_ptg").val()}&nilai_casco=${$("#nilai_casco").val()}&flag_hh=${!e.checked}`, (returnValue) => {
         $("#pst_rate_hh").getKendoNumericTextBox().value(returnValue.split(",")[1]);
         $("#pst_rate_hh").getKendoNumericTextBox().trigger("change");
     });
@@ -122,7 +122,7 @@ function OnPstRateHHChange(e){
 }
 
 function OnAOGChange(e){
-    ajaxGet(`/Akseptasi/GeneratePstRateAOG?kd_jns_kend=${$("#kd_jns_kend").val()}&kd_wilayah=${$("#kd_wilayah").val()}&kd_jns_ptg=${$("#kd_jns_ptg").val()}&nilai_casco=${$("#nilai_casco").val()}&flag_aog=${e.checked}`, (returnValue) => {
+    ajaxGet(`/Akseptasi/GeneratePstRateAOG?kd_jns_kend=${$("#kd_jns_kend").val()}&kd_wilayah=${$("#kd_wilayah").val()}&kd_jns_ptg=${$("#kd_jns_ptg").val()}&nilai_casco=${$("#nilai_casco").val()}&flag_aog=${!e.checked}`, (returnValue) => {
         $("#pst_rate_aog").getKendoNumericTextBox().value(returnValue.split(",")[1]);
         $("#pst_rate_aog").getKendoNumericTextBox().trigger("change");
     });
@@ -136,7 +136,7 @@ function OnPstRateAOGChange(e){
 }
 
 function OnBanjirChange(e){
-    ajaxGet(`/Akseptasi/GeneratePstRateBanjir?kd_jns_kend=${$("#kd_jns_kend").val()}&kd_wilayah=${$("#kd_wilayah").val()}&kd_jns_ptg=${$("#kd_jns_ptg").val()}&nilai_casco=${$("#nilai_casco").val()}&flag_banjir=${e.checked}`, (returnValue) => {
+    ajaxGet(`/Akseptasi/GeneratePstRateBanjir?kd_jns_kend=${$("#kd_jns_kend").val()}&kd_wilayah=${$("#kd_wilayah").val()}&kd_jns_ptg=${$("#kd_jns_ptg").val()}&nilai_casco=${$("#nilai_casco").val()}&flag_banjir=${!e.checked}`, (returnValue) => {
         $("#pst_rate_banjir").getKendoNumericTextBox().value(returnValue.split(",")[1]);
         $("#pst_rate_banjir").getKendoNumericTextBox().trigger("change");
     });
@@ -150,7 +150,7 @@ function OnPstRateBanjirChange(e){
 }
 
 function OnTRSChange(e){
-    ajaxGet(`/Akseptasi/GeneratePstRateTRS?kd_jns_kend=${$("#kd_jns_kend").val()}&kd_wilayah=${$("#kd_wilayah").val()}&kd_jns_ptg=${$("#kd_jns_ptg").val()}&nilai_casco=${$("#nilai_casco").val()}&flag_trs=${e.checked}`, (returnValue) => {
+    ajaxGet(`/Akseptasi/GeneratePstRateTRS?kd_jns_kend=${$("#kd_jns_kend").val()}&kd_wilayah=${$("#kd_wilayah").val()}&kd_jns_ptg=${$("#kd_jns_ptg").val()}&nilai_casco=${$("#nilai_casco").val()}&flag_trs=${!e.checked}`, (returnValue) => {
         $("#pst_rate_trs").getKendoNumericTextBox().value(returnValue.split(",")[1]);
         $("#pst_rate_trs").getKendoNumericTextBox().trigger("change");
     });

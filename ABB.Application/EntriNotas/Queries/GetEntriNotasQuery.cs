@@ -32,15 +32,22 @@ namespace ABB.Application.EntriNotas.Queries
             try
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
-                var results = (await _connectionFactory.Query<NotaDto>(@"SELECT p.*, cb.nm_cb, cob.nm_cob, scob.nm_scob FROM uw08e p 
-					INNER JOIN rf01 cb
-						ON p.kd_cb = cb.kd_cb
-					INNER JOIN rf04 cob
-						ON p.kd_cob = cob.kd_cob
-					INNER JOIN rf05 scob
-						ON p.kd_cob = scob.kd_cob
-						AND p.kd_scob = scob.kd_scob
-					WHERE p.flag_cancel = 'N' AND p.flag_posting = 'N'")).ToList();
+                var results = (await _connectionFactory.Query<NotaDto>(@"SELECT p.*, cb.nm_cb, cob.nm_cob, scob.nm_scob, aks.no_pol_pas FROM uw08e p 
+                        INNER JOIN rf01 cb
+                           ON p.kd_cb = cb.kd_cb
+                        INNER JOIN rf04 cob
+                           ON p.kd_cob = cob.kd_cob
+                        INNER JOIN rf05 scob
+                           ON p.kd_cob = scob.kd_cob
+                           AND p.kd_scob = scob.kd_scob
+                        inner join uw01e aks
+                           on p.kd_cb=aks.kd_cb
+                           and p.kd_cob=aks.kd_cob
+                           and p.kd_scob=aks.kd_scob
+                           and p.kd_thn=aks.kd_thn
+                           and p.no_pol=aks.no_pol
+                           and p.no_updt=aks.no_updt
+                        WHERE p.flag_cancel = 'N'")).ToList();
 
                 var sequence = 1;
                 foreach (var result in results)

@@ -1441,7 +1441,12 @@ namespace ABB.Web.Modules.Akseptasi
                         akseptasiPaViewModel.kd_jns_kr = "PA";
                         akseptasiPaViewModel.nilai_prm_gb = 0;
                         akseptasiPaViewModel.nilai_ptg_phk = 0;
-                    
+                        akseptasiPaViewModel.tgl_lahir = DateTime.Now;
+                        akseptasiPaViewModel.tgl_real = DateTime.Now;
+                        akseptasiPaViewModel.tgl_akh_ptg = DateTime.Now;
+                        akseptasiPaViewModel.tgl_mul_ptg = DateTime.Now;
+                        akseptasiPaViewModel.tgl_lahir = DateTime.Now;
+
                         return View("~/Modules/Akseptasi/Components/Other/_OtherPA.cshtml", akseptasiPaViewModel);
                     }
                 
@@ -1970,6 +1975,25 @@ namespace ABB.Web.Modules.Akseptasi
                 nilai_bia_mat = nilai_bia_mat,
                 jk_wkt = jk_wkt,
                 flag_bln = no_endt
+            });
+            
+            return Ok(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GenerateOtherPAData(decimal jk_wkt,
+            DateTime tgl_lahir, DateTime tgl_real, string kd_cb,
+            string kd_jns_kr, string kd_grp_kr)
+        {
+            var result = await Mediator.Send(new GetAkseptasiOtherPADataQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                jk_wkt = jk_wkt,
+                tgl_lahir = tgl_lahir,
+                tgl_real = tgl_real,
+                kd_cb = kd_cb,
+                kd_jns_kr = kd_jns_kr,
+                kd_grp_kr = kd_grp_kr
             });
             
             return Ok(result);

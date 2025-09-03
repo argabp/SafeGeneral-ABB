@@ -1,6 +1,14 @@
 ﻿$(document).ready(function () {
     btnPreviousOther();
     btnSaveAkseptasiResikoOther_Click();
+    
+    $("#total_nilai_prm").text(currencyFormatter.format(Number($("#nilai_prm_tl").val()) + Number($("#nilai_prm_std").val())
+        + Number($("#nilai_prm_bjr").val()) + Number($("#nilai_prm_gb").val())
+        + Number($("#nilai_prm_phk").val())));
+    
+    $("#total_nilai_ptg").text(currencyFormatter.format(Number($("#nilai_ptg_bjr").val()) + Number($("#nilai_harga_ptg").val())
+        + Number($("#nilai_ptg_phk").val()) + Number($("#nilai_ptg_gb").val())
+        + Number($("#nilai_ptg_tl").val())));
 });
 
 function btnPreviousOther(){
@@ -56,6 +64,7 @@ function saveAkseptasiResikoOther(url) {
     form.tgl_akh_ptg = $("#resiko_other_pa_tgl_akh_ptg").val();
     form.tgl_input = $("#resiko_other_pa_tgl_input").val();
     form.no_pol_ttg = $("#no_pol_ttg").val();
+    form.no_endt = $("#other_pa_no_endt").val();
 
     var data = JSON.stringify(form);
 
@@ -294,3 +303,21 @@ var currencyFormatter = new Intl.NumberFormat('en-US', {
     minimumFractionDigits: 3,
     maximumFractionDigits: 3
 });
+
+function OnTanggalPKChange(e){
+    ajaxGet(`/Akseptasi/GenerateOtherPAData?jk_wkt=${$("#jk_wkt").val()}&tgl_lahir=${$("#tgl_lahir").val()}&tgl_real=${e.sender.value().toLocaleDateString()}&kd_cb=${$("#kd_cb").val()}&kd_jns_kr=${$("#kd_jns_kr").val()}&kd_grp_kr=${$("#kd_grp_kr").val()}`, (returnValue) => {
+        $("#resiko_other_pa_tgl_mul_ptg").getKendoDatePicker().value(returnValue[2].split(",")[1]);
+        $("#resiko_other_pa_tgl_akh_ptg").getKendoDatePicker().value(returnValue[1].split(",")[1]);
+        $("#usia_deb").getKendoNumericTextBox().value(returnValue[3].split(",")[1]);
+        $("#other_pa_no_endt").val(returnValue[0].split(",")[1]);
+    });
+}
+
+function OnJkWktChange(e){
+    ajaxGet(`/Akseptasi/GenerateOtherPAData?jk_wkt=${e.sender.value()}&tgl_lahir=${$("#tgl_lahir").val()}&tgl_real=${$("#tgl_real").val()}&kd_cb=${$("#kd_cb").val()}&kd_jns_kr=${$("#kd_jns_kr").val()}&kd_grp_kr=${$("#kd_grp_kr").val()}`, (returnValue) => {
+        $("#resiko_other_pa_tgl_mul_ptg").getKendoDatePicker().value(returnValue[2].split(",")[1]);
+        $("#resiko_other_pa_tgl_akh_ptg").getKendoDatePicker().value(returnValue[1].split(",")[1]);
+        $("#usia_deb").getKendoNumericTextBox().value(returnValue[3].split(",")[1]);
+        $("#other_pa_no_endt").val(returnValue[0].split(",")[1]);
+    });
+}

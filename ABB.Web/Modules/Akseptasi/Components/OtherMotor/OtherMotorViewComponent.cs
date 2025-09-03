@@ -36,7 +36,7 @@ namespace ABB.Web.Modules.Akseptasi.Components.OtherMotor
 
             if (motorResult == null)
             {
-                akseptasiMotorViewModel.grp_jns_kend = "0011";
+                akseptasiMotorViewModel.grp_jns_kend = "001";
                 akseptasiMotorViewModel.kd_guna = "000";
                 akseptasiMotorViewModel.nilai_casco = 0;
                 akseptasiMotorViewModel.nilai_tjh = 0;

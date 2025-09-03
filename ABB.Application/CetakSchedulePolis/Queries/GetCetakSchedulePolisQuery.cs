@@ -80,9 +80,8 @@ namespace ABB.Application.CetakSchedulePolis.Queries
             var cetakSchedulePolisData = (await _connectionFactory.QueryProc<CetakSchedulePolisDto>(storeProcedureName, 
                 new
                 {
-                    input_str = "JK50,P,0552,24,00001,0,PT. BPR DHAHA EKONOMI"
-                    // input_str = $"{request.kd_cb.Trim()},{request.kd_cob.Trim()},{request.kd_scob.Trim()}," +
-                    //             $"{request.kd_thn},{request.no_pol.Trim()},{request.no_updt},{request.nm_ttg?.Trim()}"
+                    input_str = $"{request.kd_cb.Trim()},{request.kd_cob.Trim()},{request.kd_scob.Trim()}," +
+                                $"{request.kd_thn},{request.no_pol.Trim()},{request.no_updt},{request.nm_ttg?.Trim()}"
                 })).ToList();
 
             

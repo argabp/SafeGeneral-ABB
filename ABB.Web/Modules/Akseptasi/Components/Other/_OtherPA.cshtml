@@ -23,6 +23,7 @@
 <div class="window-body" style="background-color: lightgray">
     <form id="OtherPAForm" enctype="multipart/form-data" autocomplete="off">
         @Html.HiddenFor(h => h. kd_grp_asj)
+        <input type="hidden" id="other_pa_no_endt" value="@Model.no_endt">
         <input type="hidden" id="other_pa_nilai_bia_mat" value="@Model.nilai_bia_mat">
         <div class="form-group row">
             <div class="row col-sm-6">
@@ -204,7 +205,7 @@
             <div class="row col-sm-5">
                 <label class="col-sm-6">Tanggal PK.</label>
                 <div class="col-sm-6">
-                    <kendo-datepicker for="tgl_real" style="width: 100%"/>
+                    <kendo-datepicker for="tgl_real" on-change="OnTanggalPKChange" style="width: 100%"/>
                 </div>
             </div>
             <div class="offset-1"></div>
@@ -220,7 +221,7 @@
             <div class="row col-sm-5">
                 <label class="col-sm-6">Jangka Waktu</label>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox spinners="false" decimals="0" format="#" for="jk_wkt" style="width: 100%"/>
+                    <kendo-numerictextbox spinners="false" on-change="OnJkWktChange" decimals="0" format="#" for="jk_wkt" style="width: 100%"/>
                 </div>
             </div>
             <div class="col-sm-1">
@@ -324,7 +325,7 @@
             <div class="row col-sm-3">
                 <label class="col-sm-6">Total Premi x Jangka Waktu</label>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox spinners="false" decimals="2" format="#" for="nilai_prm_btn" on-change="OnNilaiPrmBtnChange" style="width: 100%"/>
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_prm_btn" on-change="OnNilaiPrmBtnChange" style="width: 100%"/>
                 </div>
             </div>
         </div>

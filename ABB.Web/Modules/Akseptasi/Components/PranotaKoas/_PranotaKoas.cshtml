@@ -22,7 +22,7 @@
         )
         .Columns(columns =>
         {
-            columns.Bound(col => col.Id).Width(150).Title("Nama Rekanan");
+            columns.Bound(col => col.nm_rk).Width(150).Title("Nama Rekanan");
             columns.Bound(col => col.pst_share).Width(150).Title("Share (%)").Format("{0:n2}");
             columns.Bound(col => col.nilai_prm).Width(150).Title("Premi").Format("{0:n2}");
             columns.Bound(col => col.nilai_dis).Width(150).Title("Diskon").Format("{0:n2}");

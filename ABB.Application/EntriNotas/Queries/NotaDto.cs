@@ -91,6 +91,8 @@ namespace ABB.Application.EntriNotas.Queries
 
         public string? bayar { get; set; }
 
+        public string? no_pol_pas { get; set; }
+
         public void Mapping(Profile profile)
         {
             profile.CreateMap<NotaDto, SaveEntriNotaCommand>();

@@ -36,33 +36,37 @@ function onEditDetailNota(dataItem){
         dataItem.model.no_nt_kel = $("#no_nt_kel").val().trim();
     }
 
-    if (e.container.find("input[name='pst_ang']").length) {
-        var numericTextbox = e.container.find("input[name='pst_ang']").data("kendoNumericTextBox");
+    if (dataItem.container.find("input[name='pst_ang']").length) {
+        var numericTextbox = dataItem.container.find("input[name='pst_ang']").data("kendoNumericTextBox");
         if (numericTextbox) {
             numericTextbox.bind("change", function () {
-                onPstAngChange(e.model, numericTextbox.value());
+                onNotaTertanggungDetailChange();
+            });
+        }
+    }
+
+    if (dataItem.container.find("input[name='nilai_ang']").length) {
+        var numericTextbox = dataItem.container.find("input[name='nilai_ang']").data("kendoNumericTextBox");
+        if (numericTextbox) {
+            numericTextbox.bind("change", function () {
+                onNotaTertanggungDetailChange();
             });
         }
     }
 }
 
-function onPstAngChange(model, newPstAngValue) {
-    // Example logic:
-    // Set nilai_ang = newPstAngValue * 2 (just an example)
-    model.set("nilai_ang", newPstAngValue * 2);
+function onNotaTertanggungDetailChange() {
+    var totalPstAng = 0;
+    var totalAng = 0;
+    var grid = $("#DetailEntriNotaGrid").getKendoGrid();
+    
+    grid.dataSource.view().forEach(function(dataItem) {
+        totalPstAng += dataItem.pst_ang || 0;  // Ensure we sum the value or add 0 if undefined
+        totalAng += dataItem.nilai_ang || 0;
+    });
 
-    // Update tgl_jth_tempo by adding 10 days to tgl_ang (example)
-    var tglAng = model.get("tgl_ang");
-    if (tglAng) {
-        var newDate = new Date(tglAng);
-        newDate.setDate(newDate.getDate() + 10);
-        model.set("tgl_jth_tempo", newDate);
-    }
-
-    // If you want to update tgl_ang as well (example: set today’s date)
-    // model.set("tgl_ang", new Date());
-
-    // The `model.set()` calls will automatically update the UI in the grid inline editor
+    $("#totalPersentaseAngsuran").text(totalPstAng.toFixed(2));
+    $("#totalAngsuran").text(currencyFormatter.format(totalAng));
 }
 
 function onSaveDetailNota(e) {
