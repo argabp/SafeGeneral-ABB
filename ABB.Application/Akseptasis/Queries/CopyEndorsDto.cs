@@ -5,7 +5,7 @@ using AutoMapper;
 
 namespace ABB.Application.Akseptasis.Queries
 {
-    public class CopyEndorsDto : IMapFrom<CopyEndorsInsertCommand>
+    public class CopyEndorsDto
     {
         public int Id { get; set; }
         
@@ -26,11 +26,12 @@ namespace ABB.Application.Akseptasis.Queries
         public string kd_endt { get; set; }
 
         public string ket_rsk { get; set; }
+        public decimal nilai_ttl_ptg { get; set; }
 
-        public void Mapping(Profile profile)
-        {
-            profile.CreateMap<CopyEndorsDto, CopyEndorsUpdateDeleteCommand>();
-            profile.CreateMap<CopyEndorsDto, CopyEndorsInsertCommand>();
-        }
+        public decimal nilai_dis { get; set; }
+
+        public decimal nilai_prm { get; set; }
+
+        public decimal nilai_kms { get; set; }
     }
 }

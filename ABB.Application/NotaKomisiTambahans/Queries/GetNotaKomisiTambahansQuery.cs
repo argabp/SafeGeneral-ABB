@@ -13,17 +13,6 @@ namespace ABB.Application.NotaKomisiTambahans.Queries
     {
         public string SearchKeyword { get; set; }
         public string DatabaseName { get; set; }
-        public string kd_cb { get; set; }
-
-        public string kd_thn { get; set; }
-
-        public string no_pol { get; set; }
-
-        public Int16 no_updt { get; set; }
-
-        public Int16 no_rsk { get; set; }
-        
-        public string kd_endt { get; set; }
     }
 
     public class GetNotaKomisiTambahansQueryHandler : IRequestHandler<GetNotaKomisiTambahansQuery, List<NotaKomisiTambahanDto>>
@@ -39,11 +28,7 @@ namespace ABB.Application.NotaKomisiTambahans.Queries
         {
             _connectionFactory.CreateDbConnection(request.DatabaseName);
             return (await _connectionFactory.Query<NotaKomisiTambahanDto>(@"SELECT 
-    			p.*, '(' + p.kd_cb + ') ' + cb.nm_cb nm_cb,
-    			'(' + p.kd_cob + ') ' + cob.nm_cob nm_cob,
-    			'(' + p.kd_scob + ') ' + scob.nm_scob nm_scob,
-    			p.kd_cb + ' ' + p.kd_cob + ' ' + p.kd_scob + ' ' +
-				p.kd_thn + ' ' + p.no_pol + ' ' + CONVERT(varchar, p.no_updt) no_akseptasi FROM fn05 p
+    			p.*, cb.nm_cb, cob.nm_cob , scob.nm_scob, pp.tgl_closing, pp.tgl_akh_ptg, pp.tgl_mul_ptg FROM fn05 p
     			    INNER JOIN rf01 cb
 						ON p.kd_cb = cb.kd_cb
 					INNER JOIN rf04 cob
@@ -51,18 +36,27 @@ namespace ABB.Application.NotaKomisiTambahans.Queries
 					INNER JOIN rf05 scob
 						ON p.kd_cob = scob.kd_cob
 						AND p.kd_scob = scob.kd_scob
-				WHERE (p.no_pol like '%'+@SearchKeyword+'%' 
-					OR p.jns_tr like '%'+@SearchKeyword+'%' 
-					OR p.jns_nt_msk like '%'+@SearchKeyword+'%' 
-					OR p.kd_thn like '%'+@SearchKeyword+'%' 
-					OR p.kd_bln like '%'+@SearchKeyword+'%' 
-					OR p.no_nt_msk like '%'+@SearchKeyword+'%' 
-					OR p.jns_nt_kel like '%'+@SearchKeyword+'%' 
-					OR p.no_nt_kel like '%'+@SearchKeyword+'%' 
-					OR cb.nm_cb like '%'+@SearchKeyword+'%' 
+    			    INNER JOIN uw01e pp
+    			        ON pp.kd_cb = p.kd_cb
+    			        AND pp.kd_cob = p.kd_cob
+    			        AND pp.kd_scob = p.kd_scob
+    			        AND pp.kd_thn = p.kd_thn
+    			        AND pp.no_pol = p.no_pol
+    			        AND pp.no_updt = p.no_updt
+					WHERE (p.no_pol_ttg like '%'+@SearchKeyword+'%' 
+						OR pp.tgl_mul_ptg like '%'+@SearchKeyword+'%' 
+						OR pp.tgl_akh_ptg like '%'+@SearchKeyword+'%' 
+						OR pp.tgl_closing like '%'+@SearchKeyword+'%' 
+						OR p.no_updt like '%'+@SearchKeyword+'%' 
+						OR cb.nm_cb like '%'+@SearchKeyword+'%' 
+						OR cob.nm_cob like '%'+@SearchKeyword+'%' 
+						OR scob.nm_scob like '%'+@SearchKeyword+'%' 
+						OR cb.kd_cb like '%'+@SearchKeyword+'%' 
+						OR cob.kd_cob like '%'+@SearchKeyword+'%' 
+						OR scob.kd_scob like '%'+@SearchKeyword+'%' 
+						OR p.nm_ttj like '%'+@SearchKeyword+'%' 
 					OR @SearchKeyword = '' OR @SearchKeyword IS NULL)", 
-                new { request.SearchKeyword, request.kd_cb,
-                })).ToList();
+                new { request.SearchKeyword })).ToList();
         }
     }
 }

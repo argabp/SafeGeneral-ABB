@@ -1445,7 +1445,7 @@ namespace ABB.Web.Modules.Akseptasi
                         akseptasiPaViewModel.tgl_real = DateTime.Now;
                         akseptasiPaViewModel.tgl_akh_ptg = DateTime.Now;
                         akseptasiPaViewModel.tgl_mul_ptg = DateTime.Now;
-                        akseptasiPaViewModel.tgl_lahir = DateTime.Now;
+                        akseptasiPaViewModel.tgl_input = DateTime.Now;
 
                         return View("~/Modules/Akseptasi/Components/Other/_OtherPA.cshtml", akseptasiPaViewModel);
                     }
@@ -2426,7 +2426,7 @@ namespace ABB.Web.Modules.Akseptasi
         }
         
         [HttpPost]
-        public async Task<IActionResult> CopyEndorsDelete([FromBody] CopyEndorsDto model)
+        public async Task<IActionResult> CopyEndorsDelete([FromBody] CopyEndorsViewModel model)
         {
             try
             {
@@ -2448,7 +2448,7 @@ namespace ABB.Web.Modules.Akseptasi
         }
         
         [HttpPost]
-        public async Task<IActionResult> CopyEndorsUpdate([FromBody] CopyEndorsDto model)
+        public async Task<IActionResult> CopyEndorsUpdate([FromBody] CopyEndorsViewModel model)
         {
             try
             {
@@ -2470,7 +2470,7 @@ namespace ABB.Web.Modules.Akseptasi
         }
         
         [HttpPost]
-        public async Task<IActionResult> CopyEndorsInsert([FromBody] CopyEndorsDto model)
+        public async Task<IActionResult> CopyEndorsInsert([FromBody] CopyEndorsViewModel model)
         {
             try
             {

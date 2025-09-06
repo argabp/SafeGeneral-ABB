@@ -158,6 +158,7 @@ namespace ABB.Web.Modules.PolisInduk
             viewModel.pst_share_bgu = 100;
             viewModel.faktor_prd = 100;
             viewModel.kd_grp_mkt = "M";
+            viewModel.kd_cb = Request.Cookies["UserCabang"]?.Trim() ?? string.Empty;
             return PartialView(viewModel);
         }
         
@@ -194,6 +195,8 @@ namespace ABB.Web.Modules.PolisInduk
             {
                 DatabaseName = Request.Cookies["DatabaseValue"]
             });
+
+            result = result.Where(w => w.Value != string.Empty).ToList();
 
             return Json(result);
         }

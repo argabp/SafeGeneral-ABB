@@ -42,16 +42,18 @@ namespace ABB.Application.EndorsementPolis.Queries
 						AND p.kd_scob = scob.kd_scob
 					LEFT JOIN MS_User u
 						ON u.UserId = p.kd_usr_input
-				WHERE cb.kd_cb = @KodeCabang AND (p.no_pol like '%'+@SearchKeyword+'%' 
-					OR p.no_pol_ttg like '%'+@SearchKeyword+'%' 
-					OR p.no_updt like '%'+@SearchKeyword+'%' 
-					OR cb.nm_cb like '%'+@SearchKeyword+'%' 
-					OR cob.nm_cob like '%'+@SearchKeyword+'%' 
-					OR scob.nm_scob like '%'+@SearchKeyword+'%' 
-					OR cb.kd_cb like '%'+@SearchKeyword+'%' 
-					OR cob.kd_cob like '%'+@SearchKeyword+'%' 
-					OR scob.kd_scob like '%'+@SearchKeyword+'%' 
-					OR p.nm_ttg like '%'+@SearchKeyword+'%' 
+				WHERE cb.kd_cb = @KodeCabang AND (p.no_pol_ttg like '%'+@SearchKeyword+'%' 
+						OR p.tgl_mul_ptg like '%'+@SearchKeyword+'%' 
+						OR p.tgl_akh_ptg like '%'+@SearchKeyword+'%' 
+						OR p.tgl_closing like '%'+@SearchKeyword+'%' 
+						OR p.no_updt like '%'+@SearchKeyword+'%' 
+						OR cb.nm_cb like '%'+@SearchKeyword+'%' 
+						OR cob.nm_cob like '%'+@SearchKeyword+'%' 
+						OR scob.nm_scob like '%'+@SearchKeyword+'%' 
+						OR cb.kd_cb like '%'+@SearchKeyword+'%' 
+						OR cob.kd_cob like '%'+@SearchKeyword+'%' 
+						OR scob.kd_scob like '%'+@SearchKeyword+'%' 
+						OR p.nm_ttg like '%'+@SearchKeyword+'%' 
 					OR @SearchKeyword = '' OR @SearchKeyword IS NULL)", new { request.SearchKeyword, request.KodeCabang })).ToList();
         }
     }

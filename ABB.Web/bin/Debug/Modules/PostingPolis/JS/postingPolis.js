@@ -1,4 +1,13 @@
-﻿
+﻿$(document).ready(function () {
+    searchKeyword_OnKeyUp();
+});
+
+function searchKeyword_OnKeyUp() {
+    $('#SearchKeyword').keyup(function () {
+        refreshGrid("#AkseptasiGrid");
+    });
+}
+
 function postingPolis(){
     showConfirmation('Confirmation', `Are you sure you want to posting?`,
         function () {

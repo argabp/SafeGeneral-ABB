@@ -43,7 +43,7 @@ function btnKeteranganEndorsment_OnClick(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     console.log('dataItem', dataItem);
-    openAkseptasiWindow(`/Akseptasi/KeteranganEndorsment?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_aks=${dataItem.no_aks}&no_updt=${dataItem.no_updt}`, 'Edit Akseptasi');
+    openAkseptasiWindow(`/Akseptasi/KeteranganEndorsment?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_aks=${dataItem.no_aks}&no_updt=${dataItem.no_updt}`, 'Keterangan Endorsment');
 }
 
 function closingAkseptasi(dataItem){

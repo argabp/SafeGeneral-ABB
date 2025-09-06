@@ -22,7 +22,7 @@
         columns.Bound(col => col.no_akseptasi).Width(100).Title("Nomor Akseptasi");
         columns.Bound(col => col.kd_mtu).Width(50).Title("Mata Uang");
         columns.Bound(col => col.nm_ttg).Width(150).Title("Nama Tertanggung");
-        columns.Bound(col => col.no_pol_ttg).Width(100).Title("Nomor Polis");
+        columns.Bound(col => col.no_pol_ttg).Width(100).Title("Nomor Polis").ClientTemplate("#= formatNoPol(no_pol_ttg) #");
     })
     .Pageable(pager => pager
         .Refresh(true)

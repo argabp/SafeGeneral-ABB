@@ -21,8 +21,12 @@
 
 <div class="flat-box">
     <div class="row">
-        <div class="flat-box-title col-md-6">
+        <div class="flat-box-title col-md-8">
             Nota Tertanggung
+        </div>
+
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
         </div>
     </div>
 
@@ -42,7 +46,7 @@
                     columns.Bound(col => col.nm_scob).Width(150).Title("Nama SCOB");
                     columns.Bound(col => col.no_pol_ttg).Width(150).Title("Nomor Polis").ClientTemplate("#= formatNoPol(no_pol_ttg) #");
                     columns.Bound(col => col.no_nt_msk).Width(150).Title("Nomor Nota");
-                    columns.Bound(col => col.nm_ttj).Width(200).Title("Nama Tertanggung");
+                    // columns.Bound(col => col.nm_ttg).Width(200).Title("Nama Tertanggung");
                     columns.Bound(col => col.nm_ttj).Width(150).Title("Nama Tertuju");
                     columns.Bound(col => col.flag_cancel).Width(150).Title("Status Polis");
                     columns.Bound(col => col.no_pol_pas).Width(200).Title("Nomor Polis Ceding");
@@ -88,22 +92,6 @@
 </div>
 
 <script>
-    function formatNoPol(value) {
-        if (!value) return "";
-
-        value = value.toString();
-
-        // Ensure the string is long enough
-        if (value.length < 16) return value;
-
-        return value.substring(0, 2) + '.' +
-               value.substring(2, 5) + '.' +
-               value.substring(5, 7) + '.' +
-               value.substring(7, 11) + '.' +
-               value.substring(11, 15) + '-' +
-               value.substring(15);
-    }
-    
     function formatNoPol(value) {
         if (!value) return "";
 

@@ -61,7 +61,7 @@ function endorsementPolis(dataItem, url){
     var data = JSON.stringify(form);
     ajaxPost(url, data,  function (response) {
         if (response.Status === "OK") {
-            showMessage('Success', 'Data behasil di Endorsement');
+            showMessage('Success', 'Proses Endorsment Normal Berhasil, Silahkan dicek pada menu Akseptasi Polis');
             refreshGrid("#EndorsementPolisGrid");
         }
         else {

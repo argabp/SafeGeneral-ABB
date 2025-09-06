@@ -50,7 +50,7 @@ function renewalPolis(dataItem){
     
     ajaxPost(`/RenewalPolis/RenewalPolis`, data,  function (response) {
         if (response.Status === "OK") {
-            showMessage('Success', 'Data behasil di renwal');
+            showMessage('Success', 'Proses Renewal Polis Berhasil, Silahkan dicek pada menu Akseptasi Polis');
         }
         else {
             showMessage('Error', 'Pembatalan gagal, ' + response.Message);

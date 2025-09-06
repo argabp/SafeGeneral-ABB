@@ -40,11 +40,14 @@ namespace ABB.Web.Modules.NotaKomisiTambahan
                 kd_thn = string.Empty,
                 kd_bln = string.Empty,
                 no_nt_msk = string.Empty,
-                jns_nt_kel = string.Empty,
+                jns_nt_kel = "C",
                 no_nt_kel = "00",
                 kd_mtu = "001",
                 kd_grp_ttj = "9",
                 uraian = "KOMISI",
+                pst_lain = 0,
+                nilai_lain = 0,
+                tgl_nt = DateTime.Now
             });
         }
 
@@ -175,9 +178,7 @@ namespace ABB.Web.Modules.NotaKomisiTambahan
         {
             var result = new List<DropdownOptionDto>()
             {
-                new DropdownOptionDto() { Text = "", Value = "" },
-                new DropdownOptionDto() { Text = "Komisi", Value = "C" },
-                new DropdownOptionDto() { Text = "Diskon", Value = "D" }
+                new DropdownOptionDto() { Text = "Komisi", Value = "C" }
             };
 
             return Json(result);
@@ -270,6 +271,42 @@ namespace ABB.Web.Modules.NotaKomisiTambahan
                 kd_mtu = kd_mtu,
                 tgl_nt = tgl_nt,
                 pst_nt = pst_nt,
+                nilai_nt = nilai_nt,
+                jns_nt_kel = jns_nt_kel,
+                kd_grp_ttj = kd_grp_ttj,
+                uraian = uraian,
+                kd_cb = kd_cb,
+                kd_rk_ttj = kd_rk_ttj
+            });
+
+            return Json(result);
+        }
+        
+        public async Task<JsonResult> GetNilaiPPHAndPPN(decimal nilai_nt, string uraian,
+            decimal pst_pph, decimal pst_ppn)
+        {
+            var result = await Mediator.Send(new GetNilaiPPHAndPPN()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                pst_pph = pst_pph,
+                pst_ppn = pst_ppn,
+                nilai_nt = nilai_nt,
+                uraian = uraian
+            });
+
+            return Json(result);
+        }
+        
+        public async Task<JsonResult> GetDataFromNilaiNotaChange(string kd_mtu, decimal nilai_prm,
+            string no_pol_ttg, decimal nilai_nt, string jns_nt_kel, string kd_grp_ttj,
+            string uraian, string kd_cb, string kd_rk_ttj)
+        {
+            var result = await Mediator.Send(new GetDataFromNilaiNotaChangeQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                kd_mtu = kd_mtu,
+                nilai_prm = nilai_prm,
+                no_pol_ttg = no_pol_ttg,
                 nilai_nt = nilai_nt,
                 jns_nt_kel = jns_nt_kel,
                 kd_grp_ttj = kd_grp_ttj,

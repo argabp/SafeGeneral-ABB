@@ -43,7 +43,10 @@ namespace ABB.Application.RenewalPolis.Queries
 					LEFT JOIN MS_User u
 						ON u.UserId = p.kd_usr_input
 				WHERE cb.kd_cb = @KodeCabang AND (p.no_pol like '%'+@SearchKeyword+'%' 
-					OR p.no_pol_ttg like '%'+@SearchKeyword+'%' 
+					OR p.no_renew like '%'+@SearchKeyword+'%' 
+					OR p.tgl_mul_ptg like '%'+@SearchKeyword+'%' 
+					OR p.tgl_akh_ptg like '%'+@SearchKeyword+'%' 
+					OR p.tgl_closing like '%'+@SearchKeyword+'%' 
 					OR p.no_updt like '%'+@SearchKeyword+'%' 
 					OR cb.nm_cb like '%'+@SearchKeyword+'%' 
 					OR cob.nm_cob like '%'+@SearchKeyword+'%' 

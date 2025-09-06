@@ -27,7 +27,7 @@ namespace ABB.Web.Modules.PostingKomisiTambahan
 
         public async Task<ActionResult> GetPostingPolicies([DataSourceRequest] DataSourceRequest request)
         {
-            var ds = await Mediator.Send(new GetPostingPolisQuery()
+            var ds = await Mediator.Send(new GetPostingKomisiTambahanQuery()
             {
                 DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
             });

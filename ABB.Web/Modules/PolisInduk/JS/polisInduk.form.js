@@ -22,7 +22,7 @@ function OnTglMulChange(e){
     }
     var dataJson = JSON.stringify(data);
     ajaxPostSafely("/PolisInduk/GetTahunUnderwriting", dataJson , (returnValue) => {
-        $("#thn_uw").val(returnValue);
+        $("#thn_uw").getKendoNumericTextBox().value(returnValue);
     });
 }
 
@@ -34,7 +34,7 @@ function OnTglAkhChange(e){
     }
     var dataJson = JSON.stringify(data);
     ajaxPostSafely("/PolisInduk/GetJangkaWaktuPertanggungan", dataJson , (returnValue) => {
-        $("#jk_wkt_ptg").val(returnValue);
+        $("#jk_wkt_ptg").getKendoNumericTextBox().value(returnValue);
     });
 }
 

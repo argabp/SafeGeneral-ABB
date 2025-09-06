@@ -4,6 +4,11 @@ namespace ABB.Application.CancelPostingPolis.Queries
 {
     public class CancelPostingPolisDto
     {
+        public string nm_cb { get; set; }
+
+        public string nm_cob { get; set; }
+
+        public string nm_scob { get; set; }
         public string kd_cb { get; set; }
 
         public string kd_cob { get; set; }
@@ -25,5 +30,9 @@ namespace ABB.Application.CancelPostingPolis.Queries
         public string? no_pol_ttg { get; set; }
 
         public string? kd_usr_posting { get; set; }
+
+        public DateTime tgl_mul_ptg { get; set; }
+
+        public DateTime tgl_akh_ptg { get; set; }
     }
 }

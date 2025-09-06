@@ -60,7 +60,7 @@ function OnNomorAkseptasiChange(e){
     $("#kd_mtu").getKendoDropDownList().value(selectedRow.kd_mtu);
     $("#kd_rk_sb_bis").val(selectedRow.kd_rk_sb_bis);
     $("#kd_thn").val(selectedRow.kd_thn);
-    $("#no_pol_ttg").getKendoTextBox().value(selectedRow.no_pol_ttg);
+    $("#no_pol_ttg").getKendoMaskedTextBox().value(selectedRow.no_pol_ttg);
     $("#no_updt").getKendoNumericTextBox().value(selectedRow.no_updt);
     $("#no_pol").val(selectedRow.no_pol);
     $("#nomor_akseptasi").val(selectedRow.no_akseptasi);
@@ -79,10 +79,14 @@ function OnNomorAkseptasiChange(e){
         $("#kd_grp_ttj").getKendoDropDownList().value(kd_grp_ttj);
         $("#kd_mtu").getKendoDropDownList().value(returnValue[3].split(",")[1]);
         $("#kd_rk_sb_bis").val(returnValue[4].split(",")[1]);
-        $("#kd_rk_ttj").getKendoDropDownList().value(kd_rk_ttj);
         $("#kt_ttj").getKendoTextBox().value(returnValue[6].split(",")[1]);
         $("#nilai_prm").getKendoNumericTextBox().value(returnValue[7].split(",")[1]);
         $("#nm_ttj").getKendoTextBox().value(returnValue[8].split(",")[1]);
+        
+        setTimeout(() => {
+
+            $("#kd_rk_ttj").getKendoDropDownList().value(kd_rk_ttj);
+        }, 500)
         
         ajaxGet(`/NotaKomisiTambahan/GetNilaiPremiAndPercentageNt?kd_cb=${selectedRow.kd_cb}&kd_cob=${selectedRow.kd_cob}&kd_scob=${selectedRow.kd_scob}
                 &kd_thn=${selectedRow.kd_thn}&no_pol=${selectedRow.no_pol}&no_updt=${selectedRow.no_updt}&kd_mtu=${selectedRow.kd_mtu}&nilai_nt=${nilai_nt}`, 
@@ -120,18 +124,41 @@ function OnNomorAkseptasiChange(e){
                 &tgl_nt=${$("#tgl_nt").val()}&pst_nt=${pst_nt}&nilai_nt=${nilai_nt}
                 &jns_nt_kel=${jns_nt_kel}&kd_grp_ttj=${kd_grp_ttj}&uraian=${$("#uraian").val()}
                 &kd_cb=${selectedRow.kd_cb}&kd_rk_ttj=${kd_rk_ttj}`, (returnValueSecond) => {
-                if(returnValueSecond.length === 1){
-                    $("#uraian").val(returnValueSecond[0].split(",")[1]);
-                } else {
-                    $("#nilai_nt").getKendoNumericTextBox().value(returnValueSecond[0].split(",")[1]);
-                    $("#pst_ppn").getKendoNumericTextBox().value(returnValueSecond[1].split(",")[1]);
-                    $("#pst_pph").getKendoNumericTextBox().value(returnValueSecond[2].split(",")[1]);
-                    $("#nilai_ppn").getKendoNumericTextBox().value(returnValueSecond[3].split(",")[1]);
-                    $("#nilai_pph").getKendoNumericTextBox().value(returnValueSecond[4].split(",")[1]);
-                    $("#uraian").val(returnValueSecond[5].split(",")[1]);
-                    $("#pst_lain").getKendoNumericTextBox().value(returnValueSecond[6].split(",")[1]);
-                    $("#nilai_lain").getKendoNumericTextBox().value(returnValueSecond[7].split(",")[1]);
-                }
+                returnValueSecond.forEach(data => {
+                    if(data == null){
+                        return;
+                    }
+                    
+                    var fieldName = data.split(",")[0];
+                    var val = data.split(",")[1];
+                    switch (fieldName)
+                    {
+                        case "nilai_nt":
+                            $("#nilai_nt").getKendoNumericTextBox().value(val);
+                            break;
+                        case "pst_ppn":
+                            $("#pst_ppn").getKendoNumericTextBox().value(val);
+                            break;
+                        case "pst_pph":
+                            $("#pst_pph").getKendoNumericTextBox().value(val);
+                            break;
+                        case "nilai_ppn":
+                            $("#nilai_ppn").getKendoNumericTextBox().value(val);
+                            break;
+                        case "nilai_pph":
+                            $("#nilai_pph").getKendoNumericTextBox().value(val);
+                            break;
+                        case "pst_lain":
+                            $("#pst_lain").getKendoNumericTextBox().value(val);
+                            break;
+                        case "nilai_lain":
+                            $("#nilai_lain").getKendoNumericTextBox().value(val);
+                            break;
+                        case "uraian":
+                            $("#uraian").val(val);
+                            break;
+                    }
+                })
             });
             
             closeWindow($("#NomorAkseptasiWindow"));
@@ -141,20 +168,142 @@ function OnNomorAkseptasiChange(e){
 
 function onPercentageNotaChange(e){
     ajaxGet(`/NotaKomisiTambahan/GetNilaiAndPercentage?kd_mtu=${$("#kd_mtu").val()}
-                &tgl_nt=${$("#tgl_nt").val()}&pst_nt=${e.sender.value()}&nilai_nt=${$("#nilai_nt").val()}
+                &tgl_nt=${$("#tgl_nt").val()}&pst_nt=${e.sender.value()}&nilai_nt=${$("#nilai_prm").val()}
                 &jns_nt_kel=${$("#jns_nt_kel").val()}&kd_grp_ttj=${$("#kd_grp_ttj").val()}&uraian=${$("#uraian").val()}
                 &kd_cb=${$("#kd_cb").val()}&kd_rk_ttj=${$("#kd_rk_ttj").val()}`, (returnValue) => {
-        if(returnValue.length === 1){
-            $("#uraian").val(returnValue[0].split(",")[1]);
-        } else {
-            $("#nilai_nt").getKendoNumericTextBox().value(returnValue[0].split(",")[1]);
-            $("#pst_ppn").getKendoNumericTextBox().value(returnValue[1].split(",")[1]);
-            $("#pst_pph").getKendoNumericTextBox().value(returnValue[2].split(",")[1]);
-            $("#nilai_ppn").getKendoNumericTextBox().value(returnValue[3].split(",")[1]);
-            $("#nilai_pph").getKendoNumericTextBox().value(returnValue[4].split(",")[1]);
-            $("#uraian").val(returnValue[5].split(",")[1]);
-            $("#pst_lain").getKendoNumericTextBox().value(returnValue[6].split(",")[1]);
-            $("#nilai_lain").getKendoNumericTextBox().value(returnValue[7].split(",")[1]);
-        }
+        returnValue.forEach(data => {
+            if(data == null){
+                return;
+            }
+            
+            var fieldName = data.split(",")[0];
+            var val = data.split(",")[1];
+            switch (fieldName)
+            {
+                case "nilai_nt":
+                    $("#nilai_nt").getKendoNumericTextBox().value(val);
+                    break;
+                case "pst_ppn":
+                    $("#pst_ppn").getKendoNumericTextBox().value(val);
+                    break;
+                case "pst_pph":
+                    $("#pst_pph").getKendoNumericTextBox().value(val);
+                    break;
+                case "nilai_ppn":
+                    $("#nilai_ppn").getKendoNumericTextBox().value(val);
+                    break;
+                case "nilai_pph":
+                    $("#nilai_pph").getKendoNumericTextBox().value(val);
+                    break;
+                case "pst_lain":
+                    $("#pst_lain").getKendoNumericTextBox().value(val);
+                    break;
+                case "nilai_lain":
+                    $("#nilai_lain").getKendoNumericTextBox().value(val);
+                    break;
+                case "uraian":
+                    $("#uraian").val(val);
+                    break;
+            }
+        })
+    });
+}
+
+function OnChangePstPPN(e){
+    ajaxGet(`/NotaKomisiTambahan/GetNilaiPPHAndPPN?pst_ppn=${e.sender.value()}&nilai_nt=${$("#nilai_nt").val()}
+                &pst_pph=${$("#pst_pph").val()}&uraian=${$("#uraian").val()}`, (returnValue) => {
+        $("#nilai_ppn").getKendoNumericTextBox().value(returnValue[1].split(",")[1]);
+        $("#nilai_pph").getKendoNumericTextBox().value(returnValue[0].split(",")[1]);
+    });
+}
+
+function OnChangePstPPH(e){
+    ajaxGet(`/NotaKomisiTambahan/GetNilaiPPHAndPPN?pst_pph=${e.sender.value()}&nilai_nt=${$("#nilai_nt").val()}
+                &pst_ppn=${$("#pst_ppn").val()}&uraian=${$("#uraian").val()}`, (returnValue) => {
+        $("#nilai_ppn").getKendoNumericTextBox().value(returnValue[1].split(",")[1]);
+        $("#nilai_pph").getKendoNumericTextBox().value(returnValue[0].split(",")[1]);
+    });
+}
+
+function OnNilaiPrmChange(e){
+    ajaxGet(`/NotaKomisiTambahan/GetNilaiAndPercentage?kd_mtu=${$("#kd_mtu").val()}
+                &tgl_nt=${$("#tgl_nt").val()}&pst_nt=${$("#pst_nt").val()}&nilai_nt=${e.sender.value()}
+                &jns_nt_kel=${$("#jns_nt_kel").val()}&kd_grp_ttj=${$("#kd_grp_ttj").val()}&uraian=${$("#uraian").val()}`, (returnValue) => {
+        returnValue.forEach(data => {
+            if(data == null){
+                return;
+            }
+            
+            var fieldName = data.split(",")[0];
+            var val = data.split(",")[1];
+            switch (fieldName)
+            {
+                case "nilai_nt":
+                    $("#nilai_nt").getKendoNumericTextBox().value(val);
+                    break;
+                case "pst_ppn":
+                    $("#pst_ppn").getKendoNumericTextBox().value(val);
+                    break;
+                case "pst_pph":
+                    $("#pst_pph").getKendoNumericTextBox().value(val);
+                    break;
+                case "nilai_ppn":
+                    $("#nilai_ppn").getKendoNumericTextBox().value(val);
+                    break;
+                case "nilai_pph":
+                    $("#nilai_pph").getKendoNumericTextBox().value(val);
+                    break;
+                case "pst_lain":
+                    $("#pst_lain").getKendoNumericTextBox().value(val);
+                    break;
+                case "nilai_lain":
+                    $("#nilai_lain").getKendoNumericTextBox().value(val);
+                    break;
+                case "uraian":
+                    $("#uraian").val(val);
+                    break;
+            }
+        })
+    });
+}
+
+function OnNilaiNotaChange(e){
+    ajaxGet(`/NotaKomisiTambahan/GetDataFromNilaiNotaChange?kd_mtu=${$("#kd_mtu").val()}
+                &no_pol_ttg=${$("#no_pol_ttg").val()}&pst_nt=${$("#pst_nt").val()}&nilai_prm=${e.sender.value()}
+                &jns_nt_kel=${$("#jns_nt_kel").val()}&kd_grp_ttj=${$("#kd_grp_ttj").val()}&uraian=${$("#uraian").val()}`, (returnValue) => {
+        returnValue.forEach(data => {
+            if(data == null){
+                return;
+            }
+            
+            if(data.includes(","))
+            {
+                var fieldName = data.split(",")[0];
+                var val = data.split(",")[1];
+                switch (fieldName)
+                {
+                    case "pst_ppn":
+                        $("#pst_ppn").getKendoNumericTextBox().value(val);
+                        break;
+                    case "pst_pph":
+                        $("#pst_pph").getKendoNumericTextBox().value(val);
+                        break;
+                    case "nilai_ppn":
+                        $("#nilai_ppn").getKendoNumericTextBox().value(val);
+                        break;
+                    case "nilai_pph":
+                        $("#nilai_pph").getKendoNumericTextBox().value(val);
+                        break;
+                    case "pst_lain":
+                        $("#pst_lain").getKendoNumericTextBox().value(val);
+                        break;
+                    case "nilai_lain":
+                        $("#nilai_lain").getKendoNumericTextBox().value(val);
+                        break;
+                }
+            } else {
+                showMessage("Error", data);
+            }
+        })
     });
 }

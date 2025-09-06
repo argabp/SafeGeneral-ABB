@@ -44,15 +44,9 @@
                     columns.Bound(col => col.nm_scob).Width(150).Title("Nama Sub COB");
                     columns.Bound(col => col.no_aks).Width(150).Title("Nomor Akseptasi");
                     columns.Bound(col => col.no_updt).Width(150).Title("Nomor Update");
-                    columns.Bound(col => col.no_renew).Width(150).Title("Nomor Renewal");
-                    columns.Bound(col => col.no_endt).Width(150).Title("Nomor Endorstment");
-                    columns.Bound(col => col.thn_uw).Width(150).Title("Tahun Underwriting");
-                    columns.Bound(col => col.tgl_input).Width(150).Title("Tanggal Input").Format("{0: dd-MM-yyyy}");
+                    columns.Bound(col => col.nm_ttg).Width(150).Title("Nama Tertanggung");
                     columns.Bound(col => col.tgl_mul_ptg).Width(150).Title("Tanggal Mulai").Format("{0: dd-MM-yyyy}");
                     columns.Bound(col => col.tgl_akh_ptg).Width(150).Title("Tanggal Akhir").Format("{0: dd-MM-yyyy}");
-                    columns.Bound(col => col.tgl_closing).Width(150).Title("Tanggal Closing").Format("{0: dd-MM-yyyy}");
-                    columns.Bound(col => col.nm_usr_input).Width(150).Title("Kode User Input");
-                    columns.Bound(col => col.nm_ttg).Width(150).Title("Nama Tertanggung");
                     columns.Command(command =>
                     {
                         command.Custom("Batal")

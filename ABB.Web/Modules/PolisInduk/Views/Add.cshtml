@@ -121,7 +121,7 @@
             </div>
             <div class="row col-sm-6">
                 <div class="col-sm-6">
-                    <kendo-dropdownlist for="kd_rk_ttg" style="width: 100%" on-change="OnKodeRekananTertanggungChange"
+                    <kendo-dropdownlist for="kd_rk_ttg" style="width: 100%" on-change="OnKodeRekananTertanggungChange" option-label="Pilih Tertanggung"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -202,7 +202,7 @@
             </div>
             <div class="row col-sm-6">
                 <div class="col-sm-6">
-                    <kendo-dropdownlist for="kd_rk_sb_bis" style="width: 100%"
+                    <kendo-dropdownlist for="kd_rk_sb_bis" style="width: 100%" option-label="Pilih Sumber Bisnis"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -231,7 +231,7 @@
             </div>
             <div class="row col-sm-6">
                 <div class="col-sm-6">
-                    <kendo-dropdownlist for="kd_rk_brk" style="width: 100%"
+                    <kendo-dropdownlist for="kd_rk_brk" style="width: 100%" option-label="Pilih Broker / Agen"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -260,7 +260,7 @@
             </div>
             <div class="row col-sm-6">
                 <div class="col-sm-6">
-                    <kendo-dropdownlist for="kd_rk_pas" style="width: 100%"
+                    <kendo-dropdownlist for="kd_rk_pas" style="width: 100%" option-label="Pilih Persh Asuransi"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -289,7 +289,7 @@
             </div>
             <div class="row col-sm-6">
                 <div class="col-sm-6">
-                    <kendo-dropdownlist for="kd_rk_bank" style="width: 100%"
+                    <kendo-dropdownlist for="kd_rk_bank" style="width: 100%" option-label="Pilih Bank"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -318,7 +318,7 @@
             </div>
             <div class="row col-sm-6">
                 <div class="col-sm-6">
-                    <kendo-dropdownlist for="kd_rk_mkt" style="width: 100%"
+                    <kendo-dropdownlist for="kd_rk_mkt" style="width: 100%" option-label="Pilih Marketing"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -515,7 +515,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Kode User Input</label>
                 <div class="col-sm-6">
-                    <kendo-textbox for="kd_usr_input" style="width: 100%"/>
+                    <kendo-textbox for="kd_usr_input" style="width: 100%" readonly="true"/>
                     <span asp-validation-for="kd_usr_input" class="text-danger"></span>
                 </div>
             </div>
@@ -531,7 +531,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Tanggal Update</label>
                 <div class="col-sm-6">
-                    <kendo-datepicker for="tgl_updt" ></kendo-datepicker>
+                    <kendo-datepicker for="tgl_updt" readonly="true"></kendo-datepicker>
                     <span asp-validation-for="tgl_updt" class="text-danger"></span>
                 </div>
             </div>
@@ -540,14 +540,14 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Tanggal Input</label>
                 <div class="col-sm-6">
-                    <kendo-datepicker for="tgl_input" value="@DateTime.Now"></kendo-datepicker>
+                    <kendo-datepicker for="tgl_input" value="@DateTime.Now" readonly="true"></kendo-datepicker>
                     <span asp-validation-for="tgl_input" class="text-danger"></span>
                 </div>
             </div>
             <div class="row col-sm-6">
                 <label class="col-sm-6">Kode User Update</label>
                 <div class="col-sm-6">
-                    <kendo-textbox for="kd_usr_updt" style="width: 100%"/>
+                    <kendo-textbox for="kd_usr_updt" style="width: 100%" readonly="true"/>
                     <span asp-validation-for="kd_usr_updt" class="text-danger"></span>
                 </div>
             </div>

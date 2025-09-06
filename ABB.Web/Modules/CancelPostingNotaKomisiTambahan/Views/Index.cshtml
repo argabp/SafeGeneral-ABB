@@ -40,16 +40,15 @@
                 .Columns(columns =>
                 {
                     columns.Select().Width(50);
-                    columns.Bound(col => col.kd_cb).Width(150).Title("Nama Cabang");
-                    columns.Bound(col => col.kd_cob).Width(150).Title("Nama COB");
-                    columns.Bound(col => col.kd_scob).Width(150).Title("Nama Sub COB");
-                    columns.Bound(col => col.kd_thn).Width(150).Title("Nomor Akseptasi");
-                    columns.Bound(col => col.no_pol).Width(150).Title("Nomor Polis");
+                    columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
+                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
+                    columns.Bound(col => col.nm_scob).Width(150).Title("Nama Sub COB");
+                    columns.Bound(col => col.no_pol_ttg).Width(200).Title("Nomor Polis").ClientTemplate("#= formatNoPol(no_pol_ttg) #");
                     columns.Bound(col => col.no_updt).Width(150).Title("Nomor Update");
-                    columns.Bound(col => col.no_pol_ttg).Width(150).Title("Nomor Polis");
-                    columns.Bound(col => col.nm_ttj).Width(150).Title("Nama Tertuju");
-                    columns.Bound(col => col.tgl_posting).Width(150).Title("Tanggal Posting").Format("{0: dd-MM-yyyy}");
-                    columns.Bound(col => col.kd_usr_posting).Width(150).Title("User Kode Posting");
+                    columns.Bound(col => col.nm_ttj).Width(200).Title("Nama Tertuju");
+                    columns.Bound(col => col.tgl_mul_ptg).Width(150).Title("Tanggal Mulai").Format("{0: dd-MM-yyyy}");
+                    columns.Bound(col => col.tgl_akh_ptg).Width(150).Title("Tanggal Akhir").Format("{0: dd-MM-yyyy}");
+                    columns.Bound(col => col.tgl_closing).Width(150).Title("Tanggal Closing").Format("{0: dd-MM-yyyy}");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)
@@ -67,3 +66,20 @@
     </div>
 </div>
 
+<script>
+    function formatNoPol(value) {
+        if (!value) return "";
+
+        value = value.toString();
+
+        // Ensure the string is long enough
+        if (value.length < 16) return value;
+
+        return value.substring(0, 2) + '.' +
+               value.substring(2, 5) + '.' +
+               value.substring(5, 7) + '.' +
+               value.substring(7, 11) + '.' +
+               value.substring(11, 15) + '-' +
+               value.substring(15);
+    }
+</script>

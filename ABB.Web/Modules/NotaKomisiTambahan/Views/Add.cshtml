@@ -43,7 +43,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Nomor Polis</label>
                 <div class="col-sm-6">
-                    <kendo-textbox for="no_pol_ttg" style="width: 100%"/>
+                    <kendo-maskedtextbox mask="00.000.00.0000.0000-0" for="no_pol_ttg" style="width: 100%"/>
                 </div>
             </div>
         </div>
@@ -176,7 +176,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-3">Nilai PPN</label>
                 <div class="col-sm-3">
-                    <kendo-numerictextbox spinners="false" decimals="2" for="pst_ppn" style="width: 100%; background-color: #FFFFE1"/>
+                    <kendo-numerictextbox spinners="false" decimals="2" for="pst_ppn" on-change="OnChangePstPPN" style="width: 100%; background-color: #FFFFE1"/>
                     <span asp-validation-for="pst_ppn" class="text-danger"></span>
                 </div>
                 <div class="col-sm-6">
@@ -189,14 +189,14 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Nilai Premi Polis</label>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_prm" style="width: 100%;"/>
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_prm" on-change="OnNilaiPrmChange" style="width: 100%;"/>
                     <span asp-validation-for="nilai_prm" class="text-danger"></span>
                 </div>
             </div>
             <div class="row col-sm-6">
                 <label class="col-sm-3">Nilai PPH</label>
                 <div class="col-sm-3">
-                    <kendo-numerictextbox spinners="false" decimals="2" for="pst_pph" style="width: 100%; background-color: #FFFFE1"/>
+                    <kendo-numerictextbox spinners="false" decimals="2" for="pst_pph" on-change="OnChangePstPPH" style="width: 100%; background-color: #FFFFE1"/>
                     <span asp-validation-for="pst_pph" class="text-danger"></span>
                 </div>
                 <div class="col-sm-6">
@@ -213,7 +213,7 @@
                     <span asp-validation-for="pst_nt" class="text-danger"></span>
                 </div>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_nt" style="width: 100%; background-color: #FFFFE1"/>
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_nt" on-change="OnNilaiNotaChange" style="width: 100%; background-color: #FFFFE1"/>
                     <span asp-validation-for="nilai_nt" class="text-danger"></span>
                 </div>
             </div>
@@ -237,7 +237,7 @@
                 <input type="hidden" id="tempFlag_posting" value="@Model.flag_posting">
                 <div class="col-sm-6">
                     <label>
-                        <input type="checkbox" class="k-checkbox" id="flag_posting"/> Posting
+                        <input type="checkbox" class="k-checkbox" disabled id="flag_posting"/> Posting
                     </label>
                 </div>
             </div>

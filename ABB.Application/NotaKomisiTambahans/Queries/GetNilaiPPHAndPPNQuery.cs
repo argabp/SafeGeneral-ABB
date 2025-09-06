@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ using MediatR;
 
 namespace ABB.Application.NotaKomisiTambahans.Queries
 {
-    public class GetNilaiPPHAndPPN : IRequest<string>
+    public class GetNilaiPPHAndPPN : IRequest<List<string>>
     {
         public string DatabaseName { get; set; }
         
@@ -20,7 +21,7 @@ namespace ABB.Application.NotaKomisiTambahans.Queries
         public decimal pst_ppn { get; set; }
     }
 
-    public class GetNilaiPPHAndPPNHandler : IRequestHandler<GetNilaiPPHAndPPN, string>
+    public class GetNilaiPPHAndPPNHandler : IRequestHandler<GetNilaiPPHAndPPN, List<string>>
     {
         private readonly IDbConnectionFactory _connectionFactory;
 
@@ -29,7 +30,7 @@ namespace ABB.Application.NotaKomisiTambahans.Queries
             _connectionFactory = connectionFactory;
         }
 
-        public async Task<string> Handle(GetNilaiPPHAndPPN request, CancellationToken cancellationToken)
+        public async Task<List<string>> Handle(GetNilaiPPHAndPPN request, CancellationToken cancellationToken)
         {
             _connectionFactory.CreateDbConnection(request.DatabaseName);
             return (await _connectionFactory.QueryProc<string>("spe_uw06e_08",
@@ -37,7 +38,7 @@ namespace ABB.Application.NotaKomisiTambahans.Queries
                 {
                     request.nilai_nt, request.uraian,
                     request.pst_pph, request.pst_ppn
-                })).FirstOrDefault();
+                })).ToList();
         }
     }
 }

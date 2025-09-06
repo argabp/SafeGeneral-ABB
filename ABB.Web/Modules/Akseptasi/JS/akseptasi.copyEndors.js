@@ -29,7 +29,7 @@ function copyEndorsDelete(dataItem){
     form.kd_cob = dataItem.kd_cob;
     form.kd_scob = dataItem.kd_scob;
     form.kd_thn = dataItem.kd_thn;
-    form.no_pol = dataItem.no_pol;
+    form.no_aks = $("#no_aks").val();
     form.no_updt = dataItem.no_updt;
     form.no_rsk = dataItem.no_rsk;
     form.kd_endt = dataItem.kd_endt;
@@ -38,6 +38,7 @@ function copyEndorsDelete(dataItem){
     var data = JSON.stringify(form);
     ajaxPost(`/Akseptasi/CopyEndorsDelete`, data,  function (response) {
         if (response.Result === "OK") {
+            refreshGrid("#AkseptasiResikoGrid");
             showMessage('Success', response.Message);
             closeWindow($("#CopyEndorsWindow"))
         }
@@ -65,7 +66,7 @@ function copyEndorsUpdate(dataItem){
     form.kd_cob = dataItem.kd_cob;
     form.kd_scob = dataItem.kd_scob;
     form.kd_thn = dataItem.kd_thn;
-    form.no_pol = dataItem.no_pol;
+    form.no_aks = $("#no_aks").val();
     form.no_updt = dataItem.no_updt;
     form.no_rsk = dataItem.no_rsk;
     form.kd_endt = dataItem.kd_endt;
@@ -74,6 +75,7 @@ function copyEndorsUpdate(dataItem){
     var data = JSON.stringify(form);
     ajaxPost(`/Akseptasi/CopyEndorsUpdate`, data,  function (response) {
         if (response.Result === "OK") {
+            refreshGrid("#AkseptasiResikoGrid");
             showMessage('Success', response.Message);
             closeWindow($("#CopyEndorsWindow"))
         }
@@ -98,18 +100,19 @@ function copyEndorsInsert(dataItem){
     var form = {};
 
     form.kd_cb = dataItem.kd_cb;
-    form.kd_cob = dataItem.kd_cob;
+    form.kd_cob = dataItem.kd_cobF;
     form.kd_scob = dataItem.kd_scob;
     form.kd_thn = dataItem.kd_thn;
-    form.no_pol = dataItem.no_pol;
+    form.no_aks = $("#no_aks").val();
     form.no_updt = dataItem.no_updt;
     form.no_rsk = dataItem.no_rsk;
     form.kd_endt = dataItem.kd_endt;
     form.flag_endt = "U";
 
     var data = JSON.stringify(form);
-    ajaxPost(`/Akseptasi/CopyEndorsUpdateInsert`, data,  function (response) {
+    ajaxPost(`/Akseptasi/CopyEndorsInsert`, data,  function (response) {
         if (response.Result === "OK") {
+            refreshGrid("#AkseptasiResikoGrid");
             showMessage('Success', response.Message);
             closeWindow($("#CopyEndorsWindow"))
         }

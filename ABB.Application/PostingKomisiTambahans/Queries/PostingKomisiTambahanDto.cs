@@ -4,9 +4,14 @@ namespace ABB.Application.PostingKomisiTambahans.Queries
 {
     public class PostingKomisiTambahanDto
     {
+        public string nm_cb { get; set; }
         public string kd_cb { get; set; }
 
+        public string nm_cob { get; set; }
+
         public string kd_cob { get; set; }
+
+        public string nm_scob { get; set; }
 
         public string kd_scob { get; set; }
 
@@ -45,5 +50,8 @@ namespace ABB.Application.PostingKomisiTambahans.Queries
         public string jns_nt_kel { get; set; }
 
         public string no_nt_kel { get; set; }
+
+        public DateTime? tgl_mul_ptg { get; set; }
+        public DateTime? tgl_akh_ptg { get; set; }
     }
 }

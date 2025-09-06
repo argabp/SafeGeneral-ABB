@@ -34,11 +34,18 @@ namespace ABB.Application.NomorRegistrasiPolis.Queries
 					INNER JOIN rf05 scob
 						ON p.kd_cob = scob.kd_cob
 						AND p.kd_scob = scob.kd_scob
-				WHERE (p.no_reff like '%'+@SearchKeyword+'%' 
-					OR p.no_pol_ttg like '%'+@SearchKeyword+'%' 
+				WHERE (p.no_pol_ttg like '%'+@SearchKeyword+'%' 
+					OR p.tgl_mul_ptg like '%'+@SearchKeyword+'%' 
+					OR p.tgl_akh_ptg like '%'+@SearchKeyword+'%' 
+					OR p.tgl_closing like '%'+@SearchKeyword+'%' 
+					OR p.no_updt like '%'+@SearchKeyword+'%' 
 					OR cb.nm_cb like '%'+@SearchKeyword+'%' 
 					OR cob.nm_cob like '%'+@SearchKeyword+'%' 
 					OR scob.nm_scob like '%'+@SearchKeyword+'%' 
+					OR cb.kd_cb like '%'+@SearchKeyword+'%' 
+					OR cob.kd_cob like '%'+@SearchKeyword+'%' 
+					OR scob.kd_scob like '%'+@SearchKeyword+'%' 
+					OR p.nm_ttg like '%'+@SearchKeyword+'%' 
 					OR @SearchKeyword = '' OR @SearchKeyword IS NULL)", new { request.SearchKeyword })).ToList();
 
             int id = 0;

@@ -1,4 +1,14 @@
-﻿function openEntriNotaWindow(url, title) {
+﻿$(document).ready(function () {
+    searchKeyword_OnKeyUp();
+});
+
+function searchKeyword_OnKeyUp() {
+    $('#SearchKeyword').keyup(function () {
+        refreshGrid("#EntriNotaGrid");
+    });
+}
+
+function openEntriNotaWindow(url, title) {
     openWindow('#EntriNotaWindow', url, title);
 }
 

@@ -23,10 +23,11 @@ namespace ABB.Web.Modules.PostingPolis
             return View();
         }
         
-        public async Task<ActionResult> GetPostingPolicies([DataSourceRequest] DataSourceRequest request)
+        public async Task<ActionResult> GetPostingPolicies([DataSourceRequest] DataSourceRequest request, string searchkeyword)
         {
             var ds = await Mediator.Send(new GetPostingPolisQuery()
             {
+                SearchKeyword = searchkeyword,
                 DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
             });
 

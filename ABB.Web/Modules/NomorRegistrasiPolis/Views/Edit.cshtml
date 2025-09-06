@@ -5,7 +5,7 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Kendo.Mvc
 @{
-    ViewData["Title"] = "Nomor Registrasi Polis";
+    ViewData["Title"] = "Nomor Registrasi Scheedule Polis";
     var nomor_aksepatsi = Model.kd_cb.Trim() + " . " + Model.kd_cob.Trim() + " . " +
                           Model.kd_scob.Trim() + " . " + Model.kd_thn.Trim() + " . " + Model.no_reff.Trim();
 }
@@ -70,7 +70,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Nomor Polis</label>
                 <div class="col-sm-6">
-                    <kendo-textbox for="no_pol_ttg" readonly="true" style="width: 100%"/>
+                    <kendo-maskedtextbox mask="00.000.00.0000.0000-0" for="no_pol_ttg" readonly="true" style="width: 100%"/>
                     <span asp-validation-for="no_pol_ttg" class="text-danger"></span>
                 </div>
             </div>

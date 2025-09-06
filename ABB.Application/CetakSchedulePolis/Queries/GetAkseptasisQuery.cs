@@ -39,7 +39,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
 						AND p.kd_scob = scob.kd_scob
 					LEFT JOIN MS_User u
 						ON u.UserId = p.kd_usr_input
-				WHERE p.kd_cob = 'F' and cb.kd_cb = @KodeCabang AND (p.no_pol like '%'+@SearchKeyword+'%' 
+				WHERE cb.kd_cb = @KodeCabang AND (p.no_pol like '%'+@SearchKeyword+'%' 
 					OR p.no_pol_ttg like '%'+@SearchKeyword+'%' 
 					OR p.no_updt like '%'+@SearchKeyword+'%' 
 					OR cb.nm_cb like '%'+@SearchKeyword+'%' 

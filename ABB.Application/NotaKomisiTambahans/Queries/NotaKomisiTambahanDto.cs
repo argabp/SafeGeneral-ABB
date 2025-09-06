@@ -96,6 +96,10 @@ namespace ABB.Application.NotaKomisiTambahans.Queries
         public decimal? nilai_lain { get; set; }
 
         public string no_akseptasi { get; set; }
+
+        public DateTime? tgl_mul_ptg { get; set; }
+        public DateTime? tgl_akh_ptg { get; set; }
+        public DateTime? tgl_closing { get; set; }
         
         public void Mapping(Profile profile)
         {

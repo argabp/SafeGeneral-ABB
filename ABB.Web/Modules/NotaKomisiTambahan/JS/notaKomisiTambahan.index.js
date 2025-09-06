@@ -1,4 +1,14 @@
-﻿function openNotaKomisiTambahanWindow(url, title) {
+﻿$(document).ready(function () {
+    searchKeyword_OnKeyUp();
+});
+
+function searchKeyword_OnKeyUp() {
+    $('#SearchKeyword').keyup(function () {
+        refreshGrid("#NotaKomisiTambahanGrid");
+    });
+}
+
+function openNotaKomisiTambahanWindow(url, title) {
     openWindow('#NotaKomisiTambahanWindow', url, title);
 }
 
