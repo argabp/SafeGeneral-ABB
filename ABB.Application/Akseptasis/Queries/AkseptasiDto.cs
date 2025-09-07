@@ -142,8 +142,6 @@ namespace ABB.Application.Akseptasis.Queries
         public string? st_aks { get; set; }
 
         public string? nomor_pengajuan { get; set; }
-
-        public string? nomor_akseptasi { get; set; }
         
         public void Mapping(Profile profile)
         {

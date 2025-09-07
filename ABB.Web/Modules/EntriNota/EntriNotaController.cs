@@ -25,6 +25,10 @@ namespace ABB.Web.Modules.EntriNota
             
             return View();
         }
+        public ActionResult NotaCancel()
+        {
+            return View();
+        }
 
         [HttpGet]
         public async Task<IActionResult> Edit(string kd_cb, string jns_tr, string jns_nt_msk, 
@@ -46,26 +50,6 @@ namespace ABB.Web.Modules.EntriNota
             var data = await Mediator.Send(command);
             
             return PartialView(Mapper.Map<NotaViewModel>(data));
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> NotaCancel(string kd_cb, string kd_cob, string kd_scob, 
-            string kd_thn, string no_pol, Int16 no_updt)
-        {
-            var command = new GetNotaCancelQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"],
-                kd_cb = kd_cb,
-                kd_cob = kd_cob,
-                kd_scob = kd_scob,
-                kd_thn = kd_thn,
-                no_pol = no_pol,
-                no_updt = no_updt
-            };
-            
-            var data = await Mediator.Send(command);
-            
-            return PartialView("Edit", Mapper.Map<NotaViewModel>(data));
         }
 
         [HttpGet]
@@ -97,6 +81,50 @@ namespace ABB.Web.Modules.EntriNota
                 SearchKeyword = searchkeyword,
                 DatabaseName = Request.Cookies["DatabaseValue"]
             });
+            
+            var statusPolis = new List<DropdownOptionDto>()
+            {
+                new DropdownOptionDto() { Text = "Leader (Sebagai Leader Koasuransi)", Value = "L" },
+                new DropdownOptionDto() { Text = "Member (Sebagai Member Koasuransi)", Value = "M" },
+                new DropdownOptionDto() { Text = "Transaksi Direct", Value = "O" },
+                new DropdownOptionDto() { Text = "Inward Fakultatif", Value = "C" }
+            };
+
+            foreach (var data in ds)
+            {
+                data.st_pas = statusPolis.FirstOrDefault(w => w.Value == data.st_pas)?.Text ?? string.Empty;
+            }
+            
+            return Json(ds.AsQueryable().ToDataSourceResult(request));
+        }
+        
+        public async Task<ActionResult> GetEntriNotaCancels([DataSourceRequest] DataSourceRequest request, string kd_cb,
+            string kd_cob, string kd_scob, string kd_thn, string no_pol, Int16 no_updt)
+        {
+            var ds = await Mediator.Send(new GetEntriNotaCancelsQuery()
+            {
+                kd_cb = kd_cb,
+                kd_cob = kd_cob,
+                kd_scob = kd_scob,
+                kd_thn = kd_thn,
+                no_pol = no_pol,
+                no_updt = no_updt,
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            });
+            
+            var statusPolis = new List<DropdownOptionDto>()
+            {
+                new DropdownOptionDto() { Text = "Leader (Sebagai Leader Koasuransi)", Value = "L" },
+                new DropdownOptionDto() { Text = "Member (Sebagai Member Koasuransi)", Value = "M" },
+                new DropdownOptionDto() { Text = "Transaksi Direct", Value = "O" },
+                new DropdownOptionDto() { Text = "Inward Fakultatif", Value = "C" }
+            };
+
+            foreach (var data in ds)
+            {
+                data.st_pas = statusPolis.FirstOrDefault(w => w.Value == data.st_pas)?.Text ?? string.Empty;
+            }
+            
             return Json(ds.AsQueryable().ToDataSourceResult(request));
         }
 

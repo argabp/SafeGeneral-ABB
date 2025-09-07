@@ -104,11 +104,13 @@ function OnNomorAkseptasiChange(e){
                 &nilai_nt=${nilai_nt}&kd_rk_ttj=${kd_rk_ttj}`, (returnValueSecond) => {
                 if(returnValueSecond[0] != null) {
                     $("#pst_ppn").getKendoNumericTextBox().value(returnValueSecond[0].split(",")[1]);
+                    $("#pst_ppn").getKendoNumericTextBox().trigger("change");
                     $("#nilai_ppn").getKendoNumericTextBox().value(returnValueSecond[0].split(",")[4]);   
                 }
                 
                 if(returnValueSecond[1] != null) {
                     $("#pst_pph").getKendoNumericTextBox().value(returnValueSecond[1].split(",")[1]);
+                    $("#pst_pph").getKendoNumericTextBox().trigger("change");
                     $("#nilai_pph").getKendoNumericTextBox().value(returnValueSecond[1].split(",")[4]);
                 }
             });
@@ -135,12 +137,15 @@ function OnNomorAkseptasiChange(e){
                     {
                         case "nilai_nt":
                             $("#nilai_nt").getKendoNumericTextBox().value(val);
+                            $("#nilai_nt").getKendoNumericTextBox().trigger("change");
                             break;
                         case "pst_ppn":
                             $("#pst_ppn").getKendoNumericTextBox().value(val);
+                            $("#pst_ppn").getKendoNumericTextBox().trigger("change");
                             break;
                         case "pst_pph":
                             $("#pst_pph").getKendoNumericTextBox().value(val);
+                            $("#pst_pph").getKendoNumericTextBox().trigger("change");
                             break;
                         case "nilai_ppn":
                             $("#nilai_ppn").getKendoNumericTextBox().value(val);
@@ -182,12 +187,15 @@ function onPercentageNotaChange(e){
             {
                 case "nilai_nt":
                     $("#nilai_nt").getKendoNumericTextBox().value(val);
+                    $("#nilai_nt").getKendoNumericTextBox().trigger("change");
                     break;
                 case "pst_ppn":
                     $("#pst_ppn").getKendoNumericTextBox().value(val);
+                    $("#pst_ppn").getKendoNumericTextBox().trigger("change");
                     break;
                 case "pst_pph":
                     $("#pst_pph").getKendoNumericTextBox().value(val);
+                    $("#pst_pph").getKendoNumericTextBox().trigger("change");
                     break;
                 case "nilai_ppn":
                     $("#nilai_ppn").getKendoNumericTextBox().value(val);
@@ -240,12 +248,15 @@ function OnNilaiPrmChange(e){
             {
                 case "nilai_nt":
                     $("#nilai_nt").getKendoNumericTextBox().value(val);
+                    $("#nilai_nt").getKendoNumericTextBox().trigger("change");
                     break;
                 case "pst_ppn":
                     $("#pst_ppn").getKendoNumericTextBox().value(val);
+                    $("#pst_ppn").getKendoNumericTextBox().trigger("change");
                     break;
                 case "pst_pph":
                     $("#pst_pph").getKendoNumericTextBox().value(val);
+                    $("#pst_pph").getKendoNumericTextBox().trigger("change");
                     break;
                 case "nilai_ppn":
                     $("#nilai_ppn").getKendoNumericTextBox().value(val);
@@ -284,9 +295,11 @@ function OnNilaiNotaChange(e){
                 {
                     case "pst_ppn":
                         $("#pst_ppn").getKendoNumericTextBox().value(val);
+                        $("#pst_ppn").getKendoNumericTextBox().trigger("change");
                         break;
                     case "pst_pph":
                         $("#pst_pph").getKendoNumericTextBox().value(val);
+                        $("#pst_pph").getKendoNumericTextBox().trigger("change");
                         break;
                     case "nilai_ppn":
                         $("#nilai_ppn").getKendoNumericTextBox().value(val);

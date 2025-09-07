@@ -206,10 +206,10 @@ function OnPstRatePhkChange(e){
 
 function OnNilaiPrmStdChange(e){
     var nilai_prm_std = e.sender.value();
-    ajaxGet(`/Akseptasi/GenerateNilaiPrmBtn?nilai_prm_std=${nilai_prm_std}&nilai_prm_bjr=${$("#nilai_prm_bjr").val()}&nilai_prm_tl=${$("#nilai_prm_tl").val()}&nilai_prm_gb=${$("#nilai_prm_gb").val()}&nilai_prm_phk=${$("#nilai_prm_phk").val()}&nilai_bia_adm=${$("#nilai_bia_adm").val()}&nilai_bia_mat=${$("#other_pa_nilai_bia_mat").val()}&jk_wkt=${$("#jk_wkt").val()}&no_endt=${$("#no_endt").val()}`, (returnValue) => {
-        $("#nilai_prm_btn").getKendoNumericTextBox().value(returnValue.split(",")[1]);
-        $("#nilai_prm_btn").getKendoNumericTextBox().trigger("change");
-    });
+    // ajaxGet(`/Akseptasi/GenerateNilaiPrmBtn?nilai_prm_std=${nilai_prm_std}&nilai_prm_bjr=${$("#nilai_prm_bjr").val()}&nilai_prm_tl=${$("#nilai_prm_tl").val()}&nilai_prm_gb=${$("#nilai_prm_gb").val()}&nilai_prm_phk=${$("#nilai_prm_phk").val()}&nilai_bia_adm=${$("#nilai_bia_adm").val()}&nilai_bia_mat=${$("#other_pa_nilai_bia_mat").val()}&jk_wkt=${$("#jk_wkt").val()}&no_endt=${$("#no_endt").val()}`, (returnValue) => {
+    //     $("#nilai_prm_btn").getKendoNumericTextBox().value(returnValue.split(",")[1]);
+    //     $("#nilai_prm_btn").getKendoNumericTextBox().trigger("change");
+    // });
 
     var cobs = ["0552", "0560", "0561", "0562", "0563", "0564", "0565", "0566"]
     
@@ -217,57 +217,82 @@ function OnNilaiPrmStdChange(e){
         nilai_prm_std = 0;
     }
     
-    $("#total_nilai_prm").text(currencyFormatter.format(nilai_prm_std + Number($("#nilai_prm_bjr").val())
+    var totalValue = nilai_prm_std + Number($("#nilai_prm_bjr").val())
         + Number($("#nilai_prm_gb").val()) + Number($("#nilai_prm_tl").val())
-        + Number($("#nilai_prm_phk").val())));
+        + Number($("#nilai_prm_phk").val());
+
+    $("#nilai_prm_btn").getKendoNumericTextBox().value(totalValue);
+    $("#nilai_prm_btn").getKendoNumericTextBox().trigger("change");
+    
+    $("#total_nilai_prm").text(currencyFormatter.format(totalValue));
 }
 
 function OnNilaiPrmBjrChange(e){
     var nilai_prm_bjr = e.sender.value();
-    ajaxGet(`/Akseptasi/GenerateNilaiPrmBtn?nilai_prm_std=${$("#nilai_prm_std").val()}&nilai_prm_bjr=${nilai_prm_bjr}&nilai_prm_tl=${$("#nilai_prm_tl").val()}&nilai_prm_gb=${$("#nilai_prm_gb").val()}&nilai_prm_phk=${$("#nilai_prm_phk").val()}&nilai_bia_adm=${$("#nilai_bia_adm").val()}&nilai_bia_mat=${$("#other_pa_nilai_bia_mat").val()}&jk_wkt=${$("#jk_wkt").val()}&no_endt=${$("#no_endt").val()}`, (returnValue) => {
-        $("#nilai_prm_btn").getKendoNumericTextBox().value(returnValue.split(",")[1]);
-        $("#nilai_prm_btn").getKendoNumericTextBox().trigger("change");
-    });
-
-    $("#total_nilai_prm").text(currencyFormatter.format(nilai_prm_bjr + Number($("#nilai_prm_std").val())
+    // ajaxGet(`/Akseptasi/GenerateNilaiPrmBtn?nilai_prm_std=${$("#nilai_prm_std").val()}&nilai_prm_bjr=${nilai_prm_bjr}&nilai_prm_tl=${$("#nilai_prm_tl").val()}&nilai_prm_gb=${$("#nilai_prm_gb").val()}&nilai_prm_phk=${$("#nilai_prm_phk").val()}&nilai_bia_adm=${$("#nilai_bia_adm").val()}&nilai_bia_mat=${$("#other_pa_nilai_bia_mat").val()}&jk_wkt=${$("#jk_wkt").val()}&no_endt=${$("#no_endt").val()}`, (returnValue) => {
+    //     $("#nilai_prm_btn").getKendoNumericTextBox().value(returnValue.split(",")[1]);
+    //     $("#nilai_prm_btn").getKendoNumericTextBox().trigger("change");
+    // });
+    
+    var totalValue = nilai_prm_bjr + Number($("#nilai_prm_std").val())
         + Number($("#nilai_prm_gb").val()) + Number($("#nilai_prm_tl").val())
-        + Number($("#nilai_prm_phk").val())));
+        + Number($("#nilai_prm_phk").val())
+    
+    $("#nilai_prm_btn").getKendoNumericTextBox().value(totalValue);
+    $("#nilai_prm_btn").getKendoNumericTextBox().trigger("change");
+    
+    $("#total_nilai_prm").text(currencyFormatter.format(totalValue));
 }
 
 function OnNilaiPrmGBChange(e){
     var nilai_prm_gb = e.sender.value();
-    ajaxGet(`/Akseptasi/GenerateNilaiPrmBtn?nilai_prm_std=${$("#nilai_prm_std").val()}&nilai_prm_bjr=${$("#nilai_prm_bjr").val()}&nilai_prm_tl=${$("#nilai_prm_tl").val()}&nilai_prm_gb=${nilai_prm_gb}&nilai_prm_phk=${$("#nilai_prm_phk").val()}&nilai_bia_adm=${$("#nilai_bia_adm").val()}&nilai_bia_mat=${$("#other_pa_nilai_bia_mat").val()}&jk_wkt=${$("#jk_wkt").val()}&no_endt=${$("#no_endt").val()}`, (returnValue) => {
-        $("#nilai_prm_btn").getKendoNumericTextBox().value(returnValue.split(",")[1]);
-        $("#nilai_prm_btn").getKendoNumericTextBox().trigger("change");
-    });
+    // ajaxGet(`/Akseptasi/GenerateNilaiPrmBtn?nilai_prm_std=${$("#nilai_prm_std").val()}&nilai_prm_bjr=${$("#nilai_prm_bjr").val()}&nilai_prm_tl=${$("#nilai_prm_tl").val()}&nilai_prm_gb=${nilai_prm_gb}&nilai_prm_phk=${$("#nilai_prm_phk").val()}&nilai_bia_adm=${$("#nilai_bia_adm").val()}&nilai_bia_mat=${$("#other_pa_nilai_bia_mat").val()}&jk_wkt=${$("#jk_wkt").val()}&no_endt=${$("#no_endt").val()}`, (returnValue) => {
+    //     $("#nilai_prm_btn").getKendoNumericTextBox().value(returnValue.split(",")[1]);
+    //     $("#nilai_prm_btn").getKendoNumericTextBox().trigger("change");
+    // });
 
-    $("#total_nilai_prm").text(currencyFormatter.format(nilai_prm_gb + Number($("#nilai_prm_std").val())
+    var totalValue = nilai_prm_gb + Number($("#nilai_prm_std").val())
         + Number($("#nilai_prm_bjr").val()) + Number($("#nilai_prm_tl").val())
-        + Number($("#nilai_prm_phk").val())));
+        + Number($("#nilai_prm_phk").val());
+
+    $("#nilai_prm_btn").getKendoNumericTextBox().value(totalValue);
+    $("#nilai_prm_btn").getKendoNumericTextBox().trigger("change");
+    
+    $("#total_nilai_prm").text(currencyFormatter.format(totalValue));
 }
 
 function OnNilaiPrmTLChange(e){
     var nilai_prm_tl = e.sender.value();
-    ajaxGet(`/Akseptasi/GenerateNilaiPrmBtn?nilai_prm_std=${$("#nilai_prm_std").val()}&nilai_prm_bjr=${$("#nilai_prm_bjr").val()}&nilai_prm_tl=${nilai_prm_tl}&nilai_prm_gb=${$("#nilai_prm_gb").val()}&nilai_prm_phk=${$("#nilai_prm_phk").val()}&nilai_bia_adm=${$("#nilai_bia_adm").val()}&nilai_bia_mat=${$("#other_pa_nilai_bia_mat").val()}&jk_wkt=${$("#jk_wkt").val()}&no_endt=${$("#no_endt").val()}`, (returnValue) => {
-        $("#nilai_prm_btn").getKendoNumericTextBox().value(returnValue.split(",")[1]);
-        $("#nilai_prm_btn").getKendoNumericTextBox().trigger("change");
-    });
-
-    $("#total_nilai_prm").text(currencyFormatter.format(nilai_prm_tl + Number($("#nilai_prm_std").val())
+    // ajaxGet(`/Akseptasi/GenerateNilaiPrmBtn?nilai_prm_std=${$("#nilai_prm_std").val()}&nilai_prm_bjr=${$("#nilai_prm_bjr").val()}&nilai_prm_tl=${nilai_prm_tl}&nilai_prm_gb=${$("#nilai_prm_gb").val()}&nilai_prm_phk=${$("#nilai_prm_phk").val()}&nilai_bia_adm=${$("#nilai_bia_adm").val()}&nilai_bia_mat=${$("#other_pa_nilai_bia_mat").val()}&jk_wkt=${$("#jk_wkt").val()}&no_endt=${$("#no_endt").val()}`, (returnValue) => {
+    //     $("#nilai_prm_btn").getKendoNumericTextBox().value(returnValue.split(",")[1]);
+    //     $("#nilai_prm_btn").getKendoNumericTextBox().trigger("change");
+    // });
+    
+    var totalValue = nilai_prm_tl + Number($("#nilai_prm_std").val())
         + Number($("#nilai_prm_bjr").val()) + Number($("#nilai_prm_gb").val())
-        + Number($("#nilai_prm_phk").val())));
+        + Number($("#nilai_prm_phk").val());
+    
+    $("#nilai_prm_btn").getKendoNumericTextBox().value(totalValue);
+    $("#nilai_prm_btn").getKendoNumericTextBox().trigger("change");
+    
+    $("#total_nilai_prm").text(currencyFormatter.format(totalValue));
 }
 
 function OnNilaiPrmPHKChange(e){
     var nilai_prm_phk = e.sender.value();
-    ajaxGet(`/Akseptasi/GenerateNilaiPrmBtn?nilai_prm_std=${$("#nilai_prm_std").val()}&nilai_prm_bjr=${$("#nilai_prm_bjr").val()}&nilai_prm_tl=${$("#nilai_prm_tl").val()}&nilai_prm_gb=${$("#nilai_prm_gb").val()}&nilai_prm_phk=${nilai_prm_phk}&nilai_bia_adm=${$("#nilai_bia_adm").val()}&nilai_bia_mat=${$("#other_pa_nilai_bia_mat").val()}&jk_wkt=${$("#jk_wkt").val()}&no_endt=${$("#no_endt").val()}`, (returnValue) => {
-        $("#nilai_prm_btn").getKendoNumericTextBox().value(returnValue.split(",")[1]);
-        $("#nilai_prm_btn").getKendoNumericTextBox().trigger("change");
-    });
+    // ajaxGet(`/Akseptasi/GenerateNilaiPrmBtn?nilai_prm_std=${$("#nilai_prm_std").val()}&nilai_prm_bjr=${$("#nilai_prm_bjr").val()}&nilai_prm_tl=${$("#nilai_prm_tl").val()}&nilai_prm_gb=${$("#nilai_prm_gb").val()}&nilai_prm_phk=${nilai_prm_phk}&nilai_bia_adm=${$("#nilai_bia_adm").val()}&nilai_bia_mat=${$("#other_pa_nilai_bia_mat").val()}&jk_wkt=${$("#jk_wkt").val()}&no_endt=${$("#no_endt").val()}`, (returnValue) => {
+    //     $("#nilai_prm_btn").getKendoNumericTextBox().value(returnValue.split(",")[1]);
+    //     $("#nilai_prm_btn").getKendoNumericTextBox().trigger("change");
+    // });
 
-    $("#total_nilai_prm").text(currencyFormatter.format(nilai_prm_phk + Number($("#nilai_prm_std").val())
+    var totalValue = nilai_prm_phk + Number($("#nilai_prm_std").val())
         + Number($("#nilai_prm_bjr").val()) + Number($("#nilai_prm_gb").val())
-        + Number($("#nilai_prm_tl").val())));
+        + Number($("#nilai_prm_tl").val());
+    
+    $("#nilai_prm_btn").getKendoNumericTextBox().value(totalValue);
+    $("#nilai_prm_btn").getKendoNumericTextBox().trigger("change");
+
+    $("#total_nilai_prm").text(currencyFormatter.format(totalValue));
 }
 
 function OnNilaiPtgBjrChange(e){

@@ -50,7 +50,7 @@ function savePolisInduk(url) {
                 closeWindow('#PolisIndukWindow');
             }
             else if (response.Result == "ERROR")
-                $("#PolisIndukWindow").html(response.Message);
+                showMessage('Error', response.Message);
             else
                 $("#PolisIndukWindow").html(response);
 

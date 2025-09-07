@@ -49,8 +49,8 @@ function onEditDetailNota(dataItem){
     if (dataItem.container.find("input[name='pst_ang']").length) {
         var numericTextbox = dataItem.container.find("input[name='pst_ang']").data("kendoNumericTextBox");
         if (numericTextbox) {
-            numericTextbox.bind("change", function () {
-                onNotaTertanggungDetailChange();
+            numericTextbox.bind("change", function (e) {
+                onNotaTertanggungDetailPstAngChange(e);
             });
         }
     }
@@ -59,23 +59,41 @@ function onEditDetailNota(dataItem){
         var numericTextbox = dataItem.container.find("input[name='nilai_ang']").data("kendoNumericTextBox");
         if (numericTextbox) {
             numericTextbox.bind("change", function () {
-                onNotaTertanggungDetailChange();
+                onNotaTertanggungDetailNilaiAngChange();
             });
         }
     }
 }
 
-function onNotaTertanggungDetailChange() {
+function onNotaTertanggungDetailPstAngChange(data) {
+    var totalAng = 0;
     var totalPstAng = 0;
+    var grid = $("#DetailEntriNotaGrid").getKendoGrid();
+
+    var row = $(data.sender.element).closest("tr");
+    var dataItem = grid.dataItem(row);
+    
+    ajaxGet(`/EntriNota/GenerateNilaiAng?pst_ang=${data.sender.value()}&nilai_nt=${$("#nilai_nt").val()}&nilai_ppn=${$("#nilai_ppn").val()}&nilai_pph=${$("#nilai_pph").val()}`, (returnValue) => {
+        dataItem.set("nilai_ang", returnValue.split(",")[1]);
+        
+        grid.dataSource.view().forEach(function(dataItem) {
+            totalPstAng += dataItem.pst_ang || 0;  // Ensure we sum the value or add 0 if undefined
+            totalAng += dataItem.nilai_ang || 0;
+        });
+
+        $("#totalAngsuran").text(currencyFormatter.format(totalAng));
+        $("#totalPersentaseAngsuran").text(totalPstAng.toFixed(2));
+    });
+}
+
+function onNotaTertanggungDetailNilaiAngChange() {
     var totalAng = 0;
     var grid = $("#DetailEntriNotaGrid").getKendoGrid();
     
     grid.dataSource.view().forEach(function(dataItem) {
-        totalPstAng += dataItem.pst_ang || 0;  // Ensure we sum the value or add 0 if undefined
         totalAng += dataItem.nilai_ang || 0;
     });
 
-    $("#totalPersentaseAngsuran").text(totalPstAng.toFixed(2));
     $("#totalAngsuran").text(currencyFormatter.format(totalAng));
 }
 

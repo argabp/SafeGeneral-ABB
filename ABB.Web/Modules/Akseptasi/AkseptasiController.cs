@@ -340,6 +340,18 @@ namespace ABB.Web.Modules.Akseptasi
             return Json(result);
         }
         
+        [HttpGet]
+        public async Task<JsonResult> GetObligees(string kd_grp_rk)
+        {
+            var result = await Mediator.Send(new GetObligeeQueries()
+            {
+                kd_grp_rk = kd_grp_rk,
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            });
+
+            return Json(result);
+        }
+        
         public JsonResult GetStatusPolis()
         {
             var result = new List<DropdownOptionDto>()
@@ -1284,7 +1296,7 @@ namespace ABB.Web.Modules.Akseptasi
 
                     if (motorResult == null)
                     {
-                        akseptasiMotorViewModel.grp_jns_kend = "0011";
+                        akseptasiMotorViewModel.grp_jns_kend = "001";
                         akseptasiMotorViewModel.kd_guna = "000";
                         akseptasiMotorViewModel.nilai_casco = 0;
                         akseptasiMotorViewModel.nilai_tjh = 0;
@@ -3342,9 +3354,9 @@ namespace ABB.Web.Modules.Akseptasi
             return Json(result);
         }
         
-        public async Task<JsonResult> GenerateNameAandAddressObligee(string kd_cb, string kd_rk_obl)
+        public async Task<JsonResult> GenerateNameAndAddressObligee(string kd_cb, string kd_rk_obl)
         {
-            var result = await Mediator.Send(new GenerateNameAandAddressObligeeQuery()
+            var result = await Mediator.Send(new GenerateNameAndAddressObligeeQuery()
             {
                 DatabaseName = Request.Cookies["DatabaseValue"],
                 kd_cb = kd_cb,

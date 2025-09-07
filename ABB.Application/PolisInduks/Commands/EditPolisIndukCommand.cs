@@ -155,15 +155,6 @@ namespace ABB.Application.PolisInduks.Commands
                     throw new NotFoundException();
             
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
-                var no_pol = (await _connectionFactory.QueryProc<string>("spe_uw02e_27", new
-                    {
-                        request.kd_cb, request.kd_cob,
-                        request.kd_scob, request.kd_thn,
-                        request.no_pol, request.flag_konv
-                    }))
-                    .ToList();
-            
-                entity.no_pol = no_pol.Count > 0 ? no_pol[0].Split(",")[1] : string.Empty;
             
                 await _connectionFactory.QueryProc<string>("spe_uw02e_96", new
                 {

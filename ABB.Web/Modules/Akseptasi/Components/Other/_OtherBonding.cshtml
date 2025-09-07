@@ -104,7 +104,7 @@
                     </kendo-dropdownlist>
                 </div>
                 <div class="col-sm-3">
-                    <kendo-dropdownlist for="kd_rk_prc" style="width: 100%"
+                    <kendo-dropdownlist for="kd_rk_prc" style="width: 100%" option-label="Pilih Principal"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -121,7 +121,7 @@
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
-                                <read url="@Url.Action("GetKodeRekanan", "Akseptasi")" data="dataKodeObligeeDropDown"/>
+                                <read url="@Url.Action("GetObligees", "Akseptasi")" data="dataKodeObligeeDropDown"/>
                             </transport>
                         </datasource>
                     </kendo-dropdownlist>

@@ -1,0 +1,41 @@
+﻿@using Kendo.Mvc.UI
+@using ABB.Application.EntriNotas.Queries
+@using ABB.Domain.Entities
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+<div class="window-body" style="background-color: lightgray">
+    @(Html.Kendo().Grid<NotaDto>()
+        .Name("EntriNotaCancelGrid")
+        .Editable(editable => editable.Mode(GridEditMode.InLine))
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetEntriNotaCancels", "EntriNota").Data("dataNotaCancel"))
+            .Model(model => model.Id(p => p.Id))
+        )
+        .Columns(columns =>
+        {
+            columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
+            columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
+            columns.Bound(col => col.nm_scob).Width(150).Title("Nama SCOB");
+            columns.Bound(col => col.no_pol_ttg).Width(150).Title("Nomor Polis").ClientTemplate("#= formatNoPol(no_pol_ttg) #");
+            columns.Bound(col => col.no_nt_msk).Width(150).Title("Nomor Nota");
+            columns.Bound(col => col.nm_ttg).Width(200).Title("Nama Tertanggung");
+            columns.Bound(col => col.nm_ttj).Width(150).Title("Nama Tertuju");
+            columns.Bound(col => col.st_pas).Width(150).Title("Status Polis");
+            columns.Bound(col => col.no_pol_pas).Width(175).Title("Nomor Polis Ceding");
+            columns.Bound(col => col.nilai_nt).Width(150).Title("Nilai Nota").Format("{0:n2}");
+            columns.Bound(col => col.flag_posting).Width(150).Title("Flag Posting");
+        })
+        .Pageable(pager => pager
+            .Refresh(true)
+            .Info(true)
+            .PageSizes(true)
+        )
+        .Sortable()
+        .Filterable()
+        .Scrollable()
+        .Height(450)
+        .Resizable(a=>a.Columns(true))
+        ) 
+</div>

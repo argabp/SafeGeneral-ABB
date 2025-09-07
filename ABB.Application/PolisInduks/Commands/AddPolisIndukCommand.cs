@@ -156,7 +156,7 @@ namespace ABB.Application.PolisInduks.Commands
                     {
                         request.kd_cb, request.kd_cob,
                         request.kd_scob, request.kd_thn,
-                        request.no_pol, request.flag_konv
+                        no_pol = string.Empty, request.flag_konv
                     }))
                     .ToList();
 
@@ -168,7 +168,7 @@ namespace ABB.Application.PolisInduks.Commands
 
                 await _connectionFactory.QueryProc<string>("spe_uw02e_96", new
                 {
-                    request.kd_scob, request.no_pol,
+                    request.kd_scob, polisInduk.no_pol,
                     request.nilai_tsi, request.pst_kms,
                     request.pst_dis, kd_konfirm_induk = request.kd_konfirm,
                     request.kd_mtu, request.kd_cob,

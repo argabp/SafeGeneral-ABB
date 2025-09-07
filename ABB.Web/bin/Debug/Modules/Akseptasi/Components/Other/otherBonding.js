@@ -35,7 +35,6 @@ function dataGroupObligeeDropDown(){
 
 function dataKodeObligeeDropDown(){
     return {
-        kd_cb: $("#kd_cb").val(),
         kd_grp_rk: $("#kd_grp_obl").val()
     }
 }
@@ -99,7 +98,7 @@ function saveAkseptasiResikoOther(url) {
 
 function OnKodeObligeeChange(e){
     var value = e.sender.value();
-    ajaxGet(`/Akseptasi/GenerateNameAandAddressObligee?kd_cb=${$("#kd_cb").val()}&kd_rk_obl=${value}`, (returnValue) => {
+    ajaxGet(`/Akseptasi/GenerateNameAndAddressObligee?kd_cb=${$("#kd_cb").val()}&kd_rk_obl=${value}`, (returnValue) => {
         $("#nm_obl").getKendoTextArea().value(returnValue.split(",")[1]);
         $("#almt_obl").getKendoTextArea().value(returnValue.split(",")[4]);
     });

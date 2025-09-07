@@ -260,8 +260,8 @@
                 {
                     columns.Bound(col => col.tgl_ang).Width(150).Title("Tanggal Angsuran").Format("{0: dd-MM-yyyy}").EditorTemplateName("KendoDateEditor");
                     columns.Bound(col => col.tgl_jth_tempo).Width(150).Title("Tanggal Jatuh Tempo").Format("{0: dd-MM-yyyy}").EditorTemplateName("KendoDateEditor");
-                    columns.Bound(col => col.pst_ang).Width(200).Title("Nilai Angsuran").Format("{0:n2}").EditorTemplateName("KendoNumericTextBoxTwoDecimal");//.ClientFooterTemplate("Total: #= sum ? kendo.toString(sum, 'n2') : '0.00' #");
-                    columns.Bound(col => col.nilai_ang).Width(200).Title("Jumlah Angsuran").Format("{0:n2}").EditorTemplateName("KendoNumericTextBoxTwoDecimal");//.ClientFooterTemplate("Total: #= sum ? kendo.toString(sum, 'n2') : '0.00' #");
+                    columns.Bound(col => col.pst_ang).Width(200).Title("Angsuran (%)").Format("{0:n2}").EditorTemplateName("KendoNumericTextBoxTwoDecimal");//.ClientFooterTemplate("Total: #= sum ? kendo.toString(sum, 'n2') : '0.00' #");
+                    columns.Bound(col => col.nilai_ang).Width(200).Title("Nilai Angsuran").Format("{0:n2}").EditorTemplateName("KendoNumericTextBoxTwoDecimal");//.ClientFooterTemplate("Total: #= sum ? kendo.toString(sum, 'n2') : '0.00' #");
                     columns.Command(command =>
                     {
                         command.Edit();

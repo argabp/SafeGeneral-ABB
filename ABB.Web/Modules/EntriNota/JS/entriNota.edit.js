@@ -26,10 +26,7 @@ function btnSaveEntriNota_Click() {
 
 function btnCancelEntriNota_Click() {
     $('#btn-cancel-entriNota').click(function () {
-        showProgress('#EntriNotaWindow');
-        setTimeout(function () {
-            cancelEntriNota('/EntriNota/NotaCancel')
-        }, 500);
+        openWindow("#EntriNotaCancelWindow", "/EntriNota/NotaCancel", "Nota Cancel")
     });
 }
 
@@ -40,28 +37,35 @@ function saveEntriNota(url){
     form.Details = details;
     form.flag_posting = $("#flag_posting")[0].checked ? "Y" : "N";
     form.flag_cancel = $("#flag_cancel")[0].checked ? "Y" : "N";
+
+    var totalAng = 0;
+
+    grid.dataSource.view().forEach(function(dataItem) {
+        totalAng += dataItem.nilai_ang || 0;
+    });
     
-    ajaxPost(url, JSON.stringify(form),
-        function (response) {
-            refreshGrid("#EntriNotaGrid");
-            if (response.Result == "OK") {
-                showMessage('Success', response.Message);
-            } else
-                showMessage('Error', response.Message);
+    ajaxGet(`/EntriNota/ValidateSaveDetailNota?no_pol=${$("#no_pol").val()}&nilai_nt=${$("#nilai_nt").val()}&nilai_ang=${totalAng}`, 
+        function (returnValue){
 
-            closeProgress("#EntriNotaWindow");
-            closeWindow("#EntriNotaWindow")
-        }
-    );
-}
+            if(returnValue == ""){
+                ajaxPost(url, JSON.stringify(form),
+                    function (response) {
+                        refreshGrid("#EntriNotaGrid");
+                        if (response.Result == "OK") {
+                            showMessage('Success', response.Message);
+                        } else
+                            showMessage('Error', response.Message);
 
-function cancelEntriNota(url){
-    ajaxGet(url + `?kd_cb=${$("#kd_cb").val()}&kd_cob=${$("#kd_cob").val()}&kd_scob=${$("#kd_scob").val()}&kd_thn=${$("#kd_thn").val()}&no_pol=${$("#no_pol").val()}&no_updt=${$("#no_updt").val()}`,
-        function (response) {
-            $("#EntriNotaWindow").html(response);
-            closeProgress('#EntriNotaWindow');
-        }
-    );
+                        closeProgress("#EntriNotaWindow");
+                        closeWindow("#EntriNotaWindow")
+                    }
+                );
+            } else {
+                showMessage("Error", returnValue);
+                closeProgress("#EntriNotaWindow");
+            }
+        })
+    
 }
 
 function OnKodeTertujuChange(e){
@@ -97,4 +101,15 @@ function OnDetailNotaDataBound(e){
 
     $("#totalPersentaseAngsuran").text(totalPstAng.toFixed(2));
     $("#totalAngsuran").text(currencyFormatter.format(totalAng));
+}
+
+function dataNotaCancel(){
+    return {
+        kd_cb: $("#kd_cb").val(),
+        kd_cob: $("#kd_cob").val(),
+        kd_scob: $("#kd_scob").val(),
+        kd_thn: $("#kd_thn").val(),
+        no_pol: $("#no_pol").val(),
+        no_updt: $("#no_updt").val(),
+    }
 }
