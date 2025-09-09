@@ -5806,6 +5806,9 @@
       <None Update="Modules\Akseptasi\JS\akseptasi.pranota.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\MonitoringPengajuanKlaim\JS\monitoringPengajuanKlaim.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

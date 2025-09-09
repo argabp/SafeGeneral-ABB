@@ -1,0 +1,65 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.MonitoringPengajuanKlaim.Models.MonitoringPengajuanKlaimViewModel
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Monitoring Pengajuan Klaim";
+}
+<script src="~/Modules/MonitoringPengajuanKlaim/JS/monitoringPengajuanKlaim.js"></script>
+
+<div class="flat-box" id="container-cancel-csm">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Monitoring Pengajuan Klaim
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <form id="MonitoringPengajuanKlaimForm" enctype="multipart/form-data" autocomplete="off">
+            <div>
+                <div class="row form-group">
+                    <div class="row col-sm-6">
+                        <label class="col-sm-3">Kode Cabang</label>
+                        <div class="col-sm-9">
+                            <kendo-dropdownlist for="KodeCabang"
+                                                datavaluefield="kd_cb" datatextfield="nm_cb" filter="FilterType.Contains">
+                                <datasource type="DataSourceTagHelperType.Custom">
+                                    <transport>
+                                        <read url="@Url.Action("GetCabang", "MonitoringPengajuanKlaim")"/>
+                                    </transport>
+                                </datasource>
+                            </kendo-dropdownlist>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="row col-md-6">
+                        <div class="col-md-3" style="align-self: center">
+                            <label>Tanggal</label>
+                        </div>
+                        <div class="col-md-3">
+                            <kendo-datepicker for="TanggalAwal" value="@DateTime.Now" style="width: 100%" />
+                        </div>
+                        <div class="col-md-1" style="text-align: center; align-self: center">
+                            <span>sd</span>
+                        </div>
+                        <div class="col-md-3">
+                            <kendo-datepicker for="TanggalAkhir" value="@DateTime.Now" style="width: 100%" />
+                        </div>
+                        <div class="col-sm-2">
+                            <button type="button" id="btn-refresh-grid" class="btn btn-primary" style="width: 100%">
+                                <span class="fa fa-redo"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
