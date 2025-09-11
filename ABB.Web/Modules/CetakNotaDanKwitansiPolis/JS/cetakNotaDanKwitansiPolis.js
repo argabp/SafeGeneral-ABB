@@ -26,8 +26,9 @@ function viewReport(element){
     form.kd_scob = dataItem.kd_scob;
     form.no_pol = dataItem.no_pol;
     form.no_updt = dataItem.no_updt;
+    form.kd_thn = dataItem.kd_thn;
     form.jenisLaporan = formElement[0].querySelector('select[name="jenisLaporan"]').value
-    form.bahasa = formElement[0].querySelector('select[name="mataUang"]').value
+    form.mataUang = formElement[0].querySelector('select[name="mataUang"]').value
     
     ajaxPost("/CetakNotaDanKwitansiPolis/GenerateReport", JSON.stringify(form),
         function (response) {

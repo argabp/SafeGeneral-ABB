@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ABB.Application.MonitoringPengajuanKlaims.Queries;
@@ -50,9 +51,9 @@ namespace ABB.Web.Modules.MonitoringPengajuanKlaim
                 });
                 return Json(JsonConvert.DeserializeObject(ds));
             }
-            catch
+            catch (Exception ex)
             {
-                return Json(new { Error = "Connection Timeout" });
+                return Json(new { Error = ex.InnerException == null ? ex.Message : ex.InnerException.Message });
             }
         }
     }

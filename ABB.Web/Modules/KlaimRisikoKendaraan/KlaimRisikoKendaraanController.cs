@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using ABB.Application.KlaimRisikoKendaraans.Queries;
 using ABB.Application.ProfilRisikoHartaBendas.Queries;
@@ -34,9 +35,9 @@ namespace ABB.Web.Modules.KlaimRisikoKendaraan
                 
                 return Json(JsonConvert.DeserializeObject(ds));
             }
-            catch
+            catch (Exception ex)
             {
-                return Json(new { Error = "Connection Timeout" });
+                return Json(new { Error = ex.InnerException == null ? ex.Message : ex.InnerException.Message });
             }
         }
     }

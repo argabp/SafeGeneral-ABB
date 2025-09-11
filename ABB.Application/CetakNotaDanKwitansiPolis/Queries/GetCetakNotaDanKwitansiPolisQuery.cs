@@ -74,8 +74,9 @@ namespace ABB.Application.CetakNotaDanKwitansiPolis.Queries
             var cetakNotaDanKwitansiPolisData = (await _connectionFactory.QueryProc<CetakNotaDanKwitansiPolisDto>(storeProcedureName, 
                 new
                 {
-                        input_str = $"{request.kd_cb.Trim()}{request.kd_cob.Trim()}{request.kd_scob.Trim()}" +
-                                    $"{request.kd_thn}{request.no_pol.Trim()}{request.no_updt}{request.nm_ttg?.Trim()}"
+                        input_str = $"{request.kd_cb.Trim()},{request.kd_cob.Trim()},{request.kd_scob.Trim()}," +
+                                    $"{request.kd_thn},{request.no_pol.Trim()},{request.no_updt}," +
+                                    $"{request.jenisLaporan?.Trim()},{request.mataUang}"
                 })).ToList();
             
             string reportPath = Path.Combine( _environment.ContentRootPath, "Modules", "Reports", "Templates", reportTemplateName );

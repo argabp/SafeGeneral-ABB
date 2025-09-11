@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ABB.Application.Common.Dtos;
@@ -47,9 +48,9 @@ namespace ABB.Web.Modules.DataPolisOJK
                 });
                 return Json(JsonConvert.DeserializeObject(ds));
             }
-            catch
+            catch (Exception ex)
             {
-                return Json(new { Error = "Connection Timeout" });
+                return Json(new { Error = ex.InnerException == null ? ex.Message : ex.InnerException.Message });
             }
         }
         

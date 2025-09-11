@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using ABB.Application.ProfilRisikoHartaBendas.Queries;
 using ABB.Web.Modules.Base;
@@ -32,9 +33,9 @@ namespace ABB.Web.Modules.ProfilRisikoHartaBenda
                 
                 return Json(JsonConvert.DeserializeObject(ds));
             }
-            catch
+            catch (Exception ex)
             {
-                return Json(new { Error = "Connection Timeout" });
+                return Json(new { Error = ex.InnerException == null ? ex.Message : ex.InnerException.Message });
             }
         }
     }
