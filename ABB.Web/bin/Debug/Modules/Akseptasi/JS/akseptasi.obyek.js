@@ -46,8 +46,7 @@ function saveAkseptasiObyek(url) {
 }
 
 function OnNilaiPtg100Change(e){
-    // ajaxGet(`/Akseptasi/GetNilaiPtg?pst_share=${$("#pst_share").val()}&kd_grp_sb_bis=${$("#kd_grp_sb_bis").val()}&kd_rk_sb_bis=${e.sender.value()}`, (returnValue) => {
-    //     $("#tgl_akh_ptg").getKendoDatePicker().value(returnValue.split(",")[1]);
-    //     $("#tgl_akh_ptg").getKendoDatePicker().trigger("change");
-    // });
+    ajaxGet(`/Akseptasi/GetNilaiPtg?pst_share=${$("#pst_share_bgu").val()}&nilai_ttl_ptg100=${e.sender.value()}`, (returnValue) => {
+        $("#resiko_obyek_nilai_ttl_ptg").getKendoNumericTextBox().value(returnValue.split(",")[1]);
+    });
 }

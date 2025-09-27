@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Polis PA Biasa Single</title>
+    <title>Polis PA Biasa Multi</title>
     <style>
         body {
-            /* font-family: Arial, sans-serif; */
+            /*font-family: Arial, sans-serif;*/
+            font-size: 11pt;   /* readable in print */
+            line-height: 1.4;  /* adds vertical space */
         }
-
-        .container {
-            width: 90%;
-            margin: auto;
-            /* border: 1px solid black; */
-            padding: 20px;
+        td {
+            font-size: 9pt;
+            padding: 2px 4px; /* give breathing room */
+            letter-spacing: 3px;
         }
 
         .h1 {
@@ -32,12 +32,6 @@
             width: 100%;
             border-collapse: collapse;
         }
-
-        .table td {
-            padding: 8px;
-            /* border: 1px solid black; */
-			font-size: 12px;
-        }
     </style>
 </head>
 <body>
@@ -51,9 +45,7 @@
                     <td style="vertical-align: top; text-align: justify; width: 20%;">Nomor Polis / Sertifikat</td>
                     <td style="width: 1%;">:</td>
                     <td style="width: 35%;">{{no_pol_ttg}}</td>
-                    <td style="width: 15%;">Ex Polis No</td>
-                    <td>:</td>
-                    <td>{{no_pol_lama}}</td>
+                    {{polis_pa_no_pol_lama}}
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">2. </td>
@@ -96,26 +88,14 @@
                 <tr>
                     <td style="width: 2.8%; vertical-align: top;"></td>
                     <td style="vertical-align: top; text-align: justify; width: 5%; font-weight: bold;">No.</td>
-                    <td style="vertical-align: top; text-align: justify; font-weight: bold; width: 60%;">NAMA</td>
+                    <td style="vertical-align: top; text-align: justify; font-weight: bold; width: 40%;">NAMA</td>
                     <td style="vertical-align: top; text-align: justify; font-weight: bold;" colspan="7">HUBUNGAN DG. PEMEGANG POLIS </td>
                 </tr>
                 <tr>
                     <td style="width: 2.8%; vertical-align: top;"></td>
                     <td style="vertical-align: top; text-align: justify; width: 5%;">1.</td>
-                    <td style="vertical-align: top; text-align: justify; width: 60%;">{{nm_waris_1}}</td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="7">{{hub_waris_1}}</td>
-                </tr>
-                <tr>
-                    <td style="width: 2.8%; vertical-align: top;"></td>
-                    <td style="vertical-align: top; text-align: justify; width: 5%;">2.</td>
-                    <td style="vertical-align: top; text-align: justify; width: 60%;">{{nm_waris_2}}</td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="7">{{hub_waris_2}}</td>
-                </tr>
-                <tr>
-                    <td style="width: 2.8%; vertical-align: top;"></td>
-                    <td style="vertical-align: top; text-align: justify; width: 5%;">3.</td>
-                    <td style="vertical-align: top; text-align: justify; width: 60%;">{{nm_waris_3}}</td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="7">{{hub_waris_3}}</td>
+                    <td style="vertical-align: top; text-align: justify; width: 60%;">Terlampir</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="7"></td>
                 </tr>
             </table>
             <table class="table">
@@ -232,7 +212,7 @@
                     <td style="text-align: right;">%o p.a</td>
                     <td>=</td>
                     <td style="width: 1%;">{{kd_mtu_symbol}}</td>
-                    <td>{{nilai_prm_pkk}}</td>
+                    <td style="text-align: right">{{nilai_prm_pkk}}</td>
                     <td>(Rincian Terlampir)</td>
                 </tr>
                 <tr>
@@ -242,7 +222,7 @@
                     <td style="text-align: right;">%o p.a</td>
                     <td style="width: 1%;">=</td>
                     <td>{{kd_mtu_symbol}}</td>
-                    <td>{{nilai_prm_tbh}}</td>
+                    <td style="text-align: right">{{nilai_prm_tbh_01}}</td>
                 </tr>
                 <tr>
                     <td style="width: 3.4%; vertical-align: top;"></td>
@@ -251,7 +231,7 @@
                     <td></td>
                     <td style="width: 1%;">=</td>
                     <td>{{kd_mtu_symbol}}</td>
-                    <td>{{nilai_bia_pol}}</td>
+                    <td style="text-align: right">{{nilai_bia_pol}}</td>
                 </tr>
                 <tr>
                     <td style="width: 3.4%; vertical-align: top;"></td>
@@ -260,7 +240,7 @@
                     <td></td>
                     <td>=</td>
                     <td>{{kd_mtu_symbol}}</td>
-                    <td>{{nilai_oby_05}}</td>
+                    <td style="text-align: right">{{nilai_oby_05}}</td>
                 </tr>
                 <tr>
                     <td style="width: 3.4%; vertical-align: top;"></td>
@@ -269,13 +249,14 @@
                     <td></td>
                     <td>=</td>
                     <td>{{kd_mtu_symbol}}</td>
-                    <td>{{nilai_bia_mat}}</td>
+                    <td style="text-align: right">{{nilai_bia_mat}}</td>
                 </tr>
                 <tr>
                     <td style="width: 3.4%; vertical-align: top;"></td>
                     <td style="width: 20%; vertical-align: top;"></td>
                     <td style="width: 1%;"></td>
-                    <td colspan="4"><hr></td>
+                    <td colspan="2"></td>
+                    <td colspan="2"><hr></td>
                 </tr>
                 <tr>
                     <td style="width: 3.4%; vertical-align: top;"></td>
@@ -284,46 +265,36 @@
                     <td style="font-weight: bold; text-align: center;">Total</td>
                     <td>=</td>
                     <td style="font-weight: bold;">{{kd_mtu_symbol}}</td>
-                    <td style="font-weight: bold;">{{nilai_ttl}}</td>
+                    <td style="font-weight: bold; text-align: right">{{nilai_ttl}}</td>
                 </tr>
                 <tr>
                     <td style="width: 3.4%; vertical-align: top;"></td>
                     <td style="width: 20%; vertical-align: top;"></td>
                     <td style="width: 1%;"></td>
-                    <td colspan="4"><hr style="height: 2px; border-top: 2px solid black; border-bottom: 2px solid black;"></td>
+                    <td colspan="2"></td>
+                    <td colspan="2"><hr style="height: 2px; border-top: 2px solid black; border-bottom: 2px solid black;"></td>
                 </tr>
                 <tr>
                     <td style="width: 3.4%; vertical-align: top;"></td>
                     <td style="width: 20%; vertical-align: top;"></td>
                     <td style="width: 1%;"></td>
-                    <td style="text-align: center; padding-left: 100px;">Dibuat di</td>
                     <td></td>
-                    <td>:</td>
-                    <td colspan="5">{{kt_cb}}</td>
+                    <td></td>
+                    <td colspan="2" style="text-align: left;">Dibuat di</td>
+                    <td style="width: 1%">:</td>
+                    <td style="text-align: left">{{kt_cb}}</td>
+                    <td colspan="3"></td>
                 </tr>
                 <tr>
                     <td style="width: 3.4%; vertical-align: top;"></td>
                     <td style="width: 20%; vertical-align: top;"></td>
                     <td style="width: 1%;"></td>
-                    <td style="text-align: center; padding-left: 115px;">Pada Tanggal</td>
-                    <td></td>
-                    <td>:</td>
-                    <td colspan="5">{{tgl_closing_ind}}</td>
-                </tr>
-                <tr>
-                    <td style="width: 3.4%; vertical-align: top;"></td>
-                    <td style="width: 20%; vertical-align: top;"></td>
-                    <td style="width: 1%;"></td>
-                    <td style="text-align: center; padding-left: 122px;">Penanggung,</td>
                     <td></td>
                     <td></td>
-                    <td colspan="5"></td>
-                </tr>
-                <tr>
-                    <td colspan="11" align="center">{{footer}}</td>
-                </tr>
-                <tr>
-                    <td colspan="2">{{nm_user}}</td>
+                    <td colspan="2" style="text-align: left;">Pada Tanggal</td>
+                    <td style="width: 1%">:</td>
+                    <td style="text-align: left">{{tgl_closing_ind}}</td>
+                    <td colspan="3"></td>
                 </tr>
             </table>    
         </div>

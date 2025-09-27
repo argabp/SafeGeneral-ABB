@@ -30,5 +30,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
 
         public string kd_usr_input { get; set; }
         public string nm_usr_input { get; set; }
+
+        public string? no_pol_ttg { get; set; }
     }
 }

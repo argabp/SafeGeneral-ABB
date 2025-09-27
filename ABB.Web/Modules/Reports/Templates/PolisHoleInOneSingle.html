@@ -6,14 +6,14 @@
     <title>Polis Hole in one Single</title>
     <style>
         body {
-            /* font-family: Arial, sans-serif; */
+            /*font-family: Arial, sans-serif;*/
+            font-size: 11pt;   /* readable in print */
+            line-height: 1.4;  /* adds vertical space */
         }
-
-        .container {
-            width: 90%;
-            margin: auto;
-            /* border: 1px solid black; */
-            padding: 25px;
+        td {
+            font-size: 9pt;
+            padding: 2px 4px; /* give breathing room */
+            letter-spacing: 3px;
         }
 
         .h1 {
@@ -31,12 +31,6 @@
         .table {
             width: 100%;
             border-collapse: collapse;
-        }
-
-        .table td {
-            padding: 8px;
-            /* border: 1px solid black; */
-			font-size: 12px;
         }
     </style>
 </head>
@@ -101,36 +95,12 @@
                     <td style="vertical-align: top; text-align: justify; width: 1%;">:</td>
                     <td style="vertical-align: top; text-align: justify; width: 50%;">{{desk_oby_01}}</td>
                     <td style="width: 1%; vertical-align: top;">{{kd_mtu}}</td>
-                    <td style="vertical-align: top;">{{nilai_oby_01}}</td>
+                    <td style="vertical-align: top; text-align: right">{{nilai_oby_01}}</td>
                 </tr>
-                <tr>
-                    <td style="width: 1%; vertical-align: top;"></td>
-                    <td style="vertical-align: top; text-align: justify; width: 1%;"></td>
-                    <td style="vertical-align: top; text-align: justify; width: 25%;">{{desk_oby_02}}</td>
-                    <td style="width: 1%; vertical-align: top;">{{kd_mtu}}</td>
-                    <td style="vertical-align: top;">{{nilai_oby_02}}</td>
-                </tr>
-                <tr>
-                    <td style="width: 1%; vertical-align: top;"></td>
-                    <td style="vertical-align: top; text-align: justify; width: 1%;"></td>
-                    <td style="vertical-align: top; text-align: justify; width: 25%;">{{desk_oby_03}}</td>
-                    <td style="width: 1%; vertical-align: top;">{{kd_mtu}}</td>
-                    <td style="vertical-align: top;">{{nilai_oby_03}}</td>
-                </tr>
-                <tr>
-                    <td style="width: 1%; vertical-align: top;"></td>
-                    <td style="vertical-align: top; text-align: justify; width: 1%;"></td>
-                    <td style="vertical-align: top; text-align: justify; width: 25%;">{{desk_oby_04}}</td>
-                    <td style="width: 1%; vertical-align: top;">{{kd_mtu}}</td>
-                    <td style="vertical-align: top;">{{nilai_oby_04}}</td>
-                </tr>
-                <tr>
-                    <td style="width: 1%; vertical-align: top;"></td>
-                    <td style="vertical-align: top; text-align: justify; width: 1%;"></td>
-                    <td style="vertical-align: top; text-align: justify; width: 25%;">{{desk_oby_05}}</td>
-                    <td style="width: 1%; vertical-align: top;">{{kd_mtu}}</td>
-                    <td style="vertical-align: top;">{{nilai_oby_05}}</td>
-                </tr>
+                {{polis_hole_in_one_single_nilai_oby_02}}
+                {{polis_hole_in_one_single_nilai_oby_03}}
+                {{polis_hole_in_one_single_nilai_oby_04}}
+                {{polis_hole_in_one_single_nilai_oby_05}}
                 <tr>
                     <td style="width: 1%; vertical-align: top;"></td>
                     <td style="vertical-align: top; text-align: justify; width: 1%;"></td>
@@ -142,7 +112,7 @@
                     <td style="vertical-align: top; text-align: justify; width: 1%;"></td>
                     <td style="vertical-align: top; text-align: justify; width: 25%;"></td>
                     <td style="width: 1%; vertical-align: top;">{{kd_mtu}}</td>
-                    <td style="vertical-align: top;">{{nilai_ttl_ptg}}</td>
+                    <td style="vertical-align: top; text-align: right">{{nilai_ttl_ptg}}</td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">RESIKO SENDIRI</td>
@@ -166,19 +136,11 @@
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">-</td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Hadiah hanya diberikan kepada peserta yang pertama kali berhasil memenuhi ketentuan <i>Hole in One</i> pada <i>spek_hole_1</i> dan peserta lain yang memenuhi ketentuan <i>Hole in One</i> pada <i>hole</i> tersebut tidak berhak lagi atas hadiah yang tercantum pada polis ini.</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Hadiah hanya diberikan kepada peserta yang pertama kali berhasil memenuhi ketentuan <i>Hole in One</i> pada <i>{{spek_hole}}</i> dan peserta lain yang memenuhi ketentuan <i>Hole in One</i> pada <i>hole</i> tersebut tidak berhak lagi atas hadiah yang tercantum pada polis ini.</td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">-</td>
                     <td style="vertical-align: top; text-align: justify;" colspan="8" >Apabila terjadi <i> Hole in One</i> harus dibuat Berita Acara yang ditandatangani oleh Panitia, Peserta, dan Petugas Asuransi (Penanggung) yang menjaga <i>hole</i> tersebut</td>
-                </tr>
-                <tr>
-                    <td style="width: 1%; vertical-align: top;">-</td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Pekerjaan atau kegemaran Peserta/Tertanggung yang mengandung risiko tinggi, seperti buruh tambang, penyelam, balap mobil, olah raga terbang layang / penerjun atau pekerjaan - pekerjaan / kegemaran - kegemaran  lainnya  yang  dapat dipersamakan dengan itu,  sepanjang resiko itu tidak dipertanggungkan; </td>
-                </tr>
-                <tr>
-                    <td style="width: 1%; vertical-align: top;">-</td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Terlibat secara  langsung  maupun  tidak  langsung  dalam  pemberontakan,  revolusi,  perang  saudara,  kerusuhan, pengambilan kekuasaan,   ikut serta  dalam  aksi  atau  kegiatan  militer, atau aksi dari seseorang yang bertindak selaku atau berhubungan dengan organisasi manapun dengan aktifitas yang mengarah kepada penggulingan pemerintah secara "de jure" atau "de facto" atau dengan pengaruh dari terorisme.</td>
                 </tr>
             </table>
             <table class="table">
@@ -202,23 +164,23 @@
                     <td style="vertical-align: top; text-align: justify;">{{jk_wkt_ptg}}</td>
                     <td style="vertical-align: top; text-align: justify; width: 1%;">=</td>
                     <td style="vertical-align: top; text-align: justify; width: 1%;">{{kd_mtu}}</td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="2">{{nilai_prm}}</td>
+                    <td style="vertical-align: top; text-align: right;" colspan="2">{{nilai_prm}}</td>
                 </tr>
                 <tr>
                     <td style="width: 15%; vertical-align: top;"></td>
                     <td style="width: 1%; vertical-align: top; text-align: justify;"></td>
-                    <td style="vertical-align: top; text-align: justify; padding-left: 175px;" colspan="5">Biaya Polis</td>
+                    <td style="vertical-align: top; text-align: left;" colspan="5">Biaya Polis</td>
                     <td style="vertical-align: top; text-align: justify; width: 1%;">=</td>
                     <td style="vertical-align: top; text-align: justify; width: 1%;">{{kd_mtu}}</td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="2">{{nilai_bia_pol}}</td>
+                    <td style="vertical-align: top; text-align: right;" colspan="2">{{nilai_bia_pol}}</td>
                 </tr>
                 <tr>
                     <td style="width: 15%; vertical-align: top;"></td>
                     <td style="width: 1%; vertical-align: top; text-align: justify;"></td>
-                    <td style="vertical-align: top; text-align: justify; padding-left: 175px;" colspan="5">Materai</td>
+                    <td style="vertical-align: top; text-align: left;" colspan="5">Materai</td>
                     <td style="vertical-align: top; text-align: justify; width: 1%;">=</td>
                     <td style="vertical-align: top; text-align: justify; width: 1%;">{{kd_mtu}}</td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="2">{{nilai_bia_mat}}</td>
+                    <td style="vertical-align: top; text-align: right;" colspan="2">{{nilai_bia_mat}}</td>
                 </tr>
                 <tr>
                     <td colspan="8"></td>
@@ -227,7 +189,7 @@
                 <tr>
                     <td colspan="8"></td>
                     <td style="width: 1%;">{{kd_mtu}}</td>
-                    <td>{{nilai_ttl_prm}}</td>
+                    <td style="text-align: right">{{nilai_ttl_prm}}</td>
                 </tr>
                 <tr>
                     <td colspan="8"></td>
@@ -240,14 +202,6 @@
                 <tr>
                     <td colspan="7"></td>
                     <td style="width: 30%; text-align: left;" colspan="3">PT. Asuransi Bhakti Bhayangkara</td>
-                </tr>
-                <tr style="height: 100px;">
-                    <td colspan="7"></td>
-                    <td style="width: 30%;" colspan="2"></td>
-                </tr>
-                <tr>
-                    <td colspan="7"></td>
-                    <td style="width: 30%; text-align: left; font-weight: bold;" colspan="3"><u>Chusnul Chotimah, SE, AAIK</u> <br> Kepala Divisi Underwriting</td>
                 </tr>
             </table>   
         </div>

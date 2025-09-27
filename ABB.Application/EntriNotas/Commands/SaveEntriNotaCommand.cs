@@ -115,9 +115,14 @@ namespace ABB.Application.EntriNotas.Commands
 
                 dbContext.DetailNota.RemoveRange(details);
 
+                var sequence = 1;
                 foreach (var detail in request.Details)
                 {
-                    dbContext.DetailNota.Add(_mapper.Map<DetailNota>(detail));
+                    var detailNota = _mapper.Map<DetailNota>(detail);
+                    detailNota.no_ang = (byte)sequence;
+                    dbContext.DetailNota.Add(detailNota);
+
+                    sequence++;
                 }
                 
                 var nota = dbContext.Nota.Find(request.kd_cb, request.jns_tr, request.jns_nt_msk,

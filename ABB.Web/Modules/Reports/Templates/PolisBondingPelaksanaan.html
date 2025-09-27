@@ -6,14 +6,14 @@
     <title>Polis Bonding Pelaksanaan</title>
     <style>
         body {
-            /* font-family: Arial, sans-serif; */
+            /*font-family: Arial, sans-serif;*/
+            font-size: 11pt;   /* readable in print */
+            line-height: 1.4;  /* adds vertical space */
         }
-
-        .container {
-            width: 90%;
-            margin: auto;
-            /* border: 1px solid black; */
-            padding: 20px;
+        td {
+            font-size: 9pt;
+            padding: 2px 4px; /* give breathing room */
+            letter-spacing: 3px;
         }
 
         .h1 {
@@ -31,12 +31,6 @@
         .table {
             width: 100%;
             border-collapse: collapse;
-        }
-
-        .table td {
-            padding: 8px;
-            /* border: 1px solid black; */
-			font-size: 12px;
         }
     </style>
 </head>
@@ -69,27 +63,27 @@
                     <td style="width: 1%; vertical-align: top;">2. </td>
                     <td style="vertical-align: top; text-align: justify;" colspan="8">Maka kami, TERJAMIN dan PENJAMIN dengan ini 
                         mengikatkan diri untuk melakukan pembayaran jumlah tersebut di atas dengan baik dan benar bilamana TERJAMIN 
-                        tidak memenuhi kewajiban dalam melaksanakan {{ket_rincian_kontr}} sebagaimana ditetapkan berdasarkan Surat Penunjukan Pelaksanaan Pekerjaan (SPK) 
+                        tidak memenuhi kewajiban dalam melaksanakan {{ket_rinc_kontr}} sebagaimana ditetapkan berdasarkan Surat Penunjukan Pelaksanaan Pekerjaan (SPK) 
                         Nomor : {{no_kontr}} tanggal {{tgl_kontrak}} dari PENERIMA JAMINAN.</td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">3. </td>
                     <td style="vertical-align: top; text-align: justify;" colspan="8" >Surat Jaminan ini berlaku mulai dari 
-                        tanggal {{gl_mul_ptg_ind}} sampai dengan tanggal {{tgl_akh_ptg_ind}}</td>
+                        tanggal {{tgl_mul_ptg_ind}} sampai dengan tanggal {{tgl_akh_ptg_ind}}</td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">4. </td>
                     <td style="vertical-align: top; text-align: justify;" colspan="8" >Jaminan ini berlaku apabila:</td>
                 </tr>
                 <tr>
-                    <td style="width: 1%; vertical-align: top;"></td>
-                    <td style="vertical-align: top; text-align: justify; width: 1%;">a</td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="8" >TERJAMIN tidak menyelesaikan pekerjaan tersebut pada waktunya dengan baik dan benar sesuai dengan ketentuan dalam Kontrak</td>
+                    <td style="width: 1%; vertical-align: top;padding: 0; padding-left: 8px"></td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;padding: 0; padding-left: 8px">a</td>
+                    <td style="vertical-align: top; text-align: justify;padding: 0; padding-left: 8px" colspan="8" >TERJAMIN tidak menyelesaikan pekerjaan tersebut pada waktunya dengan baik dan benar sesuai dengan ketentuan dalam Kontrak</td>
                 </tr>
                 <tr>
-                    <td style="width: 1%; vertical-align: top;"></td>
-                    <td style="vertical-align: top; text-align: justify; width: 1%;">b</td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="8">Pemutusan kontrak akibat kesalahan TERJAMIN.</td>
+                    <td style="width: 1%; vertical-align: top;padding: 0; padding-left: 8px"></td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;padding: 0; padding-left: 8px">b</td>
+                    <td style="vertical-align: top; text-align: justify;padding: 0; padding-left: 8px" colspan="8">Pemutusan kontrak akibat kesalahan TERJAMIN.</td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">5. </td>
@@ -181,10 +175,8 @@
                     <td></td>
                     <td style="width: 30%;" colspan="2"></td>
                 </tr>
-                <tr>
-                    <td colspan="9" align="center">{{footer}}</td>
-                </tr>
 			</table>    
         </div>
+    </div>
 </body>
 </html>

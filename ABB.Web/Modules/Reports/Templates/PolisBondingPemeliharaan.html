@@ -6,14 +6,14 @@
     <title>Polis Bonding Pemeliharaan</title>
     <style>
         body {
-            /* font-family: Arial, sans-serif; */
+            /*font-family: Arial, sans-serif;*/
+            font-size: 11pt;   /* readable in print */
+            line-height: 1.4;  /* adds vertical space */
         }
-
-        .container {
-            width: 90%;
-            margin: auto;
-            /* border: 1px solid black; */
-            padding: 20px;
+        td {
+            font-size: 9pt;
+            padding: 2px 4px; /* give breathing room */
+            letter-spacing: 3px;
         }
 
         .h1 {
@@ -31,12 +31,6 @@
         .table {
             width: 100%;
             border-collapse: collapse;
-        }
-
-        .table td {
-            padding: 8px;
-            /* border: 1px solid black; */
-			font-size: 12px;
         }
     </style>
 </head>
@@ -63,7 +57,7 @@
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">2. </td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="8">Maka kami, TERJAMIN dan PENJAMIN dengan ini mengikatkan diri untuk melakukan pembayaran jumlah tersebut di atas dengan baik dan benar bilamana TERJAMIN tidak memenuhi kewajiban dalam melaksanakan pekerjaan {{ket_rincian_kontr}} yang telah dipercayakan kepadanya atas dasar Berita Acara Penyerahan Awal dari PENERIMA JAMINAN No. : {{ba_srh_trm}} tanggal {{tgl_kontrak}}</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="8">Maka kami, TERJAMIN dan PENJAMIN dengan ini mengikatkan diri untuk melakukan pembayaran jumlah tersebut di atas dengan baik dan benar bilamana TERJAMIN tidak memenuhi kewajiban dalam melaksanakan pekerjaan {{ket_rinc_kontr}} yang telah dipercayakan kepadanya atas dasar Berita Acara Penyerahan Awal dari PENERIMA JAMINAN No. : {{ba_srh_trm}} tanggal {{tgl_kontrak}}</td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">3. </td>
@@ -149,10 +143,8 @@
                     <td></td>
                     <td style="width: 30%;" colspan="2"></td>
                 </tr>
-                <tr>
-                    <td colspan="9" align="center">{{footer}}</td>
-                </tr>
 			</table>    
         </div>
+    </div>
 </body>
 </html>

@@ -18,7 +18,8 @@ namespace ABB.Infrastructure.Services
             _profilePictureHelper = profilePictureHelper;
         }
 
-        public void GenerateReport(string reportName, string templateReport, string path, Orientation orientation = Orientation.Portrait)
+        public void GenerateReport(string reportName, string templateReport, string path, 
+            Orientation orientation = Orientation.Portrait, double right = 20, double left = 20)
         {
             var doc = new HtmlToPdfDocument()
             {
@@ -26,12 +27,13 @@ namespace ABB.Infrastructure.Services
                     ColorMode = ColorMode.Color,
                     Orientation = orientation,
                     PaperSize = PaperKind.A4,
+                    Margins = new MarginSettings { Top = 20, Bottom = 20, Left = left, Right = right }
                 },
                 Objects = {
                     new ObjectSettings() {
                         PagesCount = true,
                         HtmlContent = templateReport,
-                        WebSettings = { DefaultEncoding = "utf-8" },
+                        WebSettings = { DefaultEncoding = "utf-8", EnableIntelligentShrinking = false }
                     }
                 }
             };

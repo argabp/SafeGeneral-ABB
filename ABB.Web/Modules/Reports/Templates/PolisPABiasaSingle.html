@@ -6,14 +6,14 @@
     <title>Polis PA Biasa Single</title>
     <style>
         body {
-            /* font-family: Arial, sans-serif; */
+            /*font-family: Arial, sans-serif;*/
+            font-size: 11pt;   /* readable in print */
+            line-height: 1.4;  /* adds vertical space */
         }
-
-        .container {
-            width: 90%;
-            margin: auto;
-            /* border: 1px solid black; */
-            padding: 20px;
+        td {
+            font-size: 9pt;
+            padding: 2px 4px; /* give breathing room */
+            letter-spacing: 3px;
         }
 
         .h1 {
@@ -32,16 +32,11 @@
             width: 100%;
             border-collapse: collapse;
         }
-
-        .table td {
-            padding: 8px;
-            /* border: 1px solid black; */
-			font-size: 12px;
-        }
     </style>
 </head>
 <body>
 
+<p style="width: 100%; text-align: right">{{no_renew}}</p>
     <div class="container">
         <div class="h1"><u>IKHTISAR PERTANGGUNGAN ASURANSI KECELAKAAN DIRI</u></div>
         <div class="section">
@@ -51,9 +46,7 @@
                     <td style="vertical-align: top; text-align: justify; width: 20%;">Nomor Polis / Sertifikat</td>
                     <td style="width: 1%;">:</td>
                     <td style="width: 35%;">{{no_pol_ttg}}</td>
-                    <td style="width: 15%;">Ex Polis No</td>
-                    <td>:</td>
-                    <td>{{no_pol_lama}}</td>
+                    {{polis_pa_no_pol_lama}}
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">2. </td>
@@ -137,7 +130,7 @@
                     <td>:</td>
                     <td style="text-align: center; font-weight: bold;">Jenis Pertanggungan</td>
                     <td></td>
-                    <td style="text-align: center; font-weight: bold;" colspan="2">Nilai Pertanggungan</td>
+                    <td colspan="2" style="text-align: right; font-weight: bold;">Nilai Pertanggungan</td>
                 </tr>
                 <tr>
                     <td></td>
@@ -146,7 +139,7 @@
                     <td>A. Kematian karena kecelakaan</td>
                     <td>:</td>
                     <td style="width: 1%;">{{kd_mtu_symbol}}</td>
-                    <td style="width: 20%;">{{nilai_ptg_a}}</td>
+                    <td style="text-align: right; width: 20%;">{{nilai_ptg_a}}</td>
                 </tr>
                 <tr>
                     <td></td>
@@ -155,7 +148,7 @@
                     <td>B. Cacat tetap keseluruhan / Cacat tetap sebagian</td>
                     <td>:</td>
                     <td style="width: 1%;">{{kd_mtu_symbol}}</td>
-                    <td style="width: 20%;">{{nilai_ptg_b}}</td>
+                    <td style="text-align: right; width: 20%;">{{nilai_ptg_b}}</td>
                 </tr>
                 <tr>
                     <td></td>
@@ -164,7 +157,7 @@
                     <td>C. Biaya-biaya perawatan/pengobatan akibat Kecelakaan</td>
                     <td>:</td>
                     <td style="width: 1%;">{{kd_mtu_symbol}}</td>
-                    <td style="width: 20%;">{{nilai_ptg_c}}</td>
+                    <td style="text-align: right; width: 20%;">{{nilai_ptg_c}}</td>
                 </tr>
                 <tr>
                     <td>10.</td>
@@ -178,15 +171,13 @@
                     <td style="width: 1%; vertical-align: top;">11.</td>
                     <td style="width: 20%; vertical-align: top;">Suku Premi Dasar</td>
                     <td style="width: 1%;">:</td>
-                    <td style="width: 20%;">A. {{pst_a}} {{stn_rate_a}}</td>
-                    <td>C. {{pst_c}} {{stn_rate_c}}</td>
+                    {{polis_pa_single_suku_premi_dasar_first_row}}
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;"></td>
                     <td style="width: 20%;"></td>
                     <td style="width: 1%;"></td>
-                    <td>B. {{pst_b}} {{stn_rate_b}}</td>
-                    <td>D. {{pst_b}} {{stn_rate_b}}</td>
+                    {{polis_pa_single_suku_premi_dasar_second_row}}
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">12.</td>
@@ -207,53 +198,29 @@
                     <td style="width: 20%; vertical-align: top;">Premi Jaminan Dasar</td>
                     <td style="width: 1%;">:</td>
                     <td style="width: 1%;">- {{kd_mtu_symbol}}</td>
-                    <td>{{nilai_ptg_a}}</td>
+                    <td style="text-align: right; width: 5%">{{nilai_ptg_a}}</td>
                     <td style="width: 1%;">x</td>
-                    <td>{{pst_a}}</td>
+                    <td style="text-align: right">{{pst_a}}</td>
                     <td>{{stn_rate_a}}</td>
-                    <td>=</td>
+                    <td style="width: 1%">=</td>
                     <td style="width: 1%;">{{kd_mtu_symbol}}</td>
-                    <td>{{nilai_prm_a}}</td>
+                    <td style="text-align: right; width: 20%">{{nilai_prm_a}}</td>
                 </tr>
                 <tr>
                     <td style="width: 3.4%; vertical-align: top;"></td>
                     <td style="width: 20%; vertical-align: top;">Premi Jaminan Tambahan</td>
                     <td style="width: 1%;">:</td>
                     <td>- {{kd_mtu_symbol}}</td>
-                    <td>{{nilai_ptg_b}}</td>
+                    <td style="text-align: right">{{nilai_ptg_b}}</td>
                     <td>x</td>
-                    <td>{{pst_B}}</td>
+                    <td style="text-align: right">{{pst_b}}</td>
                     <td>{{stn_rate_b}}</td>
                     <td>=</td>
                     <td>{{kd_mtu_symbol}}</td>
-                    <td>{{nilai_prm_b}}</td>
+                    <td style="text-align: right">{{nilai_prm_b}}</td>
                 </tr>
-                <tr>
-                    <td style="width: 3.4%; vertical-align: top;"></td>
-                    <td style="width: 20%; vertical-align: top;"></td>
-                    <td style="width: 1%;">:</td>
-                    <td>- {{kd_mtu_symbol}}</td>
-                    <td>{{nilai_ptg_c}}</td>
-                    <td>x</td>
-                    <td>{{pst_c}}</td>
-                    <td>{{stn_rate_c}}</td>
-                    <td>=</td>
-                    <td>{{kd_mtu_symbol}}</td>
-                    <td>{{nilai_prm_c}}</td>
-                </tr>
-                <tr>
-                    <td style="width: 3.4%; vertical-align: top;"></td>
-                    <td style="width: 20%; vertical-align: top;"></td>
-                    <td style="width: 1%;">:</td>
-                    <td>- {{kd_mtu_symbol}}</td>
-                    <td>{{nilai_ptg_d}}</td>
-                    <td>x</td>
-                    <td>{{pst_D}}</td>
-                    <td>{{stn_rate_d}}</td>
-                    <td>=</td>
-                    <td>{{kd_mtu_symbol}}</td>
-                    <td>{{nilai_prm_d}}</td>
-                </tr>
+                {{polis_pa_single_nilai_ptg_c}}
+                {{polis_pa_single_nilai_ptg_d}}
                 <tr>
                     <td style="width: 3.4%; vertical-align: top;"></td>
                     <td style="width: 20%; vertical-align: top;">- Biaya Polis</td>
@@ -265,7 +232,7 @@
                     <td></td>
                     <td>=</td>
                     <td>{{kd_mtu_symbol}}</td>
-                    <td>{{nilai_bia_pol}}</td>
+                    <td style="text-align: right">{{nilai_bia_pol}}</td>
                 </tr>
                 <tr>
                     <td style="width: 3.4%; vertical-align: top;"></td>
@@ -278,7 +245,7 @@
                     <td></td>
                     <td>=</td>
                     <td>{{kd_mtu_symbol}}</td>
-                    <td>{{nilai_oby_05}}</td>
+                    <td style="text-align: right">{{nilai_oby_05}}</td>
                 </tr>
                 <tr>
                     <td style="width: 3.4%; vertical-align: top;"></td>
@@ -291,7 +258,7 @@
                     <td></td>
                     <td>=</td>
                     <td>{{kd_mtu_symbol}}</td>
-                    <td>{{nilai_bia_mat}}</td>
+                    <td style="text-align: right">{{nilai_bia_mat}}</td>
                 </tr>
                 <tr>
                     <td style="width: 3.4%; vertical-align: top;"></td>
@@ -308,7 +275,7 @@
                     <td></td>
                     <td>=</td>
                     <td style="font-weight: bold;">{{kd_mtu_symbol}}</td>
-                    <td style="font-weight: bold;">{{nilai_ttl}}</td>
+                    <td style="font-weight: bold; text-align: right">{{nilai_ttl}}</td>
                 </tr>
                 <tr>
                     <td style="width: 3.4%; vertical-align: top;"></td>
@@ -333,21 +300,6 @@
                     <td></td>
                     <td>:</td>
                     <td colspan="5">{{tgl_closing_ind}}</td>
-                </tr>
-                <tr>
-                    <td style="width: 3.4%; vertical-align: top;"></td>
-                    <td style="width: 20%; vertical-align: top;"></td>
-                    <td style="width: 1%;"></td>
-                    <td style="text-align: center; padding-left: 122px;">Penanggung,</td>
-                    <td></td>
-                    <td></td>
-                    <td colspan="5"></td>
-                </tr>
-                <tr>
-                    <td colspan="11" align="center">{{footer}}</td>
-                </tr>
-                <tr>
-                    <td colspan="2">{{nm_user}}</td>
                 </tr>
             </table>    
         </div>

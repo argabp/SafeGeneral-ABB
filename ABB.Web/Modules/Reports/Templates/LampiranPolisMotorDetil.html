@@ -5,9 +5,14 @@
   <title>Perincian Data Kendaraan Bermotor</title>
   <style>
     body {
-      /* font-family: Arial, sans-serif; */
-      font-size: 14px;
-      margin: 30px;
+      /*font-family: Arial, sans-serif;*/
+      font-size: 11pt;   /* readable in print */
+      line-height: 1.4;  /* adds vertical space */
+    }
+    td {
+      font-size: 9pt;
+      padding: 2px 4px; /* give breathing room */
+      letter-spacing: 3px;
     }
     h2, h3 {
       text-align: left;
@@ -18,7 +23,6 @@
       margin-top: 10px;
     }
     th, td {
-      padding: 6px;
       text-align: left;
     }
     .no-border {
@@ -39,7 +43,7 @@
 </head>
 <body>
 
-<h2><u>PERINCIAN DATA KENDARAAN BERMOTOR</u></h2>
+<h2 style="text-align: center"><u>PERINCIAN DATA KENDARAAN BERMOTOR</u></h2>
 
 <table class="no-border">
   <tr>
@@ -53,6 +57,8 @@
     <td>{{nm_ttg}}</td>
   </tr>
 </table>
+
+<hr style="color: black">
 
 {{detail}}
 {{summary}}

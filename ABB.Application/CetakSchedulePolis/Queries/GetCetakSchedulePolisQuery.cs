@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using ABB.Application.Common;
 using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
+using ABB.Domain.Models;
 using MediatR;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Primitives;
@@ -34,6 +35,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
     {
         private readonly IDbConnectionFactory _connectionFactory;
         private readonly IHostEnvironment _environment;
+        private readonly ReportConfig _reportConfig;
 
         private List<string> ReportHaveDetails = new List<string>()
         {
@@ -50,10 +52,12 @@ namespace ABB.Application.CetakSchedulePolis.Queries
             "PolisPASiramaMulti.html"
         };
 
-        public GetCetakSchedulePolisQueryHandler(IDbConnectionFactory connectionFactory, IHostEnvironment environment)
+        public GetCetakSchedulePolisQueryHandler(IDbConnectionFactory connectionFactory, IHostEnvironment environment,
+            ReportConfig reportConfig)
         {
             _connectionFactory = connectionFactory;
             _environment = environment;
+            _reportConfig = reportConfig;
         }
 
         public async Task<string> Handle(GetCetakSchedulePolisQuery request, CancellationToken cancellationToken)
@@ -137,39 +141,39 @@ namespace ABB.Application.CetakSchedulePolis.Queries
             {
                 var sp_stringBuilder = new StringBuilder();
                 sp_stringBuilder.Append(cetakSchedulePolis.pst_rate_prm.Value.ToString("#0.0000"));
-                sp_stringBuilder.Append(cetakSchedulePolis.stn_rate_prm == "1" ? "%" : "%o");
+                sp_stringBuilder.Append(cetakSchedulePolis.stn_rate_prm == "1" ? " %" : " %o");
 
                 if (cetakSchedulePolis.pst_tjh != null && cetakSchedulePolis.pst_tjh > 0)
                 {
-                    sp_stringBuilder.Append($" (Pokok) {cetakSchedulePolis.pst_tjh:#0.0000}% (TJH)");
+                    sp_stringBuilder.Append($" (Pokok) {cetakSchedulePolis.pst_tjh:#0.0000} % (TJH)");
                 }
 
                 if (cetakSchedulePolis.pst_rate_hh != null && cetakSchedulePolis.pst_rate_hh > 0 &&
                     cetakSchedulePolis.stn_rate_hh != null)
                 {
                     var stn_rate_hh = cetakSchedulePolis.stn_rate_hh == 1 ? "%" : "%o";
-                    sp_stringBuilder.Append($",  {cetakSchedulePolis.pst_rate_hh:#0.0000}{stn_rate_hh} (SRCC)");
+                    sp_stringBuilder.Append($",  {cetakSchedulePolis.pst_rate_hh:#0.0000} {stn_rate_hh} (SRCC)");
                 }
 
                 if (cetakSchedulePolis.pst_rate_aog != null && cetakSchedulePolis.pst_rate_aog > 0 &&
                     cetakSchedulePolis.stn_rate_aog != null)
                 {
                     var stn_rate_aog = cetakSchedulePolis.stn_rate_aog == 1 ? "%" : "%o";
-                    sp_stringBuilder.Append($",  {cetakSchedulePolis.pst_rate_aog:#0.0000}{stn_rate_aog} (AOG)");
+                    sp_stringBuilder.Append($",  {cetakSchedulePolis.pst_rate_aog:#0.0000} {stn_rate_aog} (AOG)");
                 }
 
                 if (cetakSchedulePolis.pst_rate_banjir != null && cetakSchedulePolis.pst_rate_banjir > 0 &&
                     cetakSchedulePolis.stn_rate_banjir != null)
                 {
                     var stn_rate_banjir = cetakSchedulePolis.stn_rate_banjir == 1 ? "%" : "%o";
-                    sp_stringBuilder.Append($",  {cetakSchedulePolis.pst_rate_banjir:#0.0000}{stn_rate_banjir} (Banjir)");
+                    sp_stringBuilder.Append($",  {cetakSchedulePolis.pst_rate_banjir:#0.0000} {stn_rate_banjir} (Banjir)");
                 }
 
                 if (cetakSchedulePolis.pst_rate_trs != null && cetakSchedulePolis.pst_rate_trs > 0 &&
                     cetakSchedulePolis.stn_rate_trs != null)
                 {
                     var stn_rate_trs = cetakSchedulePolis.stn_rate_trs == 1 ? "%" : "%o";
-                    sp_stringBuilder.Append($",  {cetakSchedulePolis.pst_rate_trs:#0.0000}{stn_rate_trs} (TRS)");
+                    sp_stringBuilder.Append($",  {cetakSchedulePolis.pst_rate_trs:#0.0000} {stn_rate_trs} (TRS)");
                 }
 
                 if (cetakSchedulePolis.nilai_prm_pad != null && cetakSchedulePolis.nilai_prm_pad > 0)
@@ -484,6 +488,489 @@ namespace ABB.Application.CetakSchedulePolis.Queries
             var nilai_prm_tbh_05 = ReportHelper.ConvertToReportFormat(cetakSchedulePolis.nilai_prm_tbh_05);
             var nilai_prm_pad = ReportHelper.ConvertToReportFormat(cetakSchedulePolis.nilai_prm_pad);
 
+            #region FireSingle
+
+            var fire_single_nm_cvrg_01_td = string.Empty;
+
+            if (Convert.ToDecimal(nilai_prm_tbh_01) > 0)
+            {
+                fire_single_nm_cvrg_01_td = @$"
+	                <tr style='height: 20px;'>
+		                <td style='width: 1%;'></td>
+		                <td style='width: 12%;'>b. {cetakSchedulePolis.nm_cvrg_01}</td>
+		                <td style='width: 10%;'>{cetakSchedulePolis.kd_cvrg_01}</td>
+		                <td style='width: 15%;text-align: right'>{pst_rate_prm_01}</td>
+		                <td style='width: 15%;'>{stn_rate_prm_01}</td>
+		                <td style='width: 1%'>:</td>
+		                <td style='padding: 0; margin: 0; width: 17.5%'>{cetakSchedulePolis.kd_mtu_symbol}</td>
+		                <td style='padding: 0; margin: 0; text-align: right; width: 5%'>{nilai_prm_tbh_01}
+		                </td>
+	                </tr>";
+            }
+            else
+            {
+                fire_single_nm_cvrg_01_td = @$"
+	                <tr style='height: 20px;'>
+		                <td style='width: 1%;'></td>
+		                <td style='width: 12%;'>b. {cetakSchedulePolis.nm_cvrg_01}</td>
+		                <td style='width: 10%;'>{cetakSchedulePolis.kd_cvrg_01}</td>
+		                <td style='width: 15%;text-align: right'>{pst_rate_prm_01}</td>
+		                <td style='width: 15%;'>{stn_rate_prm_01}</td>
+		                <td style='width: 1%'></td>
+		                <td style='padding: 0; margin: 0; width: 17.5%'></td>
+		                <td style='padding: 0; margin: 0; text-align: right; width: 5%'>
+                        </td>
+	                </tr>";
+            }
+
+            var fire_single_nm_cvrg_02_td = string.Empty;
+
+            if (Convert.ToDecimal(nilai_prm_tbh_02) > 0)
+            {
+                fire_single_nm_cvrg_02_td = @$"
+	                <tr style='height: 20px;'>
+		                <td style='width: 1%;'></td>
+		                <td style='width: 12%;'>b. {cetakSchedulePolis.nm_cvrg_02}</td>
+		                <td style='width: 10%;'>{cetakSchedulePolis.kd_cvrg_02}</td>
+		                <td style='width: 15%;text-align: right'>{pst_rate_prm_02}</td>
+		                <td style='width: 15%;'>{stn_rate_prm_02}</td>
+		                <td style='width: 1%'>:</td>
+		                <td style='padding: 0; margin: 0; width: 17.5%'>{cetakSchedulePolis.kd_mtu_symbol}</td>
+		                <td style='padding: 0; margin: 0; text-align: right; width: 5%'>{nilai_prm_tbh_02}
+		                </td>
+	                </tr>";
+            }
+            else
+            {
+                fire_single_nm_cvrg_02_td = @$"
+	                <tr style='height: 20px;'>
+		                <td style='width: 1%;'></td>
+		                <td style='width: 12%;'>b. {cetakSchedulePolis.nm_cvrg_02}</td>
+		                <td style='width: 10%;'>{cetakSchedulePolis.kd_cvrg_02}</td>
+		                <td style='width: 15%;text-align: right'>{pst_rate_prm_02}</td>
+		                <td style='width: 15%;'>{stn_rate_prm_02}</td>
+		                <td style='width: 1%'></td>
+		                <td style='padding: 0; margin: 0; width: 17.5%'></td>
+		                <td style='padding: 0; margin: 0; text-align: right; width: 5%'>
+                        </td>
+	                </tr>";
+            }
+
+            var fire_single_nm_cvrg_03_td = string.Empty;
+
+            if (!string.IsNullOrWhiteSpace(cetakSchedulePolis.nm_cvrg_03) && Convert.ToDecimal(nilai_prm_tbh_03) > 0)
+            {
+                fire_single_nm_cvrg_03_td = @$"
+	                <tr style='height: 20px;'>
+		                <td style='width: 1%;'></td>
+		                <td style='width: 12%;'>{cetakSchedulePolis.nm_cvrg_03}</td>
+		                <td style='width: 10%;'>{cetakSchedulePolis.kd_cvrg_03}</td>
+		                <td style='width: 15%;text-align: right'>{pst_rate_prm_03}</td>
+		                <td style='width: 15%;'>{stn_rate_prm_03}</td>
+		                <td style='width: 1%'>:</td>
+		                <td style='padding: 0; margin: 0; width: 17.5%'>{cetakSchedulePolis.kd_mtu_symbol}</td>
+		                <td style='padding: 0; margin: 0; text-align: right; width: 5%'>{nilai_prm_tbh_03}
+		                </td>
+	                </tr>";
+            }
+
+            var fire_single_nm_cvrg_04_td = string.Empty;
+
+            if (!string.IsNullOrWhiteSpace(cetakSchedulePolis.nm_cvrg_04) && Convert.ToDecimal(nilai_prm_tbh_04) > 0)
+            {
+                fire_single_nm_cvrg_04_td = @$"
+	                <tr style='height: 20px;'>
+		                <td style='width: 1%;'></td>
+		                <td style='width: 12%;'>{cetakSchedulePolis.nm_cvrg_03}</td>
+		                <td style='width: 10%;'>{cetakSchedulePolis.kd_cvrg_03}</td>
+		                <td style='width: 15%;text-align: right'>{pst_rate_prm_03}</td>
+		                <td style='width: 15%;'>{stn_rate_prm_03}</td>
+		                <td style='width: 1%'>:</td>
+		                <td style='padding: 0; margin: 0; width: 17.5%'>{cetakSchedulePolis.kd_mtu_symbol}</td>
+		                <td style='padding: 0; margin: 0; text-align: right; width: 5%'>{nilai_prm_tbh_03}
+		                </td>
+	                </tr>";
+            }
+
+            var fire_single_nm_cvrg_05_td = string.Empty;
+
+            if (!string.IsNullOrWhiteSpace(cetakSchedulePolis.nm_cvrg_03) && Convert.ToDecimal(nilai_prm_tbh_05) > 0)
+            {
+                fire_single_nm_cvrg_05_td = @$"
+	                <tr style='height: 20px;'>
+		                <td style='width: 1%;'></td>
+		                <td style='width: 12%;'>{cetakSchedulePolis.nm_cvrg_03}</td>
+		                <td style='width: 10%;'>{cetakSchedulePolis.kd_cvrg_03}</td>
+		                <td style='width: 15%;text-align: right'>{pst_rate_prm_03}</td>
+		                <td style='width: 15%;'>{stn_rate_prm_03}</td>
+		                <td style='width: 1%'>:</td>
+		                <td style='padding: 0; margin: 0; width: 17.5%'>{cetakSchedulePolis.kd_mtu_symbol}</td>
+		                <td style='padding: 0; margin: 0; text-align: right; width: 5%'>{nilai_prm_tbh_03}
+		                </td>
+	                </tr>";
+            }
+
+            var fire_single_desk_oby_3_td = string.Empty;
+
+            if (!string.IsNullOrWhiteSpace(cetakSchedulePolis.desk_oby_03) && Convert.ToDecimal(nilai_oby_03) > 0)
+            {
+                fire_single_desk_oby_3_td = @$"
+	            <tr style='height: 20px;'>
+		            <td style='width: 1%;'>3.</td>
+		            <td style='width: 62%;' colspan=3>{cetakSchedulePolis.desk_oby_03}</td>
+		            <td style='padding: 0; margin: 0; width: 17.5%;'>{cetakSchedulePolis.kd_mtu_symbol}</td>
+		            <td style='padding: 0; margin: 0; width: 5%; text-align: right'>{nilai_oby_03}
+		            </td>
+	            </tr>";
+            }
+
+            var fire_single_desk_oby_4_td = string.Empty;
+
+            if (!string.IsNullOrWhiteSpace(cetakSchedulePolis.desk_oby_04) && Convert.ToDecimal(nilai_oby_04) > 0)
+            {
+                fire_single_desk_oby_4_td = @$"
+	            <tr style='height: 20px;'>
+		            <td style='width: 1%;'>3.</td>
+		            <td style='width: 62%;' colspan=3>{cetakSchedulePolis.desk_oby_04}</td>
+		            <td style='padding: 0; margin: 0; width: 17.5%;'>{cetakSchedulePolis.kd_mtu_symbol}</td>
+		            <td style='padding: 0; margin: 0; width: 5%; text-align: right'>{nilai_oby_04}
+		            </td>
+	            </tr>";
+            }
+
+            var fire_single_desk_oby_5_td = string.Empty;
+
+            if (!string.IsNullOrWhiteSpace(cetakSchedulePolis.desk_oby_05) && Convert.ToDecimal(nilai_oby_05) > 0)
+            {
+                fire_single_desk_oby_5_td = @$"
+	            <tr style='height: 20px;'>
+		            <td style='width: 1%;'>3.</td>
+		            <td style='width: 62%;' colspan=3>{cetakSchedulePolis.desk_oby_05}</td>
+		            <td style='padding: 0; margin: 0; width: 17.5%;'>{cetakSchedulePolis.kd_mtu_symbol}</td>
+		            <td style='padding: 0; margin: 0; width: 5%; text-align: right'>{nilai_oby_05}
+		            </td>
+	            </tr>";
+            }
+
+            #endregion
+            
+            var no_renew = cetakSchedulePolis.no_renew == "0" ? "(Baru)" : "(Perpanjangan)";
+
+            #region Fire Multi
+            
+            var div_no_pol_lama = string.Empty;
+
+            if (!string.IsNullOrWhiteSpace(cetakSchedulePolis.no_pol_lama))
+            {
+                div_no_pol_lama = $@"
+                        <td style='width: 15%;'>Ex Polis</td>
+                        <td style='width: 2.5%'>:</td>
+                        <td style='width: 30%'>{cetakSchedulePolis.no_pol_lama}</td>";
+            }
+
+            var subTotal = ReportHelper.ConvertToReportFormat(Convert.ToDecimal(cetakSchedulePolis?.nilai_prm_pkk ?? 0)  + 
+                Convert.ToDecimal(cetakSchedulePolis?.nilai_prm_tbh_01 ?? 0)  + Convert.ToDecimal(cetakSchedulePolis?.nilai_prm_tbh_02 ?? 0) 
+                                                              + Convert.ToDecimal(cetakSchedulePolis?.nilai_prm_tbh_03 ?? 0)  + Convert.ToDecimal(cetakSchedulePolis?.nilai_prm_tbh_04 ?? 0) 
+                                                              + Convert.ToDecimal(cetakSchedulePolis?.nilai_prm_tbh_05 ?? 0)  - Convert.ToDecimal(cetakSchedulePolis?.nilai_dis ?? 0));
+            
+            var fire_multi_cvrg_01 = Convert.ToDecimal(nilai_prm_tbh_01) > 0 ? $@"
+                    <td>- Jaminan Tambahan {cetakSchedulePolis.kd_cvrg_01}</td>
+                    <td>:</td>
+                    <td>{cetakSchedulePolis.kd_mtu_symbol}</td>
+                    <td style='text-align: right;'>{nilai_prm_tbh_01}</td>" : $@"
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td</td>";
+            
+            var fire_multi_cvrg_02 = Convert.ToDecimal(nilai_prm_tbh_02) > 0 ? $@"
+                    <td>- Jaminan Tambahan {cetakSchedulePolis.kd_cvrg_01}</td>
+                    <td>:</td>
+                    <td>{cetakSchedulePolis.kd_mtu_symbol}</td>
+                    <td style='text-align: right;'>{nilai_prm_tbh_02}</td>" : $@"
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td</td>";
+            
+            var fire_multi_cvrg_03 = Convert.ToDecimal(nilai_prm_tbh_03) > 0 ? $@"
+                    <td>- Jaminan Tambahan {cetakSchedulePolis.kd_cvrg_01}</td>
+                    <td>:</td>
+                    <td>{cetakSchedulePolis.kd_mtu_symbol}</td>
+                    <td style='text-align: right;'>{nilai_prm_tbh_03}</td>" : $@"
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td</td>";
+            
+            var fire_multi_cvrg_04 = Convert.ToDecimal(nilai_prm_tbh_04) > 0 ? $@"
+                    <td>- Jaminan Tambahan {cetakSchedulePolis.kd_cvrg_01}</td>
+                    <td>:</td>
+                    <td>{cetakSchedulePolis.kd_mtu_symbol}</td>
+                    <td style='text-align: right;'>{nilai_prm_tbh_04}</td>" : $@"
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td</td>";
+            
+            var fire_multi_cvrg_05 = Convert.ToDecimal(nilai_prm_tbh_05) > 0 ? $@"
+                    <td>- Jaminan Tambahan {cetakSchedulePolis.kd_cvrg_01}</td>
+                    <td>:</td>
+                    <td>{cetakSchedulePolis.kd_mtu_symbol}</td>
+                    <td style='text-align: right;'>{nilai_prm_tbh_05}</td>" : $@"
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td</td>";
+            
+            var fire_multi_pst_rate_01 = Convert.ToDecimal(pst_rate_prm_01) > 0 ? $@"
+                    <td style='width: 18%;'>{pst_rate_prm_01} {stn_rate_prm_01}</td>" : $@"
+                    <td style='width: 18%;'></td>";
+            
+            var fire_multi_pst_rate_02 = Convert.ToDecimal(pst_rate_prm_02) > 0 ? $@"
+                    <td style='width: 18%;'>{pst_rate_prm_02} {stn_rate_prm_02}</td>" : $@"
+                    <td style='width: 18%;'></td>";
+            
+            var fire_multi_pst_rate_03 = Convert.ToDecimal(pst_rate_prm_03) > 0 ? $@"
+                    <td style='width: 18%;'>{pst_rate_prm_03} {stn_rate_prm_03}</td>" : $@"
+                    <td style='width: 18%;'></td>";
+            
+            var fire_multi_pst_rate_04 = Convert.ToDecimal(pst_rate_prm_04) > 0 ? $@"
+                    <td style='width: 18%;'>{pst_rate_prm_04} {stn_rate_prm_04}</td>" : $@"
+                    <td style='width: 18%;'></td>";
+            
+            var fire_multi_pst_rate_05 = Convert.ToDecimal(pst_rate_prm_05) > 0 ? $@"
+                    <td style='width: 18%;'>{pst_rate_prm_05} {stn_rate_prm_05}</td>" : $@"
+                    <td style='width: 18%;'></td>";
+            
+            var fire_multi_desk_oby_3 = string.Empty;
+
+            if (Convert.ToDecimal(nilai_oby_03) > 0)
+            {
+                fire_multi_desk_oby_3 = @$"
+                    <tr style='height: 20px;'>
+                        <td>3.</td>
+                        <td colspan='2'>{cetakSchedulePolis.desk_oby_03}</td>
+                        <td></td>
+                        <td style='width: 1%;'>{cetakSchedulePolis.kd_mtu_symbol}</td>
+                        <td style='width: 18%; text-align: right;'>{nilai_oby_03}</td>
+                    </tr>";
+            }
+            
+            var fire_multi_desk_oby_4 = string.Empty;
+
+            if (Convert.ToDecimal(nilai_oby_04) > 0)
+            {
+                fire_multi_desk_oby_4 = @$"
+                    <tr style='height: 20px;'>
+                        <td>3.</td>
+                        <td colspan='2'>{cetakSchedulePolis.desk_oby_04}</td>
+                        <td></td>
+                        <td style='width: 1%;'>{cetakSchedulePolis.kd_mtu_symbol}</td>
+                        <td style='width: 18%; text-align: right;'>{nilai_oby_04}</td>
+                    </tr>";
+            }
+            
+            var fire_multi_desk_oby_5 = string.Empty;
+
+            if (Convert.ToDecimal(nilai_oby_05) > 0)
+            {
+                fire_multi_desk_oby_5 = @$"
+                    <tr style='height: 20px;'>
+                        <td>3.</td>
+                        <td colspan='2'>{cetakSchedulePolis.desk_oby_05}</td>
+                        <td></td>
+                        <td style='width: 1%;'>{cetakSchedulePolis.kd_mtu_symbol}</td>
+                        <td style='width: 18%; text-align: right;'>{nilai_oby_05}</td>
+                    </tr>";
+            }
+            
+            #endregion
+
+            #region Cargo Single
+
+            var cargo_single_diskon = string.Empty;
+
+            if (Convert.ToDecimal(nilai_dis) > 0)
+            {
+                cargo_single_diskon = @$"
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>Diskon</td>
+                    <td></td>
+                    <td></td>
+                    <td>=</td>
+                    <td>{cetakSchedulePolis.kd_mtu_symbol}</td>
+                    <td style='text-align: right;'>{nilai_dis}</td>
+                </tr>";
+            }
+
+            #endregion
+
+            #region Cargo Multi
+
+            var cargo_multi_diskon = string.Empty;
+
+            if (Convert.ToDecimal(nilai_dis) > 0)
+            {
+                cargo_multi_diskon = @$"
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>Diskon</td>
+                    <td></td>
+                    <td>=</td>
+                    <td>{cetakSchedulePolis.kd_mtu_symbol} {nilai_dis}</td>
+                </tr>";
+            }
+
+            #endregion
+
+            var polis_pa_no_pol_lama = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(cetakSchedulePolis.no_pol_lama))
+            {
+                polis_pa_no_pol_lama = $@"
+                    <td style='width: 15%;'></td>
+                <td></td>
+                <td></td>";
+            }
+            else
+            {
+                polis_pa_no_pol_lama = $@"
+                    <td style='width: 15%;'>Ex Polis No</td>
+                <td>:</td>
+                <td>{cetakSchedulePolis.no_pol_lama}</td>";
+            }
+            
+            #region Polis PA Biasa Single
+
+            var polis_pa_single_suku_premi_dasar_first_row = new StringBuilder();
+
+            polis_pa_single_suku_premi_dasar_first_row.Append(
+                Convert.ToDouble(pst_a) > 0
+                    ? $@"<td style='width: 20%;'>A. {pst_a} {stn_rate_a}</td>"
+                    : "<td style='width: 20%;'></td>");
+
+            polis_pa_single_suku_premi_dasar_first_row.Append(
+                Convert.ToDouble(pst_c) > 0 ? $@"<td>C. {pst_c} {stn_rate_c}</td>" : "<td></td>");
+
+            var polis_pa_single_suku_premi_dasar_second_row = new StringBuilder();
+
+            polis_pa_single_suku_premi_dasar_second_row.Append(
+                Convert.ToDouble(pst_b) > 0 ? $@"<td>B. {pst_b} {stn_rate_b}</td>" : "<td></td>");
+            
+            polis_pa_single_suku_premi_dasar_second_row.Append(
+                Convert.ToDouble(pst_d) > 0 ? $@"<td>D. {pst_d} {stn_rate_d}</td>" : "<td></td>");
+            
+            var polis_pa_single_nilai_ptg_c = string.Empty;
+
+            if (Convert.ToDouble(nilai_ptg_c) > 0)
+            {
+                polis_pa_single_nilai_ptg_c = $@"
+                <tr>
+                    <td style='width: 3.4%; vertical-align: top;'></td>
+                    <td style='width: 20%; vertical-align: top;'></td>
+                    <td style='width: 1%;'>:</td>
+                    <td>- {cetakSchedulePolis.kd_mtu_symbol}</td>
+                    <td style='text-align: right'>{nilai_ptg_c}</td>
+                    <td>x</td>
+                    <td style='text-align: right'>{pst_c}</td>
+                    <td>{stn_rate_c}</td>
+                    <td>=</td>
+                    <td>{cetakSchedulePolis.kd_mtu_symbol}</td>
+                    <td style='text-align: right'>{nilai_prm_c}</td>
+                </tr>";
+            }
+            
+            var polis_pa_single_nilai_ptg_d = string.Empty;
+
+            if (Convert.ToDouble(nilai_ptg_d) > 0)
+            {
+                polis_pa_single_nilai_ptg_d = $@"
+                <tr>
+                    <td style='width: 3.4%; vertical-align: top;'></td>
+                    <td style='width: 20%; vertical-align: top;'></td>
+                    <td style='width: 1%;'>:</td>
+                    <td>- {cetakSchedulePolis.kd_mtu_symbol}</td>
+                    <td style='text-align: right'>{nilai_ptg_d}</td>
+                    <td>x</td>
+                    <td style='text-align: right'>{pst_d}</td>
+                    <td>{stn_rate_d}</td>
+                    <td>=</td>
+                    <td>{cetakSchedulePolis.kd_mtu_symbol}</td>
+                    <td style='text-align: right'>{nilai_prm_d}</td>
+                </tr>";
+            }
+            
+            #endregion
+
+            #region Hole In One Single
+
+            var polis_hole_in_one_single_nilai_oby_02 = string.Empty;
+
+            if (Convert.ToDouble(nilai_oby_02) > 0)
+            {
+                polis_hole_in_one_single_nilai_oby_02 = $@"
+                <tr>
+                    <td style='width: 1%; vertical-align: top;'></td>
+                    <td style='vertical-align: top; text-align: justify; width: 1%;'></td>
+                    <td style='vertical-align: top; text-align: justify; width: 25%;'>{cetakSchedulePolis.desk_oby_02}</td>
+                    <td style='width: 1%; vertical-align: top;'>{cetakSchedulePolis.kd_mtu}</td>
+                    <td style='vertical-align: top; text-align: right'>{nilai_oby_02}</td>
+                </tr>";
+            }
+
+            var polis_hole_in_one_single_nilai_oby_03 = string.Empty;
+
+            if (Convert.ToDouble(nilai_oby_03) > 0)
+            {
+                polis_hole_in_one_single_nilai_oby_03 = $@"
+                <tr>
+                    <td style='width: 1%; vertical-align: top;'></td>
+                    <td style='vertical-align: top; text-align: justify; width: 1%;'></td>
+                    <td style='vertical-align: top; text-align: justify; width: 25%;'>{cetakSchedulePolis.desk_oby_03}</td>
+                    <td style='width: 1%; vertical-align: top;'>{cetakSchedulePolis.kd_mtu}</td>
+                    <td style='vertical-align: top; text-align: right'>{nilai_oby_03}</td>
+                </tr>";
+            }
+
+            var polis_hole_in_one_single_nilai_oby_04 = string.Empty;
+
+            if (Convert.ToDouble(nilai_oby_04) > 0)
+            {
+                polis_hole_in_one_single_nilai_oby_04 = $@"
+                <tr>
+                    <td style='width: 1%; vertical-align: top;'></td>
+                    <td style='vertical-align: top; text-align: justify; width: 1%;'></td>
+                    <td style='vertical-align: top; text-align: justify; width: 25%;'>{cetakSchedulePolis.desk_oby_04}</td>
+                    <td style='width: 1%; vertical-align: top;'>{cetakSchedulePolis.kd_mtu}</td>
+                    <td style='vertical-align: top; text-align: right'>{nilai_oby_04}</td>
+                </tr>";
+            }
+
+            var polis_hole_in_one_single_nilai_oby_05 = string.Empty;
+
+            if (Convert.ToDouble(nilai_oby_05) > 0)
+            {
+                polis_hole_in_one_single_nilai_oby_05 = $@"
+                <tr>
+                    <td style='width: 1%; vertical-align: top;'></td>
+                    <td style='vertical-align: top; text-align: justify; width: 1%;'></td>
+                    <td style='vertical-align: top; text-align: justify; width: 25%;'>{cetakSchedulePolis.desk_oby_05}</td>
+                    <td style='width: 1%; vertical-align: top;'>{cetakSchedulePolis.kd_mtu}</td>
+                    <td style='vertical-align: top; text-align: right'>{nilai_oby_05}</td>
+                </tr>";
+            }
+
+            #endregion
+            
+            var total_nilai_prm_pad = ReportHelper.ConvertToReportFormat((cetakSchedulePolis.nilai_prm_pad ?? 0) 
+                                      + (cetakSchedulePolis.nilai_prm_pap ?? 0));
+            
+            var reportConfig = _reportConfig.Configurations.First(w => w.Database == request.DatabaseName);
+            
             decimal total_sub_nilai_ttl_ptg = 0;
             decimal total_nilai_ttl_ptg = 0;
             decimal total_nitai_ptg = 0;
@@ -494,6 +981,9 @@ namespace ABB.Application.CetakSchedulePolis.Queries
             decimal total_premi_tambahan = 0;
             decimal total_premi_sirama_obyek = 0;
             decimal total_tbh = 0;
+            decimal total_prm_tjh = 0;
+            decimal total_tjh = 0;
+            decimal total_ttg = 0;
             if (ReportHaveDetails.Contains(reportTemplateName))
             {
                 StringBuilder stringBuilder = new StringBuilder();
@@ -520,6 +1010,14 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                         total_prm += data.nilai_prm_casco.Value + data.nilai_prm_banjir.Value +
                                      data.nilai_prm_aog.Value + data.nilai_prm_hh.Value + data.nilai_prm_trs.Value + 
                                      data.nilai_prm_pap.Value + data.nilai_prm_pad.Value + data.nilai_prm_tjh.Value;
+                    }
+                    
+                    if(data.nilai_casco != null && data.nilai_tjh != null && data.nilai_tjp != null &&
+                       data.nilai_pap != null && data.nilai_pad != null && data.nilai_pap_med != null &&
+                       data.nilai_pad_med != null)
+                    {
+                        total_ttg += data.nilai_casco.Value + data.nilai_tjh.Value + data.nilai_tjp.Value + data.nilai_pap.Value +
+                                     data.nilai_pad.Value + data.nilai_pap_med.Value + data.nilai_pad_med.Value;
                     }
                     
                     if (data.jup != null && data.jup > 0)
@@ -556,6 +1054,16 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                                                     data.nilai_prm_C.Value + data.nilai_prm_D.Value +
                                                     data.nilai_prm_phk.Value;
                     }
+                    
+                    if (data.nilai_tjh != null && data.nilai_tjh > 0)
+                    {
+                        total_tjh += data.nilai_tjh.Value;
+                    }
+                    
+                    if (data.nilai_prm_tjh != null && data.nilai_prm_tjh > 0)
+                    {
+                        total_prm_tjh += data.nilai_prm_tjh.Value;
+                    }
                 }
                 
                 StringBuilder summary = new StringBuilder();
@@ -589,10 +1097,10 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                     case "LampiranPolisPASiramaObyek.html":
                         summary.Append($@"<tr>
                                             <td style='vertical-align: top; text-align: left; border-top: 1px solid;border-bottom: 1px solid' colspan=7><strong>TOTAL</strong></td>
-                                            <td style='vertical-align: top; text-align: left; border-top: 1px solid;border-bottom: 1px solid'><strong>{ReportHelper.ConvertToReportFormat(total_uang_pertanggungan)}</strong></td>
-                                            <td style='vertical-align: top; text-align: left; border-top: 1px solid;border-bottom: 1px solid'><strong>{ReportHelper.ConvertToReportFormat(total_premi)}</strong></td>
-                                            <td style='vertical-align: top; text-align: left; border-top: 1px solid;border-bottom: 1px solid'><strong>{ReportHelper.ConvertToReportFormat(total_premi_tambahan)}</strong></td>
-                                            <td style='vertical-align: top; text-align: left; border-top: 1px solid;border-bottom: 1px solid'><strong>{ReportHelper.ConvertToReportFormat(total_premi_sirama_obyek)}</strong></td>
+                                            <td style='width: 10%; vertical-align: top; text-align: left; border-top: 1px solid;border-bottom: 1px solid; text-align: right'><strong>{ReportHelper.ConvertToReportFormat(total_uang_pertanggungan)}</strong></td>
+                                            <td style='width: 10%; vertical-align: top; text-align: left; border-top: 1px solid;border-bottom: 1px solid; text-align: right'><strong>{ReportHelper.ConvertToReportFormat(total_premi)}</strong></td>
+                                            <td style='width: 10%; vertical-align: top; text-align: left; border-top: 1px solid;border-bottom: 1px solid; text-align: right'><strong>{ReportHelper.ConvertToReportFormat(total_premi_tambahan)}</strong></td>
+                                            <td style='width: 15%; vertical-align: top; text-align: left; border-top: 1px solid;border-bottom: 1px solid; text-align: right'><strong>{ReportHelper.ConvertToReportFormat(total_premi_sirama_obyek)}</strong></td>
                                         </tr>");
                         break;
                     case "LampiranPolisMotorListing.html":
@@ -616,24 +1124,26 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                             <hr class='s1'>
                             <!-- Total -->
                             <h3>TOTAL PREMIUM :</h3>
-                            <table>
+                            <table style='border-collapse: collapse;'>
                               <tr>
-                                <td>HP CASCO</td>
+                                <td style='width: 32.5%'>HP CASCO</td>
                                 <td>: </td>
-                                <td>{cetakSchedulePolis.symbol}</td>
-                                <td>{0}</td>
+                                <td style='width: 1px'>{cetakSchedulePolis.symbol}</td>
+                                <td style='text-align: right'>{ReportHelper.ConvertToReportFormat(total_ttg - total_tjh)}</td>
                                 <td>=</td>
-                                <td>{cetakSchedulePolis.symbol}</td>
-                                <td>{0}</td>
+                                <td style='width: 1px'>{cetakSchedulePolis.symbol}</td>
+                                <td style='text-align: right'>{ReportHelper.ConvertToReportFormat(total_prm - total_prm_tjh)}</td>
+                                <td style='width: 28%'></td>
                               </tr>
                               <tr>
                                 <td>HP TJH</td>
                                 <td>: </td>
                                 <td>{cetakSchedulePolis.symbol}</td>
-                                <td>{0}</td>
+                                <td style='text-align: right'>{ReportHelper.ConvertToReportFormat(total_tjh)}</td>
                                 <td>=</td>
                                 <td>{cetakSchedulePolis.symbol}</td>
-                                <td>{0}</td>
+                                <td style='text-align: right'>{ReportHelper.ConvertToReportFormat(total_prm_tjh)}</td>
+                                <td></td>
                               </tr>
                               <tr>
                                 <td>PREMI</td>
@@ -642,7 +1152,8 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                                 <td></td>
                                 <td>=</td>
                                 <td>{cetakSchedulePolis.symbol}</td>
-                                <td>{0}</td>
+                                <td style='text-align: right; border-top: 1px solid; border-bottom: 1px double'>{ReportHelper.ConvertToReportFormat(total_prm - total_prm_tjh + total_prm_tjh)}</td>
+                                <td></td>
                               </tr>
                             </table>");
                         break;
@@ -710,11 +1221,11 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                         cetakSchedulePolis.nm_kapal,cetakSchedulePolis.tgl_brkt,
                         cetakSchedulePolis.no_inv,cetakSchedulePolis.no_bl,
                         cetakSchedulePolis.desk_kond,pst_rate_prm,
-                        stn_rate_prm,nilai_prm,
+                        stn_rate_prm,nilai_prm, cetakSchedulePolis.ket_rincian_kontr,
                         nilai_bond,cetakSchedulePolis.nm_obl,
                         cetakSchedulePolis.almt_obl,cetakSchedulePolis.ket_nilai_bond,
                         cetakSchedulePolis.ba_srh_trm,cetakSchedulePolis.tgl_kontrak,
-                        cetakSchedulePolis.ket_rincian_kontr,cetakSchedulePolis.jml_hari,
+                        cetakSchedulePolis.ket_rinc_kontr,cetakSchedulePolis.jml_hari,
                         cetakSchedulePolis.nm_principal,cetakSchedulePolis.jbt_principal,
                         cetakSchedulePolis.nm_surety,cetakSchedulePolis.jbt_surety,
                         charge, cetakSchedulePolis.footer,
@@ -736,7 +1247,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                         cetakSchedulePolis.kota_cab,nilai_ttl_prm,
                         cetakSchedulePolis.no_rsk,cetakSchedulePolis.nm_deb,
                         cetakSchedulePolis.alm_lok_ptg,cetakSchedulePolis.kd_usr,
-                        cetakSchedulePolis.tmp_lahir,
+                        cetakSchedulePolis.tmp_lahir, cetakSchedulePolis.no_pol_induk,
                         view_prm_tbh_01, view_prm_tbh_02, view_prm_tbh_03, view_prm_tbh_04,
                         view_prm_tbh_05, view_nilai_dis, view_row_desk_oby_01, view_row_desk_oby_02,
                         view_row_desk_oby_03, view_row_desk_oby_04, view_row_desk_oby_05, nilai_kendaraan_bermotor,
@@ -757,17 +1268,17 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                         cetakSchedulePolis.jk_wkt_ptg, cetakSchedulePolis.tgl_mul_ptg_ind,
                         cetakSchedulePolis.tgl_akh_ptg_ind, cetakSchedulePolis.nm_okup,
                         cetakSchedulePolis.kd_okup, cetakSchedulePolis.nm_kls_konstr,
-                        pst_rate_prm_pkk, stn_rate_prm_pkk,
-                        cetakSchedulePolis.kd_mtu_symbol, nilai_prk_pkk,
+                        pst_rate_prm_pkk, stn_rate_prm_pkk, div_no_pol_lama, cargo_single_diskon,
+                        cetakSchedulePolis.kd_mtu_symbol, nilai_prk_pkk, cargo_multi_diskon,
                         cetakSchedulePolis.nm_cvrg_01, cetakSchedulePolis.kd_cvrg_01,
-                        pst_rate_prm_01, stn_rate_prm_01,
-                        nilai_prm_tbh_01,cetakSchedulePolis.nm_cvrg_02, 
+                        pst_rate_prm_01, stn_rate_prm_01, no_renew, polis_pa_no_pol_lama,
+                        nilai_prm_tbh_01,cetakSchedulePolis.nm_cvrg_02,
                         cetakSchedulePolis.kd_cvrg_02, pst_rate_prm_02, 
-                        stn_rate_prm_02, nilai_prm_tbh_02,
-                        cetakSchedulePolis.ket_dis, nilai_dis,
-                        nilai_bia_pol, nilai_bia_mat, nilai_prm_pa,
-                        cetakSchedulePolis.ket_klausula, nilai_ttl,
-                        cetakSchedulePolis.desk_oby_01, nilai_oby_01,
+                        stn_rate_prm_02, nilai_prm_tbh_02, subTotal, polis_hole_in_one_single_nilai_oby_05,
+                        cetakSchedulePolis.ket_dis, nilai_dis, total_nilai_prm_pad,
+                        nilai_bia_pol, nilai_bia_mat, nilai_prm_pa, polis_hole_in_one_single_nilai_oby_04,
+                        cetakSchedulePolis.ket_klausula, nilai_ttl, polis_hole_in_one_single_nilai_oby_03,
+                        cetakSchedulePolis.desk_oby_01, nilai_oby_01, polis_hole_in_one_single_nilai_oby_02,
                         cetakSchedulePolis.desk_oby_02, nilai_oby_02,
                         cetakSchedulePolis.desk_oby_03, nilai_oby_03,
                         cetakSchedulePolis.desk_oby_04, nilai_oby_04,
@@ -786,13 +1297,13 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                         cetakSchedulePolis.nm_grp_oby, cetakSchedulePolis.nm_grp_oby_1,
                         sub_total_kebakaran, cetakSchedulePolis.cover, cetakSchedulePolis.tgl_closing,
                         cetakSchedulePolis.no_pol_lama,cetakSchedulePolis.st_pas,
-                        nilai_prm_pkk,nilai_prm_tbh_03,
-                        nilai_prm_tbh_04, nilai_prm_tbh_05,
+                        nilai_prm_pkk,nilai_prm_tbh_03, polis_pa_single_suku_premi_dasar_first_row = polis_pa_single_suku_premi_dasar_first_row.ToString(),
+                        nilai_prm_tbh_04, nilai_prm_tbh_05, polis_pa_single_suku_premi_dasar_second_row = polis_pa_single_suku_premi_dasar_second_row.ToString(),
                         cetakSchedulePolis.kd_cvrg_03, cetakSchedulePolis.kd_cvrg_04,
                         cetakSchedulePolis.kd_cvrg_05,cetakSchedulePolis.nm_cvrg_03,
                         cetakSchedulePolis.nm_cvrg_04, cetakSchedulePolis.nm_cvrg_05,
-                        pst_rate_prm_03, pst_rate_prm_04,
-                        pst_rate_prm_05,stn_rate_prm_03,
+                        pst_rate_prm_03, pst_rate_prm_04, polis_pa_single_nilai_ptg_c,
+                        pst_rate_prm_05,stn_rate_prm_03, polis_pa_single_nilai_ptg_d,
                         stn_rate_prm_04,stn_rate_prm_05,
                         cetakSchedulePolis.deduct,cetakSchedulePolis.lamp_pol,
                         cetakSchedulePolis.nm_merk_kend,cetakSchedulePolis.tipe_kend,
@@ -810,11 +1321,11 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                         cetakSchedulePolis.nm_kapal,cetakSchedulePolis.tgl_brkt,
                         cetakSchedulePolis.no_inv,cetakSchedulePolis.no_bl,
                         cetakSchedulePolis.desk_kond,pst_rate_prm,
-                        stn_rate_prm,nilai_prm,
-                        nilai_bond,cetakSchedulePolis.nm_obl,
+                        stn_rate_prm,nilai_prm, cetakSchedulePolis.no_kontr,
+                        nilai_bond,cetakSchedulePolis.nm_obl, cetakSchedulePolis.ket_rincian_kontr,
                         cetakSchedulePolis.almt_obl,cetakSchedulePolis.ket_nilai_bond,
                         cetakSchedulePolis.ba_srh_trm,cetakSchedulePolis.tgl_kontrak,
-                        cetakSchedulePolis.ket_rincian_kontr,cetakSchedulePolis.jml_hari,
+                        cetakSchedulePolis.ket_rinc_kontr, cetakSchedulePolis.jml_hari,
                         cetakSchedulePolis.nm_principal,cetakSchedulePolis.jbt_principal,
                         cetakSchedulePolis.nm_surety,cetakSchedulePolis.jbt_surety,
                         charge, cetakSchedulePolis.footer,
@@ -844,12 +1355,17 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                         view_jns_nilai_ptg_b, view_jns_nilai_ptg_c, view_jns_nilai_ptg_d, view_perhitungan_prm_a,
                         view_perhitungan_prm_b, view_perhitungan_prm_c, view_perhitungan_prm_d, view_desk_oby_2,
                         view_desk_oby_3, view_desk_oby_4, view_desk_oby_5, total_nilai_ttl_ptg = ReportHelper.ConvertToReportFormat(total_nilai_ttl_ptg),
+                        fire_single_nm_cvrg_01_td, fire_single_nm_cvrg_02_td, fire_single_nm_cvrg_03_td, fire_single_nm_cvrg_04_td, fire_single_nm_cvrg_05_td,
+                        fire_single_desk_oby_3_td, fire_single_desk_oby_4_td, fire_single_desk_oby_5_td, title5 = reportConfig.Title.Title5,
+                        fire_multi_cvrg_01, fire_multi_cvrg_02, fire_multi_cvrg_03, fire_multi_cvrg_04, fire_multi_cvrg_05,
+                        fire_multi_pst_rate_01, fire_multi_pst_rate_02, fire_multi_pst_rate_03, fire_multi_pst_rate_04, fire_multi_pst_rate_05,
+                        fire_multi_desk_oby_3, fire_multi_desk_oby_4, fire_multi_desk_oby_5
                 } );
             }
             
             return resultTemplate;
         }
-    
+        
         private string GenerateDetailReport(string reportType, CetakSchedulePolisDto data, int sequence)
         {
             var stn_rate_A = data.stn_rate_A == 1 ? "%" : "%o";
@@ -899,7 +1415,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                             <td style='width: 10%; text-align: center; vertical-align: top;' rowspan='2'>{nilai_ttl_ptg}</td>
                         </tr>
                         <tr>
-                            <td style='vertical-align: top; text-align: center;'>{data.ket_rsk}</td>
+                            <td style='vertical-align: top; text-align: center;'>{data.kd_zona}</td>
                         </tr>
                         <tr>
                             <td></td>
@@ -908,7 +1424,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                             <td></td>
                             <td></td>
                             <td style='font-weight: bold; text-align: center;' colspan='2'>{data.nm_grp_oby} : </td>
-                            <td style='font-weight: bold;'>{nilai_ttl_ptg}</td>
+                            <td style='font-weight: bold; text-align: right;'>{nilai_ttl_ptg}</td>
                         </tr>";
                 case "LampiranPolisPASiramaObyek.html":
                     return @$"
@@ -920,10 +1436,10 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                                     <td style='vertical-align: top; text-align: center;'>{tgl_akh_ptg_ind}</td>
                                     <td style='vertical-align: top; text-align: center;'>{data.jk_wkt}</td>
                                     <td style='vertical-align: top; text-align: center;'>{data.usia}</td>
-                                    <td style='vertical-align: top; text-align: center;'>{ReportHelper.ConvertToReportFormat(data.nilai_ptg_A + data.nilai_ptg_B + data.nilai_ptg_C + data.nilai_ptg_D + data.nilai_ptg_phk)}</td>
-                                    <td style='vertical-align: top; text-align: center;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_A + data.nilai_prm_B + data.nilai_prm_C + data.nilai_prm_D )}</td>
-                                    <td style='vertical-align: top; text-align: center;'>{ReportHelper.ConvertToReportFormat(data.nilai_ptg_phk)}</td>
-                                    <td style='vertical-align: top; text-align: center;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_A + data.nilai_prm_B + data.nilai_prm_C + data.nilai_prm_D + data.nilai_prm_phk)}</td>
+                                    <td style='width: 10%; vertical-align: top; text-align: right;'>{ReportHelper.ConvertToReportFormat(data.nilai_ptg_A + data.nilai_ptg_B + data.nilai_ptg_C + data.nilai_ptg_D + data.nilai_ptg_phk)}</td>
+                                    <td style='width: 10%; vertical-align: top; text-align: right;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_A + data.nilai_prm_B + data.nilai_prm_C + data.nilai_prm_D )}</td>
+                                    <td style='width: 10%; vertical-align: top; text-align: right;'>{ReportHelper.ConvertToReportFormat(data.nilai_ptg_phk)}</td>
+                                    <td style='width: 15%; vertical-align: top; text-align: right;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_A + data.nilai_prm_B + data.nilai_prm_C + data.nilai_prm_D + data.nilai_prm_phk)}</td>
                                 </tr>";
                 case "LampiranPolisPABiasaDaftarisi.html":
                     return @$"
@@ -957,7 +1473,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                                 <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'>{data.nm_jns_kend}/{data.nm_merk_kend}</td>
                                 <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'>{data.thn_buat}</td>
                                 <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'>{data.no_rangka}</td>
-                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
                                 <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_casco)}</td>
                                 <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{pst_rate_prm}{stn_rate_prm}</td>
                                 <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_casco)}</td>
@@ -971,7 +1487,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                                 <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
                                 <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
                                 <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'>{data.no_msn}</td>
-                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{data.nm_utk}</td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'>{data.nm_utk}</td>
                                 <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
                                 <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
                                 <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
@@ -985,7 +1501,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                                 <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'>{data.tipe_kend}</td>
                                 <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
                                 <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'>{data.jml_tempat_ddk}</td>
-                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{data.perlengkapan}</td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'>{data.perlengkapan}</td>
                                 <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>Banjir</td>
                                 <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{pst_rate_banjir} {stn_rate_banjir}</td>
                                 <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_banjir)}</td>
@@ -999,7 +1515,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                                 <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'>{data.kd_jns_ptg}</td>
                                 <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
                                 <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'>{data.nm_pemilik}</td>
-                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{data.no_pls}</td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'>{data.no_pls}</td>
                                 <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>Gempa Bumi</td>
                                 <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{pst_rate_aog} {stn_rate_aog}</td>
                                 <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_aog)}</td>
@@ -1013,7 +1529,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                                 <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'>{tgl_mul_ptg} s/d {tgl_akh_ptg}</td>
                                 <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
                                 <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
                                 <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>Huru-Hara</td>
                                 <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{pst_rate_hh} {stn_rate_hh}</td>
                                 <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_hh)}</td>
@@ -1027,7 +1543,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                                 <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
                                 <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
                                 <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
                                 <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>TRS</td>
                                 <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{pst_rate_trs} {stn_rate_trs}</td>
                                 <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_trs)}</td>
@@ -1041,7 +1557,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                                 <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
                                 <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
                                 <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
                                 <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>Kec. Diri Pap.</td>
                                 <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>0,500 %</td>
                                 <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_pap)}</td>
@@ -1055,7 +1571,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                                 <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
                                 <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
                                 <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
                                 <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>Kec. Diri Png.</td>
                                 <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>1,000 %</td>
                                 <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_pad)}</td>
@@ -1069,7 +1585,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                                 <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
                                 <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
                                 <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
-                                <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
+                                <td style='vertical-align: top; text-align: left;border-right: 1px solid;border-left: 1px solid;'></td>
                                 <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>TJH</td>
                                 <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'></td>
                                 <td style='vertical-align: top; text-align: right;border-right: 1px solid;border-left: 1px solid;'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_tjh)}</td>
@@ -1080,203 +1596,218 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                 case "LampiranPolisMotorDetil.html":
                     return @$"
 <h3>BENTUK PERTANGGUNGAN : [ E ] ALL RISK</h3>
-                            <table>
+                            <table style='border-collapse: collapse;'>
                               <tr>
                                 <td style='width: 5%;'>{sequence}</td>
-                                <td style='width: 20%;'>MERK / JENIS / TAHUN / WARNA</td>
+                                <td style='width: 27.5%;'>MERK / JENIS / TAHUN / WARNA</td>
                                 <td style='width: 1%;'>:</td>
-                                <td style='width: 60%;' colspan='6'></td>
-                                <td>Rate : </td>
+                                <td style='width: 60%;' colspan='7'></td>
+                                <td colspan='4' style='text-align: right'>Rate : {pst_rate_prm} {stn_rate_prm}</td>
                               </tr>
                               <tr>
                                 <td></td>
                                 <td>NOMOR POLISI</td>
                                 <td>:</td>
-                                <td colspan='8'>{data.no_pls}</td>
+                                <td colspan='10'>{data.no_pls}</td>
                               </tr>
                               <tr>
                                 <td></td>
                                 <td>PENGGUNAAN KENDARAAN</td>
                                 <td>:</td>
-                                <td colspan='8'>{data.nm_utk}</td>
+                                <td colspan='10'>{data.nm_utk}</td>
                               </tr>
                               <tr>
                                 <td></td>
                                 <td>NO. RANGKA / MESIN</td>
                                 <td>:</td>
-                                <td colspan='8'>{data.no_rangka} / {data.no_msn}</td>
+                                <td colspan='10'>{data.no_rangka} / {data.no_msn}</td>
                               </tr>
                               <tr>
                                 <td></td>
                                 <td>JUMLAH TEMPAT DUDUK</td>
                                 <td>:</td>
-                                <td colspan='8'>{data.jml_tempat_ddk} Orang</td>
+                                <td colspan='10'>{data.jml_tempat_ddk} Orang</td>
                               </tr>
                               <tr>
                                 <td></td>
                                 <td>RESIKO SENDIRI</td>
                                 <td>:</td>
-                                <td colspan='8'>{data.symbol} {ReportHelper.ConvertToReportFormat(data.nilai_rsk_sendiri)}</td>
+                                <td style='width: 1%;'>{data.symbol}</td>
+                                <td colspan='1' style='text-align: right'>{ReportHelper.ConvertToReportFormat(data.nilai_rsk_sendiri)}</td>
+                                <td colspan='8'></td>
                               </tr>
                               <tr>
                                 <td></td>
                                 <td>MASA PERTANGGUNGAN</td>
                                 <td>:</td>
-                                <td colspan='8'>{data.jk_wkt_ptg} ha</td>
+                                <td colspan='19'>{data.jk_wkt_ptg} hari</td>
                               </tr>
                               <tr>
                                 <td></td>
                                 <td>HARGA PERTANGGUNGAN</td>
                                 <td>:</td>
-                                <td style='width: 18%;'>{data.symbol} {ReportHelper.ConvertToReportFormat(data.nilai_casco_1)}</td>
+                                <td style='width: 1%;'>{data.symbol}</td>
+                                <td style='width: 15%; text-align: right'>{ReportHelper.ConvertToReportFormat(data.nilai_casco)}</td>
                                 <td style='width: 1%;'>=</td>
-                                <td style='width: 15%;'>{ReportHelper.ConvertToReportFormat(data.nilai_casco_2)}</td>
-                                <td style='width: 15%;'>x {ReportHelper.ConvertToReportFormat(data.pst_rate, true)} %</td>
+                                <td style='width: 12.5%;'>{ReportHelper.ConvertToReportFormat(data.nilai_casco)}</td>
+                                <td style='width: 1%;'>x</td>
+                                <td style='width: 10%; text-align: right'>{ReportHelper.ConvertToReportFormat(data.pst_rate_prm, true)} %</td>
                                 <td style='width: 1%;'>=</td>
-                                <td colspan='3'>{data.symbol} {ReportHelper.ConvertToReportFormat(data.nilai_prm_casco)}</td>
+                                <td style='width: 1%;'>{data.symbol}</td>
+                                <td colspan='2' style='text-align: right'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_casco)}</td>
                               </tr>
                               <tr>
                                 <td></td>
                                 <td>TJH PIHAK KETIGA</td>
                                 <td>:</td>
-                                <td style='width: 18%;'>{data.symbol} {ReportHelper.ConvertToReportFormat(data.nilai_tjh)}</td>
+                                <td style='width: 1%;'>{data.symbol}</td>
+                                <td style='width: 15%; text-align: right'>{ReportHelper.ConvertToReportFormat(data.nilai_tjh)}</td>
                                 <td style='width: 1%;'></td>
-                                <td style='width: 15%;'></td>
-                                <td style='width: 15%;'></td>
+                                <td style='width: 12.5%;'></td>
+                                <td style='width: 1%;'></td>
+                                <td style='width: 10%;'></td>
                                 <td style='width: 1%;'>=</td>
-                                <td colspan='3'>{data.symbol} {ReportHelper.ConvertToReportFormat(data.nilai_prm_tjh)}</td>
+                                <td style='width: 1%;'>{data.symbol}</td>
+                                <td colspan='2' style='text-align: right'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_tjh)}</td>
                               </tr>
                               <tr>
                                 <td></td>
                                 <td>Premi Huru-hara</td>
                                 <td>:</td>
-                                <td style='width: 18%;'></td>
+                                <td></td>
+                                <td></td>
                                 <td style='width: 1%;'>=</td>
-                                <td style='width: 15%;'>{ReportHelper.ConvertToReportFormat(data.nilai_casco)}</td>
-                                <td style='width: 15%;'>x {ReportHelper.ConvertToReportFormat(data.pst_rate, true)} %</td>
+                                <td style='width: 12.5%;'>{ReportHelper.ConvertToReportFormat(data.nilai_casco)}</td>
+                                <td style='width: 1%;'>x</td>
+                                <td style='width: 10%; text-align: right'>{ReportHelper.ConvertToReportFormat(data.pst_rate_hh, true)} %</td>
                                 <td style='width: 1%;'>=</td>
-                                <td colspan='3'>{data.symbol} {ReportHelper.ConvertToReportFormat(data.nilai_prm_hh_1)}</td>
+                                <td style='width: 1%;'>{data.symbol}</td>
+                                <td colspan='2' style='text-align: right'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_hh_1)}</td>
                               </tr>
                               <tr>
                                 <td></td>
                                 <td>Premi Bencana Alam</td>
                                 <td>:</td>
-                                <td style='width: 18%;'></td>
+                                <td></td>
+                                <td></td>
                                 <td style='width: 1%;'>=</td>
-                                <td style='width: 15%;'>{ReportHelper.ConvertToReportFormat(data.nilai_casco_3)}</td>
-                                <td style='width: 15%;'>x {ReportHelper.ConvertToReportFormat(data.pst_rate, true)} %</td>
+                                <td style='width: 12.5%;'>{ReportHelper.ConvertToReportFormat(data.nilai_casco)}</td>
+                                <td style='width: 1%;'>x</td>
+                                <td style='width: 10%; text-align: right'>{ReportHelper.ConvertToReportFormat(data.pst_rate_aog, true)} %</td>
                                 <td style='width: 1%;'>=</td>
-                                <td colspan='3'>{data.symbol} {ReportHelper.ConvertToReportFormat(data.nilai_prm_aog)}</td>
+                                <td style='width: 1%;'>{data.symbol}</td>
+                                <td colspan='2' style='text-align: right'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_aog)}</td>
                               </tr>
                               <tr>
                                 <td></td>
                                 <td>Premi Banjir</td>
                                 <td>:</td>
-                                <td style='width: 18%;'></td>
+                                <td></td>
+                                <td></td>
                                 <td style='width: 1%;'>=</td>
-                                <td style='width: 15%;'>{ReportHelper.ConvertToReportFormat(data.nilai_casco_4)}</td>
-                                <td style='width: 15%;'>x {ReportHelper.ConvertToReportFormat(data.pst_rate, true)} %</td>
+                                <td style='width: 12.5%;'>{ReportHelper.ConvertToReportFormat(data.nilai_casco)}</td>
+                                <td style='width: 1%;'>x</td>
+                                <td style='width: 10%; text-align: right'>{ReportHelper.ConvertToReportFormat(data.pst_rate_banjir, true)} %</td>
                                 <td style='width: 1%;'>=</td>
-                                <td colspan='3'>{data.symbol} {ReportHelper.ConvertToReportFormat(data.nilai_prm_banjir)}</td>
+                                <td style='width: 1%;'>{data.symbol}</td>
+                                <td colspan='2' style='text-align: right'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_banjir)}</td>
                               </tr>
                               <tr>
                                 <td></td>
                                 <td>Premi TRS</td>
                                 <td>:</td>
-                                <td style='width: 18%;'></td>
+                                <td></td>
+                                <td></td>
                                 <td style='width: 1%;'>=</td>
-                                <td style='width: 15%;'>{ReportHelper.ConvertToReportFormat(data.nilai_casco_5)}</td>
-                                <td style='width: 15%;'>x {ReportHelper.ConvertToReportFormat(data.pst_rate, true)} %</td>
+                                <td style='width: 12.5%;'>{ReportHelper.ConvertToReportFormat(data.nilai_casco)}</td>
+                                <td style='width: 1%;'>x</td>
+                                <td style='width: 10%; text-align: right'>{ReportHelper.ConvertToReportFormat(data.pst_rate_trs, true)} %</td>
                                 <td style='width: 1%;'>=</td>
-                                <td colspan='3'>{data.symbol} {ReportHelper.ConvertToReportFormat(data.nilai_prm_trs)}</td>
+                                <td style='width: 1%;'>{data.symbol}</td>
+                                <td colspan='2' style='text-align: right'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_trs)}</td>
                               </tr>
                               <tr>
                                 <td></td>
                                 <td>PA Penumpang</td>
                                 <td>:</td>
-                                <td style='width: 18%;'>{data.symbol} {ReportHelper.ConvertToReportFormat(data.nilai_pap)}</td>
+                                <td style='width: 1%;'>{data.symbol}</td>
+                                <td style='width: 15%; text-align: right'>{ReportHelper.ConvertToReportFormat(data.nilai_pap)}</td>
                                 <td style='width: 1%;'></td>
-                                <td style='width: 15%;'></td>
-                                <td style='width: 15%;'></td>
+                                <td style='width: 12.5%;'></td>
+                                <td></td>
+                                <td></td>
                                 <td style='width: 1%;'>=</td>
-                                <td colspan='3'>{data.symbol} {ReportHelper.ConvertToReportFormat(data.nilai_prm_pap)}</td>
+                                <td style='width: 1%;'>{data.symbol}</td>
+                                <td colspan='2' style='text-align: right'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_pap)}</td>
                               </tr>
                               <tr>
                                 <td></td>
                                 <td>PA Pengemudi</td>
                                 <td>:</td>
-                                <td style='width: 18%;'>{data.symbol} {ReportHelper.ConvertToReportFormat(data.nilai_pad)}</td>
+                                <td style='width: 1%;'>{data.symbol}</td>
+                                <td style='width: 15%; text-align: right'>{ReportHelper.ConvertToReportFormat(data.nilai_pad)}</td>
                                 <td style='width: 1%;'></td>
-                                <td style='width: 15%;'></td>
-                                <td style='width: 15%;'></td>
+                                <td style='width: 12.5%;'></td>
+                                <td></td>
+                                <td></td>
                                 <td style='width: 1%;'>=</td>
-                                <td colspan='3'>{data.symbol} {ReportHelper.ConvertToReportFormat(data.nilai_prm_pad)}</td>
+                                <td style='width: 1%;'>{data.symbol}</td>
+                                <td colspan='2' style='text-align: right'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_pad)}</td>
                               </tr>
                               <tr>
                                 <td></td>
                                 <td>TJH Penumpang Pihak Ketiga</td>
                                 <td>:</td>
-                                <td style='width: 18%;'>{data.symbol} {ReportHelper.ConvertToReportFormat(data.nilai_tjp)}</td>
+                                <td style='width: 1%;'>{data.symbol}</td>
+                                <td style='width: 15%; text-align: right'>{ReportHelper.ConvertToReportFormat(data.nilai_tjp)}</td>
                                 <td style='width: 1%;'></td>
-                                <td style='width: 15%;'></td>
-                                <td style='width: 15%;'></td>
+                                <td style='width: 12.5%;'></td>
+                                <td></td>
+                                <td></td>
                                 <td style='width: 1%;'>=</td>
-                                <td colspan='3'>{data.symbol} {ReportHelper.ConvertToReportFormat(data.nilai_prm_tkp)}</td>
+                                <td style='width: 1%;'>{data.symbol}</td>
+                                <td colspan='2' style='text-align: right'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_tkp)}</td>
                               </tr>
                               <tr>
                                 <td></td>
                                 <td>ME Penumpang</td>
                                 <td>:</td>
-                                <td style='width: 18%;'>{data.symbol} {ReportHelper.ConvertToReportFormat(data.nilai_pap_med)}</td>
+                                <td style='width: 1%;'>{data.symbol}</td>
+                                <td style='width: 15%; text-align: right'>{ReportHelper.ConvertToReportFormat(data.nilai_pap_med)}</td>
                                 <td style='width: 1%;'></td>
-                                <td style='width: 15%;'></td>
-                                <td style='width: 15%;'></td>
+                                <td style='width: 12.5%;'></td>
+                                <td></td>
+                                <td></td>
                                 <td style='width: 1%;'>=</td>
-                                <td colspan='3'>{data.symbol} {ReportHelper.ConvertToReportFormat(data.nilai_prm_pap_med)}</td>
+                                <td style='width: 1%;'>{data.symbol}</td>
+                                <td colspan='2' style='text-align: right'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_pap_med)}</td>
                               </tr>
                               <tr>
                                 <td></td>
                                 <td>ME Pengemudi</td>
                                 <td>:</td>
-                                <td style='width: 18%;'>{data.symbol} {ReportHelper.ConvertToReportFormat(data.nilai_pad_med)}</td>
+                                <td style='width: 1%;'>{data.symbol}</td>
+                                <td style='width: 15%; text-align: right'>{ReportHelper.ConvertToReportFormat(data.nilai_pad_med)}</td>
                                 <td style='width: 1%;'></td>
-                                <td style='width: 15%;'></td>
-                                <td style='width: 15%;'></td>
+                                <td style='width: 12.5%;'></td>
+                                <td></td>
+                                <td></td>
                                 <td style='width: 1%;'>=</td>
-                                <td colspan='3'>{data.symbol} {ReportHelper.ConvertToReportFormat(data.nilai_prm_pad_med)}</td>
+                                <td style='width: 1%;'>{data.symbol}</td>
+                                <td colspan='2' style='text-align: right'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_pad_med)}</td>
                               </tr>
                               <tr>
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td style='width: 18%;'>------------------------------------------</td>
+                                <td style='width: 1%; border-top: 1px solid; border-bottom: 1px double'>{data.symbol}</td>
+                                <td style='width: 12.5%; text-align: right; border-top: 1px solid; border-bottom: 1px double'>{ReportHelper.ConvertToReportFormat(data.nilai_casco + data.nilai_tjh + data.nilai_tjp + data.nilai_pap + data.nilai_pad + data.nilai_pap_med + data.nilai_pad_med)}</td>
                                 <td style='width: 1%;'></td>
-                                <td style='width: 15%;'></td>
-                                <td style='width: 15%;'></td>
-                                <td style='width: 1%;'></td>
-                                <td colspan='3'>---------------------------------------------------</td>
-                              </tr>
-                              <tr>
                                 <td></td>
                                 <td></td>
-                                <td></td>
-                                <td style='width: 18%;'>{data.symbol} {ReportHelper.ConvertToReportFormat(data.nilai_casco + data.nilai_tjh)}</td>
                                 <td style='width: 1%;'></td>
-                                <td style='width: 15%;'></td>
-                                <td style='width: 15%;'></td>
-                                <td style='width: 1%;'></td>
-                                <td colspan='3'>{data.symbol} {ReportHelper.ConvertToReportFormat(data.nilai_prm_casco + data.nilai_prm_tjh)}</td>
-                              </tr>
-                              <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td style='width: 18%;'>------------------------------------------</td>
-                                <td style='width: 1%;'></td>
-                                <td style='width: 15%;'></td>
-                                <td style='width: 15%;'></td>
-                                <td style='width: 1%;'></td>
-                                <td colspan='3'>---------------------------------------------------</td>
+                                <td style='width: 1%; border-top: 1px solid; border-bottom: 1px double'>{data.symbol}</td>
+                                <td colspan='2' style='text-align: right; border-top: 1px solid; border-bottom: 1px double'>{ReportHelper.ConvertToReportFormat(data.nilai_prm_casco + data.nilai_prm_tjh + data.nilai_prm_tjp + data.nilai_prm_pap + data.nilai_prm_pad + data.nilai_prm_pap_med + data.nilai_prm_pad_med + data.nilai_prm_hh + data.nilai_prm_banjir + data.nilai_prm_trs + data.nilai_prm_aog)}</td>
                               </tr>
                             </table>";
                 default:
@@ -1296,10 +1827,10 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                     {
                         var nilai_ptg_a = ReportHelper.ConvertToReportFormat(cetakSchedulePolis.nilai_ptg_A);
                         var tgl_mul_ptg = DateTime.TryParse(cetakSchedulePolis.tgl_mul_ptg, out _)
-                            ? ReportHelper.ConvertDateTime(DateTime.Parse(cetakSchedulePolis.tgl_mul_ptg), "dd-MMM-yyyy")
+                            ? ReportHelper.ConvertDateTime(DateTime.Parse(cetakSchedulePolis.tgl_mul_ptg), "dd-MMMM-yyyy")
                             : cetakSchedulePolis.tgl_mul_ptg;
                         var tgl_akh_ptg = DateTime.TryParse(cetakSchedulePolis.tgl_akh_ptg, out _)
-                            ? ReportHelper.ConvertDateTime(DateTime.Parse(cetakSchedulePolis.tgl_akh_ptg), "dd-MMM-yyyy")
+                            ? ReportHelper.ConvertDateTime(DateTime.Parse(cetakSchedulePolis.tgl_akh_ptg), "dd-MMMM-yyyy")
                             : cetakSchedulePolis.tgl_akh_ptg;
                         var nilai_prm_pkk = ReportHelper.ConvertToReportFormat(cetakSchedulePolis.nilai_prm_pkk);
                         var nilai_prm_tbh_01 = ReportHelper.ConvertToReportFormat(cetakSchedulePolis.nilai_prm_tbh_01);
@@ -1371,16 +1902,16 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                             cetakSchedulePolis.nilai_prm,cetakSchedulePolis.nilai_bond,
                             cetakSchedulePolis.nm_obl,cetakSchedulePolis.almt_obl,
                             cetakSchedulePolis.ket_nilai_bond,cetakSchedulePolis.ba_srh_trm,
-                            cetakSchedulePolis.tgl_kontrak,cetakSchedulePolis.ket_rincian_kontr,
+                            cetakSchedulePolis.tgl_kontrak,cetakSchedulePolis.ket_rinc_kontr,
                             cetakSchedulePolis.jml_hari,cetakSchedulePolis.nm_principal,
                             cetakSchedulePolis.jbt_principal,cetakSchedulePolis.nm_surety,
                             cetakSchedulePolis.jbt_surety,cetakSchedulePolis.charge,
                             cetakSchedulePolis.no_pol_lama,cetakSchedulePolis.nm_polis,
-                            cetakSchedulePolis.tgl_lahir,cetakSchedulePolis.nm_waris_1,
+                            tgl_lahir = ReportHelper.ConvertDateTime(cetakSchedulePolis.tgl_lahir, "dd MMMM yyyy"),cetakSchedulePolis.nm_waris_1,
                             cetakSchedulePolis.nm_waris_2,cetakSchedulePolis.nm_waris_3,
                             cetakSchedulePolis.hub_waris_1,cetakSchedulePolis.hub_waris_2,
                             cetakSchedulePolis.hub_waris_3,cetakSchedulePolis.jk_wkt_ptg_ind,
-                            nilai_ptg_a,cetakSchedulePolis.nilai_ptg_B,
+                            nilai_ptg_a,cetakSchedulePolis.nilai_ptg_B, cetakSchedulePolis.ket_rincian_kontr,
                             cetakSchedulePolis.nilai_ptg_C,cetakSchedulePolis.pst_A,
                             cetakSchedulePolis.pst_B,cetakSchedulePolis.pst_C,
                             cetakSchedulePolis.pst_D,cetakSchedulePolis.pst_E,

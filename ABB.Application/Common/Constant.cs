@@ -158,14 +158,18 @@ namespace ABB.Application.Common
                                                             <title>Polis PA Sirama Multi</title>
                                                             <style>
                                                                 body {
-                                                                    font-family: Arial, sans-serif;
+                                                                    /*font-family: Arial, sans-serif;*/
+                                                                    font-size: 11pt;   /* readable in print */
+                                                                    line-height: 1.4;  /* adds vertical space */
+                                                                }
+                                                                td {
+                                                                    font-size: 9pt;
+                                                                    padding: 2px 4px; /* give breathing room */
+                                                                    letter-spacing: 3px;
                                                                 }
 
                                                                 .container {
-                                                                    width: 90%;
-                                                                    margin: auto;
                                                                     border: 1px solid black;
-                                                                    padding: 25px;
                                                                     page-break-before: always; /* Forces a page break before this element */
                                                                 }
 
@@ -186,10 +190,17 @@ namespace ABB.Application.Common
                                                                     border-collapse: collapse;
                                                                 }
 
-                                                                .table td {
-                                                                    padding: 8px;
-                                                                    /* border: 1px solid black; */
-			                                                        font-size: 12px;
+
+
+                                                                .draft-watermark {
+                                                                    position: fixed;
+                                                                    top: 50%;
+                                                                    left: 50%;
+                                                                    font-size: 80px;
+                                                                    color: #A9A9A9;
+                                                                    opacity: 0.3;
+                                                                    z-index: -1;
+                                                                    font-weight: bold;
                                                                 }
                                                             </style>
                                                         </head>

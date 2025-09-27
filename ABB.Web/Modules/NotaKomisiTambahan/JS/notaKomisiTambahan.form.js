@@ -14,6 +14,7 @@ function btnSaveNotaKomisiTambahan_Click() {
 function saveNotaKomisiTambahan(url){
     var form = getFormData($('#NotaKomisiTambahanForm'));
     form.flag_posting = $("#flag_posting")[0].checked ? "Y" : "N";
+    form.no_pol_ttg = $("#no_pol_ttg").getKendoMaskedTextBox().raw();
     
     ajaxPost(url, JSON.stringify(form),
         function (response) {
@@ -59,7 +60,6 @@ function OnNomorAkseptasiChange(e){
     $("#kd_grp_sb_bis").val(selectedRow.kd_grp_sb_bis);
     $("#kd_mtu").getKendoDropDownList().value(selectedRow.kd_mtu);
     $("#kd_rk_sb_bis").val(selectedRow.kd_rk_sb_bis);
-    $("#kd_thn").val(selectedRow.kd_thn);
     $("#no_pol_ttg").getKendoMaskedTextBox().value(selectedRow.no_pol_ttg);
     $("#no_updt").getKendoNumericTextBox().value(selectedRow.no_updt);
     $("#no_pol").val(selectedRow.no_pol);
@@ -77,6 +77,7 @@ function OnNomorAkseptasiChange(e){
         $("#almt_ttj").getKendoTextArea().value(returnValue[0].split(",")[1]);
         $("#kd_grp_sb_bis").val(returnValue[1].split(",")[1]);
         $("#kd_grp_ttj").getKendoDropDownList().value(kd_grp_ttj);
+        $("#kd_grp_ttj").getKendoDropDownList().trigger("change");
         $("#kd_mtu").getKendoDropDownList().value(returnValue[3].split(",")[1]);
         $("#kd_rk_sb_bis").val(returnValue[4].split(",")[1]);
         $("#kt_ttj").getKendoTextBox().value(returnValue[6].split(",")[1]);
@@ -233,6 +234,16 @@ function OnChangePstPPH(e){
     });
 }
 
+
+function OnTanggalNotaChange(e){
+    let date = e.sender.value(); // a Date object
+    let month = String(date.getMonth() + 1).padStart(2, "0");
+    let year = String(date.getFullYear()).slice(-2);
+    $("#kd_thn").val(year);
+    $("#kd_bln").val(month);
+    $("#nomor_nota").val(`${$("#kd_cb").val()}.${$("#jns_tr").val()}.${$("#jns_nt_msk").val()}.${year}.${month}.${$("#no_nt_msk").val()}/${$("#jns_nt_kel").val()}.${$("#no_nt_kel").val()}`);
+}
+
 function OnNilaiPrmChange(e){
     ajaxGet(`/NotaKomisiTambahan/GetNilaiAndPercentage?kd_mtu=${$("#kd_mtu").val()}
                 &tgl_nt=${$("#tgl_nt").val()}&pst_nt=${$("#pst_nt").val()}&nilai_nt=${e.sender.value()}
@@ -279,8 +290,9 @@ function OnNilaiPrmChange(e){
 }
 
 function OnNilaiNotaChange(e){
-    ajaxGet(`/NotaKomisiTambahan/GetDataFromNilaiNotaChange?kd_mtu=${$("#kd_mtu").val()}
-                &no_pol_ttg=${$("#no_pol_ttg").val()}&pst_nt=${$("#pst_nt").val()}&nilai_prm=${e.sender.value()}
+    var no_pol_ttg = $("#no_pol_ttg").getKendoMaskedTextBox().raw();
+    ajaxGet(`/NotaKomisiTambahan/GetDataFromNilaiNotaChange?kd_mtu=${$("#kd_mtu").val()}&nilai_prm=${$("#nilai_prm").val()}
+                &no_pol_ttg=${no_pol_ttg}&pst_nt=${$("#pst_nt").val()}&nilai_nt=${e.sender.value()}&kd_cb=${$("#kd_cb").val()}&kd_rk_ttj=${$("#kd_rk_ttj").val()}
                 &jns_nt_kel=${$("#jns_nt_kel").val()}&kd_grp_ttj=${$("#kd_grp_ttj").val()}&uraian=${$("#uraian").val()}`, (returnValue) => {
         returnValue.forEach(data => {
             if(data == null){

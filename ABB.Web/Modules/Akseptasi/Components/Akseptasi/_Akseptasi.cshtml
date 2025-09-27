@@ -265,9 +265,9 @@
             </div>
         </div>
         <div class="form-group row">
-            <div class="row col-sm-6">
+            <div class="row col-sm-6" style="padding: 0">
                 <label class="col-sm-6">Periode Pertanggungan</label>
-                <div class="col-sm-6 row">
+                <div class="col-sm-6 row" style="padding-right: 0;">
                     <div class="col-sm-5">
                         <kendo-datepicker for="tgl_mul_ptg" style="width: 100%; background-color: #FFFFE1" on-change="OnTglMulChange"/>
                         <span asp-validation-for="tgl_mul_ptg" class="text-danger"></span>
@@ -306,9 +306,9 @@
             </div>
         </div>
         <div class="form-group row" style="display: none" id="RekayasaDiv">
-            <div class="row col-sm-6">
-                <label class="col-sm-6">Mulai Periode Maintenance</label>
-                <div class="col-sm-6 row">
+            <div class="row col-sm-6" style="padding: 0">
+                <label class="col-sm-6">Mulai / Periode Maintenance</label>
+                <div class="col-sm-6 row" style="padding-right: 0">
                     <div class="col-sm-6">
                         <kendo-datepicker for="tgl_maintenance" style="width: 100%;"/>
                         <span asp-validation-for="tgl_maintenance" class="text-danger"></span>

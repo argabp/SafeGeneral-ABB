@@ -29,6 +29,7 @@ namespace ABB.Web.Modules.Akseptasi
     {
         private static List<RekananDto> _rekanans;
         private static IEnumerable<LokasiResikoDto> _lokasiResiko;
+        private static IEnumerable<DropdownOptionDto> _cobs;
 
         public async Task<ActionResult> Index()
         {
@@ -44,6 +45,11 @@ namespace ABB.Web.Modules.Akseptasi
             _lokasiResiko = await Mediator.Send(new GetLokasiResikoQuery()
             {
                 DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty
+            });
+            
+            _cobs = await Mediator.Send(new GetCobQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"]
             });
             
             return View();
@@ -178,14 +184,9 @@ namespace ABB.Web.Modules.Akseptasi
             return Json(result);
         }
 
-        public async Task<JsonResult> GetCOB()
+        public JsonResult GetCOB()
         {
-            var result = await Mediator.Send(new GetCobQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"]
-            });
-
-            return Json(result);
+            return Json(_cobs);
         }
 
         public async Task<JsonResult> GetSCOB(string kd_cob)
@@ -1024,6 +1025,20 @@ namespace ABB.Web.Modules.Akseptasi
                     return View("~/Modules/Akseptasi/Views/EmptyWithMessage.cshtml");
             }
         }
+        
+        
+        
+        public async Task<JsonResult> GetNilaiPtg(decimal pst_share, decimal nilai_ttl_ptg100)
+        {
+            var result = await Mediator.Send(new GetNilaiPtgQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                nilai_ttl_ptg100 = nilai_ttl_ptg100,
+                pst_share = pst_share
+            });
+
+            return Json(result);
+        }
 
         #endregion
 
@@ -1345,6 +1360,11 @@ namespace ABB.Web.Modules.Akseptasi
                     akseptasiMotorViewModel.kd_cb = akseptasiMotorViewModel.kd_cb.Trim();
                     akseptasiMotorViewModel.kd_cob = akseptasiMotorViewModel.kd_cob.Trim();
                     akseptasiMotorViewModel.kd_scob = akseptasiMotorViewModel.kd_scob.Trim();
+                    akseptasiMotorViewModel.kd_guna = akseptasiMotorViewModel.kd_guna.Trim();
+                    akseptasiMotorViewModel.validitas = akseptasiMotorViewModel.validitas.Trim();
+                    akseptasiMotorViewModel.kd_jns_ptg = akseptasiMotorViewModel.kd_jns_ptg.Trim();
+                    akseptasiMotorViewModel.warna_kend = akseptasiMotorViewModel.warna_kend?.Trim();
+                    akseptasiMotorViewModel.kd_wilayah = akseptasiMotorViewModel.kd_wilayah?.Trim();
                     
                     return View("~/Modules/Akseptasi/Components/Other/_OtherMotor.cshtml", akseptasiMotorViewModel);
                 case "_OtherFire":

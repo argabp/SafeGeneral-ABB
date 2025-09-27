@@ -6,14 +6,13 @@
     <title>Polis Pengangkutan Barang</title>
     <style>
         body {
-            /* font-family: Arial, sans-serif; */
+            /*font-family: Arial, sans-serif;*/
+            font-size: 11pt;   /* readable in print */
+            line-height: 1.4;  /* adds vertical space */
         }
-
-        .container {
-            width: 80%;
-            margin: auto;
-            /* border: 1px solid black; */
-            padding: 20px;
+        td {
+            font-size: 9pt;
+            padding: 2px 4px; /* give breathing room */
         }
 
         .h1 {
@@ -32,12 +31,7 @@
             width: 100%;
             /* border-collapse: collapse; */
         }
-
-        .table td {
-            padding: 5px;
-			font-size: 12px;
-            /* border: 1px solid #000; */
-        }
+        
 		p {
 			text-align: justify;
 			font-size: 12px;
@@ -158,16 +152,7 @@
                     <td style="width: 5%;">{{kd_mtu_symbol}}</td>
                     <td style="text-align: right;">{{nilai_prm}}</td>
                 </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td>Diskon</td>
-                    <td></td>
-                    <td></td>
-                    <td>=</td>
-                    <td>{{kd_mtu_symbol}}</td>
-                    <td style="text-align: right;">{{nilai_dis}}</td>
-                </tr>
+                {{cargo_single_diskon}}
                 <tr>
                     <td></td>
                     <td></td>
@@ -207,9 +192,9 @@
                     <td style="text-align: right;">{{nilai_ttl}}</td>
                 </tr>
                 <tr>
-                    <td>{{nilai_dis}}</td>
                     <td></td>
-                    <td>{{stamp_duty}}</td>
+                    <td></td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td colspan="3"><hr style="border-top: 3px double black; width: 100%;"></td>
@@ -217,37 +202,10 @@
                 <tr>
                     <td></td>
                     <td></td>
-                    <td>{{ctt_polis}}</td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td colspan="4" align="center">{{kt_cb}}, {{tgl_closing}}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td colspan="3" align="center">PT. Asuransi Bhakti Bhayangkara</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td colspan="3" align="center"><br><br><br><br><strong><u>Ati Nofianti, A.Md, As. K</u></strong></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td colspan="3" align="center"><strong>Kepala Divisi Underwriting</strong></td>
-                </tr>
-                <tr>
-                    <td colspan="8" align="center">{{footer}}</td>
                 </tr>
 			</table>
         </div>

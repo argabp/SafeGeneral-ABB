@@ -5809,6 +5809,9 @@
       <None Update="Modules\MonitoringPengajuanKlaim\JS\monitoringPengajuanKlaim.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\Reports\Templates\footer.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

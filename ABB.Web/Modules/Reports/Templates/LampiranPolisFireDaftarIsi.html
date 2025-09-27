@@ -6,7 +6,14 @@
     <title>Lampiran Polis Fire Daftar Isi</title>
     <style>
         body {
-            /* font-family: Arial, sans-serif; */
+            /*font-family: Arial, sans-serif;*/
+            font-size: 11pt;   /* readable in print */
+            line-height: 1.4;  /* adds vertical space */
+        }
+        td {
+            font-size: 9pt;
+            padding: 2px 4px; /* give breathing room */
+            letter-spacing: 3px;
         }
 
         .container {
@@ -34,9 +41,7 @@
         }
 
         .table td {
-            padding: 8px;
             border: 1px solid black;
-			font-size: 12px;
         }
     </style>
 </head>
@@ -46,17 +51,17 @@
         <div class="h1">LAMPIRAN INI MERUPAKAN BAGIAN YANG TIDAK TERPISAHKAN DARI</div>
         <div class="h1">POLIS KEBAKARAN</div>
         <div class="section">
-            <table class="table">
+            <table style="width: 100%;" cellpadding="3">
                 <tr>
-                    <td style="width: 15%; vertical-align: top;">NOMOR POLIS</td>
+                    <td style="width: 20%; vertical-align: top;">NOMOR POLIS</td>
                     <td style="vertical-align: top; text-align: justify;">:</td>
                     <td style="vertical-align: top; text-align: justify;" colspan="6">{{no_pol_ttg}}</td>
                 </tr>
                 <tr>
-                    <td style="width: 1%; vertical-align: top;">NAMA TERTANGGUNG</td>
+                    <td style="width: 20%; vertical-align: top;">NAMA TERTANGGUNG</td>
                     <td style="vertical-align: top; text-align: justify; width: 1%;">:</td>
                     <td style="vertical-align: top; text-align: justify; width: 70%;" colspan="5">{{nm_ttg}}</td>
-                    <td style="vertical-align: top; text-align: justify;">Dalam {{nm_mtu}}</td>
+                    <td style="width: 10%; vertical-align: top; text-align: justify;">Dalam {{nm_mtu}}</td>
                 </tr>
             </table>
             <table class="table">

@@ -37,8 +37,8 @@ namespace ABB.Web.Modules.NotaKomisiTambahan
                 kd_cb = string.Empty,
                 jns_tr = "P",
                 jns_nt_msk = "0",
-                kd_thn = string.Empty,
-                kd_bln = string.Empty,
+                kd_thn = DateTime.Now.ToString("yy"),
+                kd_bln = DateTime.Now.ToString("MM"),
                 no_nt_msk = string.Empty,
                 jns_nt_kel = "C",
                 no_nt_kel = "00",
@@ -47,7 +47,7 @@ namespace ABB.Web.Modules.NotaKomisiTambahan
                 uraian = "KOMISI",
                 pst_lain = 0,
                 nilai_lain = 0,
-                tgl_nt = DateTime.Now
+                tgl_nt = DateTime.Now,
             });
         }
 

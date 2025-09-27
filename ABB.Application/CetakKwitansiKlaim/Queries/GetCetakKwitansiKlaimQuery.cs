@@ -58,8 +58,7 @@ namespace ABB.Application.CetakKwitansiKlaim.Queries
             Template templateProfileResult = Template.Parse( templateReportHtml );
 
             var data = datas.FirstOrDefault();
-            
-            
+
             var nilai_nt = ReportHelper.ConvertToReportFormat(data.nilai_nt);
             var resultTemplate = templateProfileResult.Render( new
             {

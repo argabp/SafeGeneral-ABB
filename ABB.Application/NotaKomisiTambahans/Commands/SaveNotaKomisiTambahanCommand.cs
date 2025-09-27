@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ABB.Application.Common.Interfaces;
@@ -127,10 +128,35 @@ namespace ABB.Application.NotaKomisiTambahans.Commands
                     request.jns_sb_nt, request.kd_cb, request.jns_tr,
                     request.jns_nt_msk, request.kd_thn, request.kd_bln, request.no_nt_msk,
                     request.jns_nt_kel, request.no_nt_kel);
-            
+                
+                
                 if (entity == null)
                 {
+                    var no_nt_msk = (await _connectionFactory.QueryProc<string>("spe_fn01e_02_web", new
+                    {
+                        
+                        request.jns_sb_nt, request.kd_cb, request.jns_tr,
+                        request.jns_nt_msk, request.kd_thn, request.kd_bln
+                    })).FirstOrDefault();
+
+                    if (no_nt_msk == null)
+                        throw new Exception("no_nt_msk null");
+
+                    no_nt_msk = no_nt_msk.Split(",")[1];
+                    
+                    var result = (await _connectionFactory.QueryProc<string>("spe_uw03e_07_01", new
+                    {
+                        request.jns_nt_kel, request.kd_grp_ttj, request.nilai_nt,
+                        request.nilai_prm, request.no_pol_ttg, request.kd_mtu,
+                        no_nt_msk, request.pst_nt, request.no_ref,
+                        request.kd_rk_ttj
+                    })).FirstOrDefault();
+
+                    if (!string.IsNullOrWhiteSpace(result))
+                        throw new Exception(result);
+                    
                     var notaKomisiTambahan = _mapper.Map<NotaKomisiTambahan>(request);
+                    notaKomisiTambahan.no_nt_msk = no_nt_msk;
                     dbContext.NotaKomisiTambahan.Add(notaKomisiTambahan);
 
                     await dbContext.SaveChangesAsync(cancellationToken);
@@ -138,6 +164,17 @@ namespace ABB.Application.NotaKomisiTambahans.Commands
                 }
                 else
                 {
+                    var result = (await _connectionFactory.QueryProc<string>("spe_uw03e_07_01", new
+                    {
+                        request.jns_nt_kel, request.kd_grp_ttj, request.nilai_nt,
+                        request.nilai_prm, request.no_pol_ttg, request.kd_mtu,
+                        request.no_nt_msk, request.pst_nt, request.no_ref,
+                        request.kd_rk_ttj
+                    })).FirstOrDefault();
+
+                    if (!string.IsNullOrWhiteSpace(result))
+                        throw new Exception(result);
+                    
                     entity.no_ref = request.no_ref;
                     entity.kd_grp_ttj = request.kd_grp_ttj;
                     entity.kd_rk_ttj = request.kd_rk_ttj;

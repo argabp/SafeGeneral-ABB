@@ -290,6 +290,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         public string ket_nilai_bond { get; set; }
         public string ba_srh_trm { get; set; }
         public string tgl_kontrak { get; set; }
+        public string ket_rinc_kontr { get; set; }
         public string ket_rincian_kontr { get; set; }
         public string jml_hari { get; set; }
         public string nm_principal { get; set; }
@@ -342,6 +343,11 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         public decimal? pst_tjh { get; set; }
         public decimal? nilai_prm_phk { get; set; }
         public decimal? nilai_ptg_phk { get; set; }
-        
+
+        public string? kd_zona { get; set; }
+
+        public string? no_kontr { get; set; }
+
+        public string? no_pol_induk { get; set; }
     }
 }

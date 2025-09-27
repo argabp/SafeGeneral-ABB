@@ -6,14 +6,14 @@
     <title>Polis Jaminan Penawaran</title>
     <style>
         body {
-            /* font-family: Arial, sans-serif; */
+            /*font-family: Arial, sans-serif;*/
+            font-size: 11pt;   /* readable in print */
+            line-height: 1.4;  /* adds vertical space */
         }
-
-        .container {
-            width: 80%;
-            margin: auto;
-            /* border: 1px solid black; */
-            padding: 20px;
+        td {
+            font-size: 9pt;
+            padding: 2px 4px; /* give breathing room */
+            letter-spacing: 3px;
         }
 
         .h1 {
@@ -32,12 +32,6 @@
             width: 100%;
             border-collapse: collapse;
         }
-
-        .table td {
-            padding: 8px;
-            /* border: 1px solid black; */
-			font-size: 12px;
-        }
     </style>
 </head>
 <body>
@@ -47,12 +41,12 @@
         <div class="section">
             <table class="table">
                 <tr>
-                    <td style="width: 5%;">Nomor</td>
-                    <td style="width: 1%;">:</td>
-                    <td style="width: 20%;">{{no_pol_ttg}}</td>
-					<td style="width: 8%;">Nilai Jaminan</td>
-					<td style="width: 1%;">:</td>
-					<td style="width: 5%;">{{symbol}}{{nilai_bond}}</td>
+                    <td style="width: 5%;"><strong>Nomor</strong></td>
+                    <td style="width: 1%;"><strong>:</strong></td>
+                    <td style="width: 20%;"><strong>{{no_pol_ttg}}</strong></td>
+					<td style="width: 8%;"><strong>Nilai Jaminan</strong></td>
+					<td style="width: 1%;"><strong>:</strong></td>
+					<td style="width: 5%;"><strong>{{symbol}} {{nilai_bond}}</strong></td>
                 </tr>
 			</table>
             <table class="table">
@@ -66,7 +60,7 @@
                     <td style="vertical-align: top; text-align: justify;" colspan="8">Maka kami, TERJAMIN dan PENJAMIN dengan ini mengikatkan 
                         diri untuk melakukan pembayaran jumlah tersebut di atas dengan baik dan benar bilamana TERJAMIN tidak 
                         memenuhi kewajiban sebagaimana ditetapkan dalam Dokumen Pengadaan 
-                        Nomor : {{ba_srh_trm}} Tanggal {{tgl_kontrak}} untuk pelaksanaan pelelangan pekerjaan {{ket_rincian_kontr}} yang diselenggarakan oleh PENERIMA JAMINAN.</td>
+                        Nomor : {{ba_srh_trm}} Tanggal {{tgl_kontrak}} untuk pelaksanaan pelelangan pekerjaan {{ket_rinc_kontr}} yang diselenggarakan oleh PENERIMA JAMINAN.</td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">3. </td>
@@ -74,19 +68,19 @@
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;"></td>
-                    <td style="vertical-align: top; text-align: justify; width: 1%;">a. <br> b.</td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="8" >Menarik kembali penawarannya selama dilaksanakannya pelelangan atau sesudah dinyatakan sebagai pemenang. <br> Tidak,</td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;padding: 0; padding-left: 8px">a. <br> b.</td>
+                    <td style="vertical-align: top; text-align: justify;padding: 0; padding-left: 8px" colspan="8" >Menarik kembali penawarannya selama dilaksanakannya pelelangan atau sesudah dinyatakan sebagai pemenang. <br> Tidak,</td>
                 </tr>
                 <tr>
-                    <td style="width: 1%; vertical-align: top;"></td>
-                    <td style="vertical-align: top; text-align: justify; width: 1%;"></td>
-                    <td style="vertical-align: top; text-align: justify; width: 1%;">1) <br> 2) <br> 3)</td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="6">menyerahkan Jaminan Pelaksanaan setelah ditunjuk sebagai pemenang <br> menandatangani kontrak <br> hadir dalam klarifikasi dan/atau verifikasi sebagai calon pemenang</td>
+                    <td style="width: 1%; vertical-align: top;padding: 0;"></td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;padding: 0; padding-left: 8px"></td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;padding: 0; padding-left: 8px">1) <br> 2) <br> 3)</td>
+                    <td style="vertical-align: top; text-align: justify;padding: 0; padding-left: 8px" colspan="6">menyerahkan Jaminan Pelaksanaan setelah ditunjuk sebagai pemenang <br> menandatangani kontrak <br> hadir dalam klarifikasi dan/atau verifikasi sebagai calon pemenang</td>
                 </tr>
                 <tr>
-                    <td style="width: 1%; vertical-align: top;"></td>
-                    <td style="vertical-align: top; text-align: justify; width: 1%;">c</td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="8">terlibat Korupsi Kolusi dan Nepotisme (KKN)</td>
+                    <td style="width: 1%; vertical-align: top;padding: 0; padding-left: 8px"></td>
+                    <td style="vertical-align: top; text-align: justify; width: 1%;padding: 0; padding-left: 8px">c</td>
+                    <td style="vertical-align: top; text-align: justify;padding: 0; padding-left: 8px" colspan="8">terlibat Korupsi Kolusi dan Nepotisme (KKN)</td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">4. </td>
@@ -177,15 +171,8 @@
                     <td></td>
                     <td style="width: 30%;" colspan="2"></td>
                 </tr>
-                <!-- <tr>
-                    <td colspan="9"><hr style="height: 6px; border-top: 2px solid black; border-bottom: 2px solid black;"></td>
-                </tr> -->
-                <tr>
-                    <td colspan="9" align="center">{{footer}}</td>
-                <!-- <tr>
-                    <td colspan="9"><hr style="height: 6px; border-top: 2px solid black; border-bottom: 2px solid black;"></td>
-                </tr> -->
 			</table>    
         </div>
+    </div>
 </body>
 </html>

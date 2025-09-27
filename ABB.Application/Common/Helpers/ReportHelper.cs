@@ -6,7 +6,7 @@ namespace ABB.Application.Common.Helpers
     {
         public static string ConvertToReportFormat(decimal? value, bool percentage = false)
         {
-            return value == null ? "0" : percentage ? value.Value.ToString("#,##0.00;(#,##0.00)") : value.Value.ToString("#,##0;(#,##0)");
+            return value == null ? "0" : percentage ? value.Value.ToString("#,##0.0000;(#,##0.0000)") : value.Value.ToString("#,##0;(#,##0)");
         }
         
         public static decimal ConvertToDecimalFormat(string value)

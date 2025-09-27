@@ -96,13 +96,30 @@ namespace ABB.Web.Modules.CetakSchedulePolis
                 var reportTemplate = await Mediator.Send(command);
 
                 var reportOrientation = Orientation.Portrait;
+                var right = 20;
+                var left = 20;
 
-                if (model.jenisLaporan == "L")
+                if (model.jenisLaporan == "L" && model.jenisLampiran != "D")
                 {
                     reportOrientation = Orientation.Landscape;
+                    right = 0;
+                    left = 0;
+                }
+
+                if (model.jenisLaporan == "M" && model.jenisLampiran == "A")
+                {
+                    right = 10;
+                    left = 10;
+                }
+
+                if (model.jenisLampiran == "D")
+                {
+                    right = 10;
+                    left = 10;
                 }
                 
-                _reportGeneratorService.GenerateReport("CetakSchedulePolis.pdf", reportTemplate, sessionId, reportOrientation);
+                _reportGeneratorService.GenerateReport("CetakSchedulePolis.pdf", 
+                    reportTemplate, sessionId, reportOrientation, right, left);
 
                 return Ok(new { Status = "OK", Data = sessionId});
             }

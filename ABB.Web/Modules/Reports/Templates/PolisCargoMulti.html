@@ -6,13 +6,13 @@
     <title>Polis Pengangkutan Barang</title>
     <style>
         body {
-            /* font-family: Arial, sans-serif; */
+            /*font-family: Arial, sans-serif;*/
+            font-size: 11pt;   /* readable in print */
+            line-height: 1.4;  /* adds vertical space */
         }
-
-        .container {
-            width: 80%;
-            margin: auto;
-            padding: 20px;
+        td {
+            font-size: 9pt;
+            padding: 2px 4px; /* give breathing room */
         }
 
         .h1 {
@@ -29,11 +29,6 @@
         .table {
             width: 100%;
             border-collapse: collapse;
-        }
-
-        .table td {
-            padding: 8px;
-			font-size: 12px;
         }
 		p {
 			text-align: justify;
@@ -177,19 +172,12 @@
                 <tr>
                     <td>Perhitungan Premi</td>
                     <td>:</td>
-                    <td style="width: 40%;">{{pst_rate_prm}} {{stn_rate_prm}} x {{kd_mtu_symbol}} {{nilai_ttl_ptg}}</td>
+                    <td style="width: 40%;">{{kd_mtu_symbol}} {{nilai_ttl_ptg}} x {{pst_rate_prm}} {{stn_rate_prm}}</td>
 					<td></td>
                     <td>=</td>
                     <td>{{kd_mtu_symbol}} {{nilai_prm}}</td>
                 </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td>Diskon</td>
-                    <td></td>
-                    <td>=</td>
-                    <td>{{kd_mtu_symbol}} {{nilai_dis}}</td>
-                </tr>
+                {{cargo_multi_diskon}}
                 <tr>
                     <td></td>
                     <td></td>
@@ -241,45 +229,6 @@
                     <td style="width: 25%;"></td>
                     <td>Dikeluarkan di {{kt_cb}} pada tanggal {{tgl_closing}}</td>
                     <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td style="text-align: left;">PT. Asuransi Bhakti Bhayangkara</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td style="text-align: left;"><br><br><br><br><br><br><strong><u>Ati Nofianti, A.Md, As. K</u></strong></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td style="text-align: left;"><strong>Kepala Divisi Underwriting</strong></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td colspan="10" align="center">{{footer}}</td>
                 </tr>
 			</table>
         </div>

@@ -20,6 +20,7 @@ function btnSaveNomorRegistrasiPolis_Click() {
 
 function saveNomorRegistrasiPolis(url){
     var form = getFormData($('#NomorRegistrasiPolisForm'));
+    form.no_pol_ttg = $("#no_pol_ttg").getKendoMaskedTextBox().raw();
     
     ajaxPost(url, JSON.stringify(form),
         function (response) {

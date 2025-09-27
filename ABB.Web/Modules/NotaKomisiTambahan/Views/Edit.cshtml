@@ -171,18 +171,18 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Tanggal Nota</label>
                 <div class="col-sm-6">
-                    <kendo-datepicker for="tgl_nt" style="width: 100%"/>
+                    <kendo-datepicker for="tgl_nt" style="width: 100%" on-change="OnTanggalNotaChange"/>
                     <span asp-validation-for="tgl_nt" class="text-danger"></span>
                 </div>
             </div>
             <div class="row col-sm-6">
                 <label class="col-sm-3">Nilai PPN</label>
                 <div class="col-sm-3">
-                    <kendo-numerictextbox spinners="false" decimals="2" for="pst_ppn" on-change="OnChangePstPPN" style="width: 100%; background-color: #FFFFE1"/>
+                    <kendo-numerictextbox spinners="false" readonly="true" decimals="2" for="pst_ppn" on-change="OnChangePstPPN" style="width: 100%; background-color: #FFFFE1"/>
                     <span asp-validation-for="pst_ppn" class="text-danger"></span>
                 </div>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_ppn" style="width: 100%; background-color: #FFFFE1"/>
+                    <kendo-numerictextbox spinners="false" readonly="true" decimals="2" for="nilai_ppn" style="width: 100%; background-color: #FFFFE1"/>
                     <span asp-validation-for="nilai_ppn" class="text-danger"></span>
                 </div>
             </div>
@@ -198,11 +198,11 @@
             <div class="row col-sm-6">
                 <label class="col-sm-3">Nilai PPH</label>
                 <div class="col-sm-3">
-                    <kendo-numerictextbox spinners="false" decimals="2" for="pst_pph" on-change="OnChangePstPPH" style="width: 100%; background-color: #FFFFE1"/>
+                    <kendo-numerictextbox spinners="false" readonly="true" decimals="2" for="pst_pph" on-change="OnChangePstPPH" style="width: 100%; background-color: #FFFFE1"/>
                     <span asp-validation-for="pst_pph" class="text-danger"></span>
                 </div>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_pph" style="width: 100%; background-color: #FFFFE1"/>
+                    <kendo-numerictextbox spinners="false" readonly="true" decimals="2" for="nilai_pph" style="width: 100%; background-color: #FFFFE1"/>
                     <span asp-validation-for="nilai_pph" class="text-danger"></span>
                 </div>
             </div>
@@ -211,7 +211,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-3">Nilai Nota</label>
                 <div class="col-sm-3">
-                    <kendo-numerictextbox spinners="false" on-change="onPercentageNotaChange" decimals="2" for="pst_nt" style="width: 100%;"/>
+                    <kendo-numerictextbox spinners="false" on-change="onPercentageNotaChange" max="100" decimals="2" for="pst_nt" style="width: 100%;"/>
                     <span asp-validation-for="pst_nt" class="text-danger"></span>
                 </div>
                 <div class="col-sm-6">
@@ -222,11 +222,11 @@
             <div class="row col-sm-6">
                 <label class="col-sm-3">Jasa Koperasi</label>
                 <div class="col-sm-3">
-                    <kendo-numerictextbox spinners="false" decimals="2" for="pst_lain" style="width: 100%; background-color: #FFFFE1"/>
+                    <kendo-numerictextbox spinners="false" readonly="true" decimals="2" for="pst_lain" style="width: 100%; background-color: #FFFFE1"/>
                     <span asp-validation-for="pst_lain" class="text-danger"></span>
                 </div>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_lain" style="width: 100%; background-color: #FFFFE1"/>
+                    <kendo-numerictextbox spinners="false" readonly="true" decimals="2" for="nilai_lain" style="width: 100%; background-color: #FFFFE1"/>
                     <span asp-validation-for="nilai_lain" class="text-danger"></span>
                 </div>
             </div>

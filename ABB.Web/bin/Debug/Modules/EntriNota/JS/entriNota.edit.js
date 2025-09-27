@@ -37,6 +37,7 @@ function saveEntriNota(url){
     form.Details = details;
     form.flag_posting = $("#flag_posting")[0].checked ? "Y" : "N";
     form.flag_cancel = $("#flag_cancel")[0].checked ? "Y" : "N";
+    form.no_pol_ttg = $("#no_pol_ttg").getKendoMaskedTextBox().raw();
 
     var totalAng = 0;
 
