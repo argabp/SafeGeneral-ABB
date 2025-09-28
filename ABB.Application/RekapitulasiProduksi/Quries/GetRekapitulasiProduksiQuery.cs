@@ -126,26 +126,26 @@ namespace ABB.Application.RekapitulasiProduksi.Quries
                                                     <td style='width: 10%; text-align: right; vertical-align: top; border-left: 1px solid; border-right: 1px solid;'>{data.jml_polis}</td>
                                                 </tr>");
 
-                        total_premi += ReportHelper.ConvertToDecimalFormat(nilai_prm);
-                        total_diskon += ReportHelper.ConvertToDecimalFormat(nilai_diskon);
-                        total_komisi += ReportHelper.ConvertToDecimalFormat(nilai_kms);
-                        total_biaya_polis += ReportHelper.ConvertToDecimalFormat(nilai_bia_pol);
-                        total_biaya_materai += ReportHelper.ConvertToDecimalFormat(nilai_bia_mat);
-                        total_brokerage += ReportHelper.ConvertToDecimalFormat(nilai_kms_broker);
-                        total_net_premi += ReportHelper.ConvertToDecimalFormat(nilai_net);
-                        total_polis += Convert.ToDecimal(data.jml_polis);
+                        total_premi += data.nilai_prm ?? 0;
+                        total_diskon += data.nilai_diskon ?? 0;
+                        total_komisi += data.nilai_kms ?? 0;
+                        total_biaya_polis += data.nilai_bia_pol ?? 0;
+                        total_biaya_materai += data.nilai_bia_mat ?? 0;
+                        total_brokerage += data.nilai_kms_broker ?? 0;
+                        total_net_premi += data.nilai_net ?? 0;
+                        total_polis += data.jml_polis;
                     }
                         
                     stringBuilder.Append($@"
                             <tr>
                                 <td colspan=2 style='border: 1px solid; text-align: center'>Jumlah</td>
-                                <td style='border: 1px solid; text-align: right'>{total_premi:#,##0}</td>
-                                <td style='border: 1px solid; text-align: right'>{total_diskon:#,##0}</td>
-                                <td style='border: 1px solid; text-align: right'>{total_komisi:#,##0}</td>
-                                <td style='border: 1px solid; text-align: right'>{total_biaya_polis:#,##0}</td>
-                                <td style='border: 1px solid; text-align: right'>{total_biaya_materai:#,##0}</td>
-                                <td style='border: 1px solid; text-align: right'>{total_brokerage:#,##0}</td>
-                                <td style='border: 1px solid; text-align: right'>{total_net_premi:#,##0}</td>
+                                <td style='border: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_premi)}</td>
+                                <td style='border: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_diskon)}</td>
+                                <td style='border: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_komisi)}</td>
+                                <td style='border: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_biaya_polis)}</td>
+                                <td style='border: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_biaya_materai)}</td>
+                                <td style='border: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_brokerage)}</td>
+                                <td style='border: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_net_premi)}</td>
                                 <td style='border: 1px solid; text-align: right'>{total_polis}</td>
                             </tr>
                         </table>");
@@ -226,26 +226,26 @@ namespace ABB.Application.RekapitulasiProduksi.Quries
                                                         <td style='width: 10%; text-align: right; vertical-align: top; border-left: 1px solid; border-right: 1px solid;'>{data.jml_polis}</td>
                                                     </tr>");
                             
-                            total_premi += ReportHelper.ConvertToDecimalFormat(nilai_prm);
-                            total_diskon += ReportHelper.ConvertToDecimalFormat(nilai_diskon);
-                            total_komisi += ReportHelper.ConvertToDecimalFormat(nilai_kms);
-                            total_biaya_polis += ReportHelper.ConvertToDecimalFormat(nilai_bia_pol);
-                            total_biaya_materai += ReportHelper.ConvertToDecimalFormat(nilai_bia_mat);
-                            total_brokerage += ReportHelper.ConvertToDecimalFormat(nilai_kms_broker);
-                            total_net_premi += ReportHelper.ConvertToDecimalFormat(nilai_net);
-                            total_polis += Convert.ToDecimal(data.jml_polis);
+                            total_premi += data.nilai_prm ?? 0;
+                            total_diskon += data.nilai_diskon ?? 0;
+                            total_komisi += data.nilai_kms ?? 0;
+                            total_biaya_polis += data.nilai_bia_pol ?? 0;
+                            total_biaya_materai += data.nilai_bia_mat ?? 0;
+                            total_brokerage += data.nilai_kms_broker ?? 0;
+                            total_net_premi += data.nilai_net ?? 0;
+                            total_polis += data.jml_polis;
                         }
                         
                         stringBuilder.Append($@"
                             <tr>
                                 <td colspan=2 style='border: 1px solid; text-align: center'>Jumlah</td>
-                                <td style='border: 1px solid; text-align: right'>{total_premi:#,##0}</td>
-                                <td style='border: 1px solid; text-align: right'>{total_diskon:#,##0}</td>
-                                <td style='border: 1px solid; text-align: right'>{total_komisi:#,##0}</td>
-                                <td style='border: 1px solid; text-align: right'>{total_biaya_polis:#,##0}</td>
-                                <td style='border: 1px solid; text-align: right'>{total_biaya_materai:#,##0}</td>
-                                <td style='border: 1px solid; text-align: right'>{total_brokerage:#,##0}</td>
-                                <td style='border: 1px solid; text-align: right'>{total_net_premi:#,##0}</td>
+                                <td style='border: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_premi)}</td>
+                                <td style='border: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_diskon)}</td>
+                                <td style='border: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_komisi)}</td>
+                                <td style='border: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_biaya_polis)}</td>
+                                <td style='border: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_biaya_materai)}</td>
+                                <td style='border: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_brokerage)}</td>
+                                <td style='border: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_net_premi)}</td>
                                 <td style='border: 1px solid; text-align: right'>{total_polis}</td>
                             </tr>
                         </table>");

@@ -6,7 +6,14 @@
     <title>Laporan Bulanan Cabang</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            /*font-family: Arial, sans-serif;*/
+            font-size: 11pt;   /* readable in print */
+            line-height: 1.4;  /* adds vertical space */
+        }
+        td {
+            font-size: 9pt;
+            padding: 2px 4px; /* give breathing room */
+            letter-spacing: 1px;
         }
 
         .h1 {
@@ -25,11 +32,6 @@
             width: 100%;
             border-collapse: collapse;
         }
-
-        .table td {
-            padding: 8px;
-            font-size: 12px;
-        }
     </style>
 </head>
 <body>
@@ -39,7 +41,7 @@
 
     <div class='container'>
         <div class='section'>
-            <p style='font-size: 14px; margin: auto; text-align: center;'><strong>LAPORAN PRODUKSI PREMI BRUTO</strong></p>
+            <p style='font-size: 14px; margin: auto; text-align: center;'><strong>LAPORAN PRODUKSI {{jenis_laporan}}</strong></p>
             <p style='font-size: 14px; margin: auto; text-align: center;'><strong>LOKASI {{nm_cb}}</strong></p>
             <p style='font-size: 14px; margin: auto; text-align: center; padding-bottom: 3em'><strong>Periode: {{kd_bln_mul}} s/d {{kd_bln_akh}}</strong></p>
             

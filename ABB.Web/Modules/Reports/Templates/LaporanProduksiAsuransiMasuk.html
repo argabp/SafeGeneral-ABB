@@ -3,10 +3,17 @@
 <head>
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <title>Laporan Produksi Asuransi Masuk</title>
+    <title>Laporan Produksi Kaosuransi Masuk</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            /*font-family: Arial, sans-serif;*/
+            font-size: 11pt;   /* readable in print */
+            line-height: 1.4;  /* adds vertical space */
+        }
+        td {
+            font-size: 9pt;
+            padding: 2px 4px; /* give breathing room */
+            letter-spacing: 1px;
         }
 
         .h1 {
@@ -25,25 +32,9 @@
             width: 100%;
             border-collapse: collapse;
         }
-
-        .table td {
-            padding: 8px;
-            font-size: 12px;
-        }
     </style>
 </head>
 <body>
 {{details}}
-<table class='table'>
-    <tr>
-        <td colspan=4 style='border-bottom: 1px solid; width: 60%'>Total Keseluruhan Nilai</td>
-        <td style='border-bottom: 1px solid;text-align: right'>{{total_semua_sum_ins}}</td>
-        <td style='border-bottom: 1px solid;text-align: right'>{{total_semua_gross_premium}}</td>
-        <td style='border-bottom: 1px solid;text-align: right'>{{total_semua_commision}}</td>
-        <td style='border-bottom: 1px solid;text-align: right'>{{total_semua_discount}}</td>
-        <td style='border-bottom: 1px solid;text-align: right'>{{total_semua_handling_fee}}</td>
-        <td style='border-bottom: 1px solid;text-align: right'>{{total_semua_net_due_to_us}}</td>
-    </tr>
-</table>
 </body>
 </html>

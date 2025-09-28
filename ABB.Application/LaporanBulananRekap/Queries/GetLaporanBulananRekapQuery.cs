@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using ABB.Application.LaporanBulananCabang.Queries;
@@ -139,13 +141,23 @@ namespace ABB.Application.LaporanBulananRekap.Queries
             
             stringBuilder.Append("</table>");
             
+            var jenisLaporan = new List<DropdownOptionDto>()
+            {
+                new DropdownOptionDto() { Text = "Rekap Premi Bruto", Value = "6" },
+                new DropdownOptionDto() { Text = "Rekap Premi Netto", Value = "7" },
+                new DropdownOptionDto() { Text = "Rekap Discount + Komisi", Value = "8" },
+                new DropdownOptionDto() { Text = "Rekap Klaim", Value = "9" },
+                new DropdownOptionDto() { Text = "Rekap Premi Rate", Value = "10" }
+            };
+            
             var laporanBulananRekap = laporanBulananRekapDatas.FirstOrDefault();
             resultTemplate = templateProfileResult.Render( new
             {
                 laporanBulananRekap?.nm_cab, 
                 kd_bln_mul = request.kd_bln_mul.ToString("dd-MM-yyyy"),
                 kd_bln_akh = request.kd_bln_akh.ToString("dd-MM-yyyy"),
-                details = stringBuilder.ToString()
+                details = stringBuilder.ToString(),
+                jenis_laporan = jenisLaporan.FirstOrDefault(w => w.Value == request.jns_lap)?.Text
             } );
             
             return resultTemplate;

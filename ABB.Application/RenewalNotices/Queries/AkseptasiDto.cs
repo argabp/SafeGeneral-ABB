@@ -31,5 +31,9 @@ namespace ABB.Application.RenewalNotices.Queries
         public string nm_ttg { get; set; }
 
         public string almt_ttg { get; set; }
+        
+        public DateTime tgl_mul_ptg { get; set; }
+
+        public DateTime tgl_akh_ptg { get; set; }
     }
 }

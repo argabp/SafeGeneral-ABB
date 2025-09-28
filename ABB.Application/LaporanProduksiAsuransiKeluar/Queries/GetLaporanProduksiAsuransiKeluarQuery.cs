@@ -80,6 +80,9 @@ namespace ABB.Application.LaporanProduksiAsuransiKeluar.Queries
             decimal total_semua_nilai_kms = 0;
             decimal total_semua_nilai_hf = 0;
             decimal total_semua_nilai_net = 0;
+            
+            var lastCob = nama_cobs.Last();
+            
             foreach (var nama_cob in nama_cobs)
             {
                 var sequence = 0;
@@ -147,15 +150,13 @@ namespace ABB.Application.LaporanProduksiAsuransiKeluar.Queries
                                         </tr>
                                         <tr>
                                             <td colspan=5 style='border-bottom: 1px solid; border-top: 1px solid'>Sub Total Nilai</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{total_sum_ins:#,##0}</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{total_pst_share:#,##0}</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{total_nilai_prm:#,##0}</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{total_nilai_kms:#,##0}</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{total_nilai_hf:#,##0}</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{total_nilai_net:#,##0}</td>
-                                        </tr>
-                                    </table>
-                                    </div>");
+                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_sum_ins)}</td>
+                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_pst_share)}</td>
+                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_nilai_prm)}</td>
+                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_nilai_kms)}</td>
+                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_nilai_hf)}</td>
+                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_nilai_net)}</td>
+                                        </tr>");
                 
                 total_semua_sum_ins += total_sum_ins;
                 total_semua_pst_share += total_pst_share;
@@ -163,16 +164,25 @@ namespace ABB.Application.LaporanProduksiAsuransiKeluar.Queries
                 total_semua_nilai_kms += total_nilai_kms;
                 total_semua_nilai_hf += total_nilai_hf;
                 total_semua_nilai_net += total_nilai_net;
+
+                stringBuilder.Append(lastCob == nama_cob
+                    ? $@"
+                        <tr>
+                            <td colspan=5 style='border-bottom: 1px solid; width: 60%'>Total Keseluruhan Nilai</td>
+                            <td style='border-bottom: 1px solid;text-align: right'>{ReportHelper.ConvertToReportFormat(total_semua_sum_ins)}</td>
+                            <td style='border-bottom: 1px solid;text-align: right'>{ReportHelper.ConvertToReportFormat(total_semua_pst_share)}</td>
+                            <td style='border-bottom: 1px solid;text-align: right'>{ReportHelper.ConvertToReportFormat(total_semua_nilai_prm)}</td>
+                            <td style='border-bottom: 1px solid;text-align: right'>{ReportHelper.ConvertToReportFormat(total_semua_nilai_kms)}</td>
+                            <td style='border-bottom: 1px solid;text-align: right'>{ReportHelper.ConvertToReportFormat(total_semua_nilai_hf)}</td>
+                            <td style='border-bottom: 1px solid;text-align: right'>{ReportHelper.ConvertToReportFormat(total_semua_nilai_net)}</td>
+                        </tr></table></div>"
+                    : @"
+                                    </table>
+                                    </div>");
             }
             
             resultTemplate = templateProfileResult.Render( new
             {
-                total_semua_sum_ins = ReportHelper.ConvertToReportFormat(total_semua_sum_ins), 
-                total_semua_share_member = ReportHelper.ConvertToReportFormat(total_semua_pst_share), 
-                total_semua_premi_koas = ReportHelper.ConvertToReportFormat(total_semua_nilai_prm),
-                total_semua_commission = ReportHelper.ConvertToReportFormat(total_semua_nilai_kms), 
-                total_semua_handling_fee = ReportHelper.ConvertToReportFormat(total_semua_nilai_hf), 
-                total_semua_amount_due_to_you = ReportHelper.ConvertToReportFormat(total_semua_nilai_net),
                 details = stringBuilder.ToString()
             } );
             

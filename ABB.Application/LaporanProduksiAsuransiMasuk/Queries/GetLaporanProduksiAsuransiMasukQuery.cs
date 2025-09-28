@@ -8,6 +8,7 @@ using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Primitives;
 using Scriban;
 
 namespace ABB.Application.LaporanProduksiAsuransiMasuk.Queries
@@ -79,6 +80,9 @@ namespace ABB.Application.LaporanProduksiAsuransiMasuk.Queries
             decimal total_semua_discount = 0;
             decimal total_semua_handling_fee = 0;
             decimal total_semua_net_due_to_us = 0;
+
+            var lastCob = nama_cobs.Last();
+
             foreach (var nama_cob in nama_cobs)
             {
                 var sequence = 0;
@@ -94,10 +98,10 @@ namespace ABB.Application.LaporanProduksiAsuransiMasuk.Queries
                                                 <table class='table'>
                                                     <tr>
                                                         <td style='width: 3%; text-align: center; border: 1px solid'>NO</td>
-                                                        <td style='width: 20%; text-align: center; border: 1px solid'>NOMOR/TANGGAL NOTA</td>
+                                                        <td style='width: 20%; text-align: center; border: 1px solid; width: 10%'>NOMOR/TANGGAL NOTA</td>
                                                         <td style='width: 20%; text-align: center; border: 1px solid'>CEDING COMPANY</td>
                                                         <td style='width: 10%; text-align: center; border: 1px solid'>NAMA TERTANGGUNG / LOKET</td>
-                                                        <td style='width: 5%;  text-align: center; border: 1px solid'>NOMOR POLIS</td>
+                                                        <td style='width: 5%;  text-align: center; border: 1px solid; width: 15%'>NOMOR POLIS</td>
                                                         <td style='width: 10%; text-align: center; border: 1px solid'>TOTAL SUM INSURED</td>
                                                         <td style='width: 10%; text-align: center; border: 1px solid'>GROSS PREMIUM</td>
                                                         <td style='width: 10%; text-align: center; border: 1px solid'>COMISSION</td>
@@ -114,15 +118,15 @@ namespace ABB.Application.LaporanProduksiAsuransiMasuk.Queries
                 foreach (var data in laporanProduksiAsuransiMasukDatas.Where(w => w.nm_cob == nama_cob))
                 {
                     sequence++;
-                    var nilai_ttl_ptg = ReportHelper.ConvertToReportFormat(data.nilai_ttl_ptg) == null ? "0" : data.nilai_ttl_ptg.Value.ToString("#,##0");
-                    var nilai_prm = ReportHelper.ConvertToReportFormat(data.nilai_prm) == null ? "0" : data.nilai_prm.Value.ToString("#,##0");
-                    var nilai_kms = ReportHelper.ConvertToReportFormat(data.nilai_kms) == null ? "0" : data.nilai_kms.Value.ToString("#,##0");
-                    var nilai_dis = ReportHelper.ConvertToReportFormat(data.nilai_dis) == null ? "0" : data.nilai_dis.Value.ToString("#,##0");
-                    var nilai_hf = ReportHelper.ConvertToReportFormat(data.nilai_ttl_ptg) == null ? "0" : data.nilai_hf.Value.ToString("#,##0");
-                    var nilai_net = ReportHelper.ConvertToReportFormat(data.nilai_ttl_ptg) == null ? "0" : data.nilai_net.Value.ToString("#,##0");
+                    var nilai_ttl_ptg = ReportHelper.ConvertToReportFormat(data.nilai_ttl_ptg);
+                    var nilai_prm = ReportHelper.ConvertToReportFormat(data.nilai_prm);
+                    var nilai_kms = ReportHelper.ConvertToReportFormat(data.nilai_kms);
+                    var nilai_dis = ReportHelper.ConvertToReportFormat(data.nilai_dis);
+                    var nilai_hf = ReportHelper.ConvertToReportFormat(data.nilai_hf);
+                    var nilai_net = ReportHelper.ConvertToReportFormat(data.nilai_net);
                     stringBuilder.Append(@$"<tr>
                                                 <td style='width: 3%;  text-align: left; vertical-align: top; border: 1px solid'>{sequence}</td>
-                                                <td style='width: 20%; text-align: left; vertical-align: top; border: 1px solid'>{data.no_nota}<br>{data.tgl_nt}</td>
+                                                <td style='width: 20%; text-align: left; vertical-align: top; border: 1px solid'>{data.no_nota}<br>{data.tgl_nt.Value:dd-MM-yyyy}</td>
                                                 <td style='width: 20%; text-align: left; vertical-align: top; border: 1px solid'>{data.nm_pas}</td>
                                                 <td style='width: 20%; text-align: left; vertical-align: top; border: 1px solid'>{data.nm_ttg}</td>
                                                 <td style='width: 10%; text-align: center; vertical-align: top; border: 1px solid'>{data.no_pol_ttg}</td>
@@ -146,15 +150,13 @@ namespace ABB.Application.LaporanProduksiAsuransiMasuk.Queries
                                         </tr>
                                         <tr>
                                             <td colspan=5 style='border-bottom: 1px solid; border-top: 1px solid'>Sub Total Nilai</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{total_sum_ins:#,##0}</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{total_gross_premium:#,##0}</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{total_commision:#,##0}</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{total_discount:#,##0}</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{total_handling_fee:#,##0}</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{total_net_due_to_us:#,##0}</td>
-                                        </tr>
-                                    </table>
-                                    </div>");
+                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_sum_ins)}</td>
+                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_gross_premium)}</td>
+                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_commision)}</td>
+                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_discount)}</td>
+                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_handling_fee)}</td>
+                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_net_due_to_us)}</td>
+                                        </tr>");
                 
                 total_semua_sum_ins += total_sum_ins;
                 total_semua_gross_premium += total_gross_premium;
@@ -162,16 +164,25 @@ namespace ABB.Application.LaporanProduksiAsuransiMasuk.Queries
                 total_semua_discount += total_discount;
                 total_semua_handling_fee += total_handling_fee;
                 total_semua_net_due_to_us += total_net_due_to_us;
+
+                stringBuilder.Append(lastCob == nama_cob
+                    ? $@"
+                        <tr>
+                            <td colspan=5 style='border-bottom: 1px solid; width: 60%'>Total Keseluruhan Nilai</td>
+                            <td style='border-bottom: 1px solid;text-align: right'>{ReportHelper.ConvertToReportFormat(total_semua_sum_ins)}</td>
+                            <td style='border-bottom: 1px solid;text-align: right'>{ReportHelper.ConvertToReportFormat(total_semua_gross_premium)}</td>
+                            <td style='border-bottom: 1px solid;text-align: right'>{ReportHelper.ConvertToReportFormat(total_semua_commision)}</td>
+                            <td style='border-bottom: 1px solid;text-align: right'>{ReportHelper.ConvertToReportFormat(total_semua_discount)}</td>
+                            <td style='border-bottom: 1px solid;text-align: right'>{ReportHelper.ConvertToReportFormat(total_semua_handling_fee)}</td>
+                            <td style='border-bottom: 1px solid;text-align: right'>{ReportHelper.ConvertToReportFormat(total_semua_net_due_to_us)}</td>
+                        </tr></table></div>"
+                    : @"
+                                    </table>
+                                    </div>");
             }
             
             resultTemplate = templateProfileResult.Render( new
             {
-                total_semua_sum_ins = ReportHelper.ConvertToReportFormat(total_semua_sum_ins), 
-                total_semua_gross_premium = ReportHelper.ConvertToReportFormat(total_semua_gross_premium), 
-                total_semua_commision = ReportHelper.ConvertToReportFormat(total_semua_commision),
-                total_semua_discount = ReportHelper.ConvertToReportFormat(total_semua_discount), 
-                total_semua_handling_fee = ReportHelper.ConvertToReportFormat(total_semua_handling_fee), 
-                total_semua_net_due_to_us = ReportHelper.ConvertToReportFormat(total_semua_net_due_to_us),
                 details = stringBuilder.ToString()
             } );
             

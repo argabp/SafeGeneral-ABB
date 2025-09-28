@@ -30,7 +30,10 @@ namespace ABB.Web.Modules.RekapitulasiProduksi
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
             
-            return View(new RekapitulasiProduksiViewModel());
+            return View(new RekapitulasiProduksiViewModel()
+            {
+                kd_cb = Request.Cookies["UserCabang"]?.Trim() ?? string.Empty
+            });
         }
 
         public async Task<JsonResult> GetCabang()

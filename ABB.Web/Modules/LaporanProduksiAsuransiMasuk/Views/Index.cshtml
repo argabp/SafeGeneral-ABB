@@ -8,7 +8,7 @@
 
 @{
     Layout = "~/Modules/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Laporan Produksi Asuransi Masuk";
+    ViewData["Title"] = "Laporan Produksi Kaosuransi Masuk";
 }
 <script src="~/Modules/LaporanProduksiAsuransiMasuk/JS/laporanProduksiAsuransiMasuk.js"></script>
 
@@ -18,20 +18,24 @@
     }
 </style>
 <div class="flat-box">
-    
+    <div class="row" style="padding-bottom: 1em;">
+        <div class="flat-box-title col-md-8">
+            Laporan Produksi Kaosuransi Masuk
+        </div>
+    </div>
     <form id="LaporanProduksiAsuransiMasukForm" enctype="multipart/form-data" autocomplete="off">
         <div class="form-group row">
-            <div class="row col-sm-6">
-                <label class="col-sm-6">Periode</label>
-                <div class="col-sm-6 row">
-                    <div class="col-sm-5">
+            <div class="row col-sm-9">
+                <label class="col-sm-2">Periode</label>
+                <div class="col-sm-4 row" style="padding-right: 0">
+                    <div class="col-sm-5" style="padding-right: 0">
                         <kendo-datepicker for="kd_bln_mul" value="DateTime.Now"/>
                         <span asp-validation-for="kd_bln_mul" class="text-danger"></span>
                     </div>
-                    <div class="col-sm-2" style="align-content: center">
+                    <div class="col-sm-2" style="align-content: center; text-align: right">
                         <p style="margin-bottom: 3px">s/d</p>
                     </div>
-                    <div class="col-sm-5">
+                    <div class="col-sm-5" style="padding-right: 0">
                         <kendo-datepicker for="kd_bln_akh" value="DateTime.Now"/>
                         <span asp-validation-for="kd_bln_akh" class="text-danger"></span>
                     </div>
@@ -39,9 +43,9 @@
             </div>
         </div>
         <div class="form-group row">
-            <div class="row col-sm-6">
-                <label class="col-sm-6">Kode Cabang</label>
-                <div class="col-sm-6">
+            <div class="row col-sm-9">
+                <label class="col-sm-2">Kode Cabang</label>
+                <div class="col-sm-4">
                     <kendo-dropdownlist for="kd_cb" style="width: 100%" on-change="OnKodeCabangChange" option-label="Pilih Cabang"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
@@ -55,9 +59,9 @@
             </div>
         </div>
         <div class="form-group row">
-            <div class="row col-sm-6">
-                <label class="col-sm-6">Kode COB</label>
-                <div class="col-sm-6">
+            <div class="row col-sm-9">
+                <label class="col-sm-2">Kode COB</label>
+                <div class="col-sm-4">
                     <kendo-dropdownlist for="kd_cob" style="width: 100%" on-change="OnKodeCOBChange" option-label="Pilih COB"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
@@ -71,9 +75,9 @@
             </div>
         </div>
         <div class="form-group row">
-            <div class="row col-sm-6">
-                <label class="col-sm-6">Kode SCOB</label>
-                <div class="col-sm-6">
+            <div class="row col-sm-9">
+                <label class="col-sm-2">Kode SCOB</label>
+                <div class="col-sm-4">
                     <kendo-dropdownlist for="kd_scob" style="width: 100%" option-label="Pilih SCOB"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
@@ -87,9 +91,9 @@
             </div>
         </div>
         <div class="form-group row">
-            <div class="row col-sm-6">
-                <label class="col-sm-6">Kode Sumber Bisnis</label>
-                <div class="col-sm-6">
+            <div class="row col-sm-9">
+                <label class="col-sm-2">Kode Sumber Bisnis</label>
+                <div class="col-sm-4">
                     <kendo-dropdownlist for="kd_grp_sb_bis" style="width: 100%" on-change="OnKodeSumberBisnisChange" option-label="Pilih Kode Sumber Bisnis"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
@@ -100,9 +104,7 @@
                     </kendo-dropdownlist>
                     <span asp-validation-for="kd_grp_sb_bis" class="text-danger"></span>
                 </div>
-            </div>
-            <div class="row col-sm-6">
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <kendo-dropdownlist for="kd_rk_sb_bis" style="width: 100%" 
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
@@ -116,9 +118,9 @@
             </div>
         </div>
         <div class="form-group row">
-            <div class="row col-sm-6">
-                <label class="col-sm-6">Kode Tertanggung</label>
-                <div class="col-sm-6">
+            <div class="row col-sm-9">
+                <label class="col-sm-2">Kode Tertanggung</label>
+                <div class="col-sm-4">
                     <kendo-dropdownlist for="kd_grp_ttg" style="width: 100%" on-change="OnKodeTertanggungChange" option-label="Pilih Kode Tertanggung"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
@@ -129,9 +131,7 @@
                     </kendo-dropdownlist>
                     <span asp-validation-for="kd_grp_ttg" class="text-danger"></span>
                 </div>
-            </div>
-            <div class="row col-sm-6">
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <kendo-dropdownlist for="kd_rk_ttg" style="width: 100%"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
@@ -146,9 +146,9 @@
         </div>
         
         <div class="form-group row">
-            <div class="row col-sm-6">
-                <label class="col-sm-6">Kode Marketing</label>
-                <div class="col-sm-6">
+            <div class="row col-sm-9">
+                <label class="col-sm-2">Kode Marketing</label>
+                <div class="col-sm-4">
                     <kendo-dropdownlist for="kd_grp_mkt" style="width: 100%" on-change="OnKodeMarketingChange" option-label="Pilih Kode Marketing"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
@@ -159,9 +159,7 @@
                     </kendo-dropdownlist>
                     <span asp-validation-for="kd_grp_mkt" class="text-danger"></span>
                 </div>
-            </div>
-            <div class="row col-sm-6">
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <input type="hidden" id="temp_kd_rk_mkt" value="@Model.kd_rk_mkt">
                     <kendo-dropdownlist for="kd_rk_mkt" style="width: 100%"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">

@@ -8,6 +8,7 @@ using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using Scriban;
 
 namespace ABB.Application.LaporanProduksiAsuransi.Queries
@@ -51,8 +52,8 @@ namespace ABB.Application.LaporanProduksiAsuransi.Queries
                 new
                 {
                     input_str = $"{request.kd_bln_mul.ToShortDateString()},{request.kd_bln_akh.ToShortDateString()},{kd_thn}," +
-                                $"{request.kd_cb.Trim()},{request.kd_grp_sb_bis.Trim()},{request.kd_rk_sb_bis.Trim()},{request.kd_cob.Trim()}" +
-                                $"{request.kd_scob.Trim()},{prm_th},{request.kd_grp_ttg.Trim()},{request.kd_rk_ttg.Trim()}" +
+                                $"{request.kd_cb.Trim()},{request.kd_grp_sb_bis.Trim()},{request.kd_cob.Trim()}," +
+                                $"{request.kd_scob.Trim()},{prm_th},{request.kd_rk_sb_bis.Trim()},{request.kd_grp_ttg.Trim()},{request.kd_rk_ttg.Trim()}," +
                                 $"{request.kd_grp_mkt.Trim()},{request.kd_rk_mkt.Trim()}"
                 })).ToList();
 
@@ -68,163 +69,245 @@ namespace ABB.Application.LaporanProduksiAsuransi.Queries
             
             Template templateProfileResult = Template.Parse( templateReportHtml );
 
-            var nama_cobs = laporanProduksiAsuransiDatas.Select(s => s.nm_cob).Distinct().ToList();
-
             string resultTemplate;
             
+            decimal grand_total_nilai_prm = 0;
+            decimal grand_total_nilai_dis = 0;
+            decimal grand_total_nilai_kms = 0;
+            decimal grand_total_premi_netto = 0;
+            decimal grand_total_nilai_bia_pol = 0;
+            decimal grand_total_nilai_bia_mat = 0;
+            decimal grand_total_total_group = 0;
+            
+            var groupedData = laporanProduksiAsuransiDatas
+            .GroupBy(x => new { x.kd_grp_sb_bis, x.kd_rk_sb_bis, x.kd_bln, x.kd_cob }) // Outer group
+            .ToList();
 
+            var lastOuterKey = groupedData.Last().Key;
+            
             StringBuilder stringBuilder = new StringBuilder();
-            decimal total_semua_nilai_prm = 0;
-            decimal total_semua_nilai_dis = 0;
-            decimal total_semua_nilai_kms = 0;
-            decimal total_semua_premi_netto = 0;
-            decimal total_semua_nilai_bia_pol = 0;
-            decimal total_semua_nilai_bia_mat = 0;
-            decimal total_semua_group = 0;
-            foreach (var nama_cob in nama_cobs)
-            {
-                var sequence = 0;
-                var laporanProduksiAsuransi = laporanProduksiAsuransiDatas.FirstOrDefault(w => w.nm_cob == nama_cob);
-                stringBuilder.Append(@$"<div style='page-break-before: always;'>
-                                        <p style='font-size: 14px; margin: auto;'><strong>PT. ASURANSI BHAKTI BHAYANGKARA</strong></p>
-                                        <p style='font-size: 12px; margin: auto;'><strong>Jakarta Selatan</strong></p>
-                                        <p style='font-size: 12px; margin: auto;'><strong>Jakarta</strong></p>
 
-                                        <div class='container'>
-                                            <div class='section'>
-                                                <p style='font-size: 14px; margin: auto; text-align: center;'><strong>LAPORAN PRODUKSI ASURANSI</strong></p>
-                                                <table style='font-size: 12px; width: 100%'>
-                                                    <tr>
-                                                        <td style='width: 30%;'></td>
-                                                        <td style='width: 20%; text-align: left;'>PERIODE</td>
-                                                        <td style='vertical-align: top; text-align: justify;'>:</td>
-                                                        <td style='vertical-align: top; text-align: justify;'>{laporanProduksiAsuransi?.tgl_period}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style='width: 30%;'></td>
-                                                        <td style='width: 20%; text-align: left;'>CABANG PERUSAHAAN</td>
-                                                        <td style='vertical-align: top; text-align: justify; width: 1%;'>:</td>
-                                                        <td style='vertical-align: top; text-align: justify; width: 70%;'>{laporanProduksiAsuransi?.nm_cb}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style='width: 30%;'></td>
-                                                        <td style='width: 20%; text-align: left;'>JENIS BISNIS</td>
-                                                        <td style='vertical-align: top; text-align: justify; width: 1%;'>:</td>
-                                                        <td style='vertical-align: top; text-align: justify; width: 70%;'>{laporanProduksiAsuransi?.nm_cob}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style='width: 30%;'></td>
-                                                        <td style='width: 20%; text-align: left;'>SUMBER BISNIS</td>
-                                                        <td style='vertical-align: top; text-align: justify; width: 1%;'>:</td>
-                                                        <td style='vertical-align: top; text-align: justify; width: 70%;'>{laporanProduksiAsuransi?.nm_sb_bis}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style='width: 30%;'></td>
-                                                        <td style='width: 20%; text-align: left;'>MARKETING</td>
-                                                        <td style='vertical-align: top; text-align: justify; width: 1%;'>:</td>
-                                                        <td style='vertical-align: top; text-align: justify; width: 70%;'>{laporanProduksiAsuransi?.nm_mkt}</td>
-                                                    </tr>
-                                                </table>
-                                                <table class='table'>
-                                                    <tr>
-                                                        <td style='width: 3%; text-align: center; border: 1px solid' rowspan='2'>NOMOR URUT</td>
-                                                        <td style='width: 20%; text-align: center; border: 1px solid' rowspan='2'>NOMOR POLIS<br>NOMOR NOTA</td>
-                                                        <td style='width: 20%; text-align: center; border: 1px solid' rowspan='2'>NAMA  TERTANGGUNG<br>QQ</td>
-                                                        <td style='width: 10%; text-align: center; border: 1px solid' rowspan='2'>PERIODE PERTANGGUNGAN<br>TANGGAL NOTA</td>
-                                                        <td style='width: 5%;  text-align: center; border: 1px solid' rowspan='2'>TSI<br>NO. REG</td>
-                                                        <td style='width: 10%; text-align: center; border: 1px solid' rowspan='2'>TAHUN</td>
-                                                        <td style='width: 10%; text-align: center; border: 1px solid' rowspan='2'>CURRENCY</td>
-                                                        <td style='width: 10%; text-align: center; border: 1px solid' rowspan='2'>NILAI PREMI</td>
-                                                        <td style='vertical-align: top; text-align: center; border: 1px solid'>DISKON</td>
-                                                        <td style='width: 10%; text-align: center; border: 1px solid' rowspan='2'>PREMI NETTO</td>
-                                                        <td style='width: 10%; text-align: center; border: 1px solid' rowspan='2'>BIAYA POLIS/<br>ENDORSMENT</td>
-                                                        <td style='width: 10%; text-align: center; border: 1px solid' rowspan='2'>BIAYA METERAI</td>
-                                                        <td style='width: 10%; text-align: center; border: 1px solid' rowspan='2'>JUMLAH</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style='vertical-align: top; text-align: center; border: 1px solid'>KOMISI</td>
-                                                    </tr>
-                                                    <tr style='height: 50px;'>
-                                                        <td style='font-weight: bold; border: 1px solid' colspan='13'>{nama_cob}</td>
-                                                    </tr>");
-                decimal total_nilai_prm = 0;
-                decimal total_nilai_dis = 0;
-                decimal total_nilai_kms = 0;
-                decimal total_premi_netto = 0;
-                decimal total_nilai_bia_pol = 0;
-                decimal total_nilai_bia_mat = 0;
-                decimal total_group = 0;
-                foreach (var data in laporanProduksiAsuransiDatas.Where(w => w.nm_cob == nama_cob))
+            foreach (var outerGroup in groupedData)
+            {
+                // Outer group key
+                var outerFirst = outerGroup.FirstOrDefault();
+
+                // 💡 Now group by kd_mkt INSIDE the outer group
+                var innerGroups = outerGroup.GroupBy(x => x.kd_mtu).ToList();
+
+                var lastInnerGroupData = innerGroups.Last();
+                
+                decimal total_outer_nilai_prm = 0;
+                decimal total_outer_nilai_dis = 0;
+                decimal total_outer_nilai_kms = 0;
+                decimal total_outer_premi_netto = 0;
+                decimal total_outer_nilai_bia_pol = 0;
+                decimal total_outer_nilai_bia_mat = 0;
+                decimal total_outer_group = 0;
+
+                var lastInnerKey = innerGroups.Last().Key;
+                
+                foreach (var innerGroup in innerGroups)
                 {
-                    sequence++;
-                    var nilai_ttl_ptg = ReportHelper.ConvertToReportFormat(data.nilai_ttl_ptg);
-                    var nilai_dis = ReportHelper.ConvertToReportFormat(data.nilai_ttl_ptg);
-                    var nilai_prm = ReportHelper.ConvertToReportFormat(data.nilai_prm);
-                    var nilai_kms = ReportHelper.ConvertToReportFormat(data.nilai_kms);
-                    var nilai_bia_pol = ReportHelper.ConvertToReportFormat(data.nilai_bia_pol);
-                    var nilai_bia_mat = ReportHelper.ConvertToReportFormat(data.nilai_bia_mat);
-                    var premi_netto = ReportHelper.ConvertToReportFormat(Convert.ToDecimal(data.nilai_prm) - (Convert.ToDecimal(data.nilai_dis) + Convert.ToDecimal(data.nilai_kms)));
-                    var total_bia = ReportHelper.ConvertToReportFormat(Convert.ToDecimal(data.nilai_bia_pol) + Convert.ToDecimal(data.nilai_bia_mat));
+                    var innerFirst = innerGroup.FirstOrDefault();
+
+                    stringBuilder.Append(@$"<div style='page-break-before: always;'>
+                        <p style='font-size: 14px; margin: auto;'><strong>PT. ASURANSI BHAKTI BHAYANGKARA</strong></p>
+                        <p style='font-size: 12px; margin: auto;'><strong>Jakarta Selatan</strong></p>
+                        <p style='font-size: 12px; margin: auto;'><strong>Jakarta</strong></p>
+
+                        <div class='container'>
+                            <div class='section'>
+                                <p style='font-size: 14px; margin: auto; text-align: center;'><strong>LAPORAN PRODUKSI ASURANSI</strong></p>
+                                <table style='font-size: 12px; width: 100%'>
+                                    <tr>
+                                        <td style='width: 30%;'></td>
+                                        <td style='width: 20%; text-align: left;'>PERIODE</td>
+                                        <td style='vertical-align: top;'>:</td>
+                                        <td colspan='2'>{outerFirst?.tgl_period}</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>CABANG PERUSAHAAN</td>
+                                        <td>:</td>
+                                        <td colspan='2'>{outerFirst?.nm_cb}</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>JENIS BISNIS</td>
+                                        <td>:</td>
+                                        <td colspan='2'>{outerFirst?.nm_cob}</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>SUMBER BISNIS</td>
+                                        <td>:</td>
+                                        <td colspan='2'>{outerFirst?.nm_sb_bis}</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>MARKETING</td>
+                                        <td>:</td>
+                                        <td>{innerFirst?.nm_mkt}</td>
+                                        <td style='font-size: 8pt'>Page 1</td>
+                                    </tr>
+                                </table>
+
+                                <table class='table'>
+                                    <tr>
+                                        <td rowspan='2' style='width: 3%; text-align: center; border: 1px solid'>NOMOR URUT</td>
+                                        <td rowspan='2' style='width: 20%; text-align: center; border: 1px solid'>NOMOR POLIS<br>NOMOR NOTA</td>
+                                        <td rowspan='2' style='width: 22%; text-align: center; border: 1px solid'>NAMA  TERTANGGUNG<br>QQ</td>
+                                        <td rowspan='2' style='width: 10%; text-align: center; border: 1px solid'>PERIODE PERTANGGUNGAN<br>TANGGAL NOTA</td>
+                                        <td rowspan='2' style='width: 5%; text-align: center; border: 1px solid'>TSI<br>NO. REG</td>
+                                        <td rowspan='2' style='width: 5%; text-align: center; border: 1px solid'>TAHUN</td>
+                                        <td rowspan='2' style='width: 5%; text-align: center; border: 1px solid'>CURRENCY</td>
+                                        <td rowspan='2' style='width: 5%; text-align: center; border: 1px solid'>NILAI PREMI</td>
+                                        <td style='width:5%; text-align: center; border: 1px solid'>DISKON</td>
+                                        <td rowspan='2' style='width: 5%; text-align: center; border: 1px solid'>PREMI NETTO</td>
+                                        <td rowspan='2' style='width: 5%; text-align: center; border: 1px solid'>BIAYA POLIS/<br>ENDORSMENT</td>
+                                        <td rowspan='2' style='width: 5%; text-align: center; border: 1px solid'>BIAYA METERAI</td>
+                                        <td rowspan='2' style='width: 5%; text-align: center; border: 1px solid'>JUMLAH</td>
+                                    </tr>
+                                    <tr>
+                                        <td style='width:5%; text-align: center; border: 1px solid'>KOMISI</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan='13' style='font-weight: bold; border: 1px solid'>{outerFirst?.nm_cob}</td>
+                                    </tr>");
+
+                    // Subtotal variables for inner group
+                    int sequence = 0;
+                    decimal total_nilai_prm = 0;
+                    decimal total_nilai_dis = 0;
+                    decimal total_nilai_kms = 0;
+                    decimal total_premi_netto = 0;
+                    decimal total_nilai_bia_pol = 0;
+                    decimal total_nilai_bia_mat = 0;
+                    decimal total_group = 0;
+
+                    foreach (var data in innerGroup)
+                    {
+                        sequence++;
+
+                        var nilai_ttl_ptg = ReportHelper.ConvertToReportFormat(data.nilai_ttl_ptg);
+                        var nilai_prm = ReportHelper.ConvertToReportFormat(data.nilai_prm);
+                        var nilai_dis = ReportHelper.ConvertToReportFormat(data.nilai_dis);
+                        var nilai_kms = ReportHelper.ConvertToReportFormat(data.nilai_kms);
+                        var nilai_bia_pol = ReportHelper.ConvertToReportFormat(data.nilai_bia_pol);
+                        var nilai_bia_mat = ReportHelper.ConvertToReportFormat(data.nilai_bia_mat);
+                        var premi_netto = ReportHelper.ConvertToReportFormat(Convert.ToDecimal(data.nilai_prm) - (Convert.ToDecimal(data.nilai_dis) + Convert.ToDecimal(data.nilai_kms)));
+                        var total_bia = ReportHelper.ConvertToReportFormat(Convert.ToDecimal(premi_netto) + Convert.ToDecimal(data.nilai_bia_pol) + Convert.ToDecimal(data.nilai_bia_mat));
+
+                        stringBuilder.Append(@$"<tr>
+                            <td style='border: 1px solid'>{sequence}</td>
+                            <td style='border: 1px solid'>{data.no_pol_ttg}<br>{data.no_nota}</td>
+                            <td style='border: 1px solid'>{data.nm_ttg}<br>{data.nm_qq}</td>
+                            <td style='border: 1px solid'>{data.tgl_mul_ptg_ind} s/d {data.tgl_akh_ptg_ind}<br>{data.tgl_nt?.ToShortDateString()}</td>
+                            <td style='border: 1px solid; text-align: right'>{nilai_ttl_ptg}<br>{data.no_reg}</td>
+                            <td style='border: 1px solid'>{data.kd_cvrg}</td>
+                            <td style='border: 1px solid; text-align: center'>Rp.</td>
+                            <td style='border: 1px solid; text-align: right'>{nilai_prm}</td>
+                            <td style='border: 1px solid; text-align: right'>{nilai_dis}<br>{nilai_kms}</td>
+                            <td style='border: 1px solid; text-align: right'>{premi_netto}</td>
+                            <td style='border: 1px solid; text-align: right'>{nilai_bia_pol}</td>
+                            <td style='border: 1px solid; text-align: right'>{nilai_bia_mat}</td>
+                            <td style='border: 1px solid; text-align: right'>{total_bia}</td>
+                        </tr>");
+
+                        total_nilai_prm += ReportHelper.ConvertToDecimalFormat(nilai_prm);
+                        total_nilai_dis += ReportHelper.ConvertToDecimalFormat(nilai_dis);
+                        total_nilai_kms += ReportHelper.ConvertToDecimalFormat(nilai_kms);
+                        total_premi_netto += ReportHelper.ConvertToDecimalFormat(premi_netto);
+                        total_nilai_bia_pol += ReportHelper.ConvertToDecimalFormat(nilai_bia_pol);
+                        total_nilai_bia_mat += ReportHelper.ConvertToDecimalFormat(nilai_bia_mat);
+                        total_group += ReportHelper.ConvertToDecimalFormat(total_bia);
+                    }
+
+                    // ✅ Subtotal per kd_mkt
                     stringBuilder.Append(@$"<tr>
-                                                <td style='width: 3%;  text-align: left; vertical-align: top; border: 1px solid'>{sequence}</td>
-                                                <td style='width: 20%; text-align: left; vertical-align: top; border: 1px solid'>{data.no_pol_ttg}<br>{data.no_nota}</td>
-                                                <td style='width: 20%; text-align: left; vertical-align: top; border: 1px solid'>{data.nm_ttg}<br>{data.nm_qq}</td>
-                                                <td style='width: 10%; text-align: center; vertical-align: top; border: 1px solid'>{data.tgl_mul_ptg_ind} s/d {data.tgl_akh_ptg_ind}<br>{data.tgl_nt.Value.ToShortDateString()}</td>
-                                                <td style='width: 5%;  text-align: right; vertical-align: top; border: 1px solid'>{nilai_ttl_ptg}<br>{data.no_reg}</td>
-                                                <td style='width: 10%; text-align: left; vertical-align: top; border: 1px solid'>{data.kd_cvrg}</td>
-                                                <td style='width: 10%; text-align: center; vertical-align: top; border: 1px solid'>Rp.</td>
-                                                <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{nilai_prm}</td>
-                                                <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{nilai_dis}<br>{nilai_kms}</td>
-                                                <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{premi_netto}</td>
-                                                <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{nilai_bia_pol}</td>
-                                                <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{nilai_bia_mat}</td>
-                                                <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid'>{total_bia}</td>
-                                            </tr>");
-                    total_nilai_prm += ReportHelper.ConvertToDecimalFormat(nilai_ttl_ptg);
-                    total_nilai_dis += ReportHelper.ConvertToDecimalFormat(nilai_dis);
-                    total_nilai_kms += ReportHelper.ConvertToDecimalFormat(nilai_kms);
-                    total_premi_netto += ReportHelper.ConvertToDecimalFormat(premi_netto);
-                    total_nilai_bia_pol += ReportHelper.ConvertToDecimalFormat(nilai_bia_pol);
-                    total_nilai_bia_mat += ReportHelper.ConvertToDecimalFormat(nilai_bia_mat);
-                    total_group += ReportHelper.ConvertToDecimalFormat(total_bia);
+                        <td colspan='6' style='border-top: 1px solid;'>TOTAL DALAM RUPIAH</td>
+                        <td style='border-top: 1px solid; text-align: center'>Rp.</td>
+                        <td style='border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_nilai_prm)}</td>
+                        <td style='border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_nilai_dis)}</td>
+                        <td style='border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_premi_netto)}</td>
+                        <td style='border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_nilai_bia_pol)}</td>
+                        <td style='border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_nilai_bia_mat)}</td>
+                        <td style='border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_group)}</td>
+                    </tr>");
+                    
+                    stringBuilder.Append(@$"<tr>
+                        <td colspan='6' style='border-bottom: 1px solid;'></td>
+                        <td style='border-bottom: 1px solid; text-align: center'>Rp.</td>
+                        <td style='border-bottom: 1px solid; text-align: right'></td>
+                        <td style='border-bottom: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_nilai_kms)}</td>
+                        <td style='border-bottom: 1px solid; text-align: right'></td>
+                        <td style='border-bottom: 1px solid; text-align: right'></td>
+                        <td style='border-bottom: 1px solid; text-align: right'></td>
+                        <td style='border-bottom: 1px solid; text-align: right'></td>
+                    </tr>");
+
+                    if (!outerGroup.Key.Equals(lastOuterKey) || !innerGroup.Key.Equals(lastInnerKey))
+                    {
+                        // append - i.e. if outer isn't last OR inner isn't last
+                        stringBuilder.Append("</table></div></div>");
+                    }
+
+                    // accumulate subtotal to outer total
+                    total_outer_nilai_prm += total_nilai_prm;
+                    total_outer_nilai_dis += total_nilai_dis;
+                    total_outer_nilai_kms += total_nilai_kms;
+                    total_outer_premi_netto += total_premi_netto;
+                    total_outer_nilai_bia_pol += total_nilai_bia_pol;
+                    total_outer_nilai_bia_mat += total_nilai_bia_mat;
+                    total_outer_group += total_group;
                 }
 
-                stringBuilder.Append(@$"<tr>
-                                            <td colspan=1></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan=6 style='border-bottom: 1px solid; border-top: 1px solid'>TOTAL DALAM ORIGINAL</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: center'>Rp.</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_nilai_prm)}</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_nilai_dis)}<br>{ReportHelper.ConvertToReportFormat(total_nilai_kms)}</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_premi_netto)}</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_nilai_bia_pol)}</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_nilai_bia_mat)}</td>
-                                            <td style='border-bottom: 1px solid; border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(total_group)}</td>
-                                        </tr>
-                                    </table>
-                                    </div>");
-                
-                total_semua_nilai_prm += total_nilai_prm;
-                total_semua_nilai_dis += total_nilai_dis;
-                total_semua_nilai_kms += total_nilai_kms;
-                total_semua_premi_netto += total_premi_netto;
-                total_semua_nilai_bia_pol += total_nilai_bia_pol;
-                total_semua_nilai_bia_mat += total_nilai_bia_mat;
-                total_semua_group += total_group;
+                // ✅ Outer group total
+                grand_total_nilai_prm += total_outer_nilai_prm;
+                grand_total_nilai_dis += total_outer_nilai_dis;
+                grand_total_nilai_kms += total_outer_nilai_kms;
+                grand_total_premi_netto += total_outer_premi_netto;
+                grand_total_nilai_bia_pol += total_outer_nilai_bia_pol;
+                grand_total_nilai_bia_mat += total_outer_nilai_bia_mat;
+                grand_total_total_group += total_outer_group;
+
+                if (outerGroup.Key.Equals(lastOuterKey))
+                {
+                        stringBuilder.Append($@"<tr>
+                        <td colspan=6 style='border-bottom: 1px solid; width: 60%'>TOTAL KESELURUHAN DALAM RUPIAH</td>
+                        <td style='border-bottom: 1px solid;text-align: right'></td>
+                        <td style='border-bottom: 1px solid;text-align: right'>{ReportHelper.ConvertToReportFormat(grand_total_nilai_prm)}</td>
+                        <td style='border-bottom: 1px solid;text-align: right'>{ReportHelper.ConvertToReportFormat(grand_total_nilai_dis)}</td>
+                        <td style='border-bottom: 1px solid;text-align: right'>{ReportHelper.ConvertToReportFormat(grand_total_premi_netto)}</td>
+                        <td style='border-bottom: 1px solid;text-align: right'>{ReportHelper.ConvertToReportFormat(grand_total_nilai_bia_pol)}</td>
+                        <td style='border-bottom: 1px solid;text-align: right'>{ReportHelper.ConvertToReportFormat(grand_total_nilai_bia_mat)}</td>
+                        <td style='border-bottom: 1px solid;text-align: right'>{ReportHelper.ConvertToReportFormat(grand_total_total_group)}</td>
+                    </tr>
+                    <tr>
+                        <td colspan=6 style='border-bottom: 1px solid; width: 60%'></td>
+                        <td style='border-bottom: 1px solid;text-align: right;'></td>
+                        <td style='border-bottom: 1px solid;text-align: right;'></td>
+                        <td style='border-bottom: 1px solid;text-align: right;'>{ReportHelper.ConvertToReportFormat(grand_total_nilai_kms)}</td>
+                        <td style='border-bottom: 1px solid;text-align: right;'></td>
+                        <td style='border-bottom: 1px solid;text-align: right;'></td>
+                        <td style='border-bottom: 1px solid;text-align: right;'></td>
+                        <td style='border-bottom: 1px solid;text-align: right;'></td>
+                    </tr>
+                    <tr>
+                        <td colspan=10></td>
+                        <td colspan=3 style='text-align: center'><strong>Departement Underwriting</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan=10></td>
+                        <td colspan=3 style='text-align: center'>{laporanProduksiAsuransiDatas[0].nm_cb}, {DateTime.Now:dd MMMM yyyy}</td>
+                    </tr></table></div></div>");
+                }
             }
             
             resultTemplate = templateProfileResult.Render( new
             {
-                total_semua_nilai_prm = ReportHelper.ConvertToReportFormat(total_semua_nilai_prm), 
-                total_semua_nilai_dis = ReportHelper.ConvertToReportFormat(total_semua_nilai_dis), 
-                total_semua_nilai_kms = ReportHelper.ConvertToReportFormat(total_semua_nilai_kms),
-                total_semua_premi_netto = ReportHelper.ConvertToReportFormat(total_semua_premi_netto), 
-                total_semua_nilai_bia_pol = ReportHelper.ConvertToReportFormat(total_semua_nilai_bia_pol), 
-                total_semua_nilai_bia_mat = ReportHelper.ConvertToReportFormat(total_semua_nilai_bia_mat),
-                total_semua_group = ReportHelper.ConvertToReportFormat(total_semua_group),
-                laporanProduksiAsuransiDatas[0].nm_cb,
-                date = DateTime.Now.ToString("dd MMMM yyyy"), details = stringBuilder.ToString()
+                details = stringBuilder.ToString()
             } );
             
             return resultTemplate;

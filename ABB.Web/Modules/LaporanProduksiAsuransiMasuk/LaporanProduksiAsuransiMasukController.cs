@@ -38,7 +38,10 @@ namespace ABB.Web.Modules.LaporanProduksiAsuransiMasuk
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
             
-            return View(new LaporanProduksiAsuransiMasukViewModel());
+            return View(new LaporanProduksiAsuransiMasukViewModel()
+            {
+                kd_cb = Request.Cookies["UserCabang"]?.Trim() ?? string.Empty
+            });
         }
 
         public async Task<JsonResult> GetCabang()
@@ -111,12 +114,14 @@ namespace ABB.Web.Modules.LaporanProduksiAsuransiMasuk
         [HttpGet]
         public async Task<JsonResult> GetKodeRekanan(string kd_grp_rk, string kd_cb)
         {
-            var result = new List<DropdownOptionDto>();
-            result.Append(new DropdownOptionDto()
+            var result = new List<DropdownOptionDto>()
             {
-                Text = "",
-                Value = ""
-            });
+                new DropdownOptionDto()
+                {
+                    Text = "",
+                    Value = ""
+                }
+            };
             
             foreach (var rekanan in _rekanans.Where(w => w.kd_grp_rk.Trim() == kd_grp_rk && w.kd_cb.Trim() == kd_cb))
             {
@@ -156,7 +161,8 @@ namespace ABB.Web.Modules.LaporanProduksiAsuransiMasuk
                 
                 var reportTemplate = await Mediator.Send(command);
                 
-                _reportGeneratorService.GenerateReport("LaporanProduksiAsuransiMasuk.pdf", reportTemplate, sessionId, Orientation.Landscape);
+                _reportGeneratorService.GenerateReport("LaporanProduksiAsuransiMasuk.pdf", reportTemplate, sessionId, Orientation.Landscape,
+                    5, 5, 5, 5);
 
                 return Ok(new { Status = "OK", Data = sessionId});
             }

@@ -80,6 +80,12 @@ namespace ABB.Web.Modules.Akseptasi
                 data.st_pas = statusPolis.FirstOrDefault(w => w.Value == data.st_pas)?.Text ?? string.Empty;
             }
             
+            foreach (var data in ds)
+            {
+                data.no_aks = data.kd_cb.Trim() + "." + data.kd_cob.Trim() +
+                              data.kd_scob.Trim() + "." + data.kd_thn.Trim() + "." + data.no_aks.Trim();
+            }
+            
             return Json(ds.AsQueryable().ToDataSourceResult(request));
         }
 

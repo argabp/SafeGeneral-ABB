@@ -18,11 +18,15 @@
     }
 </style>
 <div class="flat-box">
-    
+    <div class="row" style="padding-bottom: 1em;">
+        <div class="flat-box-title col-md-8">
+            Laporan Bulanan Cabang
+        </div>
+    </div>
     <form id="LaporanBulananCabangForm" enctype="multipart/form-data" autocomplete="off">
         <div class="form-group row">
             <div class="row col-sm-6">
-                <label class="col-sm-6">Kode Cabang</label>
+                <label class="col-sm-3">Kode Cabang</label>
                 <div class="col-sm-6">
                     <kendo-dropdownlist for="kd_cb" style="width: 100%" option-label="Pilih Cabang"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
@@ -38,16 +42,16 @@
         </div>
         <div class="form-group row">
             <div class="row col-sm-6">
-                <label class="col-sm-6">Periode</label>
-                <div class="col-sm-6 row">
-                    <div class="col-sm-5">
+                <label class="col-sm-3">Periode</label>
+                <div class="col-sm-6 row" style="padding-right: 0">
+                    <div class="col-sm-5" style="padding-right: 0">
                         <kendo-datepicker for="kd_bln_mul" value="DateTime.Now"/>
                         <span asp-validation-for="kd_bln_mul" class="text-danger"></span>
                     </div>
-                    <div class="col-sm-2" style="align-content: center">
+                    <div class="col-sm-2" style="align-content: center; text-align: right">
                         <p style="margin-bottom: 3px">s/d</p>
                     </div>
-                    <div class="col-sm-5">
+                    <div class="col-sm-5" style="padding-right: 0">
                         <kendo-datepicker for="kd_bln_akh" value="DateTime.Now"/>
                         <span asp-validation-for="kd_bln_akh" class="text-danger"></span>
                     </div>
@@ -56,7 +60,7 @@
         </div>
         <div class="form-group row">
             <div class="row col-sm-6">
-                <label class="col-sm-6">Jenis Laporan</label>
+                <label class="col-sm-3">Jenis Laporan</label>
                 <div class="col-sm-6">
                     <kendo-dropdownlist for="jns_lap" style="width: 100%" option-label="Pilih Jenis Laporan"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">

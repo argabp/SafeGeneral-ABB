@@ -29,7 +29,10 @@ namespace ABB.Web.Modules.RenewalReminder
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
             
-            return View(new RenewalReminderViewModel());
+            return View(new RenewalReminderViewModel()
+            {
+                kd_cb = Request.Cookies["UserCabang"]?.Trim() ?? string.Empty
+            });
         }
 
         public async Task<JsonResult> GetCabang()

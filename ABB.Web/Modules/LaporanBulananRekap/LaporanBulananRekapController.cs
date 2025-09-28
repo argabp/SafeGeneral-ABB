@@ -30,7 +30,10 @@ namespace ABB.Web.Modules.LaporanBulananRekap
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
             
-            return View(new LaporanBulananRekapViewModel());
+            return View(new LaporanBulananRekapViewModel()
+            {
+                kd_cb = Request.Cookies["UserCabang"]?.Trim() ?? string.Empty
+            });
         }
 
         public async Task<JsonResult> GetCabang()
@@ -66,7 +69,8 @@ namespace ABB.Web.Modules.LaporanBulananRekap
 
                 var reportTemplate = await Mediator.Send(command);
                 
-                _reportGeneratorService.GenerateReport("LaporanBulananRekap.pdf", reportTemplate, sessionId, Orientation.Landscape);
+                _reportGeneratorService.GenerateReport("LaporanBulananRekap.pdf", reportTemplate, sessionId, Orientation.Landscape,
+                    5, 5, 5, 5);
 
                 return Ok(new { Status = "OK", Data = sessionId});
             }

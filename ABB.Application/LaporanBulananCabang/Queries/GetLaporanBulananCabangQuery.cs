@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using ABB.Application.RekapitulasiProduksi.Quries;
@@ -73,7 +75,6 @@ namespace ABB.Application.LaporanBulananCabang.Queries
             decimal total_premi_11 = 0;
             decimal total_premi_12 = 0;
             decimal total_nilai_prm_ttl = 0;
-            StringBuilder totalText = new StringBuilder();
 
             var st_pass = laporanBulananCabangDatas.Select(s => s.st_pas).Distinct().ToList();
             
@@ -139,13 +140,23 @@ namespace ABB.Application.LaporanBulananCabang.Queries
             
             stringBuilder.Append("</table>");
             
+            var jenisLaporan = new List<DropdownOptionDto>()
+            {
+                new DropdownOptionDto() { Text = "Premi Bruto", Value = "1" },
+                new DropdownOptionDto() { Text = "Premi Netto", Value = "2" },
+                new DropdownOptionDto() { Text = "Discount + Komisi", Value = "3" },
+                new DropdownOptionDto() { Text = "Klaim", Value = "4" },
+                new DropdownOptionDto() { Text = "Premi Rate", Value = "5" }
+            };
+            
             var laporanBulananCabang = laporanBulananCabangDatas.FirstOrDefault();
             resultTemplate = templateProfileResult.Render( new
             {
                 laporanBulananCabang?.nm_cab, 
                 kd_bln_mul = request.kd_bln_mul.ToString("dd-MM-yyyy"),
                 kd_bln_akh = request.kd_bln_akh.ToString("dd-MM-yyyy"),
-                details = stringBuilder.ToString()
+                details = stringBuilder.ToString(),
+                jenis_laporan = jenisLaporan.FirstOrDefault(w => w.Value == request.jns_lap)?.Text
             } );
             
             return resultTemplate;
