@@ -38,7 +38,7 @@
             @(Html.Kendo().Grid<AkseptasiDto>()
                 .Name("AkseptasiGrid")
                 .DataSource(dataSource => dataSource.Ajax()
-                    .Read(read => read.Action("GetAkseptasis", "CetakSchedulePolis").Data("searchFilter"))
+                    .Read(read => read.Action("GetAkseptasis", "CetakNotaDanKwitansiPolis").Data("searchFilter"))
                     .Model(model => model.Id(p => p.Id))
                 )
                 .Columns(columns =>
@@ -46,11 +46,10 @@
                     columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
                     columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
                     columns.Bound(col => col.nm_scob).Width(150).Title("Nama Sub COB");
-                    columns.Bound(col => col.no_pol).Width(150).Title("Nomor Polis");
+                    columns.Bound(col => col.no_pol_ttg).Width(150).Title("Nomor Polis").ClientTemplate("#= formatNoPol(no_pol_ttg) #");;
                     columns.Bound(col => col.no_updt).Width(150).Title("Nomor Update");
                     columns.Bound(col => col.tgl_closing).Width(150).Title("Tanggal Closing").Format("{0: dd-MM-yyyy}");
                     columns.Bound(col => col.nm_ttg).Width(150).Title("Nama Tertanggung");
-                    columns.Bound(col => col.nm_usr_input).Width(150).Title("Nama User Input");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)
@@ -63,9 +62,7 @@
                 .Scrollable()
                 .Height(450)
                 .Resizable(a=>a.Columns(true))
-                .Events(ev => ev.DataBound("gridAutoFit"))
-        
-                )    
+                .Events(ev => ev.DataBound("gridAutoFit")))
         </div>
         
         <script id="template" type="text/kendo-tmpl">

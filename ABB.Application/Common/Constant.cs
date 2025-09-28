@@ -165,7 +165,7 @@ namespace ABB.Application.Common
                                                                 td {
                                                                     font-size: 9pt;
                                                                     padding: 2px 4px; /* give breathing room */
-                                                                    letter-spacing: 3px;
+                                                                    letter-spacing: 1px;
                                                                 }
 
                                                                 .container {

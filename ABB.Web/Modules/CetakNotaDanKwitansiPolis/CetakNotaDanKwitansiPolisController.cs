@@ -87,7 +87,7 @@ namespace ABB.Web.Modules.CetakNotaDanKwitansiPolis
                 
                 var reportTemplate = await Mediator.Send(command);
 
-                _reportGeneratorService.GenerateReport("CetakNotaDanKwitansiPolis.pdf", reportTemplate, sessionId);
+                _reportGeneratorService.GenerateReport("CetakNotaDanKwitansiPolis.pdf", reportTemplate, sessionId, right: 0, left: 0, top: 0, bottom: 0);
 
                 return Ok(new { Status = "OK", Data = sessionId});
             }
