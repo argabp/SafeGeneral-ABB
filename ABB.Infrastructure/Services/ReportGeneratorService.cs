@@ -20,14 +20,14 @@ namespace ABB.Infrastructure.Services
 
         public void GenerateReport(string reportName, string templateReport, string path, 
             Orientation orientation = Orientation.Portrait, double right = 20, double left = 20, 
-            double top = 20, double bottom = 20)
+            double top = 20, double bottom = 20, PaperKind paperSize = PaperKind.A4)
         {
             var doc = new HtmlToPdfDocument()
             {
                 GlobalSettings = {
                     ColorMode = ColorMode.Color,
                     Orientation = orientation,
-                    PaperSize = PaperKind.A4,
+                    PaperSize = paperSize,
                     Margins = new MarginSettings { Top = top, Bottom = bottom, Left = left, Right = right }
                 },
                 Objects = {

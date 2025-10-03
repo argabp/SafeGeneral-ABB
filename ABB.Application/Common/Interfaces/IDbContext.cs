@@ -70,6 +70,8 @@ namespace ABB.Application.Common.Interfaces
         DbSet<AkseptasiResiko> AkseptasiResiko { get; set; }
         DbSet<AkseptasiCoverage> AkseptasiCoverage { get; set; }
         DbSet<AkseptasiObyek> AkseptasiObyek { get; set; }
+        DbSet<AkseptasiObyekCIT> AkseptasiObyekCIT { get; set; }
+        DbSet<AkseptasiObyekCIS> AkseptasiObyekCIS { get; set; }
         DbSet<AkseptasiOtherFire> AkseptasiOtherFire { get; set; }
         DbSet<AkseptasiOtherMotor> AkseptasiOtherMotor { get; set; }
         DbSet<AkseptasiOtherMotorDetail> AkseptasiOtherMotorDetail { get; set; }

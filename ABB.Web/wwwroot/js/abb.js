@@ -1196,7 +1196,6 @@ function getAppFieldValue(field) {
     return $("#" + field.ColumnName).data(dataType).value();
 
 }
-
 function formatNoPol(value) {
   if (!value) return "";
 
@@ -1211,4 +1210,8 @@ function formatNoPol(value) {
       value.substring(7, 11) + '.' +
       value.substring(11, 15) + '-' +
       value.substring(15);
+}
+
+function disableGridTextbox(dataItem){
+  return false;
 }

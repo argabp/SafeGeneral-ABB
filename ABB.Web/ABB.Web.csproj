@@ -5812,6 +5812,15 @@
       <None Update="Modules\Reports\Templates\footer.html">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\Akseptasi\Components\Obyek\obyekCIT.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Akseptasi\JS\akseptasi.obyekCIT.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Akseptasi\Components\Obyek\obyekCIS.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

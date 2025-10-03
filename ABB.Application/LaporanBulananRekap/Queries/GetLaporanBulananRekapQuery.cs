@@ -101,7 +101,7 @@ namespace ABB.Application.LaporanBulananRekap.Queries
             foreach (var st_pas in st_pass)
             {
                 stringBuilder.Append($@"<tr>
-                                            <td colspan='13' style='border: 1px solid'>{st_pas}</td>
+                                            <td colspan='14' style='border: 1px solid'>{st_pas}</td>
                                         </tr>");
                 
                 foreach (var data in laporanBulananRekapDatas.Where(w => w.st_pas == st_pas))

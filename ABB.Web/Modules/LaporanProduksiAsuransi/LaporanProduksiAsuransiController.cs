@@ -163,7 +163,7 @@ namespace ABB.Web.Modules.LaporanProduksiAsuransi
                 var reportTemplate = await Mediator.Send(command);
                 
                 _reportGeneratorService.GenerateReport("LaporanProduksiAsuransi.pdf", reportTemplate, sessionId, Orientation.Landscape,
-                    5, 5, 5, 5);
+                    5, 5, 5, 5, PaperKind.Legal);
 
                 return Ok(new { Status = "OK", Data = sessionId});
             }

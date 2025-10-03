@@ -197,7 +197,7 @@ namespace ABB.Application.LaporanProduksiAsuransi.Queries
                         var nilai_bia_pol = ReportHelper.ConvertToReportFormat(data.nilai_bia_pol);
                         var nilai_bia_mat = ReportHelper.ConvertToReportFormat(data.nilai_bia_mat);
                         var premi_netto = ReportHelper.ConvertToReportFormat(Convert.ToDecimal(data.nilai_prm) - (Convert.ToDecimal(data.nilai_dis) + Convert.ToDecimal(data.nilai_kms)));
-                        var total_bia = ReportHelper.ConvertToReportFormat(Convert.ToDecimal(premi_netto) + Convert.ToDecimal(data.nilai_bia_pol) + Convert.ToDecimal(data.nilai_bia_mat));
+                        var total_bia = ReportHelper.ConvertToReportFormat(Convert.ToDecimal(data.nilai_prm) - (Convert.ToDecimal(data.nilai_dis) + Convert.ToDecimal(data.nilai_kms)) + Convert.ToDecimal(data.nilai_bia_pol) + Convert.ToDecimal(data.nilai_bia_mat));
 
                         stringBuilder.Append(@$"<tr>
                             <td style='border: 1px solid'>{sequence}</td>

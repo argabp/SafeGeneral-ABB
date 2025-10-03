@@ -70,7 +70,7 @@ namespace ABB.Web.Modules.LaporanBulananRekap
                 var reportTemplate = await Mediator.Send(command);
                 
                 _reportGeneratorService.GenerateReport("LaporanBulananRekap.pdf", reportTemplate, sessionId, Orientation.Landscape,
-                    5, 5, 5, 5);
+                    5, 5, 5, 5, PaperKind.Legal);
 
                 return Ok(new { Status = "OK", Data = sessionId});
             }

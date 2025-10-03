@@ -122,8 +122,8 @@ namespace ABB.Application.LaporanProduksiAsuransiKeluar.Queries
                     var pst_share = ReportHelper.ConvertToReportFormat(data.pst_share);
                     var nilai_prm = ReportHelper.ConvertToReportFormat(data.nilai_prm);
                     var nilai_kms = ReportHelper.ConvertToReportFormat(data.nilai_kms);
-                    var nilai_hf = ReportHelper.ConvertToReportFormat(data.nilai_ttl_ptg);
-                    var nilai_net = ReportHelper.ConvertToReportFormat(data.nilai_ttl_ptg);
+                    var nilai_hf = ReportHelper.ConvertToReportFormat(data.nilai_hf);
+                    var nilai_net = ReportHelper.ConvertToReportFormat(data.nilai_net);
                     stringBuilder.Append(@$"<tr>
                                                 <td style='width: 3%;  text-align: left; vertical-align: top; border: 1px solid'>{sequence}</td>
                                                 <td style='width: 20%; text-align: left; vertical-align: top; border: 1px solid'>{data.no_nota}<br>{data.tgl_nt}</td>

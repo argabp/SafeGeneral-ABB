@@ -42,5 +42,7 @@ namespace ABB.Application.PembatalanAkseptasis.Queries
         public string kd_usr_input { get; set; }
 
         public string nm_ttg { get; set; }
+
+        public string? no_aks_view { get; set; }
     }
 }

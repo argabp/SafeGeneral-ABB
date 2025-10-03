@@ -162,7 +162,7 @@ namespace ABB.Web.Modules.LaporanProduksiAsuransiKeluar
                 var reportTemplate = await Mediator.Send(command);
                 
                 _reportGeneratorService.GenerateReport("LaporanProduksiAsuransiKeluar.pdf", reportTemplate, sessionId, Orientation.Landscape,
-                    5, 5, 5, 5);
+                    5, 5, 5, 5, PaperKind.Legal);
 
                 return Ok(new { Status = "OK", Data = sessionId});
             }

@@ -34,8 +34,8 @@ namespace ABB.Web.Modules.PembatalanAkseptasi
 
             foreach (var data in ds)
             {
-                data.no_aks = data.kd_cb.Trim() + "." + data.kd_cob.Trim() +
-                              data.kd_scob.Trim() + "." + data.kd_thn.Trim() + "." + data.no_aks.Trim();
+                data.no_aks_view = data.kd_cb.Trim() + "." + data.kd_cob.Trim() +
+                                   data.kd_scob.Trim() + "." + data.kd_thn.Trim() + "." + data.no_aks.Trim();
             }
 
             return Json(ds.AsQueryable().ToDataSourceResult(request));
