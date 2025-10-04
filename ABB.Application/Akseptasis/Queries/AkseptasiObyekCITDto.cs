@@ -52,6 +52,8 @@ namespace ABB.Application.Akseptasis.Queries
         public decimal? nilai_prm_pa { get; set; }
 
         public decimal? pst_rate { get; set; }
+
+        public string nm_asal { get; set; }
         
         public void Mapping(Profile profile)
         {

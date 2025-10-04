@@ -68,8 +68,21 @@ namespace ABB.Application.Akseptasis.Commands
                     request.kd_cob, request.kd_scob, request.kd_thn, request.no_aks, request.no_updt, 
                     request.no_rsk, request.kd_endt, request.no_oby);
 
-                request.tgl_oby = request.tgl_oby.AddDays(1);
-                
+                var dataCis = dbContext.AkseptasiObyekCIS.Where(w => w.kd_cb == request.kd_cb
+                                                                    && w.kd_cob == request.kd_cob &&
+                                                                    w.kd_scob == request.kd_scob &&
+                                                                    w.kd_thn == request.kd_thn
+                                                                    && w.no_aks == request.no_aks &&
+                                                                    w.no_updt == request.no_updt &&
+                                                                    w.no_rsk == request.no_rsk
+                                                                    && w.kd_endt == request.kd_endt &&
+                                                                    w.no_oby == request.no_oby);
+
+                if (dataCis.Any())
+                {
+                    request.tgl_oby = dataCis.Max(w => w.tgl_oby).AddDays(1);
+                }
+
                 if (entity == null)
                 {
                     var akseptasiObyek = _mapper.Map<AkseptasiObyekCIS>(request);
@@ -97,12 +110,12 @@ namespace ABB.Application.Akseptasis.Commands
                     await dbContext.SaveChangesAsync(cancellationToken);
                 }
 
-                // await _connectionFactory.QueryProc<string>("spe_uw02e_20", new
-                // {
-                //     request.kd_cb, request.kd_cob, request.kd_scob,
-                //     request.kd_thn, request.no_aks, request.no_updt,
-                //     request.no_rsk, request.kd_endt
-                // });
+                await _connectionFactory.QueryProc<string>("spe_uw02e_20", new
+                {
+                    request.kd_cb, request.kd_cob, request.kd_scob,
+                    request.kd_thn, request.no_aks, request.no_updt,
+                    request.no_rsk, request.kd_endt
+                });
                     
                 return Unit.Value;
             }

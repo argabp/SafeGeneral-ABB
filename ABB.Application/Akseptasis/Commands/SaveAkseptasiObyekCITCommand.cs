@@ -120,16 +120,17 @@ namespace ABB.Application.Akseptasis.Commands
                     entity.nilai_pa = request.nilai_pa;
                     entity.pst_rate_pa = request.pst_rate_pa;
                     entity.nilai_prm_pa = request.nilai_prm_pa;
+                    entity.ket_tujuan = request.ket_tujuan;
             
                     await dbContext.SaveChangesAsync(cancellationToken);
                 }
 
-                // await _connectionFactory.QueryProc<string>("spe_uw02e_20", new
-                // {
-                //     request.kd_cb, request.kd_cob, request.kd_scob,
-                //     request.kd_thn, request.no_aks, request.no_updt,
-                //     request.no_rsk, request.kd_endt
-                // });
+                await _connectionFactory.QueryProc<string>("spe_uw02e_20", new
+                {
+                    request.kd_cb, request.kd_cob, request.kd_scob,
+                    request.kd_thn, request.no_aks, request.no_updt,
+                    request.no_rsk, request.kd_endt
+                });
                     
                 return Unit.Value;
             }

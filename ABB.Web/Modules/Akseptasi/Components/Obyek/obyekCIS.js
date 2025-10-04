@@ -101,3 +101,47 @@ function saveAkseptasiObyekCIS(dataItem) {
         }
     );
 }
+
+// Format totalNilaiAng as currency (money format)
+var currencyFormatter = new Intl.NumberFormat('en-US', {
+    style: 'decimal',
+    minimumFractionDigits: 3,
+    maximumFractionDigits: 3
+});
+
+function OnAkseptasiObyekDataBound(e){
+    // Get the grid instance
+    var grid = e.sender;
+    var totalSaldo = 0;
+
+    grid.dataSource.view().forEach(function(dataItem) {
+        totalSaldo += dataItem.nilai_saldo || 0;
+    });
+
+    $("#totalSaldo").text(currencyFormatter.format(totalSaldo));
+
+    var grid = this;
+    gridAutoFit(grid);
+}
+
+function onEditAkseptasiObyek(dataItem){
+    if (dataItem.container.find("input[name='nilai_saldo']").length) {
+        var numericTextbox = dataItem.container.find("input[name='nilai_saldo']").data("kendoNumericTextBox");
+        if (numericTextbox) {
+            numericTextbox.bind("change", function () {
+                onNilaiSaldoChange();
+            });
+        }
+    }
+}
+
+function onNilaiSaldoChange() {
+    var totalSaldo = 0;
+    var grid = $("#AkseptasiObyekGrid").getKendoGrid();
+
+    grid.dataSource.view().forEach(function(dataItem) {
+        totalSaldo += dataItem.nilai_saldo || 0;
+    });
+
+    $("#totalSaldo").text(currencyFormatter.format(totalSaldo));
+}

@@ -26,6 +26,7 @@
 
     <ItemGroup>
       <Folder Include="CetakNotaDanKwitansiPolis\Commands" />
+      <Folder Include="CetakNotaKoasuransiKeluars\Commands" />
       <Folder Include="CetakSchedulePolis\Commands" />
       <Folder Include="HasilCSM\Commands" />
       <Folder Include="RenewalNotices\Commands" />

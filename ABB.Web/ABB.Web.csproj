@@ -5821,6 +5821,24 @@
       <None Update="Modules\Akseptasi\Components\Obyek\obyekCIS.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\Reports\Templates\CetakanNotaKoasuransiKeluar.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\CetakNotaKoasuransiKeluar\JS\cetakNotaKoasuransiKeluar.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Reports\Templates\CetakLampiranEndorsment.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\CetakLampiranEndorsment\JS\cetakLampiranEndorsment.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Reports\Templates\CetakNotaKomisiTambahan.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\CetaknotaKomisiTambahan\JS\cetaknotaKomisiTambahan.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

@@ -44,8 +44,12 @@
         .Scrollable()
         .Height(450)
         .Resizable(a => a.Columns(true))
-        .Events(ev => ev.DataBound("gridAutoFit").Save("saveAkseptasiObyekCIS")))
+        .Events(ev => ev.DataBound("OnAkseptasiObyekDataBound").Edit("onEditAkseptasiObyek").Save("saveAkseptasiObyekCIS")))
 
+        <div class="form-group row">
+            <p class="col-sm-3" style="font-weight: bold;">Total Saldo</p>
+            <p class="col-sm-3" style="font-weight: bold;" id="totalSaldo"></p>
+        </div>
     <div class="window-footer">
         <button type="button" id="btn-previous-akseptasiResikoObyekCIS" class="btn btn-primary space-right">
             <span class="fa fa-arrow-left"></span> Previous

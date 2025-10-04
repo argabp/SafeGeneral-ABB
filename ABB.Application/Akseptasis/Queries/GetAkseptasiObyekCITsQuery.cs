@@ -41,8 +41,10 @@ namespace ABB.Application.Akseptasis.Queries
         public async Task<List<AkseptasiObyekCITDto>> Handle(GetAkseptasiObyekCITsQuery request, CancellationToken cancellationToken)
         {
             _connectionFactory.CreateDbConnection(request.DatabaseName);
-            return (await _connectionFactory.Query<AkseptasiObyekCITDto>(@"SELECT p.*
+            return (await _connectionFactory.Query<AkseptasiObyekCITDto>(@"SELECT p.*, r.nm_lok nm_asal 
 				FROM uw06a02 p
+				    INNER JOIN rf19 r
+						ON r.kd_lok = p.kd_lok_asal
 				WHERE p.kd_cb = @KodeCabang AND 
 				      p.kd_cob = @kd_cob AND 
 				      p.kd_scob = @kd_scob AND 
