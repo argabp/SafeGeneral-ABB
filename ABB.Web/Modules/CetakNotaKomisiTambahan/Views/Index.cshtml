@@ -47,9 +47,8 @@
                     columns.Bound(col => col.no_pol_ttg).Width(200).Title("Nomor Polis").ClientTemplate("#= formatNoPol(no_pol_ttg) #");
                     columns.Bound(col => col.no_updt).Width(150).Title("Nomor Update");
                     columns.Bound(col => col.nm_ttj).Width(200).Title("Nama Tertuju");
-                    columns.Bound(col => col.tgl_mul_ptg).Width(150).Title("Tanggal Mulai").Format("{0: dd-MM-yyyy}");
-                    columns.Bound(col => col.tgl_akh_ptg).Width(150).Title("Tanggal Akhir").Format("{0: dd-MM-yyyy}");
-                    columns.Bound(col => col.tgl_closing).Width(150).Title("Tanggal Closing").Format("{0: dd-MM-yyyy}");
+                    columns.Bound(col => col.tgl_nt).Width(150).Title("Tanggal Nota").Format("{0: dd-MM-yyyy}");
+                    columns.Bound(col => col.nilai_nt).Width(200).Title("Nilai Nota").Format("{0:n2}");
                     columns.Command(command =>
                     {
                         command.Custom("Preview")

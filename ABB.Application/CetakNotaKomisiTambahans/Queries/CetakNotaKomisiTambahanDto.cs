@@ -49,5 +49,9 @@ namespace ABB.Application.CetakNotaKomisiTambahans.Queries
         public string? nm_ttj { get; set; }
 
         public Int16 no_updt { get; set; }
+
+        public DateTime? tgl_nt { get; set; }
+
+        public decimal? nilai_nt { get; set; }
     }
 }

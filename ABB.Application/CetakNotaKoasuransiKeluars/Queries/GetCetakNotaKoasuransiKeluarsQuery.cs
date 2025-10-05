@@ -32,7 +32,8 @@ namespace ABB.Application.CetakNotaKoasuransiKeluars.Queries
             try
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
-                var results = (await _connectionFactory.Query<CetakNotaKoasuransiKeluarDto>(@"SELECT pp.nm_ttg, pp.st_pas, p.*, cb.nm_cb, cob.nm_cob, scob.nm_scob FROM uw08e p 
+                var results = (await _connectionFactory.Query<CetakNotaKoasuransiKeluarDto>(@"SELECT pp.nm_ttg, pp.st_pas, p.*, cb.nm_cb, cob.nm_cob, scob.nm_scob 
+                    FROM uw08e p 
                         INNER JOIN rf01 cb
                            ON p.kd_cb = cb.kd_cb
                         INNER JOIN rf04 cob
@@ -48,6 +49,7 @@ namespace ABB.Application.CetakNotaKoasuransiKeluars.Queries
                             AND pp.no_pol = p.no_pol
                             AND pp.no_updt = p.no_updt
                         WHERE p.flag_cancel = 'N' AND 
+                              p.jns_nt_kel = 'K' AND
                               (p.no_nt_msk like '%'+@SearchKeyword+'%' 
 					OR p.no_pol_ttg like '%'+@SearchKeyword+'%' 
 					OR p.nm_ttj like '%'+@SearchKeyword+'%' 

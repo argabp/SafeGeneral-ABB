@@ -74,13 +74,35 @@ namespace ABB.Application.CetakLampiranEndorsments.Queries
                     break;
             }
 
+            var other = string.Empty;
+            if (data.other?.Length > 0)
+            {
+                other = $@"
+	                <tr>
+		                <td>{nm_cob}</td>
+		                <td>:</td>
+		                <td>{data.other}</td>
+	                </tr>";
+            }
+
+            var bentuk_pertanggungan = string.Empty;
+            if (data.kd_cob.Trim() == "M")
+            {
+                bentuk_pertanggungan = $@"
+	                <tr>
+		                <td>Bentuk Pertanggungan</td>
+		                <td>:</td>
+		                <td>{data.kd_jns_ptg}</td>
+	                </tr>";
+            }
+
             var ket_endt = data.ket_endt.Replace("\r\n", "<br>");
             
             var resultTemplate = templateProfileResult.Render( new
             {
                 data.almt_ttg, data.no_endt, data.nm_ttg, nm_cob, data.no_updt,
-                data.kd_jns_ptg, data.no_pol_ttg, data.kt_ttg, ket_endt, data.other,
-                data.kd_cob, tsi = ReportHelper.ConvertToReportFormat(data.tsi),
+                data.kd_jns_ptg, data.no_pol_ttg, data.kt_ttg, ket_endt, other,
+                data.kd_cob, tsi = ReportHelper.ConvertToReportFormat(data.tsi), bentuk_pertanggungan,
                 tgl_mul_ptg = ReportHelper.ConvertDateTime(data.tgl_mul_ptg, "dd/MM/yyyy"),
                 tgl_akh_ptg = ReportHelper.ConvertDateTime(data.tgl_akh_ptg, "dd/MM/yyyy"),
                 data.symbol, data.kd_cob_1, 

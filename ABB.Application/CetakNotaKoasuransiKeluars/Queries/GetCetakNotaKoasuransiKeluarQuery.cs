@@ -77,7 +77,7 @@ namespace ABB.Application.CetakNotaKoasuransiKeluars.Queries
                 : $@"
 		<td style='width: 5%'>{data.uraian_01}</td>
 		<td style='width: 1%'>:</td>
-		<td style='width: 5%'>{data.kd_mtu_symbol}</td>
+		<td style='width: 1%'>{data.kd_mtu_symbol}</td>
 		<td style='text-align: right; width: 5%'>{ReportHelper.ConvertToReportFormat(data.nilai_01)}</td>";
 
             var div_nilai_02 = data.nilai_02 == 0
@@ -89,7 +89,7 @@ namespace ABB.Application.CetakNotaKoasuransiKeluars.Queries
                 : $@"
 		<td style='width: 5%'>{data.uraian_02}</td>
 		<td style='width: 1%'>:</td>
-		<td style='width: 5%'>{data.kd_mtu_symbol}</td>
+		<td style='width: 1%'>{data.kd_mtu_symbol}</td>
 		<td style='text-align: right; width: 5%'>{ReportHelper.ConvertToReportFormat(data.nilai_02)}</td>";
 
             var div_nilai_03 = data.nilai_03 == 0
@@ -101,7 +101,7 @@ namespace ABB.Application.CetakNotaKoasuransiKeluars.Queries
                 : $@"
 		<td style='width: 5%'>{data.uraian_03}</td>
 		<td style='width: 1%'>:</td>
-		<td style='width: 5%'>{data.kd_mtu_symbol}</td>
+		<td style='width: 1%'>{data.kd_mtu_symbol}</td>
 		<td style='text-align: right; width: 5%'>{ReportHelper.ConvertToReportFormat(data.nilai_03)}</td>";
 
             var div_nilai_04 = data.nilai_04 == 0
@@ -113,7 +113,7 @@ namespace ABB.Application.CetakNotaKoasuransiKeluars.Queries
                 : $@"
 		<td style='width: 5%'>{data.uraian_04}</td>
 		<td style='width: 1%'>:</td>
-		<td style='width: 5%'>{data.kd_mtu_symbol}</td>
+		<td style='width: 1%'>{data.kd_mtu_symbol}</td>
 		<td style='text-align: right; width: 5%'>{ReportHelper.ConvertToReportFormat(data.nilai_04)}</td>";
 
             var div_nilai_05 = data.nilai_05 == 0
@@ -125,8 +125,11 @@ namespace ABB.Application.CetakNotaKoasuransiKeluars.Queries
                 : $@"
 		<td style='width: 5%'>{data.uraian_05}</td>
 		<td style='width: 1%'>:</td>
-		<td style='width: 5%'>{data.kd_mtu_symbol}</td>
+		<td style='width: 1%'>{data.kd_mtu_symbol}</td>
 		<td style='text-align: right; width: 5%'>{ReportHelper.ConvertToReportFormat(data.nilai_05)}</td>";
+            var header = data.st_nota == "D" ? "NOTA DEBET" : "NOTA KREDIT";
+            var nilai_ttl_ptg = ReportHelper.ConvertToReportFormat(data.nilai_ttl_ptg);
+            var nilai_prm_full = ReportHelper.ConvertToReportFormat(data.nilai_prm_full);
             
             var resultTemplate = templateProfileResult.Render( new
             {
@@ -139,7 +142,7 @@ namespace ABB.Application.CetakNotaKoasuransiKeluars.Queries
                 tgl_mul_ptg = ReportHelper.ConvertDateTime(data.tgl_mul_ptg, "dd/MM/yyyy"),
                 tgl_akh_ptg = ReportHelper.ConvertDateTime(data.tgl_akh_ptg, "dd/MM/yyyy"),
                 data.uraian_01, data.uraian_02, data.uraian_03, data.uraian_04, data.uraian_05,
-                data.kd_mtu_pol_symbol, data.ket_nilai_nt, data.period_polis,
+                data.kd_mtu_pol_symbol, data.ket_nilai_nt, data.period_polis, header, nilai_ttl_ptg, nilai_prm_full,
                 title3 = reportConfig.Title.Title3, title4 = reportConfig.Title.Title4, title6 = reportConfig.Title.Title6
             } );
 

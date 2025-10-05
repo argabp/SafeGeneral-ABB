@@ -94,10 +94,21 @@ namespace ABB.Application.CetakNotaKomisiTambahans.Queries
                                   : "(" + data.pst_nota.Value.ToString("#,##0.00") + "%)");
             }
 
+            string text_koperasi = data.pst_lain != 0 ? "Jasa Koperasi" : "";
+            var koperasi = data.nilai_lain.Value > 0
+                ? $@"
+            <tr>
+                <td>{text_koperasi}</td>
+                <td>:</td>
+                <td>{data.kd_mtu_symbol}</td>
+                <td style='width: 10%; text-align: right'>{nilai_lain}</td>
+                <td></td>
+            </tr>"
+                : string.Empty;
+            
             string text_ppn =
                 data.pst_ppn == 0 ? "" : $"PPN {ReportHelper.ConvertToReportFormat(data.pst_ppn, true)} %";
             string text_pph = data.pst_ppn != 0 ? data.nm_grp_sbr_bis : "";
-            string text_koperasi = data.pst_lain != 0 ? "Jasa Koperasi" : "";
 
             string total = ReportHelper.ConvertToReportFormat(data.nilai_nt + data.nilai_ppn + data.nilai_pph + data.nilai_lain);
 
@@ -107,7 +118,7 @@ namespace ABB.Application.CetakNotaKomisiTambahans.Queries
                 data.jns_tr, data.jns_nt_msk, data.jns_nt_kel, data.nm_cb, data.almt_ttj,
                 nilai_prm, nilai_pph, nilai_ppn, nilai_lain, data.nm_ttj, data.kt_ttj,
                 nilai_koperasi, data.kt_cb, data.kd_mtu_symbol, data.tgl_nt_ind, data.no_nota,
-                data.period_polis, text_komisi, text_ppn, text_pph, text_koperasi, total,
+                data.period_polis, text_komisi, text_ppn, text_pph, koperasi, total,
                 title3 = reportConfig.Title.Title3, title4 = reportConfig.Title.Title4, title6 = reportConfig.Title.Title6
             } );
 
