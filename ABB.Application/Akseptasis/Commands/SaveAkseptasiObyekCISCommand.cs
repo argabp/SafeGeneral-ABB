@@ -75,8 +75,7 @@ namespace ABB.Application.Akseptasis.Commands
                                                                     && w.no_aks == request.no_aks &&
                                                                     w.no_updt == request.no_updt &&
                                                                     w.no_rsk == request.no_rsk
-                                                                    && w.kd_endt == request.kd_endt &&
-                                                                    w.no_oby == request.no_oby);
+                                                                    && w.kd_endt == request.kd_endt).ToList();
 
                 if (dataCis.Any())
                 {
