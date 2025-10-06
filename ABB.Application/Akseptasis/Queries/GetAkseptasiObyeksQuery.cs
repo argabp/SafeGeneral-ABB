@@ -56,22 +56,6 @@ namespace ABB.Application.Akseptasis.Queries
 		            request.no_aks, request.no_updt, request.no_rsk,
 		            request.kd_endt
 	            })).ToList();
-    //         return (await _connectionFactory.Query<AkseptasiResikoDto>(@"SELECT p.*, cb.nm_cb, cob.nm_cob, scob.nm_scob
-				// FROM uw04a p
-				// 	INNER JOIN rf01 cb
-				// 		ON p.kd_cb = cb.kd_cb
-				// 	INNER JOIN rf04 cob
-				// 		ON p.kd_cob = cob.kd_cob
-				// 	INNER JOIN rf05 scob
-				// 		ON p.kd_scob = scob.kd_scob
-				// WHERE cb.kd_cb = @KodeCabang AND (p.no_aks like '%'+@SearchKeyword+'%' 
-				// 	OR p.no_pol_pas like '%'+@SearchKeyword+'%' 
-				// 	OR p.st_pas like '%'+@SearchKeyword+'%' 
-				// 	OR cb.nm_cb like '%'+@SearchKeyword+'%' 
-				// 	OR cob.nm_cob like '%'+@SearchKeyword+'%' 
-				// 	OR scob.nm_scob like '%'+@SearchKeyword+'%' 
-				// 	OR p.nm_ttg like '%'+@SearchKeyword+'%' 
-				// 	OR @SearchKeyword = '' OR @SearchKeyword IS NULL)", new { request.SearchKeyword, request.KodeCabang })).ToList();
         }
     }
 }

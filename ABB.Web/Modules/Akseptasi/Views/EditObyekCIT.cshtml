@@ -1,0 +1,171 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.Akseptasi.Models.AkseptasiResikoObyekCITViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/Akseptasi/JS/akseptasi.obyekCIT.js"></script>
+
+<style>
+    p {
+        margin: 0px;
+        padding: 0px;
+    }
+    label {
+        align-content: center;
+    }
+</style>
+
+@{
+    var nomor_aksepatsi = Model.kd_cb.Trim() + "." + Model.kd_cob.Trim() +
+                          Model.kd_scob.Trim() + "." + Model.kd_thn.Trim() + "." + Model.no_aks.Trim();
+    var pst_rate = (double) Model.pst_rate;
+}
+
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="ObyekCITForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Akseptasi</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="temp_obyek_cit_nomor_akseptasi" value="@nomor_aksepatsi" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Update</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="resiko_obyek_cit_no_updt" value="@Model.no_updt" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Resiko</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="resiko_obyek_cit_no_rsk" value="@Model.no_rsk" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Endorsment</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist name="resiko_obyek_cit_kd_endt" style="width: 100%" readonly="true" value="@Model.kd_endt"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeEndorsment", "Akseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Obyek</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="no_oby" readonly="true" style="width: 100%; background-color: #00FFFF"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Asal</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_lok_asal" style="width: 100%" option-label="Pilih Kode Asal"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetLokasi", "Akseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Keterangan Tujuan</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="ket_tujuan" style="width: 100%;"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Tanggal Kirim</label>
+                <div class="col-sm-6">
+                    <kendo-datepicker for="tgl_kirim" style="width: 100%; background-color: #FFFFE1"/>
+                    <span asp-validation-for="tgl_kirim" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Maks. Nilai Pertanggungan</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="nilai_srt" style="width: 100%; background-color: #FFFFE1"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nilai Pertanggungan</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="nilai_kas" style="width: 100%; background-color: #FFFFE1"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Rate (%0)</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox decimals="2" max="100" value="pst_rate" spinners="false" name="resiko_obyek_cit_pst_rate" style="width: 100%;"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Jarak (KM)</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox decimals="0" spinners="false" for="jarak" style="width: 100%;"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Kendaraan</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="ket_kirim" style="width: 100%;"/>
+                    <span asp-validation-for="ket_kirim" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Jumlah Pegawai</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox decimals="0" format="#" spinners="false" for="jml_wesel" style="width: 100%;"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nilai PA</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="nilai_pa" style="width: 100%;"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Rate PA (%0)</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox decimals="2" max="100" for="pst_rate_pa" spinners="false" style="width: 100%;" on-change="OnRatePaChange"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Premi PA</label>
+                <div class="col-sm-"6>
+                    <kendo-numerictextbox decimals="2" spinners="false" for="nilai_prm_pa" style="width: 100%;"/>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="window-footer">
+        <button type="button" id="btn-save-akseptasiObyekCIT" class="btn btn-success space-right">
+            <span class="fa fa-save"></span> Save
+        </button>
+    </div>
+</div>

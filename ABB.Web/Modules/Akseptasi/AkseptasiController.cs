@@ -55,7 +55,7 @@ namespace ABB.Web.Modules.Akseptasi
             return View();
         }
 
-        #region Akspetasi
+        #region Aksepetasi
         
         public async Task<ActionResult> GetAkseptasis([DataSourceRequest] DataSourceRequest request, string searchkeyword)
         {
@@ -82,7 +82,7 @@ namespace ABB.Web.Modules.Akseptasi
             
             foreach (var data in ds)
             {
-                data.no_aks = data.kd_cb.Trim() + "." + data.kd_cob.Trim() +
+                data.no_aks_view = data.kd_cb.Trim() + "." + data.kd_cob.Trim() +
                               data.kd_scob.Trim() + "." + data.kd_thn.Trim() + "." + data.no_aks.Trim();
             }
             
@@ -807,6 +807,48 @@ namespace ABB.Web.Modules.Akseptasi
 
             return Json(ds.AsQueryable().ToDataSourceResult(request));
         }
+
+        public async Task<ActionResult> GetAkseptasiObyekCITs([DataSourceRequest] DataSourceRequest request, 
+            string searchkeyword, string kd_cb, string kd_cob, string kd_scob, 
+            string kd_thn, string no_aks, Int16 no_updt, Int16 no_rsk, string kd_endt)
+        {
+            var ds = await Mediator.Send(new GetAkseptasiObyekCITsQuery()
+            {
+                SearchKeyword = searchkeyword,
+                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                KodeCabang = kd_cb,
+                kd_cob = kd_cob,
+                kd_scob = kd_scob,
+                kd_thn = kd_thn,
+                no_aks = no_aks,
+                no_updt = no_updt,
+                no_rsk = no_rsk,
+                kd_endt = kd_endt
+            });
+
+            return Json(ds.AsQueryable().ToDataSourceResult(request));
+        }
+
+        public async Task<ActionResult> GetAkseptasiObyekCISs([DataSourceRequest] DataSourceRequest request, 
+            string searchkeyword, string kd_cb, string kd_cob, string kd_scob, 
+            string kd_thn, string no_aks, Int16 no_updt, Int16 no_rsk, string kd_endt)
+        {
+            var ds = await Mediator.Send(new GetAkseptasiObyekCISsQuery()
+            {
+                SearchKeyword = searchkeyword,
+                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                KodeCabang = kd_cb,
+                kd_cob = kd_cob,
+                kd_scob = kd_scob,
+                kd_thn = kd_thn,
+                no_aks = no_aks,
+                no_updt = no_updt,
+                no_rsk = no_rsk,
+                kd_endt = kd_endt
+            });
+
+            return Json(ds.AsQueryable().ToDataSourceResult(request));
+        }
         
         [HttpPost]
         public async Task<IActionResult> SaveAkseptasiObyek([FromBody] AkseptasiResikoObyekViewModel model)
@@ -854,6 +896,44 @@ namespace ABB.Web.Modules.Akseptasi
             }
         }
         
+        [HttpPost]
+        public async Task<IActionResult> SaveAkseptasiObyekCIT([FromBody] AkseptasiResikoObyekCITViewModel model)
+        {
+            try
+            {
+                var command = Mapper.Map<SaveAkseptasiObyekCITCommand>(model);
+                command.DatabaseName = Request.Cookies["DatabaseValue"];
+                await Mediator.Send(command);
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
+            }
+            catch (ValidationException ex)
+            {
+                ModelState.AddModelErrors(ex);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", ex.Message });
+            }
+            
+            return PartialView("~/Modules/Akseptasi/Views/EditObyekCIT.cshtml", model);
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> SaveAkseptasiObyekCIS([FromBody] AkseptasiResikoObyekCISViewModel model)
+        {
+            try
+            {
+                var command = Mapper.Map<SaveAkseptasiObyekCISCommand>(model);
+                command.DatabaseName = Request.Cookies["DatabaseValue"];
+                await Mediator.Send(command);
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", ex.Message });
+            }
+        }
+        
         [HttpGet]
         public async Task<IActionResult> AddObyekFire(string kd_cb, string kd_cob,
             string kd_scob, string kd_thn, string no_aks, Int16 no_rsk)
@@ -870,6 +950,46 @@ namespace ABB.Web.Modules.Akseptasi
             viewModel.kd_endt = "I";
             viewModel.nilai_ttl_ptg = 0;
             viewModel.pst_adj = 100;
+
+            return PartialView(viewModel);
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> AddObyekCIT(string kd_cb, string kd_cob,
+            string kd_scob, string kd_thn, string no_aks, Int16 no_rsk)
+        {
+            var viewModel = new AkseptasiResikoObyekCITViewModel();
+
+            viewModel.kd_cb = kd_cb;
+            viewModel.kd_cob = kd_cob;
+            viewModel.kd_scob = kd_scob;
+            viewModel.kd_thn = kd_thn;
+            viewModel.no_aks = no_aks;
+            viewModel.no_rsk = no_rsk;
+            viewModel.no_updt = 0;
+            viewModel.kd_endt = "I";
+            viewModel.nilai_kas = 0;
+            viewModel.nilai_srt = 0;
+            viewModel.pst_rate = 0;
+
+            return PartialView(viewModel);
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> AddObyekCIS(string kd_cb, string kd_cob,
+            string kd_scob, string kd_thn, string no_aks, Int16 no_rsk)
+        {
+            var viewModel = new AkseptasiResikoObyekCISViewModel();
+
+            viewModel.kd_cb = kd_cb;
+            viewModel.kd_cob = kd_cob;
+            viewModel.kd_scob = kd_scob;
+            viewModel.kd_thn = kd_thn;
+            viewModel.no_aks = no_aks;
+            viewModel.no_rsk = no_rsk;
+            viewModel.no_updt = 0;
+            viewModel.kd_endt = "I";
+            viewModel.nilai_saldo = 0;
 
             return PartialView(viewModel);
         }
@@ -899,6 +1019,54 @@ namespace ABB.Web.Modules.Akseptasi
         }
 
         [HttpGet]
+        public async Task<IActionResult> EditObyekCIT(string kd_cb, string kd_cob,
+            string kd_scob, string kd_thn, string no_aks, short no_updt, 
+            Int16 no_rsk, string kd_endt, Int16 no_oby)
+        {
+            var akseptasiResiko = await Mediator.Send(new GetAkseptasiObyekCITQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                kd_cb = kd_cb,
+                kd_cob = kd_cob,
+                kd_scob = kd_scob,
+                kd_thn = kd_thn,
+                no_aks = no_aks,
+                no_updt = no_updt,
+                no_rsk = no_rsk,
+                kd_endt = kd_endt,
+                no_oby = no_oby
+            });
+
+            var data = Mapper.Map<AkseptasiResikoObyekCITViewModel>(akseptasiResiko);
+            
+            return PartialView(data);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditObyekCIS(string kd_cb, string kd_cob,
+            string kd_scob, string kd_thn, string no_aks, short no_updt, 
+            Int16 no_rsk, string kd_endt, Int16 no_oby)
+        {
+            var akseptasiResiko = await Mediator.Send(new GetAkseptasiObyekCISQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                kd_cb = kd_cb,
+                kd_cob = kd_cob,
+                kd_scob = kd_scob,
+                kd_thn = kd_thn,
+                no_aks = no_aks,
+                no_updt = no_updt,
+                no_rsk = no_rsk,
+                kd_endt = kd_endt,
+                no_oby = no_oby
+            });
+
+            var data = Mapper.Map<AkseptasiResikoObyekCISViewModel>(akseptasiResiko);
+            
+            return PartialView(data);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> DeleteObyekFire(string kd_cb, string kd_cob,
             string kd_scob, string kd_thn, string no_aks, short no_updt, 
             Int16 no_rsk, string kd_endt, Int16 no_oby)
@@ -906,6 +1074,66 @@ namespace ABB.Web.Modules.Akseptasi
             try
             {
                 var command = new DeleteAkseptasiObyekCommand()
+                {
+                    kd_cb = kd_cb,
+                    kd_cob = kd_cob,
+                    kd_scob = kd_scob,
+                    kd_thn = kd_thn,
+                    no_aks = no_aks,
+                    no_updt = no_updt,
+                    no_rsk = no_rsk,
+                    kd_endt = kd_endt,
+                    no_oby = no_oby,
+                    DatabaseName = Request.Cookies["DatabaseValue"]
+                };
+                await Mediator.Send(command);
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", Message = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteObyekCIT(string kd_cb, string kd_cob,
+            string kd_scob, string kd_thn, string no_aks, short no_updt, 
+            Int16 no_rsk, string kd_endt, Int16 no_oby)
+        {
+            try
+            {
+                var command = new DeleteAkseptasiObyekCITCommand()
+                {
+                    kd_cb = kd_cb,
+                    kd_cob = kd_cob,
+                    kd_scob = kd_scob,
+                    kd_thn = kd_thn,
+                    no_aks = no_aks,
+                    no_updt = no_updt,
+                    no_rsk = no_rsk,
+                    kd_endt = kd_endt,
+                    no_oby = no_oby,
+                    DatabaseName = Request.Cookies["DatabaseValue"]
+                };
+                await Mediator.Send(command);
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", Message = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteObyekCIS(string kd_cb, string kd_cob,
+            string kd_scob, string kd_thn, string no_aks, short no_updt, 
+            Int16 no_rsk, string kd_endt, Int16 no_oby)
+        {
+            try
+            {
+                var command = new DeleteAkseptasiObyekCISCommand()
                 {
                     kd_cb = kd_cb,
                     kd_cob = kd_cob,
@@ -1027,12 +1255,16 @@ namespace ABB.Web.Modules.Akseptasi
                 case "_ObyekFireFull":
                     return View("~/Modules/Akseptasi/Components/Obyek/_ObyekFireFull.cshtml",
                         new AkseptasiResikoObyekViewModel());
+                case "_ObyekCIS":
+                    return View("~/Modules/Akseptasi/Components/Obyek/_ObyekCIS.cshtml",
+                        new AkseptasiResikoObyekCISViewModel());
+                case "_ObyekCIT":
+                    return View("~/Modules/Akseptasi/Components/Obyek/_ObyekCIT.cshtml",
+                        new AkseptasiResikoObyekCITViewModel());
                 default:
                     return View("~/Modules/Akseptasi/Views/EmptyWithMessage.cshtml");
             }
         }
-        
-        
         
         public async Task<JsonResult> GetNilaiPtg(decimal pst_share, decimal nilai_ttl_ptg100)
         {
@@ -1041,6 +1273,18 @@ namespace ABB.Web.Modules.Akseptasi
                 DatabaseName = Request.Cookies["DatabaseValue"],
                 nilai_ttl_ptg100 = nilai_ttl_ptg100,
                 pst_share = pst_share
+            });
+
+            return Json(result);
+        }
+        
+        public async Task<JsonResult> GetNilaiPremiPA(decimal nilai_pa, decimal pst_rate_pa)
+        {
+            var result = await Mediator.Send(new GenerateNilaiPremiPaQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                nilai_pa = nilai_pa,
+                pst_rate_pa = pst_rate_pa
             });
 
             return Json(result);
@@ -2530,6 +2774,16 @@ namespace ABB.Web.Modules.Akseptasi
         }
 
         #endregion
+        
+        public async Task<JsonResult> GetLokasi()
+        {
+            var result = await Mediator.Send(new GetLokasisQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            });
+
+            return Json(result);
+        }
         
         public async Task<JsonResult> GetMataUang()
         {

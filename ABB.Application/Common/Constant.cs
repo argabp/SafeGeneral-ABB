@@ -217,10 +217,10 @@ namespace ABB.Application.Common
                 "d_uw02e_06_01_f", "_ObyekFireFull"
             },
             {
-                "d_uw02e_06_04_t", "Empty"
+                "d_uw02e_06_04_t", "_ObyekCIS"
             },
             {
-                "d_uw02e_06_02u_t", "Empty"
+                "d_uw02e_06_02u_t", "_ObyekCIT"
             },
             {
                 "d_uw02e_06_01_t", "Empty"

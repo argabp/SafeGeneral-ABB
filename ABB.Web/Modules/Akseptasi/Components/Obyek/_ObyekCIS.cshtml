@@ -1,0 +1,61 @@
+﻿@using ABB.Application.Akseptasis.Queries
+@using Kendo.Mvc.UI
+
+<script src="~/Modules/Akseptasi/Components/Obyek/obyekCIS.js"></script>
+
+<div class="window-body">
+    <div class="row">
+        <div class="col-md-4">
+            <input type="text" class="search-field-top" style="height: 1em" id="SearchKeywordObyekCIS" placeholder="Search"/>
+        </div>
+    </div>
+
+    @(Html.Kendo().Grid<AkseptasiObyekCISDto>()
+        .Name("AkseptasiObyekGrid")
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetAkseptasiObyekCISs", "Akseptasi").Data("searchFilterObyekCIS"))
+            .Model(model => model.Id(p => p.no_oby))
+        )
+        .ToolBar(t => t.Create())
+        .Columns(columns =>
+        {
+            columns.Bound(col => col.no_oby).Width(150).Title("Nomor Obyek").Editable("disableGridTextbox");
+            columns.Bound(col => col.nilai_saldo).Width(150).Title("Nilai Saldo").Format("{0:n2}").EditorTemplateName("KendoNumericTextBox");;
+            columns.Bound(col => col.tgl_oby).Width(150).Title("Tanggal Obyek").Format("{0: dd-MM-yyyy}").EditorTemplateName("KendoDateEditor");
+            columns.Command(command =>
+            {
+                command.Edit();
+                command.Custom("DeleteAkseptasiObyekCIS")
+                    .Text("Delete")
+                    .IconClass("k-icon k-i-delete")
+                    .HtmlAttributes(new { title = "Delete" })
+                    .Click("btnDeleteAkseptasiObyekCIS_OnClick");
+            }).Width(200).Title("Action");
+        })
+        .Editable(GridEditMode.InLine)
+        .Pageable(pager => pager
+            .Refresh(true)
+            .Info(true)
+            .PageSizes(true)
+        )
+        .Sortable()
+        .Filterable()
+        .AutoBind(false)
+        .Scrollable()
+        .Height(450)
+        .Resizable(a => a.Columns(true))
+        .Events(ev => ev.DataBound("OnAkseptasiObyekDataBound").Edit("onEditAkseptasiObyek").Save("saveAkseptasiObyekCIS")))
+
+        <div class="form-group row">
+            <p class="col-sm-3" style="font-weight: bold;">Total Saldo</p>
+            <p class="col-sm-3" style="font-weight: bold;" id="totalSaldo"></p>
+        </div>
+    <div class="window-footer">
+        <button type="button" id="btn-previous-akseptasiResikoObyekCIS" class="btn btn-primary space-right">
+            <span class="fa fa-arrow-left"></span> Previous
+        </button>
+        <button type="button" id="btn-next-akseptasiResikoObyekCIS" class="btn btn-primary space-right">
+            Next <span class="fa fa-arrow-right"></span>
+        </button>
+    </div>
+</div>

@@ -80,6 +80,8 @@ namespace ABB.Infrastructure.Data
         public DbSet<AkseptasiResiko> AkseptasiResiko { get; set; }
         public DbSet<AkseptasiCoverage> AkseptasiCoverage { get; set; }
         public DbSet<AkseptasiObyek> AkseptasiObyek { get; set; }
+        public DbSet<AkseptasiObyekCIT> AkseptasiObyekCIT { get; set; }
+        public DbSet<AkseptasiObyekCIS> AkseptasiObyekCIS { get; set; }
         public DbSet<AkseptasiOtherFire> AkseptasiOtherFire { get; set; }
         public DbSet<AkseptasiOtherMotor> AkseptasiOtherMotor { get; set; }
         public DbSet<AkseptasiOtherMotorDetail> AkseptasiOtherMotorDetail { get; set; }
@@ -215,6 +217,8 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new DokumenAkseptasiMap());
             builder.ApplyConfiguration(new LimitAkseptasiMap());
             builder.ApplyConfiguration(new LimitAkseptasiDetilMap());
+            builder.ApplyConfiguration(new AkseptasiObyekCISMap());
+            builder.ApplyConfiguration(new AkseptasiObyekCITMap());
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

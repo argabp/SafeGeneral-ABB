@@ -1,0 +1,87 @@
+﻿@using ABB.Application.CetakNotaKoasuransiKeluars.Queries
+@using Kendo.Mvc.UI
+@using ABB.Domain.Entities
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Cetak Nota Koasuransi Keluar";
+}
+<script src="~/Modules/CetakNotaKoasuransiKeluar/JS/cetakNotaKoasuransiKeluar.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-8">
+            Cetak Nota Koasuransi Keluar
+        </div>
+
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<CetakNotaKoasuransiKeluarDto>()
+                .Name("CetakNotaKoasuransiKeluarGrid")
+                .Editable(editable => editable.Mode(GridEditMode.InLine))
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetCetakNotaKoasuransiKeluars", "CetakNotaKoasuransiKeluar").Data("searchFilter"))
+                    .Model(model => model.Id(p => p.Id))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
+                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
+                    columns.Bound(col => col.nm_scob).Width(150).Title("Nama SCOB");
+                    columns.Bound(col => col.no_pol_ttg).Width(200).Title("Nomor Polis").ClientTemplate("#= formatNoPol(no_pol_ttg) #");
+                    columns.Bound(col => col.no_nt_msk).Width(200).Title("Nomor Nota").ClientTemplate("#= formatNomorNota(kd_cb, jns_tr, kd_thn, kd_bln, no_nt_msk, jns_nt_kel, no_nt_kel) #");;
+                    columns.Bound(col => col.nm_ttg).Width(200).Title("Nama Tertanggung");
+                    columns.Bound(col => col.nm_ttj).Width(150).Title("Nama Tertuju");
+                    columns.Bound(col => col.st_pas).Width(150).Title("Status Polis");
+                    columns.Bound(col => col.nilai_nt).Width(150).Title("Nilai Nota").Format("{0:n2}");
+                    columns.Bound(col => col.flag_posting).Width(150).Title("Flag Posting");
+                    columns.Command(command =>
+                    {
+                        command.Custom("Preview")
+                            .Text(" ")
+                            .IconClass("fa fa-eye")
+                            .HtmlAttributes(new { title = "Preview" })
+                            .Click("viewReport");
+                    }).Width(200).Title("Action");
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit"))
+                ) 
+        </div>
+    </div>
+</div>
+
+<script>
+    function formatNomorNota(kd_cb, jns_tr, kd_thn, kd_bln, 
+                            no_nt_msk, jns_nt_kel, no_nt_kel){
+        return kd_cb.trim() + "." + jns_tr.trim() + "." +
+                kd_thn.trim() + "." + kd_bln.trim() + "." +
+                no_nt_msk.trim() + "." + jns_nt_kel.trim() +
+                "." + no_nt_kel.trim();
+    }
+</script>

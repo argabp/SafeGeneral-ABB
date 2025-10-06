@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Cetak Lampiran Endorsment</title>
+</head>
+<style>
+	body {
+		/*font-family: Arial, sans-serif;*/
+		font-size: 11pt;   /* readable in print */
+		line-height: 1.4;  /* adds vertical space */
+		padding: 1em;
+	}
+	td {
+		font-size: 9pt;
+		padding: 2px 4px; /* give breathing room */
+		letter-spacing: 1px;
+	}
+
+	h2 {
+		font-size: 9.5pt;
+	}
+</style>
+<body>
+<div style="text-align: right;">
+	<div style="margin-left: 40%;">
+		<div style="text-align: center; float: left;">
+			<p style="font-size: 18px; margin: 0"><u>Endorsment</u></p>
+		</div>
+	</div>
+</div>
+<table style="border-collapse: collapse; width: 100%;">
+	<tr>
+		<td style='width: 30%'>Endorsment</td>
+		<td style='width: 1%'>:</td>
+		<td>{{no_endt}}</td>
+	</tr>
+	<tr>
+		<td>Nomor Polis</td>
+		<td>:</td>
+		<td>{{no_pol_ttg}}</td>
+	</tr>
+	<tr>
+		<td>Jenis Pertanggungan</td>
+		<td>:</td>
+		<td><u>{{kd_cob_1}}</u></td>
+	</tr>
+	<tr>
+		<td>Nama Tertanggung</td>
+		<td>:</td>
+		<td>{{nm_ttg}}</td>
+	</tr>
+	<tr>
+		<td>Alamat</td>
+		<td>:</td>
+		<td>{{almt_ttg}}, {{kt_ttg}}</td>
+	</tr>
+	<tr>
+		<td>Lamp</td>
+		<td>:</td>
+		<td>{{no_updt}}</td>
+	</tr>
+	<tr>
+		<td>Periode Pertanggungan</td>
+		<td>:</td>
+		<td>{{tgl_mul_ptg}} s/d {{tgl_akh_ptg}}</td>
+	</tr>
+	<tr>
+		<td>Total Pertanggungan</td>
+		<td>:</td>
+		<td>{{symbol}} {{tsi}}</td>
+	</tr>
+	{{other}}
+	{{bentuk_pertanggungan}}
+	<tr style="height: 20px;">
+		<td colspan='3'>
+			<hr style="border: none; border-top: 2px solid black;">
+		</td>
+	</tr>
+	<tr style="height: 20px;">
+		<td colspan='3'>
+			{{ket_endt}}
+		</td>
+	</tr>
+</table>
+</body>
+</html>
