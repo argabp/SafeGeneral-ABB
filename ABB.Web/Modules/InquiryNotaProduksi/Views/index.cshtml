@@ -1,0 +1,109 @@
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.TagHelpers
+@using ABB.Application.InquiryNotaProduksis.Queries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Inquiry Nota";
+}
+
+<script src="~/Modules/InquiryNotaProduksi/JS/InquiryNotaProduksi.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+
+<div class="flat-box filter-box">
+    <div class="flat-box-content">
+        <div class="filter-bar-top">
+            <label for="StartDate"><b>Periode :</b></label>
+
+            <!-- DatePicker Dari -->
+            @(Html.Kendo().DatePicker()
+                .Name("StartDate")
+                .HtmlAttributes(new { style = "width:150px;" })
+                .Format("dd-MM-yyyy")
+            )
+
+            <span class="date-separator">s/d</span>
+
+            <!-- DatePicker Sampai -->
+            @(Html.Kendo().DatePicker()
+                .Name("EndDate")
+                .HtmlAttributes(new { style = "width:150px;" })
+                .Format("dd-MM-yyyy")
+            )
+
+            <!-- Tombol Cari -->
+            @(Html.Kendo().Button()
+                .Name("btnSearch")
+                .Content("<span class='k-icon k-i-search'></span> Cari")
+                .HtmlAttributes(new { @class = "k-primary", style = "border-radius:6px;" })
+                .Events(e => e.Click("onSearchClick"))
+            )
+        </div>
+    </div>
+</div>
+
+<div class="flat-box">
+        <div class="flat-box-title ">
+            Inquiry Nota
+            <div class="pullright-flex">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+        
+      
+            <!-- <button class="flat-btn-primary" onclick="btnAddVoucherKas_OnClick()">Entri Voucher Kas</button> -->
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+             @(Html.Kendo().Grid<InquiryNotaProduksiDto>()
+                .Name("InquiryNotaProduksiGrid")
+                .DataSource(dataSource => dataSource.Ajax()
+                           .Read(read => read.Action("GetInquiryNotaProduksi", "InquiryNotaProduksi").Data("getAllFilters"))
+                            .Model(model => model.Id(p => p.id))
+
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.no_nd).Width(250).Title("No Nota");
+                    columns.Bound(col => col.no_ref).Width(200).Title("No Ref");
+                    columns.Bound(col => col.nm_cust2).Width(200).Title("No Cust");
+                    columns.Bound(col => col.date).Format("{0:dd-MM-yyyy}").Width(150).Title("Tanggal");
+                    columns.Command(command =>
+                    {
+                         command.Custom("LihatInquiryNotaProduksi")
+                           .Text("View")
+                            .IconClass("fa fa-eye")
+                           .Click("btnViewInquiryNota_OnClick");
+                    }).Width(200).Title("Action").Locked(true);
+                })
+                .Pageable(pager => pager.Refresh(true))
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+            )
+        </div>
+
+        @(Html.Kendo().Window()
+            .Name("InquiryNotaProduksiWindow")
+            .Title("Inquiry Nota")
+            .Width(1000)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+        )
+
+    </div>
+</div>
+

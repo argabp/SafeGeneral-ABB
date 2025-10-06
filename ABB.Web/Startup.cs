@@ -67,7 +67,7 @@ namespace ABB.Web
             services.AddSingleton(Configuration);
             services.AddSingleton(new ProgressBarDto());
             services.AddApplication();
-            services.AddInfrastructure();
+            services.AddInfrastructure(Configuration);
             services.AddSerializer();
             services.AddModulesFolder();
             services.AddPlugins(Configuration);

@@ -1,0 +1,43 @@
+@using ABB.Application.EntriPembayaranBanks.Queries 
+@using Kendo.Mvc.UI
+@using ABB.Application.InquiryNotaProduksis.Queries 
+
+<div class="p-2">
+    <input type="text" class="k-textbox" id="PilihNotaSearchKeyword" 
+           placeholder="Cari berdasarkan No. Nota atau Nama..." style="width: 100%;">
+</div>
+
+@(Html.Kendo().Grid<InquiryNotaProduksiDto>() // Ganti dengan DTO Nota Produksi Anda
+    .Name("PilihNotaGrid")
+    .DataSource(dataSource => dataSource.Ajax()
+        .Read(read => read.Action("GetNotaProduksi", "EntriPembayaranBank"))
+    )
+    .Columns(columns =>
+    {
+         columns.Bound(c => c.no_nd).Title("Nomor Nota").Width(200);
+        columns.Bound(c => c.nm_cust2).Title("Nama Tertanggung").Width(250);
+        columns.Bound(c => c.premi).Format("{0:n2}").Width(150);
+    })
+    .Pageable()
+    .Sortable()
+    .Filterable()
+    .Selectable(s => s.Mode(GridSelectionMode.Single)) // Hanya bisa pilih satu baris
+    .Events(ev => ev.Change("onNotaProduksiSelect")) // Panggil JS saat baris dipilih
+)
+
+<script>
+    // Fungsi ini mengirimkan nilai dari search box ke Controller
+    function getNotaProduksiSearchFilter() {
+        return {
+            searchKeyword: $("#PilihNotaSearchKeyword").val()
+        };
+    }
+
+    // Fungsi ini berjalan setelah konten window dimuat
+    $(function() {
+        // Pasang event listener 'keyup' pada search box
+        $("#PilihNotaSearchKeyword").on("keyup", function() {
+            $("#PilihNotaGrid").data("kendoGrid").dataSource.read();
+        });
+    });
+</script>

@@ -1,0 +1,583 @@
+@model ABB.Web.Modules.InquiryNotaProduksi.Models.InquiryNotaProduksiViewModel
+@using ABB.Application.InquiryNotaProduksis.Queries
+@using Kendo.Mvc.UI
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+<div class="window-body">
+    <fieldset>
+            <div class="row">
+                <!-- Kolom kiri -->
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Nomor Reff</label>
+                        <div class="col-sm-8">
+                            <input class="form-control form-control-sm"
+                                value="@Model.InquiryNotaProduksiHeader.no_ref"
+                                readonly style="font-size: 12px;" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Penutupan</label>
+                        <div class="col-sm-8">
+                            <input class="form-control form-control-sm"
+                                value="@Model.InquiryNotaProduksiHeader.jn_ass"
+                                readonly style="font-size: 12px;" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Tanggal</label>
+                        <div class="col-sm-8">
+                            <input class="form-control form-control-sm"
+                                value="@Model.InquiryNotaProduksiHeader.date"
+                                readonly style="font-size: 12px;" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Jenis Nota (P/K)</label>
+                        <div class="col-sm-8">
+                            <input class="form-control form-control-sm"
+                                value="@Model.InquiryNotaProduksiHeader.type"
+                                readonly style="font-size: 12px;" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Nota</label>
+                        <div class="col-sm-8">
+                            <input class="form-control form-control-sm"
+                                value="@Model.InquiryNotaProduksiHeader.d_k"
+                                readonly style="font-size: 12px;" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">COB</label>
+                        <div class="col-sm-8">
+                            <input class="form-control form-control-sm"
+                                value=""
+                                readonly style="font-size: 12px;" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Reasuransi</label>
+                        <div class="col-sm-8">
+                            <input class="form-control form-control-sm"
+                                value=""
+                                readonly style="font-size: 12px;" />
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- Kolom kanan -->
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Kantor Unit</label>
+                        <div class="col-sm-8">
+                            <input class="form-control form-control-sm"
+                                value="@Model.InquiryNotaProduksiHeader.lok"
+                                readonly style="font-size: 12px;" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Tertanggung</label>
+                        <div class="col-sm-8">
+                            <input class="form-control form-control-sm"
+                                value="@Model.InquiryNotaProduksiHeader.nm_cust2"
+                                readonly style="font-size: 12px;" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">QQ</label>
+                        <div class="col-sm-8">
+                            <input class="form-control form-control-sm"
+                                value="@Model.InquiryNotaProduksiHeader.qq"
+                                readonly style="font-size: 12px;" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Reasuradur</label>
+                        <div class="col-sm-8 d-flex">
+                            <input class="form-control form-control-sm mr-2" 
+                                style="width: 80px; font-size: 12px;" 
+                                value="" 
+                                readonly />
+                            <input class="form-control form-control-sm flex-fill" 
+                                style="font-size: 12px;" 
+                                value="" 
+                                readonly />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Broker</label>
+                        <div class="col-sm-8 d-flex">
+                            <input class="form-control form-control-sm mr-2" 
+                                style="width: 80px; font-size: 12px;" 
+                                value="@Model.InquiryNotaProduksiHeader.no_brok" 
+                                readonly />
+                            <input class="form-control form-control-sm flex-fill" 
+                                style="font-size: 12px;" 
+                                value="@Model.InquiryNotaProduksiHeader.nm_brok" 
+                                readonly />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Tanggal Jatuh Tempo</label>
+                        <div class="col-sm-8">
+                            <input class="form-control form-control-sm"
+                                value="@Model.InquiryNotaProduksiHeader.tgl_jth_tempo"
+                                readonly style="font-size: 12px;" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        <hr>
+
+        <div class="row">
+            <!-- Kolom kiri -->
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">No Endos</label>
+                    <div class="col-sm-6">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.no_endos"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">No Nota</label>
+                    <div class="col-sm-6">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.no_nd"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">No Polis</label>
+                    <div class="col-sm-6">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.no_pl"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kolom tengah -->
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Register</label>
+                    <div class="col-sm-6">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.reg"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Nomor Kwitansi</label>
+                    <div class="col-sm-6">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.no_kwi"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kolom kanan -->
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Curensi</label>
+                    <div class="col-sm-4">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.curensi"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Kurs</label>
+                    <div class="col-sm-4">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.kurs"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <!-- Kolom kiri -->
+            <div class="col-md-6">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Harga Pertanggungan</label>
+                    <div class="col-sm-8">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.hp"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Masa</label>
+                    <div class="col-sm-8 d-flex align-items-center">
+                        <input class="form-control form-control-sm text-center"
+                            style="font-size: 12px; flex: 1;"
+                            value="@Model.InquiryNotaProduksiHeader.d_per1"
+                            readonly />
+                        <span class="mx-2">S/D</span>
+                        <input class="form-control form-control-sm text-center"
+                            style="font-size: 12px; flex: 1;"
+                            value="@Model.InquiryNotaProduksiHeader.d_per2"
+                            readonly />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Catatan</label>
+                    <div class="col-sm-8">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.catat"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+
+                    <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Pembawa Pos</label>
+                    <div class="col-sm-8 d-flex">
+                        <input class="form-control form-control-sm mr-2" 
+                            style="width: 80px; font-size: 12px;" 
+                            value="@Model.InquiryNotaProduksiHeader.no_pos" 
+                            readonly />
+                        <input class="form-control form-control-sm flex-fill" 
+                            style="font-size: 12px;" 
+                            value="@Model.InquiryNotaProduksiHeader.nm_pos" 
+                            readonly />
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+
+        <hr>
+
+         <div class="row">
+            <!-- Kolom kiri -->
+            <div class="col-md-6">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Premi</label>
+                    <div class="col-sm-8">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.premi"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Diskon %</label>
+                    <div class="col-sm-8 d-flex">
+                        <input class="form-control form-control-sm mr-2" 
+                            style="width: 80px; font-size: 12px;" 
+                            value="@Model.InquiryNotaProduksiHeader.rabat" 
+                            readonly />
+                        <input class="form-control form-control-sm flex-fill" 
+                            style="font-size: 12px;" 
+                            value="@Model.InquiryNotaProduksiHeader.n_rabat" 
+                            readonly />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Bruto</label>
+                    <div class="col-sm-8">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.n_bruto"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Polis</label>
+                    <div class="col-sm-8">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.polis"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">By Materai</label>
+                    <div class="col-sm-8">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.materai"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Komisi</label>
+                    <div class="col-sm-8 d-flex">
+                        <input class="form-control form-control-sm mr-2" 
+                            style="width: 80px; font-size: 12px;" 
+                            value="@Model.InquiryNotaProduksiHeader.komisi" 
+                            readonly />
+                        <input class="form-control form-control-sm flex-fill" 
+                            style="font-size: 12px;" 
+                            value="@Model.InquiryNotaProduksiHeader.n_komisi" 
+                            readonly />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Handling Fee</label>
+                    <div class="col-sm-8 d-flex">
+                        <input class="form-control form-control-sm mr-2" 
+                            style="width: 80px; font-size: 12px;" 
+                            value="@Model.InquiryNotaProduksiHeader.h_fee" 
+                            readonly />
+                        <input class="form-control form-control-sm flex-fill" 
+                            style="font-size: 12px;" 
+                            value="@Model.InquiryNotaProduksiHeader.n_hfee" 
+                            readonly />
+                    </div>
+                </div>
+
+                 <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Lain-Lain</label>
+                    <div class="col-sm-8">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.lain"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+
+                 <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Klaim</label>
+                    <div class="col-sm-8">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.klaim"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+
+                 <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Netto</label>
+                    <div class="col-sm-8">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.netto"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <!-- Kolom kiri -->
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Tgl Byr</label>
+                    <div class="col-sm-6">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.tgl_byr"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">jumlah</label>
+                    <div class="col-sm-6">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.jumlah"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">kd_pol</label>
+                    <div class="col-sm-6">
+                        <input class="form-control form-control-sm"
+                            value=""
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">date_input</label>
+                    <div class="col-sm-6">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.date_input"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">kd_ass2</label>
+                    <div class="col-sm-6">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.kd_ass2"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">kd_tutup</label>
+                    <div class="col-sm-6">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.kd_tutup"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">data_edit</label>
+                    <div class="col-sm-6">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.date_edit"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kolom tengah -->
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">kd_ass3</label>
+                    <div class="col-sm-6">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.kd_ass3"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Debet</label>
+                    <div class="col-sm-6">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.debet"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">nm_pol</label>
+                    <div class="col-sm-6">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.nm_pol"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">saldo</label>
+                    <div class="col-sm-6">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.saldo"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">kredit</label>
+                    <div class="col-sm-6">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.kredit"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">no_bukti</label>
+                    <div class="col-sm-6">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.no_bukti"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">post_tr</label>
+                    <div class="col-sm-6">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.post_tr"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kolom kanan -->
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Created by</label>
+                    <div class="col-sm-4">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.created_by"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">jns_ass2</label>
+                    <div class="col-sm-4">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.jn_ass2"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">edited_by</label>
+                    <div class="col-sm-4">
+                        <input class="form-control form-control-sm"
+                             value="@Model.InquiryNotaProduksiHeader.edited_by"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">no_nd2</label>
+                    <div class="col-sm-4">
+                        <input class="form-control form-control-sm"
+                            value="@Model.InquiryNotaProduksiHeader.no_nd2"
+                            readonly style="font-size: 12px;" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </fieldset>
+</div>
+<div class="window-footer">
+</div>
+
+

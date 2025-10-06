@@ -82,3 +82,17 @@ C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Infrastructure\obj\Re
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Infrastructure\obj\Release\ABB.Infrastructure.csproj.CopyComplete
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Infrastructure\obj\Release\ABB.Infrastructure.dll
 C:\Users\FORMULATRIX\RiderProjects\Mine\SafeGeneralABB\ABB.Infrastructure\obj\Release\ABB.Infrastructure.pdb
+c:\Users\IPO\Documents\SIA\SafeGeneral-ABB\ABB.Infrastructure\bin\Release\ABB.Infrastructure.deps.json
+c:\Users\IPO\Documents\SIA\SafeGeneral-ABB\ABB.Infrastructure\bin\Release\ABB.Infrastructure.dll
+c:\Users\IPO\Documents\SIA\SafeGeneral-ABB\ABB.Infrastructure\bin\Release\ABB.Infrastructure.pdb
+c:\Users\IPO\Documents\SIA\SafeGeneral-ABB\ABB.Infrastructure\bin\Release\ABB.Application.dll
+c:\Users\IPO\Documents\SIA\SafeGeneral-ABB\ABB.Infrastructure\bin\Release\ABB.Domain.dll
+c:\Users\IPO\Documents\SIA\SafeGeneral-ABB\ABB.Infrastructure\bin\Release\ABB.Application.pdb
+c:\Users\IPO\Documents\SIA\SafeGeneral-ABB\ABB.Infrastructure\bin\Release\ABB.Domain.pdb
+c:\Users\IPO\Documents\SIA\SafeGeneral-ABB\ABB.Infrastructure\obj\Release\ABB.Infrastructure.csprojAssemblyReference.cache
+c:\Users\IPO\Documents\SIA\SafeGeneral-ABB\ABB.Infrastructure\obj\Release\ABB.Infrastructure.AssemblyInfoInputs.cache
+c:\Users\IPO\Documents\SIA\SafeGeneral-ABB\ABB.Infrastructure\obj\Release\ABB.Infrastructure.AssemblyInfo.cs
+c:\Users\IPO\Documents\SIA\SafeGeneral-ABB\ABB.Infrastructure\obj\Release\ABB.Infrastructure.csproj.CoreCompileInputs.cache
+c:\Users\IPO\Documents\SIA\SafeGeneral-ABB\ABB.Infrastructure\obj\Release\ABB.Infrastructure.csproj.CopyComplete
+c:\Users\IPO\Documents\SIA\SafeGeneral-ABB\ABB.Infrastructure\obj\Release\ABB.Infrastructure.dll
+c:\Users\IPO\Documents\SIA\SafeGeneral-ABB\ABB.Infrastructure\obj\Release\ABB.Infrastructure.pdb

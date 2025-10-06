@@ -1,0 +1,62 @@
+@model ABB.Web.Modules.KasBank.Models.KasBankViewModel
+@using Kendo.Mvc.UI
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="KasBankForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kode</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="Kode" style="width: 100%;"/>
+                <span asp-validation-for="Kode" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Keterangan</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="Keterangan" style="width: 100%"/>
+                <span asp-validation-for="Keterangan" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">No. Rekening</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="NoRekening" style="width: 100%"/>
+                <span asp-validation-for="NoRekening" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">No. Perkiraan</label>
+            <div class="col-sm-12">
+                <kendo-combobox for="NoPerkiraan"
+                                style="width: 100%;"
+                                datatextfield="Text"
+                                datavaluefield="Value"
+                                bind-to="ViewBag.NoPerkiraanOptions"
+                                filter="FilterType.Contains"
+                                placeholder="Pilih atau ketik No. Perkiraan...">
+                </kendo-combobox>
+                <span asp-validation-for="NoPerkiraan" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Tipe</label>
+            <div class="col-sm-12">
+               <kendo-dropdownlist for="TipeKasBank"
+                            style="width: 100%;"
+                            datatextfield="Text"
+                            datavaluefield="Value"
+                            bind-to="ViewBag.TipeKasBankOptions">
+                </kendo-dropdownlist>
+                <span asp-validation-for="TipeKasBank" class="text-danger"></span>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="window-footer">
+    <button type="button" onclick="onSaveKasBank()" class="btn btn-success space-right">
+        <span class="fa fa-save"></span> Save
+    </button>
+</div>
