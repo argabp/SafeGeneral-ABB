@@ -76,7 +76,7 @@ namespace ABB.Infrastructure.Services
             foreach (var sentTo in emailSends)
             {
                 var body = emailTemplateHtml;
-                MailAddress from = new MailAddress("ithelpdesk@abb.co.id");
+                MailAddress from = new MailAddress(username);
                 MailAddress to = new MailAddress(sentTo);
 
                 MailMessage message = new MailMessage(from, to);
