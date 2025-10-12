@@ -1,0 +1,57 @@
+﻿@using ABB.Application.Inquiries.Queries
+@using Kendo.Mvc.UI
+
+<script src="~/Modules/Inquiry/Components/InquiryObyek/obyekFire.js"></script>
+
+<div class="window-body">
+    <div class="row">
+        <div class="col-md-4">
+            <input type="text" class="search-field-top" style="height: 1em" id="SearchKeywordObyek" placeholder="Search"/>
+        </div>
+        <div class="offset-1"></div>
+    </div>
+    
+    @(Html.Kendo().Grid<InquiryObyekDto>()
+        .Name("InquiryObyekGrid")
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetInquiryObyeks", "Inquiry").Data("searchFilterObyek"))
+            .Model(model => model.Id(p => p.no_oby))
+        )
+        .Columns(columns =>
+        {
+            columns.Bound(col => col.no_oby).Width(150).Title("Nomor Obyek");
+            columns.Bound(col => col.desk_oby).Width(150).Title("Uraian Pertanggungan");
+            columns.Bound(col => col.nilai_ttl_ptg).Width(150).Title("Nilai Pertanggungan");
+            columns.Command(command =>
+            {
+                command.Custom("ViewInquiryObyek")
+                    .Text("View")
+                    .IconClass("fa fa-eye")
+                    .HtmlAttributes(new { title = "View" })
+                    .Click("btnViewInquiryObyek_OnClick");
+            }).Width(200).Title("Action");
+        })
+        .Pageable(pager => pager
+            .Refresh(true)
+            .Info(true)
+            .PageSizes(true)
+        )
+        .Sortable()
+        .Filterable()
+        .AutoBind(false)
+        .Scrollable()
+        .Height(450)
+        .Resizable(a => a.Columns(true))
+        .Events(ev => ev.DataBound("gridAutoFit"))
+    
+        )
+    
+    <div class="window-footer">
+        <button type="button" id="btn-previous-inquiryResikoObyek" class="btn btn-primary space-right">
+            <span class="fa fa-arrow-left"></span> Previous
+        </button>
+        <button type="button" id="btn-next-inquiryResikoObyek" class="btn btn-primary space-right">
+            Next <span class="fa fa-arrow-right"></span>
+        </button>
+    </div>
+</div>

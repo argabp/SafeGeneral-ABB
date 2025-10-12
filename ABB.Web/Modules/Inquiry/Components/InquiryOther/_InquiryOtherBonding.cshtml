@@ -1,0 +1,318 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.Inquiry.Models.InquiryResikoOtherBondingViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/Inquiry/Components/InquiryOther/otherBonding.js"></script>
+
+<style>
+    p {
+        margin: 0px;
+        padding: 0px;
+    }
+    label {
+        align-content: center;
+    }
+</style>
+
+@{
+    var nomor_aksepatsi = Model.kd_cb.Trim() + "." + Model.kd_cob.Trim() +
+                          Model.kd_scob.Trim() + "." + Model.kd_thn.Trim() + "." + Model.no_pol.Trim();
+}
+<div class="window-body" style="background-color: lightgray">
+    <form id="OtherBondingForm" enctype="multipart/form-data" autocomplete="off">
+    @Html.HiddenFor(h => h. grp_obl)
+    @Html.HiddenFor(h => h. kd_grp_obl)
+    @Html.HiddenFor(h => h. grp_kontr)
+    @Html.HiddenFor(h => h. kd_grp_surety)
+    @Html.HiddenFor(h => h. grp_jns_pekerjaan)
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Akseptasi</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="temp_other_nomor_akseptasi" value="@nomor_aksepatsi" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Update</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="resiko_other_bonding_no_updt" value="@Model.no_updt" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Resiko</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="resiko_other_bonding_no_rsk" value="@Model.no_rsk" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Endorsment</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist name="resiko_other_bonding_kd_endt" style="width: 100%" readonly="true" value="@Model.kd_endt"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeEndorsment", "Inquiry")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Surety</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_rk_surety" style="width: 100%" class="not-null-dropdown" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeSurety", "Inquiry")" data="dataKodeSerutyDropDown"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Group Obligee</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_obl" style="width: 100%" class="not-null-dropdown" option-label="Pilih Group Obligee" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetGroupObligee", "Inquiry")" data="dataGroupObligeeDropDown"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Principal</label>
+                <div class="col-sm-3">
+                    <kendo-dropdownlist for="kd_grp_prc" style="width: 100%" class="not-null-dropdown" on-change="OnChangeKodePrincipal" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodePrincipal", "Inquiry")" data="dataKodePrincipalDropDown"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+                <div class="col-sm-3">
+                    <kendo-dropdownlist for="kd_rk_prc" style="width: 100%" option-label="Pilih Principal" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeRekanan", "Inquiry")" data="dataKodePrincipalDropDown"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Obligee</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_rk_obl" style="width: 100%" option-label="Pilih Kode Obligee" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetObligees", "Inquiry")" data="dataKodeObligeeDropDown"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nama Konsorsium</label>
+                <div class="col-sm-6">
+                    <kendo-textarea name="nm_kons" rows="2" style="width: 100%; background-color: var(--soft-grey) !important" readonly="true">@Model.nm_kons</kendo-textarea>
+                    <span asp-validation-for="nm_kons" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nama Obliguee</label>
+                <div class="col-sm-6">
+                    <kendo-textarea name="nm_obl" rows="2" style="width: 100%; background-color: var(--soft-grey) !important" readonly="true">@Model.nm_obl</kendo-textarea>
+                    <span asp-validation-for="nm_obl" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">TTD Principal</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="nm_principal" style="width: 100%" readonly="true"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Alamat</label>
+                <div class="col-sm-6">
+                    <kendo-textarea name="almt_obl" rows="2" style="width: 100%; background-color: var(--soft-grey) !important" readonly="true">@Model.almt_obl</kendo-textarea>
+                    <span asp-validation-for="almt_obl" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Jabatan Principal</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="jbt_principal" style="width: 100%" readonly="true"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kota</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="kt_obl" style="width: 100%" readonly="true"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Group Kontrak</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_kontr" style="width: 100%" class="not-null-dropdown" option-label="Pilih Group Kontrak" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeKontrak", "Inquiry")" data="dataGroupKontrakDropDown" />
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Rumus</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_rumus" style="width: 100%" class="not-null-dropdown" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeRumus", "Inquiry")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nilai Kontrak</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_kontr" style="width: 100%" readonly="true"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Tanggal Kontrak</label>
+                <div class="col-sm-6">
+                    <kendo-datepicker for="tgl_kontrak" value="DateTime.Now" style="width: 100%" readonly="true"/>
+                    <span asp-validation-for="tgl_kontrak" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nilai Bond</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_bond" style="width: 100%; background-color: #FFFFE1" readonly="true"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Pekerjaan</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="jns_pekerjaan" style="width: 100%" class="not-null-dropdown" option-label="Pilih Kode Pekerjaan" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodePekerjaan", "Inquiry")" data="dataKodePekerjaanDropDown"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Deskripsi Pekejraan</label>
+                <div class="col-sm-6">
+                    <kendo-textarea name="ket_rincian_kontr" rows="2" style="width: 100%; background-color: var(--soft-grey) !important" readonly="true">@Model.ket_rincian_kontr</kendo-textarea>
+                    <span asp-validation-for="ket_rincian_kontr" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Tanggal Lelang</label>
+                <div class="col-sm-6">
+                    <kendo-datepicker for="tgl_lelang" value="DateTime.Now" style="width: 100%" readonly="true"/>
+                    <span asp-validation-for="tgl_lelang" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Tempat Lelang</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="tmpt_lelang" style="width: 100%" readonly="true"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">No Dokumen</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="ba_serah_trm" style="width: 100%" readonly="true"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Tanggal Dokumen</label>
+                <div class="col-sm-6">
+                    <kendo-datepicker for="tgl_terbit" value="DateTime.Now" style="width: 100%" readonly="true"/>
+                    <span asp-validation-for="tgl_terbit" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Tanggal Transaksi</label>
+                <div class="col-sm-6">
+                    <kendo-datepicker for="tgl_tr" value="DateTime.Now" style="width: 100%" readonly="true"/>
+                    <span asp-validation-for="tgl_tr" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">TTD Surety</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_bag" style="width: 100%" class="not-null-dropdown" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetTTDSurety", "Inquiry")" data="dataTTDSuretyDropDown"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="window-footer">
+        <button type="button" id="btn-previous-inquiryResikoOther" class="btn btn-primary space-right">
+            <span class="fa fa-arrow-left"></span> Previous
+        </button>
+    </div>
+</div>

@@ -17,6 +17,7 @@ namespace ABB.Web.Modules.DashboardUnderwriting
             {
                 KodeCabang = Request.Cookies["UserCabang"],
                 Cabang = Request.Cookies["UserCabang"],
+                DatabaseName = Request.Cookies["DatabaseValue"]
             });
             
             return View(model);

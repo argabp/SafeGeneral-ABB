@@ -1,0 +1,64 @@
+﻿@using ABB.Application.Inquiries.Queries
+@using Kendo.Mvc.UI
+
+<script src="~/Modules/Inquiry/Components/InquiryResiko/resiko.js"></script>
+
+<style>
+    .flat-btn-primary{
+        padding: 10px 0px;
+    }
+</style>
+
+<div class="window-body">
+    <div class="row">
+        <div class="col-md-4">
+            <input type="text" class="search-field-top" style="height: 1em" id="SearchKeywordResiko" placeholder="Search"/>
+        </div>
+        <div class="offset-2"></div>
+    </div>
+    
+    @(Html.Kendo().Grid<InquiryResikoDto>()
+        .Name("InquiryResikoGrid")
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetInquiryResikos", "Inquiry").Data("searchFilterResiko"))
+            .Model(model => model.Id(p => p.Id))
+        )
+        .Columns(columns =>
+        {
+            columns.Bound(col => col.no_rsk).Width(150).Title("Nomor Resiko");
+            columns.Bound(col => col.kd_endt).Width(150).Title("Kode Endors").ClientTemplate("#= data.kd_endt == 'I' ? 'Insert' : 'Delete' #");
+            columns.Bound(col => col.ket_rsk).Width(200).Title("Keterangan Resiko");
+            columns.Bound(col => col.nilai_ttl_ptg).Width(200).Title("Total Pertanggungan");
+            columns.Bound(col => col.nilai_prm).Width(150).Title("Premi");
+            columns.Bound(col => col.nilai_dis).Width(100).Title("Diskon");
+            columns.Bound(col => col.nilai_kms).Width(100).Title("Komisi");
+            columns.Command(command =>
+            {
+                command.Custom("ViewInquiryResiko")
+                    .Text("View")
+                    .IconClass("fa fa-eye")
+                    .HtmlAttributes(new { title = "View" })
+                    .Click("btnViewInquiryResiko_OnClick");
+            }).Width(200).Title("Action");
+        })
+        .Pageable(pager => pager
+            .Refresh(true)
+            .Info(true)
+            .PageSizes(true)
+        )
+        .Sortable()
+        .Filterable()
+        .Scrollable()
+        .Selectable()
+        .Height(450)
+        .Resizable(a => a.Columns(true))
+        .Events(ev => ev.DataBound("gridAutoFit").Change("OnResikoChange"))
+
+        )
+    
+    <div class="window-footer">
+        <button type="button" id="btn-next-inquiryResiko" class="btn btn-primary space-right">
+            Next <span class="fa fa-arrow-right"></span>
+        </button>
+    </div>
+</div>

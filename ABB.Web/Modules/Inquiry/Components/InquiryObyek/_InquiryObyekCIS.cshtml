@@ -1,0 +1,51 @@
+﻿@using ABB.Application.Inquiries.Queries
+@using Kendo.Mvc.UI
+
+<script src="~/Modules/Inquiry/Components/InquiryObyek/obyekCIS.js"></script>
+
+<div class="window-body">
+    <div class="row">
+        <div class="col-md-4">
+            <input type="text" class="search-field-top" style="height: 1em" id="SearchKeywordObyekCIS" placeholder="Search"/>
+        </div>
+    </div>
+
+    @(Html.Kendo().Grid<InquiryObyekCISDto>()
+        .Name("InquiryObyekGrid")
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetInquiryObyekCISs", "Inquiry").Data("searchFilterObyekCIS"))
+            .Model(model => model.Id(p => p.no_oby))
+        )
+        .Columns(columns =>
+        {
+            columns.Bound(col => col.no_oby).Width(150).Title("Nomor Obyek").Editable("disableGridTextbox");
+            columns.Bound(col => col.nilai_saldo).Width(150).Title("Nilai Saldo").Format("{0:n2}").EditorTemplateName("KendoNumericTextBox");
+            columns.Bound(col => col.tgl_oby).Width(150).Title("Tanggal Obyek").Format("{0: dd-MM-yyyy}").EditorTemplateName("KendoDateEditor");
+        })
+        .Editable(GridEditMode.InLine)
+        .Pageable(pager => pager
+            .Refresh(true)
+            .Info(true)
+            .PageSizes(true)
+        )
+        .Sortable()
+        .Filterable()
+        .AutoBind(false)
+        .Scrollable()
+        .Height(450)
+        .Resizable(a => a.Columns(true))
+        .Events(ev => ev.DataBound("OnInquiryObyekDataBound")))
+
+        <div class="form-group row">
+            <p class="col-sm-3" style="font-weight: bold;">Total Saldo</p>
+            <p class="col-sm-3" style="font-weight: bold;" id="totalSaldo"></p>
+        </div>
+    <div class="window-footer">
+        <button type="button" id="btn-previous-inquiryResikoObyekCIS" class="btn btn-primary space-right">
+            <span class="fa fa-arrow-left"></span> Previous
+        </button>
+        <button type="button" id="btn-next-inquiryResikoObyekCIS" class="btn btn-primary space-right">
+            Next <span class="fa fa-arrow-right"></span>
+        </button>
+    </div>
+</div>

@@ -1,0 +1,32 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.Inquiry.Models.InquiryParameterViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/Inquiry/JS/inquiry.form.js"></script>
+
+<div class="window-body">
+    <div id="inquiryTab">
+        <ul>
+            <li class="k-active">
+                Inquiry
+            </li>
+            <li>
+                Resiko
+            </li>
+            <li>
+                Pranota
+            </li>
+        </ul>
+        <div id="tabInquiry">
+            <vc:inquiry model="Model"></vc:inquiry>
+        </div>
+        <div id="tabResikoView">
+            <vc:inquiry-resiko-view model="Model"></vc:inquiry-resiko-view>
+        </div>
+        <div id="tabPranota">
+            <vc:inquiry-pranota-view model="@Model"></vc:inquiry-pranota-view>
+        </div>
+    </div>
+</div>

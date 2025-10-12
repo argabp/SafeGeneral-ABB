@@ -1,0 +1,159 @@
+﻿@using ABB.Application.Inquiries.Queries
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.TagHelpers
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Inquiry";
+}
+
+<script src="~/Modules/Inquiry/JS/inquiry.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-8">
+            Inquiry
+        </div>
+
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<InquiryDto>()
+                .Name("InquiryGrid")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetInquiries", "Inquiry").Data("searchFilter"))
+                    .Model(model => model.Id(p => p.no_pol_induk))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
+                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
+                    columns.Bound(col => col.nm_scob).Width(150).Title("Nama Sub COB");
+                    columns.Bound(col => col.no_pol).Width(150).Title("Nomor Poli");
+                    columns.Bound(col => col.nm_ttg).Width(175).Title("Nama Tertanggung");
+                    columns.Bound(col => col.st_pas).Width(150).Title("Status Polis");
+                    columns.Bound(col => col.no_updt).Width(150).Title("Nomor Update");
+                    columns.Bound(col => col.no_pol_pas).Width(175).Title("Nomor Polis Ceding");
+                    columns.Bound(col => col.nomor_pengajuan).Width(175).Title("Nomor Pengajuan");
+                    columns.Command(command =>
+                    {
+                        command.Custom("ViewInquiry")
+                            .Text(" View ")
+                            .IconClass("fa fa-eye")
+                            .HtmlAttributes(new { title = "View" })
+                            .Click("btnViewInquiry_OnClick");
+                    }).Width(200).Title("Action");
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit"))
+        
+                )    
+        </div>
+        
+        @(Html.Kendo().Window()
+            .Name("InquiryWindow")
+            .Title("Inquiry")
+            .Width(1200)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+        
+        @(Html.Kendo().Window()
+            .Name("InquiryResikoWindow")
+            .Title("Inquiry Resiko")
+            .Width(1000)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+        
+        @(Html.Kendo().Window()
+            .Name("InquiryCoverageWindow")
+            .Title("Inquiry Coverage")
+            .Width(1000)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+        
+        @(Html.Kendo().Window()
+            .Name("InquiryObyekWindow")
+            .Title("Inquiry Obyek")
+            .Width(1000)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+        
+        @(Html.Kendo().Window()
+            .Name("InquiryPranotaWindow")
+            .Title("Inquiry Pranota")
+            .Width(1000)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+        
+        @(Html.Kendo().Window()
+            .Name("InquiryPranotaKoasWindow")
+            .Title("Inquiry Pranota Koas")
+            .Width(1000)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+        
+        @(Html.Kendo().Window()
+            .Name("InquiryOtherMotorDetailWindow")
+            .Title("Inquiry Other Motor Detail")
+            .Width(1000)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+        
+        @(Html.Kendo().Window()
+            .Name("InquiryOtherCargoDetailWindow")
+            .Title("Inquiry Other Cargo Detail")
+            .Width(1000)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+        
+        @(Html.Kendo().Window()
+            .Name("AlokasiWindow")
+            .Title("Inquiry Alokasi")
+            .Width(1000)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+    </div>
+</div>
+

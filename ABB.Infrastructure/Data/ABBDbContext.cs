@@ -93,6 +93,23 @@ namespace ABB.Infrastructure.Data
         public DbSet<AkseptasiOtherHoleInOne> AkseptasiOtherHoleInOne { get; set; }
         public DbSet<AkseptasiPranota> AkseptasiPranota { get; set; }
         public DbSet<AkseptasiPranotaKoas> AkseptasiPranotaKoas { get; set; }
+        public DbSet<Inquiry> Inquiry { get; set; }
+        public DbSet<InquiryResiko> InquiryResiko { get; set; }
+        public DbSet<InquiryCoverage> InquiryCoverage { get; set; }
+        public DbSet<InquiryObyek> InquiryObyek { get; set; }
+        public DbSet<InquiryObyekCIT> InquiryObyekCIT { get; set; }
+        public DbSet<InquiryObyekCIS> InquiryObyekCIS { get; set; }
+        public DbSet<InquiryOtherFire> InquiryOtherFire { get; set; }
+        public DbSet<InquiryOtherMotor> InquiryOtherMotor { get; set; }
+        public DbSet<InquiryOtherMotorDetail> InquiryOtherMotorDetail { get; set; }
+        public DbSet<InquiryOtherCargo> InquiryOtherCargo { get; set; }
+        public DbSet<InquiryOtherCargoDetail> InquiryOtherCargoDetail { get; set; }
+        public DbSet<InquiryOtherBonding> InquiryOtherBonding { get; set; }
+        public DbSet<InquiryOtherPA> InquiryOtherPA { get; set; }
+        public DbSet<InquiryOtherHull> InquiryOtherHull { get; set; }
+        public DbSet<InquiryOtherHoleInOne> InquiryOtherHoleInOne { get; set; }
+        public DbSet<InquiryPranota> InquiryPranota { get; set; }
+        public DbSet<InquiryPranotaKoas> InquiryPranotaKoas { get; set; }
         public DbSet<Nota> Nota { get; set; }
         public DbSet<DetailNota> DetailNota { get; set; }
         public DbSet<DetailAlokasi> DetailAlokasi { get; set; }
@@ -197,6 +214,21 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new AkseptasiOtherHoleInOneMap());
             builder.ApplyConfiguration(new AkseptasiPranotaMap());
             builder.ApplyConfiguration(new AkseptasiPranotaKoasMap());
+            builder.ApplyConfiguration(new InquiryMap());
+            builder.ApplyConfiguration(new InquiryResikoMap());
+            builder.ApplyConfiguration(new InquiryCoverageMap());
+            builder.ApplyConfiguration(new InquiryObyekMap());
+            builder.ApplyConfiguration(new InquiryOtherFireMap());
+            builder.ApplyConfiguration(new InquiryOtherMotorMap());
+            builder.ApplyConfiguration(new InquiryOtherMotorDetailMap());
+            builder.ApplyConfiguration(new InquiryOtherCargoMap());
+            builder.ApplyConfiguration(new InquiryOtherCargoDetailMap());
+            builder.ApplyConfiguration(new InquiryOtherBondingMap());
+            builder.ApplyConfiguration(new InquiryOtherPAMap());
+            builder.ApplyConfiguration(new InquiryOtherHullMap());
+            builder.ApplyConfiguration(new InquiryOtherHoleInOneMap());
+            builder.ApplyConfiguration(new InquiryPranotaMap());
+            builder.ApplyConfiguration(new InquiryPranotaKoasMap());
             builder.ApplyConfiguration(new NotaMap());
             builder.ApplyConfiguration(new DetailNotaMap());
             builder.ApplyConfiguration(new DetailAlokasiMap());
@@ -219,6 +251,8 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new LimitAkseptasiDetilMap());
             builder.ApplyConfiguration(new AkseptasiObyekCISMap());
             builder.ApplyConfiguration(new AkseptasiObyekCITMap());
+            builder.ApplyConfiguration(new InquiryObyekCISMap());
+            builder.ApplyConfiguration(new InquiryObyekCITMap());
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

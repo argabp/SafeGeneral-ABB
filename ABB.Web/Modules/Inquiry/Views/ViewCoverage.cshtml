@@ -1,0 +1,123 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.Inquiry.Models.InquiryResikoCoverageViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<style>
+    p {
+        margin: 0px;
+        padding: 0px;
+    }
+    label {
+        align-content: center;
+    }
+</style>
+
+@{
+    var nomor_aksepatsi = Model.kd_cb.Trim() + "." + Model.kd_cob.Trim() +
+                          Model.kd_scob.Trim() + "." + Model.kd_thn.Trim() + "." + Model.no_pol.Trim();
+    var resiko_coverage_pst_dis = (double) Model.pst_dis;
+    var resiko_coverage_pst_rate_prm = (double) Model.pst_rate_prm;
+    var resiko_coverage_pst_kms = (double) Model.pst_kms;
+}
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="CoverageForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Akseptasi</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="temp_coverage_nomor_akseptasi" value="@nomor_aksepatsi" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Update</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="resiko_coverage_no_updt" value="@Model.no_updt" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Resiko</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="resiko_coverage_no_rsk" value="@Model.no_rsk" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Endorsment</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist name="resiko_coverage_kd_endt" style="width: 100%" readonly="true" value="@Model.kd_endt"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeEndorsment", "Inquiry")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Coverage</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_cvrg" style="width: 100%" readonly="true" option-label="Pilih Kode Coverage" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeCoverage", "Akseptasi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Jaminan</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="flag_pkk" style="width: 100%" class="not-null-dropdown" option-label="Pilih Kode Coverage" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetJaminan", "Inquiry")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Diskon (%)</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="resiko_coverage_pst_dis" value="@resiko_coverage_pst_dis" style="width: 100%; background-color: #FFFFE1" readonly="true"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Rate Premi</label>
+                <div class="col-sm-3">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="resiko_coverage_pst_rate_prm" value="@resiko_coverage_pst_rate_prm" style="width: 100%; background-color: #FFFFE1" readonly="true"/>
+                </div>
+                <div class="col-sm-3">
+                    <kendo-dropdownlist name="resiko_coverage_stn_rate_prm" style="width: 100%" value="@Model.stn_rate_prm" class="not-null-dropdown" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetRatePremi", "Inquiry")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Komisi (%)</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="resiko_coverage_pst_kms" value="@resiko_coverage_pst_kms" style="width: 100%; background-color: #FFFFE1" readonly="true"/>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

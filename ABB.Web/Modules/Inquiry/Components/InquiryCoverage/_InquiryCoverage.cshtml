@@ -1,0 +1,56 @@
+﻿@using ABB.Application.Inquiries.Queries
+@using Kendo.Mvc.UI
+
+<script src="~/Modules/Inquiry/Components/InquiryCoverage/coverage.js"></script>
+
+<div class="window-body">
+    <div class="row">
+        <div class="col-md-4">
+            <input type="text" class="search-field-top" style="height: 1em" id="SearchKeywordCoverage" placeholder="Search"/>
+        </div>
+        <div class="offset-1"></div>
+    </div>
+    
+    @(Html.Kendo().Grid<InquiryCoverageDto>()
+        .Name("CoverageGrid")
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetInquiryCoverages", "Inquiry").Data("searchFilterCoverage"))
+            .Model(model => model.Id(p => p.kd_cvrg))
+        )
+        .Columns(columns =>
+        {
+            columns.Bound(col => col.kd_cvrg).Width(150).Title("Kode Coverage");
+            columns.Bound(col => col.kd_cvrg).Width(150).Title("Rate Premi").ClientTemplate("#= pst_rate_prm # #= stn_rate_prm == 1 ? '%' : '%o' #");
+            columns.Command(command =>
+            {
+                command.Custom("ViewInquiryCoverage")
+                    .Text("View")
+                    .IconClass("fa fa-view")
+                    .HtmlAttributes(new { title = "Edit" })
+                    .Click("btnViewInquiryCoverage_OnClick");
+            }).Width(200).Title("Action");
+        })
+        .Pageable(pager => pager
+            .Refresh(true)
+            .Info(true)
+            .PageSizes(true)
+        )
+        .Sortable()
+        .Filterable()
+        .Scrollable()
+        .AutoBind(false)
+        .Height(450)
+        .Resizable(a => a.Columns(true))
+        .Events(ev => ev.DataBound("gridAutoFit"))
+    
+        )
+    
+    <div class="window-footer">
+        <button type="button" id="btn-previous-inquiryResikoCoverage" class="btn btn-primary space-right">
+            <span class="fa fa-arrow-left"></span> Previous
+        </button>
+        <button type="button" id="btn-next-inquiryResikoCoverage" class="btn btn-primary space-right">
+            Next <span class="fa fa-arrow-right"></span>
+        </button>
+    </div>
+</div>

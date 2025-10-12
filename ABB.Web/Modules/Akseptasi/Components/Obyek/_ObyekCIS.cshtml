@@ -20,7 +20,7 @@
         .Columns(columns =>
         {
             columns.Bound(col => col.no_oby).Width(150).Title("Nomor Obyek").Editable("disableGridTextbox");
-            columns.Bound(col => col.nilai_saldo).Width(150).Title("Nilai Saldo").Format("{0:n2}").EditorTemplateName("KendoNumericTextBox");;
+            columns.Bound(col => col.nilai_saldo).Width(150).Title("Nilai Saldo").Format("{0:n2}").EditorTemplateName("KendoNumericTextBox");
             columns.Bound(col => col.tgl_oby).Width(150).Title("Tanggal Obyek").Format("{0: dd-MM-yyyy}").EditorTemplateName("KendoDateEditor");
             columns.Command(command =>
             {

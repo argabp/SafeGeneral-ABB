@@ -1337,8 +1337,78 @@ namespace ABB.Web.Modules.Akseptasi
                     return PartialView("~/Modules/Akseptasi/Components/Other/_OtherBonding.cshtml", akseptasiBondingViewModel);
                 case "C":
                     return PartialView("~/Modules/Akseptasi/Components/Other/_OtherCargo.cshtml" , model);
-                case "M":
-                    return PartialView("~/Modules/Akseptasi/Components/Other/_OtherMotor.cshtml" , model);
+                case "M":var akseptasiMotorViewModel = new AkseptasiResikoOtherMotorViewModel()
+                    {
+                        kd_cb = model.kd_cb.Trim(),
+                        kd_cob = model.kd_cob.Trim(),
+                        kd_scob = model.kd_scob.Trim(),
+                        kd_thn = model.kd_thn.Trim(),
+                        no_updt = model.no_updt,
+                        no_aks = model.no_aks
+                    };
+                    
+                    var motorCommand = Mapper.Map<GetAkseptasiOtherMotorQuery>(model);
+                    motorCommand.DatabaseName = Request.Cookies["DatabaseValue"];
+                    var motorResult = await Mediator.Send(motorCommand);
+
+                    if (motorResult == null)
+                    {
+                        akseptasiMotorViewModel.grp_jns_kend = "001";
+                        akseptasiMotorViewModel.kd_guna = "000";
+                        akseptasiMotorViewModel.nilai_casco = 0;
+                        akseptasiMotorViewModel.nilai_tjh = 0;
+                        akseptasiMotorViewModel.nilai_tjp = 0;
+                        akseptasiMotorViewModel.nilai_pap = 0;
+                        akseptasiMotorViewModel.nilai_pad = 0;
+                        akseptasiMotorViewModel.pst_rate_prm = 0;
+                        akseptasiMotorViewModel.stn_rate_prm = 1;
+                        akseptasiMotorViewModel.pst_rate_hh = 0;
+                        akseptasiMotorViewModel.stn_rate_hh = 1;
+                        akseptasiMotorViewModel.nilai_rsk_sendiri = 0;
+                        akseptasiMotorViewModel.nilai_prm_casco = 0;
+                        akseptasiMotorViewModel.nilai_prm_tjh = 0;
+                        akseptasiMotorViewModel.nilai_prm_tjp = 0;
+                        akseptasiMotorViewModel.nilai_prm_pap = 0;
+                        akseptasiMotorViewModel.nilai_prm_pad = 0;
+                        akseptasiMotorViewModel.nilai_prm_hh = 0;
+                        akseptasiMotorViewModel.nilai_pap_med = 0;
+                        akseptasiMotorViewModel.nilai_pad_med = 0;
+                        akseptasiMotorViewModel.nilai_prm_pap_med = 0;
+                        akseptasiMotorViewModel.nilai_prm_pad_med = 0;
+                        akseptasiMotorViewModel.nilai_prm_aog = 0;
+                        akseptasiMotorViewModel.pst_rate_aog = 0;
+                        akseptasiMotorViewModel.stn_rate_prm = 1;
+                        akseptasiMotorViewModel.pst_rate_banjir = 0;
+                        akseptasiMotorViewModel.stn_rate_banjir = 1;
+                        akseptasiMotorViewModel.nilai_prm_banjir = 0;
+                        akseptasiMotorViewModel.validitas = "A";
+                        akseptasiMotorViewModel.pst_rate_trs = 0;
+                        akseptasiMotorViewModel.stn_rate_trs = 1;
+                        akseptasiMotorViewModel.nilai_prm_trs = 0;
+                        akseptasiMotorViewModel.pst_rate_tjh = 0;
+                        akseptasiMotorViewModel.stn_rate_tjh = 1;
+                        akseptasiMotorViewModel.pst_rate_tjp = 0;
+                        akseptasiMotorViewModel.stn_rate_tjp = 1;
+                        akseptasiMotorViewModel.pst_rate_pap = 0;
+                        akseptasiMotorViewModel.stn_rate_pap = 1;
+                        akseptasiMotorViewModel.pst_rate_pad = 0;
+                        akseptasiMotorViewModel.stn_rate_pad = 1;
+                        akseptasiMotorViewModel.kd_endt = "I";
+
+                        return View("~/Modules/Akseptasi/Components/Other/_OtherMotor.cshtml", akseptasiMotorViewModel);
+                    }
+                
+                    Mapper.Map(motorResult, akseptasiMotorViewModel);
+                    akseptasiMotorViewModel.kd_cb = akseptasiMotorViewModel.kd_cb.Trim();
+                    akseptasiMotorViewModel.kd_cob = akseptasiMotorViewModel.kd_cob.Trim();
+                    akseptasiMotorViewModel.kd_scob = akseptasiMotorViewModel.kd_scob.Trim();
+                    akseptasiMotorViewModel.kd_guna = akseptasiMotorViewModel.kd_guna.Trim();
+                    akseptasiMotorViewModel.validitas = akseptasiMotorViewModel.validitas.Trim();
+                    akseptasiMotorViewModel.kd_jns_ptg = akseptasiMotorViewModel.kd_jns_ptg.Trim();
+                    akseptasiMotorViewModel.warna_kend = akseptasiMotorViewModel.warna_kend?.Trim();
+                    akseptasiMotorViewModel.kd_wilayah = akseptasiMotorViewModel.kd_wilayah?.Trim();
+                    
+                    return View("~/Modules/Akseptasi/Components/Other/_OtherMotor.cshtml", akseptasiMotorViewModel);
                 case "F":
                     var akseptasiFireViewModel = new AkseptasiResikoOtherFireViewModel()
                     {
@@ -2367,7 +2437,8 @@ namespace ABB.Web.Modules.Akseptasi
                 no_updt = no_updt,
                 no_rsk = no_rsk,
                 kd_endt = kd_endt,
-                no_pol = no_pol
+                no_pol = no_pol,
+                SearchKeyword = searchkeyword
             });
 
             return Json(ds.AsQueryable().ToDataSourceResult(request));
