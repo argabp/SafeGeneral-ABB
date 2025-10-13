@@ -12,7 +12,7 @@
     </div>
     
     @(Html.Kendo().Grid<InquiryCoverageDto>()
-        .Name("CoverageGrid")
+        .Name("InquiryCoverageGrid")
         .DataSource(dataSource => dataSource.Ajax()
             .Read(read => read.Action("GetInquiryCoverages", "Inquiry").Data("searchFilterCoverage"))
             .Model(model => model.Id(p => p.kd_cvrg))

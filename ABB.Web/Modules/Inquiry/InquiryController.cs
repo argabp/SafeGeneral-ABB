@@ -2084,7 +2084,7 @@ namespace ABB.Web.Modules.Inquiry
                         no_pol = model.no_pol
                     };
                     
-                    var hullCommand = Mapper.Map<GetInquiryOtherFireQuery>(model);
+                    var hullCommand = Mapper.Map<GetInquiryOtherHullQuery>(model);
                     hullCommand.DatabaseName = Request.Cookies["DatabaseValue"];
                     var hullResult = await Mediator.Send(hullCommand);
 

@@ -306,17 +306,20 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
         }
         
         [HttpGet]
-        public JsonResult GetKodeRekanan(string kd_grp_rk, string kd_cb)
+        public JsonResult GetKodeRekanan(string kd_grp_rk, string kd_cb, string no_fax)
         {
             var result = new List<DropdownOptionDto>();
-
-            foreach (var rekanan in _rekanans.Where(w => w.kd_grp_rk.Trim() == kd_grp_rk && w.kd_cb.Trim() == kd_cb))
+            
+            if (string.IsNullOrWhiteSpace(no_fax))
             {
-                result.Add(new DropdownOptionDto()
-                {
-                    Text = rekanan.nm_rk,
-                    Value = rekanan.kd_rk
-                });
+                result.AddRange(_rekanans.Where(w => w.kd_grp_rk.Trim() == kd_grp_rk && w.kd_cb.Trim() == kd_cb)
+                    .Select(rekanan => new DropdownOptionDto() { Text = rekanan.nm_rk, Value = rekanan.kd_rk }));
+            }
+            else
+            {
+                result.AddRange(_rekanans
+                    .Where(w => w.kd_grp_rk.Trim() == kd_grp_rk && w.kd_cb.Trim() == kd_cb && w.no_fax == no_fax)
+                    .Select(rekanan => new DropdownOptionDto() { Text = rekanan.nm_rk, Value = rekanan.kd_rk }));
             }
 
             return Json(result);

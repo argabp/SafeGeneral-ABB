@@ -289,7 +289,7 @@ function OnKodeRekananTertanggungChange(e){
 }
 
 function OnKodeRekananSumberBisnisChange(e){
-    ajaxGet(`/Akseptasi/GetKodeAkseptasi?st_pas=${$("#st_pas").val()}&kd_grp_sb_bis=${$("#kd_grp_sb_bis").val()}&kd_rk_sb_bis=${e.sender._cascadedValue}`, (returnValue) => {        
+    ajaxGet(`/Akseptasi/GetKodeAkseptasi?st_pas=${$("#st_pas").val()}&kd_grp_sb_bis=${$("#kd_grp_sb_bis").val()}&kd_rk_sb_bis=${e.sender._cascadedValue}&no_fax="Y"`, (returnValue) => {        
         $("#kd_grp_pas").getKendoDropDownList().value(returnValue[2].split(",")[1]);
         $("#kd_grp_pas").getKendoDropDownList().trigger("change");
         $("#kd_grp_brk").getKendoDropDownList().value(returnValue[1].split(",")[1]);

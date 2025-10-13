@@ -1727,7 +1727,7 @@ namespace ABB.Web.Modules.Akseptasi
                         no_aks = model.no_aks
                     };
                     
-                    var hullCommand = Mapper.Map<GetAkseptasiOtherFireQuery>(model);
+                    var hullCommand = Mapper.Map<GetAkseptasiOtherHullQuery>(model);
                     hullCommand.DatabaseName = Request.Cookies["DatabaseValue"];
                     var hullResult = await Mediator.Send(hullCommand);
 
