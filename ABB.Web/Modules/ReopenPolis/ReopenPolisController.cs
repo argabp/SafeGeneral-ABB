@@ -30,12 +30,6 @@ namespace ABB.Web.Modules.ReopenPolis
                 DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
                 KodeCabang = Request.Cookies["UserCabang"] ?? string.Empty
             });
-            
-            foreach (var data in ds)
-            {
-                data.no_pol = data.kd_cb.Trim() + "." + data.kd_cob.Trim() +
-                              data.kd_scob.Trim() + "." + data.kd_thn.Trim() + "." + data.no_pol.Trim();
-            }
 
             return Json(ds.AsQueryable().ToDataSourceResult(request));
         }

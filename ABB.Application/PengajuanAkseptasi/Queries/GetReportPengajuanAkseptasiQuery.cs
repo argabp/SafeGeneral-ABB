@@ -84,7 +84,7 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
                 nilai_pertanggungan = ReportHelper.ConvertToReportFormat(data.nilai_ttl_ptg),
                 pst_dis = ReportHelper.ConvertToReportFormat(data.pst_dis),
                 pst_kms = ReportHelper.ConvertToReportFormat(data.pst_kms),
-                data.st_pas, pst_share = ReportHelper.ConvertToReportFormat(data.pst_share, true),
+                data.st_pas, pst_share = ReportHelper.ConvertToReportFormat(data.pst_share),
                 data.no_pol_pas, data.nm_pas1, pst_pas1 = ReportHelper.ConvertToReportFormat(data.pst_pas1),
                 data.nm_pas2, pst_pas2 = ReportHelper.ConvertToReportFormat(data.pst_pas2),
                 data.nm_pas3, pst_pas3 = ReportHelper.ConvertToReportFormat(data.pst_pas3),
