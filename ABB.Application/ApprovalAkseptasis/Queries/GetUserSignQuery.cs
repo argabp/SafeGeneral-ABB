@@ -32,7 +32,7 @@ namespace ABB.Application.ApprovalAkseptasis.Queries
             try
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
-                return (await _connectionFactory.Query<DropdownOptionDto>("SELECT kd_user Value, nm_user_sign Text " +
+                return (await _connectionFactory.Query<DropdownOptionDto>("SELECT DISTINCT kd_user_sign Value, nm_user_sign Text " +
                                                                           "FROM v_user_esc")).ToList();
             }
             catch (Exception ex)

@@ -51,6 +51,11 @@ function OnClickBatalAkseptasiPengajuanAkseptasi(e) {
     openWindow('#ApprovalWindow',`/PengajuanAkseptasi/BatalAkseptasi`, 'Batal Akseptasi');
 }
 
+function OnClickBandingPengajuanAkseptasi(e) {
+    dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    openWindow('#ApprovalWindow',`/PengajuanAkseptasi/Banding`, 'Banding');
+}
+
 function OnClickPrintPengajuanAkseptasi(e) {
     showProgressOnGrid('#PengajuanAkseptasiGrid');
     dataItem = this.dataItem($(e.currentTarget).closest("tr"));
@@ -78,35 +83,37 @@ function OnClickPrintPengajuanAkseptasi(e) {
 
 function setButtonActions(e){
     var grid = this;
+    var userLogin = $("#UserLogin").val();
 
-    // Loop through data items and rows
-    grid.tbody.find("tr").each(function() {
+    grid.tbody.find("tr").each(function(e, element) {
         var dataItem = grid.dataItem(this);
-        
-        if($("#UserLogin").val() != dataItem.kd_user_input){
-            $(this).find(".k-grid-Edit").hide(); // "custom" is the command name
-            $(this).find(".k-grid-Submit").hide(); // "custom" is the command name
-            $(this).find(".k-grid-Cancel").hide(); // "custom" is the command name
-            $(this).find(".k-grid-BatalAkseptasi").hide(); // "custom" is the command name
+        var uid = $(this).data("uid");
+
+        // Find button container - try locked column first, then regular
+        var buttonContainer = grid.element.find(".k-grid-content-locked tr[data-uid='" + uid + "'] .k-command-cell");
+        if (!buttonContainer.length) {
+            buttonContainer = $(this).find(".k-command-cell");
         }
-        
-        if($("#UserLogin").val() != dataItem.kd_user_status){
-            $(this).find(".k-grid-Edit").hide(); // "custom" is the command name
-            $(this).find(".k-grid-Submit").hide(); // "custom" is the command name
-            $(this).find(".k-grid-BatalAkseptasi").hide(); // "custom" is the command name
-        }
-        
-        if (dataItem.status !== "New" && dataItem.status !== "Revised") {
-            // Hide the custom button in this row
-            $(this).find(".k-grid-Edit").hide(); // "custom" is the command name
-            $(this).find(".k-grid-Submit").hide(); // "custom" is the command name
-        }
-        
-        if(dataItem.flag_closing !== "N" && dataItem.status !== "Approved"){
-            // Hide the custom button in this row
-            $(this).find(".k-grid-BatalAkseptasi").hide(); // "custom" is the command name
+
+        if (buttonContainer.length) {
+            // Apply your business logic to hide buttons
+            if(userLogin != dataItem.kd_user_input){
+                buttonContainer.find(".k-grid-Edit, .k-grid-Submit").hide();
+            }
+
+            if(userLogin != dataItem.kd_user_status){
+                buttonContainer.find(".k-grid-Edit, .k-grid-Submit").hide();
+            }
+
+            if (dataItem.status !== "New" && dataItem.status !== "Revised") {
+                buttonContainer.find(".k-grid-Edit, .k-grid-Submit").hide();
+            }
+
+            if(dataItem.flag_banding != "1" || dataItem.flag_closing != "N" || userLogin != dataItem.kd_user_input){
+                buttonContainer.find(".k-grid-Banding").hide();
+            }
         }
     });
-    
+
     gridAutoFit(grid);
 }

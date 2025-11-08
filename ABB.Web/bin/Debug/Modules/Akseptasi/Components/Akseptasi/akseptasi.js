@@ -99,6 +99,10 @@ function setAkseptasiModel(model){
     $("#kd_cb").getKendoDropDownList().readonly(true);
     $("#kd_cob").getKendoDropDownList().readonly(true);
     $("#kd_scob").getKendoDropDownList().readonly(true);
+    $("#kd_usr_updt").getKendoTextBox().value(model.kd_usr_updt);
+    $("#kd_usr_input").getKendoTextBox().value(model.kd_usr_input);
+    $("#tgl_updt").getKendoDatePicker().value(model.tgl_updt);
+    $("#tgl_input").getKendoDatePicker().value(model.tgl_input);
     var no_aks = model.kd_cb.trim() + "." + model.kd_cob.trim() + model.kd_scob.trim() + "." + model.kd_thn + "." + model.no_aks.trim();
     $("#temp_nomor_akseptasi").val(no_aks);
 }

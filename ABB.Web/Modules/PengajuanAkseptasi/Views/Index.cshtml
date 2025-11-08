@@ -35,6 +35,45 @@
         )
         .Columns(columns =>
         {
+            columns.Command(command =>
+            {
+                command.Custom("Edit")
+                    .Text("Edit")
+                    .IconClass("fa fa-pencil-alt")
+                    .HtmlAttributes(new { title = "Edit" })
+                    .Click("OnClickEditPengajuanAkseptasi");
+                command.Custom("View")
+                    .Text("View")
+                    .IconClass("fa fa-eye")
+                    .HtmlAttributes(new { title = "View" })
+                    .Click("OnClickViewPengajuanAkseptasi");
+                command.Custom("Info")
+                    .Text("Info")
+                    .IconClass("fa fa-info-circle")
+                    .HtmlAttributes(new { title = "Info" })
+                    .Click("OnClickInfoPengajuanAkseptasi");
+                command.Custom("Submit")
+                    .Text("Submit")
+                    .IconClass("fa fa-location-arrow")
+                    .HtmlAttributes(new { title = "Submit" })
+                    .Click("OnClickSubmitPengajuanAkseptasi");
+                // command.Custom("BatalAkseptasi")
+                //     .Text(" ")
+                //     .IconClass("fa fa-ban")
+                //     .HtmlAttributes(new { title = "Batal Akseptasi" })
+                //     .Click("OnClickBatalAkseptasiPengajuanAkseptasi");
+                command.Custom("Banding")
+                    .Text("Banding")
+                    .IconClass("fa fa-history")
+                    .HtmlAttributes(new { title = "Banding" })
+                    .Click("OnClickBandingPengajuanAkseptasi");
+                command.Custom("Print")
+                    .Text("Print")
+                    .IconClass("fa fa-print")
+                    .HtmlAttributes(new { title = "Print" })
+                    .Click("OnClickPrintPengajuanAkseptasi");
+    
+            }).Title("Action").Width(250).Locked(true);
             columns.Bound(col => col.Id).Hidden();
             columns.Bound(col => col.nm_cb).Title("Cabang");
             columns.Bound(col => col.nm_cob).Title("COB");
@@ -45,40 +84,6 @@
             columns.Bound(col => col.status).Title("Status");
             columns.Bound(col => col.user_status).Title("User Status");
             columns.Bound(col => col.tgl_status).Title("Tanggal Status").Format("{0: dd-MM-yyyy}");
-            columns.Command(command =>
-            {
-                command.Custom("Edit")
-                    .Text(" ")
-                    .IconClass("fa fa-pencil-alt")
-                    .HtmlAttributes(new { title = "Edit" })
-                    .Click("OnClickEditPengajuanAkseptasi");
-                command.Custom("View")
-                    .Text(" ")
-                    .IconClass("fa fa-eye")
-                    .HtmlAttributes(new { title = "View" })
-                    .Click("OnClickViewPengajuanAkseptasi");
-                command.Custom("Info")
-                    .Text(" ")
-                    .IconClass("fa fa-info-circle")
-                    .HtmlAttributes(new { title = "Info" })
-                    .Click("OnClickInfoPengajuanAkseptasi");
-                command.Custom("Submit")
-                    .Text(" ")
-                    .IconClass("fa fa-location-arrow")
-                    .HtmlAttributes(new { title = "Submit" })
-                    .Click("OnClickSubmitPengajuanAkseptasi");
-                command.Custom("BatalAkseptasi")
-                    .Text(" ")
-                    .IconClass("fa fa-ban")
-                    .HtmlAttributes(new { title = "Batal Akseptasi" })
-                    .Click("OnClickBatalAkseptasiPengajuanAkseptasi");
-                command.Custom("Print")
-                    .Text(" ")
-                    .IconClass("fa fa-print")
-                    .HtmlAttributes(new { title = "Print" })
-                    .Click("OnClickPrintPengajuanAkseptasi");
-    
-            }).Title("Action").Width(250);
         })
         .Pageable(pager => pager
                     .Refresh(true)
@@ -115,7 +120,7 @@
         @(Html.Kendo().Window()
                     .Name("ApprovalWindow")
                     .Title("Approval Page")
-                    .Width(500)
+                    .Width(1000)
                     .Modal(true)
                     .Visible(false)
                     .Draggable(true)

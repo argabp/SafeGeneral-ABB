@@ -29,6 +29,7 @@ namespace ABB.Web.Modules.ApprovalAkseptasi.Models
         {
             profile.CreateMap<ApprovalAkseptasiEscModel, ApprovalAkseptasiEscCommand>();
             profile.CreateMap<ApprovalAkseptasiEscModel, ApprovalAkseptasiRevCommand>();
+            profile.CreateMap<ApprovalAkseptasiEscModel, ApprovalAkseptasiBandingCommand>();
         }
     }
 }

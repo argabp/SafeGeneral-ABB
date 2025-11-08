@@ -130,6 +130,9 @@ namespace ABB.Infrastructure.Data
         public DbSet<DokumenAkseptasiDetil> DokumenAkseptasiDetil { get; set; }
         public DbSet<LimitAkseptasi> LimitAkseptasi { get; set; }
         public DbSet<LimitAkseptasiDetil> LimitAkseptasiDetil { get; set; }
+        public DbSet<RegisterKlaim> RegisterKlaim { get; set; }
+        public DbSet<DokumenRegisterKlaim> DokumenRegisterKlaim { get; set; }
+        public DbSet<AnalisaDanEvaluasi> AnalisaDanEvaluasi { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -253,6 +256,9 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new AkseptasiObyekCITMap());
             builder.ApplyConfiguration(new InquiryObyekCISMap());
             builder.ApplyConfiguration(new InquiryObyekCITMap());
+            builder.ApplyConfiguration(new RegisterKlaimMap());
+            builder.ApplyConfiguration(new DokumenRegisterKlaimMap());
+            builder.ApplyConfiguration(new AnalisaDanEvaluasiMap());
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

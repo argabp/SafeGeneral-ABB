@@ -8,33 +8,32 @@ using ABB.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace ABB.Application.Inquiries.Queries
+namespace ABB.Application.Common.Queries
 {
-    public class GetKodeWilayahQuery : IRequest<List<DropdownOptionDto>>
+    public class GetCabangQuery : IRequest<List<DropdownOptionDto>>
     {
         public string DatabaseName { get; set; }
     }
 
-    public class GetKodeWilayahQueryHandler : IRequestHandler<GetKodeWilayahQuery, List<DropdownOptionDto>>
+    public class GetCabangQueryHandler : IRequestHandler<GetCabangQuery, List<DropdownOptionDto>>
     {
         private readonly IDbConnectionFactory _connectionFactory;
-        private readonly ILogger<GetKodeWilayahQueryHandler> _logger;
+        private readonly ILogger<GetCabangQueryHandler> _logger;
 
-        public GetKodeWilayahQueryHandler(IDbConnectionFactory connectionFactory, ILogger<GetKodeWilayahQueryHandler> logger)
+        public GetCabangQueryHandler(IDbConnectionFactory connectionFactory, ILogger<GetCabangQueryHandler> logger)
         {
             _connectionFactory = connectionFactory;
             _logger = logger;
         }
 
-        public async Task<List<DropdownOptionDto>> Handle(GetKodeWilayahQuery request,
+        public async Task<List<DropdownOptionDto>> Handle(GetCabangQuery request,
             CancellationToken cancellationToken)
         {
             try
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
-                return (await _connectionFactory.Query<DropdownOptionDto>(
-                    "SELECT RTRIM(LTRIM(kd_prop)) Value, nm_prop Text " +
-                    "FROM rf07")).ToList();
+                return (await _connectionFactory.Query<DropdownOptionDto>("SELECT RTRIM(LTRIM(kd_cb)) Value, nm_cb Text " +
+                                                                          "FROM rf01")).ToList();
             }
             catch (Exception ex)
             {

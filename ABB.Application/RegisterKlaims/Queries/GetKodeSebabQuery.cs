@@ -8,32 +8,35 @@ using ABB.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace ABB.Application.Akseptasis.Queries
+namespace ABB.Application.RegisterKlaims.Queries
 {
-    public class GetKodePropinsiQuery : IRequest<List<DropdownOptionDto>>
+    public class GetKodeSebabQuery : IRequest<List<DropdownOptionDto>>
     {
         public string DatabaseName { get; set; }
+
+        public string kd_cob { get; set; }
     }
 
-    public class GetKodePropinsiQueryHandler : IRequestHandler<GetKodePropinsiQuery, List<DropdownOptionDto>>
+    public class GetKodeSebabQueryHandler : IRequestHandler<GetKodeSebabQuery, List<DropdownOptionDto>>
     {
         private readonly IDbConnectionFactory _connectionFactory;
-        private readonly ILogger<GetKodePropinsiQueryHandler> _logger;
+        private readonly ILogger<GetKodeSebabQueryHandler> _logger;
 
-        public GetKodePropinsiQueryHandler(IDbConnectionFactory connectionFactory, ILogger<GetKodePropinsiQueryHandler> logger)
+        public GetKodeSebabQueryHandler(IDbConnectionFactory connectionFactory, ILogger<GetKodeSebabQueryHandler> logger)
         {
             _connectionFactory = connectionFactory;
             _logger = logger;
         }
 
-        public async Task<List<DropdownOptionDto>> Handle(GetKodePropinsiQuery request,
+        public async Task<List<DropdownOptionDto>> Handle(GetKodeSebabQuery request,
             CancellationToken cancellationToken)
         {
             try
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
-                return (await _connectionFactory.Query<DropdownOptionDto>("SELECT RTRIM(LTRIM(kd_prop)) Value, nm_prop Text " +
-                                                                          "FROM rf07")).ToList();
+                return (await _connectionFactory.Query<DropdownOptionDto>(
+                    "SELECT RTRIM(LTRIM(kd_sebab)) Value, nm_sebab Text " +
+                    "FROM v_rf01 WHERE kd_cob = @kd_cob", new { request.kd_cob })).ToList();
             }
             catch (Exception ex)
             {

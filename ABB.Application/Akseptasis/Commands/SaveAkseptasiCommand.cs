@@ -296,7 +296,7 @@ namespace ABB.Application.Akseptasis.Commands
                     entity.lamp_pol = request.lamp_pol;
                     entity.ket_klausula = request.ket_klausula;
                     entity.flag_konv = request.flag_konv;
-                    entity.no_survey = request.no_survey;
+                    entity.kd_konfirm = request.kd_konfirm;
                     entity.tgl_ttd = request.tgl_ttd;
                     entity.wpc = request.wpc;
                     entity.tgl_input = request.tgl_input;

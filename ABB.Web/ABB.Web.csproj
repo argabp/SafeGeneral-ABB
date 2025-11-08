@@ -5995,6 +5995,45 @@
       <None Update="Modules\Inquiry\Components\InquiryResikoView\resikoView.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\Shared\Components\RegisterKlaim\registerKlaim.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Shared\Components\DokumenRegisterKlaim\dokumenRegisterKlaim.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\RegisterKlaim\JS\registerKlaim.add.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\RegisterKlaim\JS\registerKlaim.form.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\RegisterKlaim\JS\registerKlaim.index.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\RegisterKlaim\JS\pengajuanAkseptasi.info.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\RegisterKlaim\JS\pengajuanAkseptasi.view.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\RegisterKlaim\JS\pengajuanAkseptasi.submit.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\RegisterKlaim\JS\pengajuanAkseptasi.batalAkseptasi.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\RegisterKlaim\JS\registerKlaim.akseptasiPolis.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Shared\Components\AnalisaDanEvaluasi\analisaDanEvaluasi.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\ApprovalAkseptasi\JS\approvalAkseptasi.banding.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\PengajuanAkseptasi\JS\pengajuanAkseptasi.banding.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

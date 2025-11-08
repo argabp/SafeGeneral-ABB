@@ -38,7 +38,7 @@ namespace ABB.Application.DashboardUnderwriting.Queries
             urls.Add("Approved", "/PengajuanAkseptasi/Index?");
             urls.Add("Rejected", "/PengajuanAkseptasi/Index?");
             urls.Add("Revised", "/PengajuanAkseptasi/Index?");
-            urls.Add("Canceled", "/PengajuanAkseptasi/Index?");
+            urls.Add("Banding", "/PengajuanAkseptasi/Index?");
             
             var icons = new Dictionary<string, string>();
             
@@ -49,7 +49,7 @@ namespace ABB.Application.DashboardUnderwriting.Queries
             icons.Add("Approved", "fa-child");
             icons.Add("Rejected", "fa-times-circle");
             icons.Add("Revised", "fa-edit");
-            icons.Add("Canceled", "fa-ban");
+            icons.Add("Banding", "fa-history");
             var dashboard = new DashboardUnderwritingDto();
 
             _dbConnectionFactory.CreateDbConnection(request.DatabaseName);

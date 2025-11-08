@@ -45,9 +45,6 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.nm_cob).Title("Nama COB");
-                    columns.Bound(col => col.nm_scob).Title("Nama Sub COB");
-                    columns.Bound(col => col.Desc_AkseptasiProduk).Title("Keterangan");
                     columns.Command(command =>
                     {
                         command.Custom("EditAkseptasiProduk")
@@ -60,7 +57,10 @@
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteAkseptasiProduk");
-                    }).Width(200).Title("Action");
+                    }).Width(200).Title("Action").Locked(true);
+                    columns.Bound(col => col.nm_cob).Title("Nama COB");
+                    columns.Bound(col => col.nm_scob).Title("Nama Sub COB");
+                    columns.Bound(col => col.Desc_AkseptasiProduk).Title("Keterangan");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

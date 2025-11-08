@@ -41,14 +41,6 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
-                    columns.Bound(col => col.nm_scob).Width(150).Title("Nama SCOB");
-                    columns.Bound(col => col.nm_mtu).Width(150).Title("Nama Mata Uang");
-                    columns.Bound(col => col.nilai_min_prm).Width(150).Title("Nilai Minimum Premi");
-                    columns.Bound(col => col.nilai_bia_pol).Width(150).Title("Nilai Biaya Polis");
-                    columns.Bound(col => col.nilai_bia_adm).Width(150).Title("Nilai Biaya Adm. dll");
-                    columns.Bound(col => col.nilai_min_form).Width(150).Title("Nilai Minimum Formulir");
-                    columns.Bound(col => col.nilai_maks_plafond).Width(150).Title("Nilai Maksimum Plafond");
                     columns.Command(command =>
                     {
                         command.Custom("EditBiayaPerSubCOB")
@@ -61,7 +53,15 @@
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteBiayaPerSubCOB");
-                    }).Width(200).Title("Action");
+                    }).Width(200).Title("Action").Locked(true);
+                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
+                    columns.Bound(col => col.nm_scob).Width(150).Title("Nama SCOB");
+                    columns.Bound(col => col.nm_mtu).Width(150).Title("Nama Mata Uang");
+                    columns.Bound(col => col.nilai_min_prm).Width(150).Title("Nilai Minimum Premi");
+                    columns.Bound(col => col.nilai_bia_pol).Width(150).Title("Nilai Biaya Polis");
+                    columns.Bound(col => col.nilai_bia_adm).Width(150).Title("Nilai Biaya Adm. dll");
+                    columns.Bound(col => col.nilai_min_form).Width(150).Title("Nilai Minimum Formulir");
+                    columns.Bound(col => col.nilai_maks_plafond).Width(150).Title("Nilai Maksimum Plafond");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

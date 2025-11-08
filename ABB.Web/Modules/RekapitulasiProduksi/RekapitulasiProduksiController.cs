@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ABB.Application.Common.Dtos;
+using ABB.Application.Common.Queries;
 using ABB.Application.Common.Services;
 using ABB.Application.KapasitasCabangs.Queries;
 using ABB.Application.PolisInduks.Queries;

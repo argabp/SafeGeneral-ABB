@@ -21,6 +21,7 @@ using ABB.Web.Modules.PolisInduk.Models;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
+using GetKodeWilayahQuery = ABB.Application.Common.Queries.GetKodeWilayahQuery;
 
 namespace ABB.Web.Modules.Inquiry
 {
@@ -1352,7 +1353,7 @@ namespace ABB.Web.Modules.Inquiry
         
         public async Task<JsonResult> GetKodePropinsi()
         {
-            var result = await Mediator.Send(new GetKodePropinsiQuery()
+            var result = await Mediator.Send(new GetKodeWilayahQuery()
             {
                 DatabaseName = Request.Cookies["DatabaseValue"]
             });

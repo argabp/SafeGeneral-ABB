@@ -1,0 +1,36 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.RegisterKlaim.Models.AnalisaDanEvaluasiViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/Shared/Components/AnalisaDanEvaluasi/analisaDanEvaluasi.js"></script>
+
+<style>
+    p {
+        margin: 0px;
+        padding: 0px;
+    }
+    label {
+        align-content: center;
+    }
+</style>
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="AnalisaDanEvaluasiForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-group row">
+            <div class="col-sm-12">
+                <textarea id="ket_anev" name="ket_anev" style="width:100%; height:850px;" aria-label="editor">@Model.ket_anev</textarea>
+            </div>
+        </div>
+    </form>
+
+    <div class="window-footer">
+        <button type="button" id="btn-previous-analisaDanEvaluasi" class="btn btn-primary space-right">
+            <span class="fa fa-arrow-left"></span> Previous
+        </button>
+        <button type="button" id="btn-save-analisaDanEvaluasi" class="btn btn-success space-right">
+            <span class="fa fa-save"></span> Save
+        </button>
+    </div>
+</div>

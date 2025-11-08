@@ -1,0 +1,21 @@
+﻿@model List<ABB.Application.RegisterKlaims.Queries.DokumenRegisterKlaimDto>
+@using Kendo.Mvc.UI
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/Shared/Components/DokumenRegisterKlaim/dokumenRegisterKlaim.js"></script>
+
+
+<input type="hidden" id="dokumenRegisterKlaimDS" value='@Html.Raw(Json.Serialize(Model))' /> 
+<div id="DokumenRegisterKlaimGrid">
+</div>
+
+<div class="window-footer">
+    <button type="button" id="btn-previous-dokumenRegisterKlaim" class="btn btn-primary space-right">
+        <span class="fa fa-arrow-left"></span> Previous
+    </button>
+    <button type="button" id="btn-next-dokumenRegisterKlaim" class="btn btn-primary space-right">
+        Next <span class="fa fa-arrow-right"></span>
+    </button>
+</div>

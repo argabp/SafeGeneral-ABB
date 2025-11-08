@@ -5,7 +5,7 @@
 function btnApprovalAkseptasiEscalated(){
     $('#btn-approvalAkseptasi-escalated').click(function () {
 
-        if($("#keteranganApproval").val().trim() === ""){
+        if($("#keterangan").val().trim() === ""){
             showMessage('Error', "Keterangan Wajib Diisi");
             return;
         }

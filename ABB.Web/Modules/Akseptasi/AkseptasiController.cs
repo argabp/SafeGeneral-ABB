@@ -3022,7 +3022,7 @@ namespace ABB.Web.Modules.Akseptasi
         
         public async Task<JsonResult> GetKodePropinsi()
         {
-            var result = await Mediator.Send(new GetKodePropinsiQuery()
+            var result = await Mediator.Send(new GetKodeWilayahQuery()
             {
                 DatabaseName = Request.Cookies["DatabaseValue"]
             });

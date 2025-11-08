@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using ABB.Application.Common;
+using ABB.Application.Common.Queries;
 using ABB.Application.KapasitasCabangs.Queries;
 using ABB.Application.NomorRegistrasiPolis.Commands;
 using ABB.Application.NomorRegistrasiPolis.Queries;

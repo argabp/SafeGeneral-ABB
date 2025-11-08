@@ -3,37 +3,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace ABB.Application.KapasitasCabangs.Queries
+namespace ABB.Application.RegisterKlaims.Queries
 {
-    public class GetCabangQuery : IRequest<List<DropdownOptionDto>>
+    public class GetKodeTahunQuery : IRequest<string>
     {
         public string DatabaseName { get; set; }
+
+        public DateTime tgl_reg { get; set; }
     }
 
-    public class GetCabangQueryHandler : IRequestHandler<GetCabangQuery, List<DropdownOptionDto>>
+    public class GetKodeTahunQueryHandler : IRequestHandler<GetKodeTahunQuery, string>
     {
         private readonly IDbConnectionFactory _connectionFactory;
-        private readonly ILogger<GetCabangQueryHandler> _logger;
+        private readonly ILogger<GetKodeTahunQueryHandler> _logger;
 
-        public GetCabangQueryHandler(IDbConnectionFactory connectionFactory, ILogger<GetCabangQueryHandler> logger)
+        public GetKodeTahunQueryHandler(IDbConnectionFactory connectionFactory, ILogger<GetKodeTahunQueryHandler> logger)
         {
             _connectionFactory = connectionFactory;
             _logger = logger;
         }
 
-        public async Task<List<DropdownOptionDto>> Handle(GetCabangQuery request,
+        public async Task<string> Handle(GetKodeTahunQuery request,
             CancellationToken cancellationToken)
         {
             try
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
-                return (await _connectionFactory.Query<DropdownOptionDto>("SELECT RTRIM(LTRIM(kd_cb)) Value, nm_cb Text " +
-                                                                          "FROM rf01")).ToList();
+                return (await _connectionFactory.QueryProc<string>("spe_cl01e_05", new
+                {
+                    request.tgl_reg
+                })).FirstOrDefault();
             }
             catch (Exception ex)
             {

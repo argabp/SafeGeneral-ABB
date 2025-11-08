@@ -37,6 +37,20 @@
         .Resizable(r => r.Columns(true))
         .Columns(columns =>
         {
+            
+            columns.Command(command =>
+            {
+                command.Custom("Edit")
+                    .Text(" ")
+                    .IconClass("fa fa-pencil-alt")
+                    .HtmlAttributes(new { title="Edit"})
+                    .Click("btnEditCabang_OnClick");
+                command.Custom("Delete")
+                    .Text(" ")
+                    .IconClass("fa fa-trash")
+                    .HtmlAttributes(new { title="Delete"})
+                    .Click("btnDeleteCabang_OnClick");
+            }).Title("Action").Width(180).Locked(true);
             columns.Bound(col => col.kd_cb).Title("Kode Cabang").Width(150);
             columns.Bound(col => col.nm_cb).Title("Nama Cabang").Width(150);
             columns.Bound(col => col.almt).Title("Alamat").Width(150);
@@ -46,19 +60,6 @@
             columns.Bound(col => col.npwp).Title("NPWP").Width(150);
             columns.Bound(col => col.no_fax).Title("No. Fax").Width(150);
             columns.Bound(col => col.email).Title("Email").Width(200);
-            columns.Command(command =>
-            {
-                command.Custom("Edit")
-                        .Text(" ")
-                        .IconClass("fa fa-pencil-alt")
-                        .HtmlAttributes(new { title="Edit"})
-                        .Click("btnEditCabang_OnClick");
-                command.Custom("Delete")
-                        .Text(" ")
-                        .IconClass("fa fa-trash")
-                        .HtmlAttributes(new { title="Delete"})
-                        .Click("btnDeleteCabang_OnClick");
-            }).Title("Action").Width(180);
         })
         .Pageable(pager => pager
                     .Refresh(true)

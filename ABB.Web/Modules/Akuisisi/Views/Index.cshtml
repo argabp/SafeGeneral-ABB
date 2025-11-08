@@ -41,13 +41,6 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
-                    columns.Bound(col => col.nm_scob).Width(150).Title("Nama SCOB");
-                    columns.Bound(col => col.kd_thn).Width(150).Title("Kode Tahun");
-                    columns.Bound(col => col.nm_mtu).Width(150).Title("Nama Mata Uang");
-                    columns.Bound(col => col.nilai_min_acq).Width(150).Title("Nilai Minimum Premi");
-                    columns.Bound(col => col.nilai_maks_acq).Width(150).Title("Nilai Maksimum Premi");
-                    columns.Bound(col => col.nilai_acq).Width(150).Title("Persentase Nilai Akuisisi");
                     columns.Command(command =>
                     {
                         command.Custom("EditAkuisisi")
@@ -60,7 +53,14 @@
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteAkuisisi");
-                    }).Width(200).Title("Action");
+                    }).Width(200).Title("Action").Locked(true);
+                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
+                    columns.Bound(col => col.nm_scob).Width(150).Title("Nama SCOB");
+                    columns.Bound(col => col.kd_thn).Width(150).Title("Kode Tahun");
+                    columns.Bound(col => col.nm_mtu).Width(150).Title("Nama Mata Uang");
+                    columns.Bound(col => col.nilai_min_acq).Width(150).Title("Nilai Minimum Premi");
+                    columns.Bound(col => col.nilai_maks_acq).Width(150).Title("Nilai Maksimum Premi");
+                    columns.Bound(col => col.nilai_acq).Width(150).Title("Persentase Nilai Akuisisi");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

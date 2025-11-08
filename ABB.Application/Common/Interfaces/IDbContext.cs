@@ -120,6 +120,9 @@ namespace ABB.Application.Common.Interfaces
         DbSet<DokumenAkseptasiDetil> DokumenAkseptasiDetil { get; set; }
         DbSet<LimitAkseptasi> LimitAkseptasi { get; set; }
         DbSet<LimitAkseptasiDetil> LimitAkseptasiDetil { get; set; }
+        DbSet<RegisterKlaim> RegisterKlaim { get; set; }
+        DbSet<DokumenRegisterKlaim> DokumenRegisterKlaim { get; set; }
+        DbSet<AnalisaDanEvaluasi> AnalisaDanEvaluasi { get; set; }
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);

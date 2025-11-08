@@ -21,6 +21,7 @@ namespace ABB.Web.Modules.Shared.Components.LampiranPengajuanAkseptasi
         public async Task<IViewComponentResult> InvokeAsync(PengajuanAkseptasiModel model)
         {
             var command = _mapper.Map<GetPengajuanAkseptasiAttachmentQuery>(model);
+            command.DatabaseName = Request.Cookies["DatabaseValue"];
             var result = await _mediator.Send(command);
 
             return View("_LampiranPengajuanAkseptasi", result);

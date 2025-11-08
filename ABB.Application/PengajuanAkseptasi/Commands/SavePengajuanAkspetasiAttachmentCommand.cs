@@ -17,6 +17,7 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
 {
     public class SavePengajuanAkspetasiAttachmentCommand : IRequest, IMapFrom<TRAkseptasiAttachment>
     {
+        public string DatabaseName { get; set; }
         public string kd_cb { get; set; }
         
         public string kd_cob { get; set; }

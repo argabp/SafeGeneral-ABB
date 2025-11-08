@@ -41,10 +41,6 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.nm_mtu).Width(150).Title("Nama Mata Uang");
-                    columns.Bound(col => col.nilai_prm_mul).Width(150).Title("Nilai Premi Mulai");
-                    columns.Bound(col => col.nilai_prm_akh).Width(150).Title("Nilai Premi Akhir");
-                    columns.Bound(col => col.nilai_bia_mat).Width(150).Title("Nilai Biaya Materai");
                     columns.Command(command =>
                     {
                         command.Custom("EditBiayaMaterai")
@@ -57,7 +53,11 @@
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteBiayaMaterai");
-                    }).Width(200).Title("Action");
+                    }).Width(200).Title("Action").Locked(true);
+                    columns.Bound(col => col.nm_mtu).Width(150).Title("Nama Mata Uang");
+                    columns.Bound(col => col.nilai_prm_mul).Width(150).Title("Nilai Premi Mulai");
+                    columns.Bound(col => col.nilai_prm_akh).Width(150).Title("Nilai Premi Akhir");
+                    columns.Bound(col => col.nilai_bia_mat).Width(150).Title("Nilai Biaya Materai");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

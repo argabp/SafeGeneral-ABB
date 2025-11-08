@@ -37,23 +37,23 @@
         .Resizable(r => r.Columns(true))
         .Columns(columns =>
         {
+            columns.Command(command =>
+            {
+                command.Custom("Edit")
+                    .Text(" ")
+                    .IconClass("fa fa-pencil-alt")
+                    .HtmlAttributes(new { title="Edit"})
+                    .Click("btnEditCOB_OnClick");
+                command.Custom("Delete")
+                    .Text(" ")
+                    .IconClass("fa fa-trash")
+                    .HtmlAttributes(new { title="Delete"})
+                    .Click("btnDeleteCOB_OnClick");
+            }).Title("Action").Width(180).Locked(true);
             columns.Bound(col => col.kd_cob).Title("Kode COB").Width(100);
             columns.Bound(col => col.nm_cob).Title("Nama COB").Width(200);
             columns.Bound(col => col.nm_cob_ing).Title("Alamat").Width(200);
             columns.Bound(col => col.kd_class).Title("Kode Class").Width(100);
-            columns.Command(command =>
-            {
-                command.Custom("Edit")
-                        .Text(" ")
-                        .IconClass("fa fa-pencil-alt")
-                        .HtmlAttributes(new { title="Edit"})
-                        .Click("btnEditCOB_OnClick");
-                command.Custom("Delete")
-                        .Text(" ")
-                        .IconClass("fa fa-trash")
-                        .HtmlAttributes(new { title="Delete"})
-                        .Click("btnDeleteCOB_OnClick");
-            }).Title("Action").Width(180);
         })
         .Pageable(pager => pager
                     .Refresh(true)

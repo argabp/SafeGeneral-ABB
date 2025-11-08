@@ -124,6 +124,11 @@ namespace ABB.Web.Modules.ApprovalAkseptasi
             return View("Revised");
         }
         
+        public IActionResult BandingView()
+        {
+            return View("Banding");
+        }
+        
         public async Task<IActionResult> ApprovalAkseptasi(ApprovalAkseptasiModel model)
         {
             try
@@ -156,7 +161,7 @@ namespace ABB.Web.Modules.ApprovalAkseptasi
 
                 foreach (var notifTo in result.Item2)
                 {
-                    await ApplicationHub.SendPengajuanAkseptasiNotification(notifTo, model.nomor_pengajuan, "Submit");
+                    await ApplicationHub.SendPengajuanAkseptasiNotification(notifTo, model.nomor_pengajuan, "Escalated");
                 }
                 
                 return Json(new { Result = "OK", Message = result.Item1 });
@@ -178,7 +183,29 @@ namespace ABB.Web.Modules.ApprovalAkseptasi
 
                 foreach (var notifTo in result.Item2)
                 {
-                    await ApplicationHub.SendPengajuanAkseptasiNotification(notifTo, model.nomor_pengajuan, "Submit");
+                    await ApplicationHub.SendPengajuanAkseptasiNotification(notifTo, model.nomor_pengajuan, "Revised");
+                }
+                
+                return Json(new { Result = "OK", Message = result.Item1 });
+            }
+            catch (Exception e)
+            {
+                return Json(new
+                    { Result = "ERROR", Message = e.InnerException == null ? e.Message : e.InnerException.Message });
+            }
+        }
+        
+        public async Task<IActionResult> ApprovalAkseptasiBanding(ApprovalAkseptasiEscModel model)
+        {
+            try
+            {
+                var command = Mapper.Map<ApprovalAkseptasiBandingCommand>(model);
+                command.DatabaseName = Request.Cookies["DatabaseValue"];
+                var result = await Mediator.Send(command);
+
+                foreach (var notifTo in result.Item2)
+                {
+                    await ApplicationHub.SendPengajuanAkseptasiNotification(notifTo, model.nomor_pengajuan, "Banding");
                 }
                 
                 return Json(new { Result = "OK", Message = result.Item1 });
