@@ -628,6 +628,32 @@ namespace ABB.Web.Modules.Akseptasi
             }
         }
 
+        public async Task<JsonResult> GenerateNilaiKomisi(decimal pst_kms, decimal nilai_prm, decimal nilai_dis)
+        {
+            var result = await Mediator.Send(new GenerateNilaiKomisiQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                pst_kms = pst_kms,
+                nilai_prm = nilai_prm,
+                nilai_dis = nilai_dis
+            });
+
+            return Json(result);
+        }
+        
+        public async Task<JsonResult> GenerateNilaiDiskon(decimal pst_kms, decimal nilai_prm, decimal pst_dis)
+        {
+            var result = await Mediator.Send(new GenerateNilaiDiskonQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                pst_kms = pst_kms,
+                nilai_prm = nilai_prm,
+                pst_dis = pst_dis
+            });
+
+            return Json(result);
+        }
+
         #endregion
 
         #region Coverage

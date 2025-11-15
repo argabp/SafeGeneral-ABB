@@ -22,7 +22,7 @@ namespace ABB.Domain.Entities
 
         public DateTime PeriodeAkhir { get; set; }
 
-        public Int16 JktWaktuHari { get; set; }
+        public int JktWaktuHari { get; set; }
 
         public string Mtu { get; set; }
 

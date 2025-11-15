@@ -23,21 +23,21 @@
     <div class="flat-box-content">
         <form id="CancelCSMForm" enctype="multipart/form-data" autocomplete="off">
             <div>
-                <dif class="row form-group">
-                    <div class="row col-sm-6">
-                        <label class="col-sm-4">Tipe Transaksi</label>
-                        <div class="col-sm-8">
-                            <kendo-dropdownlist for="TipeTransaksi" option-label="Pilih Tipe Transaksi"
-                                                datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
-                                <datasource type="DataSourceTagHelperType.Custom">
-                                    <transport>
-                                        <read url="@Url.Action("GetTipeTransaksi", "CancelCSM")"/>
-                                    </transport>
-                                </datasource>
-                            </kendo-dropdownlist>
-                        </div>
-                    </div>
-                </dif>
+                @* <div class="row form-group"> *@
+                @*     <div class="row col-sm-6"> *@
+                @*         <label class="col-sm-4">Tipe Transaksi</label> *@
+                @*         <div class="col-sm-8"> *@
+                @*             <kendo-dropdownlist for="TipeTransaksi" option-label="Pilih Tipe Transaksi" *@
+                @*                                 datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains"> *@
+                @*                 <datasource type="DataSourceTagHelperType.Custom"> *@
+                @*                     <transport> *@
+                @*                         <read url="@Url.Action("GetTipeTransaksi", "CancelCSM")"/> *@
+                @*                     </transport> *@
+                @*                 </datasource> *@
+                @*             </kendo-dropdownlist> *@
+                @*         </div> *@
+                @*     </div> *@
+                @* </div> *@
                 <div class="row form-group">
                     <div class="row col-sm-6">
                         <label class="col-sm-4">Kode Metode</label>

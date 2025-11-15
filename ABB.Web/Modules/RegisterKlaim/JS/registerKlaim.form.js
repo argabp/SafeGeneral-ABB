@@ -1,12 +1,7 @@
 ﻿var state;
 
 $(document).ready(function () {
-    $('#RegisterKlaimTab').kendoTabStrip();
-
     showProgress('#RegisterKlaimWindow');
-    
-    var tabstrip = $('#RegisterKlaimTab').data("kendoTabStrip");
-    tabstrip.select(0);
     
     setTimeout(() => {
         $("#ket_anev").kendoEditor({

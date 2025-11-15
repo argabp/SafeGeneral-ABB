@@ -1,0 +1,85 @@
+﻿@model ABB.Web.Modules.MutasiKlaim.Models.MutasiKlaimAlokasiViewModel
+@using Kendo.Mvc.UI
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/MutasiKlaim/JS/mutasiKlaim.alokasi.js"></script>
+
+@{
+    var nomor_register = Model.kd_cb.Trim() + "." + Model.kd_cob.Trim() +
+                          Model.kd_scob.Trim() + "." + Model.kd_thn.Trim() + "." + Model.no_kl.Trim();
+}
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="MutasiKlaimAlokasiForm" enctype="multipart/form-data" autocomplete="off">
+        @Html.HiddenFor(h => h.kd_cb)
+        @Html.HiddenFor(h => h.kd_cob)
+        @Html.HiddenFor(h => h.kd_scob)
+        @Html.HiddenFor(h => h.kd_thn)
+        @Html.HiddenFor(h => h.no_kl)
+        @Html.HiddenFor(h => h.no_mts)
+        @Html.HiddenFor(h => h.IsEdit)
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-4">Nomor Register Klaim</label>
+                <div class="col-sm-8">
+                    <kendo-textbox name="temp_nomor_register" value="@nomor_register" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-8">
+                <label class="col-sm-6">Rekanan</label>
+                <div class="col-sm-6">
+                    <input type="hidden" id="temp_kd_grp_pas" value="@Model.kd_grp_pas">
+                    <kendo-dropdownlist for="kd_grp_pas" style="width: 100%" on-change="OnKodeRekananChange" option-label="Pilih Rekanan"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetGroupRekanan", "MutasiKlaim")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_grp_pas" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-4">
+                <div class="col-sm-12">
+                    <input type="hidden" id="temp_kd_rk_pas" value="@Model.kd_rk_pas">
+                    <kendo-dropdownlist for="kd_rk_pas" style="width: 100%" class="primary-dropdown"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetRekanan", "MutasiKlaim")" data="dataRekananDropDown"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_rk_pas" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-4">Share (%)</label>
+                <div class="col-sm-8">
+                    <kendo-numerictextbox decimals="2" max="100" spinners="false" for="pst_share" style="width: 100%;"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-4">Nilai Klaim</label>
+                <div class="col-sm-8">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="nilai_kl" style="width: 100%;"/>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="window-footer">
+        <button type="button" id="btn-save-mutasiKlaimAlokasi" class="btn btn-success space-right">
+            <span class="fa fa-save"></span> Save
+        </button>
+    </div>
+</div>

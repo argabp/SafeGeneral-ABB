@@ -123,6 +123,10 @@ namespace ABB.Application.Common.Interfaces
         DbSet<RegisterKlaim> RegisterKlaim { get; set; }
         DbSet<DokumenRegisterKlaim> DokumenRegisterKlaim { get; set; }
         DbSet<AnalisaDanEvaluasi> AnalisaDanEvaluasi { get; set; }
+        DbSet<MutasiKlaim> MutasiKlaim { get; set; }
+        DbSet<MutasiKlaimAlokasi> MutasiKlaimAlokasi { get; set; }
+        DbSet<MutasiKlaimBeban> MutasiKlaimBeban { get; set; }
+        DbSet<MutasiKlaimObyek> MutasiKlaimObyek { get; set; }
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);

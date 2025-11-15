@@ -11,8 +11,6 @@ namespace ABB.Application.CancelCSM.Queries
 {
     public class GetViewSourceDataCancelQuery : IRequest<List<ViewSourceDataCancel>>
     {
-        public string TipeTransaksi { get; set; }
-
         public string KodeMetode { get; set; }
     }
 
@@ -32,19 +30,15 @@ namespace ABB.Application.CancelCSM.Queries
 
             List<ViewSourceDataCancel> viewSourceDatas;
                 
-            if(string.IsNullOrWhiteSpace(request.KodeMetode) && string.IsNullOrWhiteSpace(request.TipeTransaksi))
+            if(string.IsNullOrWhiteSpace(request.KodeMetode))
                 viewSourceDatas = 
                     _dbContextCsm.ViewSourceDataCancel
-                        .Where(w => w.KodeMetode == request.KodeMetode && w.TipeTransaksi == request.TipeTransaksi).ToList();
+                        .Where(w => w.KodeMetode == request.KodeMetode).ToList();
             else if(string.IsNullOrWhiteSpace(request.KodeMetode))
-                viewSourceDatas = _dbContextCsm.ViewSourceDataCancel
-                    .Where(w => w.TipeTransaksi == request.TipeTransaksi).ToList();
-            else if(string.IsNullOrWhiteSpace(request.TipeTransaksi))
-                viewSourceDatas = _dbContextCsm.ViewSourceDataCancel
-                    .Where(w => w.KodeMetode == request.KodeMetode).ToList();
+                viewSourceDatas = _dbContextCsm.ViewSourceDataCancel.ToList();
             else
                 viewSourceDatas = _dbContextCsm.ViewSourceDataCancel
-                    .Where(w => w.KodeMetode == request.KodeMetode && w.TipeTransaksi == request.TipeTransaksi).ToList();
+                    .Where(w => w.KodeMetode == request.KodeMetode).ToList();
 
             return viewSourceDatas;
         }

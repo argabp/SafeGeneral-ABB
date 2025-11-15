@@ -133,6 +133,10 @@ namespace ABB.Infrastructure.Data
         public DbSet<RegisterKlaim> RegisterKlaim { get; set; }
         public DbSet<DokumenRegisterKlaim> DokumenRegisterKlaim { get; set; }
         public DbSet<AnalisaDanEvaluasi> AnalisaDanEvaluasi { get; set; }
+        public DbSet<MutasiKlaim> MutasiKlaim { get; set; }
+        public DbSet<MutasiKlaimAlokasi> MutasiKlaimAlokasi { get; set; }
+        public DbSet<MutasiKlaimBeban> MutasiKlaimBeban { get; set; }
+        public DbSet<MutasiKlaimObyek> MutasiKlaimObyek { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -259,6 +263,10 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new RegisterKlaimMap());
             builder.ApplyConfiguration(new DokumenRegisterKlaimMap());
             builder.ApplyConfiguration(new AnalisaDanEvaluasiMap());
+            builder.ApplyConfiguration(new MutasiKlaimMap());
+            builder.ApplyConfiguration(new MutasiKlaimAlokasiMap());
+            builder.ApplyConfiguration(new MutasiKlaimBebanMap());
+            builder.ApplyConfiguration(new MutasiKlaimObyekMap());
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

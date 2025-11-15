@@ -70,6 +70,7 @@ function setRegisterKlaimModel(model){
 function saveRegisterKlaim(url) {
     var form = getFormData($('#RegisterKlaimForm'));
     form.no_pol_lama = $("#no_pol_lama").getKendoMaskedTextBox().raw();
+    form.flag_konv = $("#flag_konv")[0].checked ? "Y" : "N";
     var data = JSON.stringify(form);
     ajaxPost(url,  data,
         function (response) {

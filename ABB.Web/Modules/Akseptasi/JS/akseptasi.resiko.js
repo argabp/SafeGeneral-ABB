@@ -54,3 +54,15 @@ function saveAkseptasiResiko(url) {
         }
     );
 }
+
+function OnPstDiskonChange(e){
+    ajaxGet(`/Akseptasi/GenerateNilaiDiskon?pst_dis=${e.sender.value()}&nilai_prm=${$("#resiko_nilai_prm").val()}&pst_kms=${$("#pst_kms").val()}`, (returnValue) => {
+        $("#resiko_nilai_dis").getKendoNumericTextBox().value(returnValue.split(",")[1]);
+    });
+}
+
+function OnKomisiDiskonChange(e){
+    ajaxGet(`/Akseptasi/GenerateNilaiKomisi?pst_kms=${e.sender.value()}&nilai_prm=${$("#resiko_nilai_prm").val()}&nilai_dis=${$("#resiko_nilai_dis").val()}`, (returnValue) => {
+        $("#resiko_nilai_kms").getKendoNumericTextBox().value(returnValue.split(",")[1]);
+    });
+}

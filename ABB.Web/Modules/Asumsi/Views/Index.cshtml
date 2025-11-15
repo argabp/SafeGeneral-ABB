@@ -38,7 +38,8 @@
                 )
                 .Columns(columns =>
                 {
-                    
+                    columns.Bound(col => col.KodeAsumsi).Width(150).Title("Kode Asumsi").Editable("editKodeAsumsi");
+                    columns.Bound(col => col.NamaAsumsi).Width(150).Title("Nama Asumsi");
                     columns.Command(command =>
                     {
                         command.Edit();
@@ -47,9 +48,7 @@
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteAsumsi");
-                    }).Width(200).Locked(true).Title("Action");
-                    columns.Bound(col => col.KodeAsumsi).Width(150).Title("Kode Asumsi").Editable("editKodeAsumsi");
-                    columns.Bound(col => col.NamaAsumsi).Width(150).Title("Nama Asumsi");
+                    }).Width(200).Title("Action");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

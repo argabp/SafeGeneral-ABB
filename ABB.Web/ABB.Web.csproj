@@ -6010,18 +6010,6 @@
       <None Update="Modules\RegisterKlaim\JS\registerKlaim.index.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Modules\RegisterKlaim\JS\pengajuanAkseptasi.info.js">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Modules\RegisterKlaim\JS\pengajuanAkseptasi.view.js">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Modules\RegisterKlaim\JS\pengajuanAkseptasi.submit.js">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Modules\RegisterKlaim\JS\pengajuanAkseptasi.batalAkseptasi.js">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
       <None Update="Modules\RegisterKlaim\JS\registerKlaim.akseptasiPolis.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
@@ -6032,6 +6020,27 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Modules\PengajuanAkseptasi\JS\pengajuanAkseptasi.banding.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\MutasiKlaim\JS\mutasiKlaim.insert.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\MutasiKlaim\JS\mutasiKlaim.index.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\RegisterKlaim\JS\registerKlaim.edit.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\MutasiKlaim\JS\mutasiKlaim.view.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\MutasiKlaim\JS\mutasiKlaim.alokasi.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\MutasiKlaim\JS\mutasiKlaim.beban.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\MutasiKlaim\JS\mutasiKlaim.obyek.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
