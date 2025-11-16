@@ -6049,6 +6049,12 @@
       <None Update="Modules\ReopenMutasiKlaim\JS\reopenMutasiKlaim.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\EntriNotaKlaim\JS\entriNotaKlaim.edit.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\EntriNotaKlaim\JS\entriNotaKlaim.index.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

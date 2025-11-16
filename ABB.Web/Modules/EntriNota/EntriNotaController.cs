@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ABB.Application.BiayaMaterais.Queries;
 using ABB.Application.Common;
 using ABB.Application.Common.Dtos;
+using ABB.Application.Common.Queries;
 using ABB.Application.EntriNotas.Commands;
 using ABB.Application.EntriNotas.Queries;
 using ABB.Web.Modules.Base;
@@ -32,6 +33,28 @@ namespace ABB.Web.Modules.EntriNota
 
         [HttpGet]
         public async Task<IActionResult> Edit(string kd_cb, string jns_tr, string jns_nt_msk, 
+            string kd_thn, string kd_bln, string no_nt_msk, string jns_nt_kel, string no_nt_kel)
+        {
+            var command = new GetEntriNotaQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                kd_cb = kd_cb,
+                jns_tr = jns_tr,
+                jns_nt_msk = jns_nt_msk,
+                kd_thn = kd_thn,
+                kd_bln = kd_bln,
+                no_nt_msk = no_nt_msk,
+                jns_nt_kel = jns_nt_kel,
+                no_nt_kel = no_nt_kel,
+            };
+            
+            var data = await Mediator.Send(command);
+            
+            return PartialView(Mapper.Map<NotaViewModel>(data));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> View(string kd_cb, string jns_tr, string jns_nt_msk, 
             string kd_thn, string kd_bln, string no_nt_msk, string jns_nt_kel, string no_nt_kel)
         {
             var command = new GetEntriNotaQuery()

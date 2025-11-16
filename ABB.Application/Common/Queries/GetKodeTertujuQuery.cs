@@ -8,7 +8,7 @@ using ABB.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace ABB.Application.EntriNotas.Queries
+namespace ABB.Application.Common.Queries
 {
     public class GetKodeTertujuQuery : IRequest<List<DropdownOptionDto>>
     {

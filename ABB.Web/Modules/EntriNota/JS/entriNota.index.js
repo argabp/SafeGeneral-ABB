@@ -19,6 +19,13 @@ function onEditEntriNota(e) {
     openEntriNotaWindow(`/EntriNota/Edit?kd_cb=${dataItem.kd_cb}&jns_tr=${dataItem.jns_tr}&jns_nt_msk=${dataItem.jns_nt_msk}&kd_thn=${dataItem.kd_thn}&kd_bln=${dataItem.kd_bln}&no_nt_msk=${dataItem.no_nt_msk}&jns_nt_kel=${dataItem.jns_nt_kel}&no_nt_kel=${dataItem.no_nt_kel}`, 'Edit Nota Tertanggung');
 }
 
+function onViewEntriNota(e) {
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    console.log('dataItem', dataItem);
+    openEntriNotaWindow(`/EntriNota/View?kd_cb=${dataItem.kd_cb}&jns_tr=${dataItem.jns_tr}&jns_nt_msk=${dataItem.jns_nt_msk}&kd_thn=${dataItem.kd_thn}&kd_bln=${dataItem.kd_bln}&no_nt_msk=${dataItem.no_nt_msk}&jns_nt_kel=${dataItem.jns_nt_kel}&no_nt_kel=${dataItem.no_nt_kel}`, 'View Nota Tertanggung');
+}
+
 function dataKodeTertujuDropDown(){
     return {
         kd_grp_ttj: $("#kd_grp_ttj").val().trim(),
@@ -143,6 +150,9 @@ function onEntriNotaDataBound(e) {
         var dataItem = grid.dataItem(this);
         if (dataItem.flag_posting == "Y") {
             $(this).find("a[title='Edit']").hide();
+        }
+        if (dataItem.flag_posting == "N") {
+            $(this).find("a[title='View']").hide();
         }
     });
 }

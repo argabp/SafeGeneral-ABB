@@ -59,6 +59,11 @@
                             .IconClass("k-icon k-i-edit")
                             .HtmlAttributes(new { title="Edit"})
                             .Click("onEditEntriNota");
+                        command.Custom("ViewNota")
+                            .Text("View")
+                            .IconClass("fa fa-eye")
+                            .HtmlAttributes(new { title = "View" })
+                            .Click("onViewEntriNota");
                     }).Width(200).Title("Action");
                 })
                 .Pageable(pager => pager
