@@ -6043,6 +6043,12 @@
       <None Update="Modules\MutasiKlaim\JS\mutasiKlaim.obyek.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\PostingMutasiKlaim\JS\postingMutasiKlaim.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\ReopenMutasiKlaim\JS\reopenMutasiKlaim.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

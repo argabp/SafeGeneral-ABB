@@ -1,0 +1,72 @@
+﻿@using Kendo.Mvc.UI
+@using ABB.Application.ReopenMutasiKlaims.Queries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Reopen Mutasi Klaim";
+}
+<script src="~/Modules/ReopenMutasiKlaim/JS/reopenMutasiKlaim.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-8">
+            Reopen Mutasi Klaim
+        </div>
+
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<ReopenMutasiKlaimDto>()
+                .Name("ReopenMutasiKlaimGrid")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetReopenMutasiKlaims", "ReopenMutasiKlaim").Data("searchFilter"))
+                    .Model(model => model.Id(p => p.Id))
+                )
+                .Columns(columns =>
+                {
+                    columns.Command(command =>
+                    {
+                        command.Custom("Reopen")
+                            .Text(" Reopen")
+                            .IconClass("fa fa-envelope-open-text")
+                            .HtmlAttributes(new { title = "Batal" })
+                            .Click("btnReopenMutasiKlaim_OnClick");
+                    }).Width(200).Locked(true).Title("Action");
+                    columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
+                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
+                    columns.Bound(col => col.nm_scob).Width(150).Title("Nama Sub COB");
+                    columns.Bound(col => col.nomor_register).Width(200).Title("Nomor Mutasi Klaim");
+                    columns.Bound(col => col.no_mts).Width(150).Title("Nomor Mutasi");
+                    columns.Bound(col => col.nm_tipe_mts).Width(150).Title("Tipe Mutasi");
+                    columns.Bound(col => col.nm_ttg).Width(200).Title("Nama Tertanggung");
+                    columns.Bound(col => col.tgl_mts).Width(150).Title("Tanggal Mutasi").Format("{0: dd-MM-yyyy}");
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit")))
+        </div>
+    </div>
+</div>
+
