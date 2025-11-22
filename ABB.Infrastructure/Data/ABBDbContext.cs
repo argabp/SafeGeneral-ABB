@@ -138,6 +138,8 @@ namespace ABB.Infrastructure.Data
         public DbSet<MutasiKlaimBeban> MutasiKlaimBeban { get; set; }
         public DbSet<MutasiKlaimObyek> MutasiKlaimObyek { get; set; }
         public DbSet<EntriNotaKlaim> NotaKlaim { get; set; }
+        public DbSet<LKT> LKT { get; set; }
+        public DbSet<LKS> LKS { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -269,6 +271,8 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new MutasiKlaimBebanMap());
             builder.ApplyConfiguration(new MutasiKlaimObyekMap());
             builder.ApplyConfiguration(new EntriNotaKlaimMap());
+            builder.ApplyConfiguration(new LKSMap());
+            builder.ApplyConfiguration(new LKTMap());
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

@@ -1,0 +1,85 @@
+﻿@using ABB.Application.LKSs.Queries
+@using Kendo.Mvc.UI
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "LKS";
+}
+<script src="~/Modules/LKS/JS/lks.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-8">
+            LKS
+        </div>
+
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<LKSDto>()
+                .Name("LKSGrid")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetLKSs", "LKS").Data("searchFilter"))
+                    .Model(model => model.Id(p => p.Id))
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
+                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
+                    columns.Bound(col => col.nm_scob).Width(150).Title("Nama SCOB");
+                    columns.Bound(col => col.nomor_lks).Width(200).Title("Nomor LKS");
+                    columns.Bound(col => col.no_mts).Width(150).Title("Nomor Mutasi");
+                    columns.Bound(col => col.flag_posting).Width(150).Title("Flag Posting");
+                    columns.Command(command =>
+                    {
+                        command.Custom("EditLKS")
+                            .Text("Edit")
+                            .IconClass("k-icon k-i-edit")
+                            .HtmlAttributes(new { title="Edit"})
+                            .Click("onEditLKS");
+                        command.Custom("ViewLKS")
+                            .Text("View")
+                            .IconClass("fa fa-eye")
+                            .HtmlAttributes(new { title = "View" })
+                            .Click("onViewLKS");
+                    }).Width(200).Title("Action");
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("onLKSDataBound"))
+                ) 
+        </div>
+        
+        @(Html.Kendo().Window()
+            .Name("LKSWindow")
+            .Title("LKS")
+            .Width(800)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+    </div>
+</div>

@@ -55,7 +55,7 @@ namespace ABB.Application.EntriNotaKlaims.Queries
                 var nota = dbContext.NotaKlaim.Find(request.kd_cb, request.jns_tr, request.jns_nt_msk,
                     request.kd_thn, request.kd_bln, request.no_nt_msk, request.jns_nt_kel, request.no_nt_kel);
 
-                return _mapper.Map<EntriNotaKlaim>(nota);
+                return nota;
             }
             catch (Exception ex)
             {

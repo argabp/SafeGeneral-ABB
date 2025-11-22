@@ -128,6 +128,8 @@ namespace ABB.Application.Common.Interfaces
         DbSet<MutasiKlaimBeban> MutasiKlaimBeban { get; set; }
         DbSet<MutasiKlaimObyek> MutasiKlaimObyek { get; set; }
         DbSet<EntriNotaKlaim> NotaKlaim { get; set; }
+        DbSet<LKT> LKT { get; set; }
+        DbSet<LKS> LKS { get; set; }
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
