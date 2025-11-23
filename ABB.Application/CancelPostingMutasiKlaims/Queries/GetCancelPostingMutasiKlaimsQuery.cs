@@ -7,33 +7,33 @@ using ABB.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace ABB.Application.UpdateSettledKlaims.Queries
+namespace ABB.Application.CancelPostingMutasiKlaims.Queries
 {
-    public class GetUpdateSettledKlaimQuery : IRequest<List<UpdateSettledKlaimDto>>
+    public class GetCancelPostingMutasiKlaimsQuery : IRequest<List<CancelPostingMutasiKlaimDto>>
     {
         public string SearchKeyword { get; set; }
         public string DatabaseName { get; set; }
     }
 
-    public class GetUpdateSettledKlaimQueryHandler : IRequestHandler<GetUpdateSettledKlaimQuery, List<UpdateSettledKlaimDto>>
+    public class GetCancelPostingMutasiKlaimsQueryHandler : IRequestHandler<GetCancelPostingMutasiKlaimsQuery, List<CancelPostingMutasiKlaimDto>>
     {
         private readonly IDbConnectionFactory _connectionFactory;
-        private readonly ILogger<GetUpdateSettledKlaimQueryHandler> _logger;
+        private readonly ILogger<GetCancelPostingMutasiKlaimsQueryHandler> _logger;
 
-        public GetUpdateSettledKlaimQueryHandler(IDbConnectionFactory connectionFactory, ILogger<GetUpdateSettledKlaimQueryHandler> logger)
+        public GetCancelPostingMutasiKlaimsQueryHandler(IDbConnectionFactory connectionFactory, ILogger<GetCancelPostingMutasiKlaimsQueryHandler> logger)
         {
             _connectionFactory = connectionFactory;
             _logger = logger;
         }
 
-        public async Task<List<UpdateSettledKlaimDto>> Handle(GetUpdateSettledKlaimQuery request,
+        public async Task<List<CancelPostingMutasiKlaimDto>> Handle(GetCancelPostingMutasiKlaimsQuery request,
             CancellationToken cancellationToken)
         {
             try
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
-                return (await _connectionFactory.Query<UpdateSettledKlaimDto>(@"SELECT p.*, cb.nm_cb, cob.nm_cob, scob.nm_scob
-					FROM cl01 p
+                return (await _connectionFactory.Query<CancelPostingMutasiKlaimDto>(@"SELECT p.*, cb.nm_cb, cob.nm_cob, scob.nm_scob
+					FROM cl10 p
 						INNER JOIN rf01 cb
 							ON p.kd_cb = cb.kd_cb
 						INNER JOIN rf04 cob
@@ -41,17 +41,13 @@ namespace ABB.Application.UpdateSettledKlaims.Queries
 						INNER JOIN rf05 scob
 							ON p.kd_cob = scob.kd_cob
 							AND p.kd_scob = scob.kd_scob
-					WHERE p.flag_settled = 'N' AND (p.no_rsk like '%'+@SearchKeyword+'%' 
-						OR p.tgl_updt like '%'+@SearchKeyword+'%' 
-						OR p.no_updt like '%'+@SearchKeyword+'%' 
-						OR cb.nm_cb like '%'+@SearchKeyword+'%' 
-						OR cob.nm_cob like '%'+@SearchKeyword+'%' 
-						OR scob.nm_scob like '%'+@SearchKeyword+'%' 
-						OR cb.kd_cb like '%'+@SearchKeyword+'%' 
+					WHERE p.flag_cancel = 'N' AND p.no_dla = 0 AND p.flag_posting = 'Y' AND (
+						cb.kd_cb like '%'+@SearchKeyword+'%' 
 						OR cob.kd_cob like '%'+@SearchKeyword+'%' 
 						OR scob.kd_scob like '%'+@SearchKeyword+'%' 
 						OR p.no_kl like '%'+@SearchKeyword+'%' 
-						OR p.no_pol_lama like '%'+@SearchKeyword+'%' 
+						OR p.no_mts like '%'+@SearchKeyword+'%' 
+						OR p.nm_ttj like '%'+@SearchKeyword+'%' 
 						OR @SearchKeyword = '' OR @SearchKeyword IS NULL)", new { request.SearchKeyword })).ToList();
             }
             catch (Exception ex)

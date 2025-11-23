@@ -9,7 +9,7 @@ function searchKeyword_OnKeyUp() {
 }
 
 function updateSettledKlaim(){
-    showConfirmation('Confirmation', `Are you sure you want to posting?`,
+    showConfirmation('Confirmation', `Are you sure you want to update?`,
         function () {
             showProgressOnGrid('#UpdateSettledKlaimGrid');
             // Get the Kendo UI Grid instance
