@@ -6073,6 +6073,9 @@
       <None Update="Modules\CancelPostingMutasiKlaim\JS\updateSettledKlaim.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\CancelUpdateSettledKlaim\JS\cancelUpdateSettledKlaim.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
