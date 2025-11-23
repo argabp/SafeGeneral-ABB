@@ -6067,6 +6067,9 @@
       <None Update="Modules\LKT\JS\lkt.index.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\UpdateSettledKlaim\JS\updateSettledKlaim.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

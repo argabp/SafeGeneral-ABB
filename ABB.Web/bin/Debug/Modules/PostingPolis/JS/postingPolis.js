@@ -45,7 +45,7 @@ function postingPolis(){
             ajaxPost("/PostingPolis/Posting", JSON.stringify(selectedData),
                 function (response) {
                     if(response.Status === "OK"){
-                        showMessage("Success", "Posting succed")
+                        showMessage("Success", "Posting Sukses")
                     } else {
                         showMessage('Error', response.Message);
                     }

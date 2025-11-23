@@ -4,16 +4,16 @@
 
 function searchKeyword_OnKeyUp() {
     $('#SearchKeyword').keyup(function () {
-        refreshGrid("#AkseptasiGrid");
+        refreshGrid("#UpdateSettledKlaimGrid");
     });
 }
 
-function postingPolis(){
+function updateSettledKlaim(){
     showConfirmation('Confirmation', `Are you sure you want to posting?`,
         function () {
-            showProgressOnGrid('#AkseptasiGrid');
+            showProgressOnGrid('#UpdateSettledKlaimGrid');
             // Get the Kendo UI Grid instance
-            var grid = $("#AkseptasiGrid").data("kendoGrid");
+            var grid = $("#UpdateSettledKlaimGrid").data("kendoGrid");
 
             // Get all selected rows (checked rows)
             var selectedRows = grid.select();
@@ -33,23 +33,19 @@ function postingPolis(){
                     kd_cob: dataItem.kd_cob,
                     kd_scob: dataItem.kd_scob,
                     kd_thn: dataItem.kd_thn,
-                    no_pol: dataItem.no_pol,
-                    no_updt: dataItem.no_updt,
-                    no_pol_ttg: dataItem.no_pol_ttg,
-                    tgl_closing: dataItem.tgl_closing,
-                    nm_ttg: dataItem.nm_ttg,
-                    kd_usr_posting: dataItem.kd_usr_posting
+                    no_kl: dataItem.no_kl
                 });
             });
 
-            ajaxPost("/PostingPolis/Posting", JSON.stringify(selectedData),
+            ajaxPost("/UpdateSettledKlaim/Update", JSON.stringify(selectedData),
                 function (response) {
                     if(response.Status === "OK"){
-                        showMessage("Success", "Posting Sukses")
+                        showMessage("Success", "Update Sukses")
                     } else {
                         showMessage('Error', response.Message);
                     }
-                    closeProgressOnGrid('#AkseptasiGrid');
+                    refreshGrid('#UpdateSettledKlaimGrid');
+                    closeProgressOnGrid('#UpdateSettledKlaimGrid');
                 },
             );
         }
