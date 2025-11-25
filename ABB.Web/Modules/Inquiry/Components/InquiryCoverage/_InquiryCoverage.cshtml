@@ -19,8 +19,6 @@
         )
         .Columns(columns =>
         {
-            columns.Bound(col => col.kd_cvrg).Width(150).Title("Kode Coverage");
-            columns.Bound(col => col.kd_cvrg).Width(150).Title("Rate Premi").ClientTemplate("#= pst_rate_prm # #= stn_rate_prm == 1 ? '%' : '%o' #");
             columns.Command(command =>
             {
                 command.Custom("ViewInquiryCoverage")
@@ -28,7 +26,9 @@
                     .IconClass("fa fa-view")
                     .HtmlAttributes(new { title = "Edit" })
                     .Click("btnViewInquiryCoverage_OnClick");
-            }).Width(200).Title("Action");
+            }).Width(200).Title("Action").Locked(true);
+            columns.Bound(col => col.kd_cvrg).Width(150).Title("Kode Coverage");
+            columns.Bound(col => col.kd_cvrg).Width(150).Title("Rate Premi").ClientTemplate("#= pst_rate_prm # #= stn_rate_prm == 1 ? '%' : '%o' #");
         })
         .Pageable(pager => pager
             .Refresh(true)

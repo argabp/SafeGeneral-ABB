@@ -33,16 +33,31 @@ function dataKodeTertujuDropDown(){
 }
 
 function onEntriNotaKlaimDataBound(e) {
-    var grid = $("#EntriNotaKlaimGrid").data("kendoGrid");
-    grid.tbody.find("tr").each(function() {
+    var grid = this;
+
+    grid.tbody.find("tr").each(function(e, element) {
         var dataItem = grid.dataItem(this);
-        if (dataItem.flag_posting == "Y") {
-            $(this).find("a[title='Edit']").hide();
+        var uid = $(this).data("uid");
+
+        // Find button container - try locked column first, then regular
+        var buttonContainer = grid.element.find(".k-grid-content-locked tr[data-uid='" + uid + "'] .k-command-cell");
+        if (!buttonContainer.length) {
+            buttonContainer = $(this).find(".k-command-cell");
         }
-        if (dataItem.flag_posting == "N") {
-            $(this).find("a[title='View']").hide();
+
+        if (buttonContainer.length) {
+            if (dataItem.flag_posting == "Y") {
+                // Find the "Closing" button and hide it
+                buttonContainer.find("a[title='Edit']").hide();
+            }
+            if (dataItem.flag_posting == "N") {
+                // Find the "Closing" button and hide it
+                buttonContainer.find("a[title='View']").hide();
+            }
         }
     });
+
+    gridAutoFit(grid);
 }
 
 function OnKodeRkTTJChange(e){

@@ -43,17 +43,17 @@
                             .IconClass("fa fa-plus")
                             .HtmlAttributes(new { title = "Insert" })
                             .Click("OnClickInsertDetailMutasiKlaim");
-                    }).Width(200).Title("Action");
+                    }).Width(200).Title("Action").Locked(true);
                     columns.Bound(col => col.Id).Hidden();
-                    columns.Bound(col => col.nm_cb).Title("Cabang");
-                    columns.Bound(col => col.nm_cob).Title("COB");
-                    columns.Bound(col => col.nm_scob).Title("SCOB");
-                    columns.Bound(col => col.register_klaim).Title("Nomor Register Klaim");
-                    columns.Bound(col => col.nm_ttg).Title("Nama Tertanggung");
-                    columns.Bound(col => col.sebab_kerugian).Title("Sebab Klaim");
-                    columns.Bound(col => col.tgl_kej).Title("Tanggal Kejadian").Format("{0: dd-MM-yyyy}");
-                    columns.Bound(col => col.tgl_lapor).Title("Tanggal Lapor").Format("{0: dd-MM-yyyy}");
-                    columns.Bound(col => col.tgl_reg).Title("Tanggal Register").Format("{0: dd-MM-yyyy}");
+                    columns.Bound(col => col.nm_cb).Width(150).Title("Cabang");
+                    columns.Bound(col => col.nm_cob).Width(150).Title("COB");
+                    columns.Bound(col => col.nm_scob).Width(150).Title("SCOB");
+                    columns.Bound(col => col.register_klaim).Width(150).Title("Nomor Register Klaim");
+                    columns.Bound(col => col.nm_ttg).Width(150).Title("Nama Tertanggung");
+                    columns.Bound(col => col.sebab_kerugian).Width(150).Title("Sebab Klaim");
+                    columns.Bound(col => col.tgl_kej).Width(150).Title("Tanggal Kejadian").Format("{0: dd-MM-yyyy}");
+                    columns.Bound(col => col.tgl_lapor).Width(150).Title("Tanggal Lapor").Format("{0: dd-MM-yyyy}");
+                    columns.Bound(col => col.tgl_reg).Width(150).Title("Tanggal Register").Format("{0: dd-MM-yyyy}");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)
@@ -108,8 +108,8 @@
                                             .IconClass("k-icon k-i-delete")
                                             .HtmlAttributes(new { title="Delete"})
                                             .Click("onDeleteMutasiKlaim");
-                                    }).Width(200).Title("Action").Locked(true);
-                                    columns.Bound(col => col.no_mts).Width(100).Title("Nomor Mutasi");
+                                    }).Width(250).Title("Action").Locked(true);
+                                    columns.Bound(col => col.no_mts).Width(150).Title("Nomor Mutasi");
                                     columns.Bound(col => col.nm_tipe_mts).Width(150).Title("Tipe Mutasi");
                                     columns.Bound(col => col.nm_kd_mtu).Width(150).Title("Mata Uang");
                                     
@@ -134,7 +134,7 @@
                             <div id="obyekGrid#=id_detail_grid#"></div>
                                                            </text>
                         );
-                        items.Add().Text("Alokasi").Content(@<text>
+                        items.Add().Text("Alokasi Koasuransi").Content(@<text>
                             <div class="row">
                             <div class="col-sm-2">
                                 <button style="height: 1em" class="flat-btn-primary" id="btnAddAlokasi#=id_detail_grid#" disabled=true>Add Alokasi</button>

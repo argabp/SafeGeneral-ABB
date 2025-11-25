@@ -37,23 +37,23 @@
         .Resizable(r => r.Columns(true))
         .Columns(columns =>
         {
+            columns.Command(command =>
+            {
+                command.Custom("Edit")
+                    .Text(" ")
+                    .IconClass("fa fa-pencil-alt")
+                    .HtmlAttributes(new { title="Edit"})
+                    .Click("btnEditRole_OnClick");
+                command.Custom("Delete")
+                    .Text(" ")
+                    .IconClass("fa fa-trash")
+                    .HtmlAttributes(new { title="Delete"})
+                    .Click("btnDeleteRole_OnClick");
+            }).Title("Action").Width(150).Locked(true);
             columns.Bound(col => col.RoleId).Hidden();
             columns.Bound(col => col.RoleCode);
             columns.Bound(col => col.RoleName);
             columns.Bound(col => col.Description);
-            columns.Command(command =>
-            {
-                command.Custom("Edit")
-                        .Text(" ")
-                        .IconClass("fa fa-pencil-alt")
-                        .HtmlAttributes(new { title="Edit"})
-                        .Click("btnEditRole_OnClick");
-                command.Custom("Delete")
-                        .Text(" ")
-                        .IconClass("fa fa-trash")
-                        .HtmlAttributes(new { title="Delete"})
-                        .Click("btnDeleteRole_OnClick");
-            }).Title("Action").Width(180);
         })
         .Pageable(pager => pager
                     .Refresh(true)

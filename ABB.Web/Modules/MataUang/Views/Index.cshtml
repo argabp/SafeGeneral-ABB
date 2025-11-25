@@ -43,9 +43,6 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.kd_mtu).Width(150).Title("Kode Mata Uang").Editable("disableGridTextboxWhenEdit");
-                    columns.Bound(col => col.nm_mtu).Width(150).Title("Nama Mata Uang");
-                    columns.Bound(col => col.symbol).Width(150).Title("Symbol");
                     columns.Command(command =>
                     {
                         command.Edit();
@@ -54,7 +51,10 @@
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteMataUang");
-                    }).Width(200).Title("Action");
+                    }).Width(200).Title("Action").Locked(true);
+                    columns.Bound(col => col.kd_mtu).Width(150).Title("Kode Mata Uang").Editable("disableGridTextboxWhenEdit");
+                    columns.Bound(col => col.nm_mtu).Width(150).Title("Nama Mata Uang");
+                    columns.Bound(col => col.symbol).Width(150).Title("Symbol");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

@@ -22,8 +22,6 @@
         )
         .Columns(columns =>
         {
-            columns.Bound(col => col.no_urut).Width(150).Title("No Urut");
-            columns.Bound(col => col.nm_angkut).Width(150).Title("Nama Angkut");
             columns.Command(command =>
             {
                 command.Custom("EditAkseptasiOtherCargoDetail")
@@ -36,7 +34,9 @@
                     .IconClass("k-icon k-i-delete")
                     .HtmlAttributes(new { title = "Delete" })
                     .Click("btnDeleteAkseptasiOtherCargoDetail_OnClick");
-            }).Width(200).Title("Action");
+            }).Width(200).Title("Action").Locked(true);
+            columns.Bound(col => col.no_urut).Width(150).Title("No Urut");
+            columns.Bound(col => col.nm_angkut).Width(150).Title("Nama Angkut");
         })
         .Pageable(pager => pager
             .Refresh(true)

@@ -78,8 +78,8 @@
                     .IconClass("fa fa-print")
                     .HtmlAttributes(new { title = "Print" })
                     .Click("OnClickPrintApprovalAkseptasi");
-    
-            }).Title("Action").Width(300).Locked(true);
+
+            }).Title("Action").Width(300);
             columns.Bound(col => col.Id).Hidden();
             columns.Bound(col => col.nm_cb).Title("Cabang");
             columns.Bound(col => col.nm_cob).Title("COB");

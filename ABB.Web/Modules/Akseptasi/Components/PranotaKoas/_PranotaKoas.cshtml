@@ -22,12 +22,6 @@
         )
         .Columns(columns =>
         {
-            columns.Bound(col => col.nm_rk).Width(150).Title("Nama Rekanan");
-            columns.Bound(col => col.pst_share).Width(150).Title("Share (%)").Format("{0:n2}");
-            columns.Bound(col => col.nilai_prm).Width(150).Title("Premi").Format("{0:n2}");
-            columns.Bound(col => col.nilai_dis).Width(150).Title("Diskon").Format("{0:n2}");
-            columns.Bound(col => col.nilai_hf).Width(150).Title("Handling Fee").Format("{0:n2}");
-            columns.Bound(col => col.nilai_kms).Width(150).Title("Komisi").Format("{0:n2}");
             columns.Command(command =>
             {
                 command.Custom("EditAkseptasiPranotaKoas")
@@ -40,7 +34,13 @@
                     .IconClass("k-icon k-i-delete")
                     .HtmlAttributes(new { title = "Delete" })
                     .Click("btnDeleteAkseptasiPranotaKoas_OnClick");
-            }).Width(200).Title("Action");
+            }).Width(200).Title("Action").Locked(true);
+            columns.Bound(col => col.nm_rk).Width(150).Title("Nama Rekanan");
+            columns.Bound(col => col.pst_share).Width(150).Title("Share (%)").Format("{0:n2}");
+            columns.Bound(col => col.nilai_prm).Width(150).Title("Premi").Format("{0:n2}");
+            columns.Bound(col => col.nilai_dis).Width(150).Title("Diskon").Format("{0:n2}");
+            columns.Bound(col => col.nilai_hf).Width(150).Title("Handling Fee").Format("{0:n2}");
+            columns.Bound(col => col.nilai_kms).Width(150).Title("Komisi").Format("{0:n2}");
         })
         .Pageable(pager => pager
             .Refresh(true)

@@ -94,7 +94,7 @@ function onDeleteObyek(e){
                     .IconClass("k-icon k-i-delete")
                     .HtmlAttributes(new { title = "Delete" })
                     .Click("onDeleteObyek");
-            }).Width(200).Title("Action");
+            }).Width(200).Title("Action").Locked(true);
             columns.Bound(col => col.no_oby).Width(100).Title("Nomor Obyek");
             columns.Bound(col => col.nm_oby).Width(200).Title("Nama Obyek");
             columns.Bound(col => col.nilai_ttl_ptg).Width(150).Title("Nilai Pertanggungan");

@@ -39,6 +39,14 @@
                 )
                 .Columns(columns =>
                 {
+                    columns.Command(command =>
+                    {
+                        command.Custom("Renewal")
+                            .Text(" Renewal")
+                            .IconClass("fa fa-newspaper")
+                            .HtmlAttributes(new { title = "Renewal" })
+                            .Click("btnRenewalPolis_OnClick");
+                    }).Width(200).Title("Action").Locked(true);
                     columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
                     columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
                     columns.Bound(col => col.nm_scob).Width(150).Title("Nama Sub COB");
@@ -49,14 +57,6 @@
                     columns.Bound(col => col.tgl_mul_ptg).Width(150).Title("Tanggal Mulai").Format("{0: dd-MM-yyyy}");
                     columns.Bound(col => col.tgl_akh_ptg).Width(150).Title("Tanggal Akhir").Format("{0: dd-MM-yyyy}");
                     columns.Bound(col => col.tgl_closing).Width(150).Title("Tanggal Closing").Format("{0: dd-MM-yyyy}");
-                    columns.Command(command =>
-                    {
-                        command.Custom("Renewal")
-                            .Text(" Renewal")
-                            .IconClass("fa fa-newspaper")
-                            .HtmlAttributes(new { title = "Renewal" })
-                            .Click("btnRenewalPolis_OnClick");
-                    }).Width(200).Title("Action");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

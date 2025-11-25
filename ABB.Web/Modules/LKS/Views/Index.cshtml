@@ -39,12 +39,6 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
-                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
-                    columns.Bound(col => col.nm_scob).Width(150).Title("Nama SCOB");
-                    columns.Bound(col => col.nomor_lks).Width(200).Title("Nomor LKS");
-                    columns.Bound(col => col.no_mts).Width(150).Title("Nomor Mutasi");
-                    columns.Bound(col => col.flag_posting).Width(150).Title("Flag Posting");
                     columns.Command(command =>
                     {
                         command.Custom("EditLKS")
@@ -57,7 +51,13 @@
                             .IconClass("fa fa-eye")
                             .HtmlAttributes(new { title = "View" })
                             .Click("onViewLKS");
-                    }).Width(200).Title("Action");
+                    }).Width(200).Title("Action").Locked(true);
+                    columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
+                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
+                    columns.Bound(col => col.nm_scob).Width(150).Title("Nama SCOB");
+                    columns.Bound(col => col.nomor_lks).Width(200).Title("Nomor LKS");
+                    columns.Bound(col => col.no_mts).Width(150).Title("Nomor Mutasi");
+                    columns.Bound(col => col.flag_posting).Width(150).Title("Flag Posting");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

@@ -44,8 +44,6 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.kd_grp_oby).Width(150).Title("Kode Grup Obyek").Editable("disableGridTextboxWhenEdit");
-                    columns.Bound(col => col.nm_grp_oby).Width(200).Title("Nama Grup Obyek");
                     columns.Command(command =>
                     {
                         command.Edit();
@@ -54,7 +52,9 @@
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteGrupObyek");
-                    }).Width(200).Title("Action");
+                    }).Width(200).Title("Action").Locked(true);
+                    columns.Bound(col => col.kd_grp_oby).Width(150).Title("Kode Grup Obyek").Editable("disableGridTextboxWhenEdit");
+                    columns.Bound(col => col.nm_grp_oby).Width(200).Title("Nama Grup Obyek");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

@@ -42,9 +42,6 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.nm_cob).Title("Nama COB");
-                    columns.Bound(col => col.nm_scob).Title("Nama Sub COB");
-                    columns.Bound(col => col.nm_dokumenakseptasi).Title("Nama Dokumen Akseptasi");
                     columns.Command(command =>
                     {
                         command.Custom("EditDokumenAkseptasi")
@@ -57,7 +54,10 @@
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteDokumenAkseptasi");
-                    }).Width(200).Title("Action");
+                    }).Width(200).Title("Action").Locked(true);
+                    columns.Bound(col => col.nm_cob).Title("Nama COB");
+                    columns.Bound(col => col.nm_scob).Title("Nama Sub COB");
+                    columns.Bound(col => col.nm_dokumenakseptasi).Title("Nama Dokumen Akseptasi");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)
@@ -89,8 +89,6 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.nm_dokumen).Title("Nama Dokumen");
-                    columns.Bound(col => col.flag_wajib).Title("Flag Wajib");
                     columns.Command(command =>
                     {
                         command.Custom("EditDokumenAkseptasiDetail")
@@ -103,7 +101,9 @@
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteDokumenAkseptasiDetail");
-                    }).Width(200).Title("Action");
+                    }).Width(200).Title("Action").Locked(true);
+                    columns.Bound(col => col.nm_dokumen).Title("Nama Dokumen");
+                    columns.Bound(col => col.flag_wajib).Title("Flag Wajib");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

@@ -22,9 +22,6 @@
         )
         .Columns(columns =>
         {
-            columns.Bound(col => col.no_oby).Width(150).Title("Nomor Obyek");
-            columns.Bound(col => col.desk_oby).Width(150).Title("Uraian Pertanggungan");
-            columns.Bound(col => col.nilai_ttl_ptg).Width(150).Title("Nilai Pertanggungan");
             columns.Command(command =>
             {
                 command.Custom("EditAkseptasiObyek")
@@ -37,7 +34,10 @@
                     .IconClass("k-icon k-i-delete")
                     .HtmlAttributes(new { title = "Delete" })
                     .Click("btnDeleteAkseptasiObyek_OnClick");
-            }).Width(200).Title("Action");
+            }).Width(200).Locked(true).Title("Action");
+            columns.Bound(col => col.no_oby).Width(150).Title("Nomor Obyek");
+            columns.Bound(col => col.desk_oby).Width(150).Title("Uraian Pertanggungan");
+            columns.Bound(col => col.nilai_ttl_ptg).Width(150).Title("Nilai Pertanggungan");
         })
         .Pageable(pager => pager
             .Refresh(true)

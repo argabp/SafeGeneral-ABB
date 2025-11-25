@@ -37,25 +37,24 @@
         )
         .Columns(columns =>
         {
+            columns.Command(command =>
+            {
+                command.Custom("Edit")
+                    .Text(" ")
+                    .IconClass("fa fa-pencil-alt")
+                    .HtmlAttributes(new { title = "Edit" })
+                    .Click("btnEditNav_OnClick");
+                command.Custom("Delete")
+                    .Text(" ")
+                    .IconClass("fa fa-trash")
+                    .HtmlAttributes(new { title = "Delete" })
+                    .Click("btnDeleteNav_OnClick");
+            }).Title("Action").Width(150).Locked(true);
             columns.Bound(col => col.NavigationId).Hidden();
             columns.Bound(col => col.Text).Title("Menu").Width(200);
             columns.Bound(col => col.Icon).Title("Icon").ClientTemplate("<span class='fas #= Icon #'> </span>").Width(100);
             columns.Bound(col => col.IsActive).Title("Status").ClientTemplate("#=isactiveTmp(data)#").Width(100);
             columns.Bound(col => col.SubNavigation).Title("Sub Menu").ClientTemplate("#= kendo.toString(replaceString(SubNavigation))#").Width(250);
-            columns.Command(command =>
-            {
-                command.Custom("Edit")
-                        .Text(" ")
-                        .IconClass("fa fa-pencil-alt")
-                        .HtmlAttributes(new { title = "Edit" })
-                        .Click("btnEditNav_OnClick");
-                command.Custom("Delete")
-                        .Text(" ")
-                        .IconClass("fa fa-trash")
-                        .HtmlAttributes(new { title = "Delete" })
-                        .Click("btnDeleteNav_OnClick");
-
-            }).Title("Action").Width(80);
 
         })
         .Pageable(pager => pager

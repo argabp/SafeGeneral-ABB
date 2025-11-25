@@ -25,13 +25,6 @@
         )
         .Columns(columns =>
         {
-            columns.Bound(col => col.no_rsk).Width(150).Title("Nomor Resiko");
-            columns.Bound(col => col.kd_endt).Width(150).Title("Kode Endors").ClientTemplate("#= data.kd_endt == 'I' ? 'Insert' : 'Delete' #");
-            columns.Bound(col => col.ket_rsk).Width(200).Title("Keterangan Resiko");
-            columns.Bound(col => col.nilai_ttl_ptg).Width(200).Title("Total Pertanggungan");
-            columns.Bound(col => col.nilai_prm).Width(150).Title("Premi");
-            columns.Bound(col => col.nilai_dis).Width(100).Title("Diskon");
-            columns.Bound(col => col.nilai_kms).Width(100).Title("Komisi");
             columns.Command(command =>
             {
                 command.Custom("ViewInquiryResiko")
@@ -39,7 +32,14 @@
                     .IconClass("fa fa-eye")
                     .HtmlAttributes(new { title = "View" })
                     .Click("btnViewInquiryResiko_OnClick");
-            }).Width(200).Title("Action");
+            }).Width(200).Title("Action").Locked(true);
+            columns.Bound(col => col.no_rsk).Width(150).Title("Nomor Resiko");
+            columns.Bound(col => col.kd_endt).Width(150).Title("Kode Endors").ClientTemplate("#= data.kd_endt == 'I' ? 'Insert' : 'Delete' #");
+            columns.Bound(col => col.ket_rsk).Width(200).Title("Keterangan Resiko");
+            columns.Bound(col => col.nilai_ttl_ptg).Width(200).Title("Total Pertanggungan");
+            columns.Bound(col => col.nilai_prm).Width(150).Title("Premi");
+            columns.Bound(col => col.nilai_dis).Width(100).Title("Diskon");
+            columns.Bound(col => col.nilai_kms).Width(100).Title("Komisi");
         })
         .Pageable(pager => pager
             .Refresh(true)

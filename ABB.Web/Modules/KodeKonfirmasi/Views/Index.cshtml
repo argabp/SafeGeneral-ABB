@@ -44,9 +44,6 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
-                    columns.Bound(col => col.no_aks).Width(150).Title("Nomor Akseptasi");
-                    columns.Bound(col => col.kd_konfirm).Width(150).Title("Kode Konfirmasi");
                     columns.Command(command =>
                     {
                         command.Custom("DeleteKodeKonfirmasi")
@@ -54,7 +51,10 @@
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
                             .Click("btnDeleteKodeKonfirmasi_OnClick");
-                    }).Width(200).Title("Action");
+                    }).Width(200).Title("Action").Locked(true);
+                    columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
+                    columns.Bound(col => col.no_aks).Width(150).Title("Nomor Akseptasi");
+                    columns.Bound(col => col.kd_konfirm).Width(150).Title("Kode Konfirmasi");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

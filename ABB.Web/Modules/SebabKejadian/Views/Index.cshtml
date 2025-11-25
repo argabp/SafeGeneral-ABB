@@ -41,9 +41,6 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
-                    columns.Bound(col => col.kd_sebab).Width(150).Title("Kode Sebab Kejadian");
-                    columns.Bound(col => col.nm_sebab).Width(150).Title("Nama Sebab Kejadian");
                     columns.Command(command =>
                     {
                         command.Custom("EditSebabKejadian")
@@ -56,7 +53,10 @@
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteSebabKejadian");
-                    }).Width(200).Title("Action");
+                    }).Width(200).Title("Action").Locked(true);
+                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
+                    columns.Bound(col => col.kd_sebab).Width(150).Title("Kode Sebab Kejadian");
+                    columns.Bound(col => col.nm_sebab).Width(150).Title("Nama Sebab Kejadian");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

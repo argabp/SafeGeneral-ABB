@@ -45,8 +45,6 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.kd_kota).Width(100).Title("Kode Kota").Editable("disableGridTextboxWhenEdit");
-                    columns.Bound(col => col.nm_kota).Width(200).Title("Nama Kota");
                     columns.Command(command =>
                     {
                         command.Edit();
@@ -55,7 +53,9 @@
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteKota");
-                    }).Width(200).Title("Action");
+                    }).Width(200).Title("Action").Locked(true);
+                    columns.Bound(col => col.kd_kota).Width(100).Title("Kode Kota").Editable("disableGridTextboxWhenEdit");
+                    columns.Bound(col => col.nm_kota).Width(200).Title("Nama Kota");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

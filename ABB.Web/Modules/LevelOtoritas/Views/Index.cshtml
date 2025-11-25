@@ -44,8 +44,6 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.kd_user).Width(150).Title("Username");
-                    columns.Bound(col => col.flag_xol).Width(150).Title("Level Otoritas");
                     columns.Command(command =>
                     {
                         command.Custom("EditLevelOtoritas")
@@ -58,7 +56,9 @@
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteLevelOtoritas");
-                    }).Width(200).Title("Action");
+                    }).Width(200).Title("Action").Locked(true);
+                    columns.Bound(col => col.kd_user).Width(150).Title("Username");
+                    columns.Bound(col => col.flag_xol).Width(150).Title("Level Otoritas");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

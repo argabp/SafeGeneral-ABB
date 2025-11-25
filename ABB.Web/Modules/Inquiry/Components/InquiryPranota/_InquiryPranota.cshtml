@@ -25,12 +25,6 @@
         )
         .Columns(columns =>
         {
-            columns.Bound(col => col.nm_mtu).Width(150).Title("Mata Uang");
-            columns.Bound(col => col.nilai_prm).Width(150).Title("Premi");
-            columns.Bound(col => col.nilai_dis).Width(150).Title("Diskon");
-            columns.Bound(col => col.nilai_kms).Width(150).Title("Komisi");
-            columns.Bound(col => col.nilai_kms_reas).Width(150).Title("Komisi Reasuransi");
-            columns.Bound(col => col.nilai_ttl_ptg).Width(150).Title("Total Pertanggungan");
             columns.Command(command =>
             {
                 command.Custom("ViewInquiryPranota")
@@ -38,7 +32,13 @@
                     .IconClass("fa fa-eye")
                     .HtmlAttributes(new { title = "View" })
                     .Click("btnViewInquiryPranota_OnClick");
-            }).Width(200).Title("Action");
+            }).Width(200).Title("Action").Locked(true);
+            columns.Bound(col => col.nm_mtu).Width(150).Title("Mata Uang");
+            columns.Bound(col => col.nilai_prm).Width(150).Title("Premi");
+            columns.Bound(col => col.nilai_dis).Width(150).Title("Diskon");
+            columns.Bound(col => col.nilai_kms).Width(150).Title("Komisi");
+            columns.Bound(col => col.nilai_kms_reas).Width(150).Title("Komisi Reasuransi");
+            columns.Bound(col => col.nilai_ttl_ptg).Width(150).Title("Total Pertanggungan");
         })
         .Pageable(pager => pager
             .Refresh(true)

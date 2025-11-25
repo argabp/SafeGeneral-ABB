@@ -41,9 +41,6 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
-                    columns.Bound(col => col.kd_dok).Width(150).Title("Kode Dokumen Klaim");
-                    columns.Bound(col => col.nm_dok).Width(150).Title("Nama DokumenKlaim");
                     columns.Command(command =>
                     {
                         command.Custom("EditDokumenKlaim")
@@ -56,7 +53,10 @@
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteDokumenKlaim");
-                    }).Width(200).Title("Action");
+                    }).Width(200).Title("Action").Locked(true);
+                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
+                    columns.Bound(col => col.kd_dok).Width(150).Title("Kode Dokumen Klaim");
+                    columns.Bound(col => col.nm_dok).Width(150).Title("Nama DokumenKlaim");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

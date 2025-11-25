@@ -22,7 +22,6 @@
         )
         .Columns(columns =>
         {
-            columns.Bound(col => col.thn_ptg_kend).Width(150).Title("Tahun PTG Kendaraan");
             columns.Command(command =>
             {
                 command.Custom("EditAkseptasiOtherMotorDetail")
@@ -35,7 +34,8 @@
                     .IconClass("k-icon k-i-delete")
                     .HtmlAttributes(new { title = "Delete" })
                     .Click("btnDeleteAkseptasiOtherMotorDetail_OnClick");
-            }).Width(200).Title("Action");
+            }).Width(200).Title("Action").Locked(true);
+            columns.Bound(col => col.thn_ptg_kend).Width(150).Title("Tahun PTG Kendaraan");
         })
         .Pageable(pager => pager
             .Refresh(true)

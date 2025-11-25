@@ -42,14 +42,6 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.nm_cb).Title("Nama Cabang").Width(150);
-                    columns.Bound(col => col.nm_cob).Title("Nama COB");
-                    columns.Bound(col => col.nm_scob).Title("Nama Sub COB");
-                    columns.Bound(col => col.thn).Title("Tahun");
-                    columns.Bound(col => col.nilai_kapasitas).Title("Nilai Kapasitas");
-                    columns.Bound(col => col.pst_limit_cb).Title("Limit Cabang (%)");
-                    columns.Bound(col => col.maks_panel).Title("Maks Panel");
-                    columns.Bound(col => col.nm_limit).Title("Nama Limit Akseptasi");
                     columns.Command(command =>
                     {
                         command.Custom("EditLimitAkseptasi")
@@ -62,7 +54,15 @@
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteLimitAkseptasi");
-                    }).Width(200).Title("Action");
+                    }).Width(200).Title("Action").Locked(true);
+                    columns.Bound(col => col.nm_cb).Title("Nama Cabang").Width(150);
+                    columns.Bound(col => col.nm_cob).Title("Nama COB");
+                    columns.Bound(col => col.nm_scob).Title("Nama Sub COB");
+                    columns.Bound(col => col.thn).Title("Tahun");
+                    columns.Bound(col => col.nilai_kapasitas).Title("Nilai Kapasitas");
+                    columns.Bound(col => col.pst_limit_cb).Title("Limit Cabang (%)");
+                    columns.Bound(col => col.maks_panel).Title("Maks Panel");
+                    columns.Bound(col => col.nm_limit).Title("Nama Limit Akseptasi");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

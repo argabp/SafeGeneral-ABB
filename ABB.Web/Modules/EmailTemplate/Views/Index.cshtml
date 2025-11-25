@@ -32,22 +32,21 @@
         )
         .Columns(columns =>
         {
-            columns.Bound(col => col.Id).Width(100).Title("Id");
-            columns.Bound(col => col.Name).Title("Nama");
             columns.Command(command =>
             {
                 command.Custom("Edit")
-                        .Text(" ")
-                        .IconClass("fa fa-pencil-alt")
-                        .HtmlAttributes(new { title="Edit"})
-                        .Click("btnEditEmailTemplate_OnClick");
+                    .Text(" ")
+                    .IconClass("fa fa-pencil-alt")
+                    .HtmlAttributes(new { title="Edit"})
+                    .Click("btnEditEmailTemplate_OnClick");
                 command.Custom("Delete")
-                        .Text(" ")
-                        .IconClass("fa fa-trash")
-                        .HtmlAttributes(new { title="Delete"})
-                        .Click("btnDeleteEmailTemplate_OnClick");
-        
-            }).Title("Action").Width(150);
+                    .Text(" ")
+                    .IconClass("fa fa-trash")
+                    .HtmlAttributes(new { title="Delete"})
+                    .Click("btnDeleteEmailTemplate_OnClick");
+            }).Title("Action").Width(150).Locked(true);
+            columns.Bound(col => col.Id).Width(100).Title("Id");
+            columns.Bound(col => col.Name).Title("Nama");
         })
         .Pageable(pager => pager
                     .Refresh(true)

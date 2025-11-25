@@ -44,9 +44,6 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.kd_utk).Width(100).Title("Kode Untuk").Editable("disableGridTextboxWhenEdit");
-                    columns.Bound(col => col.nm_utk).Width(200).Title("Nama Untuk (Indonesia)");
-                    columns.Bound(col => col.nm_utk_ing).Width(200).Title("Nama Untuk (English)");
                     columns.Command(command =>
                     {
                         command.Edit();
@@ -55,7 +52,10 @@
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeletePeruntukanKendaraan");
-                    }).Width(200).Title("Action");
+                    }).Width(200).Title("Action").Locked(true);
+                    columns.Bound(col => col.kd_utk).Width(100).Title("Kode Untuk").Editable("disableGridTextboxWhenEdit");
+                    columns.Bound(col => col.nm_utk).Width(200).Title("Nama Untuk (Indonesia)");
+                    columns.Bound(col => col.nm_utk_ing).Width(200).Title("Nama Untuk (English)");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

@@ -40,13 +40,6 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
-                    columns.Bound(col => col.nm_grp_rk).Width(150).Title("Nama Group Obligee");
-                    columns.Bound(col => col.kd_rk).Width(150).Title("Kode Obligee");
-                    columns.Bound(col => col.nm_rk).Width(150).Title("Nama Obligee");
-                    columns.Bound(col => col.nm_kota).Width(150).Title("Kota Obligee");
-                    columns.Bound(col => col.almt).Width(150).Title("Alamat Obligee");
-                    columns.Bound(col => col.nm_sic).Width(150).Title("Retail/Corporate");
                     columns.Command(command =>
                     {
                         command.Custom("EditObligee")
@@ -69,7 +62,14 @@
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteDetailObligee");
-                    }).Width(200).Title("Action");
+                    }).Width(200).Title("Action").Locked(true);
+                    columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
+                    columns.Bound(col => col.nm_grp_rk).Width(150).Title("Nama Group Obligee");
+                    columns.Bound(col => col.kd_rk).Width(150).Title("Kode Obligee");
+                    columns.Bound(col => col.nm_rk).Width(150).Title("Nama Obligee");
+                    columns.Bound(col => col.nm_kota).Width(150).Title("Kota Obligee");
+                    columns.Bound(col => col.almt).Width(150).Title("Alamat Obligee");
+                    columns.Bound(col => col.nm_sic).Width(150).Title("Retail/Corporate");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

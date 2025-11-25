@@ -21,6 +21,14 @@
         )
         .Columns(columns =>
         {
+            columns.Command(command =>
+            {
+                command.Custom("ViewInquiryAlokasi")
+                    .Text("View")
+                    .IconClass("fa fa-eye")
+                    .HtmlAttributes(new { title = "View" })
+                    .Click("btnViewInquiryAlokasi_OnClick");
+            }).Width(200).Title("Action").Locked(true);
             columns.Bound(col => col.kd_jns_sor).Width(150).Title("Jenis SOR");
             columns.Bound(col => col.kd_rk_sor).Width(150).Title("Kode SOR");
             columns.Bound(col => col.nilai_ttl_ptg_reas).Width(150).Title("TSI");
@@ -31,14 +39,6 @@
             columns.Bound(col => col.pst_adj_reas).Width(150).Title("Rate Adjustment");
             columns.Bound(col => col.stn_adj_reas).Width(150).Title("Rate Adjustment").ClientTemplate("#= data.stn_adj_reas == 1 ? '%' : '%o' #");
             columns.Bound(col => col.nilai_adj_reas).Width(150).Title("Premi Adjustment");
-            columns.Command(command =>
-            {
-                command.Custom("ViewInquiryAlokasi")
-                    .Text("View")
-                    .IconClass("fa fa-eye")
-                    .HtmlAttributes(new { title = "View" })
-                    .Click("btnViewInquiryAlokasi_OnClick");
-            }).Width(200).Title("Action");
         })
         .Pageable(pager => pager
             .Refresh(true)

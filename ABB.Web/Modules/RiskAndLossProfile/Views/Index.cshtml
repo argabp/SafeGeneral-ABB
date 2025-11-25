@@ -41,10 +41,6 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
-                    columns.Bound(col => col.nomor).Width(150).Title("Nomor");
-                    columns.Bound(col => col.bts1).Width(150).Title("Batas 1");
-                    columns.Bound(col => col.bts2).Width(150).Title("Batas 2");
                     columns.Command(command =>
                     {
                         command.Custom("EditRiskAndLossProfile")
@@ -57,7 +53,11 @@
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteRiskAndLossProfile");
-                    }).Width(200).Title("Action");
+                    }).Width(200).Title("Action").Locked(true);
+                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
+                    columns.Bound(col => col.nomor).Width(150).Title("Nomor");
+                    columns.Bound(col => col.bts1).Width(150).Title("Batas 1");
+                    columns.Bound(col => col.bts2).Width(150).Title("Batas 2");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)
