@@ -1,0 +1,94 @@
+@model List<ABB.Application.InquiryNotaProduksis.Queries.InquiryNotaProduksiDto>
+
+@{
+    Layout = null; // view cetak biasanya tanpa layout
+    Func<DateTime?, string> fmtDate = d => d.HasValue ? d.Value.ToString("dd-MM-yyyy") : "-";
+    Func<decimal?, string> fmtNum = n => n.HasValue ? string.Format("{0:N2}", n.Value) : "0.00";
+    var printedOn = DateTime.Now.ToString("dd-MM-yyyy HH:mm");
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Cetak Laporan Pelunasan</title>
+    <style>
+        body { font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #000; }
+        .report-header { text-align: center; margin-bottom: 12px; }
+        .report-title { font-size: 16px; font-weight: bold; }
+        .report-sub { font-size: 12px; color: #333; margin-top: 4px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        table th, table td { border: 1px solid #666; padding: 6px 8px; text-align: left; }
+        table th { background: #f2f2f2; font-weight: bold; }
+        .right { text-align: right; }
+        .center { text-align: center; }
+        .no-border { border: none; }
+        .footer { margin-top: 16px; font-size: 11px; color:#333; }
+
+        @@media print {
+            .page-break { page-break-after: always; }
+    }
+</style>
+</head>
+<body>
+    <div class="report-header">
+        <div class="report-title">LAPORAN PELUNASAN POS SENDIRI </div>
+        <!-- <div class="report-sub">LOKASI: @printedOn</div> -->
+        <!-- <div class="report-sub">PERIODE: @printedOn</div> -->
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width:40px;" class="center">No</th>
+                <th style="width:120px;">TGL PRODUKSI</th>
+                <th>No.Nota</th>
+                <th style="width:160px;">No.Polis</th>
+                <th style="width:160px;">TERTANGGUNG</th>
+                <th style="width:160px;">PEMBAWA POS</th>
+                <th style="width:160px;">AGEN/BROKER</th>
+                <th style="width:160px;">CEDING</th>
+                <th style="width:160px;">LOK</th>
+                <th style="width:160px;">COB</th>
+                <th style="width:160px;">NO.BUKTI</th>
+                <th style="width:160px;">TGL LUNAS</th>
+                <th style="width:160px;">NILAI LUNAS</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model == null || !Model.Any())
+            {
+                <tr>
+                    <td colspan="6" class="center">Tidak ada data</td>
+                </tr>
+            }
+            else
+            {
+                var idx = 1;
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="center">@idx</td>
+                        <td>@fmtDate(item.date)</td>
+                        <td>@(string.IsNullOrWhiteSpace(item.no_nd) ? "-" : item.no_nd)</td>
+                        <td>@(string.IsNullOrWhiteSpace(item.no_pl) ? "-" : item.no_pl)</td>
+                        <td>@(string.IsNullOrWhiteSpace(item.nm_cust2) ? "-" : item.nm_cust2)</td>
+                        <td>@(string.IsNullOrWhiteSpace(item.nm_pos) ? "-" : item.nm_pos)</td>
+                        <td>@(string.IsNullOrWhiteSpace(item.nm_brok) ? "-" : item.nm_brok)</td>
+                        <td>@(string.IsNullOrWhiteSpace(item.nm_cust2) ? "-" : item.nm_cust2)</td>
+                        <td>@(string.IsNullOrWhiteSpace(item.lok) ? "-" : item.lok)</td>
+                        <td>@(string.IsNullOrWhiteSpace(item.kd_tutup) ? "-" : item.kd_tutup)</td>
+                        <td>@(string.IsNullOrWhiteSpace(item.no_bukti) ? "-" : item.no_bukti)</td>
+                        <td>@fmtDate(item.tgl_byr)</td>
+                        <td class="right">@fmtNum(item.jumlah)</td>
+                        
+                    </tr>
+                    idx++;
+                }
+            }
+        </tbody>
+    </table>
+
+    
+</body>
+</html>

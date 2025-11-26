@@ -1,0 +1,92 @@
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.TagHelpers
+@using ABB.Application.KasBanks.Queries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Kas dan Bank";
+}
+
+<script src="~/Modules/KasBank/JS/kasbank.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+     .breadcrumb-item + .breadcrumb-item::before {
+        content: ">"; /* Ganti '/' dengan '>' */
+        padding: 0 .5rem; /* Atur spasi jika perlu */
+    }
+</style>
+    <nav aria-label="breadcrumb">
+    <ol class="breadcrumb" style="background: white; ">
+        <li class="breadcrumb-item"><a href="#">Finance</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Kas dan Bank</li>
+    </ol>
+    </nav>
+    <div class="flat-box">
+        <div class="flat-box-title ">
+            Kas dan Bank
+            <div class="pullright-flex">
+        
+                <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+        
+                <button class="flat-btn-primary" onclick="btnAddKasBank_OnClick()">Entri Kas atau Bank</button>
+            </div>
+        </div>
+        
+    
+
+     <div class="flat-box-content">
+        <div class="div-box ">
+            @(Html.Kendo().Grid<KasBankDto>()
+                .Name("KasBankGrid")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetKasBank", "KasBank").Data("getSearchFilter")) 
+                    .Model(model => model.Id(p => p.Kode)) // Primary Key
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.Kode).Width(150).Title("Kode");
+                    columns.Bound(col => col.Keterangan).Width(250).Title("Keterangan");
+                    columns.Bound(col => col.NoRekening).Width(150).Title("No. Rekening");
+                    columns.Bound(col => col.NoPerkiraan).Width(150).Title("No. Perkiraan");
+                    columns.Bound(col => col.TipeKasBank).Width(120).Title("Tipe");
+                    columns.Bound(col => col.Saldo).Format("{0:n2}").Width(120).Title("Saldo Awal");
+                    columns.Command(command =>
+                    {
+                        command.Custom("EditKasBank")
+                            .Text("Edit")
+                            .IconClass("fa fa-pencil-alt")
+                            .Click("btnEditKasBank_OnClick");
+                        command.Custom("DeleteKasBank")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .Click("onDeleteKasBank");
+                    }).Title("Action").Locked(true).Width(200);
+                })
+                .Pageable(pager => pager.Refresh(true))
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+            )
+        </div>
+        
+        @(Html.Kendo().Window()
+            .Name("KasBankWindow")
+            .Title("Kas dan Bank")
+            .Width(500)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+        )
+    </div>
+</div>
+

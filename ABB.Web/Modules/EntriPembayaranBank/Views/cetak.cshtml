@@ -1,0 +1,139 @@
+@model ABB.Web.Modules.EntriPembayaranBank.Models.EntriPembayaranBankViewModel
+@{
+    Layout = null; // Supaya halaman bersih tanpa layout utama
+
+    // Menghitung total pembayaran dari grid detail
+    var totalPembayaran = Model.PembayaranItems.Sum(p => p.TotalBayar ?? 0);
+}
+
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Cetak Pembayaran Bank - @Model.VoucherHeader.NoVoucher</title>
+    <link rel="stylesheet" href="https://unpkg.com/paper-css@0.4.1/paper.css" />
+
+    <style>
+        body { font-family: Arial, sans-serif; }
+        article { padding: 10mm; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #000; padding: 6px; text-align: left; font-size: 12px; }
+        .no-border { border: 0 !important; }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .text-left { text-align: left; }
+    </style>
+</head>
+<body class="A4 portrait">
+    <section class="sheet padding-10mm">
+    <article>
+        <table class="no-border" width="100%">
+            <tr>
+                <td class="no-border"><h3><center><B>BUKTI @(Model.VoucherHeader.DebetKredit == "D" ? "PENERIMAAN" : "PENGELUARAN") BANK</B></center> </h3></td>
+            </tr>
+        </table>
+
+        <table class="no-border" width="100%" cellpadding="5px">
+            <tr>
+                <td class="no-border text-left">@Model.VoucherHeader.NamaBank</td>
+                <td class="no-border text-center">@Model.VoucherHeader.NoBank</td>
+                <td class="no-border text-right">No. @Model.VoucherHeader.NoVoucher</td>
+            </tr>
+        </table>
+        
+        <table width="100%" cellpadding="5px">
+            <thead>
+                <tr>
+                    <td colspan="3" class="text-center"><b>KETERANGAN</b></td>
+                    <td class="text-center"><b>JUMLAH</b></td>
+                    <td class="text-center"><b>NO. AKUN</b></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="5"><b>@(Model.VoucherHeader.DebetKredit == "D" ? "TERIMA DARI" : "DIBAYARKAN KEPADA") :</b> @Model.VoucherHeader.DiterimaDari</td>
+                </tr>
+                <tr style="height:30px;">
+                    <td colspan="5">
+                        Pembayaran : 
+                        <input type="checkbox" @(Model.VoucherHeader.JenisPembayaran == "KAS" ? "checked" : "") disabled /> Kas
+                        <input type="checkbox" @(Model.VoucherHeader.JenisPembayaran == "CEK" ? "checked" : "") disabled /> Cheque
+                        <input type="checkbox" @(Model.VoucherHeader.JenisPembayaran == "GIRO" ? "checked" : "") disabled /> Giro
+                        <input type="checkbox" @(Model.VoucherHeader.JenisPembayaran == "TRANS" ? "checked" : "") disabled /> Transfer
+                        <span style="margin-left:25px;">No : @Model.VoucherHeader.NoBank</span>
+                    </td>
+                </tr>
+
+                <tr tyle="height:60px;">
+                    <td colspan="3">@Model.VoucherHeader.KeteranganVoucher</td>
+                    <td>@(Model.VoucherHeader.TotalVoucher.HasValue ? Model.VoucherHeader.TotalVoucher.Value.ToString("N2") : "0.00")</td>
+                    <td>@Model.VoucherHeader.KodeAkun</td>
+                </tr>
+
+               @* Tambahkan baris kosong agar tabel tetap tinggi *@
+                @for(int i = 0; i < (8 - i); i++)
+                {
+                    <tr style="height:30px;">
+                        <td colspan="3"></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                }
+
+                <tr style="height:30px;">
+                    <td colspan="3" id="terbilangText">#Terbilang # ... # </td>
+                    <td class="text-right"><b>@Model.VoucherHeader.NamaMataUang @(Model.VoucherHeader.TotalVoucher.HasValue ? Model.VoucherHeader.TotalVoucher.Value.ToString("N2") : "0.00")</b></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td class="text-center">Direksi</td>
+                    <td class="text-center">Keuangan</td>
+                    <td class="text-center">Akuntansi</td>
+                    <td colspan="2" rowspan="2" class="text-center">Jakarta, @Model.VoucherHeader.TanggalVoucher?.ToString("dd-MM-yyyy") <br/>Penerima <br/> <br/> <br/> <br/>(................)</td>
+                </tr>
+                <tr style="height:70px;">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+
+    </article>
+  </section>
+</body>
+</html>
+
+
+<script>
+    function terbilangJS(nilai) {
+        nilai = Math.floor(nilai);
+
+        var angka = ["", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam",
+                     "Tujuh", "Delapan", "Sembilan", "Sepuluh", "Sebelas"];
+
+        function toWords(x) {
+            if (x < 12) return angka[x];
+            else if (x < 20) return toWords(x - 10) + " Belas";
+            else if (x < 100) return toWords(Math.floor(x / 10)) + " Puluh " + toWords(x % 10);
+            else if (x < 200) return "Seratus " + toWords(x - 100);
+            else if (x < 1000) return toWords(Math.floor(x / 100)) + " Ratus " + toWords(x % 100);
+            else if (x < 2000) return "Seribu " + toWords(x - 1000);
+            else if (x < 1000000) return toWords(Math.floor(x / 1000)) + " Ribu " + toWords(x % 1000);
+            else if (x < 1000000000) return toWords(Math.floor(x / 1000000)) + " Juta " + toWords(x % 1000000);
+            else if (x < 1000000000000) return toWords(Math.floor(x / 1000000000)) + " Milyar " + toWords(x % 1000000000);
+            else return x;
+        }
+
+        return toWords(nilai).trim();
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var totalVoucher = @((Model.VoucherHeader.TotalVoucher ?? 0).ToString().Replace(",", "."));
+        var hasil = terbilangJS(totalVoucher);
+        var mataUang = "@Model.VoucherHeader.DetailMataUang";
+        document.getElementById("terbilangText").innerText = "# Terbilang #  " + "# " + hasil + " # "  + mataUang ;
+    });
+</script>

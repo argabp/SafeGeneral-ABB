@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Cetak Laporan Outstanding</title>
+    <style>
+        body { font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #000; }
+        .report-header { text-align: center; margin-bottom: 12px; }
+        .report-title { font-size: 16px; font-weight: bold; }
+        .report-sub { text-align: center; font-size: 12px; color: #333; margin-top: 4px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        table th, table td { border: 1px solid #666; padding: 6px 8px; text-align: left; }
+        table th { background: #f2f2f2; font-weight: bold; }
+        .right { text-align: right; }
+        .center { text-align: center; }
+        .no-border { border: none; }
+        .footer { margin-top: 16px; font-size: 11px; color:#333; }
+    </style>
+</head>
+<body>
+    <div class="report-header">
+        <div class="report-title">LAPORAN OUTSTANDING PIUTANG POS SENDIRI</div>
+        <div class="report-sub">LOKASI : {{ KodeCabang }}</div>
+        <div class="report-sub">PERIODE : {{ Periode }}</div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width:40px;" class="center">NO</th>
+                <th>NO NOTA/<br>NO POLIS</th>
+                <th style="width:160px;">TERTANGGUNG/<br>PEMBAWA POS</th>
+                <th style="width:160px;">AGEN/<br>BROKER</th>
+                <th style="width:160px;">No.Polis Leader</th>
+                <th style="width:160px;">CEDING/<br>LOKASI/<br>COB</th>
+                <th style="width:160px;">TGL NOTA/<br>JATUH TEMPO</th>
+                <th style="width:160px;">CURRENCY/<br>KURS</th>
+                <th style="width:160px;">UMUR/<br>RANGE</th>
+                <th style="width:160px;">NILAI NOTA (IDR)</th>
+                <th style="width:160px;">NILAI BAYAR (IDR)</th>
+                <th style="width:160px;">NILAI OS (IDR)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ details }}  </tbody>
+    </table>
+</body>
+</html>

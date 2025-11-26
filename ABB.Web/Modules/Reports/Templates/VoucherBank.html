@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Laporan Voucher Bank</title>
+    <style>
+        body { font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #000; }
+        .report-header { text-align: center; margin-bottom: 10px; }
+        .report-title { font-weight: bold; font-size: 16px; }
+        table { width: 100%; border-collapse: collapse; }
+        table th, table td { border: 1px solid #666; padding: 6px; }
+        .center { text-align: center; }
+        .right { text-align: right; }
+    </style>
+</head>
+<body>
+    <div class="report-header">
+        <div class="report-title"> VOUCHER BANK</div>
+        <div>Periode: {{ tanggal_awal }} s/d {{ tanggal_akhir }}</div>
+        <div>Kode Bank: {{ kode_bank }}</div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Tanggal Voucher</th>
+                <th>No Voucher</th>
+                <th>Diterima Dari</th>
+                <th>Keterangan</th>
+                <th>Total</th>
+                <th>Kode Bank</th>
+                <th>Jenis</th>
+                <th>Cabang</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ details }}
+        </tbody>
+    </table>
+</body>
+</html>

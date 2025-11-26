@@ -1,0 +1,182 @@
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.TagHelpers
+<!-- @using ABB.Application.EntriPembayaranKass.Queries -->
+@using ABB.Application.VoucherBanks.Queries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Entri Pembayaran Bank";
+}
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="https://unpkg.com/paper-css@0.4.1/paper.css">
+<script src="~/Modules/EntriPembayaranBank/JS/entripembayaranbank.index.js"></script>
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+    .swal2-container {
+      z-index: 10050 !important;
+    }
+     .breadcrumb-item + .breadcrumb-item::before {
+        content: ">"; /* Ganti '/' dengan '>' */
+        padding: 0 .5rem; /* Atur spasi jika perlu */
+    }
+</style>
+<nav  aria-label="breadcrumb">
+   <ol class="breadcrumb" style="background: white; ">
+        <li class="breadcrumb-item"><a href="#">Finance</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Entri Pembayaran Bank</li>
+    </ol>
+    </nav>
+<div class="flat-box">
+        <div class="flat-box-title ">
+           Entri Pembayaran Bank
+            <div class="pullright-flex">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+      
+            <!-- <button class="flat-btn-primary" onclick="btnAddVoucherKas_OnClick()">Entri Voucher Kas</button> -->
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        @(Html.Kendo().TabStrip()
+            .Name("tabStrip")
+            .Items(items =>
+            {
+                // --- TAB 1: DATA YANG MASIH DI-PROSES (BELUM FINAL) ---
+                items.Add().Text("Dalam Proses").Selected(true)
+                    .Content(
+                        @<text>
+                        <div class="div-box">
+                            @(Html.Kendo().Grid<VoucherBankDto>()
+                                .Name("BelumFinalGrid") // ID BARU
+                                .DataSource(dataSource => dataSource.Ajax()
+                                    // Memanggil action untuk data Belum Final
+                                    .Read(read => read.Action("GetEntriPembayaranBank", "EntriPembayaranBank").Data("getSearchFilterBelumFinal"))
+                                )
+                                .Columns(columns =>
+                                {
+                                    columns.Bound(col => col.KodeCabang).Title("Cabang").Width(200).ClientTemplate("#= KodeCabang # - #= NamaCabang #");
+                                    columns.Bound(col => col.NoVoucher).Width(200).Title("No. Voucher");
+                                    columns.Bound(col => col.DebetKredit).Width(150).Title("Debet / Kredit").ClientTemplate("#= DebetKredit == 'D' ? 'Debet' : (DebetKredit == 'K' ? 'Kredit' : '-') #");
+                                    columns.Bound(col => col.DiterimaDari).Width(250).Title("Diterima Dari");
+                                    columns.Bound(col => col.TanggalVoucher).Format("{0:dd-MM-yyyy}").Width(150).Title("Tanggal");
+                                    columns.Bound(col => col.KeteranganVoucher).Width(300).Title("Keterangan");
+                                    columns.Bound(col => col.TotalVoucher).Format("{0:n2}").Width(180).Title("Total");
+                                    columns.Bound(col => col.FlagPosting).Title("Posting").Width(100)
+                                        .ClientTemplate("#= FlagPosting ? '<i class=\"fa fa-check text-success\"></i> Yes' : '<i class=\"fa fa-times text-danger\"></i> No' #");
+                                    columns.Command(command =>
+                                    {
+                                        command.Custom("EntriPembayaran").Text(" Edit Pembayaran ").IconClass("fa fa-plus").Click("btnEntriPembayaran_OnClick");
+                                    }).Width(220).Title("Action").Locked(true);
+                                    
+                                })
+                                .Pageable(pager => pager.Refresh(true))
+                                .Sortable()
+                                .Filterable()
+                                .Scrollable()
+                                .Height(450)
+                                .Resizable(a=>a.Columns(true))
+                            )
+                        </div>
+                        </text>
+                    );
+
+                // --- TAB 2: DATA YANG SUDAH FINAL ---
+                items.Add().Text("Sudah Final")
+                    .Content(
+                        @<text>
+                        <div class="div-box">
+                            @(Html.Kendo().Grid<VoucherBankDto>()
+                                .Name("SudahFinalGrid") // ID BARU
+                                .DataSource(dataSource => dataSource.Ajax()
+                                    // Memanggil action untuk data Final
+                                    .Read(read => read.Action("GetEntriPembayaranBankFinal", "EntriPembayaranBank").Data("getSearchFilterSudahFinal"))
+                                )
+                                .Columns(columns =>
+                                {
+                                    columns.Bound(col => col.KodeCabang).Title("Cabang").Width(200).ClientTemplate("#= KodeCabang # - #= NamaCabang #");
+                                    columns.Bound(col => col.NoVoucher).Width(200).Title("No. Voucher");
+                                    columns.Bound(col => col.DebetKredit).Width(150).Title("Debet / Kredit").ClientTemplate("#= DebetKredit == 'D' ? 'Debet' : (DebetKredit == 'K' ? 'Kredit' : '-') #");
+                                    columns.Bound(col => col.DiterimaDari).Width(250).Title("Diterima Dari");
+                                    columns.Bound(col => col.TanggalVoucher).Format("{0:dd-MM-yyyy}").Width(150).Title("Tanggal");
+                                    columns.Bound(col => col.KeteranganVoucher).Width(300).Title("Keterangan");
+                                    columns.Bound(col => col.TotalVoucher).Format("{0:n2}").Width(180).Title("Total");
+                                    columns.Bound(col => col.FlagPosting).Title("Posting").Width(100)
+                                        .ClientTemplate("#= FlagPosting ? '<i class=\"fa fa-check text-success\"></i> Yes' : '<i class=\"fa fa-times text-danger\"></i> No' #");
+                                    columns.Command(command =>
+                                    {
+                                        command.Custom("EntriPembayaranBankLihat").Text(" Lihat ").IconClass("fa fa-eye").Click("btnLihatPembayaranBank_OnClick");
+                                        command.Custom("CetakPembayaranBank").Text(" Cetak ").IconClass("fa fa-print").Click("btnCetakPembayaranBank_OnClick");
+                                    }).Width(220).Title("Action").Locked(true);
+                                })
+                                .Pageable(pager => pager.Refresh(true))
+                                .Sortable()
+                                .Filterable()
+                                .Scrollable()
+                                .Height(450)
+                                .Resizable(a=>a.Columns(true))
+                            )
+                        </div>
+                        </text>
+                    );
+            })
+        )
+
+        @(Html.Kendo().Window()
+            .Name("EntriPembayaranBankWindow")
+            .Title("Entri Pembayaran Bank")
+            .Width(1000)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+        )
+
+         @(Html.Kendo().Window()
+            .Name("EntriPembayaranBankLihatWindow")
+            .Title("Lihat Pembayaran Bank")
+            .Width(1000)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+        )
+    </div>
+</div>
+
+<script>
+    // Fungsi untuk filter Tab 1 (Dalam Proses)
+    function getSearchFilterBelumFinal() {
+        return {
+            searchKeyword: $("#SearchKeyword").val(),
+            flagFinal: false
+        };
+    }
+
+    // Fungsi untuk filter Tab 2 (Sudah Final)
+    function getSearchFilterSudahFinal() {
+        return {
+            searchKeyword: $("#SearchKeyword").val(),
+            flagFinal: true
+        };
+    }
+
+    // Skrip Anda untuk me-refresh grid yang aktif (sudah benar)
+    $(document).ready(function () {
+        $("#SearchKeyword").on("keyup", function() {
+            var tabStrip = $("#tabStrip").data("kendoTabStrip");
+            var activeTabIndex = tabStrip.select().index();
+
+            if(activeTabIndex === 0) {
+                $("#BelumFinalGrid").data("kendoGrid").dataSource.read();
+            } else {
+                $("#SudahFinalGrid").data("kendoGrid").dataSource.read();
+            }
+        });
+    });
+</script>

@@ -1,0 +1,375 @@
+@model ABB.Web.Modules.EntriPenyelesaianPiutang.Models.EntriPenyelesaianPiutangViewModel
+@using ABB.Application.EntriPenyelesaianPiutangs.Queries;
+@using System.Text.Json;
+@using Kendo.Mvc.UI;
+@using ABB.Web.Modules.EntriPenyelesaianPiutang.Models; 
+@{
+    bool isEditMode = !string.IsNullOrEmpty(Model.PenyelesaianHeader?.NomorBukti);
+    // PERBAIKAN: Siapkan JSON di sini agar aman dari error syntax
+    var itemsForJson = Model.PembayaranItems ?? new List<PenyelesaianPiutangItem>();
+    var initialDetailsJson = JsonSerializer.Serialize(itemsForJson);
+}
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+<div class="window-body">
+
+   <form id="PenyelesaianPiutangForm">
+        <fieldset>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Kode Cabang</label>
+                <div class="col-sm-4">
+                     <kendo-combobox for="PenyelesaianHeader.KodeCabang"
+                                    style="width: 100%;"
+                                    datatextfield="Text"
+                                    datavaluefield="Value"
+                                    bind-to="ViewBag.KodeCabangOptions"
+                                    filter="FilterType.Contains"
+                                    placeholder="Pilih Cabang..."
+                                    value="@Model.PenyelesaianHeader.KodeCabang"
+                                    text="@ViewBag.DisplayCabang"
+                                    readonly="true"
+                                    auto-bind="true"
+                                   >
+                    </kendo-combobox>
+                </div>
+            </div>
+            
+             <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Jenis Penyelesaian</label>
+                <div class="col-sm-2">
+                    <kendo-dropdownlist id="JenisPenyelesaianPrefix"
+                                                style="width: 50%;"
+                                                datatextfield="Text"
+                                                datavaluefield="Value"
+                                                bind-to="ViewBag.JenisPenyelesaianOptions"
+                                                readonly="true"
+                                                >
+                    </kendo-dropdownlist>
+                
+                </div>
+                <div class="col-sm-2">
+                        <kendo-textbox id="JenisPenyelesaianSuffix" readonly="true" value="Memorial" style="font-size: 12px;" />
+                            <input type="hidden" asp-for="PenyelesaianHeader.JenisPenyelesaian" />
+                </div>
+            </div>
+             <div class="form-group row">
+              
+                 <label  class="col-sm-2 col-form-label" asp-for="PenyelesaianHeader.NomorBukti"> Nomor Bukti</label>
+                <div class="col-sm-4">
+                     <kendo-textbox for="PenyelesaianHeader.NomorBukti" style="width: 100%;" readonly="true" placeholder="[AUTO]" />
+                </div>
+            </div>
+            
+            <div class="form-group row">
+              
+                 <label  class="col-sm-2 col-form-label" asp-for="PenyelesaianHeader.KodeVoucherAcc">Nomor Voucher Referensi</label>
+                <div class="col-sm-4">
+                   <kendo-textbox for="PenyelesaianHeader.KodeVoucherAcc" style="width: 100%;" />
+                </div>
+            </div>
+            
+        </fieldset>
+        
+        <hr/>
+
+        <fieldset>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label" asp-for="PenyelesaianHeader.Tanggal"></label>
+                <div class="col-sm-4">
+                    <kendo-datepicker for="PenyelesaianHeader.Tanggal" style="width: 100%;" />
+                </div>
+                <div class="col-sm-3"></div>
+                <label class="col-sm-1 col-form-label" asp-for="PenyelesaianHeader.TanggalInput">Tanggal Input</label>
+                <div class="col-sm-2">
+                    <kendo-datepicker for="PenyelesaianHeader.TanggalInput" style="width: 100%;" readonly="true" />
+                </div>
+            </div>
+             <div class="form-group row">
+                <label class="col-sm-2 col-form-label" asp-for="PenyelesaianHeader.MataUang">Mata Uang</label>
+                <div class="col-sm-4">
+                     <kendo-combobox for="PenyelesaianHeader.MataUang"
+                                    style="width: 100%;"
+                                    datatextfield="Text"
+                                    datavaluefield="Value"
+                                    bind-to="ViewBag.MataUangOptions"
+                                    filter="FilterType.Contains"
+                                    placeholder="Pilih Mata Uang...">
+                    </kendo-combobox>
+                </div>
+
+                 <div class="col-sm-3"></div>
+                <label class="col-sm-1 col-form-label" asp-for="PenyelesaianHeader.KodeUserInput">Kode User Input</label>
+                <div class="col-sm-2">
+                    <kendo-textbox for="PenyelesaianHeader.KodeUserInput" style="width: 100%;" readonly="true" />
+                </div>
+            </div>
+             <div class="form-group row">
+                <label class="col-sm-2 col-form-label" asp-for="PenyelesaianHeader.TotalOrg">Total </label>
+                <div class="col-sm-2">
+                    <kendo-numerictextbox for="PenyelesaianHeader.TotalOrg" format="n2" style="width: 50%;" />
+                </div>
+                  <label class="col-sm-2 col-form-label" asp-for="PenyelesaianHeader.TotalRp">(Dalam Rupiah)</label>
+              
+                <div class=" col-sm-2">
+                    <kendo-numerictextbox for="PenyelesaianHeader.TotalRp"readonly="true" format="n2" style="width: 50%;" />
+                </div>
+                <div class=" col-sm-1">
+                    <kendo-dropdownlist  for="PenyelesaianHeader.DebetKredit"
+                                        style="width: 100%;"
+                                        datatextfield="Text"
+                                        datavaluefield="Value"
+                                        bind-to="ViewBag.DebetKreditOptions"
+                                        >
+                    </kendo-dropdownlist>
+                </div>
+                <label class="col-sm-1 col-form-label" asp-for="PenyelesaianHeader.TanggalUpdate">Tanggal Update</label>
+                <div class="col-sm-2">
+                    <kendo-datepicker for="PenyelesaianHeader.TanggalUpdate" style="width: 100%;" readonly="true" />
+           
+                </div>
+            </div>
+             
+              <div class="form-group row">
+                <label class="col-sm-2 col-form-label" asp-for="PenyelesaianHeader.KodeAkun">Kode Akun</label>
+                <div class="col-sm-4">
+                    <kendo-combobox for="PenyelesaianHeader.KodeAkun"
+                                    style="width:100%;"
+                                    datatextfield="Text"
+                                    datavaluefield="Value"
+                                    bind-to="ViewBag.COAoptions"
+                                    filter="FilterType.Contains"
+                                    placeholder="Pilih Akun...">
+                    </kendo-combobox>
+                </div>
+
+                <div class="col-sm-3"></div>
+                  <label class="col-sm-1 col-form-label" asp-for="PenyelesaianHeader.KodeUserUpdate">Kode User Update</label>
+                 
+                <div class="col-sm-2">
+                    <kendo-textbox for="PenyelesaianHeader.KodeUserUpdate" style="width: 100%;" readonly="true" />
+            
+                </div>
+            </div>
+            
+           
+            <div class="form-group row">
+                 <label class="col-sm-2 col-form-label" asp-for="PenyelesaianHeader.Keterangan"></label>
+                <div class="form-group col-sm-4">
+                    <kendo-textarea for="PenyelesaianHeader.Keterangan" name="PenyelesaianHeader.Keterangan" value="@Model.PenyelesaianHeader?.Keterangan"  style="width: 100%;" rows="3"></kendo-textarea>
+                </div>
+
+                 <div class="col-sm-3"></div>
+                 <label class="col-sm-1 col-form-label" asp-for="PenyelesaianHeader.FlagPosting">flag Posting</label>
+                
+                <div class="col-sm-2">
+                    <input type="checkbox" id="FlagPostingCheckbox" class="k-checkbox" 
+                               @(Model.PenyelesaianHeader?.FlagPosting == true ? "checked" : "") disabled />
+                
+                </div>
+            </div>
+           
+        </fieldset>
+    </form>
+   
+    <hr>
+   <form id="NewPaymentForm">
+        <input type="hidden" id="No" asp-for="No" />
+        <div class="row">
+           <div class="form-group col-sm-2">
+                <label asp-for="FlagPembayaran"></label>
+                <div>
+                    <kendo-dropdownlist for="FlagPembayaran"
+                                        style="width: 100%;"
+                                        datatextfield="Text"
+                                        datavaluefield="Value"
+                                        bind-to="ViewBag.FlagPembayaranOptions">
+                        
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="FlagPembayaran" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group col-sm-3" id="notaField"> 
+                <label asp-for="NoNota"></label>
+                <div class="input-group" style=" display: flex;     width: 100%;     flex-direction: row;     flex-wrap: nowrap;     align-content: center;     justify-content: center;     align-items: center; ">
+                    <kendo-textbox for="NoNota" style="width:100%;" readonly="true" />
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-info" onclick="openPilihNotaWindow()">Select</button>
+                    </div>
+                </div>
+            </div>
+
+            @(Html.Kendo().Window()
+                .Name("PilihNotaWindow")
+                .Title("Pilih Nota Produksi")
+                .Width(800)
+                .Modal(true)
+                .Visible(false)
+                .Draggable(true)
+            )
+
+
+            <div class="form-group col-sm-2" id="akunField" style="display:none;">
+                <label asp-for="KodeAkun"></label>
+                <div>
+                    <kendo-combobox for="KodeAkun"
+                                    style="width:100%;"
+                                    datatextfield="Text"
+                                    datavaluefield="Value"
+                                    bind-to="ViewBag.COAoptions"
+                                    filter="FilterType.Contains"
+                                    placeholder="Pilih Akun..." value="@Model.PenyelesaianHeader?.KodeAkun" >
+                    </kendo-combobox>
+                    <span asp-validation-for="KodeAkun" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-2 detail-payment-field">
+               
+                        <label asp-for="KodeMataUang"></label>
+                        <div>
+                            <kendo-combobox for="KodeMataUang"
+                                            style="width: 100%;"
+                                            datatextfield="Text"
+                                            datavaluefield="Value"
+                                            bind-to="ViewBag.MataUangOptions"
+                                            filter="FilterType.Contains"
+                                            placeholder="Pilih ..."
+                                        > 
+                            </kendo-combobox>
+                            <span asp-validation-for="KodeMataUang" class="text-danger"></span>
+                        </div>
+              
+            </div>
+           
+            <div class="form-group col-sm-2 detail-payment-field">
+               
+                    <label asp-for="TotalBayarOrg">Total Original</label>
+                    <kendo-numerictextbox for="TotalBayarOrg" format="n0" style="width:100%;" />
+               
+            </div>
+
+
+            <div class="form-group col-sm-2 detail-payment-field">
+                
+                    <label asp-for="TotalBayarRp">Total Dalam Rupiah</label>
+                    <kendo-numerictextbox for="TotalBayarRp" format="n0" style="width:100%;" readonly="true" />
+               
+            </div>
+
+
+            <div class="form-group col-sm-2 detail-payment-field">
+                
+                    <label asp-for="DebetKredit"></label>
+                    <div>
+                        <kendo-dropdownlist for="DebetKredit"
+                                            style="width: 100%;"
+                                            datatextfield="Text"
+                                            datavaluefield="Value"
+                                            bind-to="ViewBag.DebetKreditOptions">
+                            
+                        </kendo-dropdownlist>
+                        <span asp-validation-for="DebetKredit" class="text-danger"></span>
+                    </div>
+               
+            </div>
+        </div>
+    </form>
+    <div style="display: flex;gap: 10px;justify-content: flex-end;">
+    <button type="button" id="btn-cancel-edit" class="btn btn-secondary" style="display: none;" onclick="clearPaymentForm()">Cancel</button>
+    <button type="button" id="btn-save-pembayaran" onclick="onSavePembayaran()" class="btn btn-primary">Simpan Pembayaran</button>
+    </div>
+    <hr/>
+    <script>
+    function getNoBuktiForDetailGrid() {
+        no_bukti= $("#PenyelesaianHeader_NomorBukti").val()
+        console.log(no_bukti)
+         return { NoBukti: $("#PenyelesaianHeader_NomorBukti").val() };
+         
+    }
+
+  $(document).ready(function () {
+        // Ambil instance dropdownlist dari Kendo
+        var ddl = $("#FlagPembayaran").data("kendoDropDownList");
+
+        // Daftarkan event change
+       ddl.bind("change", function (e) {
+            var value = this.value();
+            if (value && value.toUpperCase() === "AKUN") {
+                $("#akunField").show();
+                $("#notaField").hide();
+                $(".detail-payment-field").show();
+                $("#btn-save-pembayaran").show(); // <-- BARU
+            } else if (value && value.toUpperCase() === "NOTA") {
+                $("#notaField").show();
+                $("#akunField").hide();
+                $(".detail-payment-field").hide();
+                $("#btn-save-pembayaran").hide(); // <-- BARU
+            } else {
+                $("#notaField").hide();
+                $("#akunField").hide();
+                $(".detail-payment-field").hide();
+                $("#btn-save-pembayaran").hide(); // <-- BARU
+            }
+        });
+
+        // Panggil event 'change' sekali saat form dimuat untuk mengatur tampilan awal
+        ddl.trigger("change");
+    });
+
+    
+</script>
+    
+
+    @(Html.Kendo().Grid<EntriPenyelesaianPiutangTempDto>() // <-- Gunakan DTO yang benar
+        .Name("TempDetailPembayaranGrid")
+        .DataSource(ds => ds.Ajax()
+            .Read(read => read.Action("GetTempDetailPembayaran", "EntriPenyelesaianPiutang")
+                .Data("getNoBuktiForDetailGrid"))
+        )
+        .Columns(cols => {
+            cols.Bound(c => c.No).Title("No.").Width(100);
+            cols.Bound(c => c.FlagPembayaran).Title("Flag Pembayaran").Width(150);
+            cols.Bound(c => c.NoNota).Title("Nomor Nota").Width(150);
+            cols.Bound(c => c.KodeAkun).Title("Kode Akun").Width(150);
+            cols.Bound(c => c.KodeMataUang).Title("Kode Mata Uang").Width(150);
+            cols.Bound(c => c.TotalBayarOrg).Format("{0:n0}").Width(150);
+            cols.Bound(c => c.TotalBayarRp).Format("{0:n0}").Width(150);
+            cols.Bound(c => c.DebetKredit).Title("D/K") .ClientTemplate("#= DebetKredit == 'D' ? 'Debet' : (DebetKredit == 'K' ? 'Kredit' : '') #").Width(150);
+            cols.Command(command => {
+            command.Custom("EditDetail").Text("Edit").Click("onEditPembayaran");
+            command.Custom("DeleteDetail").Text("Delete").Click("onDeletePembayaran");
+        }).Title("Action").Width(180);
+        })
+        .NoRecords(nr => nr.Template("Belum ada pembayaran")).Pageable(pager => pager.Refresh(true))
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("updateGridFooter"))
+    )
+
+    
+</div>
+
+<div style="display: flex;gap: 15px;justify-content: flex-end;margin-right:20px">
+    <button type="button" id="btn-cancel-edit" class="btn btn-secondary" style="display: none; margin-right: 10px;">Cancel</button>
+    <button type="button" id="btn-save-pembayaran-final" onclick="onSavePembayaranPiutangFinal()" class="btn btn-danger">Final Pembayaran</button>
+</div>
+
+
+<div class="window-footer" data-total-penyelesaian-original="@(Model.PenyelesaianHeader?.TotalOrg ?? 0)" id="TotalBuktiOrg" style=" font-weight: bold;    display: flex;     justify-content: center;     flex-direction: row;     flex-wrap: nowrap;     align-content: center;     align-items: center; ">
+    <div style="padding-right: 20px;font-size: 15px;">
+            <span>Total Bukti:  </span>
+           <span id="voucherTotal"> @((Model.PenyelesaianHeader?.TotalOrg ?? 0).ToString("N0"))</span>
+            
+            <span style="margin-left: 20px;">Total Penyelesaian :  </span>
+            <span id="pembayaranTotal" style="color: green;">0</span>
+
+            <span style="margin-left: 20px;">Total Sisa Penyelesaian :  </span>
+            <span id="sisapembayaranTotal" style="color: green;">0</span>
+        </div>
+</div>
+
+

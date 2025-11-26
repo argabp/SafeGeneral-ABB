@@ -1,0 +1,187 @@
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.TagHelpers
+@using ABB.Application.EntriPenyelesaianPiutangs.Queries 
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Entri Penyelesaian Piutang";
+}
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="~/Modules/EntriPenyelesaianPiutang/JS/entripenyelesaianpiutang.index.js"></script>
+<style>
+    .div-box { padding-bottom: 1em; }
+    .swal2-container { z-index: 10050 !important; }
+     .breadcrumb-item + .breadcrumb-item::before {
+        content: ">"; /* Ganti '/' dengan '>' */
+        padding: 0 .5rem; /* Atur spasi jika perlu */
+    }
+</style>
+
+<nav  aria-label="breadcrumb">
+   <ol class="breadcrumb" style="background: white; ">
+        <li class="breadcrumb-item"><a href="#">Finance</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Entri Penyelesaian Piutang</li>
+    </ol>
+</nav>
+
+<div class="flat-box">
+    <div class="flat-box-title ">
+       Entri Penyelesaian Piutang
+        <div class="pullright-flex">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+            <button class="flat-btn-primary" onclick="btnAddPenyelesaianPiutang_OnClick()">Entri Penyelesaian Piutang</button>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+
+    @(Html.Kendo().TabStrip()
+            .Name("tabStrip")
+            .Items(items =>
+            {
+                // --- TAB 1: DATA YANG MASIH DI-PROSES (BELUM FINAL) ---
+                items.Add().Text("Dalam Proses").Selected(true)
+                    .Content(
+                        @<text>
+                        <div class="div-box">
+                            @(Html.Kendo().Grid<HeaderPenyelesaianUtangDto>()
+                                .Name("BelumFinalGrid") // ID BARU
+                                .DataSource(dataSource => dataSource.Ajax()
+                                    // Memanggil action untuk data Belum Final
+                                    .Read(read => read.Action("GetEntriPenyelesaianPiutang", "EntriPenyelesaianPiutang").Data("getSearchFilterBelumFinal"))
+                                )
+                                .Columns(columns =>
+                                {
+                                    // --- GANTI Semua kolom agar sesuai dengan HeaderPenyelesaianUtangDto ---
+                                    columns.Bound(col => col.KodeCabang).Width(150).Title("Kode Cabang");
+                                    columns.Bound(col => col.NomorBukti).Width(200).Title("No. Bukti");
+                                    columns.Bound(col => col.Tanggal).Format("{0:dd-MM-yyyy}").Width(150).Title("Tanggal");
+                                    columns.Bound(col => col.Keterangan).Width(300).Title("Keterangan");
+                                    columns.Bound(col => col.TotalRp).Format("{0:n2}").Width(150).Title("Total (Rp)");
+                                    columns.Bound(col => col.FlagPosting).Title("Posting").Width(100)
+                                        .ClientTemplate("#= FlagPosting ? '<i class=\"fa fa-check text-success\"></i> Yes' : '<i class=\"fa fa-times text-danger\"></i> No' #");
+                                    
+                                    columns.Command(command =>
+                                    {
+                                        command.Custom("EntriPembayaran")
+                                            .Text("Edit Penyelesaian")
+                                            .IconClass("fa fa-edit") // Ganti ikon menjadi edit
+                                            .Click("btnEntriPenyelesaian_OnClick"); // Sesuaikan nama fungsi JS
+                                    }).Width(200).Title("Action").Locked(true);
+                                })
+                                .Pageable(pager => pager.Refresh(true).PageSizes(true))
+                                .Sortable()
+                                .Filterable()
+                                .Scrollable()
+                                .Height(450)
+                                .Resizable(a=>a.Columns(true))
+                               
+                            )
+                        </div>
+                        </text>
+                    );
+
+                items.Add().Text("Sudah Final")
+                    .Content(
+                        @<text>
+                        <div class="div-box">
+                            @(Html.Kendo().Grid<HeaderPenyelesaianUtangDto>()
+                                .Name("SudahFinalGrid") // ID BARU
+                                .DataSource(dataSource => dataSource.Ajax()
+                                    // Memanggil action untuk data Final
+                                    .Read(read => read.Action("GetEntriPenyelesaianPiutangFinal", "EntriPenyelesaianPiutang").Data("getSearchFilterSudahFinal"))
+                                )
+                                .Columns(columns =>
+                                {
+                                    // --- GANTI Semua kolom agar sesuai dengan HeaderPenyelesaianUtangDto ---
+                                    columns.Bound(col => col.KodeCabang).Width(150).Title("Kode Cabang");
+                                    columns.Bound(col => col.NomorBukti).Width(200).Title("No. Bukti");
+                                    columns.Bound(col => col.Tanggal).Format("{0:dd-MM-yyyy}").Width(150).Title("Tanggal");
+                                    columns.Bound(col => col.Keterangan).Width(300).Title("Keterangan");
+                                    columns.Bound(col => col.TotalRp).Format("{0:n2}").Width(150).Title("Total (Rp)");
+                                    columns.Bound(col => col.FlagPosting).Title("Posting").Width(100)
+                                        .ClientTemplate("#= FlagPosting ? '<i class=\"fa fa-check text-success\"></i> Yes' : '<i class=\"fa fa-times text-danger\"></i> No' #");
+                                    
+                                    columns.Command(command =>
+                                    {
+                                        command.Custom("EntriPembayaranPiutangLihat").Text(" Lihat ").IconClass("fa fa-eye").Click("btnLihatPembayaranPiutang_OnClick");
+                                       // command.Custom("EntriPembayaran")
+                                       //     .Text("Edit Penyelesaian")
+                                        //    .IconClass("fa fa-edit") // Ganti ikon menjadi edit
+                                          //  .Click("btnEntriPenyelesaian_OnClick"); // Sesuaikan nama fungsi JS
+                                    }).Width(200).Title("Action").Locked(true);
+                                })
+                                 .Pageable(pager => pager.Refresh(true).PageSizes(true))
+                                .Sortable()
+                                .Filterable()
+                                .Scrollable()
+                                .Height(450)
+                                .Resizable(a=>a.Columns(true))
+                              
+                            )
+                        </div>
+                        </text>
+                    );
+            })
+        )
+
+
+
+
+        @(Html.Kendo().Window()
+            .Name("EntriPenyelesaianPiutangWindow")
+            .Title("Entri Penyelesaian Piutang")
+            .Width(1000)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+        )
+
+         @(Html.Kendo().Window()
+            .Name("EntriPenyelesaianPiutangLihatWindow")
+            .Title("Lihat Penyelesaian Piutang")
+            .Width(1000)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+        )
+    </div>
+</div>
+
+<script>
+
+ function getSearchFilterBelumFinal() {
+        return {
+            searchKeyword: $("#SearchKeyword").val(),
+            flagFinal: false
+        };
+    }
+
+     function getSearchFilterSudahFinal() {
+        return {
+            searchKeyword: $("#SearchKeyword").val(),
+            flagFinal: true
+        };
+    }
+
+     $(document).ready(function () {
+        $("#SearchKeyword").on("keyup", function() {
+            var tabStrip = $("#tabStrip").data("kendoTabStrip");
+            var activeTabIndex = tabStrip.select().index();
+
+            if(activeTabIndex === 0) {
+                $("#BelumFinalGrid").data("kendoGrid").dataSource.read();
+            } else {
+                $("#SudahFinalGrid").data("kendoGrid").dataSource.read();
+            }
+        });
+    });
+
+   
+</script>

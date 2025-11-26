@@ -1,0 +1,171 @@
+    @using ABB.Application.EntriPembayaranBanks.Queries 
+    @using Kendo.Mvc.UI
+    @using ABB.Application.InquiryNotaProduksis.Queries 
+    @using Newtonsoft.Json
+    @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+    @addTagHelper *, Kendo.Mvc
+
+    
+    <script>
+        var coaDataSource = @Html.Raw(JsonConvert.SerializeObject(ViewBag.KodeAkunOptions ?? new List<SelectListItem>()));
+
+        // 2. BUAT FUNGSI DATABOUND
+        // Fungsi ini akan mengubah <input class='coa-combobox'> menjadi Kendo ComboBox
+        function onPilihNotaGridDataBound(e) {
+            // Panggil fungsi auto-fit Anda (jika Anda masih menggunakannya)
+            // gridAutoFit(e); 
+
+            var grid = e.sender;
+            grid.tbody.find("input.coa-combobox").each(function () {
+                var input = $(this);
+                
+                // Cek agar tidak inisialisasi ulang
+                if (!input.data("kendoComboBox")) {
+                    input.kendoComboBox({
+                        placeholder: "Pilih Akun...",
+                        dataTextField: "Text",   // Sesuai properti SelectListItem
+                        dataValueField: "Value", // Sesuai properti SelectListItem
+                        filter: "contains",
+                        dataSource: coaDataSource // <-- Gunakan data dari ViewBag
+                    });
+                }
+            });
+            var pager = grid.pager;
+            var totalItems = grid.dataSource.total();
+            if (pager) {
+                var pageSizeDropDown = pager.element.find("select[data-role='dropdownlist']").data("kendoDropDownList");
+                
+                if (pageSizeDropDown) {
+                    var ds = pageSizeDropDown.dataSource.data();
+                    var found = false;
+                    
+                    // Loop untuk mencari 'angka ajaib' kita (50000)
+                    for (var i = 0; i < ds.length; i++) {
+                        
+                        // Kita cari angka ajaib (50000) ATAU
+                        // angka yang sudah kita ubah (jika totalItems > 500)
+                        var currentValue = ds[i].value;
+                        if (currentValue == 50000 || (currentValue > 500 && currentValue == totalItems)) { 
+                            
+                            // 2. GANTI VALUE-NYA DARI 50000 MENJADI TOTAL ITEM
+                            ds[i].value = totalItems; 
+                            
+                            // 3. GANTI TEKS-NYA MENJADI "All"
+                            ds[i].text = "All"; 
+                            
+                            found = true;
+                            break;
+                        }
+                    }
+                    
+                    if (found) {
+                        pageSizeDropDown.refresh();
+                        
+                        // Jika "All" (yang sekarang bernilai totalItems) sedang dipilih
+                        if (pageSizeDropDown.value() == totalItems) {
+                            pageSizeDropDown.span.text("All");
+                        }
+                    }
+                }
+            }
+           
+           
+        }
+
+        // grid select item per page
+     
+    </script>
+    <!-- <script src="~/Modules/EntriPembayaranBank/JS/entripembayaranbank.index.js"></script> -->
+
+    <div class="p-2">
+        <!-- Label Jenis Asset -->
+            <label for="JenisAsset" style="margin-left:15px;"><b>Jenis Ass :</b></label>
+
+            <!-- Dropdown Jenis Asset -->
+            @(Html.Kendo().ComboBox()
+                .Name("JenisAsset")
+                .Placeholder("Pilih ...")
+                .DataTextField("NamaJenisAsset")
+                .DataValueField("KodeJenisAsset")
+                .Filter("contains") // bisa mengetik untuk filter
+                .Suggest(true) // auto-suggest saat ketik
+                .DataSource(source => {
+                    source.Read(read => {
+                        read.Action("GetJenisAssetList", "InquiryNotaProduksi");
+                    });
+                })
+                .HtmlAttributes(new { style = "width:250px;" })
+            )
+
+
+            <!-- Tombol Cari -->
+            @(Html.Kendo().Button()
+                .Name("btnSearch")
+                .Content("<span class='k-icon k-i-search'></span> Cari")
+                .HtmlAttributes(new { @class = "k-primary", style = "border-radius:6px; margin-left:10px;" })
+                .Events(e => e.Click("onSearchClick"))
+            )
+    </div>
+
+
+    <div class="p-2">
+        <input type="text" class="k-textbox" id="PilihNotaSearchKeyword" 
+            placeholder="Cari berdasarkan No. Nota, No Polis atau Nama..." style="width: 100%;">
+    </div>
+
+    @(Html.Kendo().Grid<InquiryNotaProduksiDto>() // Ganti dengan DTO Nota Produksi Anda
+        .Name("PilihNotaGrid")
+        .NoRecords(n => n.Template("<div style='padding:5px;'>Data tidak ditemukan</div>"))
+                    .AutoBind(false) 
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetNotaProduksi", "EntriPembayaranBank")
+            .Data("getNotaProduksiSearchFilter")
+            )
+        )
+        .Columns(columns =>
+        {
+            columns.Select().Width(50);
+            columns.Bound(c => c.no_nd).Title("Nomor Nota").Width(200);
+            columns.Bound(c => c.no_pl).Title("Nomor Polis").Width(200);
+            
+            columns.Bound(c => c.saldo).Format("{0:n2}").Width(150);
+            columns.Template("<input type='number' class='k-textbox total-org-input' value='0' style='width: 100%;' />")
+                .Title("Jumlah Dibayarkan")
+                .Width(150);
+
+            
+            columns.Template(
+                "<select class='k-dropdown dk-input' style='width: 100%;'>" +
+                    "<option value='D'>Debet</option>" +
+                    "<option value='K'>Kredit</option>" +
+                "</select>"
+            )
+            .Title("D/K").Width(100);
+            columns.Template("<input class='coa-combobox' style='width: 100%;' />")
+                .Title("Kode Akun")
+                .Width(250);
+            columns.Bound(c => c.curensi).Title("Kurensi").Width(100);
+            columns.Template("<input type='number' data-kurs=''  class='k-textbox total-rp-input' readonly value='0' style='width: 100%;' />")
+                .Title("Total Rupiah")
+                .Width(150);
+            columns.Bound(c => c.kd_mtu).Title("Kode Mata Uang").Width(100);
+            columns.Bound(c => c.nm_cust2).Title("Nama Tertanggung").Width(250);
+        })
+        .Pageable(pager => pager
+                        .Refresh(true)
+                        .Info(true)
+                        .PageSizes(new int[] { 10, 20, 50, 100, 500, 1000, 1200, 5000, 50000 })
+                    )
+                    .PersistSelection()
+                    .Sortable()
+                    .Filterable()
+                    .Scrollable()
+                    .Height(450)
+                    .Resizable(a=>a.Columns(true))
+                    .Events(ev => ev.DataBound("onPilihNotaGridDataBound"))
+    )
+
+    <div style="display: flex;padding: 20px;justify-content: flex-end;">
+
+        <button type="button" onclick="SimpanNota()" class="btn btn-primary">Simpan Nota</button>
+    </div>

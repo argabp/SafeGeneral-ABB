@@ -1,0 +1,295 @@
+@model ABB.Web.Modules.EntriPembayaranKas.Models.EntriPembayaranKasViewModel
+@using ABB.Application.EntriPembayaranKass.Queries
+@using Kendo.Mvc.UI
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+<div class="window-body">
+
+<input type="hidden" id="VoucherDKFinal" value="@Model.VoucherKasHeader.DebetKredit" />
+ <input type="hidden" id="NoVoucherFinal" value="@Model.VoucherKasHeader.NoVoucher" />
+<input type="hidden" id= "TangVocFinal" value="@Model.VoucherKasHeader.TanggalVoucher" style="font-size: 12px;"/>
+    <fieldset>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Kode Cabang</label>
+        <div class="col-sm-4">
+            <input class="form-control form-control-sm"
+                   value="@Model.VoucherKasHeader.KodeCabang"
+                   readonly style="font-size: 12px;"/>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Jenis Voucher</label>
+        <div class="col-sm-2">
+            <input class="form-control form-control-sm"
+                value="@Model.VoucherKasHeader.JenisVoucher"
+                readonly style="font-size: 12px;"/>
+        </div>
+
+    
+        <div class="col-sm-2">
+            <input class="form-control form-control-sm"
+                 value="@(Model.VoucherKasHeader.DebetKredit == "D" ? "Debit" : 
+                                Model.VoucherKasHeader.DebetKredit == "K" ? "Kredit" : Model.VoucherKasHeader.DebetKredit)" 
+                readonly style="font-size: 12px;"/>
+        </div>
+    </div>
+
+
+
+    <div class="form-group row">
+        
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">No Voucher</label>
+        <div class="col-sm-4">
+            <input class="form-control form-control-sm"
+                
+                   value="@Model.VoucherKasHeader.NoVoucher"
+                   readonly style="font-size: 12px;"  />
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Dibayar Kepada</label>
+        <div class="col-sm-4">
+            <input class="form-control form-control-sm"
+                   value="@Model.VoucherKasHeader.DibayarKepada"
+                   readonly style="font-size: 12px;"/>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Tanggal Voucher</label>
+        <div class="col-sm-4">
+            <input class="form-control form-control-sm"
+                   value="@Model.VoucherKasHeader.TanggalVoucher?.ToString("dd MMM yyyy")"
+                   readonly style="font-size: 12px;"/>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <!-- Total Voucher -->
+        <label class="col-sm-2 col-form-label">Total Voucher</label>
+        <div class="col-sm-4">
+            <input class="form-control form-control-sm" id="TotalVoucher"
+                  value="@Model.VoucherKasHeader.TotalVoucher?.ToString("N2")" 
+                readonly style="font-size: 12px;"/>
+        </div>
+
+        <!-- Total dlm Rupiah -->
+        <label class="col-sm-2 col-form-label">Total dlm Rupiah</label>
+        <div class="col-sm-3">
+            <input class="form-control form-control-sm"
+                value="@Model.VoucherKasHeader.TotalDalamRupiah?.ToString("N2")"
+                readonly style="font-size: 12px;"/>
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Keterangan Voucher</label>
+        <div class="col-sm-4">
+            <input class="form-control form-control-sm"
+                   value="@Model.VoucherKasHeader.KeteranganVoucher"
+                   readonly style="font-size: 12px;"/>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Flag Posting</label>
+        <div class="col-sm-4 d-flex align-items-center">
+            <input type="checkbox"
+                @(Model.VoucherKasHeader.FlagPosting ? "checked" : "") 
+                disabled /> &nbsp; Posted
+        </div>
+    </div>
+</fieldset>
+
+
+    <hr/>
+     <form id="FinalPaymentKasForm" >
+        <input type="hidden" id="No" name="No" value="0" />
+        <input type="hidden" asp-for="Kurs" id="Kurs_Lihat" value="@Model.Kurs" />
+        <div class="row">
+            <div class="form-group col-sm-2">
+                <label asp-for="FlagPembayaran"></label>
+                <div>
+                    <kendo-dropdownlist 
+                                        name="FlagPembayaran_Lihat"
+                                        style="width: 100%;"
+                                        datatextfield="Text"
+                                        datavaluefield="Value"
+                                        bind-to="ViewBag.FlagPembayaranOptions">
+                        
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="FlagPembayaran" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group col-sm-3" > 
+                <label asp-for="NoNota4"></label>
+                <div class="input-group" style=" display: flex;     width: 100%;     flex-direction: row;     flex-wrap: nowrap;     align-content: center;     justify-content: center;     align-items: center; ">
+                    <kendo-textbox  name="NoNota4_Lihat"  style="width:100%;" readonly="true" />
+                    <div class="input-group-append">
+                        <button id="buttonselectnota_Lihat" type="button" class="btn btn-info" disabled>Select</button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-sm-3" id="akunField_Lihat" style="display:none;">
+                    <label asp-for="KodeAkun"></label>
+                    <kendo-Combobox 
+                                    name="KodeAkun_Lihat"
+                                    style="width:100%;"
+                                    datatextfield="Text"
+                                    datavaluefield="Value"
+                                     bind-to="ViewBag.KodeAkunOptions"
+                                    filter="FilterType.Contains"
+                                    placeholder="Pilih Akun..."  >
+                    </kendo-Combobox>
+                    <span asp-validation-for="KodeAkun" class="text-danger"></span>
+            </div>
+            <div class="form-group col-sm-2 detail-payment-field">
+                    <label asp-for="KodeMataUang"></label>
+                    <div>
+                        <kendo-combobox 
+                                        name="KodeMataUang_Lihat"
+                                        style="width: 100%;"
+                                        datatextfield="Text"
+                                        datavaluefield="Value"
+                                        bind-to="ViewBag.MataUangOptions"
+                                        filter="FilterType.Contains"
+                                        placeholder="Pilih ..."
+                                    > 
+                        </kendo-combobox>
+                        <span asp-validation-for="KodeMataUang" class="text-danger"></span>
+                    </div>
+            </div>
+        
+            <div class="form-group col-sm-3 detail-payment-field">
+                <label asp-for="TotalBayar"></label>
+                <kendo-numerictextbox name="TotalBayar_Lihat"  format="n0" style="width:100%;" />
+            </div>
+
+             <div class="form-group col-sm-3 detail-payment-field">
+                <label asp-for="TotalDlmRupiah"></label>
+                <kendo-numerictextbox name="TotalDlmRupiah_Lihat" format="n0" style="width:100%;" readonly="true"/>
+            </div> 
+
+            <div class="form-group col-sm-2 detail-payment-field">
+                 <label asp-for="DebetKredit"></label>
+                <div>
+                    <kendo-dropdownlist 
+                                        style="width: 100%;"
+                                        name="DebetKredit_Lihat"
+                                        datatextfield="Text"
+                                        datavaluefield="Value"
+                                        bind-to="ViewBag.DebetKreditOptions">
+                        
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="DebetKredit" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div style="display: flex;gap: 10px;justify-content: flex-end;margin-right:10px">
+        <button type="button" id="btn-cancel-edit" class="btn btn-secondary" style="display: none;" onclick="clearFinalPaymentForm()">Cancel</button>
+        <button type="button" onclick="onUpdateFinalPembayaranKas()" class="btn btn-primary">Simpan Pembayaran</button>
+    </div>
+
+    <script>
+
+     function getNoVoucherFinalForDetailGrid() {
+         return { noVoucher: $("#NoVoucherFinal").val() };
+    }
+    $(document).ready(function() {
+            $("#FinalPaymentKasForm").hide();
+              var ddl = $("#FlagPembayaran_Lihat").data("kendoDropDownList");
+
+                // Daftarkan event change
+                ddl.bind("change", function (e) {
+                    var value = this.value();
+                    
+                    // 👇 GUNAKAN ID UNIK
+                    if (value && value.toUpperCase() === "AKUN") {
+                        $("#akunField_Lihat").show();
+                        $("#notaField_Lihat").hide();
+                        $(".detail-payment-field").show(); 
+                    } else if(value && value.toUpperCase() === "NOTA"){
+                        $("#notaField_Lihat").show();
+                        $("#akunField_Lihat").show();
+                        $(".detail-payment-field").show();
+                    } else {
+                        $("#notaField_Lihat").hide();
+                        $("#akunField_Lihat").hide();
+                        $(".detail-payment-field").hide();
+                    }
+                });
+                ddl.trigger("change");
+        });
+    
+    </script>
+
+    @(Html.Kendo().Grid<EntriPembayaranKasDto>() // <-- Gunakan DTO yang benar
+        .Name("DetailPembayaranLihatGrid")
+        .DataSource(ds => ds.Ajax()
+            .Read(read => read.Action("GetDetailPembayaran", "EntriPembayaranKas").Data("getNoVoucherFinalForDetailGrid"))
+        )
+        .Columns(cols => {
+            cols.Bound(c => c.No).Width(80).Title("No.");
+            cols.Bound(c => c.FlagPembayaran).Title("Flag Pembayaran").Width(150);
+            cols.Bound(c => c.NoNota4).Title("No Nota").Width(150);
+            cols.Bound(c => c.KodeAkun).Title("Kode Akun").Width(150);
+            cols.Bound(c => c.KodeMataUang).Title("Kode Mata Uang").Width(150);
+            cols.Bound(c => c.TotalBayar).Format("{0:n2}").Width(150).Title("Total Bayar");
+            cols.Bound(c => c.TotalDlmRupiah).Format("{0:n2}").Width(180).Title("Total Dalam Rupiah");
+            cols.Bound(c => c.DebetKredit).Title("D/K").Width(100);
+            cols.Command(command => {
+            command.Custom("EditDetail").Text("Edit").Click("onEditFinalPembayaran");
+           // command.Custom("DeleteDetail").Text("Delete").Click("onDeletePembayaranKas");
+            }).Title("Action").Width(180);
+        })
+        .NoRecords(nr => nr.Template("Belum ada pembayaran")).Pageable(pager => pager.Refresh(true))
+                .Sortable()
+                .Filterable()
+                .Scrollable(s => s.Height(null)) 
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("updateGridFooterLihat"))
+    )
+</div>
+
+<div style="display: flex;gap: 15px;justify-content: flex-end;margin-right:20px">
+    <button type="button" id="btn-cancel-edit" class="btn btn-secondary" style="display: none; margin-right: 10px;">Cancel</button>
+    
+</div>
+
+
+<div class="window-footer" data-total-voucher-original-final="@(Model.VoucherKasHeader.TotalVoucher ?? 0)" style=" font-weight: bold;    display: flex;     justify-content: center;     flex-direction: row;     flex-wrap: nowrap;     align-content: center;     align-items: center; ">
+    <div style="padding-right: 20px;font-size: 13px;">
+            <span>Total Voucher: </span>
+            <span id="voucherTotal">@Model.VoucherKasHeader.TotalVoucher?.ToString("N0")</span>
+            
+            <span style="margin-left: 20px;">Total Keseluruhan Pembayaran: </span>
+            <span id="pembayaranTotalFinal" style="color: green;">0</span>
+
+              <span style="margin-left: 20px;">Total Sisa Keseluruhan Pembayaran:  </span>
+            <span id="sisapembayaranTotalFinal" style="color: green;">0</span>
+        </div>
+</div>
+
+
+<style>
+    /* Styling pesan no-records di grid */
+    #DetailPembayaranLihatGrid .k-grid-norecords {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100px;   /* kasih ruang biar keliatan di tengah */
+        font-size: 14px;
+        color: #666;
+        text-align: center;
+    }
+</style>

@@ -1,0 +1,204 @@
+@model ABB.Web.Modules.VoucherKas.Models.VoucherKasViewModel
+@using Kendo.Mvc.UI
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="VoucherKasForm" enctype="multipart/form-data" autocomplete="off">
+        <input id="KodeKas" style="display: none;" type="hidden" value="@ViewBag.Kode" />
+        <div class="row">
+            <div class="form-group col-sm-6">
+                    <label asp-for="KodeCabang"></label>
+                    <div>
+                        <kendo-combobox 
+                            for="KodeCabang"
+                            style="width: 100%;"
+                            datatextfield="Text"
+                            datavaluefield="Value"
+                            bind-to="ViewBag.KodeCabangOptions"
+                            filter="FilterType.Contains"
+                            placeholder="Pilih kode cabang..."
+                            value="@Model.KodeCabang"
+                            text="@ViewBag.DisplayCabang"
+                            readonly="true"
+                            auto-bind="true">
+                        </kendo-combobox>
+
+                    <span asp-validation-for="KodeCabang" class="text-danger"></span>
+                    </div>
+            </div>
+            <div class="form-group col-sm-3">
+                    <label asp-for="JenisVoucher"></label>
+                    <div>
+                        <kendo-textbox for="JenisVoucher" style="width: 100%;" value="KAS" readonly="true"/>
+                        <span asp-validation-for="JenisVoucher" class="text-danger"></span>
+                    </div>
+            </div>
+            <div class="form-group col-sm-3">
+                <label asp-for="DebetKredit"></label>
+                <div>
+                    <kendo-dropdownlist for="DebetKredit"
+                                        style="width: 100%;"
+                                        datatextfield="Text"
+                                        datavaluefield="Value"
+                                        bind-to="ViewBag.DebetKreditOptions">
+                        
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="DebetKredit" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                    <label asp-for="NoVoucher">Nomor Voucher</label>
+                    <div>
+                        <kendo-textbox for="NoVoucher" style="width: 100%;" readonly="true"   />
+                        <span asp-validation-for="NoVoucher" class="text-danger"></span>
+                    </div>
+            </div>
+        </div>
+        <hr>
+
+        <div class="row">
+            <div class="form-group col-sm-12">
+                <label>Kode Akun</label>
+                <div>
+                    <kendo-combobox for="KodeAkun" value="@ViewBag.KodeAkun" style="width: 100%;" readonly="true"  />
+                    <span asp-validation-for="KodeAkun" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+             <div class="form-group col-sm-12">
+                <label id="labelDibayarKepada">Dibayar Kepada</label>
+                <div>
+                    <kendo-textbox for="DibayarKepada" style="width: 100%;"/>
+                    <span asp-validation-for="DibayarKepada" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+           <div class="form-group col-sm-6">
+                    <label>Tanggal Voucher</label>
+                    <div>
+                         <kendo-datepicker for="TanggalVoucher" style="width: 100%"/>
+                        <span asp-validation-for="TanggalVoucher" class="text-danger"></span>
+                    </div>
+            </div>
+
+            <div class="form-group col-sm-6">
+                    <label>Kode Mata Uang</label>
+                    <div>
+                        <kendo-combobox for="KodeMataUang"
+                                    style="width: 100%;"
+                                    datatextfield="Text"
+                                    datavaluefield="Value"
+                                    bind-to="ViewBag.MataUangOptions"
+                                    filter="FilterType.Contains"
+                                    placeholder="Pilih mata uang..."
+                                   > 
+                        </kendo-combobox>
+                        <span asp-validation-for="KodeMataUang" class="text-danger"></span>
+                    </div>
+            </div>
+        </div>
+
+        <div class="row">
+           <div class="form-group col-sm-6">
+                    <label>Total Voucher</label>
+                    <div>
+                         <kendo-numerictextbox  for="TotalVoucher" style="width: 100%"  format="n2" />
+                        <span asp-validation-for="TotalVoucher" class="text-danger"></span>
+                    </div>
+            </div>
+
+            <div class="form-group col-sm-6">
+                    <label>Total Dalam Rupiah</label>
+                    <div>
+                        <kendo-numerictextbox  for="TotalDalamRupiah" style="width: 100%" readonly="true"/>
+                        <span asp-validation-for="TotalDalamRupiah" class="text-danger"></span>
+                    </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-sm-12">
+                <label asp-for="JenisPembayaran"></label>
+                <div>
+                    
+                        <kendo-dropdownlist for="JenisPembayaran"
+                                                id="JenisPembayaran"
+                                            style="width: 100%;"
+                                            datatextfield="Text"
+                                            datavaluefield="Value"
+                                            bind-to="ViewBag.jenispembayaranOptions">
+                            
+                        </kendo-dropdownlist>
+                    <span asp-validation-for="JenisPembayaran" class="text-danger"></span>
+                </div>
+            </div>
+         </div>
+
+        <div class="row">
+           <div class="form-group col-sm-12">
+                    <label>Keterangan Voucher</label>
+                    <div>
+                          <kendo-textarea for="KeteranganVoucher" 
+                                        name="KeteranganVoucher"  
+                                        style="width:100%; background-color:#fff !important; border:1px solid #ced4da;"
+                                        rows="4">
+                        </kendo-textarea>
+                        <span asp-validation-for="KeteranganVoucher" class="text-danger"></span>
+                    </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="form-group col-sm-4">
+                <label asp-for="FlagPosting"></label>
+                <div>
+                    <button type="button" id="flagPosting-checkbox-ui" class="btn btn-default" style="border: 1px solid #ced4da; background-color: white;" disabled>
+                        <i class="far fa-square" style="font-size: 1.2em;"></i> </button>
+                    
+                    <input type="hidden" asp-for="FlagPosting" />
+
+                    <span asp-validation-for="FlagPosting" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        
+    </form>
+</div>
+
+<div class="window-footer">
+    <button type="button" onclick="onSaveVoucherKas()" class="btn btn-success space-right">
+        <span class="fa fa-save"></span> Save
+    </button>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+
+        // Ambil instance dropdownlist dari Kendo
+        var ddl = $("#DebetKredit").data("kendoDropDownList");
+
+        // Daftarkan event change
+        ddl.bind("change", function (e) {
+            var value = this.value();
+            if (value && value.toUpperCase() === "D") {
+                $("#labelDibayarKepada").text("Diterima Dari");
+            } else {
+                $("#labelDibayarKepada").text("Dibayar Kepada");
+            }
+        });
+    });
+
+</script>

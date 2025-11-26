@@ -1,0 +1,67 @@
+@using ABB.Application.Coas.Queries 
+@using ABB.Application.TypeCoas.Queries 
+@using Kendo.Mvc.UI
+
+<div class="p-2">
+    <input type="text"
+           class="k-textbox"
+           id="PilihTypeCoaSearchKeyword"
+           placeholder="Cari Type COA..."
+           style="width: 100%;" />
+</div>
+
+@(Html.Kendo().Grid<TypeCoaDto>()
+    .Name("PilihTypeCoaGrid")
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Read(read => read.Action("GetTypeCoa", "Coa")
+            .Data("getTypeCoaSearchFilter")) // 🔹 tambahkan ini agar filter ikut terkirim
+        .PageSize(10)
+    )
+    .Columns(columns =>
+    {
+        columns.Bound(c => c.Type).Title("Type").Width(150);
+        columns.Bound(c => c.Nama).Title("Nama").Width(200);
+        columns.Bound(c => c.Pos).Title("Pos").Width(150);
+        columns.Bound(c => c.Dk).Title("D/K").Width(100);
+    })
+    .Pageable()
+    .Sortable()
+    .Scrollable()
+    .Selectable(s => s.Mode(GridSelectionMode.Single))
+    .Events(ev => ev.Change("onTypeCoaSelect"))
+)
+
+<script>
+    // 🔹 Kirim filter pencarian ke controller
+    function getTypeCoaSearchFilter() {
+        return {
+            searchKeyword: $("#PilihTypeCoaSearchKeyword").val()
+        };
+    }
+
+    $(document).ready(function () {
+        // 🔹 Refresh grid saat user mengetik di search box
+        $("#PilihTypeCoaSearchKeyword").on("keyup", function () {
+            var grid = $("#PilihTypeCoaGrid").data("kendoGrid");
+            if (grid) {
+                grid.dataSource.read();
+            }
+        });
+    });
+
+    // 🔹 Ketika baris di grid dipilih
+    function onTypeCoaSelect(e) {
+        var grid = $("#PilihTypeCoaGrid").data("kendoGrid");
+        var selected = grid.dataItem(grid.select());
+
+        if (selected) {
+            // Isi field Type di form utama
+            $("#Type").val(selected.Type);
+
+            // Tutup window popup
+            var popup = $("#PilihCoaWindow").data("kendoWindow");
+            if (popup) popup.close();
+        }
+    }
+</script>
