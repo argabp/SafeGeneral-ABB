@@ -1,0 +1,60 @@
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.TagHelpers
+@using ABB.Application.VoucherKass.Queries
+@using ABB.Application.KasBanks.Queries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "List Voucher Kas";
+}
+
+<script src="~/Modules/ListVoucherKas/JS/ListVoucherKas.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+
+<div class="flat-box filter-box">
+    <div class="flat-box-content">
+        <div class="filter-bar" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+
+            <!-- Label Periode -->
+            <label for="StartDate"><b>Tanggal Voucher :</b></label>
+
+            <!-- DatePicker Dari -->
+            @(Html.Kendo().DatePicker()
+                .Name("StartDate")
+                .HtmlAttributes(new { style = "width:150px;" })
+                .Format("dd-MM-yyyy")
+            )
+
+            <span class="date-separator">s/d</span>
+
+            <!-- DatePicker Sampai -->
+            @(Html.Kendo().DatePicker()
+                .Name("EndDate")
+                .HtmlAttributes(new { style = "width:150px;" })
+                .Format("dd-MM-yyyy")
+            )
+
+           
+            <!-- Tombol Cari -->
+            @(Html.Kendo().Button()
+                .Name("btnSearch")
+                .Content("<span class='k-icon k-i-search'></span> Cari")
+                .HtmlAttributes(new { @class = "k-primary", style = "border-radius:6px; margin-left:10px;" })
+                .Events(e => e.Click("onSearchClick"))
+            )
+        </div>
+    </div>
+</div>
+
+
+

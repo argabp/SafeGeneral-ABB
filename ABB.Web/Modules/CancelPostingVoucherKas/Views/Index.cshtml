@@ -16,7 +16,18 @@
     .div-box{
         padding-bottom: 1em;
     }
+    
+     .breadcrumb-item + .breadcrumb-item::before {
+        content: ">"; /* Ganti '/' dengan '>' */
+        padding: 0 .5rem; /* Atur spasi jika perlu */
+    }
 </style>
+<nav  aria-label="breadcrumb">
+   <ol class="breadcrumb" style="background: white; ">
+        <li class="breadcrumb-item"><a href="#">Finance</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Cancel Posting Voucher Kas</li>
+    </ol>
+    </nav>
 <div class="flat-box">
     <div class="row">
         <div class="flat-box-title col-md-10">

@@ -15,6 +15,7 @@ namespace ABB.Application.KasBanks.Commands
         public string NoRekening { get; set; }
         public string NoPerkiraan { get; set; }
         public string TipeKasBank { get; set; }
+        public decimal? Saldo { get; set; }
     }
 
     public class UpdateKasBankCommandHandler : IRequestHandler<UpdateKasBankCommand>
@@ -39,6 +40,7 @@ namespace ABB.Application.KasBanks.Commands
                 entity.NoRekening = request.NoRekening;
                 entity.NoPerkiraan = request.NoPerkiraan;
                 entity.TipeKasBank = request.TipeKasBank;
+                entity.Saldo = request.Saldo;
 
                 // 3. Simpan perubahan
                 await _context.SaveChangesAsync(cancellationToken);

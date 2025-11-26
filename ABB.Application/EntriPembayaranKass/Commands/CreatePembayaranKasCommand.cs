@@ -18,6 +18,7 @@ namespace ABB.Application.EntriPembayaranKass.Commands
         public string DebetKredit { get; set; }
         public string NoNota4 { get; set; }
         public string KodeMataUang { get; set; }
+         public int? Kurs { get; set; }
         public decimal? TotalDlmRupiah { get; set; }
     }
 
@@ -32,13 +33,13 @@ namespace ABB.Application.EntriPembayaranKass.Commands
         public async Task<int> Handle(CreatePembayaranKasCommand request, CancellationToken cancellationToken)
         {
             // Cari nomor urut (No) terakhir untuk voucher ini
-            var lastNo = await _context.EntriPembayaranKas
+            var lastNo = await _context.EntriPembayaranKasTemp
             .Where(pb => pb.NoVoucher == request.NoVoucher)
             .OrderByDescending(pb => pb.No)
             .Select(pb => (int?)pb.No)
             .FirstOrDefaultAsync(cancellationToken) ?? 0;
 
-            var entity = new EntriPembayaranKas
+            var entity = new EntriPembayaranKasTemp
             {
                 NoVoucher = request.NoVoucher,
                 No = lastNo + 1, // Nomor urut baru
@@ -49,10 +50,11 @@ namespace ABB.Application.EntriPembayaranKass.Commands
                 DebetKredit = request.DebetKredit,
                 KodeMataUang = request.KodeMataUang,
                 TotalDlmRupiah = request.TotalDlmRupiah,
+                Kurs = request.Kurs,
                 FlagPosting = "N"
             };
 
-            _context.EntriPembayaranKas.Add(entity);
+            _context.EntriPembayaranKasTemp.Add(entity);
             await _context.SaveChangesAsync(cancellationToken);
             return entity.No;
         }

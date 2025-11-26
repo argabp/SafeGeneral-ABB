@@ -65,6 +65,9 @@ namespace ABB.Infrastructure.Data.Mapping
                 .HasColumnName("flag_posting")
                 .HasMaxLength(1);
 
+            builder.Property(t => t.FlagFinal)
+            .HasColumnName("flag_final").HasMaxLength(1);
+
             builder.Property(t => t.TanggalInput)
                 .HasColumnName("tanggal_input")
                 .HasColumnType("date");
@@ -84,6 +87,10 @@ namespace ABB.Infrastructure.Data.Mapping
             builder.Property(t => t.JenisPembayaran)
             .HasColumnName("jenis_pembayaran")
             .HasMaxLength(100);
+
+              builder.Property(t => t.KodeKas)
+            .HasColumnName("kode_kas")
+            .HasMaxLength(5);
         }
     }
 }

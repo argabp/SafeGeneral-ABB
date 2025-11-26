@@ -19,6 +19,8 @@ namespace ABB.Application.EntriPembayaranBanks.Commands
         public string KodeMataUang { get; set; }
          public string DebetKredit { get; set; }
          public decimal? TotalDlmRupiah { get; set; }
+         public int? Kurs { get; set; }
+         public decimal? NilaiKurs { get; set; }
     }
 
     public class CreatePembayaranBankCommandHandler : IRequestHandler<CreatePembayaranBankCommand, int>
@@ -32,13 +34,13 @@ namespace ABB.Application.EntriPembayaranBanks.Commands
         public async Task<int> Handle(CreatePembayaranBankCommand request, CancellationToken cancellationToken)
         {
             // Cari nomor urut (No) terakhir untuk voucher ini
-           var lastNo = await _context.EntriPembayaranBank
+           var lastNo = await _context.EntriPembayaranBankTemp
             .Where(pb => pb.NoVoucher == request.NoVoucher)
             .OrderByDescending(pb => pb.No)
             .Select(pb => (int?)pb.No)
             .FirstOrDefaultAsync(cancellationToken) ?? 0;
 
-            var entity = new EntriPembayaranBank
+            var entity = new EntriPembayaranBankTemp
             {
                 NoVoucher = request.NoVoucher,
                 No = lastNo + 1, // Nomor urut baru
@@ -50,11 +52,12 @@ namespace ABB.Application.EntriPembayaranBanks.Commands
                 NoNota4 = request.NoNota4,
                 KodeMataUang = request.KodeMataUang,
                 TotalDlmRupiah = request.TotalDlmRupiah,
+                Kurs = request.Kurs,
                 // FlagPosting = "N"
                 // Isi field lain yang required atau punya nilai default
             };
 
-            _context.EntriPembayaranBank.Add(entity);
+            _context.EntriPembayaranBankTemp.Add(entity);
             await _context.SaveChangesAsync(cancellationToken);
             return entity.No;
         }

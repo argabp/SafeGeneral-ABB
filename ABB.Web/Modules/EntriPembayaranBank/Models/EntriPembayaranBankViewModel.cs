@@ -60,6 +60,12 @@ namespace ABB.Web.Modules.EntriPembayaranBank.Models
 
         [Display(Name = "Total Dalam Rupiah")]
         public decimal? TotalDlmRupiah { get; set; }
+       
+        [Display(Name = "Nilai Kurs")]
+        public decimal? NilaiKurs { get; set; }
+
+        [Display(Name = "Kurs")]
+        public int? Kurs { get; set; }
 
 
         // Anda bisa tambahkan properti lain dari abb_pembayaran_bank di sini jika perlu diinput
@@ -71,6 +77,7 @@ namespace ABB.Web.Modules.EntriPembayaranBank.Models
             // Aturan untuk mengubah ViewModel (input) menjadi Command (perintah simpan)
             profile.CreateMap<EntriPembayaranBankViewModel, CreatePembayaranBankCommand>();
             profile.CreateMap<EntriPembayaranBankViewModel, UpdatePembayaranBankCommand>();
+            profile.CreateMap<EntriPembayaranBankViewModel, UpdatePembayaranBankLihatCommand>();
         }
     }
 }

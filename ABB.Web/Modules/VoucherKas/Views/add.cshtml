@@ -11,15 +11,21 @@
             <div class="form-group col-sm-6">
                     <label asp-for="KodeCabang"></label>
                     <div>
-                       <kendo-combobox for="KodeCabang"
-                                    style="width: 100%;"
-                                    datatextfield="Text"
-                                    datavaluefield="Value"
-                                    bind-to="ViewBag.KodeCabangOptions"
-                                    filter="FilterType.Contains"
-                                    placeholder="Pilih kode cabang...">
+                        <kendo-combobox 
+                            for="KodeCabang"
+                            style="width: 100%;"
+                            datatextfield="Text"
+                            datavaluefield="Value"
+                            bind-to="ViewBag.KodeCabangOptions"
+                            filter="FilterType.Contains"
+                            placeholder="Pilih kode cabang..."
+                            value="@Model.KodeCabang"
+                            text="@ViewBag.DisplayCabang"
+                            readonly="true"
+                            auto-bind="true">
                         </kendo-combobox>
-                        <span asp-validation-for="KodeCabang" class="text-danger"></span>
+
+                    <span asp-validation-for="KodeCabang" class="text-danger"></span>
                     </div>
             </div>
             <div class="form-group col-sm-3">
@@ -179,6 +185,8 @@
 <script>
 
     $(document).ready(function () {
+
+
         // Ambil instance dropdownlist dari Kendo
         var ddl = $("#DebetKredit").data("kendoDropDownList");
 

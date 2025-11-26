@@ -35,7 +35,7 @@ namespace ABB.Web.Modules.EntriPembayaranKas.Models
         public string KodeAkun { get; set; }
 
         [Display(Name = "Total Bayar")]
-        public int? TotalBayar { get; set; }
+        public decimal? TotalBayar { get; set; }
 
         [Display(Name = "Kode Mata Uang")]
         public string KodeMataUang { get; set; }
@@ -43,11 +43,14 @@ namespace ABB.Web.Modules.EntriPembayaranKas.Models
         [Display(Name = "Total Dalam Rupiah")]
         public decimal? TotalDlmRupiah { get; set; }
 
+         [Display(Name = "Kurs")]
+        public int? Kurs { get; set; }
         // Konfigurasi AutoMapper
         public void Mapping(Profile profile)
         {
             profile.CreateMap<EntriPembayaranKasViewModel, CreatePembayaranKasCommand>();
             profile.CreateMap<EntriPembayaranKasViewModel, UpdatePembayaranKasCommand>();
+             profile.CreateMap<EntriPembayaranKasViewModel, UpdateFinalPembayaranKasCommand>();
         }
     }
 }

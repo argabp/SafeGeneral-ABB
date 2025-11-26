@@ -12,14 +12,19 @@
            <div class="form-group col-sm-6">
                 <label asp-for="KodeCabang"></label>
                 <div>
-                    <kendo-combobox for="KodeCabang"
-                                    style="width: 100%;"
-                                    datatextfield="Text"
-                                    datavaluefield="Value"
-                                    bind-to="ViewBag.KodeCabangOptions"
-                                    filter="FilterType.Contains"
-                                    placeholder="Pilih kode cabang...">
-                    </kendo-combobox>
+                        <kendo-combobox 
+                            for="KodeCabang"
+                            style="width: 100%;"
+                            datatextfield="Text"
+                            datavaluefield="Value"
+                            bind-to="ViewBag.KodeCabangOptions"
+                            filter="FilterType.Contains"
+                            placeholder="Pilih kode cabang..."
+                            value="@Model.KodeCabang"
+                            text="@ViewBag.DisplayCabang"
+                            readonly="true"
+                            auto-bind="true">
+                        </kendo-combobox>
                     <span asp-validation-for="KodeCabang" class="text-danger"></span>
                 </div>
             </div>
@@ -149,7 +154,9 @@
                     <span asp-validation-for="DiterimaDari" class="text-danger"></span>
                 </div>
             </div>
-            <div class="row">
+        </div>
+
+        <div class="row">
                 <div class="form-group col-sm-12">
                     <label asp-for="JenisPembayaran"></label>
                     <div>
@@ -173,7 +180,8 @@
                 <div>
                    <kendo-textarea for="KeteranganVoucher" 
                         name="KeteranganVoucher"  
-                        style="width: 100%;" 
+                        
+                        style="width: 100%; background-color:#fff !important;" 
                         rows="4">
         </kendo-textarea>
                     <span asp-validation-for="KeteranganVoucher" class="text-danger"></span>
@@ -217,7 +225,8 @@
             <div class="form-group col-sm-6">
                 <label asp-for="KodeUserInput"> Kode User Input</label>
                 <div>
-                    <kendo-textbox for="KodeUserInput" style="width: 100%;" readonly="true" />
+                   <input type="hidden" asp-for="KodeUserInput" />
+                    <kendo-textbox for="NamaUserInput"   style="width: 100%;" readonly="true" />
                 </div>
             </div>
             <div class="form-group col-sm-6">

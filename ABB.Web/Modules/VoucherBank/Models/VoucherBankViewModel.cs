@@ -59,6 +59,9 @@ namespace ABB.Web.Modules.VoucherBank.Models
         
         [Display(Name = "Flag Posting")]
         public bool FlagPosting { get; set; }
+
+        [Display(Name = "Flag Final")]
+        public bool FlagFinal { get; set; }
         
         [StringLength(5)]
         [Display(Name = "Kode Bank")]
@@ -79,6 +82,9 @@ namespace ABB.Web.Modules.VoucherBank.Models
 
         [Display(Name = "User Update")] // Khusus untuk ViewModel
         public string KodeUserUpdate { get; set; }
+        
+        public string NamaUserInput { get; set; }
+        public string NamaUserUpdate { get; set; }
 
         // Konfigurasi AutoMapper
         public void Mapping(Profile profile)
@@ -88,7 +94,7 @@ namespace ABB.Web.Modules.VoucherBank.Models
 
             profile.CreateMap<VoucherBankViewModel, CreateVoucherBankCommand>();
             profile.CreateMap<VoucherBankViewModel, UpdateVoucherBankCommand>();
-           
+
 
         }
     }

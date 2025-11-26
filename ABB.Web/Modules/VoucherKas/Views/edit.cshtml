@@ -16,7 +16,8 @@
                                     datavaluefield="Value"
                                     bind-to="ViewBag.KodeCabangOptions"
                                     filter="FilterType.Contains"
-                                    placeholder="Pilih kode cabang...">
+                                    placeholder="Pilih kode cabang..."
+                                    readonly="true">
                         </kendo-combobox>
                         <span asp-validation-for="KodeCabang" class="text-danger"></span>
                     </div>
@@ -35,7 +36,8 @@
                                         style="width: 100%;"
                                         datatextfield="Text"
                                         datavaluefield="Value"
-                                        bind-to="ViewBag.DebetKreditOptions">
+                                        bind-to="ViewBag.DebetKreditOptions"
+                                        readonly="true">
                     </kendo-dropdownlist>
                     <span asp-validation-for="DebetKredit" class="text-danger"></span>
                 </div>

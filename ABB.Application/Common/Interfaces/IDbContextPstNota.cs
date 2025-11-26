@@ -15,6 +15,11 @@ using CoaEntity = ABB.Domain.Entities.Coa;
 using EntriPenyelesaianPiutangEntity = ABB.Domain.Entities.EntriPenyelesaianPiutang;
 using HeaderPenyelesaianPiutangEntity = ABB.Domain.Entities.HeaderPenyelesaianUtang;
 using MataUangEntity = ABB.Domain.Entities.MataUang;
+using CabangEntity = ABB.Domain.Entities.Cabang;
+using TypeCoaEntity = ABB.Domain.Entities.TypeCoa;
+using EntriPembayaranKasTempEntity = ABB.Domain.Entities.EntriPembayaranKasTemp;
+using EntriPembayaranBankTempEntity = ABB.Domain.Entities.EntriPembayaranBankTemp;
+using EntriPenyelesaianPiutangTempEntity = ABB.Domain.Entities.EntriPenyelesaianPiutangTemp;
 
 
 namespace ABB.Application.Common.Interfaces
@@ -32,6 +37,11 @@ namespace ABB.Application.Common.Interfaces
         DbSet<EntriPenyelesaianPiutangEntity> EntriPenyelesaianPiutang { get; set; }
         DbSet<HeaderPenyelesaianPiutangEntity> HeaderPenyelesaianUtang { get; set; }
         DbSet<MataUangEntity> MataUang { get; set; }
+        DbSet<CabangEntity> Cabang { get; set; }
+        DbSet<TypeCoaEntity> TypeCoa { get; set; }
+        DbSet<EntriPembayaranKasTempEntity> EntriPembayaranKasTemp { get; set; }
+        DbSet<EntriPembayaranBankTempEntity> EntriPembayaranBankTemp { get; set; }
+        DbSet<EntriPenyelesaianPiutangTempEntity> EntriPenyelesaianPiutangTemp { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

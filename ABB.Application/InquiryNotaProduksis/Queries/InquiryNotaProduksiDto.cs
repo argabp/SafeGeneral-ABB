@@ -64,6 +64,10 @@ namespace ABB.Application.InquiryNotaProduksis.Queries
          public decimal? post_tr { get; set; }
          public string jn_ass2 { get; set; }
          public string no_nd2 { get; set; }
+         public string nm_cust { get; set; }
+
+// tambahan kode mtu
+         public string kd_mtu { get; set; }
 
         public void Mapping(Profile profile)
         {

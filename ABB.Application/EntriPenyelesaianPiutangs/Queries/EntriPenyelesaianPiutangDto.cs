@@ -24,6 +24,7 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Queries
         {
             profile.CreateMap<EntriPenyelesaianPiutang, EntriPenyelesaianPiutangDto>();
             // Tambahkan .ForMember jika nama properti berbeda
+            
         }
     }
 }

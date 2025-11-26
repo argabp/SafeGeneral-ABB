@@ -17,7 +17,10 @@ namespace ABB.Domain.Entities
         public int? TotalBayar { get; set; }
        public string DebetKredit { get; set; }
         public string UserBayar { get; set; }
-          public decimal? TotalDlmRupiah { get; set; }
+        public decimal? TotalDlmRupiah { get; set; }
+        public int? Kurs { get; set; }
+         public decimal? NilaiKurs { get; set; }
+        //  public decimal? nilai_kurs { get; set; }
         
     }
 }

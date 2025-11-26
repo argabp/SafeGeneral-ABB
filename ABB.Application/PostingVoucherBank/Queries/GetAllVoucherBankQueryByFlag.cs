@@ -8,6 +8,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using ABB.Application.VoucherBanks.Queries;
+using ABB.Application.EntriPembayaranBanks.Queries;
 
 namespace ABB.Application.PostingVoucherBank.Queries
 {
@@ -15,7 +16,9 @@ namespace ABB.Application.PostingVoucherBank.Queries
     {
         public bool FlagPosting { get; set; }   // true = sudah posting, false = belum posting
         public string SearchKeyword { get; set; }
-         public string DatabaseName { get; set; }   
+         public string DatabaseName { get; set; }  
+        public string KodeCabang { get; set; }
+        public bool FlagFinal { get; set; } 
     }
 
     public class GetAllVoucherBankByFlagQueryHandler : IRequestHandler<GetAllVoucherBankByFlagQuery, List<VoucherBankDto>>
@@ -36,6 +39,8 @@ namespace ABB.Application.PostingVoucherBank.Queries
                 .Where(v => v.FlagPosting == request.FlagPosting)  // filter berdasarkan flag
                 .AsQueryable();
 
+            query = query.Where(v => _context.EntriPembayaranBank.Any(epb => epb.NoVoucher == v.NoVoucher));
+
             // Jika ada kata kunci pencarian, filter lagi
             if (!string.IsNullOrEmpty(request.SearchKeyword))
             {
@@ -50,6 +55,13 @@ namespace ABB.Application.PostingVoucherBank.Queries
                     kb.KodeAkun.ToLower().Contains(keyword) ||
                     (isDecimal && kb.TotalVoucher.HasValue && kb.TotalVoucher.Value == searchDecimal)
                 );
+            }
+
+            query = query.Where(vk => vk.FlagFinal == request.FlagFinal);
+
+            if (!string.IsNullOrEmpty(request.KodeCabang))
+            {
+                query = query.Where(vk => vk.KodeCabang == request.KodeCabang);
             }
 
             // Proyeksikan ke DTO

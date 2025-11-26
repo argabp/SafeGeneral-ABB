@@ -22,9 +22,11 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
         public decimal? TotalOrg { get; set; }
         public decimal? TotalRp { get; set; }
         public string Keterangan { get; set; }
+        public string DebetKredit { get; set; }
         public string KodeAkun { get; set; }
         public string KodeUserInput { get; set; } // Untuk audit trail
         public bool? FlagPosting { get; set; }
+         public bool? FlagFinal { get; set; }
        public DateTime? TanggalInput { get; set; }
     }
 
@@ -50,6 +52,7 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
                TanggalInput = DateTime.Now,
                KodeUserInput = request.KodeUserInput, // Pastikan ini dikirim dari Controller
                FlagPosting = false, // Nilai default
+               FlagFinal = false, // Nilai default
 
                KodeCabang = request.KodeCabang,
                JenisPenyelesaian = request.JenisPenyelesaian,
@@ -58,6 +61,7 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
                Tanggal = request.Tanggal,
                MataUang = request.MataUang,
                TotalOrg = request.TotalOrg,
+               DebetKredit = request.DebetKredit,
                TotalRp = request.TotalRp,
                Keterangan = request.Keterangan,
                KodeAkun = request.KodeAkun

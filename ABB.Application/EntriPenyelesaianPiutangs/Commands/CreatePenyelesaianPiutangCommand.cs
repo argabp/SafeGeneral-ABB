@@ -12,6 +12,7 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
     public class CreatePenyelesaianPiutangCommand : IRequest<int>
     {
         public string KodeAkun { get; set; }
+    
         public string FlagPembayaran { get; set; }
         public string NoNota { get; set; }
         public string KodeMataUang { get; set; }
@@ -34,13 +35,13 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
         public async Task<int> Handle(CreatePenyelesaianPiutangCommand request, CancellationToken cancellationToken)
         {
             // Cari nomor urut (No) terakhir untuk voucher ini
-           var lastNo = await _context.EntriPenyelesaianPiutang
-            .Where(pb => pb.NoBukti == request.NoBukti)
-            .OrderByDescending(pb => pb.No)
-            .Select(pb => (int?)pb.No)
-            .FirstOrDefaultAsync(cancellationToken) ?? 0;
+            var lastNo = await _context.EntriPenyelesaianPiutangTemp
+                .Where(pb => pb.NoBukti == request.NoBukti)
+                .OrderByDescending(pb => pb.No)
+                .Select(pb => (int?)pb.No)
+                .FirstOrDefaultAsync(cancellationToken) ?? 0;
 
-            var entity = new EntriPenyelesaianPiutang
+            var entity = new EntriPenyelesaianPiutangTemp
             {
                 NoBukti = request.NoBukti,
                 No = lastNo + 1, // Nomor urut baru
@@ -51,13 +52,12 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
                 FlagPembayaran = request.FlagPembayaran,
                 DebetKredit = request.DebetKredit,
                 NoNota = request.NoNota,
-                UserBayar = request.UserBayar,
                 KodeMataUang = request.KodeMataUang,
                 
                 // Isi field lain yang required atau punya nilai default
             };
 
-            _context.EntriPenyelesaianPiutang.Add(entity);
+            _context.EntriPenyelesaianPiutangTemp.Add(entity);
             await _context.SaveChangesAsync(cancellationToken);
             return entity.No;
         }

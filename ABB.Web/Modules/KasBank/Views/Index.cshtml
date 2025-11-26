@@ -18,8 +18,17 @@
     .div-box{
         padding-bottom: 1em;
     }
+     .breadcrumb-item + .breadcrumb-item::before {
+        content: ">"; /* Ganti '/' dengan '>' */
+        padding: 0 .5rem; /* Atur spasi jika perlu */
+    }
 </style>
-
+    <nav aria-label="breadcrumb">
+    <ol class="breadcrumb" style="background: white; ">
+        <li class="breadcrumb-item"><a href="#">Finance</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Kas dan Bank</li>
+    </ol>
+    </nav>
     <div class="flat-box">
         <div class="flat-box-title ">
             Kas dan Bank
@@ -48,6 +57,7 @@
                     columns.Bound(col => col.NoRekening).Width(150).Title("No. Rekening");
                     columns.Bound(col => col.NoPerkiraan).Width(150).Title("No. Perkiraan");
                     columns.Bound(col => col.TipeKasBank).Width(120).Title("Tipe");
+                    columns.Bound(col => col.Saldo).Format("{0:n2}").Width(120).Title("Saldo Awal");
                     columns.Command(command =>
                     {
                         command.Custom("EditKasBank")

@@ -21,6 +21,7 @@ namespace ABB.Application.VoucherBanks.Queries
         public decimal? TotalDalamRupiah { get; set; }
         public string KeteranganVoucher { get; set; }
         public bool FlagPosting { get; set; }
+        public bool FlagFinal { get; set; }
         public string KodeBank { get; set; }
         public string NoBank { get; set; }
          public string JenisPembayaran { get; set; }
@@ -33,8 +34,13 @@ namespace ABB.Application.VoucherBanks.Queries
 
         // definisi
         public string NamaBank { get; set; }
-         public string NamaMataUang { get; set; }
-         public string DetailMataUang { get; set; }
+        public string NamaMataUang { get; set; }
+        public string DetailMataUang { get; set; }
+
+        public string NamaCabang { get; set; }
+
+        public decimal? Saldo { get; set; }
+        public string KeteranganKasBank { get; set; }
 
         public void Mapping(Profile profile)
         {

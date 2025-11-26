@@ -149,7 +149,10 @@
                     <span asp-validation-for="DiterimaDari" class="text-danger"></span>
                 </div>
             </div>
-           <div class="row">
+            
+        </div>
+
+          <div class="row">
                 <div class="form-group col-sm-12">
                     <label asp-for="JenisPembayaran"></label>
                     <div>
@@ -167,13 +170,14 @@
                 </div>
             </div>
 
+
         <div class="row">
              <div class="form-group col-sm-12">
                 <label asp-for="KeteranganVoucher"></label>
                 <div>
                   <kendo-textarea for="KeteranganVoucher" 
                         name="KeteranganVoucher" 
-                        style="width: 100%;" 
+                        style="width: 100%; background-color:#fff !important;" 
                         rows="4">@Model.KeteranganVoucher
         </kendo-textarea>
                     <span asp-validation-for="KeteranganVoucher" class="text-danger"></span>

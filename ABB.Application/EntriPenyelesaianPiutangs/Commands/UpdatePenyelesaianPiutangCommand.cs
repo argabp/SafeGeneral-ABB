@@ -2,11 +2,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using ABB.Application.Common.Interfaces;
 using MediatR;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
 namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
 {
-    public class UpdatePenyelesaianPiutangCommand : IRequest
+    public class UpdatePenyelesaianPiutangCommand : IRequest, IMapFrom<CreatePenyelesaianPiutangCommand>
     {
         public int No { get; set; }                 // Id detail pembayaran
         public string KodeAkun { get; set; }
@@ -18,6 +19,12 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
         public string UserBayar { get; set; }
         public string DebetKredit { get; set; }
          public string NoBukti { get; set; }
+
+          public void Mapping(Profile profile)
+            {
+                // Aturan untuk mengubah CreateCommand menjadi UpdateCommand
+                profile.CreateMap<CreatePenyelesaianPiutangCommand, UpdatePenyelesaianPiutangCommand>();
+            }
     }
 
     public class UpdatePenyelesaianPiutangCommandHandler : IRequestHandler<UpdatePenyelesaianPiutangCommand>
@@ -32,7 +39,7 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
         public async Task<Unit> Handle(UpdatePenyelesaianPiutangCommand request, CancellationToken cancellationToken)
         {
             // Cari entity berdasarkan No + NoVoucher
-            var entity = await _context.EntriPenyelesaianPiutang
+            var entity = await _context.EntriPenyelesaianPiutangTemp
                 .FirstOrDefaultAsync(e => e.No == request.No && e.NoBukti == request.NoBukti
                 , cancellationToken);
 
@@ -52,7 +59,7 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
             entity.DebetKredit = request.DebetKredit;
             entity.UserBayar = request.UserBayar;
 
-            _context.EntriPenyelesaianPiutang.Update(entity);
+            _context.EntriPenyelesaianPiutangTemp.Update(entity);
             await _context.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;

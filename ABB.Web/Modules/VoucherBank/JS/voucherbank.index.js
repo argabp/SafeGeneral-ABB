@@ -32,10 +32,14 @@ function btnEditVoucherBank_OnClick(e) {
 
 // Fungsi untuk menyimpan data (dari form Add atau Edit)
 function onSaveVoucherBank() {
+    var comboCabang = $("#KodeCabang").data("kendoComboBox");
+    var kodeCabangValue = comboCabang
+    ? comboCabang.value().trim()
+    : ($("#KodeCabang").val()?.split("-")[0].trim() || "");
     var url = "/VoucherBank/Save";
    
     var data = {
-        KodeCabang: $("#KodeCabang").val(),
+        KodeCabang: kodeCabangValue,
         JenisVoucher: $("#JenisVoucher").val(),
         DebetKredit: $("#DebetKredit").data("kendoDropDownList").value(), // Cara aman ambil value dropdown
         

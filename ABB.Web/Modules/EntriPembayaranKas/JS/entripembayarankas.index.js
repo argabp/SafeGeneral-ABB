@@ -1,33 +1,69 @@
 function btnEntriPembayaranKas_OnClick(e) {
+    console.log("cli entri")
     e.preventDefault();
+    // var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    // var noVoucher = dataItem.NoVoucher;
+
+    // // Tutup SEMUA window Kendo yang terbuka
+    // $(".k-window-content").each(function () {
+    //     var wnd = $(this).data("kendoWindow");
+    //     if (wnd) wnd.close();
+    // });
+
+    // // Ambil window untuk Entri/Edit
+    // var windowEdit = $("#EntriPembayaranKasWindow").data("kendoWindow");
+
+    // windowEdit.one("open", function () {
+    //     var grid = $("#DetailPembayaranGrid").data("kendoGrid");
+    //     if (grid) grid.dataSource.read();
+    // });
+
+    // windowEdit.one("refresh", function () {
+    //     attachChangeEvents();
+    // });
+
+    // // 🔹 Muat halaman Edit dan buka modal
+    // windowEdit.refresh(`/EntriPembayaranKas/Add?noVoucher=${noVoucher}`);
+    // windowEdit.title("Edit Pembayaran Kas");
+    // windowEdit.center().open();
+
+   
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     var noVoucher = dataItem.NoVoucher;
-
+    
+    // 1. Ambil referensi ke Kendo Window
     var window = $("#EntriPembayaranKasWindow").data("kendoWindow");
-
-    window.one("open", function() {
-        // Ambil referensi ke grid di dalam window
+    window.one("refresh", function () {
+        // 'refresh' event berjalan SETELAH konten Add.cshtml dimuat
+        // dan SEMUA elemen (termasuk #VoucherDK) sudah ada.
+        
+        // 1. Pasang event listener untuk kalkulator kurs
+        attachChangeEvents();
+        
+        // 2. Ambil grid SEKARANG (setelah ada) dan refresh
         var grid = $("#DetailPembayaranGrid").data("kendoGrid");
         if (grid) {
-            // Perintahkan grid untuk memuat datanya
-            grid.dataSource.read();
+            // .read() akan memicu dataBound, yang akan memanggil updateGridFooter
+            grid.dataSource.read(); 
         }
     });
-
-    window.one("refresh", function () {
-        attachChangeEvents();
-    });
-
-    openWindow(
-        '#EntriPembayaranKasWindow',
-        `/EntriPembayaranKas/Add?noVoucher=${noVoucher}`,
-        'Entri Pembayaran Kas'
+     openWindow(
+        '#EntriPembayaranKasWindow', 
+        `/EntriPembayaranKas/Add?noVoucher=${noVoucher}`, 
+        'Entri Pembayaran'
     );
 }
 
 $(document).ready(function () {
     $("#SearchKeyword").on("keyup", function () {
         $("#EntriPembayaranKasGrid").data("kendoGrid").dataSource.read();
+    });
+
+     $(document).on("keyup", "#PilihNotaSearchKeyword", function() {
+        var grid = $("#PilihNotaGrid").data("kendoGrid");
+        if (grid) {
+            grid.dataSource.read();
+        }
     });
 });
 
@@ -60,7 +96,8 @@ function onSavePembayaranKas() {
         NoNota4: $("#NoNota4").val(),
         DebetKredit: $("#DebetKredit").val(),
         KodeMataUang: $("#KodeMataUang").val(),
-        TotalDlmRupiah: $("#TotalDlmRupiah").val()
+        TotalDlmRupiah: $("#TotalDlmRupiah").val(),
+        Kurs: $("#Kurs").val(),
     };
 
     $.ajax({
@@ -73,16 +110,16 @@ function onSavePembayaranKas() {
                 showMessage('Success', data.No ? 'Data berhasil diperbarui.' : 'Data berhasil disimpan.');
 
                 $("#DetailPembayaranGrid").data("kendoGrid").dataSource.read();
-
+                clearPaymentForm()
                 // reset form setelah simpan
                 form.find("#No").remove(); // buang id detail biar balik mode tambah baru
-                $("#FlagPembayaran").data("kendoDropDownList").value(null);
-                $("#NoNota4").data("kendoTextBox").value("");
-                $("#KodeAkun").data("kendoTextBox").value("");
-                $("#TotalBayar").data("kendoNumericTextBox").value(null);
-                $("#DebetKredit").data("kendoDropDownList").value(null);
-                $("#KodeMataUang").data("kendoComboBox").value("");
-                $("#TotalDlmRupiah").data("kendoNumericTextBox").value(null);
+                // $("#FlagPembayaran").data("kendoDropDownList").value(null);
+                // $("#NoNota4").data("kendoTextBox").value("");
+                // $("#KodeAkun").data("kendoTextBox").value("");
+                // $("#TotalBayar").data("kendoNumericTextBox").value(null);
+                // $("#DebetKredit").data("kendoDropDownList").value(null);
+                // $("#KodeMataUang").data("kendoComboBox").value("");
+                // $("#TotalDlmRupiah").data("kendoNumericTextBox").value(null);
                // $("#akunField").hide();
                // $("#notaField").hide();
             } else {
@@ -108,6 +145,7 @@ function onDeletePembayaranKas(e) {
             success: function(response) {
                 if (response.success) {
                     showMessage('Success', 'Data berhasil dihapus.');
+                    clearPaymentForm();
                     $("#DetailPembayaranGrid").data("kendoGrid").dataSource.read();
                 } else {
                     showMessage('Error', 'Gagal menghapus data.');
@@ -133,13 +171,17 @@ function onEditPembayaran(e) {
     if (dataItem.FlagPembayaran && dataItem.FlagPembayaran.toUpperCase() === "AKUN") {
         $("#akunField").show();
         $("#notaField").hide();
-        $("#KodeAkun").data("kendoTextBox").value(dataItem.KodeAkun);
+        $("#KodeAkun").data("kendoComboBox").value(dataItem.KodeAkun);
     } else if (dataItem.FlagPembayaran && dataItem.FlagPembayaran.toUpperCase() === "NOTA") {
         $("#notaField").show();
         $("#akunField").hide();
+         $("#KodeAkun").data("kendoComboBox").value(dataItem.KodeAkun);
         $("#NoNota4").data("kendoTextBox").value(dataItem.NoNota4);
     }
-
+     $("#buttonselectnota").attr("disabled", true);
+    $(".detail-payment-field").show();
+     $("#TotalDlmRupiah").data("kendoNumericTextBox").value(dataItem.TotalDlmRupiah);
+   
     $("#KodeMataUang").data("kendoComboBox").value(dataItem.KodeMataUang);
     $("#TotalBayar").data("kendoNumericTextBox").value(dataItem.TotalBayar);
     $("#DebetKredit").data("kendoDropDownList").value(dataItem.DebetKredit);
@@ -156,12 +198,15 @@ function onEditPembayaran(e) {
     } else {
         $("#No").val(dataItem.No);
     }
+    $("#btn-cancel-edit").show();
 }
 function openPilihNotaWindow() {
+    var noVoucher = $("#NoVoucher").val(); 
     var window = $("#PilihNotaWindow").data("kendoWindow");
     // Muat konten dari action PilihNota
     window.refresh({ url: "/EntriPembayaranKas/PilihNota" });
     window.center().open();
+    
 }
 function onNotaProduksiSelect(e) {
     // Ambil data dari baris yang dipilih
@@ -181,27 +226,56 @@ function onNotaProduksiSelect(e) {
 function updateGridFooter() {
     var grid = $("#DetailPembayaranGrid").data("kendoGrid");
     if (!grid) return;
+     var voucherDK = $("#VoucherDK").val();
 
-    var data = grid.dataSource.data();
-    var totalPembayaran = 0;
+    var dataForGrid = getNoVoucherForDetailGrid(); 
+    
+    if (dataForGrid && dataForGrid.noVoucher) {
+        var noVoucher = dataForGrid.noVoucher;
+        
+        // Panggil endpoint untuk mendapatkan total terbaru dari tabel TEMP
+        $.ajax({
+            type: "GET",
+            url: `/EntriPembayaranKas/GetTotalPembayaran?noVoucher=${noVoucher}&voucherDK=${voucherDK}`,
+            success: function (response) {
+                var totalPembayaran = response.totalPembayaran || 0;
+                var $pembayaranTotalSpan = $("#pembayaranTotal");
+                 var $sisaPembayaranSpan = $("#sisapembayaranTotal");
+                // Ambil total voucher asli dari header
+                var $footer = $pembayaranTotalSpan.closest(".window-footer");
+                var totalVoucherAsli = parseFloat($footer.data("total-voucher-original")) || 0;
+                
+                 var sisaPembayaran = totalVoucherAsli - totalPembayaran;
 
-    // Loop melalui setiap baris data di grid
-    for (var i = 0; i < data.length; i++) {
-        var item = data[i];
-        if (item.TotalBayar) {
-            // --- INI LOGIKA BARUNYA ---
-            // Cek status Debet atau Kredit
-            if (item.DebetKredit && item.DebetKredit.toUpperCase() === 'K') {
-                totalPembayaran -= item.TotalBayar; // Jika Kredit, kurangi
-            } else {
-                totalPembayaran += item.TotalBayar; // Jika Debit (atau kosong), tambahkan
+                // Update teks total pembayaran
+                $pembayaranTotalSpan.text(kendo.toString(totalPembayaran, "n0"));
+                $sisaPembayaranSpan.text(kendo.toString(sisaPembayaran, "n0"));
+
+                // Ambil referensi ke tombol Final Pembayaran
+                var $btnFinal = $("#btn-save-pembayaran-final"); // <-- Beri ID ini pada tombol Anda
+
+                // --- INI LOGIKA BARUNYA ---
+                // Kita pakai toleransi 1 untuk mengatasi masalah pembulatan desimal
+                if (Math.abs(totalPembayaran - totalVoucherAsli) < 1) {
+                    // 1. JIKA BALANCE
+                    $pembayaranTotalSpan.css("color", "green"); // Warna hijau
+                    $btnFinal.prop("disabled", false); // AKTIFKAN tombol
+                    $btnFinal.removeClass("k-disabled");
+                } else {
+                    // 2. JIKA TIDAK BALANCE
+                    $pembayaranTotalSpan.css("color", "red"); // Warna merah
+                    $btnFinal.prop("disabled", true); // NONAKTIFKAN tombol
+                    $btnFinal.addClass("k-disabled");
+                }
+                 if (Math.abs(sisaPembayaran) < 1) { // Ganti logika ke sisaPembayaran
+                    $sisaPembayaranSpan.css("color", "green"); // <-- Tambahkan ini
+                   
+                } else {
+                    $sisaPembayaranSpan.css("color", "red"); // <-- Tambahkan ini
+                }
             }
-            // -------------------------
-        }
+        });
     }
-
-    // Update teks di footer dengan format angka
-    $("#pembayaranTotal").text(kendo.toString(totalPembayaran, "n0"));
 }
 
     function attachChangeEvents() {
@@ -228,7 +302,8 @@ function updateGridFooter() {
         var tanggal = $("#TangVoc").val();
         var totalVoucher = $("#TotalBayar").val();
         console.log("total voucher: ",totalVoucher)
-    
+        var kursInput = $("#Kurs");
+
         if (kodeMtu && tanggal && totalVoucher) {
             
              var parts = tanggal.split(" ")[0].split("/"); 
@@ -248,6 +323,7 @@ function updateGridFooter() {
                     console.log("4. AJAX berhasil! Respons dari server:", response); // <-- LOG 5
                     if (response && response.nilai_kurs) {
                         var kurs = response.nilai_kurs;
+                        kursInput.val(kurs);
                         console.log("ini kurs", kurs)
                         var totalRupiah = totalVoucher * kurs;
                         console.log("naha Nan: ",totalRupiah)
@@ -262,7 +338,473 @@ function updateGridFooter() {
             console.log("3. Salah satu data kosong, kalkulasi dibatalkan.");
         }
     }
+    function attachChangeFinalEvents() {
+        var mataUangCombo = $("#KodeMataUang_Lihat").data("kendoComboBox");
+        var totalVoucherInput = $("#TotalBayar_Lihat").data("kendoNumericTextBox");
+        var tanggalVoucher = $("#TangVocFinal").val();
+        console.log(tanggalVoucher)
+        // Pemicu untuk kalkulator kurs (tidak berubah)
+        if (mataUangCombo) {
+            mataUangCombo.bind("change", hitungTotalRupiahFinal);
+        }
+        if (totalVoucherInput) {
+            totalVoucherInput.bind("change", hitungTotalRupiahFinal);
+        }
+        //if (tanggalVoucher) {
+            // TanggalVoucher sekarang HANYA memicu kalkulator kurs
+         //   tanggalVoucher.bind("change", hitungTotalRupiah);
+      //  }
+    }
+
+    function hitungTotalRupiahFinal() {
+    
+        var kodeMtu = $("#KodeMataUang_Lihat").data("kendoComboBox").value();
+        var tanggal = $("#TangVocFinal").val();
+        var totalVoucher = $("#TotalBayar_Lihat").val();
+        console.log("total voucher: ",totalVoucher)
+        var kursInput = $("#Kurs_Lihat");
+
+        if (kodeMtu && tanggal && totalVoucher) {
+            
+             var parts = tanggal.split(" ")[0].split("/"); 
+           
+            var day = parts[0];
+            var month = parts[1];
+            var year = parts[2];
+
+            var formattedDate = `${year}-${month}-${day}`;
+            console.log("Format: ", formattedDate);
+            var url = `/EntriPembayaranKas/GetKurs?kodeMataUang=${kodeMtu}&tanggalVoucher=${formattedDate}`;
+        
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (response) {
+                    console.log("4. AJAX berhasil! Respons dari server:", response); // <-- LOG 5
+                    if (response && response.nilai_kurs) {
+                        var kurs = response.nilai_kurs;
+                        kursInput.val(kurs);
+                        console.log("ini kurs", kurs)
+                        var totalRupiah = totalVoucher * kurs;
+                        console.log("naha Nan: ",totalRupiah)
+                        $("#TotalDlmRupiah_Lihat").data("kendoNumericTextBox").value(totalRupiah);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error("4. AJAX GAGAL!", jqXHR); // <-- LOG 6 (ini akan merah jika error)
+                }
+            });
+        } else {
+            console.log("3. Salah satu data kosong, kalkulasi dibatalkan.");
+        }
+    }
 
 
 
 
+ function SimpanNota() {
+    var grid = $("#PilihNotaGrid").data("kendoGrid");
+    var selectedData = [];
+    var noVoucher = $("#NoVoucher").val();
+
+    grid.select().each(function () {
+        var row = $(this);
+        var dataItem = grid.dataItem(this);
+
+        var totalOrg = parseFloat(row.find('.total-org-input').val()) || 0;
+        var totalRp = parseFloat(row.find('.total-rp-input').val()) || 0;
+        var totalRpInput = row.find('.total-rp-input');
+        selectedData.push({
+            NoNota: dataItem.no_nd,
+            TotalBayarOrg: totalOrg,
+            TotalBayarRp: totalRp,
+            DebetKredit: dataItem.d_k,
+            KodeMataUang: dataItem.kd_mtu,
+             Kurs: parseFloat(totalRpInput.data('kurs')) || 1
+        });
+    });
+
+    if (selectedData.length === 0) {
+        alert("Silakan pilih minimal satu nota untuk disimpan.");
+        return;
+    }
+
+    var payload = {
+        NoVoucher: noVoucher,
+        Data: selectedData
+    };
+
+    $.ajax({
+        url: '/EntriPembayaranKas/SimpanNota',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(payload),
+        success: function (response) {
+            if (response.Status === "OK") {
+                showMessage('Success','Data berhasil disimpan.');
+
+                // 🔹 Tutup modal PilihNotaWindow
+                var pilihNotaWindow = $("#PilihNotaWindow").data("kendoWindow");
+                if (pilihNotaWindow) {
+                    pilihNotaWindow.close();
+                }
+                clearPaymentForm()
+                // 🔹 Refresh grid PilihNotaGrid (jika ingin reload daftar nota)
+                grid.dataSource.read();
+
+                // 🔹 Refresh grid DetailPembayaranGrid di window utama
+                var detailGrid = $("#DetailPembayaranGrid").data("kendoGrid");
+                if (detailGrid) {
+                    detailGrid.dataSource.read();
+                }
+
+            } else {
+                alert("Error: " + (response.Message || "Gagal menyimpan data."));
+            }
+        },
+        error: function () {
+            alert("Terjadi kesalahan saat menyimpan data.");
+        }
+    });
+}
+
+
+function onSearchClick() {
+    // Cukup perintahkan grid untuk membaca ulang datanya
+    $("#PilihNotaGrid").data("kendoGrid").dataSource.read();
+}
+
+function getNotaProduksiSearchFilter() {
+    return {
+        searchKeyword: $("#PilihNotaSearchKeyword").val(),
+        jenisAsset: $("#JenisAsset").data("kendoComboBox").value()
+    };
+}
+
+ var totalBayarMap = {};
+
+    function updateTotalBayar(noNota, value) {
+        totalBayarMap[noNota] = parseFloat(value) || 0;
+        console.log("Total bayar " + noNota + " = " + totalBayarMap[noNota]);
+    }
+
+
+$(document).on('change keyup', '#PilihNotaGrid .total-org-input', function () {
+        var input = $(this);
+        var row = input.closest('tr');
+        var grid = $("#PilihNotaGrid").data("kendoGrid");
+        var dataItem = grid.dataItem(row);
+
+        var totalOrg = parseFloat(input.val()) || 0;
+        var kodeMtu = dataItem.kd_mtu;
+     
+
+        var tanggalVoucher = $("#TangVoc").val();
+        var tanggalSaja = tanggalVoucher.split(' ')[0];
+
+        if (kodeMtu.trim() === '001') {
+            row.find('.total-rp-input').val(totalOrg.toFixed(2));
+            return; 
+        }
+
+       
+        if (kodeMtu && tanggalVoucher && totalOrg > 0) {
+         var dateParts = tanggalSaja.split('/'); 
+         var formattedDate = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0];
+
+            var url = `/EntriPembayaranKas/GetKurs?kodeMataUang=${kodeMtu}&tanggalVoucher=${formattedDate}`;
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (response) {
+                    console.log("4. AJAX berhasil! Respons dari server:", response); // <-- LOG 5
+                    if (response && response.nilai_kurs) {
+                        var kurs = response.nilai_kurs;
+                        var totalRupiah = totalOrg * kurs;
+                        row.find('.total-rp-input').val(totalRupiah.toFixed(2));
+                        row.find('.total-rp-input').data('kurs', kurs);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error("4. AJAX GAGAL!", jqXHR); // <-- LOG 6 (ini akan merah jika error)
+                }
+            });
+        } else {
+             // Jika ada data yang kosong, set Total Rupiah menjadi 0
+             row.find('.total-rp-input').val('0.00');
+             row.find('.total-rp-input').data('kurs', 0);
+        }
+    });
+
+
+
+function clearPaymentForm() {
+     $("#KodeAkun").data("kendoComboBox").value(null);
+     $("#buttonselectnota").attr("disabled", false);
+    $("#TotalBayar").data("kendoNumericTextBox").value(null);
+     $("#FlagPembayaran").data("kendoDropDownList").value("");
+    $("#NoNota4").data("kendoTextBox").value("");
+        $("#DebetKredit").data("kendoDropDownList").value(null);
+    $("#KodeMataUang").data("kendoComboBox").value("");
+        if ($("#No").length > 0) {
+        $("#No").val(0);
+    }
+
+    $("#NewPaymentForm").data("original-bayar", 0);
+    $("#NewPaymentForm").data("original-dk", "");
+     $("#TotalDlmRupiah").data("kendoNumericTextBox").value(null);
+    // ---> TAMBAHKAN BARIS INI <---
+    $("#btn-cancel-edit").hide(); // Sembunyikan kembali tombol Cancel
+
+    var ddl = $("#FlagPembayaran").data("kendoDropDownList");
+    ddl.readonly(false);
+    ddl.trigger("change");
+}
+
+function onSavePembayaranKasFinal() {
+    var form = $("#NewPaymentKasForm");
+    var data = {
+        NoVoucher: form.find("#NoVoucher").val(),
+    };
+
+    if (!data.NoVoucher) {
+        showMessage("Warning", "Nomor voucher tidak boleh kosong.");
+        return;
+    }
+
+    $.ajax({
+        type: "POST",
+        url: "/EntriPembayaranKas/SaveFinal",
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: function (response) {
+            if (response.success) {
+                showMessage("Success", "Data berhasil difinalkan.");
+
+                // reload grid dan bersihkan form
+                $("#DetailPembayaranGrid").data("kendoGrid").dataSource.read();
+                clearPaymentForm();
+            } else {
+                showMessage("Error", response.message || "Gagal memproses data.");
+            }
+        },
+        error: function () {
+            showMessage("Error", "Terjadi kesalahan saat menyimpan data.");
+        },
+    });
+}
+
+
+function btnLihatPembayaranKas_OnClick(e) {
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    var noVoucher = dataItem.NoVoucher;
+
+    // Tutup SEMUA window Kendo yang terbuka
+    $(".k-window-content").each(function () {
+        var wnd = $(this).data("kendoWindow");
+        if (wnd) wnd.close();
+    });
+
+    // Ambil window untuk Lihat
+    var windowView = $("#EntriPembayaranKasLihatWindow").data("kendoWindow");
+
+    windowView.one("refresh", function () {
+        var grid = $("#DetailPembayaranLihatGrid").data("kendoGrid");
+        if (grid) grid.dataSource.read();
+        attachChangeFinalEvents()
+    });
+
+    // 🔹 Muat halaman Lihat dan buka modal
+    // windowView.refresh(`/EntriPembayaranKas/Lihat?noVoucher=${noVoucher}`);
+    // windowView.title("Lihat Pembayaran Kas");
+    // windowView.center().open();
+    openWindow(
+         '#EntriPembayaranKasLihatWindow', 
+        `/EntriPembayaranKas/Lihat?noVoucher=${noVoucher}`, 
+        'Lihat Pembayaran Kas'
+    )
+}
+
+
+  function updateGridFooterLihat(e) {
+
+        // Ambil semua data yang tampil di grid
+        var grid = $("#DetailPembayaranLihatGrid").data("kendoGrid");
+         var dataForGrid = getNoVoucherFinalForDetailGrid(); 
+        var voucherDK = $("#VoucherDKFinal").val();
+
+        if (dataForGrid && dataForGrid.noVoucher) {
+            var noVoucher = dataForGrid.noVoucher;
+            
+            // Panggil endpoint untuk mendapatkan total terbaru dari tabel TEMP
+            $.ajax({
+                type: "GET",
+                url: `/EntriPembayaranKas/GetTotalPembayaranFinal?noVoucher=${noVoucher}&voucherDK=${voucherDK}`,
+                success: function (response) {
+                    var totalPembayaran = response.totalPembayaran || 0;
+                    var $pembayaranTotalSpan = $("#pembayaranTotalFinal");
+                    var $sisaPembayaranSpan = $("#sisapembayaranTotalFinal");
+                    // Ambil total voucher asli dari header
+                    var $footer = $pembayaranTotalSpan.closest(".window-footer");
+                    var totalVoucherAsli = parseFloat($footer.data("total-voucher-original-final")) || 0;
+                    
+                    var sisaPembayaran = totalVoucherAsli - totalPembayaran;
+
+                    // Update teks total pembayaran
+                    $pembayaranTotalSpan.text(kendo.toString(totalPembayaran, "n0"));
+                    $sisaPembayaranSpan.text(kendo.toString(sisaPembayaran, "n0"));
+
+                    // Ambil referensi ke tombol Final Pembayaran
+                    var $btnFinal = $("#btn-save-pembayaran-final"); // <-- Beri ID ini pada tombol Anda
+
+                    // --- INI LOGIKA BARUNYA ---
+                    // Kita pakai toleransi 1 untuk mengatasi masalah pembulatan desimal
+                    if (Math.abs(totalPembayaran - totalVoucherAsli) < 1) {
+                        // 1. JIKA BALANCE
+                        $pembayaranTotalSpan.css("color", "green"); // Warna hijau
+                        $btnFinal.prop("disabled", false); // AKTIFKAN tombol
+                        $btnFinal.removeClass("k-disabled");
+                    } else {
+                        // 2. JIKA TIDAK BALANCE
+                        $pembayaranTotalSpan.css("color", "red"); // Warna merah
+                        $btnFinal.prop("disabled", true); // NONAKTIFKAN tombol
+                        $btnFinal.addClass("k-disabled");
+                    }
+                    if (Math.abs(sisaPembayaran) < 1) { // Ganti logika ke sisaPembayaran
+                        $sisaPembayaranSpan.css("color", "green"); // <-- Tambahkan ini
+                    
+                    } else {
+                        $sisaPembayaranSpan.css("color", "red"); // <-- Tambahkan ini
+                    }
+                }
+            });
+        }
+    }
+
+
+function onUpdateFinalPembayaranKas() {
+    var form = $("#FinalPaymentKasForm"); // <-- ID form dari Lihat.cshtml
+
+    // 1. Kumpulkan data dari form
+    var data = {
+        NoVoucher: $("#NoVoucherFinal").val(),
+        No: form.find("#No").val() || 0, // <-- Ambil 'No' (ID detail) dari hidden field
+        KodeAkun: $("#KodeAkun_Lihat").val(),
+        TotalBayar: $("#TotalBayar_Lihat").data("kendoNumericTextBox").value(),
+        FlagPembayaran: $("#FlagPembayaran_Lihat").val(),
+        NoNota4: $("#NoNota4_Lihat").val().trim(),
+        DebetKredit: $("#DebetKredit_Lihat").val(),
+        KodeMataUang: $("#KodeMataUang_Lihat").val(),
+        TotalDlmRupiah: $("#TotalDlmRupiah_Lihat").data("kendoNumericTextBox").value(), // Ambil data TotalDlmRupiah
+        Kurs: $("#Kurs_Lihat").val(), // Ambil data Kurs
+    };
+
+    // 2. Validasi: Pastikan ini adalah mode 'Update' (No > 0)
+    //    Ini sesuai dengan logic di controller Anda yang hanya memproses jika No > 0
+    if (data.No <= 0) {
+        showMessage('Warning', 'Tidak ada data pembayaran yang dipilih untuk diupdate. Silakan klik "Edit" pada grid terlebih dahulu.');
+        return;
+    }
+
+    // 3. Kirim data ke action 'UpdateFinal'
+    $.ajax({
+        type: "POST",
+        url: "/EntriPembayaranKas/UpdateFinal", // <-- Targetkan endpoint FINAL
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: function (response) {
+            if (response.success) {
+                showMessage('Success', 'Data final berhasil diperbarui.');
+
+                // 4. Refresh grid FINAL dan bersihkan form
+                $("#DetailPembayaranLihatGrid").data("kendoGrid").dataSource.read(); // <-- Refresh grid 'Lihat'
+                clearFinalPaymentForm(); // <-- Panggil helper untuk reset form
+            } else {
+                showMessage('Error', 'Gagal memperbarui data final.');
+            }
+        },
+        error: function() {
+            showMessage('Error', 'Terjadi kesalahan sistem saat memperbarui data.');
+        }
+    });
+}
+
+function onEditFinalPembayaran(e) {
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+    if (!dataItem) {
+        showMessage('Error', 'Data pembayaran tidak ditemukan.');
+        return;
+    }
+
+    // 1. Dapatkan referensi form dan tombol cancel
+    var form = $("#FinalPaymentKasForm");
+    // Cari tombol cancel yang ada di div SETELAH form
+    var cancelButton = form.next("div").find("#btn-cancel-edit"); 
+
+    // 2. TAMPILKAN FORM FINAL (INI KUNCI UTAMA MENGHINDARI ERROR _move)
+    form.show(); // <-- PENTING! Tampilkan form SEBELUM set value
+
+    // 3. Isi form dengan data yang dipilih
+    // (Asumsi window "Add" sudah ditutup, ID Kendo unik di DOM)
+    
+    form.find("#NoVoucher").val(dataItem.NoVoucher); 
+    
+    // Set nilai Kendo widgets SETELAH form terlihat
+    $("#FlagPembayaran_Lihat").data("kendoDropDownList").value(dataItem.FlagPembayaran);
+    $("#KodeAkun_Lihat").data("kendoComboBox").value(dataItem.KodeAkun);
+    $("#NoNota4_Lihat").data("kendoTextBox").value(dataItem.NoNota4);
+    $("#KodeMataUang_Lihat").data("kendoComboBox").value(dataItem.KodeMataUang);
+    $("#TotalBayar_Lihat").data("kendoNumericTextBox").value(dataItem.TotalBayar);
+    $("#TotalDlmRupiah_Lihat").data("kendoNumericTextBox").value(dataItem.TotalDlmRupiah);
+    $("#DebetKredit_Lihat").data("kendoDropDownList").value(dataItem.DebetKredit);
+    form.find("#Kurs").val(dataItem.Kurs); // Isi hidden field Kurs
+
+    // 4. Simpan ID detail (No) supaya 'onUpdateFinalPembayaranKas' tahu ini mode edit
+    form.find("#No").val(dataItem.No);
+
+    // 5. Tampilkan tombol "Cancel"
+    if (cancelButton.length) {
+        cancelButton.show();
+    }
+
+    // 6. Trigger change di FlagPembayaran untuk memastikan UI show/hide konsisten
+    $("#FlagPembayaran_Lihat").data("kendoDropDownList").trigger("change");
+}
+
+/**
+ * Membersihkan dan menyembunyikan form edit di window "Lihat" (Final).
+ */
+function clearFinalPaymentForm() {
+    var form = $("#FinalPaymentKasForm");
+    
+    // 1. Sembunyikan form
+    form.hide();
+
+    // 2. Reset semua Kendo widget di dalam form
+    // (Gunakan try-catch untuk jaga-jaga jika widget belum di-init)
+    try {
+        $("#FlagPembayaran_Lihat").data("kendoDropDownList").value("");
+        $("#NoNota4_Lihat").data("kendoTextBox").value("");
+        $("#KodeAkun_Lihat").data("kendoComboBox").value(null);
+        $("#KodeMataUang_Lihat").data("kendoComboBox").value("");
+        $("#TotalBayar_Lihat").data("kendoNumericTextBox").value(null);
+        $("#TotalDlmRupiah_Lihat").data("kendoNumericTextBox").value(null);
+        $("#DebetKredit_Lihat").data("kendoDropDownList").value(null);
+    } catch (ex) {
+        console.warn("Gagal reset Kendo widgets di clearFinalPaymentForm:", ex);
+    }
+    
+    // 3. Reset hidden fields
+    form.find("#No").val(0);
+    form.find("#Kurs").val(null);
+
+    // 4. Sembunyikan tombol "Cancel"
+    form.next("div").find("#btn-cancel-edit").hide();
+    
+    // 5. Pastikan field nota/akun ter-reset
+    $("#akunField_Lihat").hide();
+    $("#notaField_Lihat").hide();
+}

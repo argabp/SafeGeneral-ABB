@@ -19,7 +19,8 @@ function onSaveKasBank() {
         Keterangan: $("#Keterangan").val(),
         NoRekening: $("#NoRekening").val(),
         NoPerkiraan: $("#NoPerkiraan").val(),
-        TipeKasBank: $("#TipeKasBank").val()
+        TipeKasBank: $("#TipeKasBank").val(),
+        Saldo: $("#Saldo").val()
     };
     
     showProgress('#KasBankWindow');

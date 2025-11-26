@@ -1,8 +1,8 @@
 {
   "runtimeOptions": {
     "additionalProbingPaths": [
-      "C:\\Users\\FORMULATRIX\\.dotnet\\store\\|arch|\\|tfm|",
-      "C:\\Users\\FORMULATRIX\\.nuget\\packages"
+      "C:\\Users\\IPO\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\IPO\\.nuget\\packages"
     ]
   }
 }

@@ -30,6 +30,9 @@ namespace ABB.Web.Modules.KasBank.Models
         [Display(Name = "Tipe")]
         public string TipeKasBank { get; set; }
 
+        [Display(Name = "Saldo")]
+        public decimal? Saldo { get; set; }
+
         public void Mapping(Profile profile)
         {
             // Aturan untuk mengirim data DARI form KE command (Untuk Save)

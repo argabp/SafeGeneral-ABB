@@ -16,10 +16,12 @@ namespace ABB.Domain.Entities
         public decimal? TotalDalamRupiah { get; set; }
         public string KeteranganVoucher { get; set; }
         public bool? FlagPosting { get; set; }
+         public bool? FlagFinal { get; set; }
         public DateTime? TanggalInput { get; set; }
         public DateTime? TanggalUpdate { get; set; }
         public string KodeUserInput { get; set; }
         public string KodeUserUpdate { get; set; }
         public string JenisPembayaran { get; set; }
+        public string KodeKas { get; set; }
     }
 }

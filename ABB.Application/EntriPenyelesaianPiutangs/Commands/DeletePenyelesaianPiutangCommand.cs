@@ -29,12 +29,12 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
             }
 
             // Cari detail pembayaran berdasarkan Id dan NoVoucher
-            var entity = await _context.EntriPenyelesaianPiutang
+            var entity = await _context.EntriPenyelesaianPiutangTemp
                 .FirstOrDefaultAsync(v => v.No == request.No && v.NoBukti == request.NoBukti, cancellationToken);
 
             if (entity != null)
             {
-                _context.EntriPenyelesaianPiutang.Remove(entity);
+                _context.EntriPenyelesaianPiutangTemp.Remove(entity);
                 await _context.SaveChangesAsync(cancellationToken);
             }
 

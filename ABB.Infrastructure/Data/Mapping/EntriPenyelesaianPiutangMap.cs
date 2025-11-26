@@ -8,6 +8,7 @@ namespace ABB.Infrastructure.Data.Mapping
     {
         public void Configure(EntityTypeBuilder<EntriPenyelesaianPiutang> builder)
         {
+            // builder.ToTable("abb_penyelesaianutang");
             builder.ToTable("abb_penyelesaian_utang");
 
             // --- INI BAGIAN PENTING UNTUK COMPOSITE KEY ---

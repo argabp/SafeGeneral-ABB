@@ -271,6 +271,7 @@ obj/
 *.vs/
 *.dbmdl
 *.jfm
+!Include/libwkhtmltox.x64.dll
 
 # Personal/local scripts
 run-abb-dev.ps1

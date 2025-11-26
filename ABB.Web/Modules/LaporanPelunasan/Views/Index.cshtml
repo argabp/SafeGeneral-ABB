@@ -1,0 +1,192 @@
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.TagHelpers
+@using ABB.Application.InquiryNotaProduksis.Queries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Laporan Pelunasan";
+}
+
+<script src="~/Modules/LaporanPelunasan/JS/LaporanPelunasan.index.js"></script>
+
+<style>
+    .filter-section {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+    }
+
+    .filter-label {
+        font-weight: bold;
+        width: 90px;
+    }
+
+    .filter-container {
+        padding: 15px;
+    }
+     .breadcrumb-item + .breadcrumb-item::before {
+        content: ">"; /* Ganti '/' dengan '>' */
+        padding: 0 .5rem; /* Atur spasi jika perlu */
+    }
+</style>
+
+<nav  aria-label="breadcrumb">
+   <ol class="breadcrumb" style="background: white; ">
+        <li class="breadcrumb-item"><a href="#">Finance</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Laporan Pelunasan</li>
+    </ol>
+    </nav>
+
+<div class="flat-box filter-box">
+    <div class="flat-box-content filter-container">
+
+        <!-- Baris 1: Lokasi -->
+       <div class="filter-section">
+            <label class="filter-label" for="KodeCabang">Lokasi :</label>
+
+            @(Html.Kendo().ComboBox()
+                .Name("KodeCabang")
+                .Placeholder("Pilih Cabang ...")
+                .DataTextField("nm_cb")
+                .DataValueField("kd_cb")
+                .Filter("contains")
+                .Suggest(true)
+                .HtmlAttributes(new { style = "width:300px;" })
+                .Template("#: kd_cb # - #: nm_cb #")
+                .DataSource(source =>
+                {
+                    source.Read(read =>
+                    {
+                        read.Action("GetKodeCabang", "LaporanPelunasan");
+                    });
+                })
+                .AutoBind(true)
+                .Enable(false)
+                
+                // --- PERBAIKAN DISINI ---
+                .Value(ViewBag.UserCabangValue) // Set Value (Kodenya saja)
+                .Text(ViewBag.UserCabangText)   // Set Text Tampilan (Kode - Nama)
+            )
+        </div>
+
+        <!-- Baris 2: Penutupan dan S/D -->
+        <div class="filter-section">
+            <label class="filter-label" for="JenisAsset">Penutupan :</label>
+            @(Html.Kendo().ComboBox()
+                .Name("JenisAsset")
+                .Placeholder("Pilih ...")
+                .DataTextField("NamaJenisAsset")
+                .DataValueField("KodeJenisAsset")
+                .Filter("contains")
+                .Suggest(true)
+                .DataSource(source => {
+                    source.Read(read => {
+                        read.Action("GetJenisAssetList", "LaporanPelunasan");
+                    });
+                })
+                .HtmlAttributes(new { style = "width:250px;" })
+            )
+
+            <label class="filter-label" style="width:50px;" for="JenisAssetSD">S/D :</label>
+            @(Html.Kendo().ComboBox()
+                .Name("JenisAssetSD")
+                .Placeholder("Pilih ...")
+                .DataTextField("NamaJenisAsset")
+                .DataValueField("KodeJenisAsset")
+                .Filter("contains")
+                .Suggest(true)
+                .DataSource(source => {
+                    source.Read(read => {
+                        read.Action("GetJenisAssetList", "LaporanPelunasan");
+                    });
+                })
+                .HtmlAttributes(new { style = "width:250px;" })
+            )
+        </div>
+
+        <!-- Baris 3: Bulan - S/D Bulan - Tahun -->
+        <div class="filter-section">
+            <label class="filter-label" for="BulanAwal">Bulan :</label>
+            @(Html.Kendo().ComboBox()
+                .Name("BulanAwal")
+                .Placeholder("Pilih Bulan ...")
+                .DataTextField("Text")
+                .DataValueField("Value")
+                .BindTo(new List<object> {
+                    new { Text = "01", Value = "01" },
+                    new { Text = "02", Value = "02" },
+                    new { Text = "03", Value = "03" },
+                    new { Text = "04", Value = "04" },
+                    new { Text = "05", Value = "05" },
+                    new { Text = "06", Value = "06" },
+                    new { Text = "07", Value = "07" },
+                    new { Text = "08", Value = "08" },
+                    new { Text = "09", Value = "09" },
+                    new { Text = "10", Value = "10" },
+                    new { Text = "11", Value = "11" },
+                    new { Text = "12", Value = "12" }
+                })
+                .HtmlAttributes(new { style = "width:150px;" })
+            )
+
+            <label class="filter-label" style="width:50px;" for="BulanAkhir">S/D :</label>
+            @(Html.Kendo().ComboBox()
+                .Name("BulanAkhir")
+                .Placeholder("Pilih Bulan ...")
+                .DataTextField("Text")
+                .DataValueField("Value")
+                .BindTo(new List<object> {
+                   new { Text = "01", Value = "01" },
+                    new { Text = "02", Value = "02" },
+                    new { Text = "03", Value = "03" },
+                    new { Text = "04", Value = "04" },
+                    new { Text = "05", Value = "05" },
+                    new { Text = "06", Value = "06" },
+                    new { Text = "07", Value = "07" },
+                    new { Text = "08", Value = "08" },
+                    new { Text = "09", Value = "09" },
+                    new { Text = "10", Value = "10" },
+                    new { Text = "11", Value = "11" },
+                    new { Text = "12", Value = "12" }
+                })
+                .HtmlAttributes(new { style = "width:150px;" })
+            )
+
+            @{
+                var currentYear = DateTime.Now.Year;
+                var years = Enumerable.Range(2000, (currentYear + 5) - 2000 + 1)
+                    .Select(y => new { Text = y.ToString(), Value = y.ToString() })
+                    .ToList();
+            }
+
+            <label class="filter-label" style="width:60px;" for="Tahun">Tahun :</label>
+            @(Html.Kendo().DropDownList()
+                .Name("Tahun")
+                .DataTextField("Text")
+                .DataValueField("Value")
+                .BindTo(years)
+                .Value(DateTime.Now.Year.ToString())
+                .OptionLabel("Pilih Tahun ...")
+                .HtmlAttributes(new { style = "width:120px;" })
+            )
+        </div>
+
+        <!-- Baris 4: Tombol Cari -->
+        <div class="filter-section">
+            @(Html.Kendo().Button()
+                .Name("btnSearch")
+                .Content("<span class='k-icon k-i-search'></span> Cari")
+                .HtmlAttributes(new { @class = "k-primary", style = "border-radius:6px; width:120px;" })
+                .Events(e => e.Click("onSearchClick"))
+            )
+        </div>
+
+    </div>
+</div>

@@ -37,14 +37,24 @@ namespace ABB.Web.Modules.VoucherKas
           [HttpPost]
         public async Task<ActionResult> GetVoucherKas([DataSourceRequest] DataSourceRequest request, string searchKeyword)
         {
-            var data = await Mediator.Send(new GetAllVoucherKasQuery() { SearchKeyword = searchKeyword });
+            var kodeCabang = Request.Cookies["UserCabang"];
+
+            var data = await Mediator.Send(new GetAllVoucherKasQuery() { 
+                SearchKeyword = searchKeyword ,
+                KodeCabang = kodeCabang
+                
+            });
             return Json(await data.ToDataSourceResultAsync(request));
         }
 
          [HttpGet]
         public async Task<IActionResult> GetKurs(string kodeMataUang, DateTime tanggalVoucher)
         {
-            var databaseName = Request.Cookies["DatabaseName"];
+            var databaseName = Request.Cookies["DatabaseValue"];
+            // if (string.IsNullOrEmpty(databaseName))
+            // {
+            //     return RedirectToAction("Logout", "Account");
+            // }
             var kurs = await Mediator.Send(new GetKursMataUangQuery
             {
                 DatabaseName = databaseName,
@@ -72,20 +82,37 @@ namespace ABB.Web.Modules.VoucherKas
          // Action untuk menampilkan form Add
         public async Task<IActionResult> Add()
         {
-             var databaseName = Request.Cookies["DatabaseName"];
+             var databaseName = Request.Cookies["DatabaseValue"];
+                var viewModel = new VoucherKasViewModel();
 
+                var userCabang = Request.Cookies["UserCabang"];
                 //  kodecabang
                 var cabangList = await Mediator.Send(new GetCabangsQuery { DatabaseName = databaseName });
-                ViewBag.KodeCabangOptions = cabangList.Select(c => new SelectListItem
-                {
-                    Value = c.kd_cb.Trim(),
-                    Text = $"{c.kd_cb.Trim()} - {c.nm_cb.Trim()}"
-                }).ToList();
+
+               var namaCabang = cabangList
+                .FirstOrDefault(c => string.Equals(c.kd_cb.Trim(), userCabang?.Trim(), StringComparison.OrdinalIgnoreCase))
+                ?.nm_cb?.Trim();
+
+                ViewBag.DisplayCabang = $"{userCabang} - {namaCabang}";
+
+                 ViewBag.KodeCabangOptions = cabangList.Select(c => new SelectListItem
+                    {
+                        Value = c.kd_cb.Trim(),
+                        Text = $"{c.kd_cb.Trim()} - {c.nm_cb.Trim()}",
+                    
+                    }).ToList();
+              
+                
+                viewModel.KodeCabang = userCabang;
+               
+
+                 
 
 
                 // u/ debetkredit
                 ViewBag.DebetKreditOptions = new List<SelectListItem>
                 {
+                    new SelectListItem { Text = "Pilih..", Value = "" },
                     new SelectListItem { Text = "Kredit", Value = "K" },
                     new SelectListItem { Text = "Debit", Value = "D" }
                     
@@ -115,8 +142,8 @@ namespace ABB.Web.Modules.VoucherKas
                 };
 
             
-            var model = new VoucherKasViewModel();
-            return PartialView(model);
+            // var model = new VoucherKasViewModel();
+            return PartialView(viewModel);
         }
 
         [HttpPost]
@@ -144,8 +171,11 @@ namespace ABB.Web.Modules.VoucherKas
         public async Task<IActionResult> Edit(string id)
         {
 
-             var databaseName = Request.Cookies["DatabaseName"];
-
+             var databaseName = Request.Cookies["DatabaseValue"];
+            // if (string.IsNullOrEmpty(databaseName))
+            //     {
+            //         return RedirectToAction("Logout", "Account");
+            //     }
                 // kode cabang
                 var cabangList = await Mediator.Send(new GetCabangsQuery { DatabaseName = databaseName });
                 ViewBag.KodeCabangOptions = cabangList.Select(c => new SelectListItem

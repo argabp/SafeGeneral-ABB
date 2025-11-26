@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ABB.Application.Common.Interfaces;
@@ -9,7 +10,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ABB.Application.Coas.Queries
 {
-    public class GetAllCoaQuery : IRequest<List<CoaDto>> { }
+    public class GetAllCoaQuery : IRequest<List<CoaDto>>
+    {
+        public string SearchKeyword { get; set; } // ✅ properti pencarian
+    }
 
     public class GetAllCoaQueryHandler : IRequestHandler<GetAllCoaQuery, List<CoaDto>>
     {
@@ -24,7 +28,21 @@ namespace ABB.Application.Coas.Queries
 
         public async Task<List<CoaDto>> Handle(GetAllCoaQuery request, CancellationToken cancellationToken)
         {
-            return await _context.Coa
+            var query = _context.Coa.AsQueryable();
+
+            // ✅ Tambahkan filter pencarian
+            if (!string.IsNullOrWhiteSpace(request.SearchKeyword))
+            {
+                string keyword = request.SearchKeyword.ToLower();
+                query = query.Where(x =>
+                    x.gl_kode.ToLower().Contains(keyword) ||
+                    x.gl_nama.ToLower().Contains(keyword) ||
+                    x.gl_dept.ToLower().Contains(keyword) ||
+                    x.gl_type.ToLower().Contains(keyword));
+            }
+
+            // ✅ Project ke DTO menggunakan AutoMapper
+            return await query
                 .ProjectTo<CoaDto>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
         }

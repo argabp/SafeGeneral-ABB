@@ -1,10 +1,12 @@
 @model ABB.Web.Modules.EntriPembayaranBank.Models.EntriPembayaranBankViewModel
 @using ABB.Application.EntriPembayaranBanks.Queries
 @using Kendo.Mvc.UI
+@using Kendo.Mvc.Extensions
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Kendo.Mvc
 
 <div class="window-body">
+<input type="hidden" id="VoucherDK" value="@Model.VoucherHeader.DebetKredit" />
 <input type="hidden" id= "TangVoc" value="@Model.VoucherHeader.TanggalVoucher" style="font-size: 12px;"/>
     <fieldset>
         <div class="form-group row">
@@ -22,7 +24,7 @@
                 <input class="form-control form-control-sm" value="@Model.VoucherHeader.JenisVoucher" readonly style="font-size: 12px;" />
             </div>
             <div class="col-sm-2">
-                <input class="form-control form-control-sm" 
+                <input  class="form-control form-control-sm" 
                     value="@(Model.VoucherHeader.DebetKredit == "D" ? "Debit" : 
                                 Model.VoucherHeader.DebetKredit == "K" ? "Kredit" : Model.VoucherHeader.DebetKredit)" 
                     readonly style="font-size: 12px;"/>
@@ -104,6 +106,7 @@
    <form id="NewPaymentForm">
         <input type="hidden" asp-for="NoVoucher" />
         <input type="hidden"  asp-for="No" />
+        <input type="hidden" asp-for="Kurs" />
         <div class="row">
            <div class="form-group col-sm-2">
                 <label asp-for="FlagPembayaran"></label>
@@ -123,7 +126,7 @@
                 <div class="input-group" style=" display: flex;     width: 100%;     flex-direction: row;     flex-wrap: nowrap;     align-content: center;     justify-content: center;     align-items: center; ">
                     <kendo-textbox for="NoNota4" style="width:100%;" readonly="true" />
                     <div class="input-group-append">
-                        <button type="button" class="btn btn-info" onclick="openPilihNotaWindow()">Select</button>
+                        <button id="buttonselectnota" type="button" class="btn btn-info" onclick="openPilihNotaWindow()">Select</button>
                     </div>
                 </div>
             </div>
@@ -141,18 +144,18 @@
             <div class="form-group col-sm-2" id="akunField" style="display:none;">
                 <label asp-for="KodeAkun"></label>
                 <div>
-                    <kendo-combobox for="KodeAkun"
+                    <kendo-Combobox for="KodeAkun"
                                     style="width:100%;"
                                     datatextfield="Text"
                                     datavaluefield="Value"
-                                    bind-to="ViewBag.KodeAkunOptions"
+                                     bind-to="ViewBag.KodeAkunOptions"
                                     filter="FilterType.Contains"
-                                    placeholder="Pilih Akun..." value="@Model.VoucherHeader.KodeAkun" readonly="true">
-                    </kendo-combobox>
+                                    placeholder="Pilih Akun..."  >
+                    </kendo-Combobox>
                     <span asp-validation-for="KodeAkun" class="text-danger"></span>
                 </div>
             </div>
-            <div class="form-group col-sm-2">
+            <div class="form-group col-sm-2 detail-payment-field">
                     <label asp-for="KodeMataUang"></label>
                     <div>
                         <kendo-combobox for="KodeMataUang"
@@ -168,15 +171,15 @@
                     </div>
             </div>
            
-            <div class="form-group col-sm-3">
+            <div class="form-group col-sm-3 detail-payment-field">
                 <label asp-for="TotalBayar"></label>
                 <kendo-numerictextbox for="TotalBayar" format="n0" style="width:100%;" />
             </div>
-            <div class="form-group col-sm-3">
+            <div class="form-group col-sm-3 detail-payment-field">
                 <label asp-for="TotalDlmRupiah"></label>
                 <kendo-numerictextbox for="TotalDlmRupiah" format="n0" style="width:100%;" readonly="true"/>
             </div>
-            <div class="form-group col-sm-2">
+            <div class="form-group col-sm-2 detail-payment-field">
                  <label asp-for="DebetKredit"></label>
                 <div>
                     <kendo-dropdownlist for="DebetKredit"
@@ -193,7 +196,7 @@
     </form>
     <div style="display: flex;gap: 10px;justify-content: flex-end;">
     <button type="button" id="btn-cancel-edit" class="btn btn-secondary" style="display: none;" onclick="clearPaymentForm()">Cancel</button>
-    <button type="button" onclick="onSavePembayaran()" class="btn btn-primary">Simpan Pembayaran</button>
+    <button type="button" id="btn-save-pembayaran" onclick="onSavePembayaran()" class="btn btn-primary">Simpan Pembayaran</button>
     </div>
     <hr/>
     <script>
@@ -205,38 +208,50 @@
         var ddl = $("#FlagPembayaran").data("kendoDropDownList");
 
         // Daftarkan event change
-        ddl.bind("change", function (e) {
+       ddl.bind("change", function (e) {
             var value = this.value();
             if (value && value.toUpperCase() === "AKUN") {
                 $("#akunField").show();
                 $("#notaField").hide();
-            } else if(value && value.toUpperCase() === "NOTA"){
+                $(".detail-payment-field").show();
+                $("#btn-save-pembayaran").show(); // <-- BARU
+            } else if (value && value.toUpperCase() === "NOTA") {
                 $("#notaField").show();
                 $("#akunField").hide();
+                $(".detail-payment-field").hide();
+                $("#btn-save-pembayaran").hide(); // <-- BARU
             } else {
                 $("#notaField").hide();
                 $("#akunField").hide();
+                $(".detail-payment-field").hide();
+                $("#btn-save-pembayaran").hide(); // <-- BARU
             }
         });
+
+        // Panggil event 'change' sekali saat form dimuat untuk mengatur tampilan awal
+        ddl.trigger("change");
     });
 
 
     
 </script>
-    @(Html.Kendo().Grid<EntriPembayaranBankDto>() // <-- Gunakan DTO yang benar
+    @(Html.Kendo().Grid<EntriPembayaranBankTempDto>() // <-- Gunakan DTO yang benar
         .Name("DetailPembayaranGrid")
         .DataSource(ds => ds.Ajax()
-            .Read(read => read.Action("GetDetailPembayaran", "EntriPembayaranBank")
-                .Data("getNoVoucherForDetailGrid"))
+            .Read(read => read.Action("GetTempDetailPembayaran", "EntriPembayaranBank")
+                .Data("getNoVoucherForDetailGrid")
+            ) // <-- BENAR. Read() selesai dan ditutup DI SINI
+           
         )
         .Columns(cols => {
-            cols.Bound(c => c.No).Title("No.");
-            cols.Bound(c => c.FlagPembayaran).Title("Flag Pembayaran");
-            cols.Bound(c => c.NoNota4).Title("Nomor Nota");
-            cols.Bound(c => c.KodeAkun).Title("Kode Akun");
-            cols.Bound(c => c.KodeMataUang).Title("Kode Mata Uang");
-            cols.Bound(c => c.TotalBayar).Format("{0:n0}");
-            cols.Bound(c => c.DebetKredit).Title("D/K");
+            cols.Bound(c => c.No).Title("No.").Width(180);
+            cols.Bound(c => c.FlagPembayaran).Title("Flag Pembayaran").Width(180);
+            cols.Bound(c => c.NoNota4).Title("Nomor Nota").Width(180);
+            cols.Bound(c => c.KodeAkun).Title("Kode Akun").Width(180);
+            cols.Bound(c => c.KodeMataUang).Title("Kode Mata Uang").Width(180);
+            cols.Bound(c => c.TotalBayar).Format("{0:n0}").Width(180);
+            cols.Bound(c => c.TotalDlmRupiah).Format("{0:n0}").Width(180);
+            cols.Bound(c => c.DebetKredit).Title("D/K").Width(180);
             cols.Command(command => {
             command.Custom("EditDetail").Text("Edit").Click("onEditPembayaran");
             command.Custom("DeleteDetail").Text("Delete").Click("onDeletePembayaran");
@@ -250,13 +265,23 @@
                 .Events(ev => ev.DataBound("updateGridFooter"))
     )
 </div>
-<div class="window-footer" style=" font-weight: bold;    display: flex;     justify-content: center;     flex-direction: row;     flex-wrap: nowrap;     align-content: center;     align-items: center; ">
-    <div style="padding-right: 20px;font-size: 13px;">
-            <span>Total Voucher Dalam Rupiah: </span>
-            <span id="voucherTotal">Rp. @Model.VoucherHeader.TotalDalamRupiah?.ToString("N0")</span>
+
+<div style="display: flex;gap: 15px;justify-content: flex-end;margin-right:20px">
+    <button type="button" id="btn-cancel-edit" class="btn btn-secondary" style="display: none; margin-right: 10px;">Cancel</button>
+    <button type="button" id="btn-save-pembayaran-final" onclick="onSavePembayaranBankFinal()" class="btn btn-danger">Final Pembayaran</button>
+</div>
+
+
+<div class="window-footer" data-total-voucher-original="@(Model.VoucherHeader.TotalVoucher ?? 0)" style=" font-weight: bold;    display: flex;     justify-content: center;     flex-direction: row;     flex-wrap: nowrap;     align-content: center;     align-items: center; ">
+    <div style="padding-right: 20px;font-size: 15px;">
+            <span>Total Voucher:  </span>
+            <span id="voucherTotal"> @Model.VoucherHeader.TotalVoucher?.ToString("N0")</span>
             
-            <span style="margin-left: 20px;">Total Keseluruhan Pembayaran: Rp. </span>
+            <span style="margin-left: 20px;">Total Keseluruhan Pembayaran:  </span>
             <span id="pembayaranTotal" style="color: green;">0</span>
+
+            <span style="margin-left: 20px;">Total Sisa Keseluruhan Pembayaran:  </span>
+            <span id="sisapembayaranTotal" style="color: green;">0</span>
         </div>
 </div>
 

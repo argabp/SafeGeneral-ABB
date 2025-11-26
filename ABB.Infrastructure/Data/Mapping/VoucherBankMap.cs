@@ -29,7 +29,7 @@ namespace ABB.Infrastructure.Data.Mapping
 
             builder.Property(t => t.DebetKredit)
                 .HasColumnName("debet_kredit")
-                .HasMaxLength(5);
+                .HasMaxLength(6);
 
             builder.Property(t => t.NoVoucher)
                 .HasColumnName("no_voucher")
@@ -66,6 +66,9 @@ namespace ABB.Infrastructure.Data.Mapping
 
             builder.Property(t => t.FlagPosting)
                 .HasColumnName("flag_posting").HasMaxLength(1);
+
+            builder.Property(t => t.FlagFinal)
+                .HasColumnName("flag_final").HasMaxLength(1);
               
 
             builder.Property(t => t.TanggalInput)

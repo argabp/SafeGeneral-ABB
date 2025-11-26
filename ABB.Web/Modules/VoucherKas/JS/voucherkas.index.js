@@ -22,9 +22,13 @@ $(document).on('click', '#flagPosting-checkbox-ui', function() {
 });
 
 function onSaveVoucherKas() {
+    var comboCabang = $("#KodeCabang").data("kendoComboBox");
+     var kodeCabangValue = comboCabang
+    ? comboCabang.value().trim()
+    : ($("#KodeCabang").val()?.split("-")[0].trim() || "");
     var url = "/VoucherKas/Save";
     var data = {
-        KodeCabang: $("#KodeCabang").val(),
+        KodeCabang: kodeCabangValue,
         JenisVoucher: $("#JenisVoucher").val(),
         DebetKredit: $("#DebetKredit").data("kendoDropDownList").value(), // Cara aman ambil value dropdown
         NoVoucher: $("#NoVoucher").val(),
@@ -193,38 +197,38 @@ $(document).ready(function () {
     }
 
     // logika untuk generate voucher
-    function generateNoVoucher() {
-        // Ambil nilai dari komponen lain seperti biasa
-        var jenisVoucher = $("#JenisVoucher").val() || "";
-        var debetKredit = $("#DebetKredit").data("kendoDropDownList").value() || "";
-        var kodeCabang = $("#KodeCabang").data("kendoComboBox").value() || "";
-        
+   function generateNoVoucher() {
+    var jenisVoucher = $("#JenisVoucher").val() || "";
+    var debetKredit = $("#DebetKredit").data("kendoDropDownList")?.value() || "";
+    var kodeCabangText = $("#KodeCabang").data("kendoComboBox")?.input.val() || "";
+    var kodeCabang = kodeCabangText.split(" - ")[0].trim(); // ambil hanya kode
+    var kodeKas = $("#KodeKas").val() || "";
+    console.log("Kode Cabang:", kodeCabang);
+    $.ajax({
+        type: "GET",
+        url: "/VoucherKas/GetNextVoucherNumber",
+        success: function (response) {
+            if (response && response.success) {
+                var noUrut = response.nextNumber;
+                var tanggalHariIni = new Date();
 
-        $.ajax({
-            type: "GET",
-            url: "/VoucherKas/GetNextVoucherNumber",
-            success: function (response) {
-                if (response && response.success) {
-                    var noUrut = response.nextNumber; // Nomor urut dari server!
+               var bagian1 = kodeCabang.slice(-2);
+                var bagian3 = "";
 
-                    // Lanjutkan merakit nomor voucher
-                    var tanggalHariIni = new Date();
-                    var bagian1 = kodeCabang ? kodeCabang.slice(-2) : "";
-                    var bagian3 = "";
-                    if (jenisVoucher.toUpperCase() === "KAS") bagian3 = "K";
-                    if (debetKredit.toUpperCase() === "D") bagian3 += "D";
-                    else if (debetKredit.toUpperCase() === "K") bagian3 += "K";
-                    
-                    var bagian4 = $("#KodeKas").val();
-                    var bulan = ('0' + (tanggalHariIni.getMonth() + 1)).slice(-2);
-                    var tahun = tanggalHariIni.getFullYear().toString().slice(-2);
-                    var bagian5 = bulan + "/" + tahun;
+                if (jenisVoucher.toUpperCase() === "KAS") bagian3 = "K";
+                if (debetKredit.toUpperCase() === "D") bagian3 += "D";
+                else if (debetKredit.toUpperCase() === "K") bagian3 += "K";
 
-                    if (noUrut && bagian3 && bagian4 && bagian5) {
-                        var noVoucherFinal = `${bagian1}/${noUrut}/${bagian3}/${bagian4}/${bagian5}`;
-                        $("#NoVoucher").val(noVoucherFinal);
-                    }
+                var bulan = ('0' + (tanggalHariIni.getMonth() + 1)).slice(-2);
+                var tahun = tanggalHariIni.getFullYear().toString().slice(-2);
+                var bagian5 = bulan + "/" + tahun;
+
+                if (noUrut && bagian3 && kodeKas && bagian5) {
+                    var noVoucherFinal = `${bagian1}/${noUrut}/${bagian3}/${kodeKas}/${bagian5}`;
+                    $("#NoVoucher").val(noVoucherFinal);
                 }
             }
-        });
-    }
+        }
+    });
+}
+

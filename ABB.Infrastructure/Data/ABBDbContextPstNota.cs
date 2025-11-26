@@ -18,6 +18,12 @@ using EntriPembayaranBankEntity = ABB.Domain.Entities.EntriPembayaranBank;
 using EntriPenyelesaianPiutangEntity = ABB.Domain.Entities.EntriPenyelesaianPiutang;
 using HeaderPenyelesaianPiutangEntity = ABB.Domain.Entities.HeaderPenyelesaianUtang;
 using MataUangEntity = ABB.Domain.Entities.MataUang;
+using CabangEntity = ABB.Domain.Entities.Cabang;
+using TypeCoaEntity = ABB.Domain.Entities.TypeCoa;
+using EntriPembayaranKasTempEntity = ABB.Domain.Entities.EntriPembayaranKasTemp;
+using EntriPembayaranBankTempEntity = ABB.Domain.Entities.EntriPembayaranBankTemp;
+using EntriPenyelesaianPiutangTempEntity = ABB.Domain.Entities.EntriPenyelesaianPiutangTemp;
+using EntriPeriodeEntity = ABB.Domain.Entities.EntriPeriode;
 
 namespace ABB.Infrastructure.Data
 {
@@ -41,6 +47,13 @@ namespace ABB.Infrastructure.Data
         public DbSet<EntriPenyelesaianPiutangEntity> EntriPenyelesaianPiutang { get; set; }
         public DbSet<HeaderPenyelesaianPiutangEntity> HeaderPenyelesaianUtang { get; set; }
         public DbSet<MataUangEntity> MataUang { get; set; }
+        public DbSet<CabangEntity> Cabang { get; set; }
+        public DbSet<TypeCoaEntity> TypeCoa { get; set; }
+        public DbSet<EntriPembayaranKasTempEntity> EntriPembayaranKasTemp { get; set; }
+        public DbSet<EntriPembayaranBankTempEntity> EntriPembayaranBankTemp { get; set; }
+        public DbSet<EntriPenyelesaianPiutangTempEntity> EntriPenyelesaianPiutangTemp { get; set; }
+        public DbSet<EntriPeriodeEntity> EntriPeriode { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -55,6 +68,13 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new EntriPenyelesaianPiutangMap());
             builder.ApplyConfiguration(new HeaderPenyelesaianUtangMap());
             builder.ApplyConfiguration(new MataUangMap());
+            builder.ApplyConfiguration(new CabangMap());
+            builder.ApplyConfiguration(new TypeCoaMap());
+            builder.ApplyConfiguration(new EntriPembayaranKasTempMap());
+            builder.ApplyConfiguration(new EntriPembayaranBankTempMap());
+            builder.ApplyConfiguration(new EntriPenyelesaianPiutangTempMap());
+            builder.ApplyConfiguration(new EntriPeriodeMap());
+
 
         }
 

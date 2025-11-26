@@ -73,6 +73,7 @@ namespace ABB.Infrastructure.Data.Mapping
             builder.Property(p => p.post_tr).HasColumnName("post_tr");
             builder.Property(p => p.jn_ass2).HasColumnName("jn_ass2");
             builder.Property(p => p.no_nd2).HasColumnName("no_nd2");
+            builder.Property(p => p.nm_cust).HasColumnName("nm_cust");
 
         }
     }

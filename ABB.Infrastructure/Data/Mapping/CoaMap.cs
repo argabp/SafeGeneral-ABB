@@ -15,6 +15,8 @@ namespace ABB.Infrastructure.Data.Mapping
             
             builder.Property(c => c.gl_kode).HasColumnName("gl_kode");
             builder.Property(c => c.gl_nama).HasColumnName("gl_nama");
+            builder.Property(c => c.gl_dept).HasColumnName("gl_dept");
+            builder.Property(c => c.gl_type).HasColumnName("gl_type");
         }
     }
 }

@@ -20,42 +20,78 @@ namespace ABB.Web.Modules.InquiryNotaProduksi
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
-            
+
             return View();
         }
 
         [HttpPost]
         public async Task<ActionResult> GetInquiryNotaProduksi(
-            [DataSourceRequest] DataSourceRequest request, 
+            [DataSourceRequest] DataSourceRequest request,
             string searchKeyword,
             DateTime? startDate,
-            DateTime? endDate)
+            DateTime? endDate,
+            string jenisAsset)
         {
-            var data = await Mediator.Send(new InquiryNotaProduksiQuery() 
-            { 
+            // ✅ Cegah load data jika semua filter kosong
+            if (string.IsNullOrEmpty(searchKeyword) &&
+                !startDate.HasValue &&
+                !endDate.HasValue &&
+                string.IsNullOrEmpty(jenisAsset))
+            {
+                return Json(new List<object>().ToDataSourceResult(request));
+            }
+
+            // 🔹 Ambil data sesuai filter
+            var data = await Mediator.Send(new InquiryNotaProduksiQuery()
+            {
                 SearchKeyword = searchKeyword,
                 StartDate = startDate,
-                EndDate = endDate
+                EndDate = endDate,
+                JenisAsset = jenisAsset
             });
+
+            // ✅ Jika hasil kosong, kirim response dengan indikator “tidak ditemukan”
+            if (data == null || !data.Any())
+            {
+                var emptyResult = new
+                {
+                    Errors = "Data tidak ditemukan",
+                    Data = new List<object>()
+                };
+                return Json(emptyResult);
+            }
 
             return Json(await data.ToDataSourceResultAsync(request));
         }
 
         public async Task<IActionResult> Add(int id)
         {
-
-            var databaseName = Request.Cookies["DatabaseName"];
-
             var InquiryNotaProduksiDto = await Mediator.Send(new GetInquiryNotaProduksiByIdQuery { id = id });
-            if (InquiryNotaProduksiDto == null) return NotFound();
+
+            if (InquiryNotaProduksiDto == null)
+                return NotFound();
 
             var viewModel = new InquiryNotaProduksiViewModel
             {
                 InquiryNotaProduksiHeader = InquiryNotaProduksiDto,
-                id = id // Langsung set di properti utama
+                id = id
             };
 
             return PartialView(viewModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetJenisAssetList()
+        {
+            var list = await Mediator.Send(new GetDistinctJenisAssetQuery());
+
+            var result = list.Select(x => new
+            {
+                NamaJenisAsset = x,
+                KodeJenisAsset = x
+            }).ToList();
+
+            return Json(result);
         }
     }
 }

@@ -19,11 +19,12 @@ namespace ABB.Infrastructure.Data.Mapping
             builder.Property(t => t.No).HasColumnName("no").IsRequired();
             builder.Property(t => t.KodeAkun).HasColumnName("kode_akun").HasMaxLength(10);
             builder.Property(t => t.FlagPembayaran).HasColumnName("flag_pembayaran").HasMaxLength(10);
-            builder.Property(t => t.NoNota4).HasColumnName("no_nota4").HasMaxLength(100);
+            builder.Property(t => t.NoNota4).HasColumnName("no_nota").HasMaxLength(100);
             builder.Property(t => t.KodeMataUang).HasColumnName("kode_mata_uang").HasMaxLength(5);
             builder.Property(t => t.TotalBayar).HasColumnName("total_bayar");
             builder.Property(t => t.UserBayar).HasColumnName("user_bayar").HasMaxLength(25);
             builder.Property(t => t.DebetKredit).HasColumnName("debet_kredit").HasMaxLength(10);
+             builder.Property(t => t.Kurs).HasColumnName("kurs");
             builder.Property(t => t.TotalDlmRupiah).HasColumnName("total_dalam_rupiah").HasPrecision(18,2);
         }
     }

@@ -50,8 +50,26 @@ namespace ABB.Application.EntriPembayaranBanks.Queries
             // ------------------------------------
 
             return await query
-                .ProjectTo<EntriPembayaranBankDto>(_mapper.ConfigurationProvider)
-                .ToListAsync(cancellationToken);
+            .Select(pb => new EntriPembayaranBankDto
+            {
+                // Anda harus memetakan SEMUA properti DTO Anda secara manual di sini
+                // (Saya tebak nama propertinya, sesuaikan jika salah)
+                NoVoucher = pb.NoVoucher,
+                No = pb.No,
+                FlagPembayaran = pb.FlagPembayaran,
+                NoNota4 = pb.NoNota4,
+                KodeAkun = pb.KodeAkun,
+                KodeMataUang = pb.KodeMataUang,
+                TotalBayar = pb.TotalBayar,
+                TotalDlmRupiah = pb.TotalDlmRupiah,
+                DebetKredit = pb.DebetKredit,
+                Kurs = pb.Kurs,
+                // ... (tambahkan properti DTO lain jika ada) ...
+
+                // Dan tambahkan logika kalkulasi baru kita
+                TotalBayarCalculated = (pb.DebetKredit == "K" ? -pb.TotalBayar : pb.TotalBayar) ?? 0
+            })
+            .ToListAsync(cancellationToken);
         }
     }
 }

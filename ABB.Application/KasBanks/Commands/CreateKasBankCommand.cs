@@ -14,6 +14,7 @@ namespace ABB.Application.KasBanks.Commands
         public string NoRekening { get; set; }
         public string NoPerkiraan { get; set; }
         public string Kasbank { get; set; }
+        public decimal? Saldo { get; set; }
     }
 
     // ---> INI BAGIAN YANG HILANG: "Petugas Pelaksana" <---
@@ -35,7 +36,8 @@ namespace ABB.Application.KasBanks.Commands
                 Keterangan = request.Keterangan,
                 NoRekening = request.NoRekening,
                 NoPerkiraan = request.NoPerkiraan,
-                TipeKasBank = request.Kasbank
+                TipeKasBank = request.Kasbank,
+                Saldo = request.Saldo
             };
 
             // 2. Tambahkan entity baru ke DbContext

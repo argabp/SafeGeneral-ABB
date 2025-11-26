@@ -1,0 +1,192 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using ABB.Application.Common.Dtos;
+using ABB.Application.Common.Helpers;
+using ABB.Application.Common.Interfaces;
+using ABB.Application.InquiryNotaProduksis.Queries;
+using ABB.Domain.Entities;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
+using Scriban;
+using System.IO;
+using System.Text;
+using ABB.Application.Cabangs.Queries;
+
+namespace ABB.Application.LaporanOutstandings.Queries
+{
+    public class GetLaporanOutstandingQuery : IRequest<string>
+    {
+        public string DatabaseName { get; set; }
+        public string KodeCabang { get; set; }
+        public string JenisAwal { get; set; }
+        public string JenisAkhir { get; set; }
+        public string BulanAwal { get; set; }
+        public string BulanAkhir { get; set; }
+        public string Tahun { get; set; }
+        public string UserLogin { get; set; }
+    }
+
+    public class GetLaporanOutstandingQueryHandler : IRequestHandler<GetLaporanOutstandingQuery, string>
+    {
+        private readonly IDbContextPstNota _context;
+        private readonly IMapper _mapper;
+        private readonly IHostEnvironment _environment;
+
+        public GetLaporanOutstandingQueryHandler(IDbContextPstNota context, IMapper mapper, IHostEnvironment environment)
+        {
+            _context = context;
+            _mapper = mapper;
+            _environment = environment;
+        }
+
+        public async Task<string> Handle(GetLaporanOutstandingQuery request, CancellationToken cancellationToken)
+        {
+            var db = _context.Set<Produksi>().Where(x => (x.saldo ?? 0) > 0);
+
+            // 🔹 1. Filter Lokasi (LOK)
+            if (!string.IsNullOrEmpty(request.KodeCabang))
+            {
+                var kodeCabangBersih = request.KodeCabang.Trim();
+                var cabang2Digit = kodeCabangBersih.Length > 2
+                    ? kodeCabangBersih[^2..]
+                    : kodeCabangBersih;
+
+                db = db.Where(x =>
+                    !string.IsNullOrEmpty(x.lok) &&
+                    x.lok.Trim().Equals(cabang2Digit));
+            }
+
+            // 🔹 2. Filter Jenis Asset
+            if (!string.IsNullOrEmpty(request.JenisAwal) && !string.IsNullOrEmpty(request.JenisAkhir))
+            {
+                db = db.Where(x =>
+                    string.Compare(x.jn_ass, request.JenisAwal) >= 0 &&
+                    string.Compare(x.jn_ass, request.JenisAkhir) <= 0);
+            }
+
+            // 🔹 3. Filter Bulan dan Tahun
+            if (!string.IsNullOrEmpty(request.BulanAwal) &&
+                !string.IsNullOrEmpty(request.BulanAkhir) &&
+                !string.IsNullOrEmpty(request.Tahun))
+            {
+                int tahun = int.Parse(request.Tahun);
+                int bulanAwal = int.Parse(request.BulanAwal);
+                int bulanAkhir = int.Parse(request.BulanAkhir);
+
+                DateTime tanggalAwal = new DateTime(tahun, bulanAwal, 1);
+                DateTime tanggalAkhir = new DateTime(tahun, bulanAkhir, DateTime.DaysInMonth(tahun, bulanAkhir));
+
+                db = db.Where(x =>
+                    x.date.HasValue &&
+                    x.date.Value.Date >= tanggalAwal &&
+                    x.date.Value.Date <= tanggalAkhir);
+            }
+
+            // 🔹 4. Nama Cabang
+            string namaCabang = "-";
+            if (!string.IsNullOrEmpty(request.KodeCabang))
+            {
+                var cabangEntity = await _context.Set<Cabang>()
+                    .FirstOrDefaultAsync(c => c.kd_cb == request.KodeCabang, cancellationToken);
+
+                if (cabangEntity != null)
+                    namaCabang = cabangEntity.nm_cb;
+            }
+
+            // 🔹 5. Ambil Data
+            var dataLaporan = await db
+                .ProjectTo<InquiryNotaProduksiDto>(_mapper.ConfigurationProvider)
+                .OrderBy(x => x.jn_ass)
+                .ThenBy(x => x.date)
+                .ToListAsync(cancellationToken);
+
+            if (!dataLaporan.Any())
+                throw new NullReferenceException("Data tidak ditemukan");
+
+            // =================================================================
+            // START: LOGIKA RENDERING TEMPLATE SCRIBA
+            // =================================================================
+
+            Func<DateTime?, string> fmtDate = d => d.HasValue ? d.Value.ToString("dd-MM-yyyy") : "-";
+            Func<decimal?, string> fmtNum = n => n.HasValue ? string.Format("{0:N2}", n.Value) : "0.00";
+
+            string reportPath = Path.Combine(
+                _environment.ContentRootPath,
+                "Modules",
+                "Reports",
+                "Templates",
+                "LaporanOutstanding.html"
+            );
+
+            string templateReportHtml = await File.ReadAllTextAsync(reportPath);
+
+            StringBuilder detailsBuilder = new StringBuilder();
+            int idx = 1;
+
+            foreach (var item in dataLaporan)
+            {
+                var tglProduksi = fmtDate(item.date);
+                var tglLunas = fmtDate(item.tgl_byr);
+                var tgljthtempo = fmtDate(item.tgl_jth_tempo);
+
+                // Hitung umur (selisih hari)
+                int umur = 0;
+                if (DateTime.TryParse(item.tgl_jth_tempo?.ToString(), out DateTime jatuhTempo) &&
+                    DateTime.TryParse(item.date?.ToString(), out DateTime tanggalProduksi))
+                {
+                    umur = (jatuhTempo - tanggalProduksi).Days;
+                    if (umur < 0) umur = 0;
+                }
+
+                // // Nilai numeric
+                decimal nilaiNota = item.saldo ?? 0;
+                decimal nilaiBayar = item.jumlah ?? 0;
+                decimal nilaiOs = nilaiNota - nilaiBayar;
+
+                // // Format angka
+                string nilainotaStr = fmtNum(nilaiNota);
+                string nilaibayarStr = fmtNum(nilaiBayar);
+                string nilaiosStr = fmtNum(nilaiOs);
+
+                detailsBuilder.Append($@"
+                    <tr>
+                        <td class='center'>{idx}</td>
+                        <td>{(string.IsNullOrWhiteSpace(item.no_nd) ? "-" : item.no_nd)}/<br>{(string.IsNullOrWhiteSpace(item.no_pl) ? "-" : item.no_pl)}</td>
+                        <td>{(string.IsNullOrWhiteSpace(item.nm_cust2) ? "-" : item.nm_cust2)}/<br>{(string.IsNullOrWhiteSpace(item.nm_pos) ? "-" : item.nm_pos)}</td>
+                        <td>{(string.IsNullOrWhiteSpace(item.nm_brok) ? "-" : item.nm_brok)}</td>
+                        <td></td>
+                        <td>{(string.IsNullOrWhiteSpace(item.lok) ? "-" : item.lok)}/<br>{(string.IsNullOrWhiteSpace(item.kd_tutup) ? "-" : item.kd_tutup)}</td>
+                        <td>{tglProduksi}/<br>{tgljthtempo}</td>
+                        <td>{(string.IsNullOrWhiteSpace(item.curensi) ? "-" : item.curensi)}/<br>{item.kurs}</td>
+                        <td>{umur}</td>
+                        <td>{nilainotaStr}</td>
+                        <td>{nilaibayarStr}</td>
+                        <td>{nilaiosStr}</td>
+                    </tr>");
+                idx++;
+            }
+
+            Template templateReport = Template.Parse(templateReportHtml);
+
+            string resultTemplate = templateReport.Render(new
+            {
+                details = detailsBuilder.ToString(),
+                KodeCabang = request.KodeCabang,
+                NamaCabang = namaCabang,
+                Periode = $"{request.BulanAwal}-{request.BulanAkhir}-{request.Tahun}"
+            });
+
+            return resultTemplate;
+
+            // =================================================================
+            // END: LOGIKA RENDERING TEMPLATE SCRIBA
+            // =================================================================
+        }
+    }
+}

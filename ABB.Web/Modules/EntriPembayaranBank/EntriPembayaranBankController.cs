@@ -8,7 +8,6 @@ using ABB.Application.EntriPembayaranBanks.Commands;
 using ABB.Application.EntriPembayaranBanks.Queries;
 using ABB.Application.VoucherBanks.Queries;
 using ABB.Web.Modules.Base;
-using ABB.Application.MataUangs.Queries;
 using ABB.Web.Modules.EntriPembayaranBank.Models;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
@@ -17,6 +16,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using ABB.Application.KasBanks.Queries;
 using ABB.Application.InquiryNotaProduksis.Queries;
 using ABB.Application.MataUangs.Queries;
+using ABB.Application.Coas.Queries;
 
 
 namespace ABB.Web.Modules.EntriPembayaranBank
@@ -25,6 +25,7 @@ namespace ABB.Web.Modules.EntriPembayaranBank
     {
         public ActionResult Index()
         {
+            
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
@@ -35,13 +36,31 @@ namespace ABB.Web.Modules.EntriPembayaranBank
         [HttpPost]
         public async Task<ActionResult> GetEntriPembayaranBank([DataSourceRequest] DataSourceRequest request, string searchKeyword)
         {
-            var data = await Mediator.Send(new GetAllVoucherBankQuery() { SearchKeyword = searchKeyword });
+             var kodeCabang = Request.Cookies["UserCabang"];
+            var data = await Mediator.Send(new GetAllVoucherBankQuery() { 
+                SearchKeyword = searchKeyword,
+                KodeCabang = kodeCabang,
+                FlagFinal = false
+                
+                 });
+            return Json(await data.ToDataSourceResultAsync(request));
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> GetEntriPembayaranBankFinal([DataSourceRequest] DataSourceRequest request, string searchKeyword)
+        {
+             var kodeCabang = Request.Cookies["UserCabang"];
+            var data = await Mediator.Send(new GetAllVoucherBankQuery() { 
+                SearchKeyword = searchKeyword,
+                KodeCabang = kodeCabang,
+                FlagFinal = true
+                });
             return Json(await data.ToDataSourceResultAsync(request));
         }
 
         public async Task<IActionResult> Add(string noVoucher)
         {
-             var databaseName = Request.Cookies["DatabaseName"];
+             var databaseName = Request.Cookies["DatabaseValue"];
             var voucherDto = await Mediator.Send(new GetVoucherBankByIdQuery { NoVoucher = noVoucher });
             if (voucherDto == null) return NotFound();
 
@@ -52,11 +71,11 @@ namespace ABB.Web.Modules.EntriPembayaranBank
             };
 
             // kode akun
-            var akunlist = await Mediator.Send(new GetAllKasBankQuery { TipeKasBank = "BANK" });
+            var akunlist = await Mediator.Send(new GetAllCoaQuery());
                 ViewBag.KodeAkunOptions = akunlist.Select(x => new SelectListItem
                 {
-                    Value = x.NoPerkiraan,
-                    Text = $"{int.Parse(x.NoPerkiraan):N0} - {x.Keterangan}"
+                    Value = x.Kode,
+                    Text = $"{x.Kode} - {x.Nama}" 
                 }).ToList();
 
             ViewBag.DebetKreditOptions = new List<SelectListItem>
@@ -87,6 +106,13 @@ namespace ABB.Web.Modules.EntriPembayaranBank
             var data = await Mediator.Send(new GetAllEntriPembayaranBankQuery { NoVoucher = noVoucher });
             return Json(await data.ToDataSourceResultAsync(request));
         }
+        
+        [HttpPost]
+        public async Task<ActionResult> GetTempDetailPembayaran([DataSourceRequest] DataSourceRequest request, string noVoucher)
+        {
+            var data = await Mediator.Send(new GetAllEntriPembayaranBankTempQuery { NoVoucher = noVoucher });
+            return Json(await data.ToDataSourceResultAsync(request));
+        }
 
         // Action 'Save' sekarang menerima ViewModel utama
         [HttpPost]
@@ -109,20 +135,56 @@ namespace ABB.Web.Modules.EntriPembayaranBank
             return Json(new { success = true });
         }
 
-        // Nota Produksi 
-        public IActionResult PilihNota()
+          // Action 'Save' sekarang menerima ViewModel utama
+        [HttpPost]
+        public async Task<IActionResult> SaveLihat([FromBody] EntriPembayaranBankViewModel model)
         {
+            if (!ModelState.IsValid) 
+                return BadRequest(ModelState);
+
+            if (model.No > 0) // kalau ada No → update
+            {
+                var command = Mapper.Map<UpdatePembayaranBankLihatCommand>(model);
+                await Mediator.Send(command);
+            }
+
+            return Json(new { success = true });
+        }
+
+        // Nota Produksi 
+        public async Task<IActionResult> PilihNota()
+        {
+            var akunlist = await Mediator.Send(new GetAllCoaQuery());
+            ViewBag.KodeAkunOptions = akunlist.Select(x => new SelectListItem
+            {
+                Value = x.Kode.Trim(), // Pastikan di-trim
+                Text = $"{x.Kode.Trim()} - {x.Nama.Trim()}" 
+            }).ToList();
             return PartialView("PilihNota");
         }
 
         // Action untuk mengisi data ke grid _PilihNota
-        [HttpPost]
-        public async Task<IActionResult> GetNotaProduksi([DataSourceRequest] DataSourceRequest request, string searchKeyword)
+       [HttpPost]
+        public async Task<IActionResult> GetNotaProduksi([DataSourceRequest] DataSourceRequest request,
+            string searchKeyword,
+            string jenisAsset)
         {
-            // Anda perlu membuat GetNotaProduksiQuery di Application Layer
-            var data = await Mediator.Send(new InquiryNotaProduksiQuery{ SearchKeyword = searchKeyword });
-            return Json(data.ToDataSourceResult(request));
-        }
+            // ✅ Cegah load data jika semua filter kosong
+            if (string.IsNullOrEmpty(searchKeyword) && string.IsNullOrEmpty(jenisAsset))
+            {
+                var emptyList = new List<InquiryNotaProduksiDto>();
+                return Json(await emptyList.ToDataSourceResultAsync(request));
+            }
+
+            // 🔹 Ambil data sesuai filter
+            var data = await Mediator.Send(new GetNotaUntukPembayaranQuery()
+            {
+                SearchKeyword = searchKeyword,
+                JenisAsset = jenisAsset
+            });
+
+            return Json(await data.ToDataSourceResultAsync(request));
+        }  
 
         // delete
         [HttpPost]
@@ -160,10 +222,40 @@ namespace ABB.Web.Modules.EntriPembayaranBank
                 return View(viewModel); // View Razor khusus untuk cetak
             }
 
+            [HttpGet]
+            public async Task<IActionResult> GetTotalPembayaran(string noVoucher, string voucherDK)
+            {
+                if (string.IsNullOrEmpty(noVoucher))
+                {
+                    return BadRequest("No Voucher tidak boleh kosong.");
+                }
+
+                // Panggil handler baru yang kita buat
+                var total = await Mediator.Send(new GetTotalPembayaranQuery { NoVoucher = noVoucher, VoucherDK = voucherDK });
+                
+                // Kembalikan totalnya sebagai JSON
+                return Json(new { totalPembayaran = total });
+            }
+
+             [HttpGet]
+            public async Task<IActionResult> GetTotalPembayaranFinal(string noVoucher, string voucherDK)
+            {
+                if (string.IsNullOrEmpty(noVoucher))
+                {
+                    return BadRequest("No Voucher tidak boleh kosong.");
+                }
+
+                // Panggil handler baru yang kita buat
+                var total = await Mediator.Send(new GetTotalPembayaranFinalQuery { NoVoucher = noVoucher, VoucherDK = voucherDK });
+                
+                // Kembalikan totalnya sebagai JSON
+                return Json(new { totalPembayaran = total });
+            }
+
              [HttpGet]
             public async Task<IActionResult> GetKurs(string kodeMataUang, DateTime tanggalVoucher)
             {
-                var databaseName = Request.Cookies["DatabaseName"];
+                var databaseName = Request.Cookies["DatabaseValue"];
                 var kurs = await Mediator.Send(new GetKursMataUangQuery
                 {
                     DatabaseName = databaseName,
@@ -172,6 +264,111 @@ namespace ABB.Web.Modules.EntriPembayaranBank
                 });
                 return Json(new { nilai_kurs = kurs });
             }
+
+            [HttpPost]
+            public async Task<ActionResult> SimpanNota([FromBody] CreatePembayaranBankNotaCommand command)
+            {
+                try
+                {
+                    // Validasi sederhana
+                    if (string.IsNullOrEmpty(command.NoVoucher) || command.Data == null || !command.Data.Any())
+                    {
+                        throw new System.Exception("Data yang dikirim tidak lengkap.");
+                    }
+
+                    // Langsung kirim command yang sudah ter-binding
+                    await Mediator.Send(command);
+                    return Ok(new { Status = "OK", Message = "Data berhasil disimpan" });
+                }
+                catch (Exception e)
+                {
+                    return Ok(new { Status = "ERROR", Message = e.InnerException?.Message ?? e.Message });
+                }
+            }
+
+             [HttpGet]
+                public async Task<IActionResult> GetJenisAssetList()
+                {
+                    var list = await Mediator.Send(new GetDistinctJenisAssetQuery());
+
+                    var result = list.Select(x => new
+                    {
+                        NamaJenisAsset = x,
+                        KodeJenisAsset = x
+                    }).ToList();
+
+                    return Json(result);
+                }
+
+             [HttpPost]
+            public async Task<IActionResult> SaveFinal([FromBody] SaveFinalPembayaranBankRequest request)
+            {
+                if (string.IsNullOrEmpty(request.NoVoucher))
+                    return Json(new { success = false, message = "Nomor voucher tidak boleh kosong." });
+
+                try
+                {
+                    var result = await Mediator.Send(new SaveFinalPembayaranBankCommand
+                    {
+                        NoVoucher = request.NoVoucher
+                    });
+
+                    return Json(new
+                    {
+                        success = true,
+                        message = $"Berhasil memindahkan {result} data dari tabel TEMP ke tabel FINAL."
+                    });
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { success = false, message = ex.Message });
+                }
+            }
+
+        public async Task<IActionResult> Lihat(string noVoucher)
+        {
+
+            var databaseName = Request.Cookies["DatabaseValue"];
+
+             ViewBag.FlagPembayaranOptions = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "Nota", Value = "NOTA" },
+                new SelectListItem { Text = "Akun", Value = "AKUN" }
+            };
+
+               ViewBag.DebetKreditOptions = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "Kredit", Value = "K" },
+                new SelectListItem { Text = "Debit", Value = "D" }
+                
+            };
+
+            var akunlist = await Mediator.Send(new GetAllCoaQuery());
+            ViewBag.KodeAkunOptions = akunlist.Select(x => new SelectListItem
+            {
+                Value = x.Kode,
+                Text = $"{x.Kode} - {x.Nama}"
+            }).ToList();
+
+             var mataUangList = await Mediator.Send(new GetMataUangQuery { DatabaseName = databaseName });
+            ViewBag.MataUangOptions = mataUangList.Select(x => new SelectListItem
+            {
+                Value = x.kd_mtu.Trim(),
+                Text = $"{x.kd_mtu.Trim()} - {x.nm_mtu.Trim()}"
+            }).ToList();
+
+
+            var voucherDto = await Mediator.Send(new GetVoucherBankByIdQuery { NoVoucher = noVoucher });
+            if (voucherDto == null) return NotFound();
+
+            var viewModel = new EntriPembayaranBankViewModel
+            {
+                VoucherHeader = voucherDto,
+                NoVoucher = noVoucher // Langsung set di properti utama
+            };
+
+            return PartialView(viewModel);
+        }
 
     }
 }

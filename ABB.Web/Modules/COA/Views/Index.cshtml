@@ -1,0 +1,79 @@
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.TagHelpers
+@using ABB.Application.Coas.Queries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "COA";
+}
+
+<script src="~/Modules/COA/JS/Coa.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+
+<div class="flat-box">
+        <div class="flat-box-title ">
+            COA
+            <div class="pullright-flex">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+      
+            <button class="flat-btn-primary" onclick="btnAddCOA_OnClick()">Entri COA</button>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+             @(Html.Kendo().Grid<CoaDto>()
+                .Name("CoaGrid")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetCoa", "Coa").Data("getSearchFilter")) // Arahkan ke action yang baru dibuat
+                    .Model(model => model.Id(c => c.Kode)) // Primary Key
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.Kode).Width(150).Title("Kode");
+                    columns.Bound(col => col.Nama).Width(400).Title("Nama");
+                    columns.Bound(col => col.Dept).Width(150).Title("Dept");
+                    columns.Bound(col => col.Type).Width(150).Title("type");
+                    columns.Command(command =>
+                    {
+                        command.Custom("EditCoa")
+                          .Text("Edit")
+                            .IconClass("fa fa-pencil-alt")
+                           .Click("btnEditCoa_OnClick");
+                      command.Custom("DeleteCoa")
+                           .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                           .Click("onDeleteCoa"); 
+                    }).Width(180).Title("Action").Locked(true);
+                })
+                .Pageable(pager => pager.Refresh(true))
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+            )
+        </div>
+
+        @(Html.Kendo().Window()
+            .Name("CoaWindow")
+            .Title("COA")
+            .Width(500)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+        )
+
+    </div>
+</div>
+

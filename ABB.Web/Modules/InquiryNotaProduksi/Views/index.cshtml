@@ -18,11 +18,22 @@
     .div-box{
         padding-bottom: 1em;
     }
+      .breadcrumb-item + .breadcrumb-item::before {
+        content: ">"; /* Ganti '/' dengan '>' */
+        padding: 0 .5rem; /* Atur spasi jika perlu */
+    }
 </style>
-
+<nav  aria-label="breadcrumb">
+   <ol class="breadcrumb" style="background: white; ">
+        <li class="breadcrumb-item"><a href="#">Finance</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Inquiry Nota Produksi</li>
+    </ol>
+    </nav>
 <div class="flat-box filter-box">
     <div class="flat-box-content">
-        <div class="filter-bar-top">
+        <div class="filter-bar" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+
+            <!-- Label Periode -->
             <label for="StartDate"><b>Periode :</b></label>
 
             <!-- DatePicker Dari -->
@@ -41,16 +52,37 @@
                 .Format("dd-MM-yyyy")
             )
 
+            <!-- Label Jenis Asset -->
+            <label for="JenisAsset" style="margin-left:15px;"><b>Jenis Ass :</b></label>
+
+            <!-- Dropdown Jenis Asset -->
+            @(Html.Kendo().ComboBox()
+                .Name("JenisAsset")
+                .Placeholder("Pilih ...")
+                .DataTextField("NamaJenisAsset")
+                .DataValueField("KodeJenisAsset")
+                .Filter("contains") // bisa mengetik untuk filter
+                .Suggest(true) // auto-suggest saat ketik
+                .DataSource(source => {
+                    source.Read(read => {
+                        read.Action("GetJenisAssetList", "InquiryNotaProduksi");
+                    });
+                })
+                .HtmlAttributes(new { style = "width:250px;" })
+            )
+
+
             <!-- Tombol Cari -->
             @(Html.Kendo().Button()
                 .Name("btnSearch")
                 .Content("<span class='k-icon k-i-search'></span> Cari")
-                .HtmlAttributes(new { @class = "k-primary", style = "border-radius:6px;" })
+                .HtmlAttributes(new { @class = "k-primary", style = "border-radius:6px; margin-left:10px;" })
                 .Events(e => e.Click("onSearchClick"))
             )
         </div>
     </div>
 </div>
+
 
 <div class="flat-box">
         <div class="flat-box-title ">
@@ -67,6 +99,8 @@
         <div class="div-box">
              @(Html.Kendo().Grid<InquiryNotaProduksiDto>()
                 .Name("InquiryNotaProduksiGrid")
+                .NoRecords(n => n.Template("<div style='padding:5px;'>Data tidak ditemukan</div>"))
+                 .AutoBind(false)  
                 .DataSource(dataSource => dataSource.Ajax()
                            .Read(read => read.Action("GetInquiryNotaProduksi", "InquiryNotaProduksi").Data("getAllFilters"))
                             .Model(model => model.Id(p => p.id))
@@ -84,7 +118,7 @@
                            .Text("View")
                             .IconClass("fa fa-eye")
                            .Click("btnViewInquiryNota_OnClick");
-                    }).Width(200).Title("Action").Locked(true);
+                    }).Width(100).Title("Action").Locked(true);
                 })
                 .Pageable(pager => pager.Refresh(true))
                 .Sortable()

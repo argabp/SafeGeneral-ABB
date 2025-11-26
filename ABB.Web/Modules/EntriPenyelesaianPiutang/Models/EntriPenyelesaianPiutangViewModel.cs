@@ -24,23 +24,30 @@ namespace ABB.Web.Modules.EntriPenyelesaianPiutang.Models
 
     public class EntriPenyelesaianPiutangViewModel : IMapFrom<CreatePenyelesaianPiutangCommand>
     {
-        // ======================================================
-        // Bagian 1: Data Header Voucher (Hanya untuk Tampilan)
-        // ======================================================
-         public HeaderPenyelesaianUtangDto PenyelesaianHeader { get; set; }
-        public List<PenyelesaianPiutangItem> PembayaranItems { get; set; } = new List<PenyelesaianPiutangItem>();
-        
-        // ======================================================
-        // Bagian 2: Properti untuk Form Input Pembayaran Baru
-        // ======================================================
-        
-        // NoVoucher akan diisi otomatis dan disembunyikan
+         // Properti untuk data header
+        public HeaderPenyelesaianUtangDto PenyelesaianHeader { get; set; }
+
+        // Properti untuk list data detail (grid)
+        public List<PenyelesaianPiutangItem> PembayaranItems { get; set; }
+
+        public EntriPenyelesaianPiutangViewModel()
+        {
+            // Ini adalah baris kunci yang memperbaiki error.
+            // Saat ViewModel dibuat, Header-nya juga langsung dibuat (tidak null lagi).
+            PenyelesaianHeader = new HeaderPenyelesaianUtangDto(); 
+
+            // Sebaiknya inisialisasi list juga di sini agar konsisten.
+            PembayaranItems = new List<PenyelesaianPiutangItem>();
+        }
+
         public string NoBukti { get; set; }
          public int No { get; set; }
 
         [Display(Name = "Flag Pembayaran")]
         public string FlagPembayaran { get; set; }
         
+         [Display(Name = "Kode Cabang")]
+        public string KodeCabang { get; set; }
         
          
         [Display(Name = "Nomor Nota")]
@@ -67,6 +74,9 @@ namespace ABB.Web.Modules.EntriPenyelesaianPiutang.Models
         [Display(Name = "User Bayar")]
         public string UserBayar { get; set; }
 
+         [Display(Name = "Flag Final")]
+        public bool? FlagFinal { get; set; }
+
         // Anda bisa tambahkan properti lain dari abb_pembayaran_bank di sini jika perlu diinput
         // Contoh: public string FlagPembayaran { get; set; }
 
@@ -77,6 +87,8 @@ namespace ABB.Web.Modules.EntriPenyelesaianPiutang.Models
             profile.CreateMap<EntriPenyelesaianPiutangViewModel, CreatePenyelesaianPiutangCommand>();
             profile.CreateMap<EntriPenyelesaianPiutangViewModel, UpdatePenyelesaianPiutangCommand>();
             profile.CreateMap<HeaderPenyelesaianUtangDto, CreateHeaderPenyelesaianUtangCommand>();
+            profile.CreateMap<EntriPenyelesaianPiutangViewModel, UpdateFinalPenyelesaianPiutangCommand>();
+            profile.CreateMap<EntriPenyelesaianPiutangDto, PenyelesaianPiutangItem>();
         }
     }
 }

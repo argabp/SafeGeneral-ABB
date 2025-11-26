@@ -16,6 +16,7 @@ namespace ABB.Application.EntriPembayaranKass.Commands
         public string KodeMataUang { get; set; }
         public int TotalBayar { get; set; }
         public string DebetKredit { get; set; }
+         public int? Kurs { get; set; }
         public decimal? TotalDlmRupiah { get; set; }
     }
 
@@ -31,7 +32,7 @@ namespace ABB.Application.EntriPembayaranKass.Commands
         public async Task<Unit> Handle(UpdatePembayaranKasCommand request, CancellationToken cancellationToken)
         {
             // Cari entity berdasarkan No + NoVoucher
-            var entity = await _context.EntriPembayaranKas
+            var entity = await _context.EntriPembayaranKasTemp
                 .FirstOrDefaultAsync(e => e.No == request.No && e.NoVoucher == request.NoVoucher, cancellationToken);
 
             if (entity == null)
@@ -49,7 +50,7 @@ namespace ABB.Application.EntriPembayaranKass.Commands
             entity.DebetKredit = request.DebetKredit;
             entity.TotalDlmRupiah = request.TotalDlmRupiah;
 
-            _context.EntriPembayaranKas.Update(entity);
+            _context.EntriPembayaranKasTemp.Update(entity);
             await _context.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;

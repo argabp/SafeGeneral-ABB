@@ -62,6 +62,8 @@ namespace ABB.Domain.Entities
          public decimal? post_tr { get; set; }
          public string jn_ass2 { get; set; }
          public string no_nd2 { get; set; }
+         public string no_cust{ get; set; }
+         public string nm_cust { get; set; }
 
 
 

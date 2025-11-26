@@ -26,6 +26,7 @@ namespace ABB.Web.Modules.VoucherBank
     {
         public ActionResult Index()
         {
+            
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
@@ -36,14 +37,18 @@ namespace ABB.Web.Modules.VoucherBank
         [HttpPost]
         public async Task<ActionResult> GetVoucherBank([DataSourceRequest] DataSourceRequest request, string searchKeyword)
         {
-            var data = await Mediator.Send(new GetAllVoucherBankQuery() { SearchKeyword = searchKeyword });
+             var kodeCabang = Request.Cookies["UserCabang"];
+            var data = await Mediator.Send(new GetAllVoucherBankQuery() { 
+                SearchKeyword = searchKeyword,
+                KodeCabang = kodeCabang
+                 });
             return Json(await data.ToDataSourceResultAsync(request));
         }
 
         [HttpGet]
         public async Task<IActionResult> GetKurs(string kodeMataUang, DateTime tanggalVoucher)
         {
-            var databaseName = Request.Cookies["DatabaseName"];
+            var databaseName = Request.Cookies["DatabaseValue"];
             var kurs = await Mediator.Send(new GetKursMataUangQuery
             {
                 DatabaseName = databaseName,
@@ -56,14 +61,31 @@ namespace ABB.Web.Modules.VoucherBank
          public async Task<IActionResult> Add()
         {
             // get db untuk relasi
-            var databaseName = Request.Cookies["DatabaseName"];
-           
+            var databaseName = Request.Cookies["DatabaseValue"];
+            var kodeCabangCookie = Request.Cookies["UserCabang"];
+      
             // kode cabang 
+
+            var model = new VoucherBankViewModel();
+            model.JenisVoucher = "BANK";
+            model.KodeUserInput = CurrentUser.UserId;
+            model.NamaUserInput = CurrentUser.UserName; 
+           
+
+            
             var cabangList = await Mediator.Send(new GetCabangsQuery { DatabaseName = databaseName });
+             var namaCabang = cabangList
+                .FirstOrDefault(c => string.Equals(c.kd_cb.Trim(), kodeCabangCookie?.Trim(), StringComparison.OrdinalIgnoreCase))
+                ?.nm_cb?.Trim();
+
+            ViewBag.DisplayCabang = $"{kodeCabangCookie}-{namaCabang}";
+            model.KodeCabang = kodeCabangCookie;
+
             ViewBag.KodeCabangOptions = cabangList.Select(c => new SelectListItem
             {
                 Value = c.kd_cb.Trim(),
-                Text = $"{c.kd_cb.Trim()} - {c.nm_cb.Trim()}"
+                Text = $"{c.kd_cb.Trim()} - {c.nm_cb.Trim()}",
+                Selected = c.kd_cb.Trim() == model.KodeCabang
             }).ToList();
 
             // select mata uang
@@ -77,6 +99,7 @@ namespace ABB.Web.Modules.VoucherBank
             // select debetkredit
             ViewBag.DebetKreditOptions = new List<SelectListItem>
             {
+                new SelectListItem { Text = "Pilih..", Value = "" },
                 new SelectListItem { Text = "Debit", Value = "D" },
                 new SelectListItem { Text = "Kredit", Value = "K" }
             };
@@ -107,8 +130,8 @@ namespace ABB.Web.Modules.VoucherBank
                     
                 };
             
-            var model = new VoucherBankViewModel();
-            model.JenisVoucher = "BANK"; 
+          
+          
             
             return PartialView(model);
         }
@@ -130,8 +153,12 @@ namespace ABB.Web.Modules.VoucherBank
         public async Task<IActionResult> Edit(string id)
         {
              // get db untuk relasi
-            var databaseName = Request.Cookies["DatabaseName"];
-            
+            var databaseName = Request.Cookies["DatabaseValue"];
+
+            // if (string.IsNullOrEmpty(databaseName))
+            // {
+            //     return RedirectToAction("Logout", "Account");
+            // }
             // kode cabang
             var cabangList = await Mediator.Send(new GetCabangsQuery { DatabaseName = databaseName });
             ViewBag.KodeCabangOptions = cabangList.Select(c => new SelectListItem

@@ -16,6 +16,8 @@ namespace ABB.Application.PostingVoucherKas.Queries
         public bool FlagPosting { get; set; }   // true = sudah posting, false = belum posting
         public string SearchKeyword { get; set; }
          public string DatabaseName { get; set; }   
+        public string KodeCabang { get; set; }
+        public bool FlagFinal { get; set; }
     }
 
     public class GetAllVoucherKasByFlagQueryHandler : IRequestHandler<GetAllVoucherKasByFlagQuery, List<VoucherKasDto>>
@@ -52,6 +54,14 @@ namespace ABB.Application.PostingVoucherKas.Queries
                 );
             }
 
+            
+
+            query = query.Where(vk => vk.FlagFinal == request.FlagFinal);
+
+            if (!string.IsNullOrEmpty(request.KodeCabang))
+            {
+                query = query.Where(vk => vk.KodeCabang == request.KodeCabang);
+            }
             // Proyeksikan ke DTO
             var voucherKasList = await query
                 .ProjectTo<VoucherKasDto>(_mapper.ConfigurationProvider)

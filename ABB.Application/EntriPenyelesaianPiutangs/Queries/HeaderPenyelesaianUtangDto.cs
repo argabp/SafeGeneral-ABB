@@ -23,6 +23,8 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Queries
         public DateTime? TanggalUpdate { get; set; }
         public string KodeUserUpdate { get; set; }
         public bool FlagPosting { get; set; }
+        public bool FlagFinal { get; set; }
+
 
         public void Mapping(Profile profile)
         {

@@ -29,12 +29,12 @@ namespace ABB.Application.EntriPembayaranKass.Commands
             }
 
             // Cari detail pembayaran berdasarkan Id dan NoVoucher
-            var entity = await _context.EntriPembayaranKas
+            var entity = await _context.EntriPembayaranKasTemp
                 .FirstOrDefaultAsync(v => v.No == request.No && v.NoVoucher == request.NoVoucher, cancellationToken);
 
             if (entity != null)
             {
-                _context.EntriPembayaranKas.Remove(entity);
+                _context.EntriPembayaranKasTemp.Remove(entity);
                 await _context.SaveChangesAsync(cancellationToken);
             }
 

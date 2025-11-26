@@ -27,11 +27,15 @@ namespace ABB.Web.Modules.PostingVoucherKas
         }
         
          [HttpPost] // Action untuk Kendo Grid biasanya POST
-        public async Task<ActionResult> GetPostingVoucherKas([DataSourceRequest] DataSourceRequest request)
+        public async Task<ActionResult> GetPostingVoucherKas([DataSourceRequest] DataSourceRequest request, string searchKeyword)
         {
             // --- PERBAIKI BAGIAN INI ---
+             var kodeCabang = Request.Cookies["UserCabang"];
             var ds = await Mediator.Send(new GetAllVoucherKasByFlagQuery
             {
+                SearchKeyword = searchKeyword,
+                KodeCabang = kodeCabang,
+                FlagFinal = true,
                 DatabaseName = Request.Cookies["DatabaseName"]
             });
             // -------------------------
