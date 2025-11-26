@@ -1,9 +1,0 @@
-C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Domain\bin\Release\netstandard2.1\ABB.Domain.deps.json
-C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Domain\bin\Release\netstandard2.1\ABB.Domain.dll
-C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Domain\bin\Release\netstandard2.1\ABB.Domain.pdb
-C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Domain\obj\Release\netstandard2.1\ABB.Domain.csprojAssemblyReference.cache
-C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Domain\obj\Release\netstandard2.1\ABB.Domain.AssemblyInfoInputs.cache
-C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Domain\obj\Release\netstandard2.1\ABB.Domain.AssemblyInfo.cs
-C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Domain\obj\Release\netstandard2.1\ABB.Domain.csproj.CoreCompileInputs.cache
-C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Domain\obj\Release\netstandard2.1\ABB.Domain.dll
-C:\Users\Formulatrix\RiderProjects\Mine\ABB - Copy\ABB.Domain\obj\Release\netstandard2.1\ABB.Domain.pdb

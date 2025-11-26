@@ -274,5 +274,7 @@ obj/
 !Include/libwkhtmltox.x64.dll
 
 # Personal/local scripts
+**/bin/
+**/obj/
 run-abb-dev.ps1
 run-abb-dev.bat
