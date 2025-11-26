@@ -169,6 +169,7 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
                     trAkseptasi.tgl_update = dateNow;
                     trAkseptasi.flag_approved = false;
                     trAkseptasi.flag_closing = "N";
+                    trAkseptasi.flag_banding = false;
 
                     _context.TRAkseptasi.Add(trAkseptasi);
                 }

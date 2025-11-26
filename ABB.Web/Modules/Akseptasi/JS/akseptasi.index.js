@@ -106,14 +106,26 @@ function deleteAkseptasi(dataItem) {
 }
 
 function onAkseptasiDataBound(e) {
-    // Check each row for the value of `no_updt`
-    var grid = $("#AkseptasiGrid").data("kendoGrid");
-    grid.tbody.find("tr").each(function() {
+    var grid = this;
+    var userLogin = $("#UserLogin").val();
+
+    grid.tbody.find("tr").each(function(e, element) {
         var dataItem = grid.dataItem(this);
-        // Check if the value of no_updt is 1
-        if (dataItem.no_updt === 0) {
-            // Find the "Closing" button and hide it
-            $(this).find("a[title='KeteranganEndorsment']").hide();
+        var uid = $(this).data("uid");
+
+        // Find button container - try locked column first, then regular
+        var buttonContainer = grid.element.find(".k-grid-content-locked tr[data-uid='" + uid + "'] .k-command-cell");
+        if (!buttonContainer.length) {
+            buttonContainer = $(this).find(".k-command-cell");
+        }
+
+        if (buttonContainer.length) {            
+            if (dataItem.no_updt === 0) {
+                // Find the "Closing" button and hide it
+                buttonContainer.find("a[title='KeteranganEndorsment']").hide();
+            }
         }
     });
+
+    gridAutoFit(grid);
 }

@@ -40,13 +40,6 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.nm_kota).Width(150).Title("Kode Cabang");
-                    columns.Bound(col => col.nm_grp_rk).Width(150).Title("Kode Group Rekanan");
-                    columns.Bound(col => col.kd_rk).Width(150).Title("Kode Rekanan");
-                    columns.Bound(col => col.nm_rk).Width(150).Title("Nama Rekanan");
-                    columns.Bound(col => col.nm_kota).Width(150).Title("Kota Rekanan");
-                    columns.Bound(col => col.almt).Width(150).Title("Alamat Rekanan");
-                    columns.Bound(col => col.nm_sic).Width(150).Title("Retail/Corporate");
                     columns.Command(command =>
                     {
                         command.Custom("EditRekanan")
@@ -69,7 +62,14 @@
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteDetailRekanan");
-                    }).Width(200).Title("Action");
+                    }).Width(200).Title("Action").Locked(true);
+                    columns.Bound(col => col.nm_kota).Width(150).Title("Kode Cabang");
+                    columns.Bound(col => col.nm_grp_rk).Width(150).Title("Kode Group Rekanan");
+                    columns.Bound(col => col.kd_rk).Width(150).Title("Kode Rekanan");
+                    columns.Bound(col => col.nm_rk).Width(150).Title("Nama Rekanan");
+                    columns.Bound(col => col.nm_kota).Width(150).Title("Kota Rekanan");
+                    columns.Bound(col => col.almt).Width(150).Title("Alamat Rekanan");
+                    columns.Bound(col => col.nm_sic).Width(150).Title("Retail/Corporate");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

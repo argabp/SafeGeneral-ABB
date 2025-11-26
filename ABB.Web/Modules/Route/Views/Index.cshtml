@@ -33,7 +33,6 @@
             columns.Bound(col => col.RouteId).Hidden();
             columns.Bound(col => col.RouteName).Title("URL Name");
             columns.Bound(col => col.Route).Title("URL Address");
-
         })
         .Pageable(pager => pager
                     .Refresh(true)

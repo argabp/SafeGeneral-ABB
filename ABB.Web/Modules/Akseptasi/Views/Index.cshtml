@@ -44,15 +44,6 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
-                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
-                    columns.Bound(col => col.nm_scob).Width(150).Title("Nama Sub COB");
-                    columns.Bound(col => col.no_aks_view).Width(150).Title("Nomor Akseptasi");
-                    columns.Bound(col => col.nm_ttg).Width(175).Title("Nama Tertanggung");
-                    columns.Bound(col => col.st_pas).Width(150).Title("Status Polis");
-                    columns.Bound(col => col.no_updt).Width(150).Title("Nomor Update");
-                    columns.Bound(col => col.no_pol_pas).Width(175).Title("Nomor Polis Ceding");
-                    columns.Bound(col => col.nomor_pengajuan).Width(175).Title("Nomor Pengajuan");
                     columns.Command(command =>
                     {
                         command.Custom("EditAkseptasi")
@@ -65,17 +56,26 @@
                             .IconClass("fa fa-lock")
                             .HtmlAttributes(new { title = "Closing" })
                             .Click("btnClosingAkseptasi_OnClick");
-                        command.Custom("DeleteAkseptasi")
-                            .Text("Delete")
-                            .IconClass("k-icon k-i-delete")
-                            .HtmlAttributes(new { title = "Delete" })
-                            .Click("btnDeleteAkseptasi_OnClick");
+                        // command.Custom("DeleteAkseptasi")
+                        //     .Text("Delete")
+                        //     .IconClass("k-icon k-i-delete")
+                        //     .HtmlAttributes(new { title = "Delete" })
+                        //     .Click("btnDeleteAkseptasi_OnClick");
                         command.Custom("KeteranganEndorsment")
-                            .Text("KeteranganEndorsment")
+                            .Text("Keterangan Endorsment")
                             .IconClass("fa fa-indent")
                             .HtmlAttributes(new { title = "KeteranganEndorsment" })
                             .Click("btnKeteranganEndorsment_OnClick");
-                    }).Width(200).Title("Action");
+                    }).Width(200).Title("Action").Locked(true);
+                    columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
+                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
+                    columns.Bound(col => col.nm_scob).Width(150).Title("Nama Sub COB");
+                    columns.Bound(col => col.no_aks_view).Width(150).Title("Nomor Akseptasi");
+                    columns.Bound(col => col.nm_ttg).Width(175).Title("Nama Tertanggung");
+                    columns.Bound(col => col.st_pas).Width(150).Title("Status Polis");
+                    columns.Bound(col => col.no_updt).Width(150).Title("Nomor Update");
+                    columns.Bound(col => col.no_pol_pas).Width(175).Title("Nomor Polis Ceding");
+                    columns.Bound(col => col.nomor_pengajuan).Width(175).Title("Nomor Pengajuan");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

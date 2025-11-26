@@ -34,22 +34,22 @@
         )
         .Columns(columns =>
         {
-            columns.Bound(col => col.userid).Hidden();
-            columns.Bound(col => col.username).Title("Username");
-            columns.Bound(col => col.nm_cb).Title("Nama Cabang").ClientTemplate("#= brTemplateComma(nm_cb) #");
             columns.Command(command =>
             {
                 command.Custom("Edit")
-                        .Text(" ")
-                        .IconClass("fa fa-pencil-alt")
-                        .Click("btnEditUserCabang_OnClick")
-                        .HtmlAttributes(new { title = "Edit" });
+                    .Text(" ")
+                    .IconClass("fa fa-pencil-alt")
+                    .Click("btnEditUserCabang_OnClick")
+                    .HtmlAttributes(new { title = "Edit" });
                 command.Custom("Delete")
-                        .Text(" ")
-                        .IconClass("fa fa-trash")
-                        .Click("btnDeleteUserCabang_OnClick")
-                        .HtmlAttributes(new { title = "Delete" });
-            }).Title("Action").Width(180);
+                    .Text(" ")
+                    .IconClass("fa fa-trash")
+                    .Click("btnDeleteUserCabang_OnClick")
+                    .HtmlAttributes(new { title = "Delete" });
+            }).Title("Action").Width(250).Locked(true);
+            columns.Bound(col => col.userid).Hidden();
+            columns.Bound(col => col.username).Title("Username");
+            columns.Bound(col => col.nm_cb).Title("Nama Cabang").ClientTemplate("#= brTemplateComma(nm_cb) #");
         })
         .Pageable(pager => pager
                     .Refresh(true)

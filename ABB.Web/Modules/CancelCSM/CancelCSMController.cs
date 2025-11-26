@@ -64,7 +64,7 @@ namespace ABB.Web.Modules.CancelCSM
         
         public async Task<ActionResult> GetViewSourceData([DataSourceRequest] DataSourceRequest request, ProsesCSMViewModel model)
         {
-            var ds = await Mediator.Send(new GetViewSourceDataCancelQuery() { KodeMetode = model.KodeMetode, TipeTransaksi = model.TipeTransaksi});
+            var ds = await Mediator.Send(new GetViewSourceDataCancelQuery() { KodeMetode = model.KodeMetode});
             return Json(ds.AsQueryable().ToDataSourceResult(request));
         }
 

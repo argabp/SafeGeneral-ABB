@@ -6,6 +6,7 @@ using ABB.Application.Akuisisis.Queries;
 using ABB.Application.BiayaPerSubCOBs.Queries;
 using ABB.Application.Common;
 using ABB.Application.Common.Exceptions;
+using ABB.Application.Common.Queries;
 using ABB.Application.KapasitasCabangs.Commands;
 using ABB.Application.KapasitasCabangs.Queries;
 using ABB.Application.SebabKejadians.Queries;

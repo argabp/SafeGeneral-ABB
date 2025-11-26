@@ -1,0 +1,263 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.Inquiry.Models.InquiryResikoOtherMotorDetailViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<style>
+    p {
+        margin: 0px;
+        padding: 0px;
+    }
+    label {
+        align-content: center;
+    }
+</style>
+
+@{
+    var nomor_aksepatsi = Model.kd_cb.Trim() + "." + Model.kd_cob.Trim() +
+                          Model.kd_scob.Trim() + "." + Model.kd_thn.Trim() + "." + Model.no_pol.Trim();
+    var inquiry_other_motor_detail_nilai_casco = (double)Model.nilai_casco;
+    var inquiry_other_motor_detail_nilai_prm_casco = (double)Model.nilai_prm_casco;
+    var inquiry_other_motor_detail_nilai_rsk_sendiri = (double)Model.nilai_rsk_sendiri;
+    var inquiry_other_motor_detail_nilai_prm_aog = (double)Model.nilai_prm_aog;
+    var inquiry_other_motor_detail_nilai_prm_hh = (double)Model.nilai_prm_hh;
+    var inquiry_other_motor_detail_nilai_tjh = (double)Model.nilai_tjh;
+    var inquiry_other_motor_detail_nilai_prm_tjh = (double)Model.nilai_prm_tjh;
+    var inquiry_other_motor_detail_nilai_tjp = (double)Model.nilai_tjp;
+    var inquiry_other_motor_detail_nilai_prm_tjp = (double)Model.nilai_prm_tjp;
+    var inquiry_other_motor_detail_nilai_pap = (double)Model.nilai_pap;
+    var inquiry_other_motor_detail_nilai_prm_pap = (double)Model.nilai_prm_pap;
+    var inquiry_other_motor_detail_nilai_pad = (double)Model.nilai_pad;
+    var inquiry_other_motor_detail_nilai_prm_pad = (double)Model.nilai_prm_pad;
+    var inquiry_other_motor_detail_nilai_pap_med = Model.nilai_pap_med == null ? 0 : (double)Model.nilai_pap_med;
+    var inquiry_other_motor_detail_nilai_prm_pap_med = Model.nilai_prm_pap_med == null ? 0 : (double)Model.nilai_prm_pap_med;
+    var inquiry_other_motor_detail_nilai_pad_med = Model.nilai_pad_med == null ? 0 : (double)Model.nilai_pad_med;
+    var inquiry_other_motor_detail_nilai_prm_pad_med = Model.nilai_prm_pad_med == null ? 0 : (double)Model.nilai_prm_pad_med;
+    var inquiry_other_motor_detail_nilai_prm_trs = Model.nilai_prm_trs == null ? 0 : (double)Model.nilai_prm_trs;
+    var inquiry_other_motor_detail_nilai_prm_banjir = Model.nilai_prm_banjir == null ? 0 : (double)Model.nilai_prm_banjir;
+}
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="OtherMotorDetailForm" enctype="multipart/form-data" autocomplete="off">
+        @Html.HiddenFor(h => h.st_deffered)
+        <div class="form-group row">
+            <div class="row col-sm-4">
+                <label class="col-sm-6">Nomor Akseptasi</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="temp_other_motor_detail_nomor_akseptasi" value="@nomor_aksepatsi" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-4">
+                <label class="col-sm-6">Nomor Update</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="other_motor_detail_no_updt" value="@Model.no_updt" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-4">
+                <label class="col-sm-6">Nilai Pertanggungan Casco</label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-4">
+                <label class="col-sm-6">Nomor Resiko</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="resiko_other_motor_no_rsk" value="@Model.no_rsk" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-4">
+                <label class="col-sm-6">Kode Endorsment</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist name="resiko_other_motor_detail_kd_endt" style="width: 100%" readonly="true" value="@Model.kd_endt"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeEndorsment", "Inquiry")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-4">Tahun</label>
+                <div class="col-sm-8">
+                    <kendo-numerictextbox decimals="0" spinners="false" format="#" for="thn_ptg_kend" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-4">% TSI</label>
+                <div class="col-sm-8">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="prs_tsi" style="width: 100%" readonly="true"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-4">TSI Casco</label>
+                <div class="col-sm-8">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_casco" readonly="true"
+                                          value="@inquiry_other_motor_detail_nilai_casco" style="width: 100%; background-color: #FFFFE1"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-4">Premi Casco</label>
+                <div class="col-sm-8">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_prm_casco" readonly="true"
+                                          value="@inquiry_other_motor_detail_nilai_prm_casco" style="width: 100%; background-color: #FFFFE1"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-4">Bentuk PTG</label>
+                <div class="col-sm-8">
+                    <kendo-dropdownlist name="akseptasi_other_motor_detail_kd_jns_ptg_thn" style="width: 100%" value="@Model.kd_jns_ptg_thn" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetJenisPertanggungan", "Inquiry")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-4">Own Risk</label>
+                <div class="col-sm-8">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_rsk_sendiri" readonly="true"
+                                          value="@inquiry_other_motor_detail_nilai_rsk_sendiri" style="width: 100%; background-color: #FFFFE1"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-4">Premi AOG</label>
+                <div class="col-sm-8">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_prm_aog" readonly="true"
+                                          value="@inquiry_other_motor_detail_nilai_prm_aog" style="width: 100%; background-color: #FFFFE1"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-4">Premi HH</label>
+                <div class="col-sm-8">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_prm_hh" readonly="true"
+                                          value="@inquiry_other_motor_detail_nilai_prm_hh" style="width: 100%; background-color: #FFFFE1"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-4">TJH</label>
+                <div class="col-sm-8">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_tjh" readonly="true"
+                                          value="@inquiry_other_motor_detail_nilai_tjh" style="width: 100%; background-color: #FFFFE1"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-4">Premi TJH</label>
+                <div class="col-sm-8">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_prm_tjh" readonly="true"
+                                          value="@inquiry_other_motor_detail_nilai_prm_tjh" style="width: 100%; background-color: #FFFFE1"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-4">TSI TJP</label>
+                <div class="col-sm-8">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_tjp" readonly="true"
+                                          value="@inquiry_other_motor_detail_nilai_tjp" style="width: 100%; background-color: #FFFFE1"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-4">Premi TJP</label>
+                <div class="col-sm-8">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_prm_tjp" readonly="true"
+                                          value="@inquiry_other_motor_detail_nilai_prm_tjp" style="width: 100%; background-color: #FFFFE1"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-4">TSI PAP</label>
+                <div class="col-sm-8">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_pap" readonly="true"
+                                          value="@inquiry_other_motor_detail_nilai_pap" style="width: 100%; background-color: #FFFFE1"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-4">Premi PAP</label>
+                <div class="col-sm-8">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_prm_pap" readonly="true"
+                                          value="@inquiry_other_motor_detail_nilai_prm_pap" style="width: 100%; background-color: #FFFFE1"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-4">TSI PAD</label>
+                <div class="col-sm-8">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_pad" readonly="true" 
+                                          value="@inquiry_other_motor_detail_nilai_pad" style="width: 100%; background-color: #FFFFE1"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-4">Premi PAD</label>
+                <div class="col-sm-8">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_prm_pad" readonly="true"
+                                          value="@inquiry_other_motor_detail_nilai_prm_pad" style="width: 100%; background-color: #FFFFE1"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-4">TSI MEP</label>
+                <div class="col-sm-8">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_pap_med" readonly="true"
+                                          value="@inquiry_other_motor_detail_nilai_pap_med" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-4">Premi MEP</label>
+                <div class="col-sm-8">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_prm_pap_med" readonly="true"
+                                          value="@inquiry_other_motor_detail_nilai_prm_pap_med" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-4">TSI MED</label>
+                <div class="col-sm-8">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_pad_med" readonly="true"
+                                          value="@inquiry_other_motor_detail_nilai_pad_med" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-4">Premi MED</label>
+                <div class="col-sm-8">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_prm_pad_med" readonly="true"
+                                          value="@inquiry_other_motor_detail_nilai_prm_pad_med" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-4">Premi TRS</label>
+                <div class="col-sm-8">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_prm_trs" readonly="true"
+                                          value="@inquiry_other_motor_detail_nilai_prm_trs" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-4">Premi Banjir</label>
+                <div class="col-sm-8">
+                    <kendo-numerictextbox decimals="2" spinners="false" name="akseptasi_other_motor_detail_nilai_prm_banjir" readonly="true"
+                                          value="@inquiry_other_motor_detail_nilai_prm_banjir" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

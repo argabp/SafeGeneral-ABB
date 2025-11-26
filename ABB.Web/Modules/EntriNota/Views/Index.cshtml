@@ -9,7 +9,7 @@
 
 @{
     Layout = "~/Modules/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Entri Nota";
+    ViewData["Title"] = "Nota Tertanggung";
 }
 <script src="~/Modules/EntriNota/JS/entriNota.index.js"></script>
 
@@ -41,6 +41,19 @@
                 )
                 .Columns(columns =>
                 {
+                    columns.Command(command =>
+                    {
+                        command.Custom("EditNota")
+                            .Text("Edit")
+                            .IconClass("k-icon k-i-edit")
+                            .HtmlAttributes(new { title="Edit"})
+                            .Click("onEditEntriNota");
+                        command.Custom("ViewNota")
+                            .Text("View")
+                            .IconClass("fa fa-eye")
+                            .HtmlAttributes(new { title = "View" })
+                            .Click("onViewEntriNota");
+                    }).Width(200).Title("Action").Locked(true);
                     columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
                     columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
                     columns.Bound(col => col.nm_scob).Width(150).Title("Nama SCOB");
@@ -52,14 +65,6 @@
                     columns.Bound(col => col.no_pol_pas).Width(175).Title("Nomor Polis Ceding");
                     columns.Bound(col => col.nilai_nt).Width(150).Title("Nilai Nota").Format("{0:n2}");
                     columns.Bound(col => col.flag_posting).Width(150).Title("Flag Posting");
-                    columns.Command(command =>
-                    {
-                        command.Custom("EditNota")
-                            .Text("Edit")
-                            .IconClass("k-icon k-i-edit")
-                            .HtmlAttributes(new { title="Edit"})
-                            .Click("onEditEntriNota");
-                    }).Width(200).Title("Action");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

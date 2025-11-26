@@ -43,5 +43,6 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
         public string kd_user_status { get; set; }
 
         public string? flag_appproved { get; set; }
+        public bool? flag_banding { get; set; }
     }
 }

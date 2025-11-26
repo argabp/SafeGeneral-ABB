@@ -41,10 +41,6 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.desk_grp_rsk).Width(150).Title("Grup Resiko");
-                    columns.Bound(col => col.kd_rsk).Width(150).Title("Kode Jenis");
-                    columns.Bound(col => col.desk_rsk).Width(150).Title("Nama Jenis Kendaraan");
-                    columns.Bound(col => col.nm_ref).Width(150).Title("Kategori");
                     columns.Command(command =>
                     {
                         command.Custom("EditKategoriJenisKendaraan")
@@ -57,7 +53,11 @@
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteKategoriJenisKendaraan");
-                    }).Width(200).Title("Action");
+                    }).Width(200).Title("Action").Locked(true);
+                    columns.Bound(col => col.desk_grp_rsk).Width(150).Title("Grup Resiko");
+                    columns.Bound(col => col.kd_rsk).Width(150).Title("Kode Jenis");
+                    columns.Bound(col => col.desk_rsk).Width(150).Title("Nama Jenis Kendaraan");
+                    columns.Bound(col => col.nm_ref).Width(150).Title("Kategori");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

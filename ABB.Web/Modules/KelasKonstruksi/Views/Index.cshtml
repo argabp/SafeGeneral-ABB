@@ -44,8 +44,6 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.kd_kls_konstr).Width(200).Title("Kode Kelas Konstruksi").Editable("disableGridTextboxWhenEdit");
-                    columns.Bound(col => col.nm_kls_konstr).Width(200).Title("Nama Kelas Konstruksi");
                     columns.Command(command =>
                     {
                         command.Edit();
@@ -54,7 +52,9 @@
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteKelasKonstruksi");
-                    }).Width(200).Title("Action");
+                    }).Width(200).Title("Action").Locked(true);
+                    columns.Bound(col => col.kd_kls_konstr).Width(200).Title("Kode Kelas Konstruksi").Editable("disableGridTextboxWhenEdit");
+                    columns.Bound(col => col.nm_kls_konstr).Width(200).Title("Nama Kelas Konstruksi");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

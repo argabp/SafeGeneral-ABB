@@ -6,7 +6,7 @@
 
 function dataViewSourceData(){
     return {
-        TipeTransaksi: $("#TipeTransaksi").val(),
+        // TipeTransaksi: $("#TipeTransaksi").val(),
         KodeMetode: $("#KodeMetode").val(),
     }
 }
@@ -24,7 +24,7 @@ function proses(){
         let selectedKeys = $("#ViewSourceDataGrid").getKendoGrid().selectedKeyNames();
         var data = {
             Id: selectedKeys,
-            TipeTransaksi: $("#TipeTransaksi").val(),
+            // TipeTransaksi: $("#TipeTransaksi").val(),
             KodeMetode: $("#KodeMetode").val(),            
         }
         ajaxPost("/ProsesCSM/Proses", JSON.stringify(data), (response) => {
@@ -45,7 +45,7 @@ function prosesAll(){
     $('#btn-proses-all').click(function () {
         var data = {
             Id: [],
-            TipeTransaksi: $("#TipeTransaksi").val(),
+            // TipeTransaksi: $("#TipeTransaksi").val(),
             KodeMetode: $("#KodeMetode").val(),
         }
         ajaxPost("/ProsesCSM/ProsesAll", JSON.stringify(data), (response) => {

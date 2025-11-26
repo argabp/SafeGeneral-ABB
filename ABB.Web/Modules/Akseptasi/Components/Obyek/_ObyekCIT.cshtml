@@ -22,11 +22,6 @@
         )
         .Columns(columns =>
         {
-            columns.Bound(col => col.no_oby).Width(150).Title("Nomor Obyek");
-            columns.Bound(col => col.nm_asal).Width(250).Title("Asal");
-            columns.Bound(col => col.ket_tujuan).Width(150).Title("Tujuan");
-            columns.Bound(col => col.nilai_kas).Width(150).Title("Nilai Pertanggungan");
-            columns.Bound(col => col.pst_rate).Width(150).Title("Rate");
             columns.Command(command =>
             {
                 command.Custom("EditAkseptasiObyekCIT")
@@ -39,7 +34,12 @@
                     .IconClass("k-icon k-i-delete")
                     .HtmlAttributes(new { title = "Delete" })
                     .Click("btnDeleteAkseptasiObyekCIT_OnClick");
-            }).Width(200).Title("Action");
+            }).Width(200).Locked(true).Title("Action");
+            columns.Bound(col => col.no_oby).Width(150).Title("Nomor Obyek");
+            columns.Bound(col => col.nm_asal).Width(250).Title("Asal");
+            columns.Bound(col => col.ket_tujuan).Width(150).Title("Tujuan");
+            columns.Bound(col => col.nilai_kas).Width(150).Title("Nilai Pertanggungan");
+            columns.Bound(col => col.pst_rate).Width(150).Title("Rate");
         })
         .Pageable(pager => pager
             .Refresh(true)

@@ -41,8 +41,6 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.kd_kapal).Width(150).Title("Kode Kapal");
-                    columns.Bound(col => col.nm_kapal).Width(150).Title("Nama Kapal");
                     columns.Command(command =>
                     {
                         command.Custom("EditKapal")
@@ -55,7 +53,9 @@
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteKapal");
-                    }).Width(200).Title("Action");
+                    }).Width(200).Title("Action").Locked(true);
+                    columns.Bound(col => col.kd_kapal).Width(150).Title("Kode Kapal");
+                    columns.Bound(col => col.nm_kapal).Width(150).Title("Nama Kapal");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

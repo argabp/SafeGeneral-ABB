@@ -41,18 +41,18 @@
         )
         .Columns(columns =>
         {
+            columns.Command(command =>
+            {
+                command.Custom("Edit")
+                    .Text(" ")
+                    .IconClass("fa fa-pencil-alt")
+                    .Click("btnEditRoleRoute_OnClick")
+                    .HtmlAttributes(new { title = "Edit" });
+            }).Title("Action").Width(150).Locked(true);
             columns.Bound(col => col.RoleId).Hidden();
             columns.Bound(col => col.RoleName).Width(160);
             columns.Bound(col => col.Controller).Width(200).ClientTemplate("#= brTemplate(data.Controller) #");
             columns.Bound(col => col.Action).ClientTemplate("#= brTemplate(data.Action) #");
-            columns.Command(command =>
-            {
-                command.Custom("Edit")
-                        .Text(" ")
-                        .IconClass("fa fa-pencil-alt")
-                        .Click("btnEditRoleRoute_OnClick")
-                        .HtmlAttributes(new { title = "Edit" });
-            }).Title("Action").Width(80);
         })
         .Pageable(pager => pager
                     .Refresh(true)

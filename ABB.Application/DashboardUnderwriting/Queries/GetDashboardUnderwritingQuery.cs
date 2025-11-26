@@ -13,15 +13,17 @@ namespace ABB.Application.DashboardUnderwriting.Queries
         public string KodeCabang { get; set; }
 
         public string Cabang { get; set; }
+
+        public string DatabaseName { get; set; }
     }
 
     public class GetDashboardUnderwritingQueryHandler : IRequestHandler<GetDashboardUnderwritingQuery, DashboardUnderwritingDto>
     {
-        private readonly IDbConnection _db;
+        private readonly IDbConnectionFactory _dbConnectionFactory;
 
-        public GetDashboardUnderwritingQueryHandler(IDbConnection db)
+        public GetDashboardUnderwritingQueryHandler(IDbConnectionFactory dbConnectionFactory)
         {
-            _db = db;
+            _dbConnectionFactory = dbConnectionFactory;
         }
 
         public async Task<DashboardUnderwritingDto> Handle(GetDashboardUnderwritingQuery request,
@@ -36,7 +38,7 @@ namespace ABB.Application.DashboardUnderwriting.Queries
             urls.Add("Approved", "/PengajuanAkseptasi/Index?");
             urls.Add("Rejected", "/PengajuanAkseptasi/Index?");
             urls.Add("Revised", "/PengajuanAkseptasi/Index?");
-            urls.Add("Canceled", "/PengajuanAkseptasi/Index?");
+            urls.Add("Banding", "/PengajuanAkseptasi/Index?");
             
             var icons = new Dictionary<string, string>();
             
@@ -47,11 +49,13 @@ namespace ABB.Application.DashboardUnderwriting.Queries
             icons.Add("Approved", "fa-child");
             icons.Add("Rejected", "fa-times-circle");
             icons.Add("Revised", "fa-edit");
-            icons.Add("Canceled", "fa-ban");
+            icons.Add("Banding", "fa-history");
             var dashboard = new DashboardUnderwritingDto();
 
+            _dbConnectionFactory.CreateDbConnection(request.DatabaseName);
+            
             var datas =
-                (await _db.Query<DashboardUnderwritingDataDto>("SELECT * FROM v_TR_Dashboard_Cabang WHERE kd_cb = @KodeCabang", new { request.KodeCabang })).ToList();
+                (await _dbConnectionFactory.Query<DashboardUnderwritingDataDto>("SELECT * FROM v_TR_Dashboard_Cabang WHERE kd_cb = @KodeCabang", new { request.KodeCabang })).ToList();
 
             foreach (var url in urls)
             {
@@ -82,7 +86,7 @@ namespace ABB.Application.DashboardUnderwriting.Queries
             var month = dateNow.Month;
             var day = dateNow.Day;
             
-            var graphic = (await _db.QueryProc<DashboardUnderwritingGraphicDto>("spr_ppc_bulanan_1", new { kd_cb = request.KodeCabang, tgl_proses = $"{year}-{month}-{day}"  })).ToList();
+            var graphic = (await _dbConnectionFactory.QueryProc<DashboardUnderwritingGraphicDto>("spr_ppc_bulanan01", new { kd_cb = request.KodeCabang, tgl_proses = $"{year}-{month}-{day}"  })).ToList();
 
             dashboard.Graphic = graphic;
             

@@ -1,0 +1,131 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.Inquiry.Models.InquiryResikoOtherCargoDetailViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<style>
+    p {
+        margin: 0px;
+        padding: 0px;
+    }
+    label {
+        align-content: center;
+    }
+</style>
+
+@{
+    var nomor_aksepatsi = Model.kd_cb.Trim() + "." + Model.kd_cob.Trim() +
+                          Model.kd_scob.Trim() + "." + Model.kd_thn.Trim() + "." + Model.no_pol.Trim();
+}
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="OtherCargoDetailForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Akseptasi</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="temp_other_cargo_detail_nomor_akseptasi" value="@nomor_aksepatsi" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Update</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="other_cargo_detail_no_updt" value="@Model.no_updt" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Resiko</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="resiko_other_cargo_no_rsk" value="@Model.no_rsk" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Endorsment</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist name="resiko_other_cargo_detail_kd_endt" style="width: 100%" readonly="true" value="@Model.kd_endt"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeEndorsment", "Inquiry")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Urut</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="resiko_other_cargo_no_urut" value="@Model.no_urut" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Jenis Angkut</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="jns_angkut" style="width: 100%" class="not-null-dropdown"
+                                        option-label="Pilih Jenis Angkut" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetJenisAngkut", "Inquiry")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Kapal</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_angkut" style="width: 100%" readonly="true" option-label="Pilih Kode Kapal"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeKapal", "Inquiry")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6" id="label_nm_angkut"></label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="nm_angkut" style="width: 100%; background-color: #FFFFE1" readonly="true"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6" id="label_no_bl"></label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="resiko_other_cargo_detail_no_bl" value="@Model.no_bl" style="width: 100%" readonly="true"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">No. Packing List</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="resiko_other_cargo_detail_no_po" value="@Model.no_po" style="width: 100%" readonly="true"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Invoice</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="resiko_other_cargo_detail_no_inv" value="@Model.no_inv" style="width: 100%" readonly="true"/>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

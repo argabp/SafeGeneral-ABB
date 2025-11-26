@@ -1,0 +1,139 @@
+﻿@model ABB.Web.Modules.MutasiKlaim.Models.MutasiKlaimBebanViewModel
+@using Kendo.Mvc.UI
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/MutasiKlaim/JS/mutasiKlaim.beban.js"></script>
+
+@{
+    var nomor_register = Model.kd_cb.Trim() + "." + Model.kd_cob.Trim() +
+                          Model.kd_scob.Trim() + "." + Model.kd_thn.Trim() + "." + Model.no_kl.Trim();
+}
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="MutasiKlaimBebanForm" enctype="multipart/form-data" autocomplete="off">
+        @Html.HiddenFor(h => h.kd_thn)
+        @Html.HiddenFor(h => h.no_kl)
+        @Html.HiddenFor(h => h.no_mts)
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-4">Kode Cabang</label>
+                <div class="col-sm-8">
+                    <input type="hidden" id="temp_kd_cb" value="@Model.kd_cb">
+                    <kendo-dropdownlist for="kd_cb" style="width: 100%" option-label="Pilih Cabang" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetCabang", "MutasiKlaim")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_cb" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-4">Kode COB</label>
+                <div class="col-sm-8">
+                <input type="hidden" id="temp_kd_cob" value="@Model.kd_cob">
+                    <kendo-dropdownlist for="kd_cob" style="width: 100%" on-change="OnKodeCOBChange" option-label="Pilih COB" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetCOB", "MutasiKlaim")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_cob" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-4">Kode SCOB</label>
+                <div class="col-sm-8">
+                <input type="hidden" id="temp_kd_scob" value="@Model.kd_scob">
+                    <kendo-dropdownlist for="kd_scob" style="width: 100%" option-label="Pilih SCOB" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetSCOB", "MutasiKlaim")" data="dataKodeSCOBDropDown"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_scob" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-8">
+                <label class="col-sm-6">Nomor Register Klaim</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="temp_nomor_register" value="@nomor_register" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-4">
+                <label class="col-sm-6">Nomor Urut</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="no_urut" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-4">Tipe Mutasi</label>
+                <div class="col-sm-8">
+                    <kendo-textbox for="Status" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-4">Keterangan</label>
+                <div class="col-sm-8">
+                    <kendo-textarea name="ket_jns" rows="2" style="width: 100%; background-color: white">@Model.ket_jns</kendo-textarea>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-4">Mata Uang</label>
+                <div class="col-sm-8">
+                    <kendo-dropdownlist for="kd_mtu" style="width: 100%" option-label="Pilih Mata Uang" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetMataUang", "MutasiKlaim")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_mtu" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-4">Nilai Beban</label>
+                <div class="col-sm-8">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="nilai_jns_org" on-change="OnNilaiBebanChange"  style="width: 100%;"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-4">Nilai Beban sesuai mutasi</label>
+                <div class="col-sm-8">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="nilai_jns" readonly="true" style="width: 100%;"/>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="window-footer">
+        <button type="button" id="btn-save-mutasiKlaimBeban" class="btn btn-success space-right">
+            <span class="fa fa-save"></span> Save
+        </button>
+    </div>
+</div>

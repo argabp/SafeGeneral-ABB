@@ -41,6 +41,14 @@
                 )
                 .Columns(columns =>
                 {
+                    columns.Command(command =>
+                    {
+                        command.Custom("Preview")
+                            .Text(" ")
+                            .IconClass("fa fa-eye")
+                            .HtmlAttributes(new { title = "Preview" })
+                            .Click("viewReport");
+                    }).Width(200).Title("Action").Locked(true);
                     columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
                     columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
                     columns.Bound(col => col.nm_scob).Width(150).Title("Nama SCOB");
@@ -51,14 +59,6 @@
                     columns.Bound(col => col.st_pas).Width(150).Title("Status Polis");
                     columns.Bound(col => col.nilai_nt).Width(150).Title("Nilai Nota").Format("{0:n2}");
                     columns.Bound(col => col.flag_posting).Width(150).Title("Flag Posting");
-                    columns.Command(command =>
-                    {
-                        command.Custom("Preview")
-                            .Text(" ")
-                            .IconClass("fa fa-eye")
-                            .HtmlAttributes(new { title = "Preview" })
-                            .Click("viewReport");
-                    }).Width(200).Title("Action");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

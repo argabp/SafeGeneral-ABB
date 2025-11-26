@@ -12,6 +12,7 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
 {
     public class GetPengajuanAkseptasiAttachmentQuery : IRequest<List<PengajuanAkseptasiAttachmentDto>>
     {
+        public string DatabaseName { get; set; }
         public string kd_cb { get; set; }
 
         public string kd_cob { get; set; }
@@ -25,9 +26,9 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
 
     public class GetPengajuanAkseptasiAttachmentQueryHandler : IRequestHandler<GetPengajuanAkseptasiAttachmentQuery, List<PengajuanAkseptasiAttachmentDto>>
     {
-        private readonly IDbConnection _db;
+        private readonly IDbConnectionFactory _db;
 
-        public GetPengajuanAkseptasiAttachmentQueryHandler(IDbConnection db, ILogger<GetPengajuanAkseptasiAttachmentQueryHandler> logger
+        public GetPengajuanAkseptasiAttachmentQueryHandler(IDbConnectionFactory db, ILogger<GetPengajuanAkseptasiAttachmentQueryHandler> logger
             ,IHostEnvironment host)
         {
             _db = db;
@@ -36,6 +37,7 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
         public async Task<List<PengajuanAkseptasiAttachmentDto>> Handle(GetPengajuanAkseptasiAttachmentQuery request,
             CancellationToken cancellationToken)
         {
+            _db.CreateDbConnection(request.DatabaseName);
             var lampirans = (await _db.Query<PengajuanAkseptasiAttachmentDto>(
                 @$"SELECT a.*, d.nm_dokumen dokumenName FROM TR_AkseptasiAttachment a
                                 INNER JOIN MS_DokumenDetil d

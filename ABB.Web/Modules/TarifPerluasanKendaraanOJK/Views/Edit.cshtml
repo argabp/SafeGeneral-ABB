@@ -73,14 +73,14 @@
         <div class="form-group col-sm-12">
             <label class="col-sm-12">Tarif Bawah</label>
             <div class="col-sm-12">
-                <kendo-numerictextbox for="pst_rate_prm_min" style="width: 100%; background-color: #FFFFE1"/>
+                <kendo-numerictextbox for="pst_rate_prm_min" decimals="4" format="n4" style="width: 100%; background-color: #FFFFE1"/>
                 <span asp-validation-for="pst_rate_prm_min" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group col-sm-12">
             <label class="col-sm-12">Tarif Atas</label>
             <div class="col-sm-12">
-                <kendo-numerictextbox for="pst_rate_prm_max" style="width: 100%; background-color: #FFFFE1"/>
+                <kendo-numerictextbox for="pst_rate_prm_max" decimals="4" format="n4" style="width: 100%; background-color: #FFFFE1"/>
                 <span asp-validation-for="pst_rate_prm_max" class="text-danger"></span>
             </div>
         </div>

@@ -34,6 +34,24 @@
         )
         .Columns(columns =>
         {
+            columns.Command(command =>
+            {
+                command.Custom("Edit")
+                    .Text(" ")
+                    .IconClass("fa fa-pencil-alt")
+                    .HtmlAttributes(new { title="Edit"})
+                    .Click("btnEditUser_OnClick");
+                command.Custom("Delete")
+                    .Text(" ")
+                    .IconClass("fa fa-trash")
+                    .HtmlAttributes(new { title="Delete"})
+                    .Click("btnDeleteUser_OnClick");
+                command.Custom("updatePassword")
+                    .Text(" ")
+                    .IconClass("fa fa-key")
+                    .HtmlAttributes(new { title="Change Password"})
+                    .Click("btnEditPassword_OnClick");
+            }).Title("Action").Width(200).Locked(true);
             columns.Bound(col => col.Id).Hidden();
             columns.Bound(col => col.UserName).Width(150).Title("Username");
             columns.Bound(col => col.Photo).Width(80).ClientTemplate("#=photoTemplate(data)#");
@@ -46,25 +64,6 @@
             columns.Bound(col => col.LeaderName);
             columns.Bound(col => col.IsActive).ClientTemplate("#=booleanTemplate(data.IsActive)#").Width(100);
             columns.Bound(col => col.LockoutEnabled).Title("Locked Out").ClientTemplate("#=booleanTemplate(data.LockoutEnabled)#");
-            columns.Command(command =>
-            {
-                command.Custom("Edit")
-                        .Text(" ")
-                        .IconClass("fa fa-pencil-alt")
-                        .HtmlAttributes(new { title="Edit"})
-                        .Click("btnEditUser_OnClick");
-                command.Custom("Delete")
-                        .Text(" ")
-                        .IconClass("fa fa-trash")
-                        .HtmlAttributes(new { title="Delete"})
-                        .Click("btnDeleteUser_OnClick");
-                command.Custom("updatePassword")
-                       .Text(" ")
-                       .IconClass("fa fa-key")
-                        .HtmlAttributes(new { title="Change Password"})
-                       .Click("btnEditPassword_OnClick");
-
-            }).Title("Action").Width(110);
         })
         .Pageable(pager => pager
                     .Refresh(true)

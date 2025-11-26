@@ -1,0 +1,170 @@
+﻿@using Kendo.Mvc.TagHelpers
+@using Kendo.Mvc.UI
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model ABB.Web.Modules.LKS.Models.LKSViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@{
+    var nomor_lks = Model.kd_cb.Trim() + " . " + Model.kd_cob.Trim() + Model.kd_scob.Trim() + " . " + 
+                     Model.kd_thn.Trim() + " . " + Model.no_kl.Trim()+ " . " + Model.no_mts + " . " + 
+                     Model.no_pla;
+}
+
+<script src="~/Modules/LKS/JS/lks.edit.js"></script>
+
+@Html.AntiForgeryToken()
+<form id="LKSForm" enctype="multipart/form-data">
+    <div class="window-body" style="background-color: lightgray">
+        @Html.HiddenFor(m => m.kd_thn)
+        @Html.HiddenFor(m => m.no_kl)
+        @Html.HiddenFor(m => m.no_mts)
+        @Html.HiddenFor(m => m.kd_thn)
+        @Html.HiddenFor(m => m.no_pla)
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Cabang</label>
+                <div class="col-sm-6">
+                    <input type="hidden" id="temp_kd_cb" value="@Model.kd_cb">
+                    <kendo-dropdownlist for="kd_cb" style="width: 100%" on-change="OnKodeCabangChange" option-label="Pilih Cabang" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetCabang", "LKS")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_cb" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode COB</label>
+                <div class="col-sm-6">
+                    <input type="hidden" id="temp_kd_cob" value="@Model.kd_cob">
+                    <kendo-dropdownlist for="kd_cob" style="width: 100%" on-change="OnKodeCOBChange" option-label="Pilih COB" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetCOB", "LKS")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_cob" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode SCOB</label>
+                <div class="col-sm-6">
+                <input type="hidden" id="temp_kd_scob" value="@Model.kd_scob">
+                    <kendo-dropdownlist for="kd_scob" style="width: 100%" option-label="Pilih SCOB" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetSCOB", "LKS")" data="dataKodeSCOBDropDown"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_scob" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor LKS</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="temp_nomor_lks" value="@nomor_lks" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Status Tipe LKS</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="st_tipe_pla" style="width: 100%" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetStatusTipePLA", "LKS")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Persh Asuransi</label>
+                <div class="col-sm-6">
+                    <input type="hidden" id="temp_kd_grp_pas" value="@Model.kd_grp_pas">
+                    <kendo-dropdownlist for="kd_grp_pas" style="width: 100%" on-change="OnKodePasChange" option-label="Pilih Kode Persh Asuransi" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodePas", "LKS")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_grp_pas" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <div class="col-sm-6">
+                    <input type="hidden" id="temp_kd_rk_pas" value="@Model.kd_rk_pas">
+                    <kendo-dropdownlist for="kd_rk_pas" style="width: 100%" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeRekananPas", "LKS")" data="dataKodePasDropDown"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_rk_pas" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Share (%)</label>
+                <div class="col-sm-3">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="pst_share" readonly="true" style="width: 100%; background-color: #FFFFE1"/>
+                    <span asp-validation-for="pst_share" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nilai Klaim</label>
+                <div class="col-sm-3">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_kl" readonly="true" style="width: 100%; background-color: #FFFFE1"/>
+                    <span asp-validation-for="nilai_kl" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-9">
+                <label class="col-sm-4">Keterangan LKS</label>
+                <div class="col-sm-8">
+                    <kendo-textarea name="ket_pla" rows="2" style="width: 100%; background-color: white">@Model.ket_pla</kendo-textarea>
+                    <span asp-validation-for="ket_pla" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Flag Posting</label>
+                <input type="hidden" id="tempFlag_posting" value="@Model.flag_posting">
+                <div class="col-sm-6">
+                    <label>
+                        <input type="checkbox" disabled class="k-checkbox" id="flag_posting"/> Posting
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="window-footer">
+        <button type="button" id="btn-save-lks" class="btn btn-primary space-right">Save</button>
+    </div>
+</form>

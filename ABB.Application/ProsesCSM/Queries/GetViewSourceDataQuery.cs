@@ -11,7 +11,7 @@ namespace ABB.Application.ProsesCSM.Queries
 {
     public class GetViewSourceDataQuery : IRequest<List<ViewSourceData>>
     {
-        public string TipeTransaksi { get; set; }
+        // public string TipeTransaksi { get; set; }
 
         public string KodeMetode { get; set; }
     }
@@ -32,19 +32,15 @@ namespace ABB.Application.ProsesCSM.Queries
 
             List<ViewSourceData> viewSourceDatas;
                 
-            if(string.IsNullOrWhiteSpace(request.KodeMetode) && string.IsNullOrWhiteSpace(request.TipeTransaksi))
+            if(string.IsNullOrWhiteSpace(request.KodeMetode))
                 viewSourceDatas = 
                     _dbContextCsm.ViewSourceData
-                        .Where(w => w.KodeMetode == request.KodeMetode && w.TipeTransaksi == request.TipeTransaksi).ToList();
+                        .Where(w => w.KodeMetode == request.KodeMetode).ToList();
             else if(string.IsNullOrWhiteSpace(request.KodeMetode))
-                viewSourceDatas = _dbContextCsm.ViewSourceData
-                    .Where(w => w.TipeTransaksi == request.TipeTransaksi).ToList();
-            else if(string.IsNullOrWhiteSpace(request.TipeTransaksi))
-                viewSourceDatas = _dbContextCsm.ViewSourceData
-                    .Where(w => w.KodeMetode == request.KodeMetode).ToList();
+                viewSourceDatas = _dbContextCsm.ViewSourceData.ToList();
             else
                 viewSourceDatas = _dbContextCsm.ViewSourceData
-                .Where(w => w.KodeMetode == request.KodeMetode && w.TipeTransaksi == request.TipeTransaksi).ToList();
+                .Where(w => w.KodeMetode == request.KodeMetode).ToList();
 
             return viewSourceDatas;
         }

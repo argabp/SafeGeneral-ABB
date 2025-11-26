@@ -19,9 +19,6 @@
         .ToolBar(t => t.Create())
         .Columns(columns =>
         {
-            columns.Bound(col => col.no_oby).Width(150).Title("Nomor Obyek").Editable("disableGridTextbox");
-            columns.Bound(col => col.nilai_saldo).Width(150).Title("Nilai Saldo").Format("{0:n2}").EditorTemplateName("KendoNumericTextBox");;
-            columns.Bound(col => col.tgl_oby).Width(150).Title("Tanggal Obyek").Format("{0: dd-MM-yyyy}").EditorTemplateName("KendoDateEditor");
             columns.Command(command =>
             {
                 command.Edit();
@@ -30,7 +27,10 @@
                     .IconClass("k-icon k-i-delete")
                     .HtmlAttributes(new { title = "Delete" })
                     .Click("btnDeleteAkseptasiObyekCIS_OnClick");
-            }).Width(200).Title("Action");
+            }).Width(200).Locked(true).Title("Action");
+            columns.Bound(col => col.no_oby).Width(150).Title("Nomor Obyek").Editable("disableGridTextbox");
+            columns.Bound(col => col.nilai_saldo).Width(150).Title("Nilai Saldo").Format("{0:n2}").EditorTemplateName("KendoNumericTextBox");
+            columns.Bound(col => col.tgl_oby).Width(150).Title("Tanggal Obyek").Format("{0: dd-MM-yyyy}").EditorTemplateName("KendoDateEditor");
         })
         .Editable(GridEditMode.InLine)
         .Pageable(pager => pager

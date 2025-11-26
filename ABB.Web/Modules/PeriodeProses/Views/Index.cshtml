@@ -30,8 +30,6 @@
             .ToolBar(t => t.Create())
             .Columns(columns =>
             {
-                columns.Bound(col => col.PeriodeProses).Format("{0: dd-MM-yyyy}").EditorTemplateName("KendoDateEditor").Editable("editPeriodeProses");
-                columns.Bound(col => col.FlagProses).EditorTemplateName("KendoSwitch");
                 columns.Command(command =>
                 {
                     command.Edit();
@@ -40,7 +38,9 @@
                         .IconClass("k-icon k-i-delete")
                         .HtmlAttributes(new { title="Delete"})
                         .Click("onDeletePeriodeProses");
-                }).Width(200).Title("Action");
+                }).Width(200).Title("Action").Locked(true);
+                columns.Bound(col => col.PeriodeProses).Format("{0: dd-MM-yyyy}").EditorTemplateName("KendoDateEditor").Editable("editPeriodeProses");
+                columns.Bound(col => col.FlagProses).EditorTemplateName("KendoSwitch");
             })
             .Pageable(pager => pager
                 .Refresh(true)

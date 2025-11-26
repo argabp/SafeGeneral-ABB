@@ -42,10 +42,6 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.nm_cb).Title("Nama Cabang");
-                    columns.Bound(col => col.nm_cob).Title("Nama COB");
-                    columns.Bound(col => col.nm_scob).Title("Nama Sub COB");
-                    columns.Bound(col => col.nm_approval).Title("Nama Approval");
                     columns.Command(command =>
                     {
                         command.Custom("EditApproval")
@@ -58,7 +54,11 @@
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteApproval");
-                    }).Width(200).Title("Action");
+                    }).Width(200).Title("Action").Locked(true);
+                    columns.Bound(col => col.nm_cb).Title("Nama Cabang");
+                    columns.Bound(col => col.nm_cob).Title("Nama COB");
+                    columns.Bound(col => col.nm_scob).Title("Nama Sub COB");
+                    columns.Bound(col => col.nm_approval).Title("Nama Approval");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

@@ -43,10 +43,6 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.kd_okup).Width(150).Title("Kode Okupasi").Editable("disableGridTextboxWhenEdit");
-                    columns.Bound(col => col.nm_okup).Width(150).Title("Nama Okupasi");
-                    columns.Bound(col => col.nm_okup_ing).Width(150).Title("Nama Okupasi Inggris");
-                    columns.Bound(col => col.kd_category).Width(150).Title("Kode Category");
                     columns.Command(command =>
                     {
                         command.Edit();
@@ -55,7 +51,11 @@
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteOkupasi");
-                    }).Width(200).Title("Action");
+                    }).Width(200).Title("Action").Locked(true);
+                    columns.Bound(col => col.kd_okup).Width(150).Title("Kode Okupasi").Editable("disableGridTextboxWhenEdit");
+                    columns.Bound(col => col.nm_okup).Width(150).Title("Nama Okupasi");
+                    columns.Bound(col => col.nm_okup_ing).Width(150).Title("Nama Okupasi Inggris");
+                    columns.Bound(col => col.kd_category).Width(150).Title("Kode Category");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)
@@ -94,10 +94,6 @@
                                 )
                                 .Columns(columns =>
                                 {
-                                    columns.Bound(col => col.kd_okup).Width(150).Title("Kode Okupasi").Editable("disableGridTextbox");
-                                    columns.Bound(col => col.text_kls_konstr).Width(150).Title("Kode Kelas Konstruksi").Editable("disableGridTextboxWhenEdit");
-                                    columns.Bound(col => col.text_stn_rate_premi).Width(150).Title("Satuan Rate Premi").EditorTemplateName("KendoNumericTextBoxInt");
-                                    columns.Bound(col => col.pst_rate_prm).Width(200).Title("Rate Premi").Format("{0:n2}").EditorTemplateName("KendoNumericTextBox");
                                     columns.Command(command =>
                                     {
                                         command.Custom("EditDetailOkupasi")
@@ -110,7 +106,11 @@
                                             .IconClass("k-icon k-i-delete")
                                             .HtmlAttributes(new { title="Delete"})
                                             .Click("onDeleteDetailOkupasi");
-                                    }).Width(200);
+                                    }).Width(200).Title("Action").Locked(true);
+                                    columns.Bound(col => col.kd_okup).Width(150).Title("Kode Okupasi").Editable("disableGridTextbox");
+                                    columns.Bound(col => col.text_kls_konstr).Width(150).Title("Kode Kelas Konstruksi").Editable("disableGridTextboxWhenEdit");
+                                    columns.Bound(col => col.text_stn_rate_premi).Width(150).Title("Satuan Rate Premi").EditorTemplateName("KendoNumericTextBoxInt");
+                                    columns.Bound(col => col.pst_rate_prm).Width(200).Title("Rate Premi").Format("{0:n2}").EditorTemplateName("KendoNumericTextBox");
                                 })
                                 .Pageable(pager => pager
                                     .Refresh(true)

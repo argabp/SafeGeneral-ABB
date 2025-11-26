@@ -35,5 +35,7 @@ namespace ABB.Application.ApprovalAkseptasis.Queries
         public string kd_user_status { get; set; }
 
         public bool? flag_approved { get; set; }
+        public bool? flag_banding { get; set; }
+        public string? flag_closing { get; set; }
     }
 }

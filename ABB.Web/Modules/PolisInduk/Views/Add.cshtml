@@ -359,7 +359,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Share (%)</label>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox spinners="false" for="pst_share_bgu" style="width: 100%"/>
+                    <kendo-numerictextbox spinners="false" decimals="2" for="pst_share_bgu" style="width: 100%"/>
                     <span asp-validation-for="pst_share_bgu" class="text-danger"></span>
                 </div>
             </div>
@@ -414,7 +414,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Rate Premi</label>
                 <div class="col-sm-3">
-                    <kendo-numerictextbox for="pst_prm" style="width: 100%" spinners="false"/>
+                    <kendo-numerictextbox for="pst_prm" decimals="4" format="n4" style="width: 100%" spinners="false"/>
                     <span asp-validation-for="pst_prm" class="text-danger"></span>
                 </div>
                 <div class="col-sm-3">

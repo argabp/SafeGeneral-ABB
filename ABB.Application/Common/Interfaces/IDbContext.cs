@@ -83,6 +83,23 @@ namespace ABB.Application.Common.Interfaces
         DbSet<AkseptasiOtherHoleInOne> AkseptasiOtherHoleInOne { get; set; }
         DbSet<AkseptasiPranota> AkseptasiPranota { get; set; }
         DbSet<AkseptasiPranotaKoas> AkseptasiPranotaKoas { get; set; }
+        DbSet<Inquiry> Inquiry { get; set; }
+        DbSet<InquiryResiko> InquiryResiko { get; set; }
+        DbSet<InquiryCoverage> InquiryCoverage { get; set; }
+        DbSet<InquiryObyek> InquiryObyek { get; set; }
+        DbSet<InquiryObyekCIT> InquiryObyekCIT { get; set; }
+        DbSet<InquiryObyekCIS> InquiryObyekCIS { get; set; }
+        DbSet<InquiryOtherFire> InquiryOtherFire { get; set; }
+        DbSet<InquiryOtherMotor> InquiryOtherMotor { get; set; }
+        DbSet<InquiryOtherMotorDetail> InquiryOtherMotorDetail { get; set; }
+        DbSet<InquiryOtherCargo> InquiryOtherCargo { get; set; }
+        DbSet<InquiryOtherCargoDetail> InquiryOtherCargoDetail { get; set; }
+        DbSet<InquiryOtherBonding> InquiryOtherBonding { get; set; }
+        DbSet<InquiryOtherPA> InquiryOtherPA { get; set; }
+        DbSet<InquiryOtherHull> InquiryOtherHull { get; set; }
+        DbSet<InquiryOtherHoleInOne> InquiryOtherHoleInOne { get; set; }
+        DbSet<InquiryPranota> InquiryPranota { get; set; }
+        DbSet<InquiryPranotaKoas> InquiryPranotaKoas { get; set; }
         DbSet<Nota> Nota { get; set; }
         DbSet<DetailNota> DetailNota { get; set; }
         DbSet<DetailAlokasi> DetailAlokasi { get; set; }
@@ -103,6 +120,16 @@ namespace ABB.Application.Common.Interfaces
         DbSet<DokumenAkseptasiDetil> DokumenAkseptasiDetil { get; set; }
         DbSet<LimitAkseptasi> LimitAkseptasi { get; set; }
         DbSet<LimitAkseptasiDetil> LimitAkseptasiDetil { get; set; }
+        DbSet<RegisterKlaim> RegisterKlaim { get; set; }
+        DbSet<DokumenRegisterKlaim> DokumenRegisterKlaim { get; set; }
+        DbSet<AnalisaDanEvaluasi> AnalisaDanEvaluasi { get; set; }
+        DbSet<MutasiKlaim> MutasiKlaim { get; set; }
+        DbSet<MutasiKlaimAlokasi> MutasiKlaimAlokasi { get; set; }
+        DbSet<MutasiKlaimBeban> MutasiKlaimBeban { get; set; }
+        DbSet<MutasiKlaimObyek> MutasiKlaimObyek { get; set; }
+        DbSet<EntriNotaKlaim> NotaKlaim { get; set; }
+        DbSet<LKT> LKT { get; set; }
+        DbSet<LKS> LKS { get; set; }
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);

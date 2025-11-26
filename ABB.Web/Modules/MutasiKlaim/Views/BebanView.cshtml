@@ -1,0 +1,121 @@
+﻿@using ABB.Application.Akseptasis.Queries
+@using ABB.Application.MutasiKlaims.Queries
+@using Kendo.Mvc.UI
+@model ABB.Web.Modules.MutasiKlaim.Models.MutasiKlaimViewModel
+
+@{
+    var id = Model.kd_cb.Trim() + Model.kd_cob.Trim() +
+            Model.kd_scob.Trim() + Model.kd_thn.Trim() + Model.no_kl.Trim();
+    var text = Model.tipe_mts == "B" ? "Beban" : "Recovery";
+}
+
+<script>
+function OnClickAddMutasiKlaimBeban(kd_cb, kd_cob, kd_scob, kd_thn, no_kl, no_mts, tipe_mts, kd_mtu) {
+    openMutasiKlaimWindow(`/MutasiKlaim/Beban?kd_cb=${kd_cb}&kd_cob=${kd_cob}&kd_scob=${kd_scob}&kd_thn=${kd_thn}&no_kl=${no_kl}&no_mts=${no_mts}&tipe_mts=${tipe_mts}&kd_mtu=${kd_mtu}`, "Add @text");
+}
+
+function onEditBeban(e) {
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    console.log('dataItem', dataItem);
+    
+    var tipe_mts = $("#tipe_mts" + "@id").val();
+
+    openMutasiKlaimWindow(`/MutasiKlaim/EditBeban?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}&no_mts=${dataItem.no_mts}&no_urut=${dataItem.no_urut}`, "Edit @text");
+}
+
+function onDeleteBeban(e){
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    showConfirmation('Confirmation', `Are you sure you want to delete?`,
+        function () {
+
+            var parentId =
+                dataItem.kd_cb.trim() +
+                dataItem.kd_cob.trim() +
+                dataItem.kd_scob.trim() +
+                dataItem.kd_thn.trim() +
+                dataItem.no_kl.trim();
+
+            var payload = {
+                kd_cb: dataItem.kd_cb,
+                kd_cob: dataItem.kd_cob,
+                kd_scob: dataItem.kd_scob,
+                kd_thn: dataItem.kd_thn,
+                no_kl: dataItem.no_kl,
+                no_mts: dataItem.no_mts,
+                no_urut: dataItem.no_urut
+            };
+
+            showProgressOnGrid('#grid_obyek_' + parentId);
+
+            ajaxPost("/MutasiKlaim/DeleteMutasiKlaimBeban", JSON.stringify(payload),
+                function (response) {
+                    if (response.Result == "OK") {
+                        showMessage('Success', response.Message);
+                    } else
+                        showMessage('Error', response.Message);
+
+                    refreshGrid('#grid_obyek_' + parentId);
+                    closeProgressOnGrid('#grid_obyek_' + parentId);
+                }
+            );
+        }
+    );
+}
+
+</script>
+
+<style>
+    .flat-btn-primary{
+        padding: 10px 0px;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-2">
+        <button class="flat-btn-primary" style="height: 1em" onclick="OnClickAddMutasiKlaimBeban('@Model.kd_cb', '@Model.kd_cob', '@Model.kd_scob', '@Model.kd_thn', '@Model.no_kl', '@Model.no_mts', '@Model.tipe_mts', '@Model.kd_mtu')">Add @text</button>
+    </div>
+</div>
+
+@(Html.Kendo().Grid<MutasiKlaimBebanDto>()
+        .Name("grid_obyek_" + id)
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetMutasiKlaimBebans", "MutasiKlaim").Data("dataParameterMutasi"))
+            .Model(model => model.Id(p => p.Id))
+        )
+        .Columns(columns =>
+        {
+            columns.Command(command =>
+            {
+                command.Custom("EditBeban")
+                    .Text("Edit")
+                    .IconClass("fa fa-pencil-alt")
+                    .HtmlAttributes(new { title = "Edit" })
+                    .Click("onEditBeban");
+                command.Custom("DeleteBeban")
+                    .Text("Delete")
+                    .IconClass("k-icon k-i-delete")
+                    .HtmlAttributes(new { title = "Delete" })
+                    .Click("onDeleteBeban");
+            }).Width(200).Title("Action");
+            columns.Bound(col => col.no_urut).Width(100).Title("No Urut");
+            columns.Bound(col => col.ket_jns).Width(200).Title("Keterangn");
+            columns.Bound(col => col.nilai_jns_org).Width(150).Title("Nilai Recovery");
+            columns.Bound(col => col.nilai_jns).Width(150).Title("Nilai Recovery Sesuai Mutasi");
+        })
+        .Pageable(pager => pager
+            .Refresh(true)
+            .Info(true)
+            .PageSizes(true)
+        )
+        .Sortable()
+        .Filterable()
+        .Scrollable()
+        .Selectable()
+        .Height(450)
+        .Resizable(a => a.Columns(true))
+        .Events(ev => ev.DataBound("gridAutoFit"))
+
+    )
+    

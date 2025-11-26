@@ -1,0 +1,74 @@
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using ABB.Application.Common.Interfaces;
+using MediatR;
+using Microsoft.Extensions.Logging;
+
+namespace ABB.Application.MutasiKlaims.Commands
+{
+    public class DeleteMutasiKlaimObyekCommand : IRequest
+    {
+        public string DatabaseName { get; set; }
+        public string kd_cb { get; set; }
+
+        public string kd_cob { get; set; }
+
+        public string kd_scob { get; set; }
+
+        public string kd_thn { get; set; }
+
+        public string no_kl { get; set; }
+
+        public Int16 no_mts { get; set; }
+
+        public Int16 no_oby { get; set; }
+    }
+
+    public class DeleteMutasiKlaimObyekCommandHandler : IRequestHandler<DeleteMutasiKlaimObyekCommand>
+    {
+        private readonly IDbContextFactory _dbContextFactory;
+        private readonly ILogger<DeleteMutasiKlaimObyekCommandHandler> _logger;
+
+        public DeleteMutasiKlaimObyekCommandHandler(IDbContextFactory dbContextFactory, ILogger<DeleteMutasiKlaimObyekCommandHandler> logger)
+        {
+            _dbContextFactory = dbContextFactory;
+            _logger = logger;
+        }
+
+        public async Task<Unit> Handle(DeleteMutasiKlaimObyekCommand request,
+            CancellationToken cancellationToken)
+        {
+            try
+            {
+                var dbContext = _dbContextFactory.CreateDbContext(request.DatabaseName);
+
+                var mutasiKlaimObyek = dbContext.MutasiKlaimObyek.FirstOrDefault(w => w.kd_cb == request.kd_cb &&
+                    w.kd_cob == request.kd_cob &&
+                    w.kd_scob == request.kd_scob &&
+                    w.kd_thn == request.kd_thn &&
+                    w.no_kl == request.no_kl &&
+                    w.no_mts == request.no_mts &&
+                    w.no_oby == request.no_oby);
+
+                if (mutasiKlaimObyek == null)
+                {
+                    throw new Exception("Data Mutasi Klaim Obyek Tidak Dapat Ditemukan");
+                }
+
+                dbContext.MutasiKlaimObyek.Remove(mutasiKlaimObyek);
+
+                await dbContext.SaveChangesAsync(cancellationToken);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
+
+            return Unit.Value;
+        }
+    }
+}

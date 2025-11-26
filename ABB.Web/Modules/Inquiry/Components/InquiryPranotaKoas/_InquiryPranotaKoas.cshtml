@@ -1,0 +1,68 @@
+﻿@using ABB.Application.Inquiries.Queries
+@using Kendo.Mvc.UI
+
+<script src="~/Modules/Inquiry/Components/InquiryPranotaKoas/pranotaKoas.js"></script>
+
+<div class="window-body">
+    <div class="row">
+        <div class="col-md-4">
+            <input type="text" class="search-field-top" style="height: 1em" id="SearchKeywordPranotaKoas" placeholder="Search"/>
+        </div>
+        <div class="offset-5"></div>
+    </div>
+    
+    @(Html.Kendo().Grid<InquiryPranotaKoasDto>()
+        .Name("InquiryPranotaKoasGrid")
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetInquiryPranotaKoass", "Inquiry").Data("searchFilterPranotaKoas"))
+            .Model(model => model.Id(p => p.Id))
+        )
+        .Columns(columns =>
+        {
+            columns.Command(command =>
+            {
+                command.Custom("ViewInquiryPranotaKoas")
+                    .Text("View")
+                    .IconClass("fa fa-eye")
+                    .HtmlAttributes(new { title = "View" })
+                    .Click("btnViewInquiryPranotaKoas_OnClick");
+            }).Width(200).Title("Action").Locked(true);
+            columns.Bound(col => col.nm_rk).Width(150).Title("Nama Rekanan");
+            columns.Bound(col => col.pst_share).Width(150).Title("Share (%)").Format("{0:n2}");
+            columns.Bound(col => col.nilai_prm).Width(150).Title("Premi").Format("{0:n2}");
+            columns.Bound(col => col.nilai_dis).Width(150).Title("Diskon").Format("{0:n2}");
+            columns.Bound(col => col.nilai_hf).Width(150).Title("Handling Fee").Format("{0:n2}");
+            columns.Bound(col => col.nilai_kms).Width(150).Title("Komisi").Format("{0:n2}");
+        })
+        .Pageable(pager => pager
+            .Refresh(true)
+            .Info(true)
+            .PageSizes(true)
+        )
+        .Sortable()
+        .Filterable()
+        .Scrollable()
+        .Height(450)
+        .Resizable(a => a.Columns(true))
+        .Events(ev => ev.DataBound("onPranotaKoasBound"))
+    
+        )
+    
+    <div class="form-group row col-sm-12" style="padding-top: 3em">
+        <div class="row col-sm-12">
+            <p class="col-sm-6">Total Share & Premi</p>
+            <div class="col-sm-2">
+                <p id="totalPercentagePranotaKoas">0</p>
+            </div>
+            <div class="col-sm-4">
+                <p id="totalPremiPranotaKoas">0</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="window-footer">
+        <button type="button" id="btn-previous-inquiryPranotaKoas" class="btn btn-primary space-right">
+            <span class="fa fa-arrow-left"></span> Previous
+        </button>
+    </div>
+</div>

@@ -1,0 +1,28 @@
+﻿@using Kendo.Mvc.UI
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/PengajuanAkseptasi/JS/pengajuanAkseptasi.batalAkseptasi.js"></script>
+
+<script src="~/Modules/RegisterKlaim/JS/registerKlaim.add.js"></script>
+<script src="~/Modules/RegisterKlaim/JS/registerKlaim.form.js"></script>
+
+<div class="window-body">
+    <div id="RegisterKlaimTab">
+        <ul>
+            <li class="k-active">
+                Klaim
+            </li>
+            <li>
+                Dokumen
+            </li>
+        </ul>
+        <div id="tabRegisterKlaim">
+            <vc:register-klaim model="@Model"></vc:register-klaim>
+        </div>
+        <div id="tabDokumenRegisterKlaim">
+            <vc:dokumen-register-klaim model="@Model"></vc:dokumen-register-klaim>
+        </div>
+    </div>
+</div>

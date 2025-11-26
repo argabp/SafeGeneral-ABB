@@ -30,23 +30,22 @@
         )
         .Columns(columns =>
         {
-            columns.Bound(col => col.ModuleId).Hidden();
-            columns.Bound(col => col.ModuleName).Width(100);
-            columns.Bound(col => col.Navigations).ClientTemplate("#= brTemplate(Navigations)#").Width(250);
             columns.Command(command =>
             {
                 command.Custom("Edit")
-                        .Text(" ")
-                        .IconClass("fa fa-pencil-alt")
-                        .HtmlAttributes(new { title = "Edit" })
-                        .Click("btnEditModuleNavigation_OnClick");
+                    .Text(" ")
+                    .IconClass("fa fa-pencil-alt")
+                    .HtmlAttributes(new { title = "Edit" })
+                    .Click("btnEditModuleNavigation_OnClick");
                 command.Custom("Delete")
-                        .Text(" ")
-                        .IconClass("fa fa-trash")
-                        .HtmlAttributes(new { title = "Delete" })
-                        .Click("btnDeleteModuleNavigation_OnClick");
-
-            }).Title("Action").Width(80);
+                    .Text(" ")
+                    .IconClass("fa fa-trash")
+                    .HtmlAttributes(new { title = "Delete" })
+                    .Click("btnDeleteModuleNavigation_OnClick");
+            }).Title("Action").Width(80).Locked(true);
+            columns.Bound(col => col.ModuleId).Hidden();
+            columns.Bound(col => col.ModuleName).Width(100);
+            columns.Bound(col => col.Navigations).ClientTemplate("#= brTemplate(Navigations)#").Width(250);
 
         })
         .Pageable(pager => pager

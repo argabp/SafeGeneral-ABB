@@ -1,0 +1,117 @@
+﻿@using ABB.Application.MutasiKlaims.Queries
+@using Kendo.Mvc.UI
+@model ABB.Web.Modules.MutasiKlaim.Models.MutasiKlaimViewModel
+
+<script>
+function OnClickAddMutasiKlaimObyek(kd_cb, kd_cob, kd_scob, kd_thn, no_kl, no_mts) {
+    openMutasiKlaimWindow(`/MutasiKlaim/Obyek?kd_cb=${kd_cb}&kd_cob=${kd_cob}&kd_scob=${kd_scob}&kd_thn=${kd_thn}&no_kl=${no_kl}&no_mts=${no_mts}`, 'Add Obyek');
+}
+
+function onEditObyek(e) {
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    console.log('dataItem', dataItem);
+
+    openMutasiKlaimWindow(`/MutasiKlaim/EditObyek?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}&no_mts=${dataItem.no_mts}&no_oby=${dataItem.no_oby}`, 'Edit Obyek');
+}
+
+function onDeleteObyek(e){
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    showConfirmation('Confirmation', `Are you sure you want to delete?`,
+        function () {
+
+            var parentId =
+                dataItem.kd_cb.trim() +
+                dataItem.kd_cob.trim() +
+                dataItem.kd_scob.trim() +
+                dataItem.kd_thn.trim() +
+                dataItem.no_kl.trim();
+
+            var payload = {
+                kd_cb: dataItem.kd_cb,
+                kd_cob: dataItem.kd_cob,
+                kd_scob: dataItem.kd_scob,
+                kd_thn: dataItem.kd_thn,
+                no_kl: dataItem.no_kl,
+                no_mts: dataItem.no_mts,
+                no_oby: dataItem.no_oby
+            };
+
+            showProgressOnGrid('#grid_obyek_' + parentId);
+
+            ajaxPost("/MutasiKlaim/DeleteMutasiKlaimObyek", JSON.stringify(payload),
+                function (response) {
+                    if (response.Result == "OK") {
+                        showMessage('Success', response.Message);
+                    } else
+                        showMessage('Error', response.Message);
+
+                    refreshGrid('#grid_obyek_' + parentId);
+                    closeProgressOnGrid('#grid_obyek_' + parentId);
+                }
+            );
+        }
+    );
+}
+
+</script>
+
+<style>
+    .flat-btn-primary{
+        padding: 10px 0px;
+    }
+</style>
+
+@{
+    var id = Model.kd_cb.Trim() + Model.kd_cob.Trim() +
+            Model.kd_scob.Trim() + Model.kd_thn.Trim() + Model.no_kl.Trim();
+}
+
+<div class="row">
+    <div class="col-md-2">
+        <button class="flat-btn-primary" style="height: 1em" onclick="OnClickAddMutasiKlaimObyek('@Model.kd_cb', '@Model.kd_cob', '@Model.kd_scob', '@Model.kd_thn', '@Model.no_kl', '@Model.no_mts')">Add Obyek</button>
+    </div>
+</div>
+
+@(Html.Kendo().Grid<MutasiKlaimObyekDto>()
+        .Name("grid_obyek_" + id)
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetMutasiKlaimObyeks", "MutasiKlaim").Data("dataParameterMutasi"))
+            .Model(model => model.Id(p => p.Id))
+        )
+        .Columns(columns =>
+        {
+            columns.Command(command =>
+            {
+                command.Custom("EditObyek")
+                    .Text("Edit")
+                    .IconClass("fa fa-pencil-alt")
+                    .HtmlAttributes(new { title = "Edit" })
+                    .Click("onEditObyek");
+                command.Custom("DeleteObyek")
+                    .Text("Delete")
+                    .IconClass("k-icon k-i-delete")
+                    .HtmlAttributes(new { title = "Delete" })
+                    .Click("onDeleteObyek");
+            }).Width(200).Title("Action").Locked(true);
+            columns.Bound(col => col.no_oby).Width(100).Title("Nomor Obyek");
+            columns.Bound(col => col.nm_oby).Width(200).Title("Nama Obyek");
+            columns.Bound(col => col.nilai_ttl_ptg).Width(150).Title("Nilai Pertanggungan");
+            columns.Bound(col => col.nilai_kl).Width(150).Title("Nilai Klaim");
+        })
+        .Pageable(pager => pager
+            .Refresh(true)
+            .Info(true)
+            .PageSizes(true)
+        )
+        .Sortable()
+        .Filterable()
+        .Scrollable()
+        .Selectable()
+        .Height(450)
+        .Resizable(a => a.Columns(true))
+        .Events(ev => ev.DataBound("gridAutoFit"))
+
+    )
+    

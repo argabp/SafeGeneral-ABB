@@ -41,9 +41,6 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.kd_jns_sor).Width(150).Title("Kode Jenis SOR");
-                    columns.Bound(col => col.nm_jns_sor).Width(150).Title("Kode Jenis SOR");
-                    columns.Bound(col => col.nm_grp_jns_sor).Width(150).Title("Group Jenis SOR");
                     columns.Command(command =>
                     {
                         command.Custom("EditJenisSor")
@@ -56,7 +53,10 @@
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteJenisSor");
-                    }).Width(200).Title("Action");
+                    }).Width(200).Title("Action").Locked(true);
+                    columns.Bound(col => col.kd_jns_sor).Width(150).Title("Kode Jenis SOR");
+                    columns.Bound(col => col.nm_jns_sor).Width(150).Title("Kode Jenis SOR");
+                    columns.Bound(col => col.nm_grp_jns_sor).Width(150).Title("Group Jenis SOR");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

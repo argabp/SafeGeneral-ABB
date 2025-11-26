@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ABB.Application.ApprovalAkseptasis.Commands;
+using ABB.Application.ApprovalAkseptasis.Queries;
 using ABB.Application.BiayaMaterais.Queries;
 using ABB.Application.Common;
 using ABB.Application.Common.Dtos;
@@ -15,6 +17,7 @@ using ABB.Application.PolisInduks.Queries;
 using ABB.Application.SebabKejadians.Queries;
 using ABB.Web.Extensions;
 using ABB.Web.Hubs;
+using ABB.Web.Modules.ApprovalAkseptasi.Models;
 using ABB.Web.Modules.Base;
 using ABB.Web.Modules.PengajuanAkseptasi.Models;
 using Kendo.Mvc.Extensions;
@@ -158,6 +161,12 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
         }
 
         public IActionResult BatalAkseptasi()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Banding()
         {
             return View();
         }
@@ -306,17 +315,20 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
         }
         
         [HttpGet]
-        public JsonResult GetKodeRekanan(string kd_grp_rk, string kd_cb)
+        public JsonResult GetKodeRekanan(string kd_grp_rk, string kd_cb, string no_fax)
         {
             var result = new List<DropdownOptionDto>();
-
-            foreach (var rekanan in _rekanans.Where(w => w.kd_grp_rk.Trim() == kd_grp_rk && w.kd_cb.Trim() == kd_cb))
+            
+            if (string.IsNullOrWhiteSpace(no_fax))
             {
-                result.Add(new DropdownOptionDto()
-                {
-                    Text = rekanan.nm_rk,
-                    Value = rekanan.kd_rk
-                });
+                result.AddRange(_rekanans.Where(w => w.kd_grp_rk.Trim() == kd_grp_rk && w.kd_cb.Trim() == kd_cb)
+                    .Select(rekanan => new DropdownOptionDto() { Text = rekanan.nm_rk, Value = rekanan.kd_rk }));
+            }
+            else
+            {
+                result.AddRange(_rekanans
+                    .Where(w => w.kd_grp_rk.Trim() == kd_grp_rk && w.kd_cb.Trim() == kd_cb && w.no_fax == no_fax)
+                    .Select(rekanan => new DropdownOptionDto() { Text = rekanan.nm_rk, Value = rekanan.kd_rk }));
             }
 
             return Json(result);
@@ -475,6 +487,38 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
             };
             
             var result = await Mediator.Send(command);
+
+            return Json(result);
+        }
+        
+        public async Task<IActionResult> ApprovalAkseptasiBanding(ApprovalAkseptasiEscModel model)
+        {
+            try
+            {
+                var command = Mapper.Map<ApprovalAkseptasiBandingCommand>(model);
+                command.DatabaseName = Request.Cookies["DatabaseValue"];
+                var result = await Mediator.Send(command);
+
+                foreach (var notifTo in result.Item2)
+                {
+                    await ApplicationHub.SendPengajuanAkseptasiNotification(notifTo, model.nomor_pengajuan, "Banding");
+                }
+                
+                return Json(new { Result = "OK", Message = result.Item1 });
+            }
+            catch (Exception e)
+            {
+                return Json(new
+                    { Result = "ERROR", Message = e.InnerException == null ? e.Message : e.InnerException.Message });
+            }
+        }
+        
+        public async Task<JsonResult> GetUserSign()
+        {
+            var result = await Mediator.Send(new GetUserSignQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            });
 
             return Json(result);
         }

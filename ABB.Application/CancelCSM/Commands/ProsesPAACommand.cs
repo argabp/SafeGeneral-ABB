@@ -46,7 +46,7 @@ namespace ABB.Application.CancelCSM.Commands
 
                 if (request.Type == "All")
                     viewSourceDatas = _context.ViewSourceDataCancel.Where(w =>
-                        request.KodeMetode == w.KodeMetode && request.TipeTransaksi == w.TipeTransaksi).ToList();
+                        request.KodeMetode == w.KodeMetode).ToList();
                 else
                     viewSourceDatas = _context.ViewSourceDataCancel.Where(w => request.Id.Contains(w.Id)).ToList();
                 

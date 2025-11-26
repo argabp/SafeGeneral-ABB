@@ -1,0 +1,51 @@
+﻿@using ABB.Application.Inquiries.Queries
+@using Kendo.Mvc.UI
+
+<script src="~/Modules/Inquiry/Components/InquiryOtherMotorDetail/otherMotorDetail.js"></script>
+
+<div class="window-body">
+    <div class="row">
+        <div class="col-md-4">
+            <input type="text" class="search-field-top" style="height: 1em" id="SearchKeywordOtherMotorDetailKoas" placeholder="Search"/>
+        </div>
+        <div class="offset-5"></div>
+    </div>
+    
+    @(Html.Kendo().Grid<InquiryOtherMotorDetailDto>()
+        .Name("InquiryOtherMotorDetailGrid")
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetInquiryOtherMotorDetails", "Inquiry").Data("searchFilterOtherMotorDetail"))
+            .Model(model => model.Id(p => p.thn_ptg_kend))
+        )
+        .Columns(columns =>
+        {
+            columns.Command(command =>
+            {
+                command.Custom("ViewInquiryOtherMotorDetail")
+                    .Text("View")
+                    .IconClass("fa fa-eye")
+                    .HtmlAttributes(new { title = "View" })
+                    .Click("btnViewInquiryOtherMotorDetail_OnClick");
+            }).Width(200).Title("Action").Locked(true);
+            columns.Bound(col => col.thn_ptg_kend).Width(150).Title("Tahun PTG Kendaraan");
+        })
+        .Pageable(pager => pager
+            .Refresh(true)
+            .Info(true)
+            .PageSizes(true)
+        )
+        .Sortable()
+        .Filterable()
+        .Scrollable()
+        .Height(450)
+        .Resizable(a => a.Columns(true))
+        .Events(ev => ev.DataBound("gridAutoFit"))
+    
+        )
+    
+    <div class="window-footer">
+        <button type="button" id="btn-previous-inquiryOtherMotorDetail" class="btn btn-primary space-right">
+            <span class="fa fa-arrow-left"></span> Previous
+        </button>
+    </div>
+</div>

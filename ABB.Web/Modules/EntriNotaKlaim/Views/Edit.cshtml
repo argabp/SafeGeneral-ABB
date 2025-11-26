@@ -1,0 +1,225 @@
+﻿@using ABB.Application.EntriNotas.Queries
+@using ABB.Domain.Entities
+@using ABB.Web.Modules.EntriNota.Models
+@using Kendo.Mvc.TagHelpers
+@using Kendo.Mvc.UI
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model ABB.Web.Modules.EntriNotaKlaim.Models.NotaKlaimViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@{
+    var nomor_dla = Model.kd_cb.Trim() + " . " + Model.kd_cob.Trim() + " . " +
+                          Model.kd_scob.Trim() + " . " + Model.kd_thn.Trim()
+                            + " . " + Model.no_kl.Trim() + " . " + Model.no_mts + " . " + Model.no_dla;
+    
+    var nomor_nota = Model.kd_cb.Trim() + " . " + Model.jns_tr.Trim() + " . " + Model.kd_thn.Trim() + " . " + 
+                     Model.kd_bln.Trim() + " . " + Model.no_nt_msk.Trim()+ " / " + Model.jns_nt_kel.Trim() + " . " + 
+                     Model.no_nt_kel.Trim();
+}
+
+<script src="~/Modules/EntriNotaKlaim/JS/entriNotaKlaim.edit.js"></script>
+
+@Html.AntiForgeryToken()
+<form id="EntriNotaKlaimForm" enctype="multipart/form-data">
+    <div class="window-body" style="background-color: lightgray">
+        @Html.HiddenFor(m => m.kd_cb)
+        @Html.HiddenFor(m => m.jns_tr)
+        @Html.HiddenFor(m => m.jns_nt_msk)
+        @Html.HiddenFor(m => m.kd_thn)
+        @Html.HiddenFor(m => m.kd_bln)
+        @Html.HiddenFor(m => m.no_nt_msk)
+        @Html.HiddenFor(m => m.jns_nt_kel)
+        @Html.HiddenFor(m => m.no_nt_kel)
+        @Html.HiddenFor(m => m.kd_cob)
+        @Html.HiddenFor(m => m.kd_scob)
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor DLA</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="temp_nomor_dla" value="@nomor_dla" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Nota</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="temp_nomor_nota" value="@nomor_nota" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Status Tipe DLA</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="st_tipe_dla" style="width: 100%" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetStatusTipeDLA", "EntriNotaKlaim")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Mata Uang</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_mtu" style="width: 100%" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetMataUang", "EntriNotaKlaim")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Tipe Mutasi</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="tipe_mts" style="width: 100%" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetTipeMutasi", "EntriNotaKlaim")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Tertuju</label>
+                <div class="col-sm-6">
+                    <input type="hidden" id="temp_kd_grp_ttj" value="@Model.kd_grp_ttj">
+                    <kendo-dropdownlist for="kd_grp_ttj" style="width: 100%" on-change="OnKodeTertujuChange" option-label="Pilih Kode Tertuju"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeTertuju", "EntriNotaKlaim")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_grp_ttj" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <div class="col-sm-6">
+                    <input type="hidden" id="temp_kd_rk_ttj" value="@Model.kd_rk_ttj">
+                    <kendo-dropdownlist for="kd_rk_ttj" style="width: 100%" on-change="OnKodeRkTTJChange"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeRekananTertuju", "EntriNotaKlaim")" data="dataKodeTertujuDropDown"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_rk_ttj" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nama</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="nm_ttj" style="width: 100%"/>
+                    <span asp-validation-for="nm_ttj" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Alamat</label>
+                <div class="col-sm-6">
+                    <kendo-textarea name="almt_ttj" rows="2" style="width: 100%; background-color: white">@Model.almt_ttj</kendo-textarea>
+                    <span asp-validation-for="almt_ttj" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kota</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="kt_ttj" style="width: 100%"/>
+                    <span asp-validation-for="kt_ttj" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-9">
+                <label class="col-sm-4">Keterangan Nota</label>
+                <div class="col-sm-8">
+                    <kendo-textarea name="ket_nt" rows="2" style="width: 100%; background-color: white">@Model.ket_nt</kendo-textarea>
+                    <span asp-validation-for="ket_nt" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-9">
+                <label class="col-sm-4">Keterangan Kwitansi</label>
+                <div class="col-sm-8">
+                    <kendo-textarea name="ket_kwi" rows="2" style="width: 100%; background-color: white">@Model.ket_kwi</kendo-textarea>
+                    <span asp-validation-for="ket_kwi" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nilai Nota</label>
+                <div class="col-sm-3">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_nt" readonly="true" style="width: 100%; background-color: #FFFFE1"/>
+                    <span asp-validation-for="nilai_nt" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nilai Biaya</label>
+                <div class="col-sm-3">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_bia_mat" style="width: 100%; background-color: #FFFFE1"/>
+                    <span asp-validation-for="nilai_nt" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Tanggal Nota</label>
+                <div class="col-sm-6">
+                    <kendo-datepicker for="tgl_nt" readonly="true" style="width: 100%"/>
+                    <span asp-validation-for="ket_kwi" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Flag Cancel</label>
+                <input type="hidden" id="tempFlag_cancel" value="@Model.flag_cancel">
+                <div class="col-sm-6">
+                    <label>
+                        <input type="checkbox" disabled class="k-checkbox" id="flag_cancel"/> Cancel
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Flag Posting</label>
+                <input type="hidden" id="tempFlag_posting" value="@Model.flag_posting">
+                <div class="col-sm-6">
+                    <label>
+                        <input type="checkbox" disabled class="k-checkbox" id="flag_posting"/> Posting
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="window-footer">
+        <button type="button" id="btn-save-entriNotaKlaim" class="btn btn-primary space-right">Save</button>
+    </div>
+</form>

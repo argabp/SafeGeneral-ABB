@@ -1,0 +1,201 @@
+﻿@using ABB.Application.MataUangs.Queries
+@using ABB.Application.MutasiKlaims.Queries
+@using ABB.Application.RegisterKlaims.Queries
+@using Kendo.Mvc.TagHelpers
+@using Kendo.Mvc.UI
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Mutasi Klaim";
+}
+<script src="~/Modules/MutasiKlaim/JS/mutasiKlaim.index.js"></script>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-8">
+            Mutasi Klaim
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<MutasiKlaimDto>()
+                .Name("MutasiKlaimGrid")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetMutasiKlaims", "MutasiKlaim").Data("searchFilter"))
+                    .Model(model => model.Id(p => p.Id))
+                )
+                .Columns(columns =>
+                {
+                    columns.Command(command =>
+                    {
+                        command.Custom("Insert")
+                            .Text("Insert")
+                            .IconClass("fa fa-plus")
+                            .HtmlAttributes(new { title = "Insert" })
+                            .Click("OnClickInsertDetailMutasiKlaim");
+                    }).Width(200).Title("Action").Locked(true);
+                    columns.Bound(col => col.Id).Hidden();
+                    columns.Bound(col => col.nm_cb).Width(150).Title("Cabang");
+                    columns.Bound(col => col.nm_cob).Width(150).Title("COB");
+                    columns.Bound(col => col.nm_scob).Width(150).Title("SCOB");
+                    columns.Bound(col => col.register_klaim).Width(150).Title("Nomor Register Klaim");
+                    columns.Bound(col => col.nm_ttg).Width(150).Title("Nama Tertanggung");
+                    columns.Bound(col => col.sebab_kerugian).Width(150).Title("Sebab Klaim");
+                    columns.Bound(col => col.tgl_kej).Width(150).Title("Tanggal Kejadian").Format("{0: dd-MM-yyyy}");
+                    columns.Bound(col => col.tgl_lapor).Width(150).Title("Tanggal Lapor").Format("{0: dd-MM-yyyy}");
+                    columns.Bound(col => col.tgl_reg).Width(150).Title("Tanggal Register").Format("{0: dd-MM-yyyy}");
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .ClientDetailTemplateId("template")
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a => a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit"))
+
+                )
+        </div>
+            
+        <script id="template" type="text/kendo-tmpl">
+            @(Html.Kendo().TabStrip()
+                    .Name("tabStrip_#=id#")
+                    .SelectedIndex(0)
+                    .Animation(animation => animation.Open(open => open.Fade(FadeDirection.In)))
+                    .Items(items =>
+                    {
+                        items.Add().Text("Mutasi").Content(@<text>
+                            @(Html.Kendo().Grid<MutasiKlaimDetailDto>()
+                                .Name("grid_mutasi_#=id_detail_grid#")
+                                .DataSource(dataSource => dataSource.Ajax()
+                                    .Read(read => read.Action("GetMutasiKlaimDetails", "MutasiKlaim", new
+                                    {
+                                        kd_cb = "#=kd_cb#", kd_cob = "#=kd_cob#", kd_scob = "#=kd_scob#", kd_thn = "#=kd_thn#", no_kl = "#=no_kl#"
+                                        
+                                    }))
+                                    .Model(m => m.Id(p => p.Id))
+                                )
+                                .Columns(columns =>
+                                {
+                                    columns.Command(command =>
+                                    {
+                                        command.Custom("View")
+                                            .Text("View")
+                                            .IconClass("fa fa-eye")
+                                            .HtmlAttributes(new { title = "View" })
+                                            .Click("OnClickViewMutasiKlaim");
+                                        command.Custom("Closing")
+                                            .Text("Closing")
+                                            .IconClass("fa fa-lock")
+                                            .HtmlAttributes(new { title = "Closing" })
+                                            .Click("OnClickClosingMutasiKlaim");
+                                        command.Custom("DeleteMutasi")
+                                            .Text("Delete")
+                                            .IconClass("k-icon k-i-delete")
+                                            .HtmlAttributes(new { title="Delete"})
+                                            .Click("onDeleteMutasiKlaim");
+                                    }).Width(250).Title("Action").Locked(true);
+                                    columns.Bound(col => col.no_mts).Width(150).Title("Nomor Mutasi");
+                                    columns.Bound(col => col.nm_tipe_mts).Width(150).Title("Tipe Mutasi");
+                                    columns.Bound(col => col.nm_kd_mtu).Width(150).Title("Mata Uang");
+                                    
+                                })
+                                .Pageable(pager => pager
+                                    .Refresh(true)
+                                    .Info(true)
+                                    .PageSizes(true)
+                                )
+                                .Sortable()
+                                .Selectable()
+                                .Filterable()
+                                .Scrollable()
+                                .Height(380)
+                                .Resizable(a=>a.Columns(true))
+                                .Events(ev => ev.DataBound("gridAutoFit").Change("OnMutasiChange"))
+                                .ToClientTemplate())
+                        </text>
+                        );
+                        items.Add().Text("Obyek").Content(@<text>
+                            <input type="hidden" id="tipe_mts#=id_detail_grid#" />
+                            <div id="obyekGrid#=id_detail_grid#"></div>
+                                                           </text>
+                        );
+                        items.Add().Text("Alokasi Koasuransi").Content(@<text>
+                            <div class="row">
+                            <div class="col-sm-2">
+                                <button style="height: 1em" class="flat-btn-primary" id="btnAddAlokasi#=id_detail_grid#" disabled=true>Add Alokasi</button>
+                            </div>
+                            </div>
+                            @(Html.Kendo().Grid<MutasiKlaimAlokasiDto>()
+                                .Name("grid_alokasi_#=id_detail_grid#")
+                                .DataSource(dataSource => dataSource.Ajax()
+                                    .Read(read => read.Action("GetMutasiKlaimAlokasis", "MutasiKlaim").Data("dataParameterMutasi"))
+                                    .Model(m => m.Id(p => p.Id))
+                                )
+                                .Columns(columns =>
+                                {
+                                    columns.Command(command =>
+                                    {
+                                        command.Custom("EditAlokasi")
+                                            .Text("Edit")
+                                            .IconClass("fa fa-pencil-alt")
+                                            .HtmlAttributes(new { title = "Edit" })
+                                            .Click("OnEditAlokasi");
+                                        command.Custom("DeleteAlokasi")
+                                            .Text("Delete")
+                                            .IconClass("k-icon k-i-delete")
+                                            .HtmlAttributes(new { title = "Delete" })
+                                            .Click("onDeleteAlokasi");
+                                    }).Width(200).Locked(true);
+                                    columns.Bound(col => col.nm_grp_pas).Width(150).Title("Group Rekanan");
+                                    columns.Bound(col => col.nm_rk_pas).Width(150).Title("Rekanan");
+                                    columns.Bound(col => col.pst_share).Width(150).Title("Share (%)").Format("{0:n2}");
+                                    columns.Bound(col => col.nilai_kl).Width(150).Title("Nilai Klaim").Format("{0:n2}");
+
+                                })
+                                .Pageable(pager => pager
+                                    .Refresh(true)
+                                    .Info(true)
+                                    .PageSizes(true)
+                                )
+                                .Sortable()
+                                .Selectable()
+                                .Filterable()
+                                .Scrollable()
+                                .Height(380)
+                                .Resizable(a => a.Columns(true))
+                                .Events(ev => ev.DataBound("gridAutoFit"))
+                                .ToClientTemplate())
+                        
+                                                             
+                                                             </text>
+                        );
+                    })
+                    .ToClientTemplate())
+        </script>
+
+        @(Html.Kendo().Window()
+                    .Name("MutasiKlaimWindow")
+                    .Title("Mutasi Klaim Page")
+                    .Width(800)
+                    .Modal(true)
+                    .Visible(false)
+                    .Draggable(true)
+            )
+    </div>
+</div>
+

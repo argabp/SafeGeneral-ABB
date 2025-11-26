@@ -38,6 +38,14 @@
                 )
                 .Columns(columns =>
                 {
+                    columns.Command(command =>
+                    {
+                        command.Custom("Preview")
+                            .Text(" ")
+                            .IconClass("fa fa-eye")
+                            .HtmlAttributes(new { title = "Preview" })
+                            .Click("viewReport");
+                    }).Title("Action").Width(100).Locked(true);
                     columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
                     columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
                     columns.Bound(col => col.nm_scob).Width(150).Title("Nama Sub COB");
@@ -50,14 +58,6 @@
                     columns.Bound(col => col.kd_bln).Width(150).Title("Bulan");
                     columns.Bound(col => col.flag_posting).Width(100).Title("Flag Posting").ClientTemplate("#=booleanTemplate(data.flag_posting)#");
                     columns.Bound(col => col.nm_ttj).Width(150).Title("Nama Tertuju");
-                    columns.Command(command =>
-                    {
-                        command.Custom("Preview")
-                            .Text(" ")
-                            .IconClass("fa fa-eye")
-                            .HtmlAttributes(new { title = "Preview" })
-                            .Click("viewReport");
-                    }).Title("Action").Width(100);
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

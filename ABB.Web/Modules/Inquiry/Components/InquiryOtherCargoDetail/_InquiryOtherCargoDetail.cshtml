@@ -1,0 +1,52 @@
+﻿@using ABB.Application.Inquiries.Queries
+@using Kendo.Mvc.UI
+
+<script src="~/Modules/Inquiry/Components/InquiryOtherCargoDetail/otherCargoDetail.js"></script>
+
+<div class="window-body">
+    <div class="row">
+        <div class="col-md-4">
+            <input type="text" class="search-field-top" style="height: 1em" id="SearchKeywordOtherCargoDetailKoas" placeholder="Search"/>
+        </div>
+        <div class="offset-5"></div>
+    </div>
+    
+    @(Html.Kendo().Grid<InquiryOtherCargoDetailDto>()
+        .Name("InquiryOtherCargoDetailGrid")
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetInquiryOtherCargoDetails", "Inquiry").Data("searchFilterOtherCargoDetail"))
+            .Model(model => model.Id(p => p.no_urut))
+        )
+        .Columns(columns =>
+        {
+            columns.Command(command =>
+            {
+                command.Custom("ViewInquiryOtherCargoDetail")
+                    .Text("View")
+                    .IconClass("fa fa-eye")
+                    .HtmlAttributes(new { title = "View" })
+                    .Click("btnViewInquiryOtherCargoDetail_OnClick");
+            }).Width(200).Title("Action").Locked(true);
+            columns.Bound(col => col.no_urut).Width(150).Title("No Urut");
+            columns.Bound(col => col.nm_angkut).Width(150).Title("Nama Angkut");
+        })
+        .Pageable(pager => pager
+            .Refresh(true)
+            .Info(true)
+            .PageSizes(true)
+        )
+        .Sortable()
+        .Filterable()
+        .Scrollable()
+        .Height(450)
+        .Resizable(a => a.Columns(true))
+        .Events(ev => ev.DataBound("gridAutoFit"))
+    
+        )
+    
+    <div class="window-footer">
+        <button type="button" id="btn-previous-inquiryOtherCargoDetail" class="btn btn-primary space-right">
+            <span class="fa fa-arrow-left"></span> Previous
+        </button>
+    </div>
+</div>

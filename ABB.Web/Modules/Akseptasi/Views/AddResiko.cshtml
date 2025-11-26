@@ -99,7 +99,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Rate Premi</label>
                 <div class="col-sm-3">
-                    <kendo-numerictextbox decimals="2" spinners="false" for="pst_rate_prm" style="width: 100%; background-color: #FFFFE1"/>
+                    <kendo-numerictextbox decimals="4" format="n4" spinners="false" for="pst_rate_prm" style="width: 100%; background-color: #FFFFE1"/>
                     <span asp-validation-for="pst_rate_prm" class="text-danger"></span>
                 </div>
                 <div class="col-sm-3">
@@ -133,7 +133,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Diskon</label>
                 <div class="col-sm-2">
-                    <kendo-numerictextbox decimals="2" spinners="false" name="resiko_pst_dis" value="@resiko_pst_dis" style="width: 100%"/>
+                    <kendo-numerictextbox decimals="2" spinners="false" name="resiko_pst_dis" value="@resiko_pst_dis" on-change="OnPstDiskonChange" style="width: 100%"/>
                 </div>
                 <div class="col-sm-4">
                     <kendo-numerictextbox decimals="2" spinners="false" name="resiko_nilai_dis" value="@resiko_nilai_dis" style="width: 100%; background-color: #FFFFE1"/>
@@ -150,7 +150,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Komisi</label>
                 <div class="col-sm-2">
-                    <kendo-numerictextbox decimals="2" spinners="false" name="resiko_pst_kms" value="@resiko_pst_kms" style="width: 100%"/>
+                    <kendo-numerictextbox decimals="2" spinners="false" name="resiko_pst_kms" value="@resiko_pst_kms" on-change="OnPstKomisiChange" style="width: 100%"/>
                 </div>
                 <div class="col-sm-4">
                     <kendo-numerictextbox decimals="2" spinners="false" name="resiko_nilai_kms" value="@resiko_nilai_kms" style="width: 100%; background-color: #FFFFE1"/>

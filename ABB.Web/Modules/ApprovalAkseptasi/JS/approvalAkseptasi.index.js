@@ -52,6 +52,11 @@ function OnClickRevisedApprovalAkseptasi(e) {
     openWindow('#ApprovalWindow',`/ApprovalAkseptasi/RevisedView`, 'Revised');
 }
 
+function OnClickBandingApprovalAkseptasi(e) {
+    dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    openWindow('#ApprovalWindow',`/ApprovalAkseptasi/BandingView`, 'Banding');
+}
+
 function OnClickPrintApprovalAkseptasi(e) {
     showProgressOnGrid('#ApprovalAkseptasiGrid');
     dataItem = this.dataItem($(e.currentTarget).closest("tr"));
@@ -80,19 +85,31 @@ function OnClickPrintApprovalAkseptasi(e) {
 function setButtonActions(e){
     var grid = this;
 
-    // Loop through data items and rows
-    grid.tbody.find("tr").each(function() {
+    grid.tbody.find("tr").each(function(e, element) {
         var dataItem = grid.dataItem(this);
-        
-        if (dataItem.flag_approved != "1") {
-            // Hide the custom button in this row
-            $(this).find(".k-grid-Approved").hide(); // "custom" is the command name
-            $(this).find(".k-grid-Rejected").hide(); // "custom" is the command name
-            $(this).find(".k-grid-Escalated").hide(); // "custom" is the command name
-        } else {
-            $(this).find(".k-grid-Checked").hide(); // "custom" is the command name
+        var uid = $(this).data("uid");
+
+        // Find button container - try locked column first, then regular
+        var buttonContainer = grid.element.find(".k-grid-content-locked tr[data-uid='" + uid + "'] .k-command-cell");
+        if (!buttonContainer.length) {
+            buttonContainer = $(this).find(".k-command-cell");
+        }
+
+        if (buttonContainer.length) {
+            // Apply your business logic to hide buttons
+            if (dataItem.flag_approved != "1") {
+                // Hide the custom button in this row
+                buttonContainer.find(".k-grid-Approved").hide(); // "custom" is the command name
+                buttonContainer.find(".k-grid-Rejected").hide(); // "custom" is the command name
+                buttonContainer.find(".k-grid-Escalated").hide(); // "custom" is the command name
+            } else {
+                buttonContainer.find(".k-grid-Checked").hide(); // "custom" is the command name
+            }
+
+            if(dataItem.flag_banding != "1" || dataItem.flag_closing != "N"){
+                buttonContainer.find(".k-grid-Banding").hide(); // "custom" is the command name
+            }
         }
     });
-
     gridAutoFit(grid);
 }

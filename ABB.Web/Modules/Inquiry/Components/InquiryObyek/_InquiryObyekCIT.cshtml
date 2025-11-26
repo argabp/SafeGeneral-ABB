@@ -1,0 +1,59 @@
+﻿@using ABB.Application.Inquiries.Queries
+@using Kendo.Mvc.UI
+
+<script src="~/Modules/Inquiry/Components/InquiryObyek/obyekCIT.js"></script>
+
+<div class="window-body">
+    <div class="row">
+        <div class="col-md-4">
+            <input type="text" class="search-field-top" style="height: 1em" id="SearchKeywordObyekCIT" placeholder="Search"/>
+        </div>
+        <div class="offset-1"></div>
+    </div>
+    
+    @(Html.Kendo().Grid<InquiryObyekCITDto>()
+        .Name("InquiryObyekGrid")
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetInquiryObyekCITs", "Inquiry").Data("searchFilterObyekCIT"))
+            .Model(model => model.Id(p => p.no_oby))
+        )
+        .Columns(columns =>
+        {
+            columns.Command(command =>
+            {
+                command.Custom("ViewInquiryObyekCIT")
+                    .Text("View")
+                    .IconClass("fa fa-eye")
+                    .HtmlAttributes(new { title = "View" })
+                    .Click("btnViewInquiryObyekCIT_OnClick");
+            }).Width(200).Title("Action").Locked(true);
+            columns.Bound(col => col.no_oby).Width(150).Title("Nomor Obyek");
+            columns.Bound(col => col.nm_asal).Width(250).Title("Asal");
+            columns.Bound(col => col.ket_tujuan).Width(150).Title("Tujuan");
+            columns.Bound(col => col.nilai_kas).Width(150).Title("Nilai Pertanggungan");
+            columns.Bound(col => col.pst_rate).Width(150).Title("Rate");
+        })
+        .Pageable(pager => pager
+            .Refresh(true)
+            .Info(true)
+            .PageSizes(true)
+        )
+        .Sortable()
+        .Filterable()
+        .AutoBind(false)
+        .Scrollable()
+        .Height(450)
+        .Resizable(a => a.Columns(true))
+        .Events(ev => ev.DataBound("gridAutoFit"))
+    
+        )
+    
+    <div class="window-footer">
+        <button type="button" id="btn-previous-inquiryResikoObyekCIT" class="btn btn-primary space-right">
+            <span class="fa fa-arrow-left"></span> Previous
+        </button>
+        <button type="button" id="btn-next-inquiryResikoObyekCIT" class="btn btn-primary space-right">
+            Next <span class="fa fa-arrow-right"></span>
+        </button>
+    </div>
+</div>

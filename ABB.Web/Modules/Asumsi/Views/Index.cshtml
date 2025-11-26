@@ -38,8 +38,6 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.KodeAsumsi).Width(150).Title("Kode Asumsi").Editable("editKodeAsumsi");
-                    columns.Bound(col => col.NamaAsumsi).Width(150).Title("Nama Asumsi");
                     columns.Command(command =>
                     {
                         command.Edit();
@@ -48,7 +46,9 @@
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteAsumsi");
-                    }).Width(200);
+                    }).Width(200).Title("Action").Locked(true);
+                    columns.Bound(col => col.KodeAsumsi).Width(150).Title("Kode Asumsi").Editable("editKodeAsumsi");
+                    columns.Bound(col => col.NamaAsumsi).Width(150).Title("Nama Asumsi");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)
@@ -84,9 +84,6 @@
                                 )
                                 .Columns(columns =>
                                 {
-                                    columns.Bound(col => col.KodeAsumsi).Width(150).Title("Kode Asumsi").Editable("editReadOnlyField");
-                                    columns.Bound(col => col.KodeProduk).Width(150).Title("Kode Produk").Editable("editKodeProduk");
-                                    columns.Bound(col => col.PeriodeProses).Width(200).Title("Periode Proses").Format("{0: dd-MM-yyyy}").EditorTemplateName("KendoDateEditor").Editable("editPeriodeProses");
                                     columns.Command(command =>
                                     {
                                         command.Edit();
@@ -95,7 +92,10 @@
                                             .IconClass("k-icon k-i-delete")
                                             .HtmlAttributes(new { title="Delete"})
                                             .Click("onDeleteAsumsiPeriode");
-                                    }).Width(200);
+                                    }).Width(200).Locked(true).Title("Action");
+                                    columns.Bound(col => col.KodeAsumsi).Width(150).Title("Kode Asumsi").Editable("editReadOnlyField");
+                                    columns.Bound(col => col.KodeProduk).Width(150).Title("Kode Produk").Editable("editKodeProduk");
+                                    columns.Bound(col => col.PeriodeProses).Width(200).Title("Periode Proses").Format("{0: dd-MM-yyyy}").EditorTemplateName("KendoDateEditor").Editable("editPeriodeProses");
                                 })
                                 .Pageable(pager => pager
                                     .Refresh(true)
@@ -127,11 +127,6 @@
                             )
                             .Columns(columns =>
                             {
-                                columns.Bound(col => col.KodeAsumsi).Width(150).Title("Kode Asumsi").Editable("editReadOnlyField");
-                                columns.Bound(col => col.KodeProduk).Width(150).Title("Kode Produk").Editable("editReadOnlyField");
-                                columns.Bound(col => col.PeriodeProses).Width(200).Title("Periode Proses").Format("{0: dd-MM-yyyy}").EditorTemplateName("KendoDateEditor").Editable("editReadOnlyField");
-                                columns.Bound(col => col.Thn).Width(100).Title("Tahun").Editable("editTahun");
-                                columns.Bound(col => col.Persentase).Width(150).Title("Persentase").EditorTemplateName("KendoNumericTextBox");
                                 columns.Command(command =>
                                 {
                                     command.Edit();
@@ -140,7 +135,12 @@
                                         .IconClass("k-icon k-i-delete")
                                         .HtmlAttributes(new { title="Delete"})
                                         .Click("onDeleteAsumsiDetail");
-                                }).Width(200);
+                                }).Width(200).Locked(true).Title("Action");
+                                columns.Bound(col => col.KodeAsumsi).Width(150).Title("Kode Asumsi").Editable("editReadOnlyField");
+                                columns.Bound(col => col.KodeProduk).Width(150).Title("Kode Produk").Editable("editReadOnlyField");
+                                columns.Bound(col => col.PeriodeProses).Width(200).Title("Periode Proses").Format("{0: dd-MM-yyyy}").EditorTemplateName("KendoDateEditor").Editable("editReadOnlyField");
+                                columns.Bound(col => col.Thn).Width(100).Title("Tahun").Editable("editTahun");
+                                columns.Bound(col => col.Persentase).Width(150).Title("Persentase").EditorTemplateName("KendoNumericTextBox");
                             })
                             .Pageable(pager => pager
                                         .Refresh(true)

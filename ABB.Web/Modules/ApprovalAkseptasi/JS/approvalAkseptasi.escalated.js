@@ -4,6 +4,12 @@
 
 function btnApprovalAkseptasiEscalated(){
     $('#btn-approvalAkseptasi-escalated').click(function () {
+
+        if($("#keterangan").val().trim() === ""){
+            showMessage('Error', "Keterangan Wajib Diisi");
+            return;
+        }
+
         showProgress('#ApprovalWindow');
         setTimeout(function () {
             approvalAkseptasiEscalated();

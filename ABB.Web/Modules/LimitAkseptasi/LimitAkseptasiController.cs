@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ABB.Application.Approvals.Queries;
 using ABB.Application.Common;
+using ABB.Application.Common.Queries;
 using ABB.Application.KapasitasCabangs.Queries;
 using ABB.Application.LimitAkseptasis.Commands;
 using ABB.Application.LimitAkseptasis.Quries;

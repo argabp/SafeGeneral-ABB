@@ -15,7 +15,8 @@ function dataKodeTertanggungDropDown(){
 function dataKodeSumberBisnisDropDown(){
     return {
         kd_grp_rk: $("#temp_kd_grp_sb_bis").val().trim(),
-        kd_cb: $("#temp_kd_cb").val().trim()
+        kd_cb: $("#temp_kd_cb").val().trim(),
+        no_fax: "Y"
     }
 }
 
@@ -225,6 +226,7 @@ function OnKodeSCOBChange(e){
 function OnStatusPolisChange(e){
     ajaxGet("/PengajuanAkseptasi/GeneratePstShare?st_pas=" + e.sender._cascadedValue, (returnValue) => {
         $("#pst_share").getKendoNumericTextBox().value(returnValue);
+        $("#pst_share").getKendoNumericTextBox().trigger("change");
     });
 }
 

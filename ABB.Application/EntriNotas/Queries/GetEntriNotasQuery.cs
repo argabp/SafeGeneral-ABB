@@ -47,7 +47,7 @@ namespace ABB.Application.EntriNotas.Queries
                             AND pp.kd_thn = p.kd_thn
                             AND pp.no_pol = p.no_pol
                             AND pp.no_updt = p.no_updt
-                        WHERE p.flag_cancel = 'N' AND p.flag_posting = 'N' AND 
+                        WHERE p.flag_cancel = 'N' AND 
                               (p.no_nt_msk like '%'+@SearchKeyword+'%' 
 					OR p.no_pol_ttg like '%'+@SearchKeyword+'%' 
 					OR p.nm_ttj like '%'+@SearchKeyword+'%' 

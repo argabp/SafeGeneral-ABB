@@ -1,0 +1,31 @@
+﻿@model ABB.Web.Modules.Inquiry.Models.InquiryResikoParameterViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/Inquiry/Components/InquiryOther/otherCargo.js"></script>
+
+<div class="window-body">
+    <div id="resikoOtherTab">
+        <ul>
+            <li class="k-active">
+                Cargo
+            </li>
+            <li>
+                Alat Angkut > 1
+            </li>
+        </ul>
+        <div id="tabResikoMotor">
+            <vc:inquiry-other-cargo model="@Model"></vc:inquiry-other-cargo>
+        </div>
+        <div id="tabResikoMotorDetail">
+            <vc:inquiry-other-cargo-detail model="@Model"></vc:inquiry-other-cargo-detail>
+        </div>
+    </div>
+    
+    <div class="window-footer">
+        <button type="button" id="btn-previous-inquiryResikoOther" class="btn btn-primary space-right">
+            <span class="fa fa-arrow-left"></span> Previous
+        </button>
+    </div>
+</div>
