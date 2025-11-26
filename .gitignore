@@ -27,10 +27,15 @@ obj/
 Obj/
 
 ABB.Api/obj/
+ABB.Api/bin/
 ABB.Application/obj/
+ABB.Application/bin/
 ABB.Domain/obj/
+ABB.Domain/bin/
 ABB.Infrastructure/obj/
+ABB.Infrastructure/bin/
 ABB.Web/obj/
+ABB.Web/bin/
 
 # Skip this whole directory
 ./Infrastructure
