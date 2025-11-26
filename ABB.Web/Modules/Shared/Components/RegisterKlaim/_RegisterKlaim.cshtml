@@ -347,7 +347,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Tanggal Lunas Premi</label>
                 <div class="col-sm-6">
-                    <kendo-datepicker for="tgl_lns_prm" style="width: 100%; background-color: #FFFFE1"/>
+                    <kendo-datepicker for="tgl_lns_prm" readonly="true" style="width: 100%; background-color: #FFFFE1"/>
                     <span asp-validation-for="tgl_lns_prm" class="text-danger"></span>
                 </div>
             </div>
@@ -359,7 +359,7 @@
                 </div>
             </div>
         </div>
-        <div class="form-group row">
+        <div class="form-group row" id="div_kd_pas" style="display: none">
             <div class="row col-sm-6">
                 <label class="col-sm-6">Otorisasi</label>
                 <div class="col-sm-6">
@@ -374,7 +374,7 @@
                     <span asp-validation-for="kd_usr_input" class="text-danger"></span>
                 </div>
             </div>
-            <div class="row col-sm-6" id="div_kd_pas" style="display: none">
+            <div class="row col-sm-6">
                 <label class="col-sm-6">Password</label>
                 <div class="col-sm-6">
                     <kendo-textbox for="kd_pas" style="width: 100%"/>

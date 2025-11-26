@@ -98,11 +98,11 @@ function onDeleteBeban(e){
                     .IconClass("k-icon k-i-delete")
                     .HtmlAttributes(new { title = "Delete" })
                     .Click("onDeleteBeban");
-            }).Width(200).Title("Action");
+            }).Width(200).Title("Action").Locked(true);
             columns.Bound(col => col.no_urut).Width(100).Title("No Urut");
             columns.Bound(col => col.ket_jns).Width(200).Title("Keterangn");
-            columns.Bound(col => col.nilai_jns_org).Width(150).Title("Nilai Recovery");
-            columns.Bound(col => col.nilai_jns).Width(150).Title("Nilai Recovery Sesuai Mutasi");
+            columns.Bound(col => col.nilai_jns_org).Width(150).Title("Nilai Recovery").Format("{0:n2}");
+            columns.Bound(col => col.nilai_jns).Width(200).Title("Nilai Recovery Sesuai Mutasi").Format("{0:n2}");
         })
         .Pageable(pager => pager
             .Refresh(true)

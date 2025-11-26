@@ -45,9 +45,9 @@ namespace ABB.Web.Modules.RegisterKlaim.Models
 
         public string? ket_oby { get; set; }
 
-        public DateTime tgl_lapor { get; set; }
+        public DateTime? tgl_lapor { get; set; }
 
-        public DateTime tgl_kej { get; set; }
+        public DateTime? tgl_kej { get; set; }
 
         public string? tempat_kej { get; set; }
 
