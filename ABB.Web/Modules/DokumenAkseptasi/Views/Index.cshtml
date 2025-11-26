@@ -52,9 +52,9 @@
                         command.Custom("DeleteDokumenAkseptasi")
                             .Text("Delete")
                             .IconClass("k-icon k-i-delete")
-                            .HtmlAttributes(new { title="Delete"})
+                            .HtmlAttributes(new { title = "Delete" })
                             .Click("onDeleteDokumenAkseptasi");
-                    }).Width(200).Title("Action").Locked(true);
+                    }).Width(200).Title("Action");
                     columns.Bound(col => col.nm_cob).Title("Nama COB");
                     columns.Bound(col => col.nm_scob).Title("Nama Sub COB");
                     columns.Bound(col => col.nm_dokumenakseptasi).Title("Nama Dokumen Akseptasi");

@@ -26,7 +26,12 @@ namespace ABB.Application.MutasiKlaims.Queries
 
         public string nm_kd_mtu { get; set; }
         public DateTime tgl_mts { get; set; }
+        public DateTime? tgl_closing { get; set; }
 
         public string kd_usr_input { get; set; }
+
+        public decimal nilai_ttl_kl { get; set; }
+
+        public string flag_closing { get; set; }
     }
 }

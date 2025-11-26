@@ -4,10 +4,13 @@
 
 function btnInsertMutasiKlaim_Click() {
     $('#btn-insert-mutasiKlaim').click(function () {
-        showProgress('#MutasiKlaimWindow');
-        setTimeout(function () {
-            insertMutasiKlaim('/MutasiKlaim/Insert')
-        }, 500);
+        showConfirmation('Confirmation', `Are you sure you want to insert?`,
+            function () {
+                showProgress('#MutasiKlaimWindow');
+                setTimeout(function () {
+                    insertMutasiKlaim('/MutasiKlaim/Insert')
+                }, 500);
+            });
     });
 }
 

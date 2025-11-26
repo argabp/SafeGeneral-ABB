@@ -68,12 +68,13 @@
                 //     .IconClass("fa fa-print")
                 //     .HtmlAttributes(new { title = "Print" })
                 //     .Click("OnClickPrintPengajuanAkseptasi");
-            }).Title("Action").Width(250).Locked(true);
+            }).Title("Action").Width(100).Locked(true);
             columns.Bound(col => col.Id).Hidden();
             columns.Bound(col => col.nm_cb).Title("Cabang");
             columns.Bound(col => col.nm_cob).Title("COB");
             columns.Bound(col => col.nm_scob).Title("SCOB");
-            columns.Bound(col => col.register_klaim).Title("Nomor Register Klaim");
+            columns.Bound(col => col.no_pol_lama).Title("Nomor Polis").ClientTemplate("#= formatNoPol(no_pol_lama) #");
+            columns.Bound(col => col.register_klaim).Title("Nomor Berkas");
             columns.Bound(col => col.nm_ttg).Title("Nama Tertanggung");
             columns.Bound(col => col.sebab_kerugian).Title("Sebab Klaim");
             columns.Bound(col => col.tgl_kej).Title("Tanggal Kejadian").Format("{0: dd-MM-yyyy}");
@@ -122,4 +123,22 @@
             )
     </div>
 </div>
+
+<script>
+    function formatNoPol(value) {
+        if (!value) return "";
+
+        value = value.toString();
+
+        // Ensure the string is long enough
+        if (value.length < 16) return value;
+
+        return value.substring(0, 2) + '.' +
+               value.substring(2, 5) + '.' +
+               value.substring(5, 7) + '.' +
+               value.substring(7, 11) + '.' +
+               value.substring(11, 15) + '-' +
+               value.substring(15);
+    }
+</script>
 

@@ -79,7 +79,7 @@
                     .HtmlAttributes(new { title = "Print" })
                     .Click("OnClickPrintApprovalAkseptasi");
 
-            }).Title("Action").Width(300);
+            }).Title("Action").Width(300).Locked(true);
             columns.Bound(col => col.Id).Hidden();
             columns.Bound(col => col.nm_cb).Title("Cabang");
             columns.Bound(col => col.nm_cob).Title("COB");

@@ -1,0 +1,276 @@
+﻿@model ABB.Web.Modules.MutasiKlaim.Models.MutasiKlaimViewModel
+@using Kendo.Mvc.UI
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/MutasiKlaim/JS/mutasiKlaim.edit.js"></script>
+
+@{
+    var nomor_register = "K." + Model.kd_cb.Trim() + "." + Model.kd_scob.Trim() 
+                         + "." + Model.kd_thn.Trim() + "." + Model.no_kl.Trim();
+}
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="MutasiKlaimForm" enctype="multipart/form-data" autocomplete="off">
+        @Html.HiddenFor(h => h.kd_thn)
+        @Html.HiddenFor(h => h.no_kl)
+        @Html.HiddenFor(h => h.no_mts)
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Cabang</label>
+                <div class="col-sm-6">
+                    <input type="hidden" id="temp_kd_cb" value="@Model.kd_cb">
+                    <kendo-dropdownlist for="kd_cb" style="width: 100%" on-change="OnKodeCabangChange" option-label="Pilih Cabang" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetCabang", "MutasiKlaim")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_cb" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode COB</label>
+                <div class="col-sm-6">
+                    <input type="hidden" id="temp_kd_cob" value="@Model.kd_cob">
+                    <kendo-dropdownlist for="kd_cob" style="width: 100%" on-change="OnKodeCOBChange" option-label="Pilih COB" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetCOB", "MutasiKlaim")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_cob" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode SCOB</label>
+                <div class="col-sm-6">
+                <input type="hidden" id="temp_kd_scob" value="@Model.kd_scob">
+                    <kendo-dropdownlist for="kd_scob" style="width: 100%" on-change="OnKodeSCOBChange" option-label="Pilih SCOB" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetSCOB", "MutasiKlaim")" data="dataKodeSCOBDropDown"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_scob" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Berkas</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="temp_nomor_register" value="@nomor_register" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Group Mutasi</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="no_grp_mts" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Tipe Mutasi</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="tipe_mts" style="width: 100%" option-label="Pilih Tipe Mutasi" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetTipeMutasi", "MutasiKlaim")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="tipe_mts" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Mata Uang</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_mtu" style="width: 100%" option-label="Pilih Mata Uang" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetMataUang", "MutasiKlaim")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_mtu" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Tanggal Mutasi</label>
+                <div class="col-sm-6">
+                    <kendo-datepicker for="tgl_mts" style="width: 100%;" readonly="true"/>
+                    <span asp-validation-for="tgl_mts" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6" style="align-content: center;">
+                <label class="col-sm-6">Flag Konversi</label>
+                <input type="hidden" id="tempFlag_konv" value="@Model.flag_konv">
+                <div class="col-sm-6">
+                    <label>
+                        <input type="checkbox" disabled class="k-checkbox" id="flag_konv"/>
+                        Konversi
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nilai Total Klaim</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="nilai_ttl_kl" style="width: 100%;" readonly="true"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Validitas</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="validitas" style="width: 100%" option-label="Pilih Validitas" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetValiditas", "MutasiKlaim")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="validitas" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Tanggal Closing</label>
+                <div class="col-sm-6">
+                    <kendo-datepicker for="tgl_closing" style="background-color: #FFFFE1"></kendo-datepicker>
+                    <span asp-validation-for="tgl_closing" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Tanggal Closing Reas</label>
+                <div class="col-sm-6">
+                    <kendo-datepicker for="tgl_reas" readonly="true"></kendo-datepicker>
+                    <span asp-validation-for="tgl_reas" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode User Closing</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_usr_closing" style="width: 100%" option-label="Pilih User Closing" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetUsers", "MutasiKlaim")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_usr_closing" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode User Closing Reas</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_usr_reas" style="width: 100%" option-label="Pilih User Closing Reas" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetUsers", "MutasiKlaim")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_usr_reas" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6" style="align-content: center;">
+                <label class="col-sm-6">Flag Closing</label>
+                <input type="hidden" id="tempFlag_closing" value="@Model.flag_closing">
+                <div class="col-sm-6">
+                    <label>
+                        <input type="checkbox" disabled class="k-checkbox" id="flag_closing"/>
+                        Closing
+                    </label>
+                </div>
+            </div>
+            <div class="row col-sm-6" style="align-content: center;">
+                <label class="col-sm-6">Flag Closing Reas</label>
+                <input type="hidden" id="tempFlag_reas" value="@Model.flag_reas">
+                <div class="col-sm-6">
+                    <label>
+                        <input type="checkbox" disabled class="k-checkbox" id="flag_reas"/>
+                        Closing Reas
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Tanggal Input</label>
+                <div class="col-sm-6">
+                    <kendo-datepicker for="tgl_input" style="background-color: #FFFFE1" readonly="true"></kendo-datepicker>
+                    <span asp-validation-for="tgl_input" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Tanggal Update</label>
+                <div class="col-sm-6">
+                    <kendo-datepicker for="tgl_updt" readonly="true"></kendo-datepicker>
+                    <span asp-validation-for="tgl_updt" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode User Input</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_usr_input" style="width: 100%" option-label="Pilih User Input" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetUsers", "MutasiKlaim")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_usr_input" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode User Update</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_usr_updt" style="width: 100%" option-label="Pilih User Update" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetUsers", "MutasiKlaim")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_usr_updt" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="window-footer">
+        <button type="button" id="btn-save-mutasiKlaim" class="btn btn-success space-right">
+            <span class="fa fa-save"></span> Save
+        </button>
+    </div>
+</div>

@@ -52,9 +52,9 @@
                         command.Custom("DeleteApproval")
                             .Text("Delete")
                             .IconClass("k-icon k-i-delete")
-                            .HtmlAttributes(new { title="Delete"})
+                            .HtmlAttributes(new { title = "Delete" })
                             .Click("onDeleteApproval");
-                    }).Width(200).Title("Action").Locked(true);
+                    }).Width(200).Title("Action");
                     columns.Bound(col => col.nm_cb).Title("Nama Cabang");
                     columns.Bound(col => col.nm_cob).Title("Nama COB");
                     columns.Bound(col => col.nm_scob).Title("Nama Sub COB");

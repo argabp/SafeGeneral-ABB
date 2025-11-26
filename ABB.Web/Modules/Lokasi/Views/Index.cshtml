@@ -52,9 +52,9 @@
                         command.Custom("DeleteProvinsi")
                             .Text("Delete")
                             .IconClass("k-icon k-i-delete")
-                            .HtmlAttributes(new { title="Delete"})
+                            .HtmlAttributes(new { title = "Delete" })
                             .Click("onDeleteProvinsi");
-                    }).Width(200).Title("Action").Locked(true);
+                    }).Width(200).Title("Action");
                     columns.Bound(col => col.kd_prop).Width(100).Title("Kode Provinsi").Editable("disableGridTextboxWhenEdit");
                     columns.Bound(col => col.nm_prop).Width(200).Title("Nama Provinsi");
                     columns.Bound(col => col.no_pos).Width(100).Title("No Pos");
@@ -235,9 +235,6 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.kd_pos).Width(100).Title("Kode Pos").Editable("disableGridTextboxWhenEdit");
-                    columns.Bound(col => col.jalan).Width(200).Title("Jalan");
-                    columns.Bound(col => col.kota).Width(100).Title("Kota");
                     columns.Command(command =>
                     {
                         command.Edit();
@@ -247,6 +244,9 @@
                             .HtmlAttributes(new { title = "Delete" })
                             .Click("onDeleteLokasiResiko");
                     }).Width(200).Title("Action");
+                    columns.Bound(col => col.kd_pos).Width(100).Title("Kode Pos").Editable("disableGridTextboxWhenEdit");
+                    columns.Bound(col => col.jalan).Width(200).Title("Jalan");
+                    columns.Bound(col => col.kota).Width(100).Title("Kota");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)
@@ -279,14 +279,6 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.kd_pos).Width(100).Title("Kode Pos").Editable("disableGridTextbox");
-                    columns.Bound(col => col.kd_lok_rsk).Width(150).Title("Kode Lokasi Resiko").Editable("disableGridTextboxWhenEdit");
-                    columns.Bound(col => col.gedung).Width(200).Title("Gedung");
-                    columns.Bound(col => col.alamat).Width(300).Title("Alamat");
-                    columns.Bound(col => col.kd_prop).Width(100).Title("Nama Provinsi").Width(200).ClientTemplate("\\#=nm_prop\\#").EditorTemplateName("KendoDropdownProvinsi");
-                    columns.Bound(col => col.kd_kab).Width(100).Title("Nama Kabupaten").Width(200).ClientTemplate("\\#=nm_kab\\#");
-                    columns.Bound(col => col.kd_kec).Width(100).Title("Nama Kecamatan").Width(200).ClientTemplate("\\#=nm_kec\\#");
-                    columns.Bound(col => col.kd_kec).Width(100).Title("Nama Kelurahan").Width(200).ClientTemplate("\\#=nm_kel\\#");
                     columns.Command(command =>
                     {
                         command.Custom("EditDetailLokasiResiko")
@@ -300,6 +292,14 @@
                             .HtmlAttributes(new { title = "Delete" })
                             .Click("onDeleteDetailLokasiResiko");
                     }).Width(200).Title("Action");
+                    columns.Bound(col => col.kd_pos).Width(100).Title("Kode Pos").Editable("disableGridTextbox");
+                    columns.Bound(col => col.kd_lok_rsk).Width(150).Title("Kode Lokasi Resiko").Editable("disableGridTextboxWhenEdit");
+                    columns.Bound(col => col.gedung).Width(200).Title("Gedung");
+                    columns.Bound(col => col.alamat).Width(300).Title("Alamat");
+                    columns.Bound(col => col.kd_prop).Width(100).Title("Nama Provinsi").Width(200).ClientTemplate("\\#=nm_prop\\#").EditorTemplateName("KendoDropdownProvinsi");
+                    columns.Bound(col => col.kd_kab).Width(100).Title("Nama Kabupaten").Width(200).ClientTemplate("\\#=nm_kab\\#");
+                    columns.Bound(col => col.kd_kec).Width(100).Title("Nama Kecamatan").Width(200).ClientTemplate("\\#=nm_kec\\#");
+                    columns.Bound(col => col.kd_kec).Width(100).Title("Nama Kelurahan").Width(200).ClientTemplate("\\#=nm_kel\\#");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

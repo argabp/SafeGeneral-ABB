@@ -49,9 +49,9 @@
                         command.Custom("DeleteZona")
                             .Text("Delete")
                             .IconClass("k-icon k-i-delete")
-                            .HtmlAttributes(new { title="Delete"})
+                            .HtmlAttributes(new { title = "Delete" })
                             .Click("onDeleteZona");
-                    }).Width(200).Title("Action").Locked(true);
+                    }).Width(200).Title("Action");
                     columns.Bound(col => col.kd_zona).Width(150).Title("Kode Zona").Editable("disableGridTextboxWhenEdit");
                     columns.Bound(col => col.nm_zona).Width(150).Title("Nama Zona");
                 })

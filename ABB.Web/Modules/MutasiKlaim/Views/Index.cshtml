@@ -43,13 +43,14 @@
                             .IconClass("fa fa-plus")
                             .HtmlAttributes(new { title = "Insert" })
                             .Click("OnClickInsertDetailMutasiKlaim");
-                    }).Width(200).Title("Action").Locked(true);
+                    }).Width(100).Title("Action");
                     columns.Bound(col => col.Id).Hidden();
                     columns.Bound(col => col.nm_cb).Width(150).Title("Cabang");
                     columns.Bound(col => col.nm_cob).Width(150).Title("COB");
                     columns.Bound(col => col.nm_scob).Width(150).Title("SCOB");
-                    columns.Bound(col => col.register_klaim).Width(150).Title("Nomor Register Klaim");
-                    columns.Bound(col => col.nm_ttg).Width(150).Title("Nama Tertanggung");
+                    columns.Bound(col => col.no_pol_lama).Title("Nomor Polis").ClientTemplate("#= formatNoPol(no_pol_lama) #");
+                    columns.Bound(col => col.register_klaim).Width(150).Title("Nomor Berkas");
+                    columns.Bound(col => col.nm_ttg).Width(200).Title("Nama Tertanggung");
                     columns.Bound(col => col.sebab_kerugian).Width(150).Title("Sebab Klaim");
                     columns.Bound(col => col.tgl_kej).Width(150).Title("Tanggal Kejadian").Format("{0: dd-MM-yyyy}");
                     columns.Bound(col => col.tgl_lapor).Width(150).Title("Tanggal Lapor").Format("{0: dd-MM-yyyy}");
@@ -93,6 +94,11 @@
                                 {
                                     columns.Command(command =>
                                     {
+                                        command.Custom("Edit")
+                                            .Text("Edit")
+                                            .IconClass("k-icon k-i-edit")
+                                            .HtmlAttributes(new { title = "Edit" })
+                                            .Click("OnClickEditMutasiKlaim");
                                         command.Custom("View")
                                             .Text("View")
                                             .IconClass("fa fa-eye")
@@ -108,10 +114,14 @@
                                             .IconClass("k-icon k-i-delete")
                                             .HtmlAttributes(new { title="Delete"})
                                             .Click("onDeleteMutasiKlaim");
-                                    }).Width(250).Title("Action").Locked(true);
+                                    }).Width(300).Title("Action").Locked(true);
                                     columns.Bound(col => col.no_mts).Width(150).Title("Nomor Mutasi");
                                     columns.Bound(col => col.nm_tipe_mts).Width(150).Title("Tipe Mutasi");
+                                    columns.Bound(col => col.tgl_mts).Width(150).Title("Tanggal Mutasi").Format("{0: dd-MM-yyyy}");
+                                    columns.Bound(col => col.tgl_closing).Width(150).Title("Tanggal Closing").Format("{0: dd-MM-yyyy}");
                                     columns.Bound(col => col.nm_kd_mtu).Width(150).Title("Mata Uang");
+                                    columns.Bound(col => col.nilai_ttl_kl).Width(150).Title("Nilai Klaim").Format("{0:n2}");
+                                    columns.Bound(col => col.flag_closing).Width(150).Title("Flag Closing");
                                     
                                 })
                                 .Pageable(pager => pager
@@ -125,7 +135,7 @@
                                 .Scrollable()
                                 .Height(380)
                                 .Resizable(a=>a.Columns(true))
-                                .Events(ev => ev.DataBound("gridAutoFit").Change("OnMutasiChange"))
+                                .Events(ev => ev.DataBound("OnMutasiKlaimDataBound").Change("OnMutasiChange"))
                                 .ToClientTemplate())
                         </text>
                         );
@@ -199,3 +209,20 @@
     </div>
 </div>
 
+<script>
+    function formatNoPol(value) {
+        if (!value) return "";
+
+        value = value.toString();
+
+        // Ensure the string is long enough
+        if (value.length < 16) return value;
+
+        return value.substring(0, 2) + '.' +
+               value.substring(2, 5) + '.' +
+               value.substring(5, 7) + '.' +
+               value.substring(7, 11) + '.' +
+               value.substring(11, 15) + '-' +
+               value.substring(15);
+    }
+</script>

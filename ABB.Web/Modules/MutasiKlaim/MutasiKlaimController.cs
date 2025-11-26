@@ -84,7 +84,7 @@ namespace ABB.Web.Modules.MutasiKlaim
             foreach (var data in ds)
             {
                 counter++;
-                data.register_klaim = data.kd_cb.Trim() + "." + data.kd_cob.Trim() +
+                data.register_klaim = "K." + data.kd_cb.Trim() + "." +
                                       data.kd_scob.Trim() + "." + data.kd_thn.Trim() + "." + data.no_kl.Trim();
                 data.id_detail_grid = data.kd_cb.Trim() + data.kd_cob.Trim() +
                                       data.kd_scob.Trim() + data.kd_thn.Trim() + data.no_kl.Trim();
@@ -235,6 +235,45 @@ namespace ABB.Web.Modules.MutasiKlaim
         public JsonResult GetTipeMutasi()
         {
             return Json(_tipeMutasi);
+        }
+        
+        public async Task<IActionResult> Edit(string kd_cb, string kd_cob,
+            string kd_scob, string kd_thn, string no_kl, Int16 no_mts)
+        {
+            var mutasiKlaim = await Mediator.Send(new GetMutasiKlaimQuery()
+            {
+                kd_cb = kd_cb,
+                kd_cob = kd_cob,
+                kd_scob = kd_scob,
+                kd_thn = kd_thn,
+                no_kl = no_kl,
+                no_mts = no_mts,
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            });
+
+            mutasiKlaim.kd_cb = mutasiKlaim.kd_cb.Trim();
+            mutasiKlaim.kd_cob = mutasiKlaim.kd_cob.Trim();
+            mutasiKlaim.kd_scob = mutasiKlaim.kd_scob.Trim();
+            mutasiKlaim.validitas = mutasiKlaim.validitas.Trim();
+            
+            return PartialView(Mapper.Map<MutasiKlaimViewModel>(mutasiKlaim));
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> Edit([FromBody] EditMutasiKlaimViewModel model)
+        {
+            try
+            {
+                var command = Mapper.Map<SaveMutasiKlaimCommand>(model);
+                command.DatabaseName = Request.Cookies["DatabaseValue"];
+                
+                await Mediator.Send(command);
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", ex.Message });
+            }
         }
         
         public async Task<IActionResult> View(string kd_cb, string kd_cob,

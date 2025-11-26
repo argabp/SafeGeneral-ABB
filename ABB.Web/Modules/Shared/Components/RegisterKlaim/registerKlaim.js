@@ -61,7 +61,7 @@ function setRegisterKlaimModel(model){
     $("#kd_usr_input_field").getKendoDropDownList().value(model.kd_usr_input);
     $("#tgl_updt").getKendoDatePicker().value(model.tgl_updt);
     $("#tgl_input").getKendoDatePicker().value(model.tgl_input);
-    var nomor_register = model.kd_cb.trim() + "." + model.kd_cob.trim() + model.kd_scob.trim() + "." + model.kd_thn + "." + model.no_kl.trim();
+    var nomor_register = "K." + model.kd_cb.trim() + "." + model.kd_scob.trim() + "." + model.kd_thn + "." + model.no_kl.trim();
     $("#temp_nomor_register").val(nomor_register);
     $("#btn-select-no-polis").hide();
     $("#IsEdit").val("True");
@@ -109,7 +109,7 @@ function OnTglRegistrasiChange(e){
     var dataJson = JSON.stringify(data);
     ajaxPostSafely("/RegisterKlaim/GetKodeTahun", dataJson , (returnValue) => {
         $("#kd_thn").val(returnValue.split(",")[1]);
-        var nomor_register = $("#kd_cb").val().trim() + "." + $("#kd_cob").val().trim() + $("#kd_scob").val().trim() + "." + returnValue.split(",")[1] + "." + $("#no_kl").val().trim();
+        var nomor_register = "K." + $("#kd_cb").val().trim() + "." + $("#kd_scob").val().trim() + "." + returnValue.split(",")[1] + "." + $("#no_kl").val().trim();
         $("#temp_nomor_register").val(nomor_register);
     });
 }
@@ -131,7 +131,7 @@ function OnKodePenyebabChange(e){
 function OnKodeCabangChange(e){
     var value = e.sender._cascadedValue;
     $("#temp_kd_cb").val(value);
-    var nomor_register = value.trim() + "." + $("#kd_cob").val().trim() + $("#kd_scob").val().trim() + "." + $("#kd_thn").val().trim() + "." + $("#no_kl").val().trim();
+    var nomor_register = "K." + value.trim() + "." + $("#kd_scob").val().trim() + "." + $("#kd_thn").val().trim() + "." + $("#no_kl").val().trim();
     $("#temp_nomor_register").val(nomor_register);
 }
 
@@ -142,7 +142,7 @@ function OnKodeCOBChange(e){
     kd_scob.dataSource.read({kd_cob : e.sender._cascadedValue});
     var kd_sebab = $("#kd_sebab").data("kendoDropDownList");
     kd_sebab.dataSource.read({kd_cob : e.sender._cascadedValue});
-    var nomor_register = $("#kd_cb").val().trim() + "." + value.trim() + $("#kd_scob").val().trim() + "." + $("#kd_thn").val().trim() + "." + $("#no_kl").val().trim();
+    var nomor_register = "K." + $("#kd_cb").val().trim() + "." + $("#kd_scob").val().trim() + "." + $("#kd_thn").val().trim() + "." + $("#no_kl").val().trim();
     $("#temp_nomor_register").val(nomor_register);
     
     getDocumentNames();
@@ -153,7 +153,7 @@ function OnKodeCOBChange(e){
 function OnKodeSCOBChange(e){
     var value = e.sender._cascadedValue;
     $("#temp_kd_scob").val(value);
-    var nomor_register = $("#kd_cb").val().trim() + "." + $("#kd_cob").val().trim() + value.trim() + "." + $("#kd_thn").val().trim() + "." + $("#no_kl").val().trim();
+    var nomor_register = "K." + $("#kd_cb").val().trim() + "." + value.trim() + "." + $("#kd_thn").val().trim() + "." + $("#no_kl").val().trim();
     $("#temp_nomor_register").val(nomor_register);
 }
 

@@ -49,9 +49,9 @@
                         command.Custom("DeleteOkupasi")
                             .Text("Delete")
                             .IconClass("k-icon k-i-delete")
-                            .HtmlAttributes(new { title="Delete"})
+                            .HtmlAttributes(new { title = "Delete" })
                             .Click("onDeleteOkupasi");
-                    }).Width(200).Title("Action").Locked(true);
+                    }).Width(200).Title("Action");
                     columns.Bound(col => col.kd_okup).Width(150).Title("Kode Okupasi").Editable("disableGridTextboxWhenEdit");
                     columns.Bound(col => col.nm_okup).Width(150).Title("Nama Okupasi");
                     columns.Bound(col => col.nm_okup_ing).Width(150).Title("Nama Okupasi Inggris");

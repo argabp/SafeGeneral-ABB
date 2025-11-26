@@ -75,8 +75,8 @@ namespace ABB.Web.Modules.RegisterKlaim
 
             foreach (var data in ds)
             {
-                data.register_klaim = data.kd_cb.Trim() + "." + data.kd_cob.Trim() +
-                                      data.kd_scob.Trim() + "." + data.kd_thn.Trim() + "." + data.no_kl.Trim();
+                data.register_klaim = "K." + data.kd_cb.Trim() + "." + data.kd_scob.Trim() 
+                                      + "." + data.kd_thn.Trim() + "." + data.no_kl.Trim();
             }
             
             return Json(ds.AsQueryable().ToDataSourceResult(request));

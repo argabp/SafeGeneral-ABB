@@ -7,7 +7,7 @@
 <script src="~/Modules/MutasiKlaim/JS/mutasiKlaim.insert.js"></script>
 
 @{
-    var nomor_register = Model.kd_cb.Trim() + "." + Model.kd_cob.Trim() +
+    var nomor_register = "K." + Model.kd_cb.Trim() + "." +
                           Model.kd_scob.Trim() + "." + Model.kd_thn.Trim() + "." + Model.no_kl.Trim();
 }
 
@@ -20,7 +20,7 @@
         @Html.HiddenFor(h => h.no_kl)
         <div class="form-group row">
             <div class="row col-sm-12">
-                <label class="col-sm-4">Nomor Register Klaim</label>
+                <label class="col-sm-4">Nomor Berkas</label>
                 <div class="col-sm-8">
                     <kendo-textbox name="temp_nomor_register" value="@nomor_register" readonly="true" style="width: 100%"/>
                 </div>

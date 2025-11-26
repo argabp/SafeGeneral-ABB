@@ -7,15 +7,15 @@
 <script src="~/Modules/MutasiKlaim/JS/mutasiKlaim.view.js"></script>
 
 @{
-    var nomor_register = Model.kd_cb.Trim() + "." + Model.kd_cob.Trim() +
-                          Model.kd_scob.Trim() + "." + Model.kd_thn.Trim() + "." + Model.no_kl.Trim();
+    var nomor_register = "K." + Model.kd_cb.Trim() + "."  + Model.kd_scob.Trim() 
+                         + "." + Model.kd_thn.Trim() + "." + Model.no_kl.Trim();
 }
 
 <div class="window-body" style="background-color: lightgray">
-    @Html.HiddenFor(h => h.kd_thn)
-    @Html.HiddenFor(h => h.no_kl)
-    @Html.HiddenFor(h => h.no_mts)
     <form id="MutasiKlaimForm" enctype="multipart/form-data" autocomplete="off">
+        @Html.HiddenFor(h => h.kd_thn)
+        @Html.HiddenFor(h => h.no_kl)
+        @Html.HiddenFor(h => h.no_mts)
         <div class="form-group row">
             <div class="row col-sm-6">
                 <label class="col-sm-6">Kode Cabang</label>
@@ -69,7 +69,7 @@
         </div>
         <div class="form-group row">
             <div class="row col-sm-6">
-                <label class="col-sm-6">Nomor Register Klaim</label>
+                <label class="col-sm-6">Nomor Berkas</label>
                 <div class="col-sm-6">
                     <kendo-textbox name="temp_nomor_register" value="@nomor_register" readonly="true" style="width: 100%"/>
                 </div>
