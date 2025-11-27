@@ -1,0 +1,72 @@
+@model ABB.Web.Modules.TipeAkun104.Models.TipeAkun104ViewModel
+@using Kendo.Mvc.UI
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="CoaForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="row">
+            <div class="form-group col-sm-8">
+                    <label asp-for="Kode"></label>
+                    <div>
+                        <kendo-textbox for="Kode" style="width: 100%;" />
+                        <span asp-validation-for="Kode" class="text-danger"></span>
+                    </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-sm-8">
+                    <label asp-for="NamaTipe"></label>
+                    <div>
+                        <kendo-textbox for="NamaTipe" style="width: 100%;" />
+                        <span asp-validation-for="NamaTipe" class="text-danger"></span>
+                    </div>
+            </div>
+        </div>
+
+
+<div class="row">
+    <div class="form-group col-sm-8">
+
+        <!-- POS radios -->
+        <label asp-for="Pos"></label>
+
+        <div class="form-check">
+            <input class="form-check-input" type="radio" id="AK" name="Pos" value="AK" />
+            <label class="form-check-label" for="AK">NERACA – AKTIVA</label>
+        </div>
+
+        <div class="form-check">
+            <input class="form-check-input" type="radio" id="PS" name="Pos" value="PS" />
+            <label class="form-check-label" for="PS">NERACA – PASSIVA</label>
+        </div>
+
+        <!-- Kasbank checkbox (sejajar rapi) -->
+        <div class="form-check mt-2">
+
+            <input type="hidden" name="Kasbank" value="false" />
+
+            <input class="form-check-input" type="checkbox" id="Kasbank" name="Kasbank" value="true" />
+
+            <label class="form-check-label" for="Kasbank">
+                Kasbank
+            </label>
+
+        </div>
+
+        <span asp-validation-for="Pos" class="text-danger"></span>
+    </div>
+</div>
+
+       
+        
+    </form>
+</div>
+
+<div class="window-footer">
+    <button type="button" onclick="onSaveTipeAkun104()" class="btn btn-success space-right">
+        <span class="fa fa-save"></span> Save
+    </button>
+</div>
