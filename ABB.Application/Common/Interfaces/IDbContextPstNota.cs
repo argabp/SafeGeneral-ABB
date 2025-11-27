@@ -20,6 +20,9 @@ using TypeCoaEntity = ABB.Domain.Entities.TypeCoa;
 using EntriPembayaranKasTempEntity = ABB.Domain.Entities.EntriPembayaranKasTemp;
 using EntriPembayaranBankTempEntity = ABB.Domain.Entities.EntriPembayaranBankTemp;
 using EntriPenyelesaianPiutangTempEntity = ABB.Domain.Entities.EntriPenyelesaianPiutangTemp;
+using EntriPeriodeEntity = ABB.Domain.Entities.EntriPeriode;
+using TipeAkun104Entity = ABB.Domain.Entities.TipeAkun104;
+using TipeAkun117Entity = ABB.Domain.Entities.TipeAkun117;
 
 
 namespace ABB.Application.Common.Interfaces
@@ -42,6 +45,10 @@ namespace ABB.Application.Common.Interfaces
         DbSet<EntriPembayaranKasTempEntity> EntriPembayaranKasTemp { get; set; }
         DbSet<EntriPembayaranBankTempEntity> EntriPembayaranBankTemp { get; set; }
         DbSet<EntriPenyelesaianPiutangTempEntity> EntriPenyelesaianPiutangTemp { get; set; }
+        DbSet<EntriPeriodeEntity> EntriPeriode { get; set; }
+        DbSet<TipeAkun104Entity> TipeAkun104 { get; set; }
+        DbSet<TipeAkun117Entity> TipeAkun117 { get; set; }
+
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

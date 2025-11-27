@@ -1,0 +1,89 @@
+@model ABB.Web.Modules.TipeAkun117.Models.TipeAkun117ViewModel
+@using Kendo.Mvc.UI
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@{
+    // Cek mode edit jika Kode sudah terisi
+    bool isEditMode = !string.IsNullOrEmpty(Model.Kode);
+}
+
+<div class="window-body" style="padding: 15px;">
+    <form id="TipeAkunForm">
+        
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label" asp-for="Kode">Kode Tipe</label>
+            <div class="col-sm-9">
+                @if (isEditMode)
+                {
+                    <kendo-textbox for="Kode" style="width: 100%;" readonly="true" />
+                }
+                else
+                {
+                    <kendo-textbox for="Kode" style="width: 100%;" placeholder="Masukkan Kode..." />
+                }
+                <span asp-validation-for="Kode" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label" asp-for="NamaTipe">Nama Tipe</label>
+            <div class="col-sm-9">
+                <kendo-textbox for="NamaTipe" style="width: 100%;" placeholder="Masukkan Nama Tipe..." />
+                <span asp-validation-for="NamaTipe" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label" asp-for="Pos">POS</label>
+            <div class="col-sm-9">
+                <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 8px;">
+                    <div>
+                        <input type="radio" asp-for="Pos" value="AK" id="Pos_AK" class="k-radio" />
+                        <label class="k-radio-label" for="Pos_AK">Neraca - Aktiva (AK)</label>
+                    </div>
+                    
+                    <div>
+                        <input type="radio" asp-for="Pos" value="01" id="Pos_01" class="k-radio" />
+                        <label class="k-radio-label" for="Pos_01">Laba Rugi - Income (01)</label>
+                    </div>
+
+                    <div>
+                        <input type="radio" asp-for="Pos" value="PS" id="Pos_PS" class="k-radio" />
+                        <label class="k-radio-label" for="Pos_PS">Neraca - Passive (PS)</label>
+                    </div>
+
+                    <div>
+                        <input type="radio" asp-for="Pos" value="02" id="Pos_02" class="k-radio" />
+                        <label class="k-radio-label" for="Pos_02">Laba Rugi - Cost (02)</label>
+                    </div>
+                </div>
+                <span asp-validation-for="Pos" class="text-danger"></span>
+            </div>
+        </div>
+
+       <div class="form-group row">
+        <label class="col-sm-3 col-form-label" asp-for="Kasbank">Status Kas/Bank</label>
+        <div class="col-sm-9">
+            <div style="margin-top: 8px;">
+                <input type="checkbox" 
+                    id="KasbankCheckbox" 
+                    class="k-checkbox" 
+                    @(Model.Kasbank == true ? "checked" : "") />
+                    
+                <label class="k-checkbox-label" for="KasbankCheckbox">KasBank</label>
+            </div>
+            <span asp-validation-for="Kasbank" class="text-danger"></span>
+        </div>
+    </div>
+
+        <hr />
+
+        <div class="row">
+            <div class="col-sm-12" style="text-align: right;">
+                <button type="button" class="btn btn-secondary" onclick="closeWindow()">Batal</button>
+                <button type="button" class="btn btn-primary" onclick="onSaveTipeAkun()">Simpan</button>
+            </div>
+        </div>
+    </form>
+</div>

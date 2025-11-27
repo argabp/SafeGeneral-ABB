@@ -1,0 +1,79 @@
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.TagHelpers
+@using ABB.Application.TipeAkuns104.Queries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Tipe Akun 104";
+}
+
+<script src="~/Modules/TipeAkun104/JS/TipeAkun104.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+
+<div class="flat-box">
+        <div class="flat-box-title ">
+            Tipe Akun 104
+            <div class="pullright-flex">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+      
+            <button class="flat-btn-primary" onclick="btnAddTipeAkun104_OnClick()">Entri Tipe Akun 104</button>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+             @(Html.Kendo().Grid<TipeAkun104Dto>()
+                .Name("TipeAkun104Grid")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetTipeAkun104", "TipeAkun104").Data("getSearchFilter")) // Arahkan ke action yang baru dibuat
+                    .Model(model => model.Id(c => c.Kode)) // Primary Key
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.Kode).Width(150).Title("Kode");
+                    columns.Bound(col => col.NamaTipe).Width(400).Title("Nama Tipe");
+                    columns.Bound(col => col.Pos).Width(150).Title("POS");
+                    columns.Bound(col => col.Kasbank).Width(150).Title("");
+                    columns.Command(command =>
+                    {
+                       // command.Custom("EditCoa")
+                       //   .Text("Edit")
+                       //     .IconClass("fa fa-pencil-alt")
+                       //    .Click("btnEditCoa_OnClick");
+                     command.Custom("DeleteTipeAkun104")
+                          .Text("Delete")
+                           .IconClass("k-icon k-i-delete")
+                          .Click("onDeleteTipeAkun104"); 
+                    }).Width(180).Title("Action").Locked(true);
+                })
+                .Pageable(pager => pager.Refresh(true))
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+            )
+        </div>
+
+        @(Html.Kendo().Window()
+            .Name("TipeAkun104Window")
+            .Title("TipeAkun104")
+            .Width(500)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+        )
+
+    </div>
+</div>
+

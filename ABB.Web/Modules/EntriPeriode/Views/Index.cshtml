@@ -1,0 +1,127 @@
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.TagHelpers
+@using ABB.Application.EntriPeriodes.Queries 
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Entri Periode";
+}
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="~/Modules/EntriPeriode/JS/entriperiode.index.js"></script>
+<style>
+    .div-box { padding-bottom: 1em; }
+    .swal2-container { z-index: 10050 !important; }
+     .breadcrumb-item + .breadcrumb-item::before {
+        content: ">"; /* Ganti '/' dengan '>' */
+        padding: 0 .5rem; /* Atur spasi jika perlu */
+    }
+</style>
+
+<nav aria-label="breadcrumb">
+   <ol class="breadcrumb" style="background: white; ">
+        <li class="breadcrumb-item"><a href="#">Accounting</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Entri Periode</li>
+    </ol>
+</nav>
+<div class="flat-box">
+    <div class="flat-box-title ">
+       Daftar Periode Akuntansi
+        <div class="pullright-flex">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Cari Tahun..."/>
+            <button class="flat-btn-primary" onclick="btnAddPeriode_OnClick()">Set Periode Produksi</button>
+        </div>
+    </div>
+
+   <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<EntriPeriodeDto>()
+                .Name("PeriodeGrid") // Nama Grid tunggal
+                .DataSource(dataSource => dataSource.Ajax()
+                    // Tidak perlu kirim flagClosing lagi
+                    .Read(read => read.Action("GetPeriode", "EntriPeriode").Data("getSearchFilter")) 
+                    .Model(model => {
+                        model.Id(p => p.ThnPrd); 
+                    })
+                    .PageSize(20)
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(col => col.ThnPrd).Title("Tahun").Format("{0:n0}").Width(100);
+                    
+                    // UBAH 1: Bulan jadi Nama (pakai ClientTemplate JS)
+                    columns.Bound(col => col.BlnPrd).Title("Bulan").Width(150)
+                        .ClientTemplate("#= getNamaBulan(BlnPrd) #");
+
+                    // UBAH 2: Tanggal jadi format panjang (dd MMMM yyyy)
+                    // Kita pakai kendo.toString agar locale-aware atau manual formatting
+                    columns.Bound(col => col.TglMul).Title("Tgl Mulai").Width(200)
+                        .ClientTemplate("#= kendo.toString(kendo.parseDate(TglMul), 'dd MMMM yyyy') #");
+
+                    columns.Bound(col => col.TglAkh).Title("Tgl Akhir").Width(200)
+                         .ClientTemplate("#= kendo.toString(kendo.parseDate(TglAkh), 'dd MMMM yyyy') #");
+
+                    columns.Bound(col => col.FlagClosing).Title("Status").Width(100)
+                        .ClientTemplate("#= FlagClosing == 'Y' ? '<span class=\"badge badge-danger\">Closed</span>' : '<span class=\"badge badge-success\">Open</span>' #");
+                    
+                    columns.Command(command =>
+                    {
+                        command.Custom("EditPeriode")
+                            .Text(" Edit ")
+                            .IconClass("fa fa-edit")
+                            .Click("btnEditPeriode_OnClick"); 
+
+                        command.Custom("DeletePeriode")
+                            .Text(" Hapus ")
+                            .IconClass("fa fa-trash")
+                            .Click("btnDeletePeriode_OnClick");
+                    }).Width(200).Title("Action").Locked(true);
+                })
+                .Pageable(pager => pager.Refresh(true).PageSizes(true))
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(500)
+                .Resizable(a=>a.Columns(true))
+            )
+        </div>
+
+        @(Html.Kendo().Window()
+            .Name("EntriPeriodeWindow")
+            .Title("Form Entri Periode")
+            .Width(600)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+        )
+    </div>
+<script>
+    function getNamaBulan(bulanAngka) {
+        var namaBulan = [
+            "", "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+            "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+        ];
+        return namaBulan[bulanAngka] || bulanAngka;
+    }
+   function getSearchFilter() {
+        return {
+            searchKeyword: $("#SearchKeyword").val()
+            // flagClosing dihapus karena ingin menampilkan semua
+        };
+    }
+
+   $(document).ready(function () {
+        $("#SearchKeyword").on("keyup", function() {
+            $("#PeriodeGrid").data("kendoGrid").dataSource.read();
+        });
+        
+        // Set Culture Kendo ke Indonesia agar format tanggal "dd MMMM yyyy" jadi (01 Januari 2024)
+        // Jika belum di-set global, script ini membantu:
+        kendo.culture("id-ID");
+    });
+</script>

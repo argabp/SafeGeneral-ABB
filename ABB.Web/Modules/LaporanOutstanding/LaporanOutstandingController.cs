@@ -101,82 +101,46 @@ namespace ABB.Web.Modules.LaporanOutstanding
             return Json(result);
         }
 
-        [HttpGet]
-            public async Task<IActionResult> CetakLaporan(
-                string KodeCabang,
-                string JenisAwal,
-                string JenisAkhir,
-                string BulanAwal,
-                string BulanAkhir,
-                string Tahun)
-            {
-                var databaseName = Request.Cookies["DatabaseValue"];
-                var user = CurrentUser.UserId;
 
-                var query = new GetLaporanOutstandingQuery
-                {
-                    DatabaseName = databaseName,
-                    KodeCabang = KodeCabang,
-                    JenisAwal = JenisAwal,
-                    JenisAkhir = JenisAkhir,
-                    BulanAwal = BulanAwal,
-                    BulanAkhir = BulanAkhir,
-                    Tahun = Tahun,
-                    UserLogin = user
-                };
 
-                var data = await Mediator.Send(query);
-
-                if (data == null || !data.Any())
-                    return Content("<h3 style='text-align:center;'>Data tidak ditemukan</h3>", "text/html");
-
-                return View("CetakLaporan", data);
-            }
-
-            [HttpPost]
+        [HttpPost]
         public async Task<IActionResult> GenerateReport([FromBody] LaporanOutstandingFilterDto model)
         {
             try
             {
-                // var command = Mapper.Map<GetLaporanOutstandingQuery>(model);
                 var databaseName = Request.Cookies["DatabaseValue"];
                 var user = CurrentUser.UserId;
 
+                if (string.IsNullOrWhiteSpace(user))
+                    throw new Exception("User ID tidak ditemukan.");
+
+                // Sesuaikan QUERY dengan data yang datang dari JS
                 var query = new GetLaporanOutstandingQuery
                 {
                     DatabaseName = databaseName,
                     KodeCabang = model.KodeCabang,
-                    JenisAwal = model.JenisAwal,
-                    JenisAkhir = model.JenisAkhir,
-                    BulanAwal = model.BulanAwal,
-                    BulanAkhir = model.BulanAkhir,
-                    Tahun = model.Tahun,
+                    TglProduksiAwal = model.TglProduksiAwal,
+                    TglProduksiAkhir = model.TglProduksiAkhir,
+                    TglPelunasan = model.TglPelunasan,
+                    // JenisTransaksi = model.JenisTransaksi,
                     UserLogin = user
                 };
 
-                var data = await Mediator.Send(query);
-                if (data == null || !data.Any())
+                var reportTemplate = await Mediator.Send(query);
+
+                if (reportTemplate == null || !reportTemplate.Any())
                     throw new Exception("Data tidak ditemukan.");
 
-                var userId = CurrentUser.UserId;
-
-                if (string.IsNullOrWhiteSpace(userId))
-                throw new Exception("User ID tidak ditemukan. Tidak dapat menyimpan laporan.");                
-                
-                // string htmlContent = "<p>Ganti dengan hasil render View 'CetakLaporan' menjadi string HTML</p>";
-           
-                var reportTemplate = await Mediator.Send(query);
-                // Generate file PDF
                 _reportGeneratorService.GenerateReport(
                     "LaporanOutstanding.pdf",
-                    reportTemplate, // <-- Tipe data sekarang 'string', sesuai harapan GenerateReport
-                    userId,
+                    reportTemplate,
+                    user,
                     Orientation.Landscape,
                     5, 5, 5, 5,
-                   PaperKind.Legal
+                    PaperKind.Legal
                 );
 
-                return Ok(new { Status = "OK", Data = userId });
+                return Ok(new { Status = "OK", Data = user });
             }
             catch (Exception ex)
             {
@@ -188,10 +152,9 @@ namespace ABB.Web.Modules.LaporanOutstanding
     public class LaporanOutstandingFilterDto
     {
         public string KodeCabang { get; set; }
-        public string JenisAwal { get; set; }
-        public string JenisAkhir { get; set; }
-        public string BulanAwal { get; set; }
-        public string BulanAkhir { get; set; }
-        public string Tahun { get; set; }
+        public string TglProduksiAwal { get; set; }
+        public string TglProduksiAkhir { get; set; }
+        public string TglPelunasan { get; set; }
+        // public string JenisTransaksi { get; set; }
     }
 }

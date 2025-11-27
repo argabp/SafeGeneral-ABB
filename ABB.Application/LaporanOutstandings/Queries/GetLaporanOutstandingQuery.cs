@@ -20,15 +20,14 @@ using ABB.Application.Cabangs.Queries;
 
 namespace ABB.Application.LaporanOutstandings.Queries
 {
-    public class GetLaporanOutstandingQuery : IRequest<string>
+  public class GetLaporanOutstandingQuery : IRequest<string>
     {
         public string DatabaseName { get; set; }
         public string KodeCabang { get; set; }
-        public string JenisAwal { get; set; }
-        public string JenisAkhir { get; set; }
-        public string BulanAwal { get; set; }
-        public string BulanAkhir { get; set; }
-        public string Tahun { get; set; }
+        public string TglProduksiAwal { get; set; }
+        public string TglProduksiAkhir { get; set; }
+        public string TglPelunasan { get; set; }
+        public string JenisTransaksi { get; set; }
         public string UserLogin { get; set; }
     }
 
@@ -47,59 +46,46 @@ namespace ABB.Application.LaporanOutstandings.Queries
 
         public async Task<string> Handle(GetLaporanOutstandingQuery request, CancellationToken cancellationToken)
         {
-            var db = _context.Set<Produksi>().Where(x => (x.saldo ?? 0) > 0);
+            // --- Convert Tanggal ---
+            DateTime tglProdAwal = DateTime.Parse(request.TglProduksiAwal);
+            DateTime tglProdAkhir = DateTime.Parse(request.TglProduksiAkhir);
+            DateTime tglPelunasan = DateTime.Parse(request.TglPelunasan);
 
-            // 🔹 1. Filter Lokasi (LOK)
+            // --- Base Query Produksi (Saldo > 0) ---
+            var db = _context.Set<Produksi>()
+                .Where(x => (x.saldo ?? 0) > 0);
+
+            // --- Filter Lokasi berdasar 2 digit terakhir kode cabang ---
             if (!string.IsNullOrEmpty(request.KodeCabang))
             {
-                var kodeCabangBersih = request.KodeCabang.Trim();
-                var cabang2Digit = kodeCabangBersih.Length > 2
-                    ? kodeCabangBersih[^2..]
-                    : kodeCabangBersih;
+                var cabang2Digit = request.KodeCabang.Length >= 2
+                    ? request.KodeCabang[^2..]
+                    : request.KodeCabang;
 
                 db = db.Where(x =>
                     !string.IsNullOrEmpty(x.lok) &&
-                    x.lok.Trim().Equals(cabang2Digit));
+                    x.lok.Trim() == cabang2Digit);
             }
 
-            // 🔹 2. Filter Jenis Asset
-            if (!string.IsNullOrEmpty(request.JenisAwal) && !string.IsNullOrEmpty(request.JenisAkhir))
-            {
-                db = db.Where(x =>
-                    string.Compare(x.jn_ass, request.JenisAwal) >= 0 &&
-                    string.Compare(x.jn_ass, request.JenisAkhir) <= 0);
-            }
+            // --- Filter Tanggal Produksi ---
+            db = db.Where(x =>
+                x.date.HasValue &&
+                x.date.Value.Date >= tglProdAwal &&
+                x.date.Value.Date <= tglProdAkhir);
 
-            // 🔹 3. Filter Bulan dan Tahun
-            if (!string.IsNullOrEmpty(request.BulanAwal) &&
-                !string.IsNullOrEmpty(request.BulanAkhir) &&
-                !string.IsNullOrEmpty(request.Tahun))
-            {
-                int tahun = int.Parse(request.Tahun);
-                int bulanAwal = int.Parse(request.BulanAwal);
-                int bulanAkhir = int.Parse(request.BulanAkhir);
+            // --- Filter Tanggal Pelunasan (tanggal bayar <= tglPelunasan) ---
+            db = db.Where(x =>
+                x.tgl_byr.HasValue &&
+                x.tgl_byr.Value.Date <= tglPelunasan);
 
-                DateTime tanggalAwal = new DateTime(tahun, bulanAwal, 1);
-                DateTime tanggalAkhir = new DateTime(tahun, bulanAkhir, DateTime.DaysInMonth(tahun, bulanAkhir));
-
-                db = db.Where(x =>
-                    x.date.HasValue &&
-                    x.date.Value.Date >= tanggalAwal &&
-                    x.date.Value.Date <= tanggalAkhir);
-            }
-
-            // 🔹 4. Nama Cabang
+            // --- Nama Cabang ---
             string namaCabang = "-";
-            if (!string.IsNullOrEmpty(request.KodeCabang))
-            {
-                var cabangEntity = await _context.Set<Cabang>()
-                    .FirstOrDefaultAsync(c => c.kd_cb == request.KodeCabang, cancellationToken);
+            var cabangEntity = await _context.Set<Cabang>()
+                .FirstOrDefaultAsync(c => c.kd_cb == request.KodeCabang, cancellationToken);
+            if (cabangEntity != null)
+                namaCabang = cabangEntity.nm_cb;
 
-                if (cabangEntity != null)
-                    namaCabang = cabangEntity.nm_cb;
-            }
-
-            // 🔹 5. Ambil Data
+            // --- Ambil Data Produksi ---
             var dataLaporan = await db
                 .ProjectTo<InquiryNotaProduksiDto>(_mapper.ConfigurationProvider)
                 .OrderBy(x => x.jn_ass)
@@ -107,86 +93,73 @@ namespace ABB.Application.LaporanOutstandings.Queries
                 .ToListAsync(cancellationToken);
 
             if (!dataLaporan.Any())
-                throw new NullReferenceException("Data tidak ditemukan");
+                throw new Exception("Data tidak ditemukan.");
 
-            // =================================================================
-            // START: LOGIKA RENDERING TEMPLATE SCRIBA
-            // =================================================================
+            // --- Proses Template (sama seperti sebelumnya) ---
 
             Func<DateTime?, string> fmtDate = d => d.HasValue ? d.Value.ToString("dd-MM-yyyy") : "-";
-            Func<decimal?, string> fmtNum = n => n.HasValue ? string.Format("{0:N2}", n.Value) : "0.00";
+            Func<decimal?, string> fmtNum = n => n.HasValue ? $"{n.Value:N2}" : "0.00";
 
             string reportPath = Path.Combine(
                 _environment.ContentRootPath,
-                "Modules",
-                "Reports",
-                "Templates",
+                "Modules", "Reports", "Templates",
                 "LaporanOutstanding.html"
             );
 
-            string templateReportHtml = await File.ReadAllTextAsync(reportPath);
+            string templateHtml = await File.ReadAllTextAsync(reportPath);
 
             StringBuilder detailsBuilder = new StringBuilder();
             int idx = 1;
 
             foreach (var item in dataLaporan)
             {
-                var tglProduksi = fmtDate(item.date);
-                var tglLunas = fmtDate(item.tgl_byr);
-                var tgljthtempo = fmtDate(item.tgl_jth_tempo);
+                string tglProduksi = fmtDate(item.date);
+                string tglJthTempo = fmtDate(item.tgl_jth_tempo);
+                string tglBayar = fmtDate(item.tgl_byr);
 
-                // Hitung umur (selisih hari)
+                // Hitung Umur
                 int umur = 0;
-                if (DateTime.TryParse(item.tgl_jth_tempo?.ToString(), out DateTime jatuhTempo) &&
-                    DateTime.TryParse(item.date?.ToString(), out DateTime tanggalProduksi))
+                if (item.date.HasValue && item.tgl_jth_tempo.HasValue)
                 {
-                    umur = (jatuhTempo - tanggalProduksi).Days;
+                    umur = (item.tgl_jth_tempo.Value - item.date.Value).Days;
                     if (umur < 0) umur = 0;
                 }
 
-                // // Nilai numeric
                 decimal nilaiNota = item.saldo ?? 0;
                 decimal nilaiBayar = item.jumlah ?? 0;
                 decimal nilaiOs = nilaiNota - nilaiBayar;
 
-                // // Format angka
-                string nilainotaStr = fmtNum(nilaiNota);
-                string nilaibayarStr = fmtNum(nilaiBayar);
-                string nilaiosStr = fmtNum(nilaiOs);
-
                 detailsBuilder.Append($@"
                     <tr>
                         <td class='center'>{idx}</td>
-                        <td>{(string.IsNullOrWhiteSpace(item.no_nd) ? "-" : item.no_nd)}/<br>{(string.IsNullOrWhiteSpace(item.no_pl) ? "-" : item.no_pl)}</td>
-                        <td>{(string.IsNullOrWhiteSpace(item.nm_cust2) ? "-" : item.nm_cust2)}/<br>{(string.IsNullOrWhiteSpace(item.nm_pos) ? "-" : item.nm_pos)}</td>
-                        <td>{(string.IsNullOrWhiteSpace(item.nm_brok) ? "-" : item.nm_brok)}</td>
+                        <td>{item.no_nd}/<br>{item.no_pl}</td>
+                        <td>{item.nm_cust2}/<br>{item.nm_pos}</td>
+                        <td>{item.nm_brok}</td>
                         <td></td>
-                        <td>{(string.IsNullOrWhiteSpace(item.lok) ? "-" : item.lok)}/<br>{(string.IsNullOrWhiteSpace(item.kd_tutup) ? "-" : item.kd_tutup)}</td>
-                        <td>{tglProduksi}/<br>{tgljthtempo}</td>
-                        <td>{(string.IsNullOrWhiteSpace(item.curensi) ? "-" : item.curensi)}/<br>{item.kurs}</td>
+                        <td>{item.lok}/<br>{item.kd_tutup}</td>
+                        <td>{tglProduksi}/<br>{tglJthTempo}</td>
+                        <td>{item.curensi}/<br>{item.kurs}</td>
                         <td>{umur}</td>
-                        <td>{nilainotaStr}</td>
-                        <td>{nilaibayarStr}</td>
-                        <td>{nilaiosStr}</td>
+                        <td>{fmtNum(nilaiNota)}</td>
+                        <td>{fmtNum(nilaiBayar)}</td>
+                        <td>{fmtNum(nilaiOs)}</td>
                     </tr>");
+
                 idx++;
             }
 
-            Template templateReport = Template.Parse(templateReportHtml);
+            var template = Scriban.Template.Parse(templateHtml);
 
-            string resultTemplate = templateReport.Render(new
+            string renderedHtml = template.Render(new
             {
                 details = detailsBuilder.ToString(),
                 KodeCabang = request.KodeCabang,
                 NamaCabang = namaCabang,
-                Periode = $"{request.BulanAwal}-{request.BulanAkhir}-{request.Tahun}"
+                Periode = $"{request.TglProduksiAwal} s/d {request.TglProduksiAkhir} - Pelunasan ≤ {request.TglPelunasan}"
             });
 
-            return resultTemplate;
-
-            // =================================================================
-            // END: LOGIKA RENDERING TEMPLATE SCRIBA
-            // =================================================================
+            return renderedHtml;
         }
     }
+
 }
