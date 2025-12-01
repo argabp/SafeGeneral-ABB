@@ -44,28 +44,16 @@ function OnMutasiChange(e) {
         selected.kd_cob.trim() +
         selected.kd_scob.trim() +
         selected.kd_thn.trim() +
-        selected.no_kl.trim()
+        selected.no_kl.trim();
     
-    $("#tipe_mts" + parentId).val(selected.tipe_mts);
-    
-    $(`#btnAddAlokasi${parentId}`).prop('disabled', false);
-    OnClickAddMutasiKlaimAlokasi(selected);
-
-    var alokasiGridName = "grid_alokasi_" + parentId;
-    var alokasiElement = $("#" + alokasiGridName);
-
-    alokasiElement.data("kendoGrid").dataSource.read({
-        kd_cb: selected.kd_cb.trim(),
-        kd_cob: selected.kd_cob.trim(),
-        kd_scob: selected.kd_scob.trim(),
-        kd_thn: selected.kd_thn.trim(),
-        no_kl: selected.no_kl.trim(),
-        no_mts: selected.no_mts,
-    })
-    
-    ajaxGet(`/MutasiKlaim/ObyekView?kd_cb=${selected.kd_cb}&kd_cob=${selected.kd_cob}&kd_scob=${selected.kd_scob}&kd_thn=${selected.kd_thn}&no_kl=${selected.no_kl}&no_mts=${selected.no_mts}&tipe_mts=${selected.tipe_mts}&kd_mtu=${selected.kd_mtu}`,
+    ajaxGet(`/MutasiKlaim/ObyekView?kd_cb=${selected.kd_cb}&kd_cob=${selected.kd_cob}&kd_scob=${selected.kd_scob}&kd_thn=${selected.kd_thn}&no_kl=${selected.no_kl}&no_mts=${selected.no_mts}&tipe_mts=${selected.tipe_mts}&kd_mtu=${selected.kd_mtu}&flag_closing=${selected.flag_closing}`,
         (returnView) => {
             $("#obyekGrid" + parentId).html(returnView);
+        });
+    
+    ajaxGet(`/MutasiKlaim/CheckAlokasi?kd_cb=${selected.kd_cb}&kd_cob=${selected.kd_cob}&kd_scob=${selected.kd_scob}&kd_thn=${selected.kd_thn}&no_kl=${selected.no_kl}&no_mts=${selected.no_mts}&tipe_mts=${selected.tipe_mts}&kd_mtu=${selected.kd_mtu}&flag_closing=${selected.flag_closing}&flag_pol_lama=${selected.flag_pol_lama}&nilai_ttl_kl=${selected.nilai_ttl_kl}`,
+        (returnView) => {
+            $("#alokasiGrid" + parentId).html(returnView);
         });
 }
 
@@ -99,138 +87,18 @@ function saveMutasiKlaimObyek(e){
     })
 }
 
-function GetObyekGridConfig(data) {
-    var tipe = data.tipe_mts;
-    var readUrl = "";
-    var saveUrl = "";
-    var deleteUrl = "";
-    var columns = [];
-    var modelFields = {};
-
-    switch (tipe) {
-        case "P":
-        case "D":
-            readUrl = "/MutasiKlaim/GetMutasiKlaimObyeks";
-            saveUrl = "/MutasiKlaim/SaveMutasiKlaimObyek";
-            deleteUrl = "/MutasiKlaim/DeleteMutasiKlaimObyek";
-            columns = [
-                { field: "no_oby", title: "Nomor Obyek", width: "50px"},
-                { field: "nm_oby", title: "Nama Obyek", width: "50px" },
-                {
-                    field: "nilai_ttl_ptg",
-                    title: "Nilai Pertanggungan",
-                    format: "{0:n2}",
-                    attributes: { class: "text-right" },
-                    width: "50px"
-                },
-                {
-                    field: "nilai_kl",
-                    title: "Nilai Klaim",
-                    format: "{0:n2}",
-                    attributes: { class: "text-right" },
-                    width: "50px"
-                }
-            ];
-            modelFields = {
-                no_oby: { type: "int", editable: false },
-                nm_oby: { type: "string" },
-                nilai_ttl_ptg: { type: "number", defaultValue: 0 },
-                nilai_kl: { type: "number", defaultValue: 0 }
-            };
-            break;
-
-        case "R":
-            
-            
-            readUrl = "/MutasiKlaim/GetMutasiKlaimBebans";
-            saveUrl = "/MutasiKlaim/SaveMutasiKlaimBeban";
-            deleteUrl = "/MutasiKlaim/DeleteMutasiKlaimBeban";
-            columns = [
-                { field: "st_jns", title: "Status", editable: false, width: "150px" },
-                { field: "ket_jns", title: "Keterangan", width: "150px" },
-                { field: "kd_mtu", title: "Mata Uang", editable: false, width: "150px" },
-                {
-                    field: "nilai_jns_org",
-                    title: "Nilai Recovery",
-                    format: "{0:n2}",
-                    attributes: { class: "text-right" },
-                    width: 150
-                }
-            ];
-            modelFields = {
-                st_jns: { type: "string", defaultValue: data.nm_tipe_mts || "" },
-                ket_jns: { type: "string" },
-                kd_mtu: { type: "string", defaultValue: data.nm_kd_mtu || "" },
-                nilai_jns_org: { type: "number", defaultValue: 0 }
-            };
-            break;
-        case "B":
-            readUrl = "/MutasiKlaim/GetMutasiKlaimBebans";
-            saveUrl = "/MutasiKlaim/SaveMutasiKlaimBeban";
-            deleteUrl = "/MutasiKlaim/DeleteMutasiKlaimBeban";
-            columns = [
-                { field: "st_jns", title: "Status", editable: false, width: "150px" },
-                { field: "ket_jns", title: "Keterangan", width: "150px" },
-                { field: "kd_mtu", title: "Mata Uang", editable: false, width: "150px" },
-                {
-                    field: "nilai_jns_org",
-                    title: "Nilai Beban",
-                    format: "{0:n2}",
-                    attributes: { class: "text-right" },
-                    width: 150
-                }
-            ];
-            modelFields = {
-                st_jns: { type: "string", defaultValue: data.nm_tipe_mts || "" },
-                ket_jns: { type: "string" },
-                kd_mtu: { type: "string", defaultValue: data.nm_kd_mtu || "" },
-                nilai_jns_org: { type: "number", defaultValue: 0 }
-            };
-            break;
-
-        default:
-            readUrl = "/MutasiKlaim/GetMutasiKlaimBebans";
-            saveUrl = "/MutasiKlaim/SaveMutasiKlaimBeban";
-            deleteUrl = "/MutasiKlaim/DeleteMutasiKlaimBeban";
-            columns = [{ field: "fieldX", title: "Default Field" }];
-            modelFields = { fieldX: { type: "string" } };
-            break;
-    }
-
-    return {
-        readUrl: readUrl,
-        saveUrl: saveUrl,
-        deleteUrl: deleteUrl,
-        parameters: {
-            kd_cb: data.kd_cb.trim(),
-            kd_cob: data.kd_cob.trim(),
-            kd_scob: data.kd_scob.trim(),
-            kd_thn: data.kd_thn.trim(),
-            no_kl: data.no_kl.trim(),
-            no_mts: parseInt(data.no_mts)
-        },
-        columns: columns,
-        modelFields: modelFields
-    };
-}
-
-function OnClickAddMutasiKlaimAlokasi(dataItem) {
-    var parentId =
-        dataItem.kd_cb.trim() +
-        dataItem.kd_cob.trim() +
-        dataItem.kd_scob.trim() +
-        dataItem.kd_thn.trim() +
-        dataItem.no_kl.trim()
-    $(`#btnAddAlokasi${parentId}`).click(function () {
-        openMutasiKlaimWindow(`/MutasiKlaim/Alokasi?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}&no_mts=${dataItem.no_mts}`, 'Add Alokasi');
-    });
-}
-
 function OnEditAlokasi(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     console.log('dataItem', dataItem);
     openMutasiKlaimWindow(`/MutasiKlaim/EditAlokasi?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}&no_mts=${dataItem.no_mts}&kd_rk_pas=${dataItem.kd_rk_pas}&kd_grp_pas=${dataItem.kd_grp_pas}`, 'Edit Alokasi');
+}
+
+function OnViewAlokasi(e) {
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    console.log('dataItem', dataItem);
+    openMutasiKlaimWindow(`/MutasiKlaim/ViewAlokasi?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}&no_mts=${dataItem.no_mts}&kd_rk_pas=${dataItem.kd_rk_pas}&kd_grp_pas=${dataItem.kd_grp_pas}`, 'View Alokasi');
 }
 
 function onDeleteAlokasi(e){
@@ -413,6 +281,160 @@ function OnMutasiKlaimDataBound(e){
                 buttonContainer.find("a[title='Edit']").hide();
                 buttonContainer.find("a[title='Delete']").hide();
                 buttonContainer.find("a[title='Closing']").hide();
+            }
+        }
+    });
+
+    gridAutoFit(grid);
+}
+
+function onEditObyek(e) {
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    console.log('dataItem', dataItem);
+
+    openMutasiKlaimWindow(`/MutasiKlaim/EditObyek?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}&no_mts=${dataItem.no_mts}&no_oby=${dataItem.no_oby}`, 'Edit Obyek');
+}
+
+function onViewObyek(e) {
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    console.log('dataItem', dataItem);
+
+    openMutasiKlaimWindow(`/MutasiKlaim/ViewObyek?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}&no_mts=${dataItem.no_mts}&no_oby=${dataItem.no_oby}`, 'View Obyek');
+}
+
+function onDeleteObyek(e){
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    showConfirmation('Confirmation', `Are you sure you want to delete?`,
+        function () {
+
+            var parentId =
+                dataItem.kd_cb.trim() +
+                dataItem.kd_cob.trim() +
+                dataItem.kd_scob.trim() +
+                dataItem.kd_thn.trim() +
+                dataItem.no_kl.trim();
+
+            var payload = {
+                kd_cb: dataItem.kd_cb,
+                kd_cob: dataItem.kd_cob,
+                kd_scob: dataItem.kd_scob,
+                kd_thn: dataItem.kd_thn,
+                no_kl: dataItem.no_kl,
+                no_mts: dataItem.no_mts,
+                no_oby: dataItem.no_oby
+            };
+
+            showProgressOnGrid('#grid_obyek_' + parentId);
+
+            ajaxPost("/MutasiKlaim/DeleteMutasiKlaimObyek", JSON.stringify(payload),
+                function (response) {
+                    if (response.Result == "OK") {
+                        showMessage('Success', response.Message);
+                    } else
+                        showMessage('Error', response.Message);
+
+                    refreshGrid('#grid_obyek_' + parentId);
+                    closeProgressOnGrid('#grid_obyek_' + parentId);
+                }
+            );
+        }
+    );
+}
+
+function OnMutasiKlaimObyekDataBound(e){
+    var grid = this;
+
+    grid.tbody.find("tr").each(function(e, element) {
+        var dataItem = grid.dataItem(this);
+        var uid = $(this).data("uid");
+
+        // Find button container - try locked column first, then regular
+        var buttonContainer = grid.element.find(".k-grid-content-locked tr[data-uid='" + uid + "'] .k-command-cell");
+        if (!buttonContainer.length) {
+            buttonContainer = $(this).find(".k-command-cell");
+        }
+
+        if (buttonContainer.length) {
+            if (dataItem.flag_closing == "Y") {
+                // Find the "Closing" button and hide it
+                buttonContainer.find("a[title='Edit']").hide();
+                buttonContainer.find("a[title='Delete']").hide();
+            }
+        }
+    });
+
+    gridAutoFit(grid);
+}
+
+function OnMutasiKlaimAlokasiDataBound(e){
+    var grid = this;
+    
+    var totalPercentage = 0;
+    var totalPremi = 0;
+    
+    var id = undefined;
+    
+    grid.tbody.find("tr").each(function(e, element) {
+        var dataItem = grid.dataItem(this);
+        var uid = $(this).data("uid");
+
+        // Find button container - try locked column first, then regular
+        var buttonContainer = grid.element.find(".k-grid-content-locked tr[data-uid='" + uid + "'] .k-command-cell");
+        if (!buttonContainer.length) {
+            buttonContainer = $(this).find(".k-command-cell");
+        }
+
+        if (buttonContainer.length) {
+            if (dataItem.flag_closing == "Y") {
+                // Find the "Closing" button and hide it
+                buttonContainer.find("a[title='Edit']").hide();
+                buttonContainer.find("a[title='Delete']").hide();
+            }
+        }
+        
+        totalPercentage += dataItem.pst_share;
+        totalPremi += dataItem.nilai_kl;
+        
+        if(id == undefined) {
+            id = dataItem.kd_cb.trim() + dataItem.kd_cob.trim() +
+                dataItem.kd_scob.trim() + dataItem.kd_thn.trim() + dataItem.no_kl.trim();
+        }
+    });
+
+    $("#totalPercentageMutasiKlaim_" + id).text(totalPercentage.toFixed(2) + "%");
+    $("#totalPremiMutasiKlaim_" + id).text( currencyFormatter.format(totalPremi));
+
+    gridAutoFit(grid);
+}
+
+// Format totalNilaiAng as currency (money format)
+var currencyFormatter = new Intl.NumberFormat('en-US', {
+    style: 'decimal',
+    minimumFractionDigits: 3,
+    maximumFractionDigits: 3
+});
+
+function OnMutasiKlaimBebanDataBound(e){
+    var grid = this;
+
+    grid.tbody.find("tr").each(function(e, element) {
+        var dataItem = grid.dataItem(this);
+        var uid = $(this).data("uid");
+
+        // Find button container - try locked column first, then regular
+        var buttonContainer = grid.element.find(".k-grid-content-locked tr[data-uid='" + uid + "'] .k-command-cell");
+        if (!buttonContainer.length) {
+            buttonContainer = $(this).find(".k-command-cell");
+        }
+
+        if (buttonContainer.length) {
+            if (dataItem.flag_closing == "Y") {
+                // Find the "Closing" button and hide it
+                buttonContainer.find("a[title='Edit']").hide();
+                buttonContainer.find("a[title='Delete']").hide();
             }
         }
     });

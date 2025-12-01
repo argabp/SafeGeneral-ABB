@@ -47,7 +47,7 @@
                     .IconClass("fa fa-trash")
                     .Click("btnDeleteRoleNavigation_OnClick")
                     .HtmlAttributes(new { title = "Delete" });
-            }).Title("Action").Width(200).Locked(true);
+            }).Title("Action").Width(150).Locked(true);
             columns.Bound(col => col.RoleId).Hidden();
             columns.Bound(col => col.RoleName);
             columns.Bound(col => col.Menu).ClientTemplate("#= brTemplate(data.Menu) #");
@@ -62,7 +62,10 @@
         .Resizable(r => r.Columns(true))
         .Scrollable()
         .Height(400)
-        .Filterable())
+        .Filterable()
+        .Resizable(a=>a.Columns(true))
+        .Events(ev => ev.DataBound("gridAutoFit")))
+        
         @(Html.Kendo().Window()
             .Name("RoleNavigationWindow")
             .Title("Role Page")

@@ -1,7 +1,6 @@
 using System;
 using ABB.Application.Common.Interfaces;
 using ABB.Application.MutasiKlaims.Commands;
-using ABB.Application.MutasiKlaims.Queries;
 using AutoMapper;
 
 namespace ABB.Web.Modules.MutasiKlaim.Models
@@ -23,6 +22,8 @@ namespace ABB.Web.Modules.MutasiKlaim.Models
         public void Mapping(Profile profile)
         {
             profile.CreateMap<MutasiKlaimModel, DeleteMutasiKlaimCommand>();
+            profile.CreateMap<MutasiKlaimModel, CopyObyekCommand>();
+            profile.CreateMap<MutasiKlaimModel, CopyAlokasiUnderwritingCommand>();
         }
     }
 }

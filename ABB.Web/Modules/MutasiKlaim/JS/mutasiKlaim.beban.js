@@ -28,6 +28,7 @@ function saveMutasiKlaimBeban(url) {
     ajaxPost(url,  data,
         function (response) {
             refreshGrid(mutasiGridElement);
+            refreshGrid("#grid_mutasi_" + parentId);
             if (response.Result == "OK") {
                 showMessage('Success', response.Message);
             }

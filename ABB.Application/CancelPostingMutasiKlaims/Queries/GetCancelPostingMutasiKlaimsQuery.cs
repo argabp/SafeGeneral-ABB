@@ -32,8 +32,19 @@ namespace ABB.Application.CancelPostingMutasiKlaims.Queries
             try
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
-                return (await _connectionFactory.Query<CancelPostingMutasiKlaimDto>(@"SELECT p.*, cb.nm_cb, cob.nm_cob, scob.nm_scob
-					FROM cl10 p
+                return (await _connectionFactory.Query<CancelPostingMutasiKlaimDto>(@"SELECT p.*, cb.nm_cb, cob.nm_cob, scob.nm_scob, 
+					c2.no_pol_lama, c.tgl_mts, c.tgl_closing FROM cl10 p 
+                        INNER JOIN cl03 c
+                            ON c.kd_cb = p.kd_cb
+                                AND  c.kd_cob = p.kd_cob
+                                AND  c.kd_thn = p.kd_thn
+                                AND  c.no_kl = p.no_kl
+                                AND  c.no_mts = p.no_mts 
+                        INNER JOIN cl01 c2
+                            ON c.kd_cb = c2.kd_cb
+                                AND  c.kd_cob = c2.kd_cob
+                                AND  c.kd_thn = c2.kd_thn
+                                AND  c.no_kl = c2.no_kl
 						INNER JOIN rf01 cb
 							ON p.kd_cb = cb.kd_cb
 						INNER JOIN rf04 cob

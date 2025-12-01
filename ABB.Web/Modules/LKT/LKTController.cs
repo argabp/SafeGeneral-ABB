@@ -64,9 +64,8 @@ namespace ABB.Web.Modules.LKT
             foreach (var data in ds)
             {
                 data.Id = counter;
-                data.nomor_lkt = data.kd_cb.Trim() + " . " + data.kd_cob.Trim() + data.kd_scob.Trim() + " . " + 
-                                 data.kd_thn.Trim() + " . " + data.no_kl.Trim() + " . " + data.no_mts + " . " + 
-                                 data.no_dla;
+                data.nomor_register = "K." + data.kd_cb.Trim() + "." + data.kd_scob.Trim() 
+                                      + "." + data.kd_thn.Trim() + "." + data.no_kl.Trim();
                 counter++;
             }
             

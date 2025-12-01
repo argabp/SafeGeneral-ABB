@@ -33,5 +33,7 @@ namespace ABB.Application.MutasiKlaims.Queries
         public decimal nilai_ttl_kl { get; set; }
 
         public string flag_closing { get; set; }
+
+        public string flag_pol_lama { get; set; }
     }
 }

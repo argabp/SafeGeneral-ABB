@@ -56,12 +56,14 @@
                     columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
                     columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
                     columns.Bound(col => col.nm_scob).Width(150).Title("Nama SCOB");
-                    columns.Bound(col => col.nomor_register).Width(200).Title("Nomor Register");
-                    columns.Bound(col => col.no_nt_msk).Width(200).Title("Nomor Nota").ClientTemplate("#= formatNomorNota(kd_cb, jns_tr, kd_thn, kd_bln, no_nt_msk, jns_nt_kel, no_nt_kel) #");;
+                    columns.Bound(col => col.no_pol_lama).Title("Nomor Polis").ClientTemplate("#= formatNoPol(no_pol_lama) #");
+                    columns.Bound(col => col.nomor_register).Width(200).Title("Nomor Berkas");
                     columns.Bound(col => col.no_mts).Width(150).Title("Nomor Mutasi");
                     columns.Bound(col => col.nm_tipe_mts).Width(200).Title("Tipe Mutasi");
+                    columns.Bound(col => col.no_nt_msk).Width(200).Title("Nomor Nota").ClientTemplate("#= formatNomorNota(kd_cb, jns_tr, jns_nt_msk, kd_thn, kd_bln, no_nt_msk, jns_nt_kel, no_nt_kel) #");
                     columns.Bound(col => col.nm_ttj).Width(150).Title("Nama Tertuju");
                     columns.Bound(col => col.tgl_nt).Title("Tanggal Nota").Format("{0: dd-MM-yyyy}");
+                    columns.Bound(col => col.nilai_nt).Width(150).Title("Nilai Nota").Format("{0:n2}");
                     columns.Bound(col => col.flag_posting).Width(150).Title("Flag Posting");
                 })
                 .Pageable(pager => pager
@@ -90,11 +92,11 @@
 </div>
 
 <script>
-    function formatNomorNota(kd_cb, jns_tr, kd_thn, kd_bln, 
+    function formatNomorNota(kd_cb, jns_tr, jns_nt_msk, kd_thn, kd_bln, 
                             no_nt_msk, jns_nt_kel, no_nt_kel){
         return kd_cb.trim() + "." + jns_tr.trim() + "." +
-                kd_thn.trim() + "." + kd_bln.trim() + "." +
-                no_nt_msk.trim() + "." + jns_nt_kel.trim() +
-                "." + no_nt_kel.trim();
+            jns_nt_msk.trim() + "." + kd_thn.trim() + "." +
+            kd_bln.trim() + "." + no_nt_msk.trim() + "." + 
+            jns_nt_kel.trim() + "." + no_nt_kel.trim();
     }
 </script>

@@ -1,0 +1,171 @@
+﻿@using ABB.Application.MutasiKlaims.Queries
+@using Kendo.Mvc.UI
+@model ABB.Web.Modules.MutasiKlaim.Models.MutasiKlaimViewModel
+
+@{
+    var display = Model.flag_closing == "N" ? "" : "none";
+}
+
+<script>
+function OnClickAddMutasiKlaimAlokasi(kd_cb, kd_cob, kd_scob, kd_thn, no_kl, no_mts) {
+    openMutasiKlaimWindow(`/MutasiKlaim/Alokasi?kd_cb=${kd_cb}&kd_cob=${kd_cob}&kd_scob=${kd_scob}&kd_thn=${kd_thn}&no_kl=${no_kl}&no_mts=${no_mts}`, 'Add Alokasi');
+}
+
+function OnClickCopyAlokasi(kd_cb, kd_cob, kd_scob, kd_thn, no_kl, no_mts, nilai_ttl_kl) {
+    showConfirmation('Confirmation', `Are you sure you want to copy alokasi koasuransi?`,
+        function () {
+
+            var parentId =
+                kd_cb.trim() +
+                kd_cob.trim() +
+                kd_scob.trim() +
+                kd_thn.trim() +
+                no_kl.trim();
+
+            var payload = {
+                kd_cb: kd_cb,
+                kd_cob: kd_cob,
+                kd_scob: kd_scob,
+                kd_thn: kd_thn,
+                no_kl: no_kl,
+                no_mts: no_mts,
+                nilai_ttl_kl: nilai_ttl_kl
+            };
+
+            showProgressOnGrid('#grid_alokasi_' + parentId);
+
+            ajaxPost("/MutasiKlaim/CopyAlokasi", JSON.stringify(payload),
+                function (response) {
+                    if (response.Result == "OK") {
+                        showMessage('Success', "Berhasil Copy Alokasi");
+                    } else
+                        showMessage('Error', response.Message);
+
+                    refreshGrid('#grid_alokasi_' + parentId);
+                    closeProgressOnGrid('#grid_alokasi_' + parentId);
+                }
+            );
+        }
+    );
+}
+
+function OnClickCopyAlokasiUnderwriting(kd_cb, kd_cob, kd_scob, kd_thn, no_kl, no_mts) {
+    showConfirmation('Confirmation', `Are you sure you want to copy alokasi koasuransi underwriting?`,
+        function () {
+
+            var parentId =
+                kd_cb.trim() +
+                kd_cob.trim() +
+                kd_scob.trim() +
+                kd_thn.trim() +
+                no_kl.trim();
+
+            var payload = {
+                kd_cb: kd_cb,
+                kd_cob: kd_cob,
+                kd_scob: kd_scob,
+                kd_thn: kd_thn,
+                no_kl: no_kl,
+                no_mts: no_mts
+            };
+
+            showProgressOnGrid('#grid_alokasi_' + parentId);
+
+            ajaxPost("/MutasiKlaim/CopyAlokasiUnderwriting", JSON.stringify(payload),
+                function (response) {
+                    if (response.Result == "OK") {
+                        showMessage('Success', "Berhasil Copy Alokasi Underwriting");
+                    } else
+                        showMessage('Error', response.Message);
+
+                    refreshGrid('#grid_alokasi_' + parentId);
+                    closeProgressOnGrid('#grid_alokasi_' + parentId);
+                }
+            );
+        }
+    );
+}
+
+</script>
+
+<style>
+    .flat-btn-primary{
+        padding: 10px 0px;
+    }
+</style>
+
+@{
+    var id = Model.kd_cb.Trim() + Model.kd_cob.Trim() +
+            Model.kd_scob.Trim() + Model.kd_thn.Trim() + Model.no_kl.Trim();
+}
+
+<div class="row col-sm-12" style="display: @display">
+    <div class="col-md-1">
+        <button class="flat-btn-primary" style="height: 1em" onclick="OnClickAddMutasiKlaimAlokasi('@Model.kd_cb', '@Model.kd_cob', '@Model.kd_scob', '@Model.kd_thn', '@Model.no_kl', '@Model.no_mts')">Add Alokasi</button>
+    </div>
+    <div class="col-md-1">
+        <button class="flat-btn-primary" style="height: 1em" onclick="OnClickCopyAlokasi('@Model.kd_cb', '@Model.kd_cob', '@Model.kd_scob', '@Model.kd_thn', '@Model.no_kl', '@Model.no_mts', @Model.nilai_ttl_kl)">CopyAlokasi</button>
+    </div>
+    <div class="col-md-1">
+        <button class="flat-btn-primary" style="height: 1em" onclick="OnClickCopyAlokasiUnderwriting('@Model.kd_cb', '@Model.kd_cob', '@Model.kd_scob', '@Model.kd_thn', '@Model.no_kl', '@Model.no_mts')">Copy Alokasi U / W</button>
+    </div>
+</div>
+
+@(Html.Kendo().Grid<MutasiKlaimAlokasiDto>()
+        .Name("grid_alokasi_" + id)
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetMutasiKlaimAlokasis", "MutasiKlaim").Data("dataParameterMutasi"))
+            .Model(model => model.Id(p => p.Id))
+        )
+        .Columns(columns =>
+        {
+            columns.Command(command =>
+            {
+                command.Custom("EditAlokasi")
+                    .Text("Edit")
+                    .IconClass("fa fa-pencil-alt")
+                    .HtmlAttributes(new { title = "Edit" })
+                    .Click("OnEditAlokasi");
+                command.Custom("ViewAlokasi")
+                    .Text("View")
+                    .IconClass("fa fa-eye")
+                    .HtmlAttributes(new { title = "View" })
+                    .Click("OnViewAlokasi");
+                command.Custom("DeleteAlokasi")
+                    .Text("Delete")
+                    .IconClass("k-icon k-i-delete")
+                    .HtmlAttributes(new { title = "Delete" })
+                    .Click("onDeleteAlokasi");
+            }).Width(250).Title("Action").Locked(true);
+            columns.Bound(col => col.nm_grp_pas).Width(150).Title("Group Rekanan");
+            columns.Bound(col => col.nm_rk_pas).Width(150).Title("Rekanan");
+            columns.Bound(col => col.pst_share).Width(150).Title("Share (%)").Format("{0:n2}");
+            columns.Bound(col => col.nilai_kl).Width(150).Title("Nilai Klaim").Format("{0:n2}");
+        })
+        .Pageable(pager => pager
+            .Refresh(true)
+            .Info(true)
+            .PageSizes(true)
+        )
+        .Sortable()
+        .Filterable()
+        .Scrollable()
+        .Selectable()
+        .Height(450)
+        .Resizable(a => a.Columns(true))
+        .Events(ev => ev.DataBound("OnMutasiKlaimAlokasiDataBound"))
+
+)
+    
+<div class="form-group row col-sm-12" style="padding-top: 3em">
+    <div class="row col-sm-12">
+        <p class="col-sm-4"><strong>Total Share & Klaim</strong></p>
+        <div class="col-sm-1">
+            <p style="padding-left: 3em" id="totalPercentageMutasiKlaim_@id">0</p>
+        </div>
+        <div class="col-sm-4">
+            <p style="padding-left: 4.5em" id="totalPremiMutasiKlaim_@id">0</p>
+        </div>
+    </div>
+</div>
+    

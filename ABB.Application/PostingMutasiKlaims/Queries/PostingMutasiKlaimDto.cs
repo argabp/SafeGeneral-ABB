@@ -33,5 +33,7 @@ namespace ABB.Application.PostingMutasiKlaims.Queries
         public string nm_ttj { get; set; }
 
         public DateTime tgl_nt { get; set; }
+
+        public string? no_pol_lama { get; set; }
     }
 }

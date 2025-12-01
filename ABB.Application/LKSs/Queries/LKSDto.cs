@@ -30,6 +30,12 @@ namespace ABB.Application.LKSs.Queries
 
         public string flag_posting { get; set; }
 
-        public string nomor_lks { get; set; }
+        public string nomor_register { get; set; }
+
+        public DateTime tgl_mts { get; set; }
+
+        public string? no_pol_lama { get; set; }
+
+        public DateTime? tgl_closing { get; set; }
     }
 }

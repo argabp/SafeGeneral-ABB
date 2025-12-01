@@ -93,14 +93,7 @@
             <div class="row col-sm-12">
                 <label class="col-sm-4">Keterangan</label>
                 <div class="col-sm-8">
-                    <kendo-dropdownlist for="ket_jns" style="width: 100%" option-label="Pilih Keterangan" 
-                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" >
-                        <datasource type="DataSourceTagHelperType.Custom">
-                            <transport>
-                                <read url="@Url.Action("GetKeterangan", "MutasiKlaim")"/>
-                            </transport>
-                        </datasource>
-                    </kendo-dropdownlist>
+                    <kendo-textarea name="ket_jns" rows="2" readonly="true" style="width: 100%; background-color: var(--soft-grey) !important;">@Model.ket_jns</kendo-textarea>
                 </div>
             </div>
         </div>
@@ -122,25 +115,19 @@
         </div>
         <div class="form-group row">
             <div class="row col-sm-12">
-                <label class="col-sm-4">Nilai Beban</label>
+                <label class="col-sm-4">Nilai Recovery</label>
                 <div class="col-sm-8">
-                    <kendo-numerictextbox decimals="2" spinners="false" for="nilai_jns_org" on-change="OnNilaiBebanChange"  style="width: 100%;"/>
+                    <kendo-numerictextbox decimals="2" spinners="false" for="nilai_jns_org" readonly="true" style="width: 100%;"/>
                 </div>
             </div>
         </div>
         <div class="form-group row">
             <div class="row col-sm-12">
-                <label class="col-sm-4">Nilai Beban sesuai mutasi</label>
+                <label class="col-sm-4">Nilai Recovery sesuai mutasi</label>
                 <div class="col-sm-8">
                     <kendo-numerictextbox decimals="2" spinners="false" for="nilai_jns" readonly="true" style="width: 100%;"/>
                 </div>
             </div>
         </div>
     </form>
-
-    <div class="window-footer">
-        <button type="button" id="btn-save-mutasiKlaimBeban" class="btn btn-success space-right">
-            <span class="fa fa-save"></span> Save
-        </button>
-    </div>
 </div>

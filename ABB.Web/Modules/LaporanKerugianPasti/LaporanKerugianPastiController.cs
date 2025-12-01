@@ -45,6 +45,21 @@ namespace ABB.Web.Modules.LaporanKerugianPasti
                 DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
                 KodeCabang = Request.Cookies["UserCabang"] ?? string.Empty
             });
+            
+            var tipe_mutasi = new List<DropdownOptionDto>()
+            {
+                new DropdownOptionDto() { Text = "PLA", Value = "P" },
+                new DropdownOptionDto() { Text = "DLA", Value = "D" },
+                new DropdownOptionDto() { Text = "Beban", Value = "B" },
+                new DropdownOptionDto() { Text = "Recovery", Value = "R" }
+            };
+            
+            foreach (var data in ds)
+            {
+                data.nomor_berkas = "K." + data.kd_cb.Trim() + "." +
+                                      data.kd_scob.Trim() + "." + data.kd_thn.Trim() + "." + data.no_kl.Trim();
+                data.nm_tipe_mts = tipe_mutasi.FirstOrDefault(w => w.Value == data.tipe_mts)?.Text;
+            }
 
             return Json(ds.AsQueryable().ToDataSourceResult(request));
         }

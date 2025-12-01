@@ -2,48 +2,79 @@
 @using Kendo.Mvc.UI
 @model ABB.Web.Modules.MutasiKlaim.Models.MutasiKlaimViewModel
 
+@{
+    var display = Model.flag_closing == "N" ? "" : "none";
+}
+
 <script>
 function OnClickAddMutasiKlaimObyek(kd_cb, kd_cob, kd_scob, kd_thn, no_kl, no_mts) {
     openMutasiKlaimWindow(`/MutasiKlaim/Obyek?kd_cb=${kd_cb}&kd_cob=${kd_cob}&kd_scob=${kd_scob}&kd_thn=${kd_thn}&no_kl=${no_kl}&no_mts=${no_mts}`, 'Add Obyek');
 }
 
-function onEditObyek(e) {
-    e.preventDefault();
-    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-    console.log('dataItem', dataItem);
-
-    openMutasiKlaimWindow(`/MutasiKlaim/EditObyek?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}&no_mts=${dataItem.no_mts}&no_oby=${dataItem.no_oby}`, 'Edit Obyek');
-}
-
-function onDeleteObyek(e){
-    e.preventDefault();
-    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-    showConfirmation('Confirmation', `Are you sure you want to delete?`,
+function OnClickCopyObyek(kd_cb, kd_cob, kd_scob, kd_thn, no_kl, no_mts) {
+    showConfirmation('Confirmation', `Are you sure you want to copy obyek?`,
         function () {
 
             var parentId =
-                dataItem.kd_cb.trim() +
-                dataItem.kd_cob.trim() +
-                dataItem.kd_scob.trim() +
-                dataItem.kd_thn.trim() +
-                dataItem.no_kl.trim();
+                kd_cb.trim() +
+                kd_cob.trim() +
+                kd_scob.trim() +
+                kd_thn.trim() +
+                no_kl.trim();
 
             var payload = {
-                kd_cb: dataItem.kd_cb,
-                kd_cob: dataItem.kd_cob,
-                kd_scob: dataItem.kd_scob,
-                kd_thn: dataItem.kd_thn,
-                no_kl: dataItem.no_kl,
-                no_mts: dataItem.no_mts,
-                no_oby: dataItem.no_oby
+                kd_cb: kd_cb,
+                kd_cob: kd_cob,
+                kd_scob: kd_scob,
+                kd_thn: kd_thn,
+                no_kl: no_kl,
+                no_mts: no_mts
             };
 
             showProgressOnGrid('#grid_obyek_' + parentId);
 
-            ajaxPost("/MutasiKlaim/DeleteMutasiKlaimObyek", JSON.stringify(payload),
+            ajaxPost("/MutasiKlaim/CopyObyek", JSON.stringify(payload),
                 function (response) {
                     if (response.Result == "OK") {
-                        showMessage('Success', response.Message);
+                        showMessage('Success', "Berhasil Copy Obyek");
+                    } else
+                        showMessage('Error', response.Message);
+
+                    refreshGrid('#grid_obyek_' + parentId);
+                    closeProgressOnGrid('#grid_obyek_' + parentId);
+                }
+            );
+        }
+    );
+}
+
+function OnClickCopyObyekUnderwriting(kd_cb, kd_cob, kd_scob, kd_thn, no_kl, no_mts, no_rsk) {
+    showConfirmation('Confirmation', `Are you sure you want to copy obyek underwriting?`,
+        function () {
+
+            var parentId =
+                kd_cb.trim() +
+                kd_cob.trim() +
+                kd_scob.trim() +
+                kd_thn.trim() +
+                no_kl.trim();
+
+            var payload = {
+                kd_cb: kd_cb,
+                kd_cob: kd_cob,
+                kd_scob: kd_scob,
+                kd_thn: kd_thn,
+                no_kl: no_kl,
+                no_mts: no_mts,
+                no_rsk: no_rsk
+            };
+
+            showProgressOnGrid('#grid_obyek_' + parentId);
+
+            ajaxPost("/MutasiKlaim/CopyObyekUnderwriting", JSON.stringify(payload),
+                function (response) {
+                    if (response.Result == "OK") {
+                        showMessage('Success', "Berhasil Copy Obyek Underwriting");
                     } else
                         showMessage('Error', response.Message);
 
@@ -68,9 +99,15 @@ function onDeleteObyek(e){
             Model.kd_scob.Trim() + Model.kd_thn.Trim() + Model.no_kl.Trim();
 }
 
-<div class="row">
-    <div class="col-md-2">
+<div class="row col-sm-12" style="display: @display">
+    <div class="col-md-1">
         <button class="flat-btn-primary" style="height: 1em" onclick="OnClickAddMutasiKlaimObyek('@Model.kd_cb', '@Model.kd_cob', '@Model.kd_scob', '@Model.kd_thn', '@Model.no_kl', '@Model.no_mts')">Add Obyek</button>
+    </div>
+    <div class="col-md-1">
+        <button class="flat-btn-primary" style="height: 1em" onclick="OnClickCopyObyek('@Model.kd_cb', '@Model.kd_cob', '@Model.kd_scob', '@Model.kd_thn', '@Model.no_kl', '@Model.no_mts')">Copy Obyek</button>
+    </div>
+    <div class="col-md-1">
+        <button class="flat-btn-primary" style="height: 1em" onclick="OnClickCopyObyekUnderwriting('@Model.kd_cb', '@Model.kd_cob', '@Model.kd_scob', '@Model.kd_thn', '@Model.no_kl', '@Model.no_mts', '@Model.no_rsk')">Copy Obyek U / W</button>
     </div>
 </div>
 
@@ -89,16 +126,21 @@ function onDeleteObyek(e){
                     .IconClass("fa fa-pencil-alt")
                     .HtmlAttributes(new { title = "Edit" })
                     .Click("onEditObyek");
+                command.Custom("ViewObyek")
+                    .Text("View")
+                    .IconClass("fa fa-eye")
+                    .HtmlAttributes(new { title = "View" })
+                    .Click("onViewObyek");
                 command.Custom("DeleteObyek")
                     .Text("Delete")
                     .IconClass("k-icon k-i-delete")
                     .HtmlAttributes(new { title = "Delete" })
                     .Click("onDeleteObyek");
-            }).Width(200).Title("Action").Locked(true);
-            columns.Bound(col => col.no_oby).Width(100).Title("Nomor Obyek");
+            }).Width(250).Title("Action").Locked(true);
+            columns.Bound(col => col.no_oby).Width(150).Title("Nomor Obyek");
             columns.Bound(col => col.nm_oby).Width(200).Title("Nama Obyek");
-            columns.Bound(col => col.nilai_ttl_ptg).Width(150).Title("Nilai Pertanggungan");
-            columns.Bound(col => col.nilai_kl).Width(150).Title("Nilai Klaim");
+            columns.Bound(col => col.nilai_ttl_ptg).Width(200).Title("Nilai Pertanggungan").Format("{0:n2}");
+            columns.Bound(col => col.nilai_kl).Width(150).Title("Nilai Klaim").Format("{0:n2}");
         })
         .Pageable(pager => pager
             .Refresh(true)
@@ -111,7 +153,7 @@ function onDeleteObyek(e){
         .Selectable()
         .Height(450)
         .Resizable(a => a.Columns(true))
-        .Events(ev => ev.DataBound("gridAutoFit"))
+        .Events(ev => ev.DataBound("OnMutasiKlaimObyekDataBound"))
 
     )
     

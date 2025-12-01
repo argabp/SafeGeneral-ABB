@@ -43,7 +43,9 @@ namespace ABB.Application.LaporanKerugianPasti.Queries
         {
             _connectionFactory.CreateDbConnection(request.DatabaseName);
             
-            var datas = (await _connectionFactory.QueryProc<LaporanKerugianPastiDto>("spr_cl11r_01", 
+            var sp_name = request.tipe_mts.Trim() == "B" || request.tipe_mts.Trim() == "R" ? "spr_cl11r_02" : "spr_cl11r_01";
+            
+            var datas = (await _connectionFactory.QueryProc<LaporanKerugianPastiDto>(sp_name, 
                 new
                 {
                     input_str = $"{request.kd_cb.Trim()},{request.kd_cob.Trim()},{request.kd_scob.Trim()}," +
@@ -51,7 +53,7 @@ namespace ABB.Application.LaporanKerugianPasti.Queries
                                 $"{request.jabatan.Trim()},{request.tanda_tangan.Trim()}"
                 })).ToList();
 
-            var report_name = request.tipe_mts.Trim() == "B" ? "LaporanKerugianPastiBeban.html" : "LaporanKerugianPasti.html";
+            var report_name = request.tipe_mts.Trim() == "B" || request.tipe_mts.Trim() == "R" ? "LaporanKerugianPastiBeban.html" : "LaporanKerugianPasti.html";
             
             string reportPath = Path.Combine( _environment.ContentRootPath, "Modules", "Reports", "Templates", report_name );
             
@@ -75,6 +77,84 @@ namespace ABB.Application.LaporanKerugianPasti.Queries
             var nilai_kl_4 = ReportHelper.ConvertToReportFormat(data.nilai_kl_4);
             var nilai_kl_5 = ReportHelper.ConvertToReportFormat(data.nilai_kl_5);
             var nilai_kl_6 = ReportHelper.ConvertToReportFormat(data.nilai_kl_6);
+            
+            var view_nm_oby_2 = string.IsNullOrWhiteSpace(data.nm_oby_2) || data.nilai_kl_2 == 0
+                ? string.Empty
+                : $@"
+                <tr>
+                    <td></td>
+                    <td style='width: 1%;'></td>
+                    <td style='width: 30%; text-align: right;'></td>
+                    <td style='text-align: right;'></td>
+                    <td style='width: 1%; text-align: left;' colspan='2'>{data.nm_oby_2}</td>
+                    <td style='width: 1%;'>:</td>
+                    <td style='text-align: right;'>{nilai_kl_2}</td>
+                </tr>";
+            
+            var view_nm_oby_3 = string.IsNullOrWhiteSpace(data.nm_oby_3) || data.nilai_kl_3 == 0
+                ? string.Empty
+                : $@"
+                <tr>
+                    <td></td>
+                    <td style='width: 1%;'></td>
+                    <td style='width: 30%; text-align: right;'></td>
+                    <td style='text-align: right;'></td>
+                    <td style='width: 1%; text-align: left;' colspan='2'>{data.nm_oby_3}</td>
+                    <td style='width: 1%;'>:</td>
+                    <td style='text-align: right;'>{nilai_kl_3}</td>
+                </tr>";
+            
+            var view_nm_oby_4 = string.IsNullOrWhiteSpace(data.nm_oby_4) || data.nilai_kl_4 == 0
+                ? string.Empty
+                : $@"
+                <tr>
+                    <td></td>
+                    <td style='width: 1%;'></td>
+                    <td style='width: 30%; text-align: right;'></td>
+                    <td style='text-align: right;'></td>
+                    <td style='width: 1%; text-align: left;' colspan='2'>{data.nm_oby_4}</td>
+                    <td style='width: 1%;'>:</td>
+                    <td style='text-align: right;'>{nilai_kl_4}</td>
+                </tr>";
+            
+            var view_nm_oby_5 = string.IsNullOrWhiteSpace(data.nm_oby_5) || data.nilai_kl_5 == 0
+                ? string.Empty
+                : $@"
+                <tr>
+                    <td></td>
+                    <td style='width: 1%;'></td>
+                    <td style='width: 30%; text-align: right;'></td>
+                    <td style='text-align: right;'></td>
+                    <td style='width: 1%; text-align: left;' colspan='2'>{data.nm_oby_5}</td>
+                    <td style='width: 1%;'>:</td>
+                    <td style='text-align: right;'>{nilai_kl_5}</td>
+                </tr>";
+            
+            var view_nm_oby_6 = string.IsNullOrWhiteSpace(data.nm_oby_6) || data.nilai_kl_6 == 0
+                ? string.Empty
+                : $@"
+                <tr>
+                    <td></td>
+                    <td style='width: 1%;'></td>
+                    <td style='width: 30%; text-align: right;'></td>
+                    <td style='text-align: right;'></td>
+                    <td style='width: 1%; text-align: left;' colspan='2'>{data.nm_oby_6}</td>
+                    <td style='width: 1%;'>:</td>
+                    <td style='text-align: right;'>{nilai_kl_6}</td>
+                </tr>";
+            
+            var view_validitas = data.kd_cob == "M"
+                ? 
+                $@"
+                <tr>
+                    <td></td>
+                    <td style='width: 1%;'>6. </td>
+                    <td style='width: 30%;'>Validitas</td>
+                    <td>:</td>
+                    <td colspan='4'>{data.validitas}</td>
+                </tr>"
+            : string.Empty;
+            
             var resultTemplate = templateProfileResult.Render( new
             {
                     
@@ -88,10 +168,10 @@ namespace ABB.Application.LaporanKerugianPasti.Queries
                 tgl_lns_prm = ReportHelper.ConvertDateTime(data.tgl_lns_prm, "dd/MM/yyyy"),
                 data.no_bukti_lns, data.validitas, data.kt_cb, data.tgl_closing_ind,
                 request.tanda_tangan, request.jabatan, data.no_berkas_pla,
-                nilai_estimasi, data.nm_oby_1, nilai_kl_1, data.nm_oby_2, nilai_kl_2,
-                data.nm_oby_3, nilai_kl_3, data.nm_oby_4, nilai_kl_4, data.ket_kl,
-                data.nm_oby_5, nilai_kl_5, data.nm_oby_6, nilai_kl_6, data.ket_jns,
+                nilai_estimasi, data.nm_oby_1, nilai_kl_1, data.ket_kl, data.ket_jns,
                 tgl_closing = ReportHelper.ConvertDateTime(data.tgl_closing, "dd/MM/yyyy"),
+                view_nm_oby_2, view_nm_oby_3, view_nm_oby_4, view_nm_oby_5, view_nm_oby_6,
+                data.symbol, data.symbol_estimasi_pla, view_validitas
             } );
 
             return resultTemplate;

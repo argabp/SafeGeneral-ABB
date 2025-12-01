@@ -34,5 +34,9 @@ namespace ABB.Application.ReopenMutasiKlaims.Queries
         public string nm_ttg { get; set; }
 
         public DateTime tgl_mts { get; set; }
+
+        public string? no_pol_lama { get; set; }
+
+        public DateTime? tgl_closing { get; set; }
     }
 }

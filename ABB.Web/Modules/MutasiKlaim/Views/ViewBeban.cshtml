@@ -93,7 +93,7 @@
             <div class="row col-sm-12">
                 <label class="col-sm-4">Keterangan</label>
                 <div class="col-sm-8">
-                    <kendo-dropdownlist for="ket_jns" style="width: 100%" option-label="Pilih Keterangan" 
+                    <kendo-dropdownlist for="ket_jns" style="width: 100%" option-label="Pilih Keterangan" readonly="true"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" >
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -124,7 +124,7 @@
             <div class="row col-sm-12">
                 <label class="col-sm-4">Nilai Beban</label>
                 <div class="col-sm-8">
-                    <kendo-numerictextbox decimals="2" spinners="false" for="nilai_jns_org" on-change="OnNilaiBebanChange"  style="width: 100%;"/>
+                    <kendo-numerictextbox decimals="2" readonly="true" spinners="false" for="nilai_jns_org" style="width: 100%;"/>
                 </div>
             </div>
         </div>
@@ -137,10 +137,4 @@
             </div>
         </div>
     </form>
-
-    <div class="window-footer">
-        <button type="button" id="btn-save-mutasiKlaimBeban" class="btn btn-success space-right">
-            <span class="fa fa-save"></span> Save
-        </button>
-    </div>
 </div>

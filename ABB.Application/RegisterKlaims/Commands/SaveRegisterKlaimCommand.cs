@@ -174,6 +174,9 @@ namespace ABB.Application.RegisterKlaims.Commands
 
                     await dbContext.SaveChangesAsync(cancellationToken);
 
+                    await _connectionFactory.QueryProc<string>("sp_InsertDokumenKlaim",
+                        new { request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn, request.no_kl });
+
                     return registerKlaim;
                 }
                 else
@@ -214,6 +217,9 @@ namespace ABB.Application.RegisterKlaims.Commands
                     entity.kd_thn_pol = request.kd_thn_pol;
                     
                     await dbContext.SaveChangesAsync(cancellationToken);
+
+                    await _connectionFactory.QueryProc<string>("sp_InsertDokumenKlaim",
+                        new { request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn, request.no_kl });
 
                     return entity;
                 }

@@ -47,5 +47,9 @@ namespace ABB.Application.EntriNotaKlaims.Queries
         public string no_kl { get; set; }
 
         public string flag_posting { get; set; }
+
+        public string? no_pol_lama { get; set; }
+
+        public decimal? nilai_nt { get; set; }
     }
 }

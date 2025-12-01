@@ -51,6 +51,8 @@ namespace ABB.Web.Modules.MutasiKlaim.Models
         public byte? no_grp_mts { get; set; }
 
         public string? validitas { get; set; }
+
+        public Int16 no_rsk { get; set; }
         
         public void Mapping(Profile profile)
         {

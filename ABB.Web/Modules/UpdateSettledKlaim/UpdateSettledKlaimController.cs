@@ -36,8 +36,8 @@ namespace ABB.Web.Modules.UpdateSettledKlaim
             foreach (var data in ds)
             {
                 data.Id = counter;
-                data.nomor_register_klaim = data.kd_cb.Trim() + "." + data.kd_cob.Trim() +
-                                      data.kd_scob.Trim() + "." + data.kd_thn.Trim() + "." + data.no_kl.Trim();
+                data.nomor_register_klaim = "K." + data.kd_cb.Trim() + "." + data.kd_scob.Trim() 
+                                            + "." + data.kd_thn.Trim() + "." + data.no_kl.Trim();
 
                 counter++;
             }

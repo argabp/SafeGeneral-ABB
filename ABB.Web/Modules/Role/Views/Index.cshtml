@@ -14,7 +14,6 @@
 <script src="~/Modules/Role/JS/role.index.js"></script>
 <script src="~/Modules/Role/JS/role.form.js"></script>
 
-@Html.AntiForgeryToken()
 <div class="flat-box">
     <div class="row">
         <div class="flat-box-title col-md-6">
@@ -51,9 +50,9 @@
                     .Click("btnDeleteRole_OnClick");
             }).Title("Action").Width(150).Locked(true);
             columns.Bound(col => col.RoleId).Hidden();
-            columns.Bound(col => col.RoleCode);
-            columns.Bound(col => col.RoleName);
-            columns.Bound(col => col.Description);
+            columns.Bound(col => col.RoleCode).Title("Role Code");
+            columns.Bound(col => col.RoleName).Title("Role Name");
+            columns.Bound(col => col.Description).Title("Description");
         })
         .Pageable(pager => pager
                     .Refresh(true)
@@ -63,7 +62,10 @@
         .Sortable()
         .Height(400)
         .Scrollable()
-        .Filterable())
+        .Filterable()
+        .Resizable(a=>a.Columns(true))
+        .Events(ev => ev.DataBound("gridAutoFit")))
+        
         @(Html.Kendo().Window()
             .Name("RoleWindow")
             .Title("Role Page")

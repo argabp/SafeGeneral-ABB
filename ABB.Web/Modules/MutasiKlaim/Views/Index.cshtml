@@ -140,58 +140,11 @@
                         </text>
                         );
                         items.Add().Text("Obyek").Content(@<text>
-                            <input type="hidden" id="tipe_mts#=id_detail_grid#" />
                             <div id="obyekGrid#=id_detail_grid#"></div>
                                                            </text>
                         );
                         items.Add().Text("Alokasi Koasuransi").Content(@<text>
-                            <div class="row">
-                            <div class="col-sm-2">
-                                <button style="height: 1em" class="flat-btn-primary" id="btnAddAlokasi#=id_detail_grid#" disabled=true>Add Alokasi</button>
-                            </div>
-                            </div>
-                            @(Html.Kendo().Grid<MutasiKlaimAlokasiDto>()
-                                .Name("grid_alokasi_#=id_detail_grid#")
-                                .DataSource(dataSource => dataSource.Ajax()
-                                    .Read(read => read.Action("GetMutasiKlaimAlokasis", "MutasiKlaim").Data("dataParameterMutasi"))
-                                    .Model(m => m.Id(p => p.Id))
-                                )
-                                .Columns(columns =>
-                                {
-                                    columns.Command(command =>
-                                    {
-                                        command.Custom("EditAlokasi")
-                                            .Text("Edit")
-                                            .IconClass("fa fa-pencil-alt")
-                                            .HtmlAttributes(new { title = "Edit" })
-                                            .Click("OnEditAlokasi");
-                                        command.Custom("DeleteAlokasi")
-                                            .Text("Delete")
-                                            .IconClass("k-icon k-i-delete")
-                                            .HtmlAttributes(new { title = "Delete" })
-                                            .Click("onDeleteAlokasi");
-                                    }).Width(200).Locked(true);
-                                    columns.Bound(col => col.nm_grp_pas).Width(150).Title("Group Rekanan");
-                                    columns.Bound(col => col.nm_rk_pas).Width(150).Title("Rekanan");
-                                    columns.Bound(col => col.pst_share).Width(150).Title("Share (%)").Format("{0:n2}");
-                                    columns.Bound(col => col.nilai_kl).Width(150).Title("Nilai Klaim").Format("{0:n2}");
-
-                                })
-                                .Pageable(pager => pager
-                                    .Refresh(true)
-                                    .Info(true)
-                                    .PageSizes(true)
-                                )
-                                .Sortable()
-                                .Selectable()
-                                .Filterable()
-                                .Scrollable()
-                                .Height(380)
-                                .Resizable(a => a.Columns(true))
-                                .Events(ev => ev.DataBound("gridAutoFit"))
-                                .ToClientTemplate())
-                        
-                                                             
+                            <div id="alokasiGrid#=id_detail_grid#"></div>
                                                              </text>
                         );
                     })
@@ -208,21 +161,3 @@
             )
     </div>
 </div>
-
-<script>
-    function formatNoPol(value) {
-        if (!value) return "";
-
-        value = value.toString();
-
-        // Ensure the string is long enough
-        if (value.length < 16) return value;
-
-        return value.substring(0, 2) + '.' +
-               value.substring(2, 5) + '.' +
-               value.substring(5, 7) + '.' +
-               value.substring(7, 11) + '.' +
-               value.substring(11, 15) + '-' +
-               value.substring(15);
-    }
-</script>

@@ -353,11 +353,36 @@ namespace ABB.Web.Modules.MutasiKlaim
         }
         
         [HttpGet]
+        public async Task<IActionResult> ViewAlokasi(string kd_cb, string kd_cob,
+            string kd_scob, string kd_thn, string no_kl, Int16 no_mts,
+            string kd_grp_pas, string kd_rk_pas)
+        {
+            var command = new GetMutasiKlaimAlokasiQuery()
+            {
+                kd_cb = kd_cb,
+                kd_cob = kd_cob,
+                kd_scob = kd_scob,
+                kd_thn = kd_thn,
+                no_kl = no_kl,
+                no_mts = no_mts,
+                kd_grp_pas = kd_grp_pas,
+                kd_rk_pas = kd_rk_pas,
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            };
+            var mutasiKlaimAlokasi = await Mediator.Send(command);
+
+            var model = Mapper.Map<MutasiKlaimAlokasiViewModel>(mutasiKlaimAlokasi);
+            model.IsEdit = true;
+            
+            return View("ViewAlokasi", model);
+        }
+        
+        [HttpGet]
         public IActionResult ObyekView(string kd_cb, string kd_cob,
             string kd_scob, string kd_thn, string no_kl, Int16 no_mts,
-            string tipe_mts, string kd_mtu)
+            string tipe_mts, string kd_mtu, string? flag_closing)
         {
-            if (tipe_mts == "B" || tipe_mts == "R")
+            if (tipe_mts == "B")
             {
                 return View("BebanView", new MutasiKlaimViewModel()
                 {
@@ -368,7 +393,23 @@ namespace ABB.Web.Modules.MutasiKlaim
                     no_kl = no_kl,
                     no_mts = no_mts,
                     tipe_mts = tipe_mts,
-                    kd_mtu = kd_mtu
+                    kd_mtu = kd_mtu,
+                    flag_closing = flag_closing
+                });
+            }
+            if (tipe_mts == "R")
+            {
+                return View("RecoveryView", new MutasiKlaimViewModel()
+                {
+                    kd_cb = kd_cb,
+                    kd_cob = kd_cob,
+                    kd_scob = kd_scob,
+                    kd_thn = kd_thn,
+                    no_kl = no_kl,
+                    no_mts = no_mts,
+                    tipe_mts = tipe_mts,
+                    kd_mtu = kd_mtu,
+                    flag_closing = flag_closing
                 });
             }
             
@@ -379,7 +420,8 @@ namespace ABB.Web.Modules.MutasiKlaim
                 kd_scob = kd_scob,
                 kd_thn = kd_thn,
                 no_kl = no_kl,
-                no_mts = no_mts
+                no_mts = no_mts,
+                flag_closing = flag_closing
             });
         }
         
@@ -419,6 +461,29 @@ namespace ABB.Web.Modules.MutasiKlaim
             var model = Mapper.Map<MutasiKlaimObyekViewModel>(mutasiKlaimAlokasi);
             
             return View("Obyek", model);
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> ViewObyek(string kd_cb, string kd_cob,
+            string kd_scob, string kd_thn, string no_kl, Int16 no_mts,
+            Int16 no_oby)
+        {
+            var command = new GetMutasiKlaimObyekQuery()
+            {
+                kd_cb = kd_cb,
+                kd_cob = kd_cob,
+                kd_scob = kd_scob,
+                kd_thn = kd_thn,
+                no_kl = no_kl,
+                no_mts = no_mts,
+                no_oby = no_oby,
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            };
+            var mutasiKlaimAlokasi = await Mediator.Send(command);
+
+            var model = Mapper.Map<MutasiKlaimObyekViewModel>(mutasiKlaimAlokasi);
+            
+            return View("ViewObyek", model);
         }
         
         [HttpGet]
@@ -465,6 +530,90 @@ namespace ABB.Web.Modules.MutasiKlaim
             model.Status = _tipeMutasi.FirstOrDefault(w => w.Value == model.st_jns)?.Text;
             
             return View("Beban", model);
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> ViewBeban(string kd_cb, string kd_cob,
+            string kd_scob, string kd_thn, string no_kl, Int16 no_mts,
+            Int16 no_urut)
+        {
+            var command = new GetMutasiKlaimBebanQuery()
+            {
+                kd_cb = kd_cb,
+                kd_cob = kd_cob,
+                kd_scob = kd_scob,
+                kd_thn = kd_thn,
+                no_kl = no_kl,
+                no_mts = no_mts,
+                no_urut = no_urut,
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            };
+            var mutasiKlaimAlokasi = await Mediator.Send(command);
+
+            var model = Mapper.Map<MutasiKlaimBebanViewModel>(mutasiKlaimAlokasi);
+            model.kd_cb = model.kd_cb.Trim();
+            model.kd_cob = model.kd_cob.Trim();
+            model.kd_scob = model.kd_scob.Trim();
+            model.kd_mtu = model.kd_mtu.Trim();
+            model.Status = _tipeMutasi.FirstOrDefault(w => w.Value == model.st_jns)?.Text;
+            
+            return View("ViewBeban", model);
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> EditRecovery(string kd_cb, string kd_cob,
+            string kd_scob, string kd_thn, string no_kl, Int16 no_mts,
+            Int16 no_urut)
+        {
+            var command = new GetMutasiKlaimBebanQuery()
+            {
+                kd_cb = kd_cb,
+                kd_cob = kd_cob,
+                kd_scob = kd_scob,
+                kd_thn = kd_thn,
+                no_kl = no_kl,
+                no_mts = no_mts,
+                no_urut = no_urut,
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            };
+            var mutasiKlaimAlokasi = await Mediator.Send(command);
+
+            var model = Mapper.Map<MutasiKlaimBebanViewModel>(mutasiKlaimAlokasi);
+            model.kd_cb = model.kd_cb.Trim();
+            model.kd_cob = model.kd_cob.Trim();
+            model.kd_scob = model.kd_scob.Trim();
+            model.kd_mtu = model.kd_mtu.Trim();
+            model.Status = _tipeMutasi.FirstOrDefault(w => w.Value == model.st_jns)?.Text;
+            
+            return View("Recovery", model);
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> ViewRecovery(string kd_cb, string kd_cob,
+            string kd_scob, string kd_thn, string no_kl, Int16 no_mts,
+            Int16 no_urut)
+        {
+            var command = new GetMutasiKlaimBebanQuery()
+            {
+                kd_cb = kd_cb,
+                kd_cob = kd_cob,
+                kd_scob = kd_scob,
+                kd_thn = kd_thn,
+                no_kl = no_kl,
+                no_mts = no_mts,
+                no_urut = no_urut,
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            };
+            var mutasiKlaimAlokasi = await Mediator.Send(command);
+
+            var model = Mapper.Map<MutasiKlaimBebanViewModel>(mutasiKlaimAlokasi);
+            model.kd_cb = model.kd_cb.Trim();
+            model.kd_cob = model.kd_cob.Trim();
+            model.kd_scob = model.kd_scob.Trim();
+            model.kd_mtu = model.kd_mtu.Trim();
+            model.Status = _tipeMutasi.FirstOrDefault(w => w.Value == model.st_jns)?.Text;
+            
+            return View("ViewRecovery", model);
         }
         
         [HttpPost]
@@ -613,6 +762,21 @@ namespace ABB.Web.Modules.MutasiKlaim
             return Json(result);
         }
         
+        public JsonResult GetKeterangan()
+        {
+            var result = new List<DropdownOptionDto>()
+            {
+                new DropdownOptionDto() { Text = "Adjuster Fee", Value = "Adjuster Fee" },
+                new DropdownOptionDto() { Text = "lawyer Fee", Value = "lawyer Fee" },
+                new DropdownOptionDto() { Text = "Surveyor Fee", Value = "Surveyor Fee" },
+                new DropdownOptionDto() { Text = "Biaya Survei", Value = "Biaya Survei" },
+                new DropdownOptionDto() { Text = "Solicter Fee", Value = "Solicter Fee" },
+                new DropdownOptionDto() { Text = "Biaya Lain-lain", Value = "Biaya Lain-lain" }
+            };
+
+            return Json(result);
+        }
+        
         public JsonResult GetUsers()
         {
             return Json(_users);
@@ -659,6 +823,111 @@ namespace ABB.Web.Modules.MutasiKlaim
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
                 var result = await Mediator.Send(command);
                 return Json(new { Result = "OK", Message = result.Item2 });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", ex.Message });
+            }
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> CopyObyek([FromBody] MutasiKlaimModel model)
+        {
+            try
+            {
+                var command = Mapper.Map<CopyObyekCommand>(model);
+                command.DatabaseName = Request.Cookies["DatabaseValue"];
+                
+                await Mediator.Send(command);
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", ex.Message });
+            }
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> CopyObyekUnderwriting([FromBody] CopyObyekUnderwritingViewModel model)
+        {
+            try
+            {
+                var command = Mapper.Map<CopyObyekUnderwritingCommand>(model);
+                command.DatabaseName = Request.Cookies["DatabaseValue"];
+                
+                await Mediator.Send(command);
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", ex.Message });
+            }
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> CheckAlokasi(string kd_cb, string kd_cob,
+            string kd_scob, string kd_thn, string no_kl, short no_mts, string flag_pol_lama,
+            string flag_closing, decimal nilai_ttl_kl)
+        {
+            var result = await Mediator.Send(new CheckAlokasiCommand()
+            {
+                kd_cb = kd_cb,
+                kd_cob = kd_cob,
+                kd_scob = kd_scob,
+                kd_thn = kd_thn,
+                no_kl = no_kl,
+                no_mts = no_mts,
+                flag_pol_lama = flag_pol_lama,
+                flag_closing = flag_closing,
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            });
+            
+            if (string.IsNullOrWhiteSpace(result.Item1))
+            {
+                return View("EmptyWithMessage", result.Item2);
+            }
+            
+            return View("~/Modules/MutasiKlaim/Views/AlokasiView.cshtml", new MutasiKlaimViewModel()
+            {
+                
+                kd_cb = kd_cb,
+                kd_cob = kd_cob,
+                kd_scob = kd_scob,
+                kd_thn = kd_thn,
+                no_kl = no_kl,
+                no_mts = no_mts,
+                flag_closing = flag_closing,
+                nilai_ttl_kl = nilai_ttl_kl
+            });
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> CopyAlokasi([FromBody] CopyAlokasiViewModel model)
+        {
+            try
+            {
+                var command = Mapper.Map<CopyAlokasiCommand>(model);
+                command.DatabaseName = Request.Cookies["DatabaseValue"];
+                
+                await Mediator.Send(command);
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", ex.Message });
+            }
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> CopyAlokasiUnderwriting([FromBody] MutasiKlaimModel model)
+        {
+            try
+            {
+                var command = Mapper.Map<CopyAlokasiUnderwritingCommand>(model);
+                command.DatabaseName = Request.Cookies["DatabaseValue"];
+                
+                await Mediator.Send(command);
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
             catch (Exception ex)
             {

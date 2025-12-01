@@ -22,7 +22,7 @@
 <div class="flat-box">
     <div class="row">
         <div class="flat-box-title col-md-6">
-            Posting MutasiKlaim
+            Posting Mutasi Klaim
         </div>
 
         <div class="col-md-4">
@@ -48,7 +48,8 @@
                     columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
                     columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
                     columns.Bound(col => col.nm_scob).Width(150).Title("Nama Sub COB");
-                    columns.Bound(col => col.nomor_register).Width(200).Title("Nomor Mutasi Klaim");
+                    columns.Bound(col => col.no_pol_lama).Title("Nomor Polis").ClientTemplate("#= formatNoPol(no_pol_lama) #");
+                    columns.Bound(col => col.nomor_register).Width(200).Title("Nomor Berkas");
                     columns.Bound(col => col.no_mts).Width(150).Title("Nomor Mutasi");
                     columns.Bound(col => col.nm_tipe_mts).Width(150).Title("Tipe Mutasi");
                     columns.Bound(col => col.nm_ttj).Width(200).Title("Nama Tertuju");

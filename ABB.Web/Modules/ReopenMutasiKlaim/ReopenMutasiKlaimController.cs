@@ -49,8 +49,8 @@ namespace ABB.Web.Modules.ReopenMutasiKlaim
                 data.Id = counter;
                 data.nm_tipe_mts = _tipeMutasi.FirstOrDefault(w => w.Value.Trim() == data.tipe_mts.Trim())?.Text ??
                                    string.Empty;
-                data.nomor_register = data.kd_cb.Trim() + "." + data.kd_cob.Trim() +
-                                      data.kd_scob.Trim() + "." + data.kd_thn.Trim() + "." + data.no_kl.Trim();
+                data.nomor_register = "K." + data.kd_cb.Trim() + "." + data.kd_scob.Trim() 
+                                      + "." + data.kd_thn.Trim() + "." + data.no_kl.Trim();
                 
                 counter++;
             }

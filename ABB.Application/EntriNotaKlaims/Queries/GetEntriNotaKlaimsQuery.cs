@@ -32,7 +32,13 @@ namespace ABB.Application.EntriNotaKlaims.Queries
             try
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
-                var results = (await _connectionFactory.Query<EntriNotaKlaimDto>(@"SELECT p.*, cb.nm_cb, cob.nm_cob, scob.nm_scob FROM cl10 p 
+                var results = (await _connectionFactory.Query<EntriNotaKlaimDto>(@"SELECT p.*, cb.nm_cb, cob.nm_cob, scob.nm_scob, 
+                                   c.no_pol_lama FROM cl10 p 
+                        INNER JOIN cl01 c
+                            ON c.kd_cb = p.kd_cb
+                                AND  c.kd_cob = p.kd_cob
+                                AND  c.kd_thn = p.kd_thn
+                                AND  c.no_kl = p.no_kl
                         INNER JOIN rf01 cb
                            ON p.kd_cb = cb.kd_cb
                         INNER JOIN rf04 cob

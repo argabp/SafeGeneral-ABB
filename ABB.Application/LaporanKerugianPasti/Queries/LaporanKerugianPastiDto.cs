@@ -16,6 +16,9 @@ namespace ABB.Application.LaporanKerugianPasti.Queries
         
         public string symbol_ptg { get; set; }
         
+        public string? symbol { get; set; }
+        public string? symbol_estimasi_pla { get; set; }
+        
         public decimal nilai_ttl_ptg { get; set; }
         
         public decimal nilai_share_bgu { get; set; }
@@ -82,5 +85,6 @@ namespace ABB.Application.LaporanKerugianPasti.Queries
 
         public string ket_kl { get; set; }
         public string ket_jns { get; set; }
+        public string kd_cob { get; set; }
     }
 }

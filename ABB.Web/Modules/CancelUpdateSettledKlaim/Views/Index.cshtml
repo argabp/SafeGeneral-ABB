@@ -43,8 +43,8 @@
                 .Columns(columns =>
                 {
                     columns.Select().Width(50);
-                    columns.Bound(col => col.nomor_register_klaim).Width(200).Title("Nomor Register Klaim");
-                    columns.Bound(col => col.no_pol_lama).Width(150).Title("Nomor Polis");
+                    columns.Bound(col => col.nomor_register_klaim).Width(200).Title("Nomor Berkas");
+                    columns.Bound(col => col.no_pol_lama).Width(150).Title("Nomor Polis").ClientTemplate("#= formatNoPol(no_pol_lama) #");
                     columns.Bound(col => col.no_updt).Width(150).Title("Nomor Update");
                     columns.Bound(col => col.no_rsk).Width(150).Title("Nomor Resiko");
                     columns.Bound(col => col.tgl_updt).Width(150).Title("Tanggal Update").Format("{0: dd-MM-yyyy}");
