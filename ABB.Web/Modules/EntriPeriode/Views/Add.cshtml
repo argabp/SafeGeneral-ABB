@@ -1,0 +1,114 @@
+@model ABB.Web.Modules.EntriPeriode.Models.EntriPeriodeViewModel
+@using Kendo.Mvc.UI
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@{
+    bool isEditMode = Model.ThnPrd != null && Model.ThnPrd > 0;
+}
+
+<div class="window-body" style="padding: 15px;">
+    <form id="EntriPeriodeForm">
+        
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label" asp-for="ThnPrd">Tahun</label>
+            <div class="col-sm-9">
+                @if (isEditMode)
+                {
+                    <kendo-numerictextbox for="ThnPrd" format="####" decimals="0" style="width: 100%;" readonly="true" />
+                }
+                else
+                {
+                    <kendo-numerictextbox for="ThnPrd" format="####" decimals="0" min="2000" max="2099" style="width: 100%;" placeholder="Contoh: 2024" value="@DateTime.Now.Year" />
+                }
+                <span asp-validation-for="ThnPrd" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label" asp-for="BlnPrd">Bulan</label>
+            <div class="col-sm-9">
+                @if (isEditMode)
+                {
+                     // Trik: Tampilkan Textbox readonly berisi Nama Bulan, tapi simpan Value angka di hidden
+                     // Atau gunakan Dropdown readonly
+                    <input class="k-textbox" style="width:100%" readonly 
+                           value="@System.Globalization.CultureInfo.CreateSpecificCulture("id-ID").DateTimeFormat.GetMonthName(Model.BlnPrd ?? 1)" />
+                    <input type="hidden" asp-for="BlnPrd" />
+                }
+                else
+                {
+                    @(Html.Kendo().DropDownListFor(m => m.BlnPrd)
+                        .DataTextField("Text")
+                        .DataValueField("Value")
+                        .BindTo(new List<SelectListItem> {
+                            new SelectListItem { Text = "Januari", Value = "1" },
+                            new SelectListItem { Text = "Februari", Value = "2" },
+                            new SelectListItem { Text = "Maret", Value = "3" },
+                            new SelectListItem { Text = "April", Value = "4" },
+                            new SelectListItem { Text = "Mei", Value = "5" },
+                            new SelectListItem { Text = "Juni", Value = "6" },
+                            new SelectListItem { Text = "Juli", Value = "7" },
+                            new SelectListItem { Text = "Agustus", Value = "8" },
+                            new SelectListItem { Text = "September", Value = "9" },
+                            new SelectListItem { Text = "Oktober", Value = "10" },
+                            new SelectListItem { Text = "November", Value = "11" },
+                            new SelectListItem { Text = "Desember", Value = "12" }
+                        })
+                        .OptionLabel("Pilih Bulan...")
+                        .HtmlAttributes(new { style = "width: 100%" })
+                    )
+                }
+                <span asp-validation-for="BlnPrd" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label" asp-for="TglMul">Tanggal Mulai</label>
+            <div class="col-sm-9">
+                @(Html.Kendo().DatePickerFor(m => m.TglMul)
+                    .Format("dd MMMM yyyy") // Format tampilan di input
+                    .HtmlAttributes(new { style = "width: 100%" })
+                )
+                <span asp-validation-for="TglMul" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label" asp-for="TglAkh">Tanggal Akhir</label>
+            <div class="col-sm-9">
+                @(Html.Kendo().DatePickerFor(m => m.TglAkh)
+                    .Format("dd MMMM yyyy") // Format tampilan di input
+                    .HtmlAttributes(new { style = "width: 100%" })
+                )
+                <span asp-validation-for="TglAkh" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label" asp-for="FlagClosing">Status</label>
+            <div class="col-sm-9">
+                @(Html.Kendo().DropDownListFor(m => m.FlagClosing)
+                    .DataTextField("Text")
+                    .DataValueField("Value")
+                    .BindTo(new List<SelectListItem>
+                    {
+                        new SelectListItem { Text = "Open", Value = "N" },
+                        new SelectListItem { Text = "Closed", Value = "Y" }
+                    })
+                    .HtmlAttributes(new { style = "width: 100%" })
+                )
+                <span asp-validation-for="FlagClosing" class="text-danger"></span>
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="row">
+            <div class="col-sm-12" style="text-align: right;">
+                <button type="button" class="btn btn-secondary" onclick="closeWindow('#EntriPeriodeWindow')">Batal</button>
+                <button type="button" class="btn btn-primary" onclick="onSavePeriode()">Simpan</button>
+            </div>
+        </div>
+    </form>
+</div>

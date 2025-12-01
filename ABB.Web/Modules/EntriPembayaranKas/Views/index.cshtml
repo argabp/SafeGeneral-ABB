@@ -74,7 +74,7 @@
                                     command.Custom("EntriPembayaranKas").Text(" Edit Pembayaran ").IconClass("fa fa-plus").Click("btnEntriPembayaranKas_OnClick");
                                 }).Width(220).Title("Action").Locked(true);
                             })
-                            .Pageable(pager => pager.Refresh(true))
+                            .Pageable(pager => pager.Refresh(true).PageSizes(true))
                             .Sortable()
                             .Filterable()
                             .Scrollable()
@@ -113,7 +113,7 @@
                                     command.Custom("CetakPembayaranKas").Text(" Cetak ").IconClass("fa fa-print").Click("btnCetakPembayaranKas_OnClick");
                                 }).Width(220).Title("Action").Locked(true);
                             })
-                            .Pageable(pager => pager.Refresh(true))
+                            .Pageable(pager => pager.Refresh(true).PageSizes(true))
                             .Sortable()
                             .Filterable()
                             .Scrollable()

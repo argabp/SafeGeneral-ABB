@@ -24,6 +24,7 @@ using EntriPembayaranKasTempEntity = ABB.Domain.Entities.EntriPembayaranKasTemp;
 using EntriPembayaranBankTempEntity = ABB.Domain.Entities.EntriPembayaranBankTemp;
 using EntriPenyelesaianPiutangTempEntity = ABB.Domain.Entities.EntriPenyelesaianPiutangTemp;
 using EntriPeriodeEntity = ABB.Domain.Entities.EntriPeriode;
+using TipeAkun117Entity = ABB.Domain.Entities.TipeAkun117;
 
 namespace ABB.Infrastructure.Data
 {
@@ -44,6 +45,7 @@ namespace ABB.Infrastructure.Data
 
         public DbSet<Produksi> Produksi { get; set; }
         public DbSet<Coa> Coa { get; set; }
+        public DbSet<Coa117> Coa117 { get; set; }
         public DbSet<EntriPenyelesaianPiutangEntity> EntriPenyelesaianPiutang { get; set; }
         public DbSet<HeaderPenyelesaianPiutangEntity> HeaderPenyelesaianUtang { get; set; }
         public DbSet<MataUangEntity> MataUang { get; set; }
@@ -53,6 +55,7 @@ namespace ABB.Infrastructure.Data
         public DbSet<EntriPembayaranBankTempEntity> EntriPembayaranBankTemp { get; set; }
         public DbSet<EntriPenyelesaianPiutangTempEntity> EntriPenyelesaianPiutangTemp { get; set; }
         public DbSet<EntriPeriodeEntity> EntriPeriode { get; set; }
+        public DbSet<TipeAkun117Entity> TipeAkun117 { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -65,6 +68,7 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new EntriPembayaranBankMap());
             builder.ApplyConfiguration(new ProduksiMap());
             builder.ApplyConfiguration(new CoaMap());
+            builder.ApplyConfiguration(new Coa117Map());
             builder.ApplyConfiguration(new EntriPenyelesaianPiutangMap());
             builder.ApplyConfiguration(new HeaderPenyelesaianUtangMap());
             builder.ApplyConfiguration(new MataUangMap());
@@ -74,6 +78,7 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new EntriPembayaranBankTempMap());
             builder.ApplyConfiguration(new EntriPenyelesaianPiutangTempMap());
             builder.ApplyConfiguration(new EntriPeriodeMap());
+            builder.ApplyConfiguration(new TipeAkun117Map());
 
 
         }

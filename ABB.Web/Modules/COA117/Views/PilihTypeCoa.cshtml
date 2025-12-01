@@ -1,0 +1,67 @@
+@using ABB.Application.Coas117.Queries 
+@using ABB.Application.TipeAkuns117.Queries 
+@using Kendo.Mvc.UI
+
+<div class="p-2">
+    <input type="text"
+           class="k-textbox"
+           id="PilihTypeCoa117SearchKeyword"
+           placeholder="Cari Type COA..."
+           style="width: 100%;" />
+</div>
+
+@(Html.Kendo().Grid<TipeAkun117Dto>()
+    .Name("PilihTypeCoa117Grid")
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Read(read => read.Action("GetTypeCoa", "Coa117")
+            .Data("getSearchFilter")) // 🔹 tambahkan ini agar filter ikut terkirim
+        .PageSize(10)
+    )
+    .Columns(columns =>
+    {
+        columns.Bound(c => c.Kode).Title("Type").Width(150);
+        columns.Bound(c => c.NamaTipe).Title("Nama").Width(200);
+        columns.Bound(c => c.Pos).Title("Pos").Width(150);
+        columns.Bound(c => c.DebetKredit).Title("D/K").Width(100);
+    })
+    .Pageable()
+    .Sortable()
+    .Scrollable()
+    .Selectable(s => s.Mode(GridSelectionMode.Single))
+    .Events(ev => ev.Change("onTypeCoa117Select"))
+)
+
+<script>
+    // 🔹 Kirim filter pencarian ke controller
+    function getTypeCoa117SearchFilter() {
+        return {
+            searchKeyword: $("#PilihTypeCoa117SearchKeyword").val()
+        };
+    }
+
+    $(document).ready(function () {
+        // 🔹 Refresh grid saat user mengetik di search box
+        $("#PilihTypeCoa117SearchKeyword").on("keyup", function () {
+            var grid = $("#PilihTypeCoa117Grid").data("kendoGrid");
+            if (grid) {
+                grid.dataSource.read();
+            }
+        });
+    });
+
+    // 🔹 Ketika baris di grid dipilih
+    function onTypeCoa117Select(e) {
+        var grid = $("#PilihTypeCoa117Grid").data("kendoGrid");
+        var selected = grid.dataItem(grid.select());
+
+        if (selected) {
+            // Isi field Type di form utama
+            $("#Type").val(selected.Kode);
+
+            // Tutup window popup
+            var popup = $("#PilihCoa117Window").data("kendoWindow");
+            if (popup) popup.close();
+        }
+    }
+</script>
