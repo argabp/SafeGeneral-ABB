@@ -12,6 +12,7 @@ namespace ABB.Application.TypeCoas.Queries
 {
     public class GetAllTypeCoaQuery : IRequest<List<TypeCoaDto>>
     {
+        public string SearchKeyword { get; set; }
     }
 
     public class GetAllTypeCoaQueryHandler : IRequestHandler<GetAllTypeCoaQuery, List<TypeCoaDto>>
@@ -28,6 +29,16 @@ namespace ABB.Application.TypeCoas.Queries
         public async Task<List<TypeCoaDto>> Handle(GetAllTypeCoaQuery request, CancellationToken cancellationToken)
         {
             var query = _context.TypeCoa.AsQueryable();
+
+             // ✅ Tambahkan filter pencarian
+            if (!string.IsNullOrWhiteSpace(request.SearchKeyword))
+            {
+                string keyword = request.SearchKeyword.ToLower();
+                query = query.Where(x =>
+                    x.Type.ToLower().Contains(keyword) ||
+                    x.Nama.ToLower().Contains(keyword) ||
+                    x.Pos.ToLower().Contains(keyword));
+            }
 
             // ✅ Project ke DTO menggunakan AutoMapper
             return await query

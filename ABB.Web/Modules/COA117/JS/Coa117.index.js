@@ -1,12 +1,12 @@
 // Fungsi untuk membuka window Tambah Data
-function btnAddTipeAkun104_OnClick() {
-    var window = $("#TipeAkun104Window").data("kendoWindow");
-    openWindow('#TipeAkun104Window', '/TipeAkun104/Add', 'Add New Tipe Akun 104');
+function btnAddCOA117_OnClick() {
+    var window = $("#Coa117Window").data("kendoWindow");
+    openWindow('#Coa117Window', '/COA117/Add', 'Add New COA 117');
 }
 
 $(document).ready(function () {
     $("#SearchKeyword").on("keyup", function() {
-        $("#TipeAkun104Grid").data("kendoGrid").dataSource.read();
+        $("#Coa117Grid").data("kendoGrid").dataSource.read();
     });
 });
 
@@ -16,33 +16,33 @@ function getSearchFilter() {
     };
 }
 
-function onSaveTipeAkun104() {
-    var url = "/TipeAkun104/Save";
+function onSaveCoa117() {
+    var url = "/COA117/Save";
     var data = {
         Kode: $("#Kode").val(),
-        NamaTipe: $("#NamaTipe").val(),
-        Pos: $('input[name="Pos"]:checked').val(),
-        Kasbank: $('input[name="Kasbank"]:checked').val() || "0"
+        Nama: $("#Nama").val(),
+        Dept: $("#Dept").val(),
+        Type: $("#Type").val()
     };
-    showProgress('#TipeAkun104Window');
+    showProgress('#Coa117Window');
     $.ajax({
         type: "POST",
         url: url,
         contentType: "application/json; charset=utf-8", 
         data: JSON.stringify(data),                    
         success: function (response) {
-            closeProgress('#TipeAkun104Window');
+            closeProgress('#Coa117Window');
             if (response && response.success) {
                 console.log(response)
                 showMessage('Success', 'Data berhasil disimpan.');
-                closeWindow("#TipeAkun104Window");
-                refreshGrid("#TipeAkun104Grid");
+                closeWindow("#Coa117Window");
+                refreshGrid("#Coa117Grid");
             } else {
                 showMessage('Error', 'Gagal menyimpan data.');
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            closeProgress('#TipeAkun104Window');
+            closeProgress('#Coa117Window');
             if (jqXHR.status === 400) {
                 // Menangani error validasi jika ada
                 var errorData = jqXHR.responseJSON;
@@ -58,17 +58,24 @@ function onSaveTipeAkun104() {
     });
 }
 
-function onDeleteTipeAkun104(e) {
+function btnEditCoa117_OnClick(e) {
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    var window = $("#Coa117Window").data("kendoWindow");
+    openWindow('#Coa117Window', `/COA117/Edit?Kode=${dataItem.Kode.trim()}`, 'Edit Coa117');
+}
+
+function onDeleteCoa117(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
 
     // Tampilkan dialog konfirmasi
     showConfirmation('Konfirmasi Hapus', `Apakah Anda yakin ingin menghapus data dengan Kode ${dataItem.Kode}?`,
         function () {
-            showProgressOnGrid('#TipeAkun104Grid');
+            showProgressOnGrid('#Coa117Grid');
 
             // Kirim request hapus ke Controller
-            ajaxGet(`/TipeAkun104/Delete?Kode=${dataItem.Kode.trim()}`,
+            ajaxGet(`/COA117/Delete?Kode=${dataItem.Kode.trim()}`,
                 function (response) {
                     if (response.success) {
                         showMessage('Success', 'Data berhasil dihapus.');
@@ -76,13 +83,33 @@ function onDeleteTipeAkun104(e) {
                         showMessage('Error', 'Gagal menghapus data.');
                     }
                     
-                    refreshGrid("#TipeAkun104Grid");
-                    closeProgressOnGrid('#TipeAkun104Grid');
+                    refreshGrid("#Coa117Grid");
+                    closeProgressOnGrid('#Coa117Grid');
                 }
             );
         }
     );
 }
 
+function openPilihCoa117Window() {
+    var window = $("#PilihCoa117Window").data("kendoWindow");
+    // Muat konten dari action PilihNota
+    window.refresh({ url: "/COA117/PilihTypeCoa" });
+    window.center().open();
+}
 
+function onTypeCoa117Select(e) {
+    // Ambil data dari baris yang dipilih
+    var selectedRow = this.dataItem(this.select());
+
+    if (selectedRow) {
+        // "Replace" nilai di form utama dengan data dari pop-up
+        $("#Type").val(selectedRow.Type);
+        // Anda juga bisa mengisi field lain jika perlu, contoh:
+        // $("#TotalBayar").data("kendoNumericTextBox").value(selectedRow.Premi);
+        
+        // Tutup window pop-up setelah dipilih
+        $("#PilihCoa117Window").data("kendoWindow").close();
+    }
+}
 

@@ -10,7 +10,7 @@ namespace ABB.Application.TipeAkuns117.Queries
         public string Kode { get; set; }
         public string NamaTipe { get; set; }
         public string Pos { get; set; }
-        public bool? Kasbank { get; set; }
+        public string DebetKredit { get; set; }
 
        public void Mapping(Profile profile)
         {

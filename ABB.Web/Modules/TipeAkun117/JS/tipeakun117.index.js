@@ -15,6 +15,8 @@ function btnEditTipeAkun_OnClick(e) {
     window.center().open();
 }
 
+
+
 function btnDeleteTipeAkun_OnClick(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
@@ -48,11 +50,12 @@ function onSaveTipeAkun() {
     // 1. Ambil data
     var kode = $("#Kode").val();
     var namaTipe = $("#NamaTipe").val();
+    var debetkredit = $("#DebetKredit").data("kendoDropDownList").value();   
     var pos = $("input[name='Pos']:checked").val(); // Radio button
     
     // --- PERUBAHAN DI SINI ---
     // Ambil status checkbox (true/false)
-    var kasbank = $("#KasbankCheckbox").is(":checked"); 
+    // var kasbank = $("#KasbankCheckbox").is(":checked"); 
 
     // Validasi
     if (!kode || !namaTipe || !pos) {
@@ -64,7 +67,7 @@ function onSaveTipeAkun() {
         Kode: kode,
         NamaTipe: namaTipe,
         Pos: pos,
-        Kasbank: kasbank // Mengirim boolean langsung
+        DebetKredit: debetkredit // Mengirim boolean langsung
     };
 
     $.ajax({

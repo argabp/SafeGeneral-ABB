@@ -8,41 +8,42 @@ using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace ABB.Application.TipeAkuns104.Queries
+namespace ABB.Application.Coas117.Queries
 {
-    public class GetAllTipeAkun104Query : IRequest<List<TipeAkun104Dto>>
+    public class GetAllCoa117Query : IRequest<List<Coa117Dto>>
     {
         public string SearchKeyword { get; set; } // ✅ properti pencarian
     }
 
-    public class GetAllTipeAkun104QueryHandler : IRequestHandler<GetAllTipeAkun104Query, List<TipeAkun104Dto>>
+    public class GetAllCoa117QueryHandler : IRequestHandler<GetAllCoa117Query, List<Coa117Dto>>
     {
         private readonly IDbContextPstNota _context;
         private readonly IMapper _mapper;
 
-        public GetAllTipeAkun104QueryHandler(IDbContextPstNota context, IMapper mapper)
+        public GetAllCoa117QueryHandler(IDbContextPstNota context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
-        public async Task<List<TipeAkun104Dto>> Handle(GetAllTipeAkun104Query request, CancellationToken cancellationToken)
+        public async Task<List<Coa117Dto>> Handle(GetAllCoa117Query request, CancellationToken cancellationToken)
         {
-            var query = _context.TipeAkun104.AsQueryable();
+            var query = _context.Coa117.AsQueryable();
 
             // ✅ Tambahkan filter pencarian
             if (!string.IsNullOrWhiteSpace(request.SearchKeyword))
             {
                 string keyword = request.SearchKeyword.ToLower();
                 query = query.Where(x =>
-                    x.Kode.ToLower().Contains(keyword) ||
-                    x.NamaTipe.ToLower().Contains(keyword) ||
-                    x.Pos.ToLower().Contains(keyword));
+                    x.gl_kode.ToLower().Contains(keyword) ||
+                    x.gl_nama.ToLower().Contains(keyword) ||
+                    x.gl_dept.ToLower().Contains(keyword) ||
+                    x.gl_type.ToLower().Contains(keyword));
             }
 
             // ✅ Project ke DTO menggunakan AutoMapper
             return await query
-                .ProjectTo<TipeAkun104Dto>(_mapper.ConfigurationProvider)
+                .ProjectTo<Coa117Dto>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
         }
     }

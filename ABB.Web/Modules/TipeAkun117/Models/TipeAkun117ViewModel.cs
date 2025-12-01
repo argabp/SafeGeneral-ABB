@@ -19,8 +19,8 @@ namespace ABB.Web.Modules.TipeAkun117.Models
         [Display(Name = "Posisi")]
         public string Pos { get; set; } // Contoh: D (Debet) / K (Kredit) atau Neraca/LabaRugi
 
-        [Display(Name = "Kas/Bank")]
-        public bool? Kasbank { get; set; }
+        [Display(Name = "Debet/Kredit")]
+        public string DebetKredit { get; set; }
 
         public void Mapping(Profile profile)
         {

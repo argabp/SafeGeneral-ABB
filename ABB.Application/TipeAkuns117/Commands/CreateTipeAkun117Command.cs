@@ -14,7 +14,7 @@ namespace ABB.Application.TipeAkuns117.Commands
         public string Kode { get; set; }
         public string NamaTipe { get; set; }
         public string Pos { get; set; }
-        public bool? Kasbank { get; set; }
+        public string DebetKredit { get; set; }
     }
 
     // ---> INI BAGIAN YANG HILANG: "Petugas Pelaksana" <---
@@ -35,7 +35,7 @@ namespace ABB.Application.TipeAkuns117.Commands
                 Kode = request.Kode,
                 NamaTipe = request.NamaTipe,
                 Pos = request.Pos,
-                Kasbank = false
+                DebetKredit = request.DebetKredit
 
             };
 

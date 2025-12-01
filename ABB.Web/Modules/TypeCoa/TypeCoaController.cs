@@ -1,18 +1,22 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using ABB.Application.TipeAkuns117.Commands;
-using ABB.Application.TipeAkuns117.Queries;
+using ABB.Application.Common;
+using ABB.Application.Common.Dtos;
+using ABB.Application.TypeCoas.Commands;
+using ABB.Application.TypeCoas.Queries;
 using ABB.Web.Modules.Base;
-using ABB.Web.Modules.TipeAkun117.Models;
+using ABB.Web.Modules.TypeCoa.Models;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace ABB.Web.Modules.TipeAkun117
+
+namespace ABB.Web.Modules.TypeCoa
 {
-    public class TipeAkun117Controller : AuthorizedBaseController
+    public class TypeCoaController : AuthorizedBaseController
     {
         public ActionResult Index()
         {
@@ -23,26 +27,26 @@ namespace ABB.Web.Modules.TipeAkun117
             return View();
         }
 
-        [HttpPost]
-        public async Task<ActionResult> GetTipeAkun117([DataSourceRequest] DataSourceRequest request, string searchKeyword)
+          [HttpPost]
+        public async Task<ActionResult> GetTypeCoa([DataSourceRequest] DataSourceRequest request, string searchKeyword)
         {
-            var data = await Mediator.Send(new GetAllTipeAkun117Query() { SearchKeyword = searchKeyword });
+            var data = await Mediator.Send(new GetAllTypeCoaQuery() { SearchKeyword = searchKeyword });
             return Json(await data.ToDataSourceResultAsync(request));
         }
 
-        // Action untuk membuka form Add
         public async Task<IActionResult> Add()
         {
 
-            var databaseName = Request.Cookies["DatabaseValue"];
-            ViewBag.DebetKreditOptions = new List<SelectListItem>
-            {
-                new SelectListItem { Text = "Pilih..", Value = "" },
-                new SelectListItem { Text = "Kredit", Value = "K" },
-                new SelectListItem { Text = "Debit", Value = "D" }
-                
-            };
-            var model = new TipeAkun117ViewModel();
+               var databaseName = Request.Cookies["DatabaseValue"];
+                ViewBag.DebetKreditOptions = new List<SelectListItem>
+                {
+                    new SelectListItem { Text = "Pilih..", Value = "" },
+                    new SelectListItem { Text = "Kredit", Value = "K" },
+                    new SelectListItem { Text = "Debit", Value = "D" }
+                    
+                };
+
+            var model = new TypeCoaViewModel();
             PrepareViewBag(); // Siapkan data dropdown jika ada
             return PartialView("Add", model); // Menggunakan view "Add"
         }
@@ -51,7 +55,7 @@ namespace ABB.Web.Modules.TipeAkun117
         public async Task<IActionResult> Edit(string id)
         {
 
-            var databaseName = Request.Cookies["DatabaseValue"];
+             var databaseName = Request.Cookies["DatabaseValue"];
             ViewBag.DebetKreditOptions = new List<SelectListItem>
             {
                 new SelectListItem { Text = "Pilih..", Value = "" },
@@ -59,7 +63,8 @@ namespace ABB.Web.Modules.TipeAkun117
                 new SelectListItem { Text = "Debit", Value = "D" }
                 
             };
-            var dto = await Mediator.Send(new GetTipeAkun117ByIdQuery { Kode = id });
+
+            var dto = await Mediator.Send(new GetTypeCoaByIdQuery { Type = id });
             
             if (dto == null)
             {
@@ -67,15 +72,14 @@ namespace ABB.Web.Modules.TipeAkun117
             }
 
             // Map DTO ke ViewModel
-            var model = Mapper.Map<TipeAkun117ViewModel>(dto);
+            var model = Mapper.Map<TypeCoaViewModel>(dto);
             
             PrepareViewBag();
             return PartialView("Add", model); // Re-use view "Add"
         }
 
-        // Action untuk Simpan (Create atau Update)
-        [HttpPost]
-        public async Task<IActionResult> Save([FromBody] TipeAkun117ViewModel model)
+       [HttpPost]
+        public async Task<IActionResult> Save([FromBody] TypeCoaViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -85,18 +89,18 @@ namespace ABB.Web.Modules.TipeAkun117
             try
             {
                 // Cek apakah data sudah ada (untuk menentukan Create atau Update)
-                var existingData = await Mediator.Send(new GetTipeAkun117ByIdQuery { Kode = model.Kode });
+                var existingData = await Mediator.Send(new GetTypeCoaByIdQuery { Type = model.Type });
 
                 if (existingData != null)
                 {
                     // Mode Update
-                    var command = Mapper.Map<UpdateTipeAkun117Command>(model);
+                    var command = Mapper.Map<UpdateTypeCoaCommand>(model);
                     await Mediator.Send(command);
                 }
                 else
                 {
                     // Mode Create
-                    var command = Mapper.Map<CreateTipeAkun117Command>(model);
+                    var command = Mapper.Map<CreateTypeCoaCommand>(model);
                     await Mediator.Send(command);
                 }
 
@@ -108,19 +112,11 @@ namespace ABB.Web.Modules.TipeAkun117
             }
         }
 
-        // Action untuk Delete
-        [HttpPost]
-        public async Task<IActionResult> Delete(string id)
+         [HttpGet]
+        public async Task<IActionResult> Delete(string Type)
         {
-            try
-            {
-                await Mediator.Send(new DeleteTipeAkun117Command { Kode = id });
-                return Json(new { success = true });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, message = ex.Message });
-            }
+            await Mediator.Send(new DeleteTypeCoaCommand { Type = Type });
+            return Json(new { success = true });
         }
 
         // Helper untuk mengisi Dropdown (opsional, jika kolom Pos butuh dropdown)
@@ -134,5 +130,8 @@ namespace ABB.Web.Modules.TipeAkun117
                 new SelectListItem { Text = "1 - Kas/Bank", Value = "true" }
             };
         }
+
+         
+
     }
 }

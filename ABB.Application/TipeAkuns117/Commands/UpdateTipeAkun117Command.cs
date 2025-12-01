@@ -13,7 +13,7 @@ namespace ABB.Application.TipeAkuns117.Commands
         public string Kode { get; set; } // Primary Key (biasanya tidak diubah)
         public string NamaTipe { get; set; }
         public string Pos { get; set; }
-        public bool? Kasbank { get; set; }
+        public string DebetKredit { get; set; }
     }
 
     public class UpdateTipeAkun117CommandHandler : IRequestHandler<UpdateTipeAkun117Command, Unit>
@@ -37,7 +37,7 @@ namespace ABB.Application.TipeAkuns117.Commands
             // Update field
             entity.NamaTipe = request.NamaTipe;
             entity.Pos = request.Pos;
-            entity.Kasbank = request.Kasbank;
+            entity.DebetKredit = request.DebetKredit;
 
             await _context.SaveChangesAsync(cancellationToken);
 

@@ -8,15 +8,15 @@ namespace ABB.Infrastructure.Data.Mapping
     {
         public void Configure(EntityTypeBuilder<TipeAkun117> builder)
         {
-            builder.ToTable("abb_tipe_akun_117");
+            builder.ToTable("abb_tipe_coa117");
 
             // Tentukan gl_kode sebagai Primary Key
             builder.HasKey(c => c.Kode); 
             
-            builder.Property(c => c.Kode).HasColumnName("kode");
-            builder.Property(c => c.NamaTipe).HasColumnName("nm_tipe");
-            builder.Property(c => c.Pos).HasColumnName("pos");
-            builder.Property(c => c.Kasbank).HasColumnName("kasbank");
+            builder.Property(c => c.Kode).HasColumnName("gl_type");
+            builder.Property(c => c.NamaTipe).HasColumnName("f_nama");
+            builder.Property(c => c.Pos).HasColumnName("gl_pos");
+            builder.Property(c => c.DebetKredit).HasColumnName("gl_dk");
         }
     }
 }

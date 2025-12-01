@@ -156,9 +156,9 @@ namespace ABB.Application.LaporanPelunasans.Queries
             string resultTemplate = templateReport.Render(new
             {
                 details = detailsBuilder.ToString(),
-                KodeCabang = request.KodeCabang,
-                NamaCabang = namaCabang,
-                Periode = $"{request.BulanAwal}-{request.BulanAkhir}-{request.Tahun}"
+                kodecabang = request.KodeCabang,
+                namacabang = namaCabang,
+                periode = $"{request.BulanAwal} s/d {request.BulanAkhir} - {request.Tahun}"
             });
 
             return resultTemplate;

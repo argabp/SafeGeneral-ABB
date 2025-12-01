@@ -52,7 +52,7 @@
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.ThnPrd).Title("Tahun").Format("{0:n0}").Width(100);
+                    columns.Bound(col => col.ThnPrd).Title("Tahun").Width(100);
                     
                     // UBAH 1: Bulan jadi Nama (pakai ClientTemplate JS)
                     columns.Bound(col => col.BlnPrd).Title("Bulan").Width(150)

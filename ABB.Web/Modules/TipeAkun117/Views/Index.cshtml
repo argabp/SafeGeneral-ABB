@@ -54,13 +54,11 @@
                     // --- FORMAT TAMPILAN POS ---
                     // AK = Neraca Aktiva, 01 = Laba Rugi Income, PS = Neraca Passive, 02 = Laba Rugi Cost
                     columns.Bound(col => col.Pos).Title("POS").Width(200);
+                    columns.Bound(col => col.DebetKredit).Title("Debet/Kredit").Width(200);
                        
 
                     // --- FORMAT TAMPILAN KASBANK ---
-                    columns.Bound(col => col.Kasbank).Title("Kas/Bank").Width(100)
-                        .ClientTemplate("#= Kasbank ? '<span class=\"badge badge-success\">Ya</span>' : '<span class=\"badge badge-secondary\">Tidak</span>' #")
-                        .HtmlAttributes(new { style = "text-align: center;" });
-
+                    
                     columns.Command(command =>
                     {
                         command.Custom("EditTipe")
