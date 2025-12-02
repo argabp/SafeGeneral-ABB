@@ -32,12 +32,18 @@ namespace ABB.Web.Modules.LaporanOutstanding
 
         public async Task<IActionResult> Index()
         {
+            
+            var databaseName = Request.Cookies["DatabaseValue"]; 
+            var kodeCabangCookie = Request.Cookies["UserCabang"];
+
+            if (string.IsNullOrEmpty(databaseName) || string.IsNullOrEmpty(kodeCabangCookie))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
-
-            var databaseName = Request.Cookies["DatabaseValue"]; 
-            var kodeCabangCookie = Request.Cookies["UserCabang"];
 
             var cabangList = await Mediator.Send(new GetCabangsQuery { DatabaseName = databaseName });
 
@@ -122,7 +128,9 @@ namespace ABB.Web.Modules.LaporanOutstanding
                     TglProduksiAwal = model.TglProduksiAwal,
                     TglProduksiAkhir = model.TglProduksiAkhir,
                     TglPelunasan = model.TglPelunasan,
-                    // JenisTransaksi = model.JenisTransaksi,
+                    JenisLaporan = model.JenisLaporan,
+                    JenisTransaksi = model.JenisTransaksi,
+                    SelectedCodes = model.SelectedCodes,
                     UserLogin = user
                 };
 
@@ -155,6 +163,8 @@ namespace ABB.Web.Modules.LaporanOutstanding
         public string TglProduksiAwal { get; set; }
         public string TglProduksiAkhir { get; set; }
         public string TglPelunasan { get; set; }
-        // public string JenisTransaksi { get; set; }
+        public string JenisLaporan { get; set; }
+        public string JenisTransaksi { get; set; }
+        public List<string> SelectedCodes { get; set; }
     }
 }

@@ -9,7 +9,33 @@ function onSearchClick() {
     var tglpelunasan = kendo.toString(dateObj_tglpelunasan, "yyyy-MM-dd");
 
     var kodeCabang = $("#KodeCabang").data("kendoComboBox").value().trim();
-    // var JenisTransaksi = $('input[name="JenisTransaksi"]:checked').val();
+    var jenisTransaksi = $("input[name='JenisTransaksi']:checked").val();
+        var selectedCodes = [];
+
+        // Pilih container yang aktif
+        var containerSelector = "";
+        if (jenisTransaksi === "Piutang") {
+            containerSelector = "#checkboxContainerPiutang";
+        } else {
+            containerSelector = "#checkboxContainerHutang";
+        }
+
+        // Loop checkbox yang dicentang di dalam container aktif
+        $(containerSelector + " input[type='checkbox']:checked").each(function () {
+            // Name format: Check_A1 atau Check_H_A1
+            // Kita ambil bagian paling belakang (A1, B1, dst)
+            var fullName = $(this).attr("name");
+            var parts = fullName.split('_');
+            var code = parts[parts.length - 1]; // Selalu ambil bagian terakhir
+            
+            selectedCodes.push(code);
+        });
+
+        // Validasi minimal 1 checkbox
+        if (selectedCodes.length === 0) {
+            kendo.alert("Mohon pilih minimal satu jenis transaksi (Checkbox).");
+            return;
+        }
 
     if (!kodeCabang) {
         alert("Silakan pilih lokasi terlebih dahulu.");
@@ -21,8 +47,10 @@ function onSearchClick() {
         KodeCabang: kodeCabang,
         TglProduksiAwal: tgl1,
         TglProduksiAkhir: tgl2,
-        TglPelunasan: tglpelunasan
-        // JenisTransaksi: JenisTransaksi
+        TglPelunasan: tglpelunasan,
+        JenisLaporan: $("#JenisLaporan").val(),
+        JenisTransaksi: jenisTransaksi,
+        SelectedCodes: selectedCodes
     };
 
     console.log(formData);

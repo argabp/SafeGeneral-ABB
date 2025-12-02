@@ -619,6 +619,9 @@ function onSavePembayaranBankFinal() {
                 // reload grid dan bersihkan form
                 $("#DetailPembayaranGrid").data("kendoGrid").dataSource.read();
                 clearPaymentForm();
+                 refreshGrid("#SudahFinalGrid");
+                 refreshGrid("#BelumFinalGrid");
+                 closeProgressOnGrid('#BelumFinalGrid');
             } else {
                 showMessage("Error", response.message || "Gagal memproses data.");
             }
@@ -893,6 +896,34 @@ function clearFinalPaymentForm() {
     // 5. Pastikan field nota/akun ter-reset
     $("#akunField_Lihat").hide();
     $("#notaField_Lihat").hide();
+}
+
+// Fungsi untuk menghapus data
+function btnProsesPembayaranBank_OnClick(e) {
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+    // Tampilkan dialog konfirmasi
+    showConfirmation('Konfirmasi Proses', `Apakah Anda yakin ingin Mengulang Proses Pembayaran dengan No. Voucher ${dataItem.NoVoucher}?`,
+        function () {
+            showProgressOnGrid('#SudahFinalGrid');
+
+            // Kirim request hapus ke Controller
+            ajaxGet(`/EntriPembayaranBank/ProsesUlang?id=${dataItem.NoVoucher.trim()}`,
+                function (response) {
+                    if (response.success) {
+                        showMessage('Success', 'Data berhasil Di Proses Ulang.');
+                    } else {
+                        showMessage('Error', 'Gagal Memproses data.');
+                    }
+                    
+                    refreshGrid("#SudahFinalGrid");
+                    refreshGrid("#BelumFinalGrid");
+                    closeProgressOnGrid('#SudahFinalGrid');
+                }
+            );
+        }
+    );
 }
 
     

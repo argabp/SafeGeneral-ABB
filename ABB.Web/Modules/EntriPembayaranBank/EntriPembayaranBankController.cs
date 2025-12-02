@@ -370,5 +370,13 @@ namespace ABB.Web.Modules.EntriPembayaranBank
             return PartialView(viewModel);
         }
 
+          // Action untuk menghapus data
+        [HttpGet]
+        public async Task<IActionResult> ProsesUlang(string id)
+        {
+            await Mediator.Send(new ProsesUlangPembayaranBankCommand { NoVoucher = id });
+            return Json(new { success = true });
+        }
+
     }
 }
