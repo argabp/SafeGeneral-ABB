@@ -459,6 +459,13 @@ namespace ABB.Web.Modules.EntriPenyelesaianPiutang
           
             return Json(new { success = true });
         }
+          // Action untuk menghapus data
+        [HttpGet]
+        public async Task<IActionResult> ProsesUlang(string id)
+        {
+            await Mediator.Send(new ProsesUlangPembayaranPiutangCommand { NoBukti = id });
+            return Json(new { success = true });
+        }
 
 
 

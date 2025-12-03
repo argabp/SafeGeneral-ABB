@@ -38,7 +38,7 @@ namespace ABB.Web.Modules.LaporanOutstanding
 
             if (string.IsNullOrEmpty(databaseName) || string.IsNullOrEmpty(kodeCabangCookie))
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("Logout", "Account");
             }
 
             ViewBag.Module = Request.Cookies["Module"];

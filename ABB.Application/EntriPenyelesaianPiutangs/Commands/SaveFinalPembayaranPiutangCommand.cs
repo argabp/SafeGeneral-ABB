@@ -63,7 +63,7 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
                 _context.EntriPenyelesaianPiutang.Add(final);
             }
 
-            _context.EntriPenyelesaianPiutangTemp.RemoveRange(tempList);
+            // _context.EntriPenyelesaianPiutangTemp.RemoveRange(tempList);
 
             // var affectedRows = await _context.SaveChangesAsync(cancellationToken);
 

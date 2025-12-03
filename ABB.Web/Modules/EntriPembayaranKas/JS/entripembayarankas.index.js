@@ -808,3 +808,29 @@ function clearFinalPaymentForm() {
     $("#akunField_Lihat").hide();
     $("#notaField_Lihat").hide();
 }
+function btnProsesPembayaranKas_OnClick(e) {
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+    // Tampilkan dialog konfirmasi
+    showConfirmation('Konfirmasi Proses', `Apakah Anda yakin ingin Mengulang Proses Pembayaran dengan No. Voucher ${dataItem.NoVoucher}?`,
+        function () {
+            showProgressOnGrid('#SudahFinalGrid');
+
+            // Kirim request hapus ke Controller
+            ajaxGet(`/EntriPembayaranKas/ProsesUlang?id=${dataItem.NoVoucher.trim()}`,
+                function (response) {
+                    if (response.success) {
+                        showMessage('Success', 'Data berhasil Di Proses Ulang.');
+                        setTimeout(function () {
+                            location.reload(true); // reload dari server
+                        }, 500);
+                    } else {
+                        showMessage('Error', 'Gagal Memproses data.');
+                    }
+                    
+                }
+            );
+        }
+    );
+}

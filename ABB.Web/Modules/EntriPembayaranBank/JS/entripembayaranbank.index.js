@@ -614,23 +614,33 @@ function onSavePembayaranBankFinal() {
         data: JSON.stringify(data),
         success: function (response) {
             if (response.success) {
-                showMessage("Success", "Data berhasil difinalkan.");
 
-                // reload grid dan bersihkan form
-                $("#DetailPembayaranGrid").data("kendoGrid").dataSource.read();
-                clearPaymentForm();
-                 refreshGrid("#SudahFinalGrid");
-                 refreshGrid("#BelumFinalGrid");
-                 closeProgressOnGrid('#BelumFinalGrid');
+                // Pesan sukses
+                showMessage("Success", "Pembayaran berhasil difinalkan.");
+
+                // Tutup modal utama
+                $("#EntriPembayaranBankWindow")
+                    .data("kendoWindow")
+                    .close();
+
+                // Refresh grid "Dalam Proses"
+                var grid = $("#BelumFinalGrid").data("kendoGrid");
+                if (grid) grid.dataSource.read();
+
+                // Refresh grid "Sudah Final"
+                var grid2 = $("#SudahFinalGrid").data("kendoGrid");
+                if (grid2) grid2.dataSource.read();
+
             } else {
                 showMessage("Error", response.message || "Gagal memproses data.");
             }
         },
         error: function () {
             showMessage("Error", "Terjadi kesalahan saat menyimpan data.");
-        },
+        }
     });
 }
+
 
 function btnLihatPembayaranBank_OnClick(e) {
     e.preventDefault();
@@ -913,13 +923,13 @@ function btnProsesPembayaranBank_OnClick(e) {
                 function (response) {
                     if (response.success) {
                         showMessage('Success', 'Data berhasil Di Proses Ulang.');
+                        setTimeout(function () {
+                            location.reload(true); // reload dari server
+                        }, 500);
                     } else {
                         showMessage('Error', 'Gagal Memproses data.');
                     }
                     
-                    refreshGrid("#SudahFinalGrid");
-                    refreshGrid("#BelumFinalGrid");
-                    closeProgressOnGrid('#SudahFinalGrid');
                 }
             );
         }

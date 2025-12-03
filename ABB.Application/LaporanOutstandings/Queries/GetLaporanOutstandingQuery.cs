@@ -35,6 +35,12 @@ namespace ABB.Application.LaporanOutstandings.Queries
         public List<string> SelectedCodes { get; set; }
     }
 
+     public class BayarDto {
+        public string NoNota { get; set; }
+        public decimal Total { get; set; }
+    }
+
+
     public class GetLaporanOutstandingQueryHandler : IRequestHandler<GetLaporanOutstandingQuery, string>
     {
         private readonly IDbContextPstNota _context;
@@ -48,9 +54,9 @@ namespace ABB.Application.LaporanOutstandings.Queries
             _environment = environment;
         }
 
-        public async Task<string> Handle(GetLaporanOutstandingQuery request, CancellationToken cancellationToken)
+      public async Task<string> Handle(GetLaporanOutstandingQuery request, CancellationToken cancellationToken)
         {
-            // --- 1. Filter Data Produksi (Master) ---
+            // --- 1. QUERY MASTER PRODUKSI ---
             DateTime tglProdAwal = DateTime.Parse(request.TglProduksiAwal);
             DateTime tglProdAkhir = DateTime.Parse(request.TglProduksiAkhir);
             DateTime tglPelunasan = DateTime.Parse(request.TglPelunasan);
@@ -64,15 +70,12 @@ namespace ABB.Application.LaporanOutstandings.Queries
                 db = db.Where(x => !string.IsNullOrEmpty(x.lok) && x.lok.Trim() == cabang2Digit);
             }
 
-            // Filter Tanggal Produksi
+            // Filter Tanggal
             db = db.Where(x => x.date.HasValue && x.date.Value.Date >= tglProdAwal && x.date.Value.Date <= tglProdAkhir);
-            
-            // Filter Tanggal Pelunasan (Hanya ambil yang tanggal bayarnya <= tglPelunasan)
-            // Catatan: Ini filter awal di tabel produksi, nanti validasi real di tabel pembayaran
-            db = db.Where(x => x.tgl_byr.HasValue && x.tgl_byr.Value.Date <= tglPelunasan);
-            
-            // Filter Checkbox (Jenis Transaksi & Kode Ass)
-             if (request.SelectedCodes != null && request.SelectedCodes.Any())
+            db = db.Where(x => x.tgl_byr == null || x.tgl_byr.Value.Date <= tglPelunasan);
+
+            // Filter Checkbox (Piutang/Hutang)
+            if (request.SelectedCodes != null && request.SelectedCodes.Any())
             {
                 var codesForTypeP = new List<string>();
                 var codesForTypeK = new List<string>();
@@ -105,56 +108,66 @@ namespace ABB.Application.LaporanOutstandings.Queries
             var cabangEntity = await _context.Set<Cabang>().FirstOrDefaultAsync(c => c.kd_cb == request.KodeCabang, cancellationToken);
             if (cabangEntity != null) namaCabang = cabangEntity.nm_cb;
 
-            // Execute Query Master Produksi
+            // Execute Query ke Memory
             var dataLaporan = await db
                 .ProjectTo<InquiryNotaProduksiDto>(_mapper.ConfigurationProvider)
-                .OrderBy(x => x.jn_ass) 
+                .OrderBy(x => x.jn_ass)
                 .ThenBy(x => x.date)
                 .ToListAsync(cancellationToken);
 
             if (!dataLaporan.Any()) throw new Exception("Data tidak ditemukan.");
 
+
             // =========================================================================================
-            // --- 2. HITUNG NILAI BAYAR (EntriPembayaranBank, Kas, Piutang) ---
+            // --- 2. HITUNG NILAI BAYAR (FIXED WITH TRIM) ---
             // =========================================================================================
             
-            // A. Ambil Daftar No Nota Unik dari data yang sudah ditarik
-            var listNoNota = dataLaporan.Select(x => x.no_nd).Distinct().ToList();
+            // 1. Ambil List No Nota dari Produksi & TRIM spasi
+            var listNoNota = dataLaporan
+                .Where(x => !string.IsNullOrEmpty(x.no_nd))
+                .Select(x => x.no_nd.Trim()) 
+                .Distinct()
+                .ToList();
 
-            // B. Query Agregat Pembayaran Bank
-            // Asumsi: Nama kolom adalah 'no_nd' dan 'jumlah', sesuaikan jika beda
+            // 2. Query BANK (Pakai NoNota4 sesuai DTO kamu)
+            // SQL Server biasanya case-insensitive & ignore trailing space di WHERE clause, jadi Contains aman.
             var bayarBank = await _context.Set<EntriPembayaranBank>()
-                .Where(x => listNoNota.Contains(x.NoNota4))
+                .Where(x => listNoNota.Contains(x.NoNota4)) 
                 .GroupBy(x => x.NoNota4)
-                .Select(g => new { NoNota = g.Key, Total = g.Sum(x => x.TotalDlmRupiah ?? 0) })
+                .Select(g => new BayarDto { NoNota = g.Key, Total = g.Sum(x => x.TotalDlmRupiah ?? 0) })
                 .ToListAsync(cancellationToken);
 
-            // C. Query Agregat Pembayaran Kas
+            // 3. Query KAS (Pakai NoNota4 sesuai DTO kamu)
             var bayarKas = await _context.Set<EntriPembayaranKas>()
                 .Where(x => listNoNota.Contains(x.NoNota4))
                 .GroupBy(x => x.NoNota4)
-                .Select(g => new { NoNota = g.Key, Total = g.Sum(x => x.TotalDlmRupiah ?? 0) })
+                .Select(g => new BayarDto { NoNota = g.Key, Total = g.Sum(x => x.TotalDlmRupiah ?? 0) })
                 .ToListAsync(cancellationToken);
 
-            // D. Query Agregat Pembayaran Piutang (Jurnal/Offset)
+            // 4. Query PIUTANG (Pakai NoNota - Asumsi EntriPenyelesaianPiutang kolomnya NoNota)
             var bayarPiutang = await _context.Set<EntriPenyelesaianPiutang>()
-                .Where(x => listNoNota.Contains(x.NoNota))
+                .Where(x => listNoNota.Contains(x.NoNota)) 
                 .GroupBy(x => x.NoNota)
-                .Select(g => new { NoNota = g.Key, Total = g.Sum(x => x.TotalBayarRp ?? 0) })
+                .Select(g => new BayarDto { NoNota = g.Key, Total = g.Sum(x => x.TotalBayarRp ?? 0) })
                 .ToListAsync(cancellationToken);
 
-            // E. Gabungkan semua pembayaran ke Dictionary Memory
-            var totalPembayaranPerNota = new Dictionary<string, decimal>();
+            // 5. Gabungkan ke Dictionary dengan TRIM KEY
+            var totalPembayaranPerNota = new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase);
 
-            // Helper lokal untuk merge
-            void MergeToDict(IEnumerable<dynamic> sumberData)
+            void MergeToDict(List<BayarDto> sumberData)
             {
                 foreach (var item in sumberData)
                 {
-                    if (totalPembayaranPerNota.ContainsKey(item.NoNota))
-                        totalPembayaranPerNota[item.NoNota] += item.Total;
+                    if (string.IsNullOrWhiteSpace(item.NoNota)) continue;
+                    
+                    // === INI KUNCINYA: TRIM SPASI DARI DATA PEMBAYARAN ===
+                    // Data DB: "N001   " -> Trim -> "N001"
+                    var key = item.NoNota.Trim(); 
+                    
+                    if (totalPembayaranPerNota.ContainsKey(key))
+                        totalPembayaranPerNota[key] += item.Total;
                     else
-                        totalPembayaranPerNota[item.NoNota] = item.Total;
+                        totalPembayaranPerNota[key] = item.Total;
                 }
             }
 
@@ -162,28 +175,43 @@ namespace ABB.Application.LaporanOutstandings.Queries
             MergeToDict(bayarKas);
             MergeToDict(bayarPiutang);
 
-            // F. Update Nilai Bayar di Data Laporan Utama
+            // 6. UPDATE DATA LAPORAN (Overwrite item.jumlah)
             foreach (var item in dataLaporan)
             {
-                // Jika ada pembayaran di dictionary, pakai itu. Jika tidak, 0.
-                if (totalPembayaranPerNota.ContainsKey(item.no_nd))
+                if (string.IsNullOrWhiteSpace(item.no_nd)) {
+                    item.jumlah = 0; continue;
+                }
+
+                // Data Produksi juga di-Trim saat mau dicocokkan
+                var key = item.no_nd.Trim();
+
+                if (totalPembayaranPerNota.ContainsKey(key))
                 {
-                    item.jumlah = totalPembayaranPerNota[item.no_nd];
+                    // Masukkan nilai hitungan (Bank + Kas + Piutang)
+                    item.jumlah = totalPembayaranPerNota[key];
                 }
                 else
                 {
                     item.jumlah = 0;
                 }
                 
-                // Pastikan Saldo (Nilai Nota) tidak null
                 if (item.saldo == null) item.saldo = 0;
             }
 
             // =========================================================================================
-            // --- END HITUNG NILAI BAYAR ---
-            // =========================================================================================
 
-            // --- 3. Generate Rows HTML ---
+            // --- 3. Labeling Logic ---
+            string displayLabel = "DETAIL (KESELURUHAN)"; 
+            switch (request.JenisLaporan)
+            {
+                case "Pos": displayLabel = "PEMBAWA POS"; break;
+                case "Broker": displayLabel = "AGEN/BROKER"; break;
+                case "COB": displayLabel = "COB"; break;
+                case "Tertanggung": displayLabel = "TERTANGGUNG"; break;
+                case "Detail": default: displayLabel = "DETAIL (KESELURUHAN)"; break;
+            }
+
+            // --- 4. Generate HTML ---
             Func<DateTime?, string> fmtDate = d => d.HasValue ? d.Value.ToString("dd-MM-yyyy") : "-";
             Func<decimal?, string> fmtNum = n => n.HasValue ? $"{n.Value:N2}" : "0.00";
 
@@ -197,7 +225,7 @@ namespace ABB.Application.LaporanOutstandings.Queries
                 }
                 
                 decimal nNota = item.saldo ?? 0;
-                decimal nBayar = item.jumlah ?? 0; // Ini sekarang sudah nilai gabungan dari 3 tabel
+                decimal nBayar = item.jumlah ?? 0; // Nilai ini sudah hasil gabungan & trim
                 decimal nOs = nNota - nBayar;
 
                 return $@"
@@ -221,7 +249,7 @@ namespace ABB.Application.LaporanOutstandings.Queries
             {
                 return $@"
                     <tr style='font-weight:bold; background-color:#f0f0f0;'>
-                        <td colspan='9' style='text-align:right; padding-right:10px;'>TOTAL {label.ToUpper()} :</td>
+                        <td colspan='9' style='text-align:right; padding-right:10px;'>TOTAL :</td>
                         <td style='text-align:right'>{fmtNum(totNota)}</td>
                         <td style='text-align:right'>{fmtNum(totBayar)}</td>
                         <td style='text-align:right'>{fmtNum(totOs)}</td>
@@ -235,7 +263,6 @@ namespace ABB.Application.LaporanOutstandings.Queries
             {
                 foreach (var item in dataLaporan) detailsBuilder.Append(BuildRowHtml(idx++, item));
                 
-                // Hitung Grand Total dari data yang sudah diupdate nilai bayarnya
                 decimal gNota = dataLaporan.Sum(x => x.saldo ?? 0);
                 decimal gBayar = dataLaporan.Sum(x => x.jumlah ?? 0);
                 decimal gOs = gNota - gBayar;
@@ -255,20 +282,19 @@ namespace ABB.Application.LaporanOutstandings.Queries
 
                 foreach (var group in groupedData)
                 {
-                    detailsBuilder.Append($@"<tr><td colspan='12' style='background-color:#e6f7ff; font-weight:bold; padding-left:10px;'>{request.JenisLaporan}: {group.Key}</td></tr>");
+                    detailsBuilder.Append($@"<tr><td colspan='12' style='background-color:#e6f7ff; font-weight:bold; padding-left:10px;'>{displayLabel}: {group.Key}</td></tr>");
                     
                     decimal subNota = 0, subBayar = 0;
                     foreach (var item in group)
                     {
                         detailsBuilder.Append(BuildRowHtml(idx++, item));
                         subNota += (item.saldo ?? 0);
-                        subBayar += (item.jumlah ?? 0); // Akumulasi nilai bayar yang baru
+                        subBayar += (item.jumlah ?? 0);
                     }
                     detailsBuilder.Append(BuildSubtotalHtml(group.Key, subNota, subBayar, subNota - subBayar));
                 }
             }
 
-            // --- 4. Render Template ---
             string reportPath = Path.Combine(_environment.ContentRootPath, "Modules", "Reports", "Templates", "LaporanOutstanding.html");
             string templateHtml = await File.ReadAllTextAsync(reportPath);
             var template = Scriban.Template.Parse(templateHtml);
@@ -281,7 +307,7 @@ namespace ABB.Application.LaporanOutstandings.Queries
                 TglProduksiAwal = request.TglProduksiAwal,
                 TglProduksiAkhir = request.TglProduksiAkhir,
                 TanggalPosisi = DateTime.Now.ToString("dd-MM-yyyy"),
-                JudulLaporan = $"Laporan Outstanding - {request.JenisTransaksi} ({request.JenisLaporan})",
+                JudulLaporan = $"Laporan Outstanding - {request.JenisTransaksi} ({displayLabel})",
                 TglPelunasan = request.TglPelunasan
             };
 

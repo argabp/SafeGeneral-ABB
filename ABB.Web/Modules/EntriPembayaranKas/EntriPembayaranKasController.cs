@@ -410,6 +410,13 @@ namespace ABB.Web.Modules.EntriPembayaranKas
           
             return Json(new { success = true });
         }
+            // Action untuk menghapus data
+        [HttpGet]
+        public async Task<IActionResult> ProsesUlang(string id)
+        {
+            await Mediator.Send(new ProsesUlangPembayaranKasCommand { NoVoucher = id });
+            return Json(new { success = true });
+        }
      
     }
 

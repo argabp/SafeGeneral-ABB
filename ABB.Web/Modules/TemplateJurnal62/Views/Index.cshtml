@@ -1,0 +1,118 @@
+@using Kendo.Mvc.UI
+@using ABB.Application.TemplateJurnals62.Queries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Otomatisasi Jurnal ";
+}
+<script src="~/Modules/TemplateJurnal62/JS/TemplateJurnal62.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+    #kd_mtu, #tgl_mul, #tgl_akh{
+        background-color: #00FFFF;
+    }
+    #symbol, #nilai_kurs, .k-input{
+        background-color: #FFFFE1;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Otomatisasi Jurnal
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<TemplateJurnal62Dto>()
+                .Name("TemplateJurnal62Grid")
+                .ToolBar(toolbar => toolbar.Create())
+                .Editable(editable => editable.Mode(GridEditMode.InLine))
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetTemplateJurnal62", "TemplateJurnal62").Data("searchFilter"))
+                    .Model(model => model.Id(p => p.Type))
+                )
+                .Columns(columns =>
+                {
+                    columns.Command(command =>
+                    {
+                       // command.Edit();
+                       // command.Custom("DeleteMataUang")
+                           // .Text("Delete")
+                          //  .IconClass("k-icon k-i-delete")
+                          //  .HtmlAttributes(new { title = "Delete" })
+                          //  .Click("onDeleteMataUang");
+                    }).Width(200).Title("Action");
+                    columns.Bound(col => col.Type).Width(150).Title("Type").Editable("disableGridTextboxWhenEdit");
+                    columns.Bound(col => col.JenisAss).Width(150).Title("Jenis Ass");
+                    columns.Bound(col => col.NamaJurnal).Width(150).Title("Nama Jurnal");
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .ClientDetailTemplateId("template")
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+               // .Events(ev => ev.DataBound("gridAutoFit").Save("onSaveMataUang"))
+        
+                )    
+        </div>
+        
+        <script id="template" type="text/kendo-tmpl">
+    @(Html.Kendo().TabStrip()
+        .Name("tabStrip_#=Type#_#=JenisAss#")
+        .SelectedIndex(0)
+        .Items(items =>
+        {
+            items.Add().Text("Detail").Content(@<text>
+                @(Html.Kendo().Grid<TemplateJurnalDetail62Dto>()
+                    .Name("grid_detail_#=Type#_#=JenisAss#")
+                    .ToolBar(t => t.Create())
+                    .Editable(e => e.Mode(GridEditMode.InLine))
+                    .DataSource(ds => ds.Ajax()
+                        .Read(read => read.Action("GetDetailTemplateJurnal62", "TemplateJurnal62")
+                            .Data("function() { return { Type: '#=Type#', JenisAss: '#=JenisAss#' }; }")
+                        )
+                    )
+                    .Columns(columns =>
+                    {
+                        columns.Bound(m => m.GlAkun).Title("GL Akun").Width(150);
+                        columns.Bound(m => m.GlRumus).Title("Rumus").Width(150);
+                        columns.Bound(m => m.GlDk).Title("D/K").Width(80);
+                        columns.Bound(m => m.GlUrut).Title("Urut").Width(80);
+                        columns.Bound(m => m.FlagDetail).Title("Flag Detail").Width(120);
+                        columns.Bound(m => m.FlagNt).Title("Flag NT").Width(100);
+
+                        columns.Command(command =>
+                        {
+                        }).Width(200).Title("Action");
+                    })
+                    .Pageable()
+                    .Sortable()
+                    .Scrollable()
+                    .Filterable()
+                    .Height(380)
+                    .ToClientTemplate()
+                )
+            </text>);
+        })
+        .ToClientTemplate())
+</script>
+
+    </div>
+</div>
+
