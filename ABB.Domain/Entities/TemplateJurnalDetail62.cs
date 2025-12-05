@@ -7,8 +7,8 @@ namespace ABB.Domain.Entities
         public string GlAkun { get; set; }
         public string GlRumus { get; set; }
         public string GlDk { get; set; }
-        public string GlUrut { get; set; }
+        public short GlUrut { get; set; }
         public string FlagDetail { get; set; }
-        public string FlagNt { get; set; }
+        public bool? FlagNt { get; set; }
     }
 }

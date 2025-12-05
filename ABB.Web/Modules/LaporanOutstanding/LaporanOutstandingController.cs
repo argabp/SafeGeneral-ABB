@@ -11,7 +11,8 @@ using ABB.Application.LaporanOutstandings.Queries;
 using System.Linq;
 using DinkToPdf;
 using Microsoft.AspNetCore.Http;
-
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 
 namespace ABB.Web.Modules.LaporanOutstanding
@@ -36,9 +37,11 @@ namespace ABB.Web.Modules.LaporanOutstanding
             var databaseName = Request.Cookies["DatabaseValue"]; 
             var kodeCabangCookie = Request.Cookies["UserCabang"];
 
-            if (string.IsNullOrEmpty(databaseName) || string.IsNullOrEmpty(kodeCabangCookie))
+           if (string.IsNullOrEmpty(databaseName) || string.IsNullOrEmpty(kodeCabangCookie))
             {
-                return RedirectToAction("Logout", "Account");
+                await HttpContext.SignOutAsync("Identity.Application");
+
+                return RedirectToAction("Login", "Account");
             }
 
             ViewBag.Module = Request.Cookies["Module"];

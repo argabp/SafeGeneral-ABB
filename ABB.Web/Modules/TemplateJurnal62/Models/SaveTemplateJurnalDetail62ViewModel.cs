@@ -1,25 +1,25 @@
 using System;
 using ABB.Application.Common.Interfaces;
-using ABB.Domain.Entities;
+using ABB.Application.TemplateJurnals62.Commands;
 using AutoMapper;
 
-namespace ABB.Application.TemplateJurnals62.Queries
+namespace ABB.Web.Modules.TemplateJurnal62.Models
 {
-    public class TemplateJurnalDetail62Dto : IMapFrom<TemplateJurnalDetail62>
+    public class SaveTemplateJurnalDetail62ViewModel : IMapFrom<AddTemplateJurnalDetail62Command>
     {
         public string Type { get; set; }
         public string JenisAss { get; set; }
         public string GlAkun { get; set; }
         public string GlRumus { get; set; }
         public string GlDk { get; set; }
-        public int GlUrut { get; set; }
+        public short GlUrut { get; set; }
         public string FlagDetail { get; set; }
         public bool? FlagNt { get; set; }
 
-
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<TemplateJurnalDetail62, TemplateJurnalDetail62Dto>();
+            profile.CreateMap<SaveTemplateJurnalDetail62ViewModel, AddTemplateJurnalDetail62Command>();
+            profile.CreateMap<SaveTemplateJurnalDetail62ViewModel, EditTemplateJurnalDetail62Command>();
         }
     }
 }

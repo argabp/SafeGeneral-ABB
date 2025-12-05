@@ -10,6 +10,7 @@ namespace ABB.Application.TemplateJurnals62.Queries
         public string Type { get; set; }
         public string JenisAss { get; set; }
         public string NamaJurnal { get; set; }
+        public string GridId => $"{Type.Trim()}_{JenisAss.Trim()}";
 
 
         public void Mapping(Profile profile)

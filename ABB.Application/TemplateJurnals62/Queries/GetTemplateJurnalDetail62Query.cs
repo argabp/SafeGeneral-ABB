@@ -14,6 +14,7 @@ namespace ABB.Application.TemplateJurnals62.Queries
     {
         public string Type { get; set; }
         public string JenisAss { get; set; }
+        public string DatabaseName { get; set; }
     }
 
     public class GetTemplateJurnalDetail62QueryHandler : IRequestHandler<GetTemplateJurnalDetail62Query, List<TemplateJurnalDetail62Dto>>
@@ -34,10 +35,14 @@ namespace ABB.Application.TemplateJurnals62.Queries
         {
             try
             {
+                var reqType = request.Type?.Trim() ?? "";
+                var reqJenis = request.JenisAss?.Trim() ?? "";
+
+                
                 var data =
                     await _context.TemplateJurnalDetail62
-                        .Where(x => x.Type == request.Type &&
-                                    x.JenisAss == request.JenisAss)
+                        .Where(x => x.Type.Trim() == reqType && 
+                            x.JenisAss.Trim() == reqJenis)
                         .Select(x => new TemplateJurnalDetail62Dto
                         {
                             Type = x.Type,
@@ -45,7 +50,7 @@ namespace ABB.Application.TemplateJurnals62.Queries
                             GlAkun = x.GlAkun,
                             GlRumus = x.GlRumus,
                             GlDk = x.GlDk,
-                            GlUrut = x.GlUrut,
+                            GlUrut = (int)x.GlUrut,
                             FlagDetail = x.FlagDetail,
                             FlagNt = x.FlagNt
                         })

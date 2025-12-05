@@ -8,14 +8,21 @@ namespace ABB.Infrastructure.Data.Mapping
     {
         public void Configure(EntityTypeBuilder<TemplateJurnal62> builder)
         {
-            
             builder.ToTable("abb_templatejurnal62");
-            
-            // ditambahin untuk pk
+
             builder.HasKey(t => t.Type);
-            builder.Property(t => t.Type).HasColumnName("type");
-            builder.Property(t => t.JenisAss).HasColumnName("jn_ass");
-            builder.Property(t => t.NamaJurnal).HasColumnName("nm_jurnal");
+
+            builder.Property(t => t.Type)
+                .HasColumnName("type")
+                .HasMaxLength(2);   // sesuaikan dengan DB, jika 1 → ganti 1
+
+            builder.Property(t => t.JenisAss)
+                .HasColumnName("jn_ass")
+                .HasMaxLength(2);    // WAJIB, karena DB hanya 2 karakter
+
+            builder.Property(t => t.NamaJurnal)
+                .HasColumnName("nm_jurnal")
+                .HasMaxLength(50);   // sesuaikan ukuran DB
         }
     }
 }

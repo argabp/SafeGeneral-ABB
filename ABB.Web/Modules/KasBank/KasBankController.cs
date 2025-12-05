@@ -21,7 +21,7 @@ namespace ABB.Web.Modules.KasBank
     // [Route("KasBank")]
     public class KasBankController : AuthorizedBaseController
     {
-        public ActionResult Index()
+        public async Task<IActionResult> Index()
         {
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
