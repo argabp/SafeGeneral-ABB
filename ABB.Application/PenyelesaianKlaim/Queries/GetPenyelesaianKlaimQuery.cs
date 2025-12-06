@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
+using ABB.Domain.Models;
 using MediatR;
 using Microsoft.Extensions.Hosting;
 using Scriban;
@@ -28,11 +29,14 @@ namespace ABB.Application.PenyelesaianKlaim.Queries
     {
         private readonly IDbConnectionFactory _connectionFactory;
         private readonly IHostEnvironment _environment;
+        private readonly ReportConfig _reportConfig;
 
-        public GetPenyelesaianKlaimQueryHandler(IDbConnectionFactory connectionFactory, IHostEnvironment environment)
+        public GetPenyelesaianKlaimQueryHandler(IDbConnectionFactory connectionFactory, IHostEnvironment environment,
+            ReportConfig reportConfig)
         {
             _connectionFactory = connectionFactory;
             _environment = environment;
+            _reportConfig = reportConfig;
         }
 
         public async Task<string> Handle(GetPenyelesaianKlaimQuery request, CancellationToken cancellationToken)
@@ -62,25 +66,32 @@ namespace ABB.Application.PenyelesaianKlaim.Queries
             var penyelesaianKlaimData = penyelesaianKlaimDatas.FirstOrDefault();
 
             StringBuilder stringBuilder = new StringBuilder();
-            var groups = penyelesaianKlaimDatas
-                            .Select(s => s.kd_cb + s.kd_cob + s.kd_scob).Distinct().ToList();
-
-            var firstData = true;
             
-            foreach (var group in groups)
-            {
-                var sequence = 0;
-                
-                var groupDetail = penyelesaianKlaimDatas.FirstOrDefault(w =>
-                    w.kd_cb + w.kd_cob + w.kd_scob == group);
+            var groupedData = penyelesaianKlaimDatas
+                .GroupBy(x => new { x.kd_cb, x.kd_cob, x.kd_scob }) // Outer group
+                .ToList();
+            
+            var lastOuterKey = groupedData.Last().Key;
+            
+            var reportConfig = _reportConfig.Configurations.First(w => w.Database == request.DatabaseName);
 
-                var style = firstData ? "" : "style='page-break-before: always;'";
-                firstData = false;
+            foreach (var outerGroup in groupedData)
+            {
+                // 💡 Now group by kd_mkt INSIDE the outer group
+                var innerGroups = outerGroup.GroupBy(x => new { x.kd_mtu_symbol, x.kd_mtu_symbol_tsi }).ToList();
                 
-                stringBuilder.Append($@"<div {style}>
+                var lastInnerKey = innerGroups.Last().Key;
+                
+                foreach (var innerGroup in innerGroups)
+                {
+                    var sequence = 0;
+                    var innerFirst = innerGroup.FirstOrDefault();
+
+                    stringBuilder.Append($@"<div style='page-break-before: always;'>
+                        
                     <table class='table'>
                         <tr>
-                            <td style='text-transform: uppercase;'>{groupDetail.nm_cb}</td>
+                            <td style='text-transform: uppercase;'>{reportConfig.Title.Title1}</td>
                         </tr>
                     </table>
                     <div class='h1'>LAPORAN PENYELESAIAN KLAIM </div>
@@ -90,19 +101,19 @@ namespace ABB.Application.PenyelesaianKlaim.Queries
                                 <td style='width: 40%;'></td>
                                 <td style='width: 8%; vertical-align: top; font-weight: bold'>KANTOR</td>
                                 <td style='vertical-align: top; text-align: justify; width: 1%; font-weight: bold'>:</td>
-                                <td style='vertical-align: top; text-align: justify; text-transform: uppercase; font-weight: bold' colspan='6'>{groupDetail.nm_cb}</td>
+                                <td style='vertical-align: top; text-align: justify; text-transform: uppercase; font-weight: bold' colspan='6'>{innerFirst.nm_cb}</td>
                             </tr>
                             <tr>
                                 <td style='width: 40%;'></td>
                                 <td style='width: 8%; vertical-align: top; font-weight: bold'>PERIODE</td>
                                 <td style='vertical-align: top; text-align: justify; font-weight: bold'>:</td>
-                                <td style='vertical-align: top; text-align: justify; text-transform: uppercase; font-weight: bold' colspan='6'>{ReportHelper.ConvertDateTime(groupDetail.tgl_mul,"dd MMM yyyy")} s/d {ReportHelper.ConvertDateTime(groupDetail.tgl_akh,"dd MMM yyyy")}</td>
+                                <td style='vertical-align: top; text-align: justify; text-transform: uppercase; font-weight: bold' colspan='6'>{ReportHelper.ConvertDateTime(innerFirst.tgl_mul,"dd MMM yyyy")} s/d {ReportHelper.ConvertDateTime(innerFirst.tgl_akh,"dd MMM yyyy")}</td>
                             </tr>
                             <tr>
                                 <td style='width: 40%;'></td>
                                 <td style='width: 8%; vertical-align: top; font-weight: bold'>C.O.B</td>
                                 <td style='vertical-align: top; text-align: justify; font-weight: bold'>:</td>
-                                <td style='vertical-align: top; text-align: justify; text-transform: uppercase; font-weight: bold' colspan='6'>{groupDetail.nm_cob}</td>
+                                <td style='vertical-align: top; text-align: justify; text-transform: uppercase; font-weight: bold' colspan='6'>{innerFirst.nm_cob}</td>
                             </tr>
                         </table>
                         <table class='table' border='1'>
@@ -117,33 +128,34 @@ namespace ABB.Application.PenyelesaianKlaim.Queries
                                 <td style='width: 10%; text-align: center; vertical-align: top; font-weight: bold'>PENYELESAIAN KLAIM</td>
                                 <td style='width: 20%; text-align: center; vertical-align: top; font-weight: bold'>KETERANGAN <br> <br> Bia Materai</td>
                             </tr>
-                            <p style='margin-bottom: 0px;'>Dalam: {groupDetail.nm_mtu}</p>
-                    ");
-                
-                foreach (var data in penyelesaianKlaimDatas.Where(w =>
-                             w.kd_cb + w.kd_cob+ w.kd_scob == group))
-                {
-                    sequence++;
-                    
-                    var nilai_tsi_pst = ReportHelper.ConvertToReportFormat(data.nilai_share_bgu / data.pst_share_bgu);
-                    
-                    stringBuilder.Append(@$"
-                    <tr>
-                        <td style='vertical-align: top;'>1.</td>
-                        <td style='vertical-align: top'>{data.no_berkas} <br> {data.no_nota} <br> {data.no_pol_ttg}</td>
-                        <td style='vertical-align: top;'>{data.nm_ttg}</td>
-                        <td style='vertical-align: top'>{data.nm_oby} <br> {data.sebab_kerugian} <br> {data.tempat_kej}</td>
-                        <td style='vertical-align: top'>{ReportHelper.ConvertDateTime(data.tgl_closing, "dd MMM yyyy")} <br> {ReportHelper.ConvertDateTime(data.tgl_kej, "dd MMM yyyy")} <br> {ReportHelper.ConvertDateTime(data.tgl_mul_ptg, "dd MMM yyyy")}</td>
-                        <td style='width: 1%; text-align: left; vertical-align: top'>{data.kd_mtu_symbol_tsi} {nilai_tsi_pst}</td>
-                        <td style='text-align: left; vertical-align: top'>{data.kd_mtu_symbol} {ReportHelper.ConvertToReportFormat(data.nilai_ttl_pla)}</td>
-                        <td style='text-align: left; vertical-align: top'>{data.kd_mtu_symbol} {ReportHelper.ConvertToReportFormat(data.nilai_ttl_dla)}</td>
-                        <td style='vertical-align: top;'>{data.nm_flag_settled}</td>
-                    </tr>");
-                }
+                            <p style='margin-bottom: 0px;'>Dalam: {innerFirst.nm_mtu}</p>
+                        ");
 
-                stringBuilder.Append($@"</table>
+
+                    foreach (var data in innerGroup)
+                    {
+                        sequence++;
+                    
+                        var nilai_tsi_pst = ReportHelper.ConvertToReportFormat(data.nilai_share_bgu / data.pst_share_bgu);
+                    
+                        stringBuilder.Append(@$"
+                        <tr>
+                            <td style='vertical-align: top;'>{sequence}</td>
+                            <td style='vertical-align: top'>{data.no_berkas} <br> {data.no_nota} <br> {data.no_pol_ttg}</td>
+                            <td style='vertical-align: top;'>{data.nm_ttg}</td>
+                            <td style='vertical-align: top'>{data.nm_oby} <br> {data.sebab_kerugian} <br> {data.tempat_kej}</td>
+                            <td style='vertical-align: top'>{ReportHelper.ConvertDateTime(data.tgl_closing, "dd MMM yyyy")} <br> {ReportHelper.ConvertDateTime(data.tgl_kej, "dd MMM yyyy")} <br> {ReportHelper.ConvertDateTime(data.tgl_mul_ptg, "dd MMM yyyy")}</td>
+                            <td style='width: 1%; text-align: left; vertical-align: top'>{data.kd_mtu_symbol_tsi} {nilai_tsi_pst}</td>
+                            <td style='text-align: left; vertical-align: top'>{data.kd_mtu_symbol} {ReportHelper.ConvertToReportFormat(data.nilai_ttl_pla)}</td>
+                            <td style='text-align: left; vertical-align: top'>{data.kd_mtu_symbol} {ReportHelper.ConvertToReportFormat(data.nilai_ttl_dla)}</td>
+                            <td style='vertical-align: top;'>{data.nm_flag_settled}</td>
+                        </tr>");
+                    }
+
+                    stringBuilder.Append($@"</table>
                                             </div>
                                         </div>");
+                }
             }
             
             resultTemplate = templateProfileResult.Render( new

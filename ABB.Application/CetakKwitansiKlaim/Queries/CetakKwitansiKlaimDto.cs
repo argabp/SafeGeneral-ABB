@@ -4,6 +4,8 @@ namespace ABB.Application.CetakKwitansiKlaim.Queries
     {
         public string no_sert { get; set; }
 
+        public string nm_cb { get; set; }
+
         public string jns_tr { get; set; }
 
         public string jns_nt_msk { get; set; }
@@ -37,5 +39,7 @@ namespace ABB.Application.CetakKwitansiKlaim.Queries
         public string ket_nilai_nt { get; set; }
 
         public string no_nota { get; set; }
+
+        public string flag_posting { get; set; }
     }
 }

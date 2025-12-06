@@ -38,68 +38,69 @@
         </div>
     </div>
 
-   <div class="flat-box-content">
-        <div class="div-box">
-            @(Html.Kendo().Grid<EntriPeriodeDto>()
-                .Name("PeriodeGrid") // Nama Grid tunggal
-                .DataSource(dataSource => dataSource.Ajax()
-                    // Tidak perlu kirim flagClosing lagi
-                    .Read(read => read.Action("GetPeriode", "EntriPeriode").Data("getSearchFilter")) 
-                    .Model(model => {
-                        model.Id(p => p.ThnPrd); 
-                    })
-                    .PageSize(20)
-                )
-                .Columns(columns =>
-                {
-                    columns.Bound(col => col.ThnPrd).Title("Tahun").Width(100);
-                    
-                    // UBAH 1: Bulan jadi Nama (pakai ClientTemplate JS)
-                    columns.Bound(col => col.BlnPrd).Title("Bulan").Width(150)
-                        .ClientTemplate("#= getNamaBulan(BlnPrd) #");
-
-                    // UBAH 2: Tanggal jadi format panjang (dd MMMM yyyy)
-                    // Kita pakai kendo.toString agar locale-aware atau manual formatting
-                    columns.Bound(col => col.TglMul).Title("Tgl Mulai").Width(200)
-                        .ClientTemplate("#= kendo.toString(kendo.parseDate(TglMul), 'dd MMMM yyyy') #");
-
-                    columns.Bound(col => col.TglAkh).Title("Tgl Akhir").Width(200)
-                         .ClientTemplate("#= kendo.toString(kendo.parseDate(TglAkh), 'dd MMMM yyyy') #");
-
-                    columns.Bound(col => col.FlagClosing).Title("Status").Width(100)
-                        .ClientTemplate("#= FlagClosing == 'Y' ? '<span class=\"badge badge-danger\">Closed</span>' : '<span class=\"badge badge-success\">Open</span>' #");
-                    
-                    columns.Command(command =>
-                    {
-                        command.Custom("EditPeriode")
-                            .Text(" Edit ")
-                            .IconClass("fa fa-edit")
-                            .Click("btnEditPeriode_OnClick"); 
-
-                        command.Custom("DeletePeriode")
-                            .Text(" Hapus ")
-                            .IconClass("fa fa-trash")
-                            .Click("btnDeletePeriode_OnClick");
-                    }).Width(200).Title("Action").Locked(true);
+<div class="flat-box-content">
+    <div class="div-box">
+        @(Html.Kendo().Grid<EntriPeriodeDto>()
+            .Name("PeriodeGrid") // Nama Grid tunggal
+            .DataSource(dataSource => dataSource.Ajax()
+                // Tidak perlu kirim flagClosing lagi
+                .Read(read => read.Action("GetPeriode", "EntriPeriode").Data("getSearchFilter")) 
+                .Model(model => {
+                    model.Id(p => p.ThnPrd); 
                 })
-                .Pageable(pager => pager.Refresh(true).PageSizes(true))
-                .Sortable()
-                .Filterable()
-                .Scrollable()
-                .Height(500)
-                .Resizable(a=>a.Columns(true))
+                .PageSize(20)
             )
-        </div>
+            .Columns(columns =>
+            {
+                columns.Bound(col => col.ThnPrd).Title("Tahun").Width(100);
+                    
+                // UBAH 1: Bulan jadi Nama (pakai ClientTemplate JS)
+                columns.Bound(col => col.BlnPrd).Title("Bulan").Width(150)
+                    .ClientTemplate("#= getNamaBulan(BlnPrd) #");
 
-        @(Html.Kendo().Window()
-            .Name("EntriPeriodeWindow")
-            .Title("Form Entri Periode")
-            .Width(600)
-            .Modal(true)
-            .Visible(false)
-            .Draggable(true)
+                // UBAH 2: Tanggal jadi format panjang (dd MMMM yyyy)
+                // Kita pakai kendo.toString agar locale-aware atau manual formatting
+                columns.Bound(col => col.TglMul).Title("Tgl Mulai").Width(200)
+                    .ClientTemplate("#= kendo.toString(kendo.parseDate(TglMul), 'dd MMMM yyyy') #");
+
+                columns.Bound(col => col.TglAkh).Title("Tgl Akhir").Width(200)
+                    .ClientTemplate("#= kendo.toString(kendo.parseDate(TglAkh), 'dd MMMM yyyy') #");
+
+                columns.Bound(col => col.FlagClosing).Title("Status").Width(100)
+                    .ClientTemplate("#= FlagClosing == 'Y' ? '<span class=\"badge badge-danger\">Closed</span>' : '<span class=\"badge badge-success\">Open</span>' #");
+                    
+                columns.Command(command =>
+                {
+                    command.Custom("EditPeriode")
+                        .Text(" Edit ")
+                        .IconClass("fa fa-edit")
+                        .Click("btnEditPeriode_OnClick"); 
+
+                    command.Custom("DeletePeriode")
+                        .Text(" Hapus ")
+                        .IconClass("fa fa-trash")
+                        .Click("btnDeletePeriode_OnClick");
+                }).Width(200).Title("Action").Locked(true);
+            })
+            .Pageable(pager => pager.Refresh(true).PageSizes(true))
+            .Sortable()
+            .Filterable()
+            .Scrollable()
+            .Height(500)
+            .Resizable(a=>a.Columns(true))
         )
     </div>
+
+    @(Html.Kendo().Window()
+        .Name("EntriPeriodeWindow")
+        .Title("Form Entri Periode")
+        .Width(600)
+        .Modal(true)
+        .Visible(false)
+        .Draggable(true)
+    )
+</div>
+</div>
 <script>
     function getNamaBulan(bulanAngka) {
         var namaBulan = [

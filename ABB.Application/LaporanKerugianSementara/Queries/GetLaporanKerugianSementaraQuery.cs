@@ -63,6 +63,31 @@ namespace ABB.Application.LaporanKerugianSementara.Queries
             var nilai_ttl_ptg = ReportHelper.ConvertToReportFormat(data.nilai_ttl_ptg);
             var nilai_share_bgu = ReportHelper.ConvertToReportFormat(data.nilai_share_bgu);
             var nilai_ttl_kl = ReportHelper.ConvertToReportFormat(data.nilai_ttl_kl);
+            
+            var view_share = data.pst_share_bgu != 100
+                ? 
+                $@"
+                <tr>
+                    <td style='width: 1%; vertical-align: top;'></td>
+                    <td style='width: 20%;'>Share Co-as untuk kami</td>
+                    <td>:</td>
+                    <td style='vertical-align: top;'>{data.symbol_ptg}</td>
+                    <td style='vertical-align: top;'>{data.nilai_share_bgu}</td>
+                    <td></td>
+                </tr>"
+                : string.Empty;
+            
+            var view_validitas = data.kd_cob == "M"
+                ? 
+                $@"
+                <tr>
+                    <td style='width: 1%;'>12. </td>
+                    <td style='width: 20%;'>Validitas</td>
+                    <td>:</td>
+                    <td colspan='3'>{data.validitas}</td>
+                </tr>"
+                : string.Empty;
+            
             var resultTemplate = templateProfileResult.Render( new
             {
                     
@@ -74,8 +99,8 @@ namespace ABB.Application.LaporanKerugianSementara.Queries
                 data.tempat_kej, data.kond_ptg, data.ket_oby, data.symbol_kl,
                 data.sebab_kerugian, data.nm_sifat_kerugian, nilai_ttl_kl,
                 tgl_lns_prm = ReportHelper.ConvertDateTime(data.tgl_lns_prm, "dd/MM/yyyy"),
-                data.no_bukti_lns, data.validitas, data.kt_cb, data.tgl_closing_ind,
-                request.tanda_tangan, request.jabatan
+                data.no_bukti_lns, view_validitas, data.kt_cb, data.tgl_closing_ind,
+                request.tanda_tangan, request.jabatan, view_share
             } );
 
             return resultTemplate;

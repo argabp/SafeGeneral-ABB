@@ -17,5 +17,9 @@ namespace ABB.Application.PLAKoasuransi.Queries
         public Int16 no_mts { get; set; }
         public Int16 no_pla { get; set; }
         public string st_tipe_pla { get; set; }
+        public string nomor_berkas { get; set; }
+        public string no_pol_lama { get; set; }
+        public string nm_ttg { get; set; }
+        public string nm_ttj { get; set; }
     }
 }

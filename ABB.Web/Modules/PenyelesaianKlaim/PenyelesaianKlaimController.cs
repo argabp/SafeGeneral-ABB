@@ -30,7 +30,10 @@ namespace ABB.Web.Modules.PenyelesaianKlaim
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
             
-            return View(new PenyelesaianKlaimViewModel());
+            return View(new PenyelesaianKlaimViewModel()
+            {
+                kd_cb = Request.Cookies["UserCabang"]?.Trim() ?? string.Empty
+            });
         }
 
         public async Task<JsonResult> GetCabang()

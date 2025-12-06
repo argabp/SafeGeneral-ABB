@@ -46,6 +46,12 @@ namespace ABB.Web.Modules.DLAKoasuransi
                 DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
                 KodeCabang = Request.Cookies["UserCabang"] ?? string.Empty
             });
+            
+            foreach (var data in ds)
+            {
+                data.nomor_berkas = "K." + data.kd_cb.Trim() + "." +
+                                    data.kd_scob.Trim() + "." + data.kd_thn.Trim() + "." + data.no_kl.Trim();
+            }
 
             return Json(ds.AsQueryable().ToDataSourceResult(request));
         }

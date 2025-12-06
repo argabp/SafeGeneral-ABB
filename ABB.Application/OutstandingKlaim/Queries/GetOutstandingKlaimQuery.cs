@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
+using ABB.Domain.Models;
 using MediatR;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Primitives;
@@ -29,11 +30,14 @@ namespace ABB.Application.OutstandingKlaim.Queries
     {
         private readonly IDbConnectionFactory _connectionFactory;
         private readonly IHostEnvironment _environment;
+        private readonly ReportConfig _reportConfig;
 
-        public GetOutstandingKlaimQueryHandler(IDbConnectionFactory connectionFactory, IHostEnvironment environment)
+        public GetOutstandingKlaimQueryHandler(IDbConnectionFactory connectionFactory, IHostEnvironment environment,
+            ReportConfig reportConfig)
         {
             _connectionFactory = connectionFactory;
             _environment = environment;
+            _reportConfig = reportConfig;
         }
 
         public async Task<string> Handle(GetOutstandingKlaimQuery request, CancellationToken cancellationToken)
@@ -84,33 +88,34 @@ namespace ABB.Application.OutstandingKlaim.Queries
 
             string resultTemplate;
 
-            var outstandingKlaimData = outstandingKlaimDatas.FirstOrDefault();
-
             StringBuilder stringBuilder = new StringBuilder();
-            var sequence = 0;
-            
-            switch (request.jenis_laporan)
-                {
-                    case "P":
-                        var groups = outstandingKlaimDatas
-                            .Select(s => s.kd_cb + s.kd_cob + s.kd_scob).Distinct().ToList();
 
-                        var firstData = true;
+            var outstandingKlaimData = outstandingKlaimDatas.FirstOrDefault();
+            
+            var reportConfig = _reportConfig.Configurations.First(w => w.Database == request.DatabaseName);
+
+            int sequence;
+            switch (request.jenis_laporan)
+            {
+                case "P":
+                    var groupedData = outstandingKlaimDatas
+                        .GroupBy(x => new { x.kd_cb, x.kd_cob, x.kd_scob }) // Outer group
+                        .ToList();
+                    
+                    foreach (var outerGroup in groupedData)
+                    {
+                        // 💡 Now group by kd_mkt INSIDE the outer group
+                        var innerGroups = outerGroup.GroupBy(x => new { x.kd_mtu_symbol, x.kd_mtu_symbol_tsi }).ToList();
                         
-                        foreach (var group in groups)
+                        foreach (var innerGroup in innerGroups)
                         {
                             sequence = 0;
-                            
-                            var groupDetail = outstandingKlaimDatas.FirstOrDefault(w =>
-                                w.kd_cb + w.kd_cob + w.kd_scob == group);
+                            var innerFirst = innerGroup.FirstOrDefault();
 
-                            var style = firstData ? "" : "style='page-break-before: always;'";
-                            firstData = false;
-                            
-                            stringBuilder.Append($@"<div {style}>
+                            stringBuilder.Append($@"<div style='page-break-before: always;'>
                                 <table class='table'>
                                     <tr>
-                                        <td style='text-transform: uppercase;'>{groupDetail.nm_cb}</td>
+                                        <td style='text-transform: uppercase;'>{reportConfig.Title.Title1}</td>
                                     </tr>
                                 </table>
                                 <div class='h1'>LAPORAN OUTSTANDING KLAIM</div>
@@ -120,19 +125,19 @@ namespace ABB.Application.OutstandingKlaim.Queries
                                                 <td style='width: 40%;'></td>
                                                 <td style='width: 8%; vertical-align: top; font-weight: bold'>KANTOR</td>
                                                 <td style='vertical-align: top; text-align: justify; width: 1%; font-weight: bold'>:</td>
-                                                <td style='vertical-align: top; text-align: justify; text-transform: uppercase; font-weight: bold' colspan='6'>{groupDetail.nm_cb}</td>
+                                                <td style='vertical-align: top; text-align: justify; text-transform: uppercase; font-weight: bold' colspan='6'>{innerFirst.nm_cb}</td>
                                             </tr>
                                             <tr>
                                                 <td style='width: 40%;'></td>
                                                 <td style='width: 8%; vertical-align: top; font-weight: bold'>PERIODE</td>
                                                 <td style='vertical-align: top; text-align: justify; font-weight: bold'>:</td>
-                                                <td style='vertical-align: top; text-align: justify; text-transform: uppercase; font-weight: bold' colspan='6'>{ReportHelper.ConvertDateTime(groupDetail.tgl_akh, "dd MMM yyyy")}</td>
+                                                <td style='vertical-align: top; text-align: justify; text-transform: uppercase; font-weight: bold' colspan='6'>{ReportHelper.ConvertDateTime(innerFirst.tgl_akh, "dd MMM yyyy")}</td>
                                             </tr>
                                             <tr>
                                                 <td style='width: 40%;'></td>
                                                 <td style='width: 8%; vertical-align: top; font-weight: bold'>C.O.B</td>
                                                 <td style='vertical-align: top; text-align: justify; font-weight: bold'>:</td>
-                                                <td style='vertical-align: top; text-align: justify; text-transform: uppercase; font-weight: bold' colspan='6'>{groupDetail.nm_cob}</td>
+                                                <td style='vertical-align: top; text-align: justify; text-transform: uppercase; font-weight: bold' colspan='6'>{innerFirst.nm_cob}</td>
                                             </tr>
                                         </table>
                                         <table class='table' border='1'>
@@ -146,13 +151,12 @@ namespace ABB.Application.OutstandingKlaim.Queries
                                                 <td style='width: 10%; text-align: center; vertical-align: top; font-weight: bold'>NILAI O/S</td>
                                                 <td style='width: 20%; text-align: center; vertical-align: top; font-weight: bold''>KETERANGAN</td>
                                             </tr>
-                                            <p style='margin-bottom: 0px;'>Dalam : {groupDetail.nm_mtu}</p>");
-                            
-                            foreach (var data in outstandingKlaimDatas.Where(w =>
-                                         w.kd_cb + w.kd_cob+ w.kd_scob == group))
+                                            <p style='margin-bottom: 0px;'>Dalam : {innerFirst.nm_mtu}</p>");
+
+
+                            foreach (var data in innerGroup)
                             {
                                 sequence++;
-
                                 var nomor_polis =
                                     string.IsNullOrWhiteSpace(data.kd_scob) && string.IsNullOrWhiteSpace(data.no_sert)
                                         ? data.no_pol_ttg
@@ -170,29 +174,32 @@ namespace ABB.Application.OutstandingKlaim.Queries
                                     <td style='vertical-align: top;'>{data.nm_sifat_kerugian}</td>
                                 </tr>");
                             }
+                            
 
                             stringBuilder.Append($@"</table>
                                                         </div>
                                                     </div>");
                         }
-                        break;
-                    case "R":
-                        foreach (var data in outstandingKlaimDatas)
-                        {
-                            sequence++;
-                            stringBuilder.Append(@$"
+                    }
+                    break;
+                case "R":
+                    sequence = 0;
+                    foreach (var data in outstandingKlaimDatas)
+                    {
+                        sequence++;
+                        stringBuilder.Append(@$"
                             <tr>
                                 <td style='vertical-align: top;'>{sequence}</td>
                                 <td style='vertical-align: top'>{data.nm_cb}</td>
                                 <td style='vertical-align: top;'>{data.nm_cob}</td>
                                 <td style='vertical-align: top'>{data.kd_mtu_symbol_tsi}</td>
                                 <td style='vertical-align: top'>{data.kd_mtu_symbol}</td>
-                                <td style='width: 1%; text-align: left; vertical-align: top'>{ReportHelper.ConvertToReportFormat(data.nilai_share_bgu)}</td>
-                                <td style='text-align: left; vertical-align: top'>{ReportHelper.ConvertToReportFormat(data.nilai_ttl_pla)}</td>
+                                <td style='width: 1%; text-align: right; vertical-align: top'>{ReportHelper.ConvertToReportFormat(data.nilai_share_bgu)}</td>
+                                <td style='text-align: right; vertical-align: top'>{ReportHelper.ConvertToReportFormat(data.nilai_ttl_pla)}</td>
                             </tr>");
-                        }
-                        break;
-                }
+                    }
+                    break;
+            }
             
             resultTemplate = templateProfileResult.Render( new
             {

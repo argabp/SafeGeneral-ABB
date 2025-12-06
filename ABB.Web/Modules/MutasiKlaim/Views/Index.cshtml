@@ -112,9 +112,9 @@
                                         command.Custom("DeleteMutasi")
                                             .Text("Delete")
                                             .IconClass("k-icon k-i-delete")
-                                            .HtmlAttributes(new { title="Delete"})
+                                            .HtmlAttributes(new { title = "Delete" })
                                             .Click("onDeleteMutasiKlaim");
-                                    }).Width(350).Title("Action").Locked(true);
+                                    }).Width(350).Title("Action");
                                     columns.Bound(col => col.no_mts).Width(150).Title("Nomor Mutasi");
                                     columns.Bound(col => col.nm_tipe_mts).Width(150).Title("Tipe Mutasi");
                                     columns.Bound(col => col.tgl_mts).Width(150).Title("Tanggal Mutasi").Format("{0: dd-MM-yyyy}");

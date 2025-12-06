@@ -1,3 +1,5 @@
+using System;
+
 namespace ABB.Application.CetakKwitansiKlaim.Queries
 {
     public class KlaimDto
@@ -19,5 +21,21 @@ namespace ABB.Application.CetakKwitansiKlaim.Queries
         public string flag_posting { get; set; }
         public string nm_ttj { get; set; }
         public string kd_bln { get; set; }
+
+        public string? no_pol_lama { get; set; }
+
+        public decimal? nilai_nt { get; set; }
+
+        public DateTime tgl_nt { get; set; }
+
+        public Int16 no_mts { get; set; }
+
+        public string nomor_register { get; set; }
+
+        public string tipe_mts { get; set; }
+
+        public string nm_tipe_mts { get; set; }
+
+        public string no_kl { get; set; }
     }
 }

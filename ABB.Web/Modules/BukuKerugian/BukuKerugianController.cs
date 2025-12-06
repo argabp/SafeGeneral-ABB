@@ -30,7 +30,10 @@ namespace ABB.Web.Modules.BukuKerugian
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
             
-            return View(new BukuKerugianViewModel());
+            return View(new BukuKerugianViewModel()
+            {
+                kd_cb = Request.Cookies["UserCabang"]?.Trim() ?? string.Empty
+            });
         }
 
         public async Task<JsonResult> GetCabang()
@@ -85,7 +88,7 @@ namespace ABB.Web.Modules.BukuKerugian
                 
                 var reportTemplate = await Mediator.Send(command);
                 
-                _reportGeneratorService.GenerateReport("BukuKerugian.pdf", reportTemplate, sessionId, Orientation.Landscape);
+                _reportGeneratorService.GenerateReport("BukuKerugian.pdf", reportTemplate, sessionId, Orientation.Landscape, right: 10, top: 10, left: 10, bottom: 10);
 
                 return Ok(new { Status = "OK", Data = sessionId});
             }

@@ -49,5 +49,9 @@ namespace ABB.Application.LaporanKerugianSementara.Queries
         public string kt_cb { get; set; }
 
         public string tgl_closing_ind { get; set; }
+
+        public string kd_cob { get; set; }
+
+        public decimal pst_share_bgu { get; set; }
     }
 }

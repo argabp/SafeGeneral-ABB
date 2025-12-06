@@ -82,5 +82,7 @@ namespace ABB.Application.CetakNotaKlaim.Queries
         public string kd_mtu_pol_symbol { get; set; }
 
         public string st_nota { get; set; }
+
+        public string kd_thn_pol { get; set; }
     }
 }

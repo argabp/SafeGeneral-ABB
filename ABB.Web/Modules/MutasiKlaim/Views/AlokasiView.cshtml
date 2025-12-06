@@ -6,88 +6,6 @@
     var display = Model.flag_closing == "N" ? "" : "none";
 }
 
-<script>
-function OnClickAddMutasiKlaimAlokasi(kd_cb, kd_cob, kd_scob, kd_thn, no_kl, no_mts) {
-    openMutasiKlaimWindow(`/MutasiKlaim/Alokasi?kd_cb=${kd_cb}&kd_cob=${kd_cob}&kd_scob=${kd_scob}&kd_thn=${kd_thn}&no_kl=${no_kl}&no_mts=${no_mts}`, 'Add Alokasi');
-}
-
-function OnClickCopyAlokasi(kd_cb, kd_cob, kd_scob, kd_thn, no_kl, no_mts, nilai_ttl_kl) {
-    showConfirmation('Confirmation', `Are you sure you want to copy alokasi koasuransi?`,
-        function () {
-
-            var parentId =
-                kd_cb.trim() +
-                kd_cob.trim() +
-                kd_scob.trim() +
-                kd_thn.trim() +
-                no_kl.trim();
-
-            var payload = {
-                kd_cb: kd_cb,
-                kd_cob: kd_cob,
-                kd_scob: kd_scob,
-                kd_thn: kd_thn,
-                no_kl: no_kl,
-                no_mts: no_mts,
-                nilai_ttl_kl: nilai_ttl_kl
-            };
-
-            showProgressOnGrid('#grid_alokasi_' + parentId);
-
-            ajaxPost("/MutasiKlaim/CopyAlokasi", JSON.stringify(payload),
-                function (response) {
-                    if (response.Result == "OK") {
-                        showMessage('Success', "Berhasil Copy Alokasi");
-                    } else
-                        showMessage('Error', response.Message);
-
-                    refreshGrid('#grid_alokasi_' + parentId);
-                    closeProgressOnGrid('#grid_alokasi_' + parentId);
-                }
-            );
-        }
-    );
-}
-
-function OnClickCopyAlokasiUnderwriting(kd_cb, kd_cob, kd_scob, kd_thn, no_kl, no_mts) {
-    showConfirmation('Confirmation', `Are you sure you want to copy alokasi koasuransi underwriting?`,
-        function () {
-
-            var parentId =
-                kd_cb.trim() +
-                kd_cob.trim() +
-                kd_scob.trim() +
-                kd_thn.trim() +
-                no_kl.trim();
-
-            var payload = {
-                kd_cb: kd_cb,
-                kd_cob: kd_cob,
-                kd_scob: kd_scob,
-                kd_thn: kd_thn,
-                no_kl: no_kl,
-                no_mts: no_mts
-            };
-
-            showProgressOnGrid('#grid_alokasi_' + parentId);
-
-            ajaxPost("/MutasiKlaim/CopyAlokasiUnderwriting", JSON.stringify(payload),
-                function (response) {
-                    if (response.Result == "OK") {
-                        showMessage('Success', "Berhasil Copy Alokasi Underwriting");
-                    } else
-                        showMessage('Error', response.Message);
-
-                    refreshGrid('#grid_alokasi_' + parentId);
-                    closeProgressOnGrid('#grid_alokasi_' + parentId);
-                }
-            );
-        }
-    );
-}
-
-</script>
-
 <style>
     .flat-btn-primary{
         padding: 10px 0px;
@@ -104,7 +22,7 @@ function OnClickCopyAlokasiUnderwriting(kd_cb, kd_cob, kd_scob, kd_thn, no_kl, n
         <button class="flat-btn-primary" style="height: 1em" onclick="OnClickAddMutasiKlaimAlokasi('@Model.kd_cb', '@Model.kd_cob', '@Model.kd_scob', '@Model.kd_thn', '@Model.no_kl', '@Model.no_mts')">Add Alokasi</button>
     </div>
     <div class="col-md-1">
-        <button class="flat-btn-primary" style="height: 1em" onclick="OnClickCopyAlokasi('@Model.kd_cb', '@Model.kd_cob', '@Model.kd_scob', '@Model.kd_thn', '@Model.no_kl', '@Model.no_mts', @Model.nilai_ttl_kl)">CopyAlokasi</button>
+        <button class="flat-btn-primary" style="height: 1em" onclick="OnClickCopyAlokasi('@Model.kd_cb', '@Model.kd_cob', '@Model.kd_scob', '@Model.kd_thn', '@Model.no_kl', '@Model.no_mts', @Model.nilai_ttl_kl)">Copy Alokasi</button>
     </div>
     <div class="col-md-1">
         <button class="flat-btn-primary" style="height: 1em" onclick="OnClickCopyAlokasiUnderwriting('@Model.kd_cb', '@Model.kd_cob', '@Model.kd_scob', '@Model.kd_thn', '@Model.no_kl', '@Model.no_mts')">Copy Alokasi U / W</button>

@@ -6,9 +6,8 @@
     <title>Cetak Kwitansi Klaim</title>
     <style>
         .container {
-            width: 90%;
+            width: 95%;
             margin: auto;
-            padding: 25px;
         }
 
         .h1 {
@@ -27,7 +26,7 @@
         }
 
         .table td {
-            padding: 8px;
+            padding: 4px;
 			font-size: 12px;
         }
         .table-uraian {
@@ -59,10 +58,20 @@
         .text-center {
             text-align: center;
         }
+        .draft-watermark {
+             position: fixed;
+             top: 50%;
+             left: 50%;
+             font-size: 80px;
+             color: #A9A9A9;
+             opacity: 0.3;
+             z-index: -1;
+             font-weight: bold;
+         }
     </style>
 </head>
 <body>
-
+    {{draft}}
     <div class="container">
         <div class="section">
             <table class="table">
@@ -80,7 +89,7 @@
                 <tr>
                     <td style="width: 15%; vertical-align: top;">Sudah terima dari</td>
                     <td style="vertical-align: top; text-align: justify;">:</td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="3">{{nm_ttg}} <br> {{almt_kwi}} <br> {{kt_kwi}}</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="3">{{title1}} <br> {{almt_kwi}} <br> {{kt_kwi}}</td>
                     <td style="vertical-align: top; text-align: left; width: 10%;">No. L.K.P <br> No. Nota</td>
                     <td style="vertical-align: top; text-align: justify; width: 1%;">: <br> :</td>
                     <td style="vertical-align: top; text-align: justify;">{{no_berkas}} <br> {{no_nota}}</td>
@@ -117,7 +126,7 @@
                 <tr>
                     <td colspan="3">
                         <div style="display: flex; justify-content: space-between; align-items: center; padding: 5px 10px; border: 1px solid #000; font-size: 14px; width: 200px; box-sizing: border-box;">
-                            <span>{{kd_mtu_symbol}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{nilai_nt}}</span>
+                            <span>{{kd_mtu_symbol}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{nilai_nt}}</span>
                         </div>
                       </td>
                     <td style="width: 5%; padding-left: 30px;"></td>

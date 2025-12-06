@@ -380,7 +380,8 @@ namespace ABB.Web.Modules.MutasiKlaim
         [HttpGet]
         public IActionResult ObyekView(string kd_cb, string kd_cob,
             string kd_scob, string kd_thn, string no_kl, Int16 no_mts,
-            string tipe_mts, string kd_mtu, string? flag_closing)
+            string tipe_mts, string kd_mtu, string? flag_closing,
+            Int16 no_rsk)
         {
             if (tipe_mts == "B")
             {
@@ -394,7 +395,8 @@ namespace ABB.Web.Modules.MutasiKlaim
                     no_mts = no_mts,
                     tipe_mts = tipe_mts,
                     kd_mtu = kd_mtu,
-                    flag_closing = flag_closing
+                    flag_closing = flag_closing,
+                    no_rsk = no_rsk
                 });
             }
             if (tipe_mts == "R")
@@ -409,7 +411,8 @@ namespace ABB.Web.Modules.MutasiKlaim
                     no_mts = no_mts,
                     tipe_mts = tipe_mts,
                     kd_mtu = kd_mtu,
-                    flag_closing = flag_closing
+                    flag_closing = flag_closing,
+                    no_rsk = no_rsk
                 });
             }
             
@@ -421,7 +424,8 @@ namespace ABB.Web.Modules.MutasiKlaim
                 kd_thn = kd_thn,
                 no_kl = no_kl,
                 no_mts = no_mts,
-                flag_closing = flag_closing
+                flag_closing = flag_closing,
+                no_rsk = no_rsk
             });
         }
         
@@ -558,6 +562,24 @@ namespace ABB.Web.Modules.MutasiKlaim
             model.Status = _tipeMutasi.FirstOrDefault(w => w.Value == model.st_jns)?.Text;
             
             return View("ViewBeban", model);
+        }
+        
+        [HttpGet]
+        public IActionResult Recovery(string kd_cb, string kd_cob,
+            string kd_scob, string kd_thn, string no_kl, Int16 no_mts,
+            string tipe_mts, string kd_mtu)
+        {
+            return View(new MutasiKlaimBebanViewModel()
+            {
+                kd_cb = kd_cb.Trim(),
+                kd_cob = kd_cob.Trim(),
+                kd_scob = kd_scob.Trim(),
+                kd_thn = kd_thn,
+                no_kl = no_kl,
+                no_mts = no_mts,
+                kd_mtu = kd_mtu.Trim(),
+                Status = _tipeMutasi.FirstOrDefault(w => w.Value == tipe_mts)?.Text
+            });
         }
         
         [HttpGet]

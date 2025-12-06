@@ -6,9 +6,8 @@
     <title>Cetak Nota Klaim</title>
     <style>
         .container {
-            width: 90%;
+            width: 100%;
             margin: auto;
-            padding: 25px;
         }
 
         .h1 {
@@ -27,7 +26,7 @@
         }
 
         .table td {
-            padding: 8px;
+            padding: 4px;
 			font-size: 12px;
         }
         .table-uraian {
@@ -60,7 +59,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>{{header}}</td>
+                    <td style="text-align: center"><u style="font-size: 14px">{{header}}</u><br>{{no_nota}}</td>
                     <td style="width: 15%;" colspan="2">{{flag_posting}}</td>
                     <td></td>
                 </tr>
@@ -68,7 +67,7 @@
                     <td style="width: 5%;">KANTOR</td>
                     <td style="width: 1%;">:</td>
                     <td style="width: 30%;">{{nm_cb}}</td>
-                    <td style="text-align: center;"><u>{{st_nota}}</u> <br> {{no_nota}}</td>
+                    <td style="text-align: center;"></td>
                     <td style="text-align: right;">Jenis Nota</td>
                     <td style="width: 1%;">:</td>
                     <td>{{jns_tr}}.{{jns_nt_msk}}.{{jns_nt_kel}}</td>
@@ -76,9 +75,9 @@
             </table>
             <table class="table">
                 <tr>
-                    <td style="width: 15%; vertical-align: top;">TAHUN PENUTUPAN</td>
+                    <td style="width: 20%; vertical-align: top;">TAHUN PENUTUPAN</td>
                     <td style="vertical-align: top; text-align: justify;">:</td>
-                    <td style="vertical-align: top; text-align: justify;" colspan="6">{{kd_tl}}</td>
+                    <td style="vertical-align: top; text-align: justify;" colspan="6">{{kd_thn_pol}}</td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top; padding-left: 20px;">Kepada</td>
@@ -146,22 +145,18 @@
                     <td style="width: 20%; text-align: right;">{{nilai_05_1}}</td>
                     <td style="width: 20%; text-align: right;">{{nilai_05}}</td>
                 </tr>
-                <tr class="no-border">
-                    <td style="width: 20%;">JUMLAH UNTUK</td>
-                    <td style="width: 20%; text-align: right;">{{nilai_nt}}</td>
-                    <td style="width: 20%; text-align: right;">{{nilai_nt}}</td>
-                </tr>
+                {{view_jumlah_untuk}}
                 <tr class="border-botup">
                     <td style="width: 20%;">JUMLAH</td>
-                    <td style="width: 20%; text-align: right;">{{c_jumlah}}</td>
-                    <td style="width: 20%; text-align: right;">{{nilai_nt}}</td>
+                    <td style="width: 20%; text-align: right;">{{nilai_total}}</td>
+                    <td style="width: 20%; text-align: right;">{{grand_nilai_total}}</td>
                 </tr>
             </table>
             <table class="table">
                 <tr>
                     <td style="width: 5%; padding-left: 30px;">Catatan</td>
                     <td style="width: 1%;">:</td>
-                    <td style="width: 70%;">{{ket_nt_1}}</td>
+                    <td style="width: 70%;">{{ket_nt}}</td>
                     <td style="width: 60%;">{{nm_kt_cb}}, {{tgl_nt_ind}}</td>
                 </tr>
                 <tr>

@@ -8,6 +8,10 @@ namespace ABB.Application.Common.Helpers
         {
             return value == null ? "0" : percentage ? value.Value.ToString("#,##0.0000;(#,##0.0000)") : value.Value.ToString("#,##0.00;(#,##0.00)");
         }
+        public static string ConvertToReportFormat(string mataUang, decimal? value)
+        {
+            return value == null ? "0" : mataUang.ToLower().Contains("rp") ? value.Value.ToString("#,##0.00;(#,##0.00)") : value.Value.ToString("#,##0.0000;(#,##0.0000)");
+        }
         
         public static decimal ConvertToDecimalFormat(string value)
         {

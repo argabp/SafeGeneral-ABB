@@ -17,5 +17,15 @@ namespace ABB.Application.LaporanKerugianSementara.Queries
         public string no_kl { get; set; }
         public Int16 no_mts { get; set; }
         public string tipe_mts { get; set; }
+        public string nm_tipe_mts { get; set; }
+        public string ket_jns { get; set; }
+
+        public string nomor_berkas { get; set; }
+
+        public string? no_pol_lama { get; set; }
+
+        public DateTime? tgl_mts { get; set; }
+
+        public DateTime? tgl_closing { get; set; }
     }
 }

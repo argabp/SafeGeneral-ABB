@@ -73,7 +73,7 @@
             columns.Bound(col => col.nm_cb).Title("Cabang");
             columns.Bound(col => col.nm_cob).Title("COB");
             columns.Bound(col => col.nm_scob).Title("SCOB");
-            columns.Bound(col => col.no_pol_lama).Title("Nomor Polis").ClientTemplate("#= formatNoPol(no_pol_lama) #");
+            columns.Bound(col => col.no_pol_lama).Width(250).Title("Nomor Polis").ClientTemplate("#= formatNoPol(no_pol_lama) #");
             columns.Bound(col => col.register_klaim).Title("Nomor Berkas");
             columns.Bound(col => col.nm_ttg).Title("Nama Tertanggung");
             columns.Bound(col => col.sebab_kerugian).Title("Sebab Klaim");

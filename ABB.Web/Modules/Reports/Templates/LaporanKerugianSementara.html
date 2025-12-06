@@ -10,10 +10,9 @@
         }
 
         .container {
-            width: 80%;
+            width: 95%;
             margin: auto;
             /* border: 1px solid black; */
-            padding: 20px;
         }
 
         .h1 {
@@ -34,7 +33,7 @@
         }
 
         .table td {
-            padding: 8px;
+            padding: 4px;
             /* border: 1px solid black; */
 			font-size: 12px;
         }
@@ -52,7 +51,7 @@
 <body>
 
     <div class="container">
-        <div class="h1">LAPORAN KERUGIAN SEMENTARA <br> --------------------------------------------------- <br> {{no_berkas}}</div>
+        <div class="h1">LAPORAN KERUGIAN SEMENTARA <br> --------------------------------------------------- <br> <p style="text-align: center; font-weight: normal; margin:0">({{no_berkas}})</p></div>
         <p>Dengan ini kami sampaikan Laporan Klaim Sementara dengan data sebagai berikut: </p>
 
         <div class="section">
@@ -83,10 +82,19 @@
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">5. </td>
-                    <td style="width: 20%;">Obyek Pertanggungan <br> Jumlah Pertanggungan <br> Share Co-as untuk kami</td>
-                    <td>: <br> : <br> :</td>
-                    <td style="vertical-align: top;" colspan="3">{{nm_oby}} <br> {{symbol_ptg}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{nilai_ttl_ptg}} <br> {{symbol_ptg}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{nilai_share_bgu}}</td>
+                    <td style="width: 20%;">Obyek Pertanggungan</td>
+                    <td>:</td>
+                    <td style="vertical-align: top;" colspan="3">{{nm_oby}}</td>
                 </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;"></td>
+                    <td style="width: 20%;">Jumlah Pertanggungan</td>
+                    <td>:</td>
+                    <td style="vertical-align: top;">{{symbol_ptg}}</td>
+                    <td style="vertical-align: top; width: 20%">{{nilai_ttl_ptg}}</td>
+                    <td></td>
+                </tr>
+                {{view_share}}
                 <tr>
                     <td style="width: 1%;">6. </td>
                     <td style="width: 20%;">Jangka Waktu Pertanggungan</td>
@@ -95,41 +103,61 @@
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">7. </td>
-                    <td style="width: 20%;">Tanggal Kejadian <br> Tempat / Posisi Kejadian</td>
-                    <td>: <br> :</td>
-                    <td style="vertical-align: top;" colspan="3">{{tgl_kej}} <br> {{tempat_kej}}</td>
+                    <td style="width: 20%;">Tanggal Kejadian</td>
+                    <td>:</td>
+                    <td style="vertical-align: top;" colspan="3">{{tgl_kej}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;"></td>
+                    <td style="width: 20%;">Tempat / Posisi Kejadian</td>
+                    <td>:</td>
+                    <td style="vertical-align: top;" colspan="3">{{tempat_kej}}</td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">8. </td>
-                    <td style="width: 20%;">Kondisi / Syarat Pertanggungan <br> Keterangan Obyek</td>
-                    <td>: <br> :</td>
-                    <td style="vertical-align: top;" colspan="3">{{kond_ptg}} <br> {{ket_oby}}</td>
+                    <td style="width: 20%;">Kondisi / Syarat Pertanggungan</td>
+                    <td>:</td>
+                    <td style="vertical-align: top;" colspan="3">{{kond_ptg}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;"></td>
+                    <td style="width: 20%;">Keterangan Obyek</td>
+                    <td>:</td>
+                    <td style="vertical-align: top;" colspan="3">{{ket_oby}}</td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">9. </td>
-                    <td style="width: 20%;">Sebab Kerugian <br> Sifat Kerugian</td>
-                    <td>: <br> :</td>
-                    <td style="vertical-align: top;" colspan="3">{{sebab_kerugian}} <br> {{nm_sifat_kerugian}}</td>
+                    <td style="width: 20%;">Sebab Kerugian</td>
+                    <td>:</td>
+                    <td style="vertical-align: top;" colspan="3">{{sebab_kerugian}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 1%; vertical-align: top;"></td>
+                    <td style="width: 20%;">Sifat Kerugian</td>
+                    <td>:</td>
+                    <td style="vertical-align: top;" colspan="3">{{nm_sifat_kerugian}}</td>
                 </tr>
                 <tr>
                     <td style="width: 1%;">10. </td>
                     <td style="width: 20cm;">Jumlah Kerugian yang ditaksir</td>
                     <td>:</td>
                     <td style="width: 1%;">{{symbol_kl}}</td>
-                    <td colspan="2">{{nilai_ttl_kl}}</td>
+                    <td>{{nilai_ttl_kl}}</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">11. </td>
-                    <td style="width: 20%;">Tanggal Pelunasan Premi <br> Nomor Bukti Pelunasan Premi</td>
-                    <td>: <br> :</td>
-                    <td style="vertical-align: top;" colspan="3">{{tgl_lns_prm}} <br> {{no_bukti_lns}}</td>
+                    <td style="width: 20%;">Tanggal Pelunasan Premi</td>
+                    <td>:</td>
+                    <td style="vertical-align: top;" colspan="3">{{tgl_lns_prm}}</td>
                 </tr>
                 <tr>
-                    <td style="width: 1%;">12. </td>
-                    <td style="width: 20%;">Validitas</td>
+                    <td style="width: 1%; vertical-align: top;"></td>
+                    <td style="width: 20%;">Nomor Bukti Pelunasan Premi</td>
                     <td>:</td>
-                    <td colspan="3">{{validitas}}</td>
+                    <td style="vertical-align: top;" colspan="3">{{no_bukti_lns}}</td>
                 </tr>
+                {{view_validitas}}
             </table>
             <p>Demikian Laporan ini kmai ajukan untuk diteliti lebih lanjut dan atas kerjasama saudara, kami ucapkan terima kasih. </p>
             <table class="table">

@@ -1215,3 +1215,11 @@ function formatNoPol(value) {
 function disableGridTextbox(dataItem){
   return false;
 }
+
+function formatNomorNota(kd_cb, jns_tr, kd_thn, kd_bln,
+                         no_nt_msk, jns_nt_kel, no_nt_kel){
+  return kd_cb.trim() + "." + jns_tr.trim() + "." +
+      kd_thn.trim() + "." + kd_bln.trim() + "." +
+      no_nt_msk.trim() + "." + jns_nt_kel.trim() +
+      "." + no_nt_kel.trim();
+}

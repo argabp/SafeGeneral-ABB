@@ -71,23 +71,25 @@ namespace ABB.Application.DLAKoasuransi.Queries
             var data = datas.FirstOrDefault();
             
             
-            var nilai_ttl_ptg = ReportHelper.ConvertToReportFormat(data.nilai_ttl_ptg);
+            var nilai_ttl_ptg = ReportHelper.ConvertToReportFormat(data.nilai_ttl_ptg, true);
             var nilai_share_bgu = ReportHelper.ConvertToReportFormat(data.nilai_share_bgu);
-            var nilai_ttl_kl = ReportHelper.ConvertToReportFormat(data.nilai_ttl_kl);
+            var nilai_ttl_kl = ReportHelper.ConvertToReportFormat(data.nilai_ttl_kl, true);
             var nilai_share = ReportHelper.ConvertToReportFormat(data.nilai_ttl_kl * (data.pst_share / 100));
+            var pst_share = ReportHelper.ConvertToReportFormat(data.pst_share);
+            var nilai_kl = ReportHelper.ConvertToReportFormat(data.nilai_ttl_kl * (data.pst_share / 100), true);
             var resultTemplate = templateProfileResult.Render( new
             {
                     
                 data.no_berkas_reas, data.nm_ttg, data.no_pol_ttg, data.nm_scob, 
-                tgl_kej = ReportHelper.ConvertDateTime(data.tgl_kej, "dd/MM/yyyy"),
+                tgl_kej = ReportHelper.ConvertDateTime(data.tgl_kej, "dd MMMM yyyy"),
                 data.nm_oby, data.symbol, nilai_ttl_ptg, nilai_share_bgu,
-                tgl_mul_ptg = ReportHelper.ConvertDateTime(data.tgl_mul_ptg, "dd/MM/yyyy"), 
-                tgl_akh_ptg = ReportHelper.ConvertDateTime(data.tgl_akh_ptg, "dd/MM/yyyy"), 
+                tgl_mul_ptg = ReportHelper.ConvertDateTime(data.tgl_mul_ptg, "dd MMM yyyy"), 
+                tgl_akh_ptg = ReportHelper.ConvertDateTime(data.tgl_akh_ptg, "dd MMM yyyy"), 
                 data.tempat_kej, data.ket_dia, data.nm_jns_sor_01, nilai_share,
                 data.sebab_kerugian, data.nm_jns_sor_02, nilai_ttl_kl, data.no_sert, data.sifat_kerugian,
                 data.kt_cb, tgl_closing_ind = ReportHelper.ConvertDateTime(data.tgl_closing_ind, "MMM dd yyyy"), data.kd_cb, data.kd_cob, data.kd_scob,
                 data.kd_thn, data.no_kl, data.no_mts, request.no_dla, data.nm_pas,
-                data.almt_pas, data.kt_pas,
+                data.almt_pas, data.kt_pas, pst_share, nilai_kl
             } );
 
             return resultTemplate;

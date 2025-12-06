@@ -35,5 +35,7 @@ namespace ABB.Application.MutasiKlaims.Queries
         public string flag_closing { get; set; }
 
         public string flag_pol_lama { get; set; }
+
+        public Int16? no_rsk { get; set; }
     }
 }

@@ -10,10 +10,9 @@
         }
 
         .container {
-            width: 80%;
+            width: 95%;
             margin: auto;
             /* border: 1px solid black; */
-            padding: 20px;
         }
 
         .h1 {
@@ -33,7 +32,7 @@
         }
 
         .table td {
-            padding: 8px;
+            padding: 4px;
             /* border: 1px solid black; */
 			font-size: 12px;
         }
@@ -64,19 +63,19 @@
                 </tr>
             </table>
         </div>
-        <div class="h1">PRELIMINARY LOSS ADVICE <br> --------------------------------------------------- <br> {{no_berkas_reas}}</div>
+        <div class="h1">PRELIMINARY LOSS ADVICE <br> --------------------------------------------------- <br>  <p style="text-align: center; font-weight: normal; margin:0">No. {{no_berkas_reas}}</p></div>
 
         <div class="section">
             <table class="table">
                 <tr>
                     <td style="width: 1%;">1. </td>
-                    <td style="width: 25%;">Definite Loss Advice No.</td>
+                    <td style="width: 35%;">Definite Loss Advice No. </td>
                     <td style="width: 1%;">:</td>
                     <td colspan="3">{{no_berkas_reas}}</td>
                 </tr>
                 <tr>
                     <td style="width: 1%;">2. </td>
-                    <td style="width: 20%;">Insured With / Through</td>
+                    <td style="width: 20%;">Insured With / Through </td>
                     <td style="width: 1%;">:</td>
                     <td colspan="3">OUTWARD CO - INSURANCE</td>
                 </tr>
@@ -90,17 +89,13 @@
                     <td style="width: 1%;">4. </td>
                     <td style="width: 20%;">Amount Insured</td>
                     <td>:</td>
-                    <td style="width: 1%;">{{symbol}}</td>
-                    <td style="text-align: right; width: 20%;">{{nilai_ttl_ptg}}</td>
-                    <td></td>
+                    <td style="width: 1%;" colspan="3">{{symbol}} {{nilai_ttl_ptg}}</td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">5. </td>
                     <td style="width: 20%; vertical-align: top;">Your Share</td>
                     <td style="vertical-align: top;">:</td>
-                    <td style="width: 1%;">{{symbol}}</td>
-                    <td style="text-align: right; width: 30%;">{{nilai_ttl_kl}} x {{pst_share}}% = {{nilai_share_bgu}}</td>
-                    <td></td>
+                    <td style="width: 30%;" colspan="">{{pst_share}} % TSI</td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">6. </td>
@@ -118,7 +113,7 @@
                     <td style="width: 1%; vertical-align: top;">8. </td>
                     <td style="width: 20%;">Period of Insured</td>
                     <td>:</td>
-                    <td colspan="3">{{tgl_mul_ptg}} Until {{tgl_akh_ptg}}</td>
+                    <td colspan="3">{{tgl_mul_ptg}} - {{tgl_akh_ptg}}</td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">9. </td>
@@ -134,7 +129,7 @@
                 </tr>
                 <tr>
                     <td style="width: 1%;">11. </td>
-                    <td style="width: 20cm;">Registration No.</td>
+                    <td style="width: 20%;">Registration No.</td>
                     <td>:</td>
                     <td colspan="3">{{kd_cb}} / {{kd_cob}} {{kd_scob}} / {{kd_thn}} / {{no_kl}} / {{no_mts}} / {{no_dla}}</td>
                 </tr>
@@ -154,9 +149,8 @@
                     <td style="width: 1%;">14. </td>
                     <td style="width: 20%;">Claim Amount</td>
                     <td>:</td>
-                    <td style="width: 1%;">{{symbol}}</td>
-                    <td style="text-align: right; width: 20%;">{{nilai_ttl_kl}}</td>
-                    <td></td>
+                    <td style="width: 1%;">{{symbol}} {{nilai_ttl_kl}}</td>
+                    <td colspan="3"></td>
                 </tr>
             </table>
             <table class="table">
@@ -194,7 +188,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td><strong>Claim Department</strong></td>
+                    <td><strong></strong></td>
                 </tr>
                 <tr>
                     <td colspan="10" align="center">{{footer}}</td>

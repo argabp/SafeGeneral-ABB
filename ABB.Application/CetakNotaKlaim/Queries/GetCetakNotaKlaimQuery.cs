@@ -66,7 +66,19 @@ namespace ABB.Application.CetakNotaKlaim.Queries
             var nilai_04 = data.nilai_04 == 0 ? "" : ReportHelper.ConvertToReportFormat(data.nilai_04);
             var nilai_05 = data.nilai_05 == 0 ? "" : ReportHelper.ConvertToReportFormat(data.nilai_05);
             var nilai_total = ReportHelper.ConvertToReportFormat(data.nilai_01 + data.nilai_02 + data.nilai_03 + data.nilai_04 + data.nilai_05);
+            var grand_nilai_total = ReportHelper.ConvertToReportFormat(data.nilai_nt + data.nilai_01 + data.nilai_02 + data.nilai_03 + data.nilai_04 + data.nilai_05);
             var header = data.st_nota == "D" ? "NOTA DEBET" : "NOTA KREDIT";
+
+            var first_nilai_nota = data.st_nota == "D" ? nilai_nt : "";
+            var second_nilai_nota = data.st_nota == "K" ? nilai_nt : "";
+            
+            var view_jumlah_untuk = @$"
+                <tr class='no-border'>
+                    <td style='width: 20%;'>JUMLAH UNTUK</td>
+                    <td style='width: 20%; text-align: right;'>{first_nilai_nota}</td>
+                    <td style='width: 20%; text-align: right;'>{second_nilai_nota}</td>
+                </tr>";
+            
             var resultTemplate = templateProfileResult.Render( new
             {
                 nilai_nt, nilai_01, nilai_02, nilai_03, nilai_04, nilai_05, nilai_total, 
@@ -78,7 +90,7 @@ namespace ABB.Application.CetakNotaKlaim.Queries
                 tgl_mul_ptg = ReportHelper.ConvertDateTime(data.tgl_mul_ptg, "dd/MM/yyyy"),
                 tgl_akh_ptg = ReportHelper.ConvertDateTime(data.tgl_akh_ptg, "dd/MM/yyyy"),
                 data.uraian_01, data.uraian_02, data.uraian_03, data.uraian_04, data.uraian_05,
-                data.kd_mtu_pol_symbol, header
+                data.kd_mtu_pol_symbol, header, data.kd_thn_pol, view_jumlah_untuk, grand_nilai_total
             } );
 
             return resultTemplate;

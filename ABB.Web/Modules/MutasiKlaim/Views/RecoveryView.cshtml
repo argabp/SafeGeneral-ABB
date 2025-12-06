@@ -8,69 +8,6 @@
             Model.kd_scob.Trim() + Model.kd_thn.Trim() + Model.no_kl.Trim();
 }
 
-<script>
-function OnClickAddMutasiKlaimRecovery(kd_cb, kd_cob, kd_scob, kd_thn, no_kl, no_mts, tipe_mts, kd_mtu) {
-    openMutasiKlaimWindow(`/MutasiKlaim/Recovery?kd_cb=${kd_cb}&kd_cob=${kd_cob}&kd_scob=${kd_scob}&kd_thn=${kd_thn}&no_kl=${no_kl}&no_mts=${no_mts}&tipe_mts=${tipe_mts}&kd_mtu=${kd_mtu}`, "Add Recovery");
-}
-
-function onEditRecovery(e) {
-    e.preventDefault();
-    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-    console.log('dataItem', dataItem);
-
-    openMutasiKlaimWindow(`/MutasiKlaim/EditRecovery?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}&no_mts=${dataItem.no_mts}&no_urut=${dataItem.no_urut}`, "Edit Recovery");
-}
-
-function onViewRecovery(e) {
-    e.preventDefault();
-    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-    console.log('dataItem', dataItem);
-
-    openMutasiKlaimWindow(`/MutasiKlaim/ViewRecovery?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}&no_mts=${dataItem.no_mts}&no_urut=${dataItem.no_urut}`, "View Recovery");
-}
-
-function onDeleteRecovery(e){
-    e.preventDefault();
-    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-    showConfirmation('Confirmation', `Are you sure you want to delete?`,
-        function () {
-
-            var parentId =
-                dataItem.kd_cb.trim() +
-                dataItem.kd_cob.trim() +
-                dataItem.kd_scob.trim() +
-                dataItem.kd_thn.trim() +
-                dataItem.no_kl.trim();
-
-            var payload = {
-                kd_cb: dataItem.kd_cb,
-                kd_cob: dataItem.kd_cob,
-                kd_scob: dataItem.kd_scob,
-                kd_thn: dataItem.kd_thn,
-                no_kl: dataItem.no_kl,
-                no_mts: dataItem.no_mts,
-                no_urut: dataItem.no_urut
-            };
-
-            showProgressOnGrid('#grid_obyek_' + parentId);
-
-            ajaxPost("/MutasiKlaim/DeleteMutasiKlaimBeban", JSON.stringify(payload),
-                function (response) {
-                    if (response.Result == "OK") {
-                        showMessage('Success', response.Message);
-                    } else
-                        showMessage('Error', response.Message);
-
-                    refreshGrid('#grid_obyek_' + parentId);
-                    closeProgressOnGrid('#grid_obyek_' + parentId);
-                }
-            );
-        }
-    );
-}
-
-</script>
-
 <style>
     .flat-btn-primary{
         padding: 10px 0px;

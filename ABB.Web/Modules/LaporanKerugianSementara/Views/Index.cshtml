@@ -45,10 +45,13 @@
                     columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
                     columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
                     columns.Bound(col => col.nm_scob).Width(150).Title("Nama Sub COB");
-                    columns.Bound(col => col.no_kl).Width(150).Title("Nomor Kl");
-                    columns.Bound(col => col.no_mts).Width(150).Title("Nomor Mts");
-                    columns.Bound(col => col.nm_ttg).Width(150).Title("Nama Tertanggung");
-                    columns.Bound(col => col.tipe_mts).Width(150).Title("Tipe Mutasi");
+                    columns.Bound(col => col.no_pol_lama).Title("Nomor Polis").ClientTemplate("#= formatNoPol(no_pol_lama) #");
+                    columns.Bound(col => col.nomor_berkas).Width(150).Title("Nomor Berkas");
+                    columns.Bound(col => col.no_mts).Width(150).Title("Nomor Mutasi");
+                    columns.Bound(col => col.nm_tipe_mts).Width(150).Title("Tipe Mutasi");
+                    columns.Bound(col => col.nm_ttg).Width(200).Title("Nama Tertanggung");
+                    columns.Bound(col => col.tgl_mts).Width(150).Title("Tanggal Mutasi").Format("{0: dd-MM-yyyy}");
+                    columns.Bound(col => col.tgl_closing).Width(150).Title("Tanggal Closing").Format("{0: dd-MM-yyyy}");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)
@@ -83,7 +86,7 @@
                     <div class="row offset-1 col-sm-5">
                         <label class="col-sm-6">Tanda Tangan</label>
                         <div class="col-sm-6">
-                            <input name="tanda_tangan" class="form-control">
+                            <input name="tanda_tangan" class="form-control" style="font-size: 0.85rem">
                         </div>
                     </div>
                 </div>
@@ -91,7 +94,7 @@
                     <div class="row col-sm-5">
                         <label class="col-sm-6">Jabatan</label>
                         <div class="col-sm-6">
-                            <input name="jabatan" class="form-control">
+                            <input name="jabatan" class="form-control" style="font-size: 0.85rem">
                         </div>
                     </div>
                 </div>

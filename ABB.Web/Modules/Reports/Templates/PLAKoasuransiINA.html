@@ -10,10 +10,9 @@
         }
 
         .container {
-            width: 80%;
+            width: 95%;
             margin: auto;
             /* border: 1px solid black; */
-            padding: 20px;
         }
 
         .h1 {
@@ -33,7 +32,7 @@
         }
 
         .table td {
-            padding: 8px;
+            padding: 4px;
             /* border: 1px solid black; */
 			font-size: 12px;
         }
@@ -64,13 +63,13 @@
                 </tr>
             </table>
         </div>
-        <div class="h1">PRELIMINARY LOSS ADVICE <br> --------------------------------------------------- <br> {{no_berkas_reas}}</div>
+        <div class="h1">PRELIMINARY LOSS ADVICE <br> --------------------------------------------------- <br> <p style="text-align: center; font-weight: normal; margin:0">No. {{no_berkas_reas}}</p></div>
 
         <div class="section">
             <table class="table">
                 <tr>
                     <td style="width: 1%;">1. </td>
-                    <td style="width: 25%;">Nomor Preliminary Loss Advice</td>
+                    <td style="width: 35%;">Nomor Preliminary Loss Advice</td>
                     <td style="width: 1%;">:</td>
                     <td colspan="3">{{no_berkas_reas}}</td>
                 </tr>
@@ -96,7 +95,7 @@
                     <td style="width: 1%; vertical-align: top;">5. </td>
                     <td style="width: 20%; vertical-align: top;">Share Ko-as Saudara</td>
                     <td style="vertical-align: top;">:</td>
-                    <td style="width: 30%;" colspan="">{{pst_share}}% = {{nilai_share_bgu}}</td>
+                    <td style="width: 30%;" colspan="">{{pst_share}} % = {{symbol}} {{nilai_share_bgu}}</td>
                 </tr>
                 <tr>
                     <td style="width: 1%; vertical-align: top;">6. </td>
@@ -130,7 +129,7 @@
                 </tr>
                 <tr>
                     <td style="width: 1%;">11. </td>
-                    <td style="width: 20cm;">Nomor Registrasi</td>
+                    <td style="width: 20%;">Nomor Registrasi</td>
                     <td>:</td>
                     <td colspan="3">{{kd_cb}} / {{kd_cob}} {{kd_scob}} / {{kd_thn}} / {{no_kl}} / {{no_mts}} / {{no_dla}}</td>
                 </tr>
@@ -157,7 +156,7 @@
                     <td style="width: 1%; vertical-align: top;">15. </td>
                     <td style="width: 20%; vertical-align: top;">Jumlah Estimasi Saudara</td>
                     <td style="vertical-align: top;">:</td>
-                    <td style="width: 1%;" colspan="3">{{pst_share}}% x {{symbol}} {{nilai_ttl_kl}} = {{symbol}} {{nilai_kl}}</td>
+                    <td style="width: 1%;" colspan="3">{{pst_share}} % x {{symbol}} {{nilai_ttl_kl}} = {{symbol}} {{nilai_kl}}</td>
                 </tr>
             </table>
             <table class="table">
@@ -195,7 +194,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td><strong>Departemen Klaim</strong></td>
+                    <td><strong></strong></td>
                 </tr>
                 <tr>
                     <td colspan="10" align="center">{{footer}}</td>

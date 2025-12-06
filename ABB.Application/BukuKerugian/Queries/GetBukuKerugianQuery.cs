@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
+using ABB.Domain.Models;
 using MediatR;
 using Microsoft.Extensions.Hosting;
 using Scriban;
@@ -28,11 +29,14 @@ namespace ABB.Application.BukuKerugian.Queries
     {
         private readonly IDbConnectionFactory _connectionFactory;
         private readonly IHostEnvironment _environment;
+        private readonly ReportConfig _reportConfig;
 
-        public GetBukuKerugianQueryHandler(IDbConnectionFactory connectionFactory, IHostEnvironment environment)
+        public GetBukuKerugianQueryHandler(IDbConnectionFactory connectionFactory, IHostEnvironment environment,
+            ReportConfig reportConfig)
         {
             _connectionFactory = connectionFactory;
             _environment = environment;
+            _reportConfig = reportConfig;
         }
 
         public async Task<string> Handle(GetBukuKerugianQuery request, CancellationToken cancellationToken)
@@ -59,58 +63,150 @@ namespace ABB.Application.BukuKerugian.Queries
 
             string resultTemplate;
 
-            var bukuKerugianData = bukuKerugianDatas.FirstOrDefault();
-
             StringBuilder stringBuilder = new StringBuilder();
-            var sequence = 0;
-            decimal total_nilai_tsi_pst = 0;
-            decimal total_nilai_tsi = 0;
-            decimal total_nilai_tsi_pst_idr = 0;
-            decimal total_nilai_tsi_idr = 0;
-            decimal total_nilai_ttl_kl = 0;
-            decimal total_nilai_ttl_kl_idr = 0;
-            foreach (var data in bukuKerugianDatas)
+            
+            var groupedData = bukuKerugianDatas
+                .GroupBy(x => new { x.kd_cb, x.kd_cob, x.kd_scob }) // Outer group
+                .ToList();
+            
+            var lastOuterKey = groupedData.Last().Key;
+            
+            var reportConfig = _reportConfig.Configurations.First(w => w.Database == request.DatabaseName);
+            
+            foreach (var outerGroup in groupedData)
             {
-                sequence++;
-                var nilai_tsi_pst = ReportHelper.ConvertToReportFormat(data.nilai_share_bgu / data.pst_share_bgu * 100);
-                var nilai_tsi = ReportHelper.ConvertToReportFormat(data.nilai_share_bgu);
-                var nilai_tsi_pst_idr = ReportHelper.ConvertToReportFormat(data.nilai_share_bgu_idr / data.pst_share_bgu * 100);
-                var nilai_ttl_kl = ReportHelper.ConvertToReportFormat(data.nilai_ttl_kl);
-                var nilai_ttl_kl_idr = ReportHelper.ConvertToReportFormat(data.nilai_ttl_kl_idr);
-                var pst_share_bgu = ReportHelper.ConvertToReportFormat(data.pst_share_bgu, true);
-                stringBuilder.Append(@$"
+                // 💡 Now group by kd_mkt INSIDE the outer group
+                var innerGroups = outerGroup.GroupBy(x => x.nm_mtu).ToList();
+                
+                decimal total_outer_nilai_tsi_pst = 0;
+                decimal total_outer_nilai_tsi = 0;
+                decimal total_outer_nilai_tsi_pst_idr = 0;
+                decimal total_outer_nilai_tsi_idr = 0;
+                decimal total_outer_nilai_ttl_kl = 0;
+                decimal total_outer_nilai_ttl_kl_idr = 0;
+
+                var lastInnerKey = innerGroups.Last().Key;
+                
+                var sequence = 0;
+                foreach (var innerGroup in innerGroups)
+                {
+                    var innerFirst = innerGroup.FirstOrDefault();
+
+                    stringBuilder.Append($@"<div style='page-break-before: always;'>
+                    <table class='table'>
+                        <tr>
+                            <td style='text-transform: uppercase;'>{reportConfig.Title.Title1}</td>
+                        </tr>
+                    </table>
+                    <div class='h1'>AGENDA KLAIM</div>
+                    <div class='section'>
+                        <table class='table'>
+                            <tr>
+                                <td style='width: 40%;'></td>
+                                <td style='width: 8%; vertical-align: top; font-weight: bold;'>KANTOR</td>
+                                <td style='vertical-align: top; text-align: justify; width: 1%; font-weight: bold'>:</td>
+                                <td style='vertical-align: top; text-align: justify; text-transform: uppercase; font-weight: bold' colspan='6'>{innerFirst.nm_cb}</td>
+                            </tr>
+                            <tr>
+                                <td style='width: 40%;'></td>
+                                <td style='width: 8%; vertical-align: top; font-weight: bold'>PERIODE</td>
+                                <td style='vertical-align: top; text-align: justify; font-weight: bold'>:</td>
+                                <td style='vertical-align: top; text-align: justify; text-transform: uppercase; font-weight: bold' colspan='6'>{innerFirst.tgl_mul.Value:dd MMMM yyyy} s/d {innerFirst.tgl_akh.Value:dd MMMM yyyy}</td>
+                            </tr>
+                            <tr>
+                                <td style='width: 40%;'></td>
+                                <td style='width: 8%; vertical-align: top; font-weight: bold'>C.O.B</td>
+                                <td style='vertical-align: top; text-align: justify; font-weight: bold'>:</td>
+                                <td style='vertical-align: top; text-align: justify; text-transform: uppercase; font-weight: bold' colspan='6'>{innerFirst.nm_cob}</td>
+                            </tr>
+                        </table>
+                        <table class='table' border='1'>
+                            <tr>
+                                <td style='width: 1%; text-align: center; vertical-align: top; font-weight: bold' rowspan='2'>NO. </td>
+                                <td style='width: 20%; text-align: center; vertical-align: top; font-weight: bold' rowspan='2'>NOMOR BERKAS <br> NOMOR POLIS</td>
+                                <td style='width: 10%; text-align: center; vertical-align: top; font-weight: bold' rowspan='2'>TERTANGGUNG</td>
+                                <td style='width: 20%; text-align: center; vertical-align: top; font-weight: bold' rowspan='2'>OBJEK PERTANGGUNGAN <br> PENYEBAB KERUGIAN <br> LOKASI KEJADIAN</td>
+                                <td style='width: 20%; text-align: center; vertical-align: top; font-weight: bold' rowspan='2'>PERIODE PERTANGGUNGAN TANGGAL KEJADIAN</td>
+                                <td style='width: 20%;  text-align: center; font-weight: bold' colspan='2'>T.S.I</td>
+                                <td style='width: 20%; text-align: center; font-weight: bold' colspan='2'>NILAI LKS KERUGIAN</td>
+                                <td style='width: 20%; text-align: center; vertical-align: top; font-weight: bold' rowspan='2'>KETERANGAN</td>
+                            </tr>
+                            <tr>
+                                <td style='text-align: center; width: 25%; font-weight: bold'>Original</td>
+                                <td style='text-align: center; width: 25%; font-weight: bold'>Rupiah</td>
+                                <td style='text-align: center; width: 25%; font-weight: bold'>Original</td>
+                                <td style='text-align: center; width: 25%; font-weight: bold'>Rupiah</td>
+                            </tr>
+                            <p style='margin-bottom: 0px;'>Dalam: {innerFirst.nm_mtu}</p>");
+                    
+                    
+                    decimal total_nilai_tsi_pst = 0;
+                    decimal total_nilai_tsi = 0;
+                    decimal total_nilai_tsi_pst_idr = 0;
+                    decimal total_nilai_tsi_idr = 0;
+                    decimal total_nilai_ttl_kl = 0;
+                    decimal total_nilai_ttl_kl_idr = 0;
+                    
+                    foreach (var data in innerGroup)
+                    {
+                        sequence++;
+                        var nilai_tsi_pst = ReportHelper.ConvertToReportFormat(data.nilai_share_bgu / data.pst_share_bgu * 100);
+                        var nilai_tsi = ReportHelper.ConvertToReportFormat(data.nilai_share_bgu);
+                        var nilai_tsi_pst_idr = ReportHelper.ConvertToReportFormat(data.nilai_share_bgu_idr / data.pst_share_bgu * 100);
+                        var nilai_ttl_kl = ReportHelper.ConvertToReportFormat(data.nilai_ttl_kl);
+                        var nilai_ttl_kl_idr = ReportHelper.ConvertToReportFormat(data.nilai_ttl_kl_idr);
+                        var pst_share_bgu = ReportHelper.ConvertToReportFormat(data.pst_share_bgu, true);
+                        stringBuilder.Append(@$"
+                            <tr>
+                                <td style='vertical-align: top'>{sequence}</td>
+                                <td style='vertical-align: top'>{data.no_berkas} <br> {data.no_pol_ttg}</td>
+                                <td style='vertical-align: top;'>{data.nm_ttg}</td>
+                                <td style='vertical-align: top'>{data.nm_oby} <br> {data.sebab_kerugian} <br> {data.tempat_kej}</td>
+                                <td style='vertical-align: top'>{ReportHelper.ConvertDateTime(data.tgl_mul_ptg, "dd MMM yyyy")} s/d {ReportHelper.ConvertDateTime(data.tgl_akh_ptg, "dd MMM yyyy")} <br> {ReportHelper.ConvertDateTime(data.tgl_kej, "dd MMM yyyy")} </td>
+                                <td style='width: 1%; text-align: left; vertical-align: top'>{data.kd_mtu_symbol_tsi} {nilai_tsi_pst}
+                                <td style='width: 1%; text-align: left; vertical-align: top;'>{data.kd_mtu_symbol} {nilai_tsi_pst_idr}</td>
+                                <td style='width: 1%; vertical-align: top; text-align: left;'>{data.kd_mtu_symbol} {nilai_ttl_kl}</td>
+                                <td style='width: 1%; vertical-align: top; text-align: left;'>{data.kd_mtu_symbol} {nilai_ttl_kl_idr}</td>
+                                <td style='vertical-align: top;'>{data.nm_sifat_kerugian}</td>
+                            </tr>");
+                        total_nilai_tsi_pst += ReportHelper.ConvertToDecimalFormat(nilai_tsi_pst);
+                        total_nilai_tsi += ReportHelper.ConvertToDecimalFormat(nilai_tsi);
+                        total_nilai_tsi_pst_idr += ReportHelper.ConvertToDecimalFormat(nilai_tsi_pst_idr);
+                        total_nilai_tsi_idr += ReportHelper.ConvertToDecimalFormat(nilai_ttl_kl);
+                        total_nilai_ttl_kl += ReportHelper.ConvertToDecimalFormat(nilai_ttl_kl_idr);
+                        total_nilai_ttl_kl_idr += ReportHelper.ConvertToDecimalFormat(pst_share_bgu);
+                    }
+
+                    stringBuilder.Append($@"
                     <tr>
-                        <td style='vertical-align: top'>{sequence}</td>
-                        <td style='vertical-align: top'>{data.no_berkas} <br> {data.no_pol_ttg} <br> {data.no_sert}</td>
-                        <td style='vertical-align: top;'>{data.nm_ttg}</td>
-                        <td style='vertical-align: top'>{data.nm_oby} <br> {data.sebab_kerugian} <br> {data.tempat_kej}</td>
-                        <td style='vertical-align: top'>{ReportHelper.ConvertDateTime(data.tgl_mul_ptg, "dd MMM yyyy")} s/d {ReportHelper.ConvertDateTime(data.tgl_akh_ptg, "dd MMM yyyy")} <br> {ReportHelper.ConvertDateTime(data.tgl_kej, "dd MMM yyyy")} </td>
-                        <td style='width: 1%; text-align: left; vertical-align: top'>{data.kd_mtu_symbol_tsi} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {nilai_tsi_pst} <br> ({pst_share_bgu} %) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {nilai_tsi} </td>
-                        <td style='width: 1%; text-align: left; vertical-align: top;'>{data.kd_mtu_symbol} {nilai_tsi_pst_idr} <br> {nilai_tsi}</td>
-                        <td style='width: 1%; vertical-align: top; text-align: left;'>{data.kd_mtu_symbol} {nilai_ttl_kl}</td>
-                        <td style='width: 1%; vertical-align: top; text-align: left;'>{data.kd_mtu_symbol} {nilai_ttl_kl_idr}</td>
-                        <td style='vertical-align: top;'>{data.nm_sifat_kerugian}</td>
+                        <td></td>
+                        <td style='font-weight: bold; text-align: right; padding-right: 50px;' colspan='4'>TOTAL : </td>
+                        <td style='font-weight: bold; text-align: left; vertical-align: top;'>{innerFirst.kd_mtu_symbol} {ReportHelper.ConvertToReportFormat(total_nilai_tsi_pst)}</td>
+                        <td style='font-weight: bold; text-align: left; vertical-align: top;'>{innerFirst.kd_mtu_symbol} {ReportHelper.ConvertToReportFormat(total_nilai_tsi_pst_idr)}</td>
+                        <td style='font-weight: bold; text-align: left; vertical-align: top;'>{innerFirst.kd_mtu_symbol} {ReportHelper.ConvertToReportFormat(total_nilai_ttl_kl)}</td>
+                        <td style='font-weight: bold; text-align: left; vertical-align: top;'>{innerFirst.kd_mtu_symbol} {ReportHelper.ConvertToReportFormat(total_nilai_ttl_kl_idr)}</td>
+                        <td style='font-weight: bold; text-align: right; vertical-align: top;'></td>
                     </tr>");
-                total_nilai_tsi_pst += ReportHelper.ConvertToDecimalFormat(nilai_tsi_pst);
-                total_nilai_tsi += ReportHelper.ConvertToDecimalFormat(nilai_tsi);
-                total_nilai_tsi_pst_idr += ReportHelper.ConvertToDecimalFormat(nilai_tsi_pst_idr);
-                total_nilai_tsi_idr += ReportHelper.ConvertToDecimalFormat(nilai_ttl_kl);
-                total_nilai_ttl_kl += ReportHelper.ConvertToDecimalFormat(nilai_ttl_kl_idr);
-                total_nilai_ttl_kl_idr += ReportHelper.ConvertToDecimalFormat(pst_share_bgu);
+
+                    if (!outerGroup.Key.Equals(lastOuterKey) || !innerGroup.Key.Equals(lastInnerKey))
+                    {
+                        // append - i.e. if outer isn't last OR inner isn't last
+                        stringBuilder.Append("</table></div></div>");
+                    }
+
+                    // accumulate subtotal to outer total
+                    total_outer_nilai_tsi_pst += total_nilai_tsi_pst;
+                    total_outer_nilai_tsi += total_nilai_tsi;
+                    total_outer_nilai_tsi_pst_idr += total_nilai_tsi_pst_idr;
+                    total_outer_nilai_tsi_idr += total_nilai_tsi_idr;
+                    total_outer_nilai_ttl_kl += total_nilai_ttl_kl;
+                    total_outer_nilai_ttl_kl_idr += total_nilai_ttl_kl_idr;
+                }
             }
             
             resultTemplate = templateProfileResult.Render( new
             {
-                total_nilai_tsi_pst = ReportHelper.ConvertToReportFormat(total_nilai_tsi_pst), 
-                total_nilai_tsi = ReportHelper.ConvertToReportFormat(total_nilai_tsi), 
-                total_nilai_tsi_pst_idr = ReportHelper.ConvertToReportFormat(total_nilai_tsi_pst_idr),
-                total_nilai_tsi_idr = ReportHelper.ConvertToReportFormat(total_nilai_tsi_idr), 
-                total_nilai_ttl_kl = ReportHelper.ConvertToReportFormat(total_nilai_ttl_kl), 
-                total_nilai_ttl_kl_idr = ReportHelper.ConvertToReportFormat(total_nilai_ttl_kl_idr),
-                details = stringBuilder.ToString(),
-                bukuKerugianData.no_pol_ttg, bukuKerugianData.nm_mtu, bukuKerugianData.nm_cb,
-                bukuKerugianData.nm_cob, tgl_mul = bukuKerugianData.tgl_mul.Value.ToString("dd MMMM yyyy"),
-                tgl_akh = bukuKerugianData.tgl_akh.Value.ToString("dd MMMM yyyy")
+                details = stringBuilder.ToString()
             } );
             
             return resultTemplate;

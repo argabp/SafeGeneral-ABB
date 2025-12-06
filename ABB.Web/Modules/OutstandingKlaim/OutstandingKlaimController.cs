@@ -31,7 +31,10 @@ namespace ABB.Web.Modules.OutstandingKlaim
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
             
-            return View(new OutstandingKlaimViewModel());
+            return View(new OutstandingKlaimViewModel()
+            {
+                kd_cb = Request.Cookies["UserCabang"]?.Trim() ?? string.Empty
+            });
         }
 
         public async Task<JsonResult> GetCabang()

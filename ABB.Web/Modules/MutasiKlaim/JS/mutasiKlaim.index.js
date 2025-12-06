@@ -16,21 +16,33 @@ function OnClickInsertDetailMutasiKlaim(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     console.log('dataItem', dataItem);
+
+    showProgressByElement($("#MutasiKlaimWindow"));
+    
     openMutasiKlaimWindow(`/MutasiKlaim/Insert?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}`, 'Insert');
+
 }
 
 function OnClickEditMutasiKlaim(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     console.log('dataItem', dataItem);
-    openMutasiKlaimWindow(`/MutasiKlaim/Edit?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}&no_mts=${dataItem.no_mts}`, 'View');
+    
+    showProgressByElement($("#MutasiKlaimWindow"));
+    
+    openMutasiKlaimWindow(`/MutasiKlaim/Edit?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}&no_mts=${dataItem.no_mts}`, 'Edit');
+
 }
 
 function OnClickViewMutasiKlaim(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     console.log('dataItem', dataItem);
+    
+    showProgressByElement($("#MutasiKlaimWindow"));
+    
     openMutasiKlaimWindow(`/MutasiKlaim/View?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}&no_mts=${dataItem.no_mts}`, 'View');
+    
 }
 
 function OnMutasiChange(e) {
@@ -46,7 +58,7 @@ function OnMutasiChange(e) {
         selected.kd_thn.trim() +
         selected.no_kl.trim();
     
-    ajaxGet(`/MutasiKlaim/ObyekView?kd_cb=${selected.kd_cb}&kd_cob=${selected.kd_cob}&kd_scob=${selected.kd_scob}&kd_thn=${selected.kd_thn}&no_kl=${selected.no_kl}&no_mts=${selected.no_mts}&tipe_mts=${selected.tipe_mts}&kd_mtu=${selected.kd_mtu}&flag_closing=${selected.flag_closing}`,
+    ajaxGet(`/MutasiKlaim/ObyekView?kd_cb=${selected.kd_cb}&kd_cob=${selected.kd_cob}&kd_scob=${selected.kd_scob}&kd_thn=${selected.kd_thn}&no_kl=${selected.no_kl}&no_mts=${selected.no_mts}&tipe_mts=${selected.tipe_mts}&kd_mtu=${selected.kd_mtu}&flag_closing=${selected.flag_closing}&no_rsk=${selected.no_rsk}`,
         (returnView) => {
             $("#obyekGrid" + parentId).html(returnView);
         });
@@ -74,6 +86,13 @@ function saveMutasiKlaimObyek(e){
         no_mts: parentParams.no_mts,
         ...model.toJSON() // include edited/created data
     };
+    
+    var parentId =
+        parentParams.kd_cb.trim() +
+        parentParams.kd_cob.trim() +
+        parentParams.kd_scob.trim() +
+        parentParams.kd_thn.trim() +
+        parentParams.no_kl.trim();
 
     showProgressOnGrid("#" + grid.element.attr("id"));
 
@@ -84,6 +103,8 @@ function saveMutasiKlaimObyek(e){
         }
         else
             showMessage('Error', response.Message);
+        refreshGrid("#" + grid.element.attr("id"));
+        refreshGrid("#grid_mutasi_" + parentId);
     })
 }
 
@@ -91,14 +112,21 @@ function OnEditAlokasi(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     console.log('dataItem', dataItem);
+    
+    showProgressByElement($("#MutasiKlaimWindow"));
+    
     openMutasiKlaimWindow(`/MutasiKlaim/EditAlokasi?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}&no_mts=${dataItem.no_mts}&kd_rk_pas=${dataItem.kd_rk_pas}&kd_grp_pas=${dataItem.kd_grp_pas}`, 'Edit Alokasi');
+
 }
 
 function OnViewAlokasi(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     console.log('dataItem', dataItem);
+    showProgressByElement($("#MutasiKlaimWindow"));
+    
     openMutasiKlaimWindow(`/MutasiKlaim/ViewAlokasi?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}&no_mts=${dataItem.no_mts}&kd_rk_pas=${dataItem.kd_rk_pas}&kd_grp_pas=${dataItem.kd_grp_pas}`, 'View Alokasi');
+
 }
 
 function onDeleteAlokasi(e){
@@ -292,16 +320,22 @@ function onEditObyek(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     console.log('dataItem', dataItem);
+    
+    showProgressByElement($("#MutasiKlaimWindow"));
 
     openMutasiKlaimWindow(`/MutasiKlaim/EditObyek?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}&no_mts=${dataItem.no_mts}&no_oby=${dataItem.no_oby}`, 'Edit Obyek');
+
 }
 
 function onViewObyek(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     console.log('dataItem', dataItem);
+    
+    showProgressByElement($("#MutasiKlaimWindow"));
 
     openMutasiKlaimWindow(`/MutasiKlaim/ViewObyek?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}&no_mts=${dataItem.no_mts}&no_oby=${dataItem.no_oby}`, 'View Obyek');
+
 }
 
 function onDeleteObyek(e){
@@ -440,4 +474,229 @@ function OnMutasiKlaimBebanDataBound(e){
     });
 
     gridAutoFit(grid);
+}
+
+
+function OnClickAddMutasiKlaimRecovery(kd_cb, kd_cob, kd_scob, kd_thn, no_kl, no_mts, tipe_mts, kd_mtu) {
+    showProgressByElement($("#MutasiKlaimWindow"));
+    
+    openMutasiKlaimWindow(`/MutasiKlaim/Recovery?kd_cb=${kd_cb}&kd_cob=${kd_cob}&kd_scob=${kd_scob}&kd_thn=${kd_thn}&no_kl=${no_kl}&no_mts=${no_mts}&tipe_mts=${tipe_mts}&kd_mtu=${kd_mtu}`, "Add Recovery");
+
+}
+
+function onEditRecovery(e) {
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    console.log('dataItem', dataItem);
+
+    showProgressByElement($("#MutasiKlaimWindow"));
+    
+    openMutasiKlaimWindow(`/MutasiKlaim/EditRecovery?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}&no_mts=${dataItem.no_mts}&no_urut=${dataItem.no_urut}`, "Edit Recovery");
+
+}
+
+function onViewRecovery(e) {
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    console.log('dataItem', dataItem);
+    
+    showProgressByElement($("#MutasiKlaimWindow"));
+
+    openMutasiKlaimWindow(`/MutasiKlaim/ViewRecovery?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}&no_mts=${dataItem.no_mts}&no_urut=${dataItem.no_urut}`, "View Recovery");
+
+}
+
+function onDeleteRecovery(e){
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    showConfirmation('Confirmation', `Are you sure you want to delete?`,
+        function () {
+
+            var parentId =
+                dataItem.kd_cb.trim() +
+                dataItem.kd_cob.trim() +
+                dataItem.kd_scob.trim() +
+                dataItem.kd_thn.trim() +
+                dataItem.no_kl.trim();
+
+            var payload = {
+                kd_cb: dataItem.kd_cb,
+                kd_cob: dataItem.kd_cob,
+                kd_scob: dataItem.kd_scob,
+                kd_thn: dataItem.kd_thn,
+                no_kl: dataItem.no_kl,
+                no_mts: dataItem.no_mts,
+                no_urut: dataItem.no_urut
+            };
+
+            showProgressOnGrid('#grid_obyek_' + parentId);
+
+            ajaxPost("/MutasiKlaim/DeleteMutasiKlaimBeban", JSON.stringify(payload),
+                function (response) {
+                    if (response.Result == "OK") {
+                        showMessage('Success', response.Message);
+                    } else
+                        showMessage('Error', response.Message);
+
+                    refreshGrid('#grid_obyek_' + parentId);
+                    closeProgressOnGrid('#grid_obyek_' + parentId);
+                }
+            );
+        }
+    );
+}
+
+
+function OnClickAddMutasiKlaimAlokasi(kd_cb, kd_cob, kd_scob, kd_thn, no_kl, no_mts) {
+    showProgressByElement($("#MutasiKlaimWindow"));
+    
+    openMutasiKlaimWindow(`/MutasiKlaim/Alokasi?kd_cb=${kd_cb}&kd_cob=${kd_cob}&kd_scob=${kd_scob}&kd_thn=${kd_thn}&no_kl=${no_kl}&no_mts=${no_mts}`, 'Add Alokasi');
+
+}
+
+function OnClickCopyAlokasi(kd_cb, kd_cob, kd_scob, kd_thn, no_kl, no_mts, nilai_ttl_kl) {
+    showConfirmation('Confirmation', `Are you sure you want to copy alokasi koasuransi?`,
+        function () {
+
+            var parentId =
+                kd_cb.trim() +
+                kd_cob.trim() +
+                kd_scob.trim() +
+                kd_thn.trim() +
+                no_kl.trim();
+
+            var payload = {
+                kd_cb: kd_cb,
+                kd_cob: kd_cob,
+                kd_scob: kd_scob,
+                kd_thn: kd_thn,
+                no_kl: no_kl,
+                no_mts: no_mts,
+                nilai_ttl_kl: nilai_ttl_kl
+            };
+
+            showProgressOnGrid('#grid_alokasi_' + parentId);
+
+            ajaxPost("/MutasiKlaim/CopyAlokasi", JSON.stringify(payload),
+                function (response) {
+                    if (response.Result == "OK") {
+                        showMessage('Success', "Berhasil Copy Alokasi");
+                    } else
+                        showMessage('Error', response.Message);
+
+                    refreshGrid('#grid_alokasi_' + parentId);
+                    closeProgressOnGrid('#grid_alokasi_' + parentId);
+                    refreshGrid('#grid_mutasi_' + parentId);
+                }
+            );
+        }
+    );
+}
+
+function OnClickCopyAlokasiUnderwriting(kd_cb, kd_cob, kd_scob, kd_thn, no_kl, no_mts) {
+    showConfirmation('Confirmation', `Are you sure you want to copy alokasi koasuransi underwriting?`,
+        function () {
+
+            var parentId =
+                kd_cb.trim() +
+                kd_cob.trim() +
+                kd_scob.trim() +
+                kd_thn.trim() +
+                no_kl.trim();
+
+            var payload = {
+                kd_cb: kd_cb,
+                kd_cob: kd_cob,
+                kd_scob: kd_scob,
+                kd_thn: kd_thn,
+                no_kl: no_kl,
+                no_mts: no_mts
+            };
+
+            showProgressOnGrid('#grid_alokasi_' + parentId);
+
+            ajaxPost("/MutasiKlaim/CopyAlokasiUnderwriting", JSON.stringify(payload),
+                function (response) {
+                    if (response.Result == "OK") {
+                        showMessage('Success', "Berhasil Copy Alokasi Underwriting");
+                    } else
+                        showMessage('Error', response.Message);
+
+                    refreshGrid('#grid_alokasi_' + parentId);
+                    closeProgressOnGrid('#grid_alokasi_' + parentId);
+                    refreshGrid('#grid_mutasi_' + parentId);
+                }
+            );
+        }
+    );
+}
+
+
+function OnClickAddMutasiKlaimBeban(kd_cb, kd_cob, kd_scob, kd_thn, no_kl, no_mts, tipe_mts, kd_mtu) {
+    showProgressByElement($("#MutasiKlaimWindow"));
+    
+    openMutasiKlaimWindow(`/MutasiKlaim/Beban?kd_cb=${kd_cb}&kd_cob=${kd_cob}&kd_scob=${kd_scob}&kd_thn=${kd_thn}&no_kl=${no_kl}&no_mts=${no_mts}&tipe_mts=${tipe_mts}&kd_mtu=${kd_mtu}`, "Add Beban");
+
+}
+
+function onEditBeban(e) {
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    console.log('dataItem', dataItem);
+
+    showProgressByElement($("#MutasiKlaimWindow"));
+
+    openMutasiKlaimWindow(`/MutasiKlaim/EditBeban?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}&no_mts=${dataItem.no_mts}&no_urut=${dataItem.no_urut}`, "Edit Beban");
+
+}
+
+function onViewBeban(e) {
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    console.log('dataItem', dataItem);
+
+    showProgressByElement($("#MutasiKlaimWindow"));
+    
+    openMutasiKlaimWindow(`/MutasiKlaim/ViewBeban?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}&no_mts=${dataItem.no_mts}&no_urut=${dataItem.no_urut}`, "View Beban");
+
+}
+
+function onDeleteBeban(e){
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    showConfirmation('Confirmation', `Are you sure you want to delete?`,
+        function () {
+
+            var parentId =
+                dataItem.kd_cb.trim() +
+                dataItem.kd_cob.trim() +
+                dataItem.kd_scob.trim() +
+                dataItem.kd_thn.trim() +
+                dataItem.no_kl.trim();
+
+            var payload = {
+                kd_cb: dataItem.kd_cb,
+                kd_cob: dataItem.kd_cob,
+                kd_scob: dataItem.kd_scob,
+                kd_thn: dataItem.kd_thn,
+                no_kl: dataItem.no_kl,
+                no_mts: dataItem.no_mts,
+                no_urut: dataItem.no_urut
+            };
+
+            showProgressOnGrid('#grid_obyek_' + parentId);
+
+            ajaxPost("/MutasiKlaim/DeleteMutasiKlaimBeban", JSON.stringify(payload),
+                function (response) {
+                    if (response.Result == "OK") {
+                        showMessage('Success', response.Message);
+                    } else
+                        showMessage('Error', response.Message);
+
+                    refreshGrid('#grid_obyek_' + parentId);
+                    closeProgressOnGrid('#grid_obyek_' + parentId);
+                }
+            );
+        }
+    );
 }

@@ -28,8 +28,13 @@ namespace ABB.Application.CetakNotaKlaim.Queries
             _connectionFactory.CreateDbConnection(request.DatabaseName);
             return (await _connectionFactory.Query<KlaimDto>(@"SELECT 
     		RTRIM(LTRIM(p.kd_cb)) + RTRIM(LTRIM(p.jns_tr)) + RTRIM(LTRIM(p.jns_nt_msk)) + RTRIM(LTRIM(p.kd_thn)) + RTRIM(LTRIM(p.kd_bln)) + RTRIM(LTRIM(p.no_nt_msk)) + RTRIM(LTRIM(p.jns_nt_kel)) + RTRIM(LTRIM(p.no_nt_kel))   Id,
-    		p.*, cb.nm_cb, cob.nm_cob, scob.nm_scob
+    		p.*, cb.nm_cb, cob.nm_cob, scob.nm_scob, c.no_pol_lama 
 				FROM cl10 p
+                    INNER JOIN cl01 c
+                        ON c.kd_cb = p.kd_cb
+                            AND  c.kd_cob = p.kd_cob
+                            AND  c.kd_thn = p.kd_thn
+                            AND  c.no_kl = p.no_kl
 					INNER JOIN rf01 cb
 						ON p.kd_cb = cb.kd_cb
 					INNER JOIN rf04 cob
