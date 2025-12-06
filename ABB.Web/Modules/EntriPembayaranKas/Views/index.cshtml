@@ -109,6 +109,7 @@
                                 columns.Command(command =>
                                 {
                                     // Tombol "Lihat" dan "Cetak" untuk Tab 2
+                                    command.Custom("EntriPembayaranKasProses").Text(" Proses Ulang ").IconClass("fa fa-eye").Click("btnProsesPembayaranKas_OnClick");
                                     command.Custom("EntriPembayaranKasLihat").Text(" Lihat ").IconClass("fa fa-eye").Click("btnLihatPembayaranKas_OnClick");
                                     command.Custom("CetakPembayaranKas").Text(" Cetak ").IconClass("fa fa-print").Click("btnCetakPembayaranKas_OnClick");
                                 }).Width(220).Title("Action").Locked(true);

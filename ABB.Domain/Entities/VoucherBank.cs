@@ -20,6 +20,7 @@ namespace ABB.Domain.Entities
         public bool? FlagFinal { get; set; }
         public DateTime? TanggalInput { get; set; }
         public DateTime? TanggalUpdate { get; set; }
+        public DateTime? TanggalPosting { get; set; }
         public string KodeUserInput { get; set; }
         public string KodeUserUpdate { get; set; }
         // DITAMBAHKAN: Dua properti ini tidak ada sebelumnya

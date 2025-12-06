@@ -97,6 +97,10 @@ namespace ABB.Infrastructure.Data.Mapping
             builder.Property(t => t.NoBank)
                 .HasColumnName("no_bank")
                 .HasMaxLength(255);
+
+            builder.Property(t => t.TanggalPosting)
+            .HasColumnName("tgl_posting")
+            .HasColumnType("date");
         }
     }
 }

@@ -989,3 +989,31 @@ function onSaveFinalHeaderAndProceed() {
     });
 
 }
+function btnProsesPembayaranPiutang_OnClick(e) {
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    var NoBukti = dataItem.NomorBukti;
+    console.log(NoBukti);
+
+    // Tampilkan dialog konfirmasi
+    showConfirmation('Konfirmasi Proses', `Apakah Anda yakin ingin Mengulang Proses Pembayaran dengan No. Bukti ${dataItem.NomorBukti}?`,
+        function () {
+            showProgressOnGrid('#SudahFinalGrid');
+
+            // Kirim request hapus ke Controller
+           ajaxGet(
+                    `/EntriPenyelesaianPiutang/ProsesUlang?id=${NoBukti}`,
+                    function (response) {
+                        if (response.success) {
+                            showMessage('Success', 'Data berhasil Di Proses Ulang.');
+                            setTimeout(function () {
+                                location.reload(true); // reload dari server
+                            }, 500);
+                        } else {
+                            showMessage('Error', 'Gagal Memproses data.');
+                        }
+                    }
+                );
+        }
+    );
+}

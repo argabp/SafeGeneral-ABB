@@ -17,6 +17,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using ABB.Application.InquiryNotaProduksis.Queries;
 using ABB.Application.MataUangs.Queries;
 using ABB.Application.Coas.Queries;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 
 
@@ -24,10 +26,19 @@ namespace ABB.Web.Modules.EntriPembayaranKas
 {
     public class EntriPembayaranKasController : AuthorizedBaseController
     {
-        public ActionResult Index()
+        public async Task<IActionResult> Index()
         {
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
+            var databaseName = Request.Cookies["DatabaseValue"]; 
+            var kodeCabangCookie = Request.Cookies["UserCabang"];
+            if (string.IsNullOrEmpty(databaseName) || string.IsNullOrEmpty(kodeCabangCookie))
+            {
+                await HttpContext.SignOutAsync("Identity.Application");
+
+                return RedirectToAction("Login", "Account");
+            }
+
             ViewBag.UserLogin = CurrentUser.UserId;
 
             return View();
@@ -408,6 +419,13 @@ namespace ABB.Web.Modules.EntriPembayaranKas
                 await Mediator.Send(command);
             }
           
+            return Json(new { success = true });
+        }
+            // Action untuk menghapus data
+        [HttpGet]
+        public async Task<IActionResult> ProsesUlang(string id)
+        {
+            await Mediator.Send(new ProsesUlangPembayaranKasCommand { NoVoucher = id });
             return Json(new { success = true });
         }
      

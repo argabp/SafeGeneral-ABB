@@ -60,7 +60,7 @@ namespace ABB.Application.EntriPembayaranKass.Commands
                 _context.EntriPembayaranKas.Add(final);
             }
 
-            _context.EntriPembayaranKasTemp.RemoveRange(tempList);
+            //_context.EntriPembayaranKasTemp.RemoveRange(tempList);
             var affectedRows = await _context.SaveChangesAsync(cancellationToken);
 
             return tempList.Count;

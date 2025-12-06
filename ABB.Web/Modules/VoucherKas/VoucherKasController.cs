@@ -19,16 +19,27 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 
 namespace ABB.Web.Modules.VoucherKas
 {
     public class VoucherKasController : AuthorizedBaseController
     {
-        public ActionResult Index()
+        public async Task<IActionResult> Index()
         {
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
+            var databaseName = Request.Cookies["DatabaseValue"]; 
+            var kodeCabangCookie = Request.Cookies["UserCabang"];
+            if (string.IsNullOrEmpty(databaseName) || string.IsNullOrEmpty(kodeCabangCookie))
+            {
+                await HttpContext.SignOutAsync("Identity.Application");
+
+                return RedirectToAction("Login", "Account");
+            }
+
             ViewBag.UserLogin = CurrentUser.UserId;
             
             return View();

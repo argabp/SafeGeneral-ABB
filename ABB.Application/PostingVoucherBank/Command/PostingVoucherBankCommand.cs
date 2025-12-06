@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ABB.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace ABB.Application.PostingVoucherBank.Commands
 {
@@ -37,6 +38,7 @@ namespace ABB.Application.PostingVoucherBank.Commands
             foreach (var voucher in vouchersToUpdate)
             {
                 voucher.FlagPosting = true; // Atau 'Y', sesuaikan dengan standar Anda
+                voucher.TanggalPosting = DateTime.Now;
             }
 
             // 3. Simpan semua perubahan ke database dalam satu kali perintah

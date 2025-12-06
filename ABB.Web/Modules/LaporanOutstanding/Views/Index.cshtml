@@ -88,34 +88,121 @@
                 )
             </div>
 
-            <div id="checkboxContainer" style="padding: 10px; background-color: #e0ffe0; border: 1px solid #c0ffc0;">
+           <div id="checkboxContainerPiutang" style="padding: 10px; background-color: #e0ffe0; border: 1px solid #c0ffc0; display: none;">
                 <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-                    <div style="width: 48%;">
+                    <!-- BARIS 1 -->
+                    <div style="width: 23%;">
+                        @(Html.Kendo().CheckBox().Name("Check_A1").Label("A1 - PREMI POS SENDIRI"))
+                    </div>
+                    <div style="width: 23%;">
+                        @(Html.Kendo().CheckBox().Name("Check_B1").Label("B1 - PREMI REAS MASUK TTY"))
+                    </div>
+                    <div style="width: 23%;">
+                        @(Html.Kendo().CheckBox().Name("Check_C1").Label("C1 - KLAIM REAS KELUAR TTY"))
+                    </div>
+                    <div style="width: 23%;">
+                        @(Html.Kendo().CheckBox().Name("Check_K1").Label("K1 - PREMI AKDA"))
+                    </div>
+
+                    <!-- BARIS 2 -->
+                    <div style="width: 23%;">
+                        @(Html.Kendo().CheckBox().Name("Check_A2").Label("A2 - PREMI KOAS MASUK"))
+                    </div>
+                    <div style="width: 23%;">
+                        @(Html.Kendo().CheckBox().Name("Check_B2").Label("B2 - PREMI REAS MASUK NON TTY"))
+                    </div>
+                    <div style="width: 23%;">
+                        @(Html.Kendo().CheckBox().Name("Check_C2").Label("C2 - KLAIM REAS KELUAR NON TTY"))
+                    </div>
+                    <div style="width: 23%;">
+                        @(Html.Kendo().CheckBox().Name("Check_K2").Label("K2 - PREMI AKDP"))
+                    </div>
+
+                    <!-- BARIS 3 (Ada Spacer agar K4 tetap di kolom 4) -->
+                    <div style="width: 23%;">
+                        @(Html.Kendo().CheckBox().Name("Check_A3").Label("A3 - KLAIM KOAS KELUAR"))
+                    </div>
+                    <div style="width: 23%;"></div> <!-- Spacer Kolom B -->
+                    <div style="width: 23%;"></div> <!-- Spacer Kolom C -->
+                    <div style="width: 23%;">
+                        @(Html.Kendo().CheckBox().Name("Check_K4").Label("K4 - PREMI ASIBHARA"))
+                    </div>
+
+                    <!-- BARIS 4 (Spacer agar K5 tetap di kolom 4) -->
+                    <div style="width: 23%;"></div> <!-- Spacer Kolom A -->
+                    <div style="width: 23%;"></div> <!-- Spacer Kolom B -->
+                    <div style="width: 23%;"></div> <!-- Spacer Kolom C -->
+                    <div style="width: 23%;">
+                        @(Html.Kendo().CheckBox().Name("Check_K5").Label("K5 - PREMI AKDA EXTRA"))
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTAINER HUTANG (NEW) -->
+            <!-- Menggunakan warna background sedikit berbeda (misal merah muda pudar) untuk membedakan atau tetap hijau jika diinginkan -->
+            <div id="checkboxContainerHutang" style="padding: 10px; background-color: #ffe0e0; border: 1px solid #ffc0c0; display:none;">
+                <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                    <!-- BARIS 1 (A1 | B1 | C1) -->
+                    <!-- A1 -->
+                    <div style="width: 32%;">
                         @(Html.Kendo().CheckBox()
-                            .Name("Check1")
-                            .Label("A1-Pos Sendiri")
+                            .Name("Check_H_A1")
+                            .Label("A1 - KLAIM POS SENDIRI")
                         )
                     </div>
-                    <div style="width: 48%;">
+
+                    <!-- B1 -->
+                    <div style="width: 32%;">
                         @(Html.Kendo().CheckBox()
-                            .Name("Check2")
-                            .Label("B1-Reas Msk Tty")
+                            .Name("Check_H_B1")
+                            .Label("B1 - KLAIM REASURANSI MASUK TTY")
                         )
                     </div>
-                    <div style="width: 48%;">
+
+                    <!-- C1 -->
+                    <div style="width: 32%;">
                         @(Html.Kendo().CheckBox()
-                            .Name("Check3")
-                            .Label("A2-Koas Masuk")
+                            .Name("Check_H_C1")
+                            .Label("C1 - PREMI REASURANSI KELUAR TTY")
                         )
                     </div>
-                    <div style="width: 48%;">
+
+                    <!-- BARIS 2 (A2 | B2 | C2) -->
+                    <!-- A2 -->
+                    <div style="width: 32%;">
                         @(Html.Kendo().CheckBox()
-                            .Name("Check4")
-                            .Label("B2-Reas Msk N-Tty")
+                            .Name("Check_H_A2")
+                            .Label("A2 - KLAIM KOASURANSI MASUK")
+                        )
+                    </div>
+
+                    <!-- B2 -->
+                    <div style="width: 32%;">
+                        @(Html.Kendo().CheckBox()
+                            .Name("Check_H_B2")
+                            .Label("B2 - KLAIM REASURANSI MASUK NON TTY")
+                        )
+                    </div>
+
+                    <!-- C2 -->
+                    <div style="width: 32%;">
+                        @(Html.Kendo().CheckBox()
+                            .Name("Check_H_C2")
+                            .Label("C2 - PREMI REASURANSI KELUAR NON TTY")
+                        )
+                    </div>
+
+                    <!-- BARIS 3 (A3) -->
+                    <!-- A3 -->
+                    <div style="width: 32%;">
+                        @(Html.Kendo().CheckBox()
+                            .Name("Check_H_A3")
+                            .Label("A3 - PREMI KOASURANSI KELUAR")
                         )
                     </div>
                 </div>
             </div>
+
         </div>
 
        <div class="filter-section" style="display: flex; align-items: center;">
@@ -145,7 +232,23 @@
                 .HtmlAttributes(new { style = "width:150px" }) )
         </div>
 
-       
+       <div class="filter-section">
+            <label class="filter-label">Jenis Laporan :</label>
+            @(Html.Kendo().DropDownList()
+                .Name("JenisLaporan")
+                .DataTextField("Text")
+                .DataValueField("Value")
+                .BindTo(new List<SelectListItem>() {
+                    new SelectListItem() { Text = "Detail (Keseluruhan)", Value = "Detail" },
+                    new SelectListItem() { Text = "Per COB ", Value = "COB" },
+                    new SelectListItem() { Text = "Per Tertanggung", Value = "Tertanggung" },
+                    new SelectListItem() { Text = "Per Pembawa Pos", Value = "Pos" },
+                    new SelectListItem() { Text = "Per Agen/Broker", Value = "Broker" }
+                })
+                .Value("Detail")
+                .HtmlAttributes(new { style = "width:300px;" })
+            )
+        </div>
 
         <!-- Baris 4: Tombol Cari -->
         <div class="filter-section">
@@ -163,17 +266,22 @@
 <script>
     $(document).ready(function () {
         // Fungsi untuk mengontrol visibilitas
-        function toggleCheckboxes() {
-            // Cek apakah radio button 'Hutang' terpilih
-            if ($('#JenisTransaksi_Piutang').is(':checked')) {
-                // Tampilkan container checkbox
-                $('#checkboxContainer').show();
-            } else {
-                // Sembunyikan container checkbox
-                $('#checkboxContainer').hide();
-            }
-        }
+     function toggleCheckboxes() {
+            var isPiutang = $('#JenisTransaksi_Piutang').is(':checked');
+            var isHutang = $('#JenisTransaksi_Hutang').is(':checked');
 
+            // Reset dulu keduanya ke hidden
+            $('#checkboxContainerPiutang').hide();
+            $('#checkboxContainerHutang').hide();
+
+            // Cek kondisi
+            if (isPiutang) {
+                $('#checkboxContainerPiutang').show();
+            } else if (isHutang) {
+                $('#checkboxContainerHutang').show();
+            }
+            // Jika tidak ada yang checked, keduanya tetap hidden
+        }
         // 1. Jalankan saat dokumen siap (untuk set awal)
         toggleCheckboxes();
 

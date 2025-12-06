@@ -19,9 +19,13 @@
 </head>
 <body>
     <div class="report-header">
-        <div class="report-title">LAPORAN OUTSTANDING PIUTANG POS SENDIRI</div>
-        <div class="report-sub">LOKASI : {{ KodeCabang }}</div>
-        <div class="report-sub">PERIODE : {{ Periode }}</div>
+          <div class="report-title">{{ JudulLaporan }}</div>
+           <div class="report-sub">POSISI : {{ TanggalPosisi }}</div>
+        <div class="report-sub">LOKASI : {{ KodeCabang }} - {{ NamaCabang }}</div>
+        
+        <!-- DETAIL TANGGAL (Sesuai Request) -->
+        <div class="report-sub">PRODUKSI : {{ TglProduksiAwal }} S/D {{ TglProduksiAkhir }}</div>
+        <div class="report-sub">PELUNASAN S/D : {{ TglPelunasan }}</div>
     </div>
 
     <table>

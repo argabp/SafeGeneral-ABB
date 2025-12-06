@@ -614,20 +614,33 @@ function onSavePembayaranBankFinal() {
         data: JSON.stringify(data),
         success: function (response) {
             if (response.success) {
-                showMessage("Success", "Data berhasil difinalkan.");
 
-                // reload grid dan bersihkan form
-                $("#DetailPembayaranGrid").data("kendoGrid").dataSource.read();
-                clearPaymentForm();
+                // Pesan sukses
+                showMessage("Success", "Pembayaran berhasil difinalkan.");
+
+                // Tutup modal utama
+                $("#EntriPembayaranBankWindow")
+                    .data("kendoWindow")
+                    .close();
+
+                // Refresh grid "Dalam Proses"
+                var grid = $("#BelumFinalGrid").data("kendoGrid");
+                if (grid) grid.dataSource.read();
+
+                // Refresh grid "Sudah Final"
+                var grid2 = $("#SudahFinalGrid").data("kendoGrid");
+                if (grid2) grid2.dataSource.read();
+
             } else {
                 showMessage("Error", response.message || "Gagal memproses data.");
             }
         },
         error: function () {
             showMessage("Error", "Terjadi kesalahan saat menyimpan data.");
-        },
+        }
     });
 }
+
 
 function btnLihatPembayaranBank_OnClick(e) {
     e.preventDefault();
@@ -893,6 +906,34 @@ function clearFinalPaymentForm() {
     // 5. Pastikan field nota/akun ter-reset
     $("#akunField_Lihat").hide();
     $("#notaField_Lihat").hide();
+}
+
+// Fungsi untuk menghapus data
+function btnProsesPembayaranBank_OnClick(e) {
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+    // Tampilkan dialog konfirmasi
+    showConfirmation('Konfirmasi Proses', `Apakah Anda yakin ingin Mengulang Proses Pembayaran dengan No. Voucher ${dataItem.NoVoucher}?`,
+        function () {
+            showProgressOnGrid('#SudahFinalGrid');
+
+            // Kirim request hapus ke Controller
+            ajaxGet(`/EntriPembayaranBank/ProsesUlang?id=${dataItem.NoVoucher.trim()}`,
+                function (response) {
+                    if (response.success) {
+                        showMessage('Success', 'Data berhasil Di Proses Ulang.');
+                        setTimeout(function () {
+                            location.reload(true); // reload dari server
+                        }, 500);
+                    } else {
+                        showMessage('Error', 'Gagal Memproses data.');
+                    }
+                    
+                }
+            );
+        }
+    );
 }
 
     
