@@ -1,0 +1,74 @@
+﻿@using ABB.Application.SlideShows.Queries
+@using Kendo.Mvc.UI
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Slide Show";
+}
+
+<script src="~/Modules/SlideShow/JS/slideShow.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+    #kd_dokumen{
+        background-color: #00FFFF;
+    }
+    #nm_dokumen{
+        background-color: #FFFFE1;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Slide Show
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<SlideShowDto>()
+                .Name("SlideShowGrid")
+                .ToolBar(toolbar => toolbar.Create())
+                .Editable(editable => editable.Mode(GridEditMode.InLine))
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetSlideShows", "SlideShow"))
+                    .Model(model => model.Id(p => p.Id))
+                )
+                .Columns(columns =>
+                {
+                    columns.Command(command =>
+                    {
+                        command.Edit();
+                        command.Custom("DeleteSlideShow")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeleteSlideShow");
+                    }).Width(200).Title("Action").Locked(true);
+                    columns.Bound(col => col.FileName).Width(350).Title("Nama File").EditorTemplateName("KendoUpload");
+                    columns.Bound(col => col.Order).Width(200).Title("Order");
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit").Save("onSaveSlideShow"))
+            
+                )
+        </div>
+    </div>
+</div>

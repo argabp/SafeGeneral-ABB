@@ -85,5 +85,15 @@ namespace ABB.Domain.Entities
         public string? kd_grp_bkl { get; set; }
 
         public string? kd_rk_bkl { get; set; }
+
+        public Int16? kd_status { get; set; }
+
+        public string? kd_user_status { get; set; }
+
+        public DateTime? tgl_status { get; set; }
+
+        public string? ket_status { get; set; }
+
+        public bool? flag_approved { get; set; }
     }
 }

@@ -7,5 +7,6 @@ namespace ABB.Application.Common.Services
     public interface IEmailService
     {
         Task SendApprovalEmail(List<string> emailSends, ViewTRAkseptasi? viewTrAkseptasi);
+        Task SendMutasiKlaimEmail(List<string> emailSends, ViewTrKlaim? viewTrKlaim);
     }
 }

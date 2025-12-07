@@ -2,6 +2,8 @@
     searchKeyword_OnKeyUp();
 });
 
+var processData;
+
 function searchKeyword_OnKeyUp() {
     $('#SearchKeyword').keyup(function () {
         refreshGrid("#MutasiKlaimGrid");
@@ -10,6 +12,10 @@ function searchKeyword_OnKeyUp() {
 
 function openMutasiKlaimWindow(url, title) {
     openWindow('#MutasiKlaimWindow', url, title);
+}
+
+function openProcessMutasiKlaimWindow(url, title) {
+    openWindow('#ProcessMutasiKlaimWindow', url, title);
 }
 
 function OnClickInsertDetailMutasiKlaim(e) {
@@ -238,6 +244,13 @@ function dataParameterMutasi() {
     };
 }
 
+function OnClickProcessMutasiKlaim(e) {
+    e.preventDefault();
+    processData = this.dataItem($(e.currentTarget).closest("tr"));
+
+    openProcessMutasiKlaimWindow(`/MutasiKlaim/Process`, 'Process');
+}
+
 function OnClickClosingMutasiKlaim(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
@@ -302,13 +315,24 @@ function OnMutasiKlaimDataBound(e){
         if (!buttonContainer.length) {
             buttonContainer = $(this).find(".k-command-cell");
         }
-
+        
         if (buttonContainer.length) {
             if (dataItem.flag_closing == "Y") {
                 // Find the "Closing" button and hide it
                 buttonContainer.find("a[title='Edit']").hide();
                 buttonContainer.find("a[title='Delete']").hide();
                 buttonContainer.find("a[title='Closing']").hide();
+            }
+            
+            if (dataItem.tipe_mts == "D") {
+                // Find the "Closing" button and hide it
+                buttonContainer.find("a[title='Closing']").hide();
+
+                if(dataItem.flag_proses != "0"){
+                    buttonContainer.find("a[title='Process']").hide();
+                }
+            } else {
+                buttonContainer.find("a[title='Process']").hide();
             }
         }
     });

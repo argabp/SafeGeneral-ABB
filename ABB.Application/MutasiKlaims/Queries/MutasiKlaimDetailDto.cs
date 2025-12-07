@@ -37,5 +37,11 @@ namespace ABB.Application.MutasiKlaims.Queries
         public string flag_pol_lama { get; set; }
 
         public Int16? no_rsk { get; set; }
+
+        public bool? flag_proses { get; set; }
+
+        public string nomor_berkas { get; set; }
+
+        public string kd_user_status { get; set; }
     }
 }

@@ -96,5 +96,74 @@ namespace ABB.Infrastructure.Services
                 }
             }
         }
+        
+        public async Task SendMutasiKlaimEmail(List<string> emailSends, ViewTrKlaim? viewTrKlaim)
+        {
+            var username = _config.GetSection("Email").GetSection("Username").Value;
+            var password = _config.GetSection("Email").GetSection("Password").Value;
+            var smtpServer = _config.GetSection("Email").GetSection("SMTP").Value;
+            var port = _config.GetSection("Email").GetSection("Port").Value;
+            var sendEmail = _config.GetSection("Email").GetSection("SendEmail").Value;
+            
+            if(!Convert.ToBoolean(sendEmail))
+                return;
+
+            ServicePointManager.Expect100Continue = false;
+            ServicePointManager.SecurityProtocol =
+                SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+            
+            var smtpClient = new SmtpClient(smtpServer)
+            {
+                Port = Convert.ToInt32(port),
+                Credentials = new NetworkCredential(username, password),
+                EnableSsl = true,
+            };
+
+            if (viewTrKlaim == null)
+                throw new NullReferenceException("Klaim not found");
+
+            EmailTemplate emailTemplate = _dbContext.EmailTemplate.FirstOrDefault(w =>
+                w.Name == "Pengajuan Klaim");
+
+            Template templateEmailForNotification = Template.Parse( emailTemplate.Body );
+            
+            string emailTemplateHtml = await templateEmailForNotification.RenderAsync( new
+            {
+                viewTrKlaim.user_status,
+                viewTrKlaim.nm_cb,
+                viewTrKlaim.nm_cob,
+                viewTrKlaim.nm_scob,
+                viewTrKlaim.nomor_berkas,
+                tgl_reg = viewTrKlaim.tgl_reg.Value.ToString("dd MMM yyyy"),
+                viewTrKlaim.nm_tertanggung,
+                tgl_status = viewTrKlaim.tgl_status.Value.ToString("dd MMM yyyy"),
+                viewTrKlaim.ket_status,
+                viewTrKlaim.status
+            } );
+
+            foreach (var sentTo in emailSends)
+            {
+                var body = emailTemplateHtml;
+                MailAddress from = new MailAddress(username);
+                MailAddress to = new MailAddress(sentTo);
+
+                MailMessage message = new MailMessage(from, to);
+                message.Subject = $"Nomor Pengajuan Klaim {viewTrKlaim.nomor_berkas} {viewTrKlaim.status}";
+
+                message.Body = body;
+                message.IsBodyHtml = true;
+                message.Subject = $"Nomor Pengajuan Akseptasi {viewTrKlaim.nomor_berkas} {viewTrKlaim.status}";
+                
+                try
+                {
+                    smtpClient.Send(message);
+                }
+                catch (SmtpException ex)
+                {
+                    _logger.LogError(ex.Message);
+                    throw;
+                }
+            }
+        }
     }
 }

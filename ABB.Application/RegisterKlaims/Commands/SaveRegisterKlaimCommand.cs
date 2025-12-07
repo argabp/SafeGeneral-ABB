@@ -167,6 +167,9 @@ namespace ABB.Application.RegisterKlaims.Commands
                     registerKlaim.no_kl = no_kl[0].Split(",")[1];
                     registerKlaim.tgl_input = DateTime.Now;
                     registerKlaim.tgl_updt = DateTime.Now;
+                    registerKlaim.flag_approved = false;
+                    registerKlaim.tgl_status = DateTime.Now;
+                    registerKlaim.kd_user_status = _currentUserService.UserId;
                     registerKlaim.kd_usr_input = _currentUserService.UserId;
                     registerKlaim.kd_usr_updt = _currentUserService.UserId;
 

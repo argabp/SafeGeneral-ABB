@@ -140,6 +140,10 @@ namespace ABB.Infrastructure.Data
         public DbSet<EntriNotaKlaim> NotaKlaim { get; set; }
         public DbSet<LKT> LKT { get; set; }
         public DbSet<LKS> LKS { get; set; }
+        public DbSet<SlideShow> SlideShow { get; set; }
+        public DbSet<KlaimStatus> KlaimStatus { get; set; }
+        public DbSet<KlaimStatusAttachment> KlaimStatusAttachment { get; set; }
+        public DbSet<ViewTrKlaim> ViewTrKlaim { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -273,6 +277,10 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new EntriNotaKlaimMap());
             builder.ApplyConfiguration(new LKSMap());
             builder.ApplyConfiguration(new LKTMap());
+            builder.ApplyConfiguration(new SlideShowMap());
+            builder.ApplyConfiguration(new KlaimStatusMap());
+            builder.ApplyConfiguration(new KlaimStatusAttachmentMap());
+            builder.ApplyConfiguration(new ViewTRKlaimMap());
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

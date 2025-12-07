@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using ABB.Application.Homes.Queries;
 using ABB.Application.Modules.Queries;
 using ABB.Web.Modules.Base;
 using Microsoft.AspNetCore.Authorization;
@@ -38,6 +39,13 @@ namespace ABB.Web.Modules.Home
             Response.Cookies.Append("Module", moduleId.ToString());
 
             return Ok();
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> GetSlideShows()
+        {
+            var result = await Mediator.Send(new GetSlideShowsQuery());
+            return Json(result);
         }
     }
 }

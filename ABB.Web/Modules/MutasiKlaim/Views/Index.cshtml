@@ -109,6 +109,11 @@
                                             .IconClass("fa fa-lock")
                                             .HtmlAttributes(new { title = "Closing" })
                                             .Click("OnClickClosingMutasiKlaim");
+                                        command.Custom("Process")
+                                            .Text("Process")
+                                            .IconClass("fa fa-lock")
+                                            .HtmlAttributes(new { title = "Process" })
+                                            .Click("OnClickProcessMutasiKlaim");
                                         command.Custom("DeleteMutasi")
                                             .Text("Delete")
                                             .IconClass("k-icon k-i-delete")
@@ -154,6 +159,15 @@
         @(Html.Kendo().Window()
                     .Name("MutasiKlaimWindow")
                     .Title("Mutasi Klaim Page")
+                    .Width(800)
+                    .Modal(true)
+                    .Visible(false)
+                    .Draggable(true)
+            )
+
+        @(Html.Kendo().Window()
+                    .Name("ProcessMutasiKlaimWindow")
+                    .Title("Process Mutasi Klaim Page")
                     .Width(800)
                     .Modal(true)
                     .Visible(false)

@@ -2,7 +2,7 @@ using System;
 
 namespace ABB.Domain.Entities
 {
-    public class TRAkseptasiStatus
+    public class KlaimStatus
     {
         public string kd_cb { get; set; }
         
@@ -12,8 +12,10 @@ namespace ABB.Domain.Entities
 
         public string kd_thn { get; set; }
 
-        public string no_aks { get; set; }
+        public string no_kl { get; set; }
 
+        public Int16 no_mts { get; set; }
+        
         public Int16 no_urut { get; set; }
 
         public string kd_user { get; set; }

@@ -130,6 +130,10 @@ namespace ABB.Application.Common.Interfaces
         DbSet<EntriNotaKlaim> NotaKlaim { get; set; }
         DbSet<LKT> LKT { get; set; }
         DbSet<LKS> LKS { get; set; }
+        DbSet<SlideShow> SlideShow { get; set; }
+        DbSet<KlaimStatus> KlaimStatus { get; set; }
+        DbSet<KlaimStatusAttachment> KlaimStatusAttachment { get; set; }
+        DbSet<ViewTrKlaim> ViewTrKlaim { get; set; }
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);

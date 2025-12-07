@@ -114,6 +114,8 @@ namespace ABB.Web.Modules.MutasiKlaim
                 data.Id = counter;
                 data.nm_kd_mtu = _mataUang.FirstOrDefault(w => w.Value.Trim() == data.kd_mtu.Trim())?.Text ?? string.Empty;
                 data.nm_tipe_mts = _tipeMutasi.FirstOrDefault(w => w.Value.Trim() == data.tipe_mts.Trim())?.Text ?? string.Empty;
+                data.nomor_berkas = "K." + data.kd_cb.Trim() + "." +
+                                      data.kd_scob.Trim() + "." + data.kd_thn.Trim() + "." + data.no_kl.Trim();
             }
             
             return Json(ds.AsQueryable().ToDataSourceResult(request));
@@ -954,6 +956,34 @@ namespace ABB.Web.Modules.MutasiKlaim
             catch (Exception ex)
             {
                 return Json(new { Result = "ERROR", ex.Message });
+            }
+        }
+        
+        public IActionResult Process()
+        {
+            return View();
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> ProcessMutasiKlaim([FromBody] ProcessMutasiKlaimViewModel model)
+        {
+            try
+            {
+                var command = Mapper.Map<ProcessMutasiKlaimCommand>(model);
+                command.DatabaseName = Request.Cookies["DatabaseValue"];
+                var result = await Mediator.Send(command);
+
+                foreach (var notifTo in result.Item2)
+                {
+                    await ApplicationHub.SendPengajuanAkseptasiNotification(notifTo, model.nomor_berkas, model.status_name);
+                }
+                
+                return Json(new { Result = "OK", Message = result.Item1 });
+            }
+            catch (Exception e)
+            {
+                return Json(new
+                    { Result = "ERROR", Message = e.InnerException == null ? e.Message : e.InnerException.Message });
             }
         }
     }
