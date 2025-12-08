@@ -4,17 +4,15 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ABB.Infrastructure.Data.Mapping
 {
-    public class TemplateJurnalDetail62Map : IEntityTypeConfiguration<TemplateJurnalDetail62>
+    public class TemplateJurnalDetail117Map : IEntityTypeConfiguration<TemplateJurnalDetail117>
     {
-        public void Configure(EntityTypeBuilder<TemplateJurnalDetail62> builder)
+        public void Configure(EntityTypeBuilder<TemplateJurnalDetail117> builder)
         {
             
-            builder.ToTable("abb_templatejurnaldetail62");
-
-            
+            builder.ToTable("abb_templatejurnaldetail117");
             
             // ditambahin untuk pk
-            builder.HasKey(t => new { t.Type, t.JenisAss, t.GlAkun });
+            builder.HasKey(t => t.Type);
             builder.Property(t => t.Type).HasColumnName("type");
             builder.Property(t => t.JenisAss).HasColumnName("jn_ass");
             builder.Property(t => t.GlAkun).HasColumnName("gl_akun");

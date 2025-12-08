@@ -123,20 +123,25 @@ namespace ABB.Web.Modules.TemplateJurnal62
         }
 
          [HttpPost]
-        public async Task<IActionResult> EditTemplateJurnalDetail62([FromBody] SaveTemplateJurnalDetail62ViewModel model)
-        {
-            try
+            public async Task<IActionResult> EditTemplateJurnalDetail62([FromBody] SaveTemplateJurnalDetail62ViewModel model)
             {
-                var command = Mapper.Map<EditTemplateJurnalDetail62Command>(model);
-                await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
+                try
+                {
+                    // Mapping
+                    var command = Mapper.Map<EditTemplateJurnalDetail62Command>(model);
+                    
+                    // PERBAIKAN: Isi DatabaseName manual karena tidak ada di body JSON
+                    command.DatabaseName = Request.Cookies["DatabaseValue"]; 
+                    
+                    await Mediator.Send(command);
+                    return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { Result = "ERROR", Message = ex.Message });
+                }
             }
-            catch (Exception ex)
-            {
-                return Json(new { Result = "ERROR", Message = ex.Message });
-            }
-        }
 
         [HttpPost]
         public async Task<IActionResult> DeleteTemplateJurnalDetail62([FromBody] DeleteTemplateJurnalDetail62ViewModel model)

@@ -16,7 +16,7 @@ namespace ABB.Web.Modules.COA.Models
         [Display(Name = "Nama")]
         public string Nama { get; set; }
 
-        [Display(Name = "Dept")]
+        [Display(Name = "Lokasi")]
         public string Dept { get; set; }
 
         [Display(Name = "Type")]
