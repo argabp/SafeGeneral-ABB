@@ -25,6 +25,8 @@ using EntriPeriodeEntity = ABB.Domain.Entities.EntriPeriode;
 using TipeAkun117Entity = ABB.Domain.Entities.TipeAkun117;
 using TemplateJurnal62Entity = ABB.Domain.Entities.TemplateJurnal62;
 using TemplateJurnalDetail62Entity = ABB.Domain.Entities.TemplateJurnalDetail62;
+using TemplateJurnal117Entity = ABB.Domain.Entities.TemplateJurnal117;
+using TemplateJurnalDetail117Entity = ABB.Domain.Entities.TemplateJurnalDetail117;
 
 
 namespace ABB.Application.Common.Interfaces
@@ -52,6 +54,8 @@ namespace ABB.Application.Common.Interfaces
         DbSet<TipeAkun117Entity> TipeAkun117 { get; set; }
         DbSet<TemplateJurnal62Entity> TemplateJurnal62 { get; set; }
         DbSet<TemplateJurnalDetail62Entity> TemplateJurnalDetail62 { get; set; }
+        DbSet<TemplateJurnal117Entity> TemplateJurnal117 { get; set; }
+        DbSet<TemplateJurnalDetail117Entity> TemplateJurnalDetail117 { get; set; }
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);

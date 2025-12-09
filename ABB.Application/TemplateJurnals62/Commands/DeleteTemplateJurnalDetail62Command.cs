@@ -35,25 +35,36 @@ namespace ABB.Application.TemplateJurnals62.Commands
         }
 
         public async Task<Unit> Handle(DeleteTemplateJurnalDetail62Command request, CancellationToken cancellationToken)
+        {
+            try
             {
-                try
-                {
-                    var entity = _context.TemplateJurnalDetail62
-                        .FirstOrDefault(w => w.GlAkun == request.GlAkun);
+                // PERBAIKAN: Cari berdasarkan 3 kunci (Type, JenisAss, GlAkun)
+                // Gunakan Trim() untuk keamanan
+                var entity = _context.TemplateJurnalDetail62
+                    .FirstOrDefault(w => 
+                        w.Type == request.Type && 
+                        w.JenisAss == request.JenisAss && 
+                        w.GlAkun == request.GlAkun
+                    );
 
-                    if (entity != null)
-                    {
-                        _context.TemplateJurnalDetail62.Remove(entity);
-                        await _context.SaveChangesAsync(cancellationToken);
-                    }
-                }
-                catch (Exception ex)
+                if (entity != null)
                 {
-                    _logger.LogError(ex, ex.Message);
-                    throw;
+                    _context.TemplateJurnalDetail62.Remove(entity);
+                    await _context.SaveChangesAsync(cancellationToken);
                 }
-
-                return Unit.Value;
+                else 
+                {
+                    // Opsional: Beritahu user jika data tidak ketemu
+                    throw new Exception("Data tidak ditemukan atau sudah dihapus.");
+                }
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
+
+            return Unit.Value;
+        }
     }
 }

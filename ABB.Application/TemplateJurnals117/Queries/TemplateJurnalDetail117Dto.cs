@@ -3,9 +3,9 @@ using ABB.Application.Common.Interfaces;
 using ABB.Domain.Entities;
 using AutoMapper;
 
-namespace ABB.Application.TemplateJurnals62.Queries
+namespace ABB.Application.TemplateJurnals117.Queries
 {
-    public class TemplateJurnalDetail62Dto : IMapFrom<TemplateJurnalDetail62>
+    public class TemplateJurnalDetail117Dto : IMapFrom<TemplateJurnalDetail117>
     {
         public string Type { get; set; }
         public string JenisAss { get; set; }
@@ -21,7 +21,7 @@ namespace ABB.Application.TemplateJurnals62.Queries
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<TemplateJurnalDetail62, TemplateJurnalDetail62Dto>();
+            profile.CreateMap<TemplateJurnalDetail117, TemplateJurnalDetail117Dto>();
         }
     }
 }

@@ -36,33 +36,44 @@ namespace ABB.Application.TemplateJurnals62.Commands
         }
 
         public async Task<Unit> Handle(EditTemplateJurnalDetail62Command request, CancellationToken cancellationToken)
+        {
+            try
             {
-                try
+                // PERBAIKAN: Tambahkan Trim() dan filter GlAkun
+                var entity = _context.TemplateJurnalDetail62
+                    .FirstOrDefault(w => 
+                        w.Type == request.Type && 
+                        w.JenisAss == request.JenisAss && 
+                        w.GlAkun == request.GlAkun // <--- INI WAJIB ADA
+                    );
+
+                if (entity != null)
                 {
-                    var entity = _context.TemplateJurnalDetail62
-                        .FirstOrDefault(w => w.Type == request.Type && w.JenisAss == request.JenisAss);
+                    // Jangan update Primary Key (Type, JenisAss, GlAkun)
+                    // entity.Type = request.Type; // Tidak perlu update key
+                    // entity.JenisAss = request.JenisAss; // Tidak perlu update key
+                    // entity.GlAkun = request.GlAkun; // Tidak perlu update key
 
-                    if (entity != null)
-                    {
-                        entity.Type = request.Type;
-                        entity.JenisAss = request.JenisAss;
-                        entity.GlAkun = request.GlAkun;
-                        entity.GlRumus = request.GlRumus;
-                        entity.GlDk = request.GlDk;
-                        entity.GlUrut = request.GlUrut;
-                        entity.FlagDetail = request.FlagDetail;
-                        entity.FlagNt = request.FlagNt;
+                    entity.GlRumus = request.GlRumus;
+                    entity.GlDk = request.GlDk;
+                    entity.GlUrut = request.GlUrut;
+                    entity.FlagDetail = request.FlagDetail;
+                    entity.FlagNt = request.FlagNt; // Sesuaikan tipe data FlagNt di DB (biasanya string Y/N atau bit)
 
-                        await _context.SaveChangesAsync(cancellationToken);
-                    }
+                    await _context.SaveChangesAsync(cancellationToken);
                 }
-                catch (Exception ex)
+                else 
                 {
-                    _logger.LogError(ex, ex.Message);
-                    throw;
+                    throw new Exception($"Data tidak ditemukan. Akun: {request.GlAkun}");
                 }
-
-                return Unit.Value;
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
+
+            return Unit.Value;
+        }
     }
 }

@@ -6,27 +6,41 @@ function disableGridTextbox(dataItem){
     return false;
 }
 
-function onDeleteTemplateJurnal62(e){
+function onDeleteTemplateJurnalDetail62(e){
     e.preventDefault();
+    
+    // --- PERBAIKAN DI SINI ---
+    // 'this' merujuk ke Kendo Grid Widget.
+    // Kita ambil ID elemen HTML grid-nya secara langsung.
+    // Ini jauh lebih aman daripada mengandalkan dataItem.GridId.
+    var gridWidget = this;
+    var gridId = gridWidget.element.attr("id"); 
+    var gridSelector = "#" + gridId; 
+    // -------------------------
+
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    
     showConfirmation('Confirmation', `Are you sure you want to delete?`,
         function () {
-            showProgressOnGrid('#TemplateJurnal62Grid');
-            
             var data = {
-                Type: dataItem.Type,
-                JenisAss: dataItem.JenisAss,
-            }
+                Type: dataItem.Type,         
+                JenisAss: dataItem.JenisAss, 
+                GlAkun: dataItem.GlAkun
+            };
+            
+            // Sekarang selector ini pasti benar (misal: #grid_detail_1024)
+            showProgressOnGrid(gridSelector);
 
-            ajaxPost("/TemplateJurnal62/DeleteTemplateJurnal62", JSON.stringify(data),
+            ajaxPost("/TemplateJurnal62/DeleteTemplateJurnalDetail62", JSON.stringify(data),
                 function (response) {
                     if (response.Result == "OK") {
                         showMessage('Success', response.Message);
-                    } else
+                        refreshGrid(gridSelector);
+                    } else {
                         showMessage('Error', response.Message);
-                    
-                    refreshGrid("#TemplateJurnal62Grid");
-                    closeProgressOnGrid('#TemplateJurnal62Grid');
+                    }
+
+                    closeProgressOnGrid(gridSelector);
                 }
             );
         }
@@ -53,63 +67,66 @@ function onSaveTemplateJurnal62(dataItem){
     );
 }
 
-function onDeleteTemplateJurnalDetail62(e){
-    e.preventDefault();
-    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-    showConfirmation('Confirmation', `Are you sure you want to delete?`,
-        function () {
-            var data = {
-                GlAkun: dataItem.GlAkun
-            }
-            
-            showProgressOnGrid("#grid_detail_" + data.GlAkun);
 
-            ajaxPost("/TemplateJurnal62/DeleteTemplateJurnalDetail62", JSON.stringify(data),
-                function (response) {
-                    if (response.Result == "OK") {
-                        showMessage('Success', response.Message);
-                    } else
-                        showMessage('Error', response.Message);
 
-                    refreshGrid("#grid_detail_" + data.GlAkun );
-                    closeProgressOnGrid("#grid_detail_" + data.GlAkun);
-                }
-            );
-        }
-    );
-}
 
-function onSaveTemplateJurnalDetail62(dataItem){
-    var url = dataItem.model.isNew() ? "/TemplateJurnal62/AddTemplateJurnalDetail62" : "/TemplateJurnal62/EditTemplateJurnalDetail62";
+function onSaveTemplateJurnalDetail62(e) {
+    // Agar Kendo tidak menjalankan save bawaan (karena kita pakai manual Ajax)
+    // e.preventDefault(); // Opsional, tergantung config datasource
+
+    var model = e.model;
+    
+    // PERBAIKAN: Ambil ID Grid dari sender event, bukan dari model data
+    // e.sender.element adalah elemen <div> grid tersebut
+    var gridElement = e.sender.element;
+    var gridSelector = "#" + gridElement.attr("id"); 
+
+    var url = model.isNew() ? "/TemplateJurnal62/AddTemplateJurnalDetail62"
+                            : "/TemplateJurnal62/EditTemplateJurnalDetail62";
 
     var data = {
-        Type: dataItem.model.Type,
-        JenisAss: dataItem.model.JenisAss,
-        GlAkun: dataItem.model.GlAkun,
-        GlRumus: dataItem.model.GlRumus,
-        GlDk: dataItem.model.GlDk,
-        GlUrut: dataItem.model.GlUrut,
-        FlagDetail: dataItem.model.FlagDetail,
-        FlagNt: dataItem.model.FlagNt
+        // Pastikan di-TRIM agar key cocok di DB
+        Type: model.Type ? model.Type.trim() : "",
+        JenisAss: model.JenisAss ? model.JenisAss.trim() : "",
+        GlAkun: model.GlAkun ? model.GlAkun.trim() : "",
+        
+        GlRumus: model.GlRumus,
+        GlDk: model.GlDk,
+        GlUrut: model.GlUrut,
+        FlagDetail: model.FlagDetail,
+        // Konversi Boolean Grid ke String/Boolean sesuai ViewModel C#
+        FlagNt: model.FlagNt 
+    };
 
-    }
-    showProgressOnGrid("#grid_detail_" + data.GlAkun);
+    showProgressOnGrid(gridSelector);
 
     ajaxPost(url, JSON.stringify(data),
         function (response) {
-            refreshGrid("#grid_detail_" + data.GlAkun );
             if (response.Result == "OK") {
                 showMessage('Success', response.Message);
-            } else
+                // Refresh Grid yang benar
+                refreshGrid(gridSelector);
+            } else {
                 showMessage('Error', response.Message);
-
-            closeProgressOnGrid("#grid_detail_" + data.GlAkun);
-        }
-    );
+                // Jika error, cancel changes di grid biar balik ke nilai awal
+                // $(gridSelector).data("kendoGrid").cancelChanges();
+            }
+            closeProgressOnGrid(gridSelector);
+        });
 }
 
-function onEditTemplateJurnalDetail62(dataItem){
-    var gridId = dataItem.GridId
-    if(dataItem.model.isNew())
-        dataItem.model.GridId = GridId;
+function onEditTemplateJurnalDetail62(e) {
+    if (!e.model.isNew()) {
+        var glAkunField = e.container.find("input[name='GlAkun']");
+        
+        // 2. Disable atau set Readonly input tersebut
+        glAkunField.attr("readonly", true);
+        
+        // 3. Tambahkan class biar kelihatan abu-abu (visual cue kalau disabled)
+        glAkunField.addClass("k-state-disabled");
+        
+        // Jika inputnya berupa DropDownList atau Numeric, disable juga widget-nya:
+        // var widget = glAkunField.data("kendoDropDownList"); // contoh kalau dropdown
+        // if(widget) widget.enable(false);
+    }
 }

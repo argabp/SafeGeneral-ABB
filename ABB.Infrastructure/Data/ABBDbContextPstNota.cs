@@ -27,6 +27,8 @@ using EntriPeriodeEntity = ABB.Domain.Entities.EntriPeriode;
 using TipeAkun117Entity = ABB.Domain.Entities.TipeAkun117;
 using TemplateJurnal62Entity = ABB.Domain.Entities.TemplateJurnal62;
 using TemplateJurnalDetail62Entity = ABB.Domain.Entities.TemplateJurnalDetail62;
+using TemplateJurnal117Entity = ABB.Domain.Entities.TemplateJurnal117;
+using TemplateJurnalDetail117Entity = ABB.Domain.Entities.TemplateJurnalDetail117;
 
 namespace ABB.Infrastructure.Data
 {
@@ -60,6 +62,8 @@ namespace ABB.Infrastructure.Data
         public DbSet<TipeAkun117Entity> TipeAkun117 { get; set; }
         public DbSet<TemplateJurnal62Entity> TemplateJurnal62 { get; set; }
         public DbSet<TemplateJurnalDetail62Entity> TemplateJurnalDetail62 { get; set; }
+        public DbSet<TemplateJurnal117Entity> TemplateJurnal117 { get; set; }
+        public DbSet<TemplateJurnalDetail117Entity> TemplateJurnalDetail117 { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -85,6 +89,8 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new TipeAkun117Map());
             builder.ApplyConfiguration(new TemplateJurnal62Map());
             builder.ApplyConfiguration(new TemplateJurnalDetail62Map());
+            builder.ApplyConfiguration(new TemplateJurnal117Map());
+            builder.ApplyConfiguration(new TemplateJurnalDetail117Map());
 
 
         }
