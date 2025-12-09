@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ABB.Application.Approvals.Commands;
 using ABB.Application.Approvals.Queries;
 using ABB.Application.Common;
+using ABB.Application.Common.Queries;
 using ABB.Application.DokumenAkseptasis.Commands;
 using ABB.Application.DokumenAkseptasis.Queries;
 using ABB.Application.PengajuanAkseptasi.Queries;

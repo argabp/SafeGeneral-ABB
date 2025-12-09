@@ -39,7 +39,7 @@
             columns.Command(command =>
             {
                 command.Custom("Edit")
-                    .Text(" ")
+                    .Text(" Edit")
                     .IconClass("fa fa-pencil-alt")
                     .HtmlAttributes(new { title = "Edit" })
                     .Click("OnClickEditRegisterKlaim");
@@ -63,12 +63,12 @@
                 //     .IconClass("fa fa-ban")
                 //     .HtmlAttributes(new { title = "Batal Akseptasi" })
                 //     .Click("OnClickBatalAkseptasiPengajuanAkseptasi");
-                // command.Custom("Print")
-                //     .Text(" ")
-                //     .IconClass("fa fa-print")
-                //     .HtmlAttributes(new { title = "Print" })
-                //     .Click("OnClickPrintPengajuanAkseptasi");
-            }).Title("Action").Width(100).Locked(true);
+                command.Custom("Print")
+                    .Text(" Print")
+                    .IconClass("fa fa-print")
+                    .HtmlAttributes(new { title = "Print" })
+                    .Click("OnClickPrintPengajuanKlaim");
+            }).Title("Action").Width(200).Locked(true);
             columns.Bound(col => col.Id).Hidden();
             columns.Bound(col => col.nm_cb).Title("Cabang");
             columns.Bound(col => col.nm_cob).Title("COB");

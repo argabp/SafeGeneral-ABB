@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using ABB.Application.Common.Exceptions;
+using ABB.Application.Common.Queries;
 using ABB.Application.DokumenKlaims.Commands;
 using ABB.Application.DokumenKlaims.Queries;
 using ABB.Application.SebabKejadians.Queries;

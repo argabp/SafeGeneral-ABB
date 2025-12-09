@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KETERANGAN STATUS KLAIM</title>
+    <style>
+        body {
+            /*font-family: Arial, sans-serif;*/
+            font-size: 11pt;   /* readable in print */
+            line-height: 1.4;  /* adds vertical space */
+        }
+        td {
+            font-size: 9pt;
+            padding: 2px 4px; /* give breathing room */
+            letter-spacing: 1px;
+        }
+        .header {
+            text-align: center;
+            font-weight: bold;
+        }
+        .form-title {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-decoration: underline;
+        }
+        .form-number {
+            text-align: center;
+        }
+        table {
+            border-collapse: collapse;
+            margin: 15px;
+        }
+        th, td {
+            text-align: left;
+        }
+    </style>
+</head>
+<body style="border: 3px solid black">
+<div style="background-color: #f0f0f0; border-bottom: 3px solid black">
+    <div class="header">
+        KETERANGAN STATUS KLAIM
+    </div>
+    <div class="form-number">
+        {{nomor_berkas}}
+    </div>
+</div>
+
+<table style="border: 1px dashed black; width: 95%;">
+    <tr style="border: 1px dashed black">
+        <td style="border: 1px dashed black">NO</td>
+        <td style="border: 1px dashed black">USER</td>
+        <td style="border: 1px dashed black">TANGGAL PROSES</td>
+        <td style="border: 1px dashed black">STATUS</td>
+        <td style="border: 1px dashed black">KETERANGAN</td>
+    </tr>
+    {{detail}}
+</table>
+
+</body>
+</html>

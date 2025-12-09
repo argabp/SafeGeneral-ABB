@@ -21,6 +21,7 @@ namespace ABB.Web.Modules.RegisterKlaim.Models
             profile.CreateMap<RegisterKlaimModel, GetDokumenRegisterKlaimsQuery>();
             profile.CreateMap<RegisterKlaimModel, GetRegisterKlaimQuery>();
             profile.CreateMap<RegisterKlaimModel, GetAnalisaDanEvaluasiQuery>();
+            profile.CreateMap<RegisterKlaimModel, GetReportPengajuanKlaimQuery>();
         }
     }
 }

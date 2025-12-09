@@ -515,7 +515,7 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
         
         public async Task<JsonResult> GetUserSign()
         {
-            var result = await Mediator.Send(new GetUserSignQuery()
+            var result = await Mediator.Send(new GetUserSignEscQuery()
             {
                 DatabaseName = Request.Cookies["DatabaseValue"]
             });

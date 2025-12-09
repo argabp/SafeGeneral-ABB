@@ -8,32 +8,32 @@ using ABB.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace ABB.Application.ApprovalAkseptasis.Queries
+namespace ABB.Application.Common.Queries
 {
-    public class GetUserSignQuery : IRequest<List<DropdownOptionDto>>
+    public class GetMataUangQuery : IRequest<List<DropdownOptionDto>>
     {
         public string DatabaseName { get; set; }
+        public string SearchKeyword { get; set; }
     }
 
-    public class GetUserSignQueryHandler : IRequestHandler<GetUserSignQuery, List<DropdownOptionDto>>
+    public class GetMataUangQueryHandler : IRequestHandler<GetMataUangQuery, List<DropdownOptionDto>>
     {
         private readonly IDbConnectionFactory _connectionFactory;
-        private readonly ILogger<GetUserSignQueryHandler> _logger;
+        private readonly ILogger<GetMataUangQueryHandler> _logger;
 
-        public GetUserSignQueryHandler(IDbConnectionFactory connectionFactory, ILogger<GetUserSignQueryHandler> logger)
+        public GetMataUangQueryHandler(IDbConnectionFactory connectionFactory, ILogger<GetMataUangQueryHandler> logger)
         {
             _connectionFactory = connectionFactory;
             _logger = logger;
         }
 
-        public async Task<List<DropdownOptionDto>> Handle(GetUserSignQuery request,
+        public async Task<List<DropdownOptionDto>> Handle(GetMataUangQuery request,
             CancellationToken cancellationToken)
         {
             try
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
-                return (await _connectionFactory.Query<DropdownOptionDto>("SELECT DISTINCT kd_user_sign Value, nm_user_sign Text " +
-                                                                          "FROM v_user_esc")).ToList();
+                return (await _connectionFactory.Query<DropdownOptionDto>(@"SELECT m.kd_mtu Value, m.nm_mtu + '(' + m.symbol + ')' Text FROM rf06 m")).ToList();
             }
             catch (Exception ex)
             {

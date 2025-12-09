@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ABB.Application.AkseptasiProduks.Commands;
 using ABB.Application.AkseptasiProduks.Queries;
 using ABB.Application.Common;
+using ABB.Application.Common.Queries;
 using ABB.Application.PolisInduks.Queries;
 using ABB.Application.SebabKejadians.Queries;
 using ABB.Web.Modules.AkseptasiProduk.Models;

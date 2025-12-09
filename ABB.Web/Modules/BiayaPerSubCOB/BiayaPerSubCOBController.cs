@@ -6,6 +6,7 @@ using ABB.Application.BiayaPerSubCOBs.Commands;
 using ABB.Application.BiayaPerSubCOBs.Queries;
 using ABB.Application.Common;
 using ABB.Application.Common.Exceptions;
+using ABB.Application.Common.Queries;
 using ABB.Application.SebabKejadians.Queries;
 using ABB.Web.Extensions;
 using ABB.Web.Modules.Base;

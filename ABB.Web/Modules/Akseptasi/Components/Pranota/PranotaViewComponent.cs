@@ -21,7 +21,7 @@ namespace ABB.Web.Modules.Akseptasi.Components.Pranota
 
         public async Task<IViewComponentResult> InvokeAsync(AkseptasiPranotaParameterViewModel model)
         {
-            return View("~/Modules/Akseptasi/Views/Empty.cshtml");
+            return View("~/Modules/Shared/Empty.cshtml");
         }
     }
 }

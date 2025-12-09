@@ -8,32 +8,32 @@ using ABB.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace ABB.Application.BiayaMaterais.Queries
+namespace ABB.Application.Common.Queries
 {
-    public class GetMataUangQuery : IRequest<List<DropdownOptionDto>>
+    public class GetCobQuery : IRequest<List<DropdownOptionDto>>
     {
         public string DatabaseName { get; set; }
-        public string SearchKeyword { get; set; }
     }
 
-    public class GetMataUangQueryHandler : IRequestHandler<GetMataUangQuery, List<DropdownOptionDto>>
+    public class GetCobQueryHandler : IRequestHandler<GetCobQuery, List<DropdownOptionDto>>
     {
         private readonly IDbConnectionFactory _connectionFactory;
-        private readonly ILogger<GetMataUangQueryHandler> _logger;
+        private readonly ILogger<GetCobQueryHandler> _logger;
 
-        public GetMataUangQueryHandler(IDbConnectionFactory connectionFactory, ILogger<GetMataUangQueryHandler> logger)
+        public GetCobQueryHandler(IDbConnectionFactory connectionFactory, ILogger<GetCobQueryHandler> logger)
         {
             _connectionFactory = connectionFactory;
             _logger = logger;
         }
 
-        public async Task<List<DropdownOptionDto>> Handle(GetMataUangQuery request,
+        public async Task<List<DropdownOptionDto>> Handle(GetCobQuery request,
             CancellationToken cancellationToken)
         {
             try
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
-                return (await _connectionFactory.Query<DropdownOptionDto>(@"SELECT m.kd_mtu Value, m.nm_mtu + '(' + m.symbol + ')' Text FROM rf06 m")).ToList();
+                return (await _connectionFactory.Query<DropdownOptionDto>("SELECT RTRIM(LTRIM(kd_cob)) Value, nm_cob Text " +
+                                                                          "FROM rf04")).ToList();
             }
             catch (Exception ex)
             {

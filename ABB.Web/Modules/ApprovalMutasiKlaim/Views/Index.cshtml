@@ -1,0 +1,120 @@
+﻿@using Kendo.Mvc.UI
+@using ABB.Application.ApprovalMutasiKlaims.Queries
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Approval Mutasi Klaim";
+}
+<script src="~/Modules/ApprovalMutasiKlaim/JS/approvalMutasiKlaim.index.js"></script>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-4">
+            Approval Mutasi Klaim
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        @(Html.Kendo().Grid<ApprovalMutasiKlaimDto>()
+        .Name("ApprovalMutasiKlaimGrid")
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetApprovalMutasiKlaims", "ApprovalMutasiKlaim").Data("searchFilter"))
+        )
+        .Columns(columns =>
+        {
+            columns.Command(command =>
+            {
+                command.Custom("EditMutasiKlaim")
+                    .Text("Edit")
+                    .IconClass("fa fa-pencil-alt")
+                    .HtmlAttributes(new { title = "Edit" })
+                    .Click("btnClickEditApprovalMutasiKlaim");
+                command.Custom("Info")
+                    .Text("Info")
+                    .IconClass("fa fa-info-circle")
+                    .HtmlAttributes(new { title = "Info" })
+                    .Click("OnClickInfoApprovalMutasiKlaim");
+                command.Custom("Process")
+                    .Text("Process")
+                    .IconClass("fa fa-check-square")
+                    .HtmlAttributes(new { title = "Process" })
+                    .Click("OnClickProcessApprovalMutasiKlaim");
+                command.Custom("Escalated")
+                    .Text("Escalated")
+                    .IconClass("fa fa-hand-paper")
+                    .HtmlAttributes(new { title = "Escalated" })
+                    .Click("OnClickEscalatedApprovalMutasiKlaim");
+                command.Custom("Settled")
+                    .Text("Settled")
+                    .IconClass("fa fa-child")
+                    .HtmlAttributes(new { title = "Settled" })
+                    .Click("OnClickSettledApprovalMutasiKlaim");
+                command.Custom("Print")
+                    .Text("Print")
+                    .IconClass("fa fa-print")
+                    .HtmlAttributes(new { title = "Print" })
+                    .Click("OnClickPrintApprovalMutasiKlaim");
+
+            }).Title("Action").Width(300).Locked(true);
+            columns.Bound(col => col.Id).Hidden();
+            columns.Bound(col => col.nm_cb).Title("Cabang");
+            columns.Bound(col => col.nm_cob).Title("COB");
+            columns.Bound(col => col.nm_scob).Title("SCOB");
+            columns.Bound(col => col.nomor_berkas).Title("No. Pengajuan Berkas");
+            columns.Bound(col => col.nm_tertanggung).Title("Tertanggung");
+            columns.Bound(col => col.status).Title("Status");
+            columns.Bound(col => col.user_status).Title("User Status");
+            columns.Bound(col => col.tgl_status).Title("Tanggal Status").Format("{0: dd-MM-yyyy}");
+        })
+        .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                    )
+        .Sortable()
+        .Filterable()
+        .Scrollable()
+        .Height(380)
+        .Resizable(a=>a.Columns(true))
+        .Events(ev => ev.DataBound("setButtonActions"))
+    
+            )
+        
+        @(Html.Kendo().Window()
+                    .Name("InfoApprovalMutasiKlaimWindow")
+                    .Title("Info Approval Mutasi Klaim Page")
+                    .Width(1200)
+                    .Modal(true)
+                    .Visible(false)
+                    .Draggable(true)
+            )
+        
+        @(Html.Kendo().Window()
+                    .Name("ApprovalWindow")
+                    .Title("Approval Page")
+                    .Width(1000)
+                    .Modal(true)
+                    .Visible(false)
+                    .Draggable(true)
+            )
+
+        @(Html.Kendo().Window()
+            .Name("MutasiKlaimWindow")
+            .Title("Mutasi Klaim Page")
+            .Width(800)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+        )
+    </div>
+</div>
+

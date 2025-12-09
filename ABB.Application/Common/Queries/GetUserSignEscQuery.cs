@@ -8,32 +8,32 @@ using ABB.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace ABB.Application.SebabKejadians.Queries
+namespace ABB.Application.Common.Queries
 {
-    public class GetCobQuery : IRequest<List<DropdownOptionDto>>
+    public class GetUserSignEscQuery : IRequest<List<DropdownOptionDto>>
     {
         public string DatabaseName { get; set; }
     }
 
-    public class GetCobQueryHandler : IRequestHandler<GetCobQuery, List<DropdownOptionDto>>
+    public class GetUserSignEscQueryHandler : IRequestHandler<GetUserSignEscQuery, List<DropdownOptionDto>>
     {
         private readonly IDbConnectionFactory _connectionFactory;
-        private readonly ILogger<GetCobQueryHandler> _logger;
+        private readonly ILogger<GetUserSignEscQueryHandler> _logger;
 
-        public GetCobQueryHandler(IDbConnectionFactory connectionFactory, ILogger<GetCobQueryHandler> logger)
+        public GetUserSignEscQueryHandler(IDbConnectionFactory connectionFactory, ILogger<GetUserSignEscQueryHandler> logger)
         {
             _connectionFactory = connectionFactory;
             _logger = logger;
         }
 
-        public async Task<List<DropdownOptionDto>> Handle(GetCobQuery request,
+        public async Task<List<DropdownOptionDto>> Handle(GetUserSignEscQuery request,
             CancellationToken cancellationToken)
         {
             try
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
-                return (await _connectionFactory.Query<DropdownOptionDto>("SELECT RTRIM(LTRIM(kd_cob)) Value, nm_cob Text " +
-                                                                          "FROM rf04")).ToList();
+                return (await _connectionFactory.Query<DropdownOptionDto>("SELECT DISTINCT kd_user_sign Value, nm_user_sign Text " +
+                                                                          "FROM v_user_esc")).ToList();
             }
             catch (Exception ex)
             {

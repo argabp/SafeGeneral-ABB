@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RESUME PENGAJUAN KLAIM</title>
+    <style>
+        body {
+            /*font-family: Arial, sans-serif;*/
+            font-size: 11pt;   /* readable in print */
+            line-height: 1.4;  /* adds vertical space */
+        }
+        td {
+            font-size: 9pt;
+            padding: 2px 4px; /* give breathing room */
+            letter-spacing: 1px;
+        }
+        .header {
+            text-align: center;
+            font-weight: bold;
+        }
+        .form-title {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-decoration: underline;
+        }
+        .form-number {
+            text-align: center;
+        }
+        table {
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            text-align: left;
+        }
+        .section-title {
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            background-color: #f0f0f0;
+            border-bottom: 3px solid black;
+            border-top: 3px solid black;
+            padding-left: 8px;
+        }
+        .signature-section {
+            margin-top: 50px;
+            margin-right: 5%;
+            margin-left: 5%;
+        }
+        .signature-line {
+            display: inline-block;
+            width: 200px;
+            border-top: 1px solid black;
+            margin-right: 50px;
+            margin-top: 60px;
+        }
+        .signature-label {
+            display: inline-block;
+            width: 200px;
+            margin-right: 50px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body style="border: 3px solid black">
+<div style="background-color: #f0f0f0; border-bottom: 3px solid black">
+    <div class="header">
+        RESUME PENGAJUAN KLAIM
+    </div>
+    <div class="form-number">
+        {{nomor_berkas}}
+    </div>
+</div>
+
+<table style="border: none; margin-top: 20px">
+    <tr>
+        <td style="padding-left: 1em">CABANG</td>
+        <td style="padding-left: 1em">:</td>
+        <td style="padding-left: 1em">{{nm_cb}}</td>
+        <td style="padding-left: 2em">STATUS POLIS</td>
+        <td style="padding-left: 2em">:</td>
+        <td style="padding-left: 2em">{{st_pas}}</td>
+    </tr>
+    <tr>
+        <td style="padding-left: 1em">COB</td>
+        <td style="padding-left: 1em">:</td>
+        <td style="padding-left: 1em">{{nm_cob}}</td>
+        <td style="padding-left: 2em; width:20%">NILAI TSI 100%</td>
+        <td style="padding-left: 2em">:</td>
+        <td style="padding-left: 2em">{{symbol}} {{nilai_pertanggungan}}</td>
+    </tr>
+    <tr>
+        <td style="padding-left: 1em">SCOB</td>
+        <td style="padding-left: 1em">:</td>
+        <td style="padding-left: 1em">{{nm_scob}}</td>
+        <td style="padding-left: 2em">SHARE (%)</td>
+        <td style="padding-left: 2em">:</td>
+        <td style="padding-left: 2em">{{pst_share}}</td>
+    </tr>
+    <tr>
+        <td style="padding-left: 1em">MARKETING</td>
+        <td style="padding-left: 1em">:</td>
+        <td style="padding-left: 1em">{{nm_mkt}}</td>
+        <td style="padding-left: 2em">NILAI TSI SHARE (%)</td>
+        <td style="padding-left: 2em">:</td>
+        <td style="padding-left: 2em">{{symbol}} {{nilai_tsi_share}}</td>
+    </tr>
+    <tr>
+        <td style="padding-left: 1em">SUMBER BISNIS</td>
+        <td style="padding-left: 1em">:</td>
+        <td style="padding-left: 1em">{{nm_sb_bis}}</td>
+        <td style="padding-left: 2em">DISKON (%)</td>
+        <td style="padding-left: 2em">:</td>
+        <td style="padding-left: 2em">{{pst_dis}}%</td>
+    </tr>
+    <tr>
+        <td style="padding-left: 1em">TERTANGGUNG</td>
+        <td style="padding-left: 1em">:</td>
+        <td style="padding-left: 1em">{{nm_ttg}}</td>
+        <td style="padding-left: 2em">KOMISI (%)</td>
+        <td style="padding-left: 2em">:</td>
+        <td style="padding-left: 2em">{{pst_kms}}%</td>
+    </tr>
+    <tr>
+        <td style="padding-left: 1em">TANGGAL PENGAJUAN</td>
+        <td style="padding-left: 1em">:</td>
+        <td style="padding-left: 1em">{{tgl_pengajuan}}</td>
+        <td style="padding-left: 2em">NO POLIS CEDING</td>
+        <td style="padding-left: 2em">:</td>
+        <td style="padding-left: 2em">{{no_pol_pas}}</td>
+    </tr>
+    <tr>
+        <td style="padding-left: 1em">PERIODE AWAL</td>
+        <td style="padding-left: 1em">:</td>
+        <td style="padding-left: 1em">{{tgl_mul_ptg}}</td>
+        <td style="padding-left: 2em">TABLE OF LIMIT</td>
+        <td style="padding-left: 2em">:</td>
+        <td style="padding-left: 2em"></td>
+    </tr>
+    <tr>
+        <td style="padding-left: 1em">PERIODE AKHIR</td>
+        <td style="padding-left: 1em">:</td>
+        <td style="padding-left: 1em">{{tgl_akh_ptg}}</td>
+        <td style="padding-left: 2em" colspan=3>{{nm_tol}}</td>
+    </tr>
+</table>
+
+<div style="padding-left: 1em;">PANEL KOASURANSI MAKS : {{maks_panel}} PANEL</div>
+<div style="padding-left: 1em; font-weight: bold"><u>LEADER/MEMBER PERUSAHAAN ASURANSI :</U></div>
+<table style="border: 1px solid black; width: 60%; margin-left: 1em">
+    <tr style="border: 1px solid black">
+        <td style="border: 1px solid black; width: 10%">1</td>
+        <td style="border: 1px solid black">{{nm_pas1}}</td>
+        <td style="border: 1px solid black; width: 20%; text-align: right">{{pst_pas1}}%</td>
+    </tr>
+    <tr style="border: 1px solid black">
+        <td style="border: 1px solid black">2</td>
+        <td style="border: 1px solid black">{{nm_pas2}}</td>
+        <td style="border: 1px solid black; text-align: right">{{pst_pas2}}%</td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black">3</td>
+        <td style="border: 1px solid black">{{nm_pas3}}</td>
+        <td style="border: 1px solid black; text-align: right">{{pst_pas3}}%</td>
+    </tr>
+    <tr style="border: 1px solid black">
+        <td style="border: 1px solid black">4</td>
+        <td style="border: 1px solid black">{{nm_pas4}}</td>
+        <td style="border: 1px solid black; text-align: right">{{pst_pas4}}%</td>
+    </tr>
+    <tr style="border: 1px solid black">
+        <td style="border: 1px solid black">5</td>
+        <td style="border: 1px solid black">{{nm_pas5}}</td>
+        <td style="border: 1px solid black; text-align: right">{{pst_pas5}}%</td>
+    </tr>
+</table>
+
+<div style="padding-left: 1em; font-weight: bold"><u>PERHITUNGAN LIMIT CABANG/PEMASARAN:</U></div>
+<div style="padding-left: 1em;">TABLE OF LIMIT : Rp {{nilai_kapasitas}} * {{pst_tol}}% = {{nilai_kapasitas_tty1}} </div>
+<table style="border: 1px solid black; width: 95%; margin-left: 1em; margin-right: 1em">
+    <tr style="border: 1px solid black">
+        <td style="border: 1px solid black; text-align: center" colspan=2>SCHEME CO-INS</td>
+        <td style="border: 1px solid black; text-align: center">KAPASITAS TREATY</td>
+        <td style="border: 1px solid black; text-align: center">LIMIT TSI {{pst_limit_cab}}%</td>
+        <td style="border: 1px solid black; text-align: center">LIMIT SHARE MAKS</td>
+    </tr>
+    <tr style="border: 1px solid black">
+        <td style="border: 1px solid black">> {{pst_mul1}}</td>
+        <td style="border: 1px solid black; text-align: right">{{pst_koas1}}%</td>
+        <td style="border: 1px solid black; text-align: right">Rp {{nilai_kapasitas_tty1}}</td>
+        <td style="border: 1px solid black; text-align: right">Rp {{nilai_limit_tsi1}}</td>
+        <td style="border: 1px solid black; text-align: right">{{nilai_limit_sharemax1}}%</td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black">≥ {{pst_mul2}}% - {{pst_akh2}}%</td>
+        <td style="border: 1px solid black; text-align: right">{{pst_koas2}}%</td>
+        <td style="border: 1px solid black; text-align: right">Rp {{nilai_kapasitas_tty2}}</td>
+        <td style="border: 1px solid black; text-align: right">Rp {{nilai_limit_tsi2}}</td>
+        <td style="border: 1px solid black; text-align: right">{{nilai_limit_sharemax2}}%</td>
+    </tr>
+    <tr style="border: 1px solid black">
+        <td style="border: 1px solid black">≥ {{pst_mul3}}% - {{pst_akh3}}%</td>
+        <td style="border: 1px solid black; text-align: right">{{pst_koas3}}%</td>
+        <td style="border: 1px solid black; text-align: right">Rp {{nilai_kapasitas_tty3}}</td>
+        <td style="border: 1px solid black; text-align: right">Rp {{nilai_limit_tsi3}}</td>
+        <td style="border: 1px solid black; text-align: right">{{nilai_limit_sharemax3}}%</td>
+    </tr>
+    <tr style="border: 1px solid black">
+        <td style="border: 1px solid black">≤ {{pst_mul4}}%</td>
+        <td style="border: 1px solid black; text-align: right">{{pst_koas4}}%</td>
+        <td style="border: 1px solid black; text-align: right">Rp {{nilai_kapasitas_tty4}}</td>
+        <td style="border: 1px solid black; text-align: right">Rp {{nilai_limit_tsi4}}</td>
+        <td style="border: 1px solid black; text-align: right">{{nilai_limit_sharemax4}}%</td>
+    </tr>
+</table>
+
+<div class="section-title">KETERANGAN RESIKO :</div>
+<div style="padding-left: 8px;">{{ket_rsk}}</div>
+
+<div class="section-title">KELENGKAPAN DOKUMEN :</div>
+{{keterangan_resiko}}
+
+<div style="border-top: solid 3px black"></div>
+
+<div style="margin: 20px 5% 0 5%;">
+    <table border="1" cellspacing="0" cellpadding="0" width="100%" style="border-collapse: collapse;">
+        <tr>
+            <td width="30%" style="padding: 0; border: 1px solid black; vertical-align: top;">
+                <div style="background-color: #f0f0f0; text-align: center; padding: 8px 0; margin: 0; border-bottom: 1px solid black;">
+                    <strong>DIBUAT</strong>
+                </div>
+                <div style="padding: 10px; text-align: center;">
+                    <div style="margin: 20px 0; height: 80px; display: flex; align-items: flex-end; justify-content: center;">
+                        {{signature1}}
+                    </div>
+                    <div>{{jabatan_dibuat}}</div>
+                    <div>{{nm_dibuat}}</div>
+                    <div>{{tgl_dibuat}}</div>
+                </div>
+            </td>
+            <td width="30%" style="padding: 0; border: 1px solid black; vertical-align: top;">
+                <div style="background-color: #f0f0f0; text-align: center; padding: 8px 0; margin: 0; border-bottom: 1px solid black;">
+                    <strong>DIPERIKSA</strong>
+                </div>
+                <div style="padding: 10px; text-align: center;">
+                    <div style="margin: 20px 0; height: 80px; display: flex; align-items: flex-end; justify-content: center;">
+                        {{signature2}}
+                    </div>
+                    <div>{{jabatan_diperiksa}}</div>
+                    <div>{{nm_diperiksa}}</div>
+                    <div>{{tgl_diperiksa}}</div>
+                </div>
+            </td>
+            <td width="30%" style="padding: 0; border: 1px solid black; vertical-align: top;">
+                <div style="background-color: #f0f0f0; text-align: center; padding: 8px 0; margin: 0; border-bottom: 1px solid black;">
+                    <strong>DISETUJUI</strong>
+                </div>
+                <div style="padding: 10px; text-align: center;">
+                    <div style="margin: 20px 0; height: 80px; display: flex; align-items: flex-end; justify-content: center;">
+                        {{signature3}}
+                    </div>
+                    <div>{{jabatan_disetujui}}</div>
+                    <div>{{nm_disetujui}}</div>
+                    <div>{{tgl_disetujui}}</div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

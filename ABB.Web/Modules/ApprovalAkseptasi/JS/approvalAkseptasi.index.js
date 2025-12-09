@@ -17,7 +17,7 @@ function btnClickEditApprovalAkseptasi(e) {
     e.preventDefault();
     dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     console.log('dataItem', dataItem);
-    openPengajuanAkseptasiWindow(`/ApprovalAkseptasi/Edit?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_aks=${dataItem.no_aks}`, 'View');
+    openPengajuanAkseptasiWindow(`/ApprovalAkseptasi/Edit?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_aks=${dataItem.no_aks}`, 'Edit');
 }
 
 function OnClickInfoApprovalAkseptasi(e) {

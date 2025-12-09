@@ -19,7 +19,7 @@ namespace ABB.Web.Modules.Akseptasi.Components.Coverage
         {
             if (string.IsNullOrWhiteSpace(model.kd_cob) && string.IsNullOrWhiteSpace(model.kd_scob))
             {
-                return View("~/Modules/Akseptasi/Views/Empty.cshtml");
+                return View("~/Modules/Shared/Empty.cshtml");
             }
             
             // return View("_Coverage", akseptasiViewModel);

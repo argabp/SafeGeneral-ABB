@@ -15,7 +15,7 @@ namespace ABB.Web.Modules.MutasiKlaim.Models
         public string kd_thn { get; set; }
         public string no_kl { get; set; }
 
-        public Int16 kd_mts { get; set; }
+        public Int16 no_mts { get; set; }
 
         public Int16 kd_status { get; set; }
 

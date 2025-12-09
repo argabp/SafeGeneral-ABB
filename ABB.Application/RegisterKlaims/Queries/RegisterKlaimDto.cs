@@ -97,6 +97,8 @@ namespace ABB.Application.RegisterKlaims.Queries
         public string? kd_rk_bkl { get; set; }
         
         public string nm_ttg { get; set; }
+
+        public Int16 no_mts { get; set; }
         
         public void Mapping(Profile profile)
         {

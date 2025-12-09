@@ -406,5 +406,33 @@ namespace ABB.Web.Modules.RegisterKlaim
         {
             return View();
         }
+        
+        [HttpPost]
+        public async Task<ActionResult> GenerateReport([FromBody] RegisterKlaimModel model)
+        {
+            try
+            {
+                var command = Mapper.Map<GetReportPengajuanKlaimQuery>(model);
+                command.DatabaseName = Request.Cookies["DatabaseValue"];
+
+                var sessionId = HttpContext.Session.GetString("SessionId");
+
+                if (string.IsNullOrWhiteSpace(sessionId))
+                    throw new Exception("Session user tidak ditemukan");
+
+                var reportTemplate = await Mediator.Send(command);
+
+                _reportGeneratorService.GenerateReport("RegisterKlaim.pdf", reportTemplate.Item1, sessionId);
+                _reportGeneratorService.GenerateReport("KeteranganRegisterKlaim.pdf", reportTemplate.Item2,
+                    sessionId);
+
+                return Ok(new { Status = "OK", Data = sessionId });
+            }
+            catch (Exception e)
+            {
+                return Ok(new
+                    { Status = "ERROR", Message = e.InnerException == null ? e.Message : e.InnerException.Message });
+            }
+        }
     }
 }

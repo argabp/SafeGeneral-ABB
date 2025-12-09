@@ -6079,6 +6079,12 @@
       <None Update="Modules\MutasiKlaim\JS\mutasiKlaim.edit.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\Reports\Templates\PengajuanKlaim.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Reports\Templates\KeteranganPengajuanKlaim.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

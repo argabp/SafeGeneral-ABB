@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ABB.Application.Common;
 using ABB.Application.Common.Dtos;
+using ABB.Application.Common.Queries;
 using ABB.Application.PertanggunganKendaraans.Commands;
 using ABB.Application.PertanggunganKendaraans.Queries;
 using ABB.Application.SebabKejadians.Queries;

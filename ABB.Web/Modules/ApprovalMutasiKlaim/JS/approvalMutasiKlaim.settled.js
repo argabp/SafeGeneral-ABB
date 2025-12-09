@@ -1,0 +1,56 @@
+﻿$(document).ready(function () {
+    btnApprovalMutasiKlaimSettled();
+});
+
+function btnApprovalMutasiKlaimSettled(){
+    $('#btn-approvalMutasiKlaim-settled').click(function () {
+
+        if($("#keterangan").val().trim() === ""){
+            showMessage('Error', "Keterangan Wajib Diisi");
+            return;
+        }
+
+        showProgress('#ApprovalWindow');
+        setTimeout(function () {
+            approvalMutasiKlaimSettled();
+        }, 500);
+    });
+}
+
+function approvalMutasiKlaimSettled(){
+    var form = new FormData();
+
+    form.append("kd_cb", dataItem.kd_cb);
+    form.append("kd_cob", dataItem.kd_cob);
+    form.append("kd_scob", dataItem.kd_scob);
+    form.append("kd_thn", dataItem.kd_thn);
+    form.append("no_kl", dataItem.no_kl);
+    form.append("no_mts", dataItem.no_mts);
+    form.append("kd_user_status", dataItem.kd_user_status);
+    form.append("nomor_berkas", dataItem.nomor_berkas);
+    form.append("kd_status", 5);
+    form.append("tgl_status", Date());
+    form.append("keterangan", $("#keterangan").val());
+    form.append("status_name", "Banding");
+    form.append("kd_user_sign", $("#kd_user_sign").val());
+    
+    $("#upload").getKendoUpload().getFiles().forEach((data, index) => {
+        form.append("Files", data.rawFile);
+    });
+
+    ajaxUpload("/ApprovalMutasiKlaim/ApprovalMutasiKlaim", form, function (response) {
+        closeProgress("#ApprovalWindow");
+        if (response.Result == "OK") {
+            showMessage('Success', response.Message);
+            closeWindow("#ApprovalWindow");
+        }
+        else if (response.Result == "ERROR"){
+            showMessage('Error', response.Message);
+            closeWindow("#ApprovalWindow");
+        }
+        else
+            $("#ApprovalWindow").html(response);
+
+        refreshGrid("#ApprovalMutasiKlaimGrid");
+    })
+}
