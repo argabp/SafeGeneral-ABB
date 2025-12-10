@@ -6,7 +6,7 @@ function disableGridTextbox(dataItem){
     return false;
 }
 
-function onDeleteTemplateJurnal62(e){
+function onDeleteTemplateJurnal117(e){
     e.preventDefault();
     
     var gridWidget = this;
@@ -27,7 +27,7 @@ function onDeleteTemplateJurnal62(e){
             // Sekarang selector ini pasti benar (misal: #grid_detail_1024)
             showProgressOnGrid(gridSelector);
 
-            ajaxPost("/TemplateJurnal62/DeleteTemplateJurnal62", JSON.stringify(data),
+            ajaxPost("/TemplateJurnal117/DeleteTemplateJurnal117", JSON.stringify(data),
                 function (response) {
                     if (response.Result == "OK") {
                         showMessage('Success', response.Message);
@@ -43,7 +43,7 @@ function onDeleteTemplateJurnal62(e){
     );
 }
 
-function onDeleteTemplateJurnalDetail62(e){
+function onDeleteTemplateJurnalDetail117(e){
     e.preventDefault();
     
     // --- PERBAIKAN DI SINI ---
@@ -68,7 +68,7 @@ function onDeleteTemplateJurnalDetail62(e){
             // Sekarang selector ini pasti benar (misal: #grid_detail_1024)
             showProgressOnGrid(gridSelector);
 
-            ajaxPost("/TemplateJurnal62/DeleteTemplateJurnalDetail62", JSON.stringify(data),
+            ajaxPost("/TemplateJurnal117/DeleteTemplateJurnalDetail117", JSON.stringify(data),
                 function (response) {
                     if (response.Result == "OK") {
                         showMessage('Success', response.Message);
@@ -84,8 +84,8 @@ function onDeleteTemplateJurnalDetail62(e){
     );
 }
 
-function onSaveTemplateJurnal62(dataItem){    
-    var url = dataItem.model.isNew() ? "/TemplateJurnal62/AddTemplateJurnal62" : "/TemplateJurnal62/EditTemplateJurnal62";
+function onSaveTemplateJurnal117(dataItem){    
+    var url = dataItem.model.isNew() ? "/TemplateJurnal117/AddTemplateJurnal117" : "/TemplateJurnal117/EditTemplateJurnal117";
 
     var data = {
         Type: dataItem.model.Type,
@@ -95,7 +95,7 @@ function onSaveTemplateJurnal62(dataItem){
     
     ajaxPost(url, JSON.stringify(data),
         function (response) {
-            refreshGrid("#TemplateJurnal62Grid");
+            refreshGrid("#TemplateJurnal117Grid");
             if (response.Result == "OK") {
                 showMessage('Success', response.Message);
             } else
@@ -107,7 +107,7 @@ function onSaveTemplateJurnal62(dataItem){
 
 
 
-function onSaveTemplateJurnalDetail62(e) {
+function onSaveTemplateJurnalDetail117(e) {
     // Agar Kendo tidak menjalankan save bawaan (karena kita pakai manual Ajax)
     // e.preventDefault(); // Opsional, tergantung config datasource
 
@@ -118,8 +118,8 @@ function onSaveTemplateJurnalDetail62(e) {
     var gridElement = e.sender.element;
     var gridSelector = "#" + gridElement.attr("id"); 
 
-    var url = model.isNew() ? "/TemplateJurnal62/AddTemplateJurnalDetail62"
-                            : "/TemplateJurnal62/EditTemplateJurnalDetail62";
+    var url = model.isNew() ? "/TemplateJurnal117/AddTemplateJurnalDetail117"
+                            : "/TemplateJurnal117/EditTemplateJurnalDetail117";
 
     var data = {
         // Pastikan di-TRIM agar key cocok di DB
@@ -151,19 +151,51 @@ function onSaveTemplateJurnalDetail62(e) {
             closeProgressOnGrid(gridSelector);
         });
 }
+function onEditTemplateJurnalDetail117(e) {
+    // === LOGIC SAAT ADD NEW RECORD ===
+    if (e.model.isNew()) {
+        // 1. Logic Auto Number untuk GlUrut
+        var grid = e.sender; // Ambil instance grid
+        var data = grid.dataSource.data(); // Ambil semua data di grid
+        var maxUrut = 0;
 
-function onEditTemplateJurnalDetail62(e) {
-    if (!e.model.isNew()) {
+        // Loop semua data untuk cari nilai GlUrut tertinggi
+        for (var i = 0; i < data.length; i++) {
+            // Kita abaikan baris yang sedang kita edit/add ini (cek via uid)
+            if (data[i].uid !== e.model.uid) {
+                var currentVal = parseInt(data[i].GlUrut) || 0;
+                if (currentVal > maxUrut) {
+                    maxUrut = currentVal;
+                }
+            }
+        }
+
+        // Set nilai GlUrut baru = (Nilai Tertinggi + 1)
+        // e.model.set trigger update tampilan di grid
+        e.model.set("GlUrut", maxUrut + 1);
+    } 
+    // === LOGIC SAAT EDIT RECORD LAMA ===
+    else {
+        // Readonly GL AKUN jika Edit Mode
         var glAkunField = e.container.find("input[name='GlAkun']");
-        
-        // 2. Disable atau set Readonly input tersebut
         glAkunField.attr("readonly", true);
-        
-        // 3. Tambahkan class biar kelihatan abu-abu (visual cue kalau disabled)
         glAkunField.addClass("k-state-disabled");
-        
-        // Jika inputnya berupa DropDownList atau Numeric, disable juga widget-nya:
-        // var widget = glAkunField.data("kendoDropDownList"); // contoh kalau dropdown
-        // if(widget) widget.enable(false);
     }
+
+    // === LOGIC DROPDOWN D/K (Berlaku untuk Add & Edit) ===
+    var dkField = e.container.find("input[name='GlDk']");
+    if (dkField.length > 0) {
+        dkField.kendoDropDownList({
+            autoBind: true,
+            dataTextField: "text",
+            dataValueField: "value",
+            dataSource: [
+                { text: "D", value: "D" },
+                { text: "K", value: "K" }
+            ],
+            valuePrimitive: true 
+        });
+    }
+
+    
 }

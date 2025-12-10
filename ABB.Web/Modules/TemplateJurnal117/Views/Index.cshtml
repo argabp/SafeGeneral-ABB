@@ -1,5 +1,5 @@
 @using Kendo.Mvc.UI
-@using ABB.Application.TemplateJurnals62.Queries
+@using ABB.Application.TemplateJurnals117.Queries
 @using Microsoft.Extensions.Configuration
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Kendo.Mvc
@@ -8,9 +8,9 @@
 
 @{
     Layout = "~/Modules/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Otomatisasi Jurnal ";
+    ViewData["Title"] = "Otomatisasi Jurnal 117 ";
 }
-<script src="~/Modules/TemplateJurnal62/JS/TemplateJurnal62.index.js"></script>
+<script src="~/Modules/TemplateJurnal117/JS/TemplateJurnal117.index.js"></script>
 
 <script>
 function getDetailParams(e) {
@@ -18,7 +18,7 @@ function getDetailParams(e) {
     var gridDetail = this;
     var detailRow = $(gridDetail.element).closest(".k-detail-row"); 
     var masterRow = detailRow.prev();
-    var masterGrid = $("#TemplateJurnal62Grid").data("kendoGrid");
+    var masterGrid = $("#TemplateJurnal117Grid").data("kendoGrid");
     var dataItem = masterGrid.dataItem(masterRow);
 
     if (dataItem) {
@@ -50,19 +50,19 @@ function getDetailParams(e) {
 <div class="flat-box">
     <div class="row">
         <div class="flat-box-title col-md-6">
-            Otomatisasi Jurnal
+            Otomatisasi Jurnal 117
         </div>
     </div>
 
     <div class="flat-box-content">
         <div class="div-box">
-            @(Html.Kendo().Grid<TemplateJurnal62Dto>()
-                .Name("TemplateJurnal62Grid")
+            @(Html.Kendo().Grid<TemplateJurnal117Dto>()
+                .Name("TemplateJurnal117Grid")
                 .ToolBar(toolbar => toolbar.Create())
                 .Editable(editable => editable.Mode(GridEditMode.InLine))
                 .DataSource(dataSource => dataSource.Ajax()
                     // Pastikan searchFilter ada di scope global
-                    .Read(read => read.Action("GetTemplateJurnal62", "TemplateJurnal62").Data("searchFilter")) 
+                    .Read(read => read.Action("GetTemplateJurnal117", "TemplateJurnal117").Data("searchFilter")) 
                     .Model(model => model.Id(p => p.GridId))
                 )
                 .Columns(columns =>
@@ -70,14 +70,14 @@ function getDetailParams(e) {
                     columns.Command(command =>
                     {
                         command.Edit();
-                        command.Custom("DeleteTempleteJurnal62")
+                        command.Custom("DeleteTempleteJurnal117")
                             .Text("Delete")
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title = "Delete" })
-                            .Click("onDeleteTemplateJurnal62");
+                            .Click("onDeleteTemplateJurnal117");
                     }).Width(200).Title("Action");
                     columns.Bound(col => col.Type).Width(150).Title("Type").Editable("disableGridTextboxWhenEdit");
-                    columns.Bound(col => col.JenisAss).Width(150).Title("Jenis Ass");
+                    columns.Bound(col => col.JenisAss).Width(150).Title("Jenis Ass").Editable("disableGridTextboxWhenEdit");
                     columns.Bound(col => col.NamaJurnal).Width(150).Title("Nama Jurnal");
                 })
                 .Pageable(pager => pager.Refresh(true).Info(true).PageSizes(true))
@@ -87,7 +87,7 @@ function getDetailParams(e) {
                 .Scrollable()
                 .Height(450)
                 .Resizable(a => a.Columns(true))
-                .Events(ev => ev.DataBound("gridAutoFit").Save("onSaveTemplateJurnal62"))
+                .Events(ev => ev.DataBound("gridAutoFit").Save("onSaveTemplateJurnal117"))
             )
         </div>
 
@@ -98,13 +98,13 @@ function getDetailParams(e) {
         .Items(items =>
         {
             items.Add().Text("Detail").Content(@<text>
-                @(Html.Kendo().Grid<TemplateJurnalDetail62Dto>()
+                @(Html.Kendo().Grid<TemplateJurnalDetail117Dto>()
                     .Name("grid_detail_#=GridId#")
                     .ToolBar(t => t.Create())
                     .Editable(e => e.Mode(GridEditMode.InLine))
                     .DataSource(ds => ds.Ajax()
                       
-                        .Read(read => read.Action("GetDetailTemplateJurnal62", "TemplateJurnal62",
+                        .Read(read => read.Action("GetDetailTemplateJurnal117", "TemplateJurnal117",
                             new { Type = "#=Type#", JenisAss = "#=JenisAss#" }))
                         
                         .Model(m =>
@@ -123,31 +123,34 @@ function getDetailParams(e) {
                             m.Field(p => p.Type).Editable(false);
                          
                             m.Field(p => p.JenisAss).Editable(false);
+                            m.Field(p => p.GlDk).DefaultValue("D");
+                            m.Field(p => p.GlUrut).DefaultValue(0);
                             // ------------------------
                         })
                     )
                     .Columns(columns =>
                     {
                         // Kolom Type & JenisAss bisa ditampilkan atau disembunyikan (.Hidden())
+                        columns.Command(command =>
+                        {
+                            command.Edit();
+                            command.Custom("DeleteTemplateJurnalDetail117")
+                                .Text("Delete")
+                                .IconClass("k-icon k-i-delete")
+                                .HtmlAttributes(new { title = "Delete" })
+                                .Click("onDeleteTemplateJurnalDetail117");
+                        }).Width(200).Title("Action");
                         columns.Bound(m => m.Type).Title("Type").Width(150);
                         columns.Bound(m => m.JenisAss).Title("Jenis Ass").Width(150);
                         
                         columns.Bound(m => m.GlAkun).Title("GL Akun").Width(150);
                         columns.Bound(m => m.GlRumus).Title("Rumus").Width(150);
-                        columns.Bound(m => m.GlDk).Title("D/K").Width(80);
+                        columns.Bound(m => m.GlDk).Title("D/K").Width(100);
                         columns.Bound(m => m.GlUrut).Title("Urut").Width(80);
                         columns.Bound(m => m.FlagDetail).Title("Flag Detail").Width(120);
                         columns.Bound(m => m.FlagNt).Title("Flag NT").Width(100);
 
-                        columns.Command(command =>
-                        {
-                            command.Edit();
-                            command.Custom("DeleteTemplateJurnalDetail62")
-                                .Text("Delete")
-                                .IconClass("k-icon k-i-delete")
-                                .HtmlAttributes(new { title = "Delete" })
-                                .Click("onDeleteTemplateJurnalDetail62");
-                        }).Width(200).Title("Action");
+                        
                     })
                     .Pageable(p => p.Refresh(true).Info(true).PageSizes(true))
                     .Sortable()
@@ -158,8 +161,8 @@ function getDetailParams(e) {
                     .Resizable(a => a.Columns(true))
                     .Events(ev => ev
                         .DataBound("gridAutoFit")
-                        .Save("onSaveTemplateJurnalDetail62") 
-                        .Edit("onEditTemplateJurnalDetail62") 
+                        .Save("onSaveTemplateJurnalDetail117") 
+                        .Edit("onEditTemplateJurnalDetail117") 
                     )
                     .ToClientTemplate()
                 )

@@ -120,7 +120,7 @@
                            .Click("btnViewInquiryNota_OnClick");
                     }).Width(100).Title("Action").Locked(true);
                 })
-                .Pageable(pager => pager.Refresh(true))
+               .Pageable(pager => pager.Refresh(true).Info(true).PageSizes(true))
                 .Sortable()
                 .Filterable()
                 .Scrollable()

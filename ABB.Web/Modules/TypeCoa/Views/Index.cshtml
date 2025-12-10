@@ -56,7 +56,7 @@
                           .Click("onDeleteTypeCoa"); 
                     }).Width(180).Title("Action").Locked(true);
                 })
-                .Pageable(pager => pager.Refresh(true))
+                .Pageable(pager => pager.Refresh(true).Info(true).PageSizes(true))
                 .Sortable()
                 .Filterable()
                 .Scrollable()
