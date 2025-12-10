@@ -4,10 +4,7 @@ using System.Threading.Tasks;
 using ABB.Application.Common.Interfaces;
 using ABB.Domain.Entities;
 using MediatR;
-
 using VoucherBankEntity = ABB.Domain.Entities.VoucherBank;
-
-
 
 namespace ABB.Application.VoucherBanks.Commands
 {
@@ -44,6 +41,20 @@ namespace ABB.Application.VoucherBanks.Commands
 
         public async Task<string> Handle(CreateVoucherBankCommand request, CancellationToken cancellationToken)
         {
+            DateTime? tglVoucherFix = request.TanggalVoucher;
+
+            if (request.TanggalVoucher.HasValue)
+            {
+                // PERBAIKAN: Tambahkan .ToLocalTime() sebelum .Date
+                // Ini akan mengubah jam 17:00 (tgl 9) menjadi jam 00:00 (tgl 10) kembali.
+                tglVoucherFix = request.TanggalVoucher.Value.ToLocalTime().Date;
+
+                // OPSI CADANGAN (JURUS PAMUNGKAS):
+                // Jika servernya settingan UTC (Cloud/Azure) dan ToLocalTime gak mempan,
+                // Paksa tambah 7 jam (WIB):
+                // tglVoucherFix = request.TanggalVoucher.Value.AddHours(7).Date;
+            }
+
             var entity = new VoucherBankEntity
             {
                 // Memetakan semua data dari 'request' ke 'entity' baru
@@ -53,7 +64,10 @@ namespace ABB.Application.VoucherBanks.Commands
                 NoVoucher = request.NoVoucher,
                 KodeAkun = request.KodeAkun,
                 DiterimaDari = request.DiterimaDari,
-                TanggalVoucher = request.TanggalVoucher,
+                
+                // Gunakan variabel yang sudah diperbaiki
+                TanggalVoucher = tglVoucherFix,
+                
                 KodeMataUang = request.KodeMataUang,
                 TotalVoucher = request.TotalVoucher,
                 TotalDalamRupiah = request.TotalDalamRupiah,
@@ -62,7 +76,9 @@ namespace ABB.Application.VoucherBanks.Commands
                 KodeBank = request.KodeBank,
                 JenisPembayaran = request.JenisPembayaran,
                 NoBank = request.NoBank,
-                TanggalInput = DateTime.Now // Otomatis mengisi tanggal input saat ini
+                
+                // Otomatis mengisi tanggal input saat ini (Server Time)
+                TanggalInput = DateTime.Now 
             };
 
             _context.VoucherBank.Add(entity);

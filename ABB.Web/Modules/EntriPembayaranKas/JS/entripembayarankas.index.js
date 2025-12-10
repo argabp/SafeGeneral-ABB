@@ -581,9 +581,23 @@ function onSavePembayaranKasFinal() {
             if (response.success) {
                 showMessage("Success", "Data berhasil difinalkan.");
 
-                // reload grid dan bersihkan form
-                $("#DetailPembayaranGrid").data("kendoGrid").dataSource.read();
-                clearPaymentForm();
+                // 1. Refresh Grid UTAMA (yang ada di Index) supaya statusnya terupdate
+                // Pastikan ID grid utamanya benar, biasanya #EntriPembayaranKasGrid
+                var mainGrid = $("#BelumFinalGrid").data("kendoGrid");
+                if (mainGrid) {
+                    mainGrid.dataSource.read();
+                }
+                var secondGrid = $("#SudahFinalGrid").data("kendoGrid");
+                if (secondGrid) {
+                    secondGrid.dataSource.read();
+                }
+
+                // 2. Tutup Modal (Window)
+                var wnd = $("#EntriPembayaranKasWindow").data("kendoWindow");
+                if (wnd) {
+                    wnd.close();
+                }
+
             } else {
                 showMessage("Error", response.message || "Gagal memproses data.");
             }

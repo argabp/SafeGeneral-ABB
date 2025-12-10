@@ -5,10 +5,8 @@ using ABB.Application.Common.Interfaces;
 using MediatR;
 using VoucherKasEntity = ABB.Domain.Entities.VoucherKas;
 
-
 namespace ABB.Application.VoucherKass.Commands
 {
-    // Ini adalah "surat perintah" yang sudah Anda buat
     public class CreateVoucherKasCommand : IRequest<string>
     {
         public string KodeCabang { get; set; }
@@ -26,7 +24,6 @@ namespace ABB.Application.VoucherKass.Commands
         public string JenisPembayaran { get; set; }
     }
 
-    // ---> INI BAGIAN YANG HILANG: "Petugas Pelaksana" <---
     public class CreateVoucherKasCommandHandler : IRequestHandler<CreateVoucherKasCommand, string>
     {
         private readonly IDbContextPstNota _context;
@@ -38,7 +35,21 @@ namespace ABB.Application.VoucherKass.Commands
 
         public async Task<string> Handle(CreateVoucherKasCommand request, CancellationToken cancellationToken)
         {
-            // 1. Buat objek Entity dari data di dalam Command
+            DateTime? tglVoucherFix = request.TanggalVoucher;
+
+            if (request.TanggalVoucher.HasValue)
+            {
+                // PERBAIKAN: Tambahkan .ToLocalTime() sebelum .Date
+                // Ini akan mengubah jam 17:00 (tgl 9) menjadi jam 00:00 (tgl 10) kembali.
+                tglVoucherFix = request.TanggalVoucher.Value.ToLocalTime().Date;
+
+                // OPSI CADANGAN (JURUS PAMUNGKAS):
+                // Jika servernya settingan UTC (Cloud/Azure) dan ToLocalTime gak mempan,
+                // Paksa tambah 7 jam (WIB):
+                // tglVoucherFix = request.TanggalVoucher.Value.AddHours(7).Date;
+            }
+
+            // 2. Buat objek Entity
             var entity = new VoucherKasEntity
             {
                 KodeCabang = request.KodeCabang,
@@ -50,21 +61,26 @@ namespace ABB.Application.VoucherKass.Commands
                 KodeMataUang = request.KodeMataUang,
                 KeteranganVoucher = request.KeteranganVoucher,
                 FlagPosting = request.FlagPosting,
-                TanggalVoucher = request.TanggalVoucher,
+                
+                // Gunakan tanggal yang sudah diperbaiki
+                TanggalVoucher = tglVoucherFix, 
+                
                 TotalVoucher = request.TotalVoucher,
                 TotalDalamRupiah = request.TotalDalamRupiah,
-                TanggalInput = DateTime.Now,
+                
+                // Tanggal Input diset di sini (Server Time)
+                TanggalInput = DateTime.Now, 
+                
                 JenisPembayaran = request.JenisPembayaran
-
             };
 
-            // 2. Tambahkan entity baru ke DbContext
+            // 3. Tambahkan entity baru ke DbContext
             _context.VoucherKas.Add(entity);
 
-            // 3. Simpan perubahan ke database
+            // 4. Simpan perubahan ke database
             await _context.SaveChangesAsync(cancellationToken);
 
-            // 4. Kembalikan Primary Key dari data yang baru dibuat
+            // 5. Kembalikan Primary Key
             return entity.NoVoucher;
         }
     }

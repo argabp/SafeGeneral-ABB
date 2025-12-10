@@ -129,6 +129,15 @@ function getDetailParams(e) {
                     .Columns(columns =>
                     {
                         // Kolom Type & JenisAss bisa ditampilkan atau disembunyikan (.Hidden())
+                        columns.Command(command =>
+                        {
+                            command.Edit();
+                            command.Custom("DeleteTemplateJurnalDetail62")
+                                .Text("Delete")
+                                .IconClass("k-icon k-i-delete")
+                                .HtmlAttributes(new { title = "Delete" })
+                                .Click("onDeleteTemplateJurnalDetail62");
+                        }).Width(200).Title("Action");
                         columns.Bound(m => m.Type).Title("Type").Width(150);
                         columns.Bound(m => m.JenisAss).Title("Jenis Ass").Width(150);
                         
@@ -139,15 +148,7 @@ function getDetailParams(e) {
                         columns.Bound(m => m.FlagDetail).Title("Flag Detail").Width(120);
                         columns.Bound(m => m.FlagNt).Title("Flag NT").Width(100);
 
-                        columns.Command(command =>
-                        {
-                            command.Edit();
-                            command.Custom("DeleteTemplateJurnalDetail62")
-                                .Text("Delete")
-                                .IconClass("k-icon k-i-delete")
-                                .HtmlAttributes(new { title = "Delete" })
-                                .Click("onDeleteTemplateJurnalDetail62");
-                        }).Width(200).Title("Action");
+                  
                     })
                     .Pageable(p => p.Refresh(true).Info(true).PageSizes(true))
                     .Sortable()

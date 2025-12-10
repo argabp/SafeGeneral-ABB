@@ -112,93 +112,6 @@
 
 
     <hr/>
-     <form id="FinalPaymentKasForm" >
-        <input type="hidden" id="No" name="No" value="0" />
-        <input type="hidden" asp-for="Kurs" id="Kurs_Lihat" value="@Model.Kurs" />
-        <div class="row">
-            <div class="form-group col-sm-2">
-                <label asp-for="FlagPembayaran"></label>
-                <div>
-                    <kendo-dropdownlist 
-                                        name="FlagPembayaran_Lihat"
-                                        style="width: 100%;"
-                                        datatextfield="Text"
-                                        datavaluefield="Value"
-                                        bind-to="ViewBag.FlagPembayaranOptions">
-                        
-                    </kendo-dropdownlist>
-                    <span asp-validation-for="FlagPembayaran" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group col-sm-3" > 
-                <label asp-for="NoNota4"></label>
-                <div class="input-group" style=" display: flex;     width: 100%;     flex-direction: row;     flex-wrap: nowrap;     align-content: center;     justify-content: center;     align-items: center; ">
-                    <kendo-textbox  name="NoNota4_Lihat"  style="width:100%;" readonly="true" />
-                    <div class="input-group-append">
-                        <button id="buttonselectnota_Lihat" type="button" class="btn btn-info" disabled>Select</button>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group col-sm-3" id="akunField_Lihat" style="display:none;">
-                    <label asp-for="KodeAkun"></label>
-                    <kendo-Combobox 
-                                    name="KodeAkun_Lihat"
-                                    style="width:100%;"
-                                    datatextfield="Text"
-                                    datavaluefield="Value"
-                                     bind-to="ViewBag.KodeAkunOptions"
-                                    filter="FilterType.Contains"
-                                    placeholder="Pilih Akun..."  >
-                    </kendo-Combobox>
-                    <span asp-validation-for="KodeAkun" class="text-danger"></span>
-            </div>
-            <div class="form-group col-sm-2 detail-payment-field">
-                    <label asp-for="KodeMataUang"></label>
-                    <div>
-                        <kendo-combobox 
-                                        name="KodeMataUang_Lihat"
-                                        style="width: 100%;"
-                                        datatextfield="Text"
-                                        datavaluefield="Value"
-                                        bind-to="ViewBag.MataUangOptions"
-                                        filter="FilterType.Contains"
-                                        placeholder="Pilih ..."
-                                    > 
-                        </kendo-combobox>
-                        <span asp-validation-for="KodeMataUang" class="text-danger"></span>
-                    </div>
-            </div>
-        
-            <div class="form-group col-sm-3 detail-payment-field">
-                <label asp-for="TotalBayar"></label>
-                <kendo-numerictextbox name="TotalBayar_Lihat"  format="n0" style="width:100%;" />
-            </div>
-
-             <div class="form-group col-sm-3 detail-payment-field">
-                <label asp-for="TotalDlmRupiah"></label>
-                <kendo-numerictextbox name="TotalDlmRupiah_Lihat" format="n0" style="width:100%;" readonly="true"/>
-            </div> 
-
-            <div class="form-group col-sm-2 detail-payment-field">
-                 <label asp-for="DebetKredit"></label>
-                <div>
-                    <kendo-dropdownlist 
-                                        style="width: 100%;"
-                                        name="DebetKredit_Lihat"
-                                        datatextfield="Text"
-                                        datavaluefield="Value"
-                                        bind-to="ViewBag.DebetKreditOptions">
-                        
-                    </kendo-dropdownlist>
-                    <span asp-validation-for="DebetKredit" class="text-danger"></span>
-                </div>
-            </div>
-        </div>
-    </form>
-    <div style="display: flex;gap: 10px;justify-content: flex-end;margin-right:10px">
-        <button type="button" id="btn-cancel-edit" class="btn btn-secondary" style="display: none;" onclick="clearFinalPaymentForm()">Cancel</button>
-        <button type="button" onclick="onUpdateFinalPembayaranKas()" class="btn btn-primary">Simpan Pembayaran</button>
-    </div>
 
     <script>
 
@@ -247,10 +160,6 @@
             cols.Bound(c => c.TotalBayar).Format("{0:n2}").Width(150).Title("Total Bayar");
             cols.Bound(c => c.TotalDlmRupiah).Format("{0:n2}").Width(180).Title("Total Dalam Rupiah");
             cols.Bound(c => c.DebetKredit).Title("D/K").Width(100);
-            cols.Command(command => {
-            command.Custom("EditDetail").Text("Edit").Click("onEditFinalPembayaran");
-           // command.Custom("DeleteDetail").Text("Delete").Click("onDeletePembayaranKas");
-            }).Title("Action").Width(180);
         })
         .NoRecords(nr => nr.Template("Belum ada pembayaran")).Pageable(pager => pager.Refresh(true))
                 .Sortable()
