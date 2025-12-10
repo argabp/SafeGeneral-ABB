@@ -10,7 +10,7 @@ namespace ABB.Infrastructure.Data.Mapping
         {
             builder.ToTable("abb_templatejurnal117");
 
-            builder.HasKey(t => t.Type);
+            builder.HasKey(t => new { t.Type, t.JenisAss });
 
             builder.Property(t => t.Type)
                 .HasColumnName("type")

@@ -70,7 +70,7 @@
                             .Click("onDeleteKasBank");
                     }).Title("Action").Locked(true).Width(200);
                 })
-                .Pageable(pager => pager.Refresh(true))
+                .Pageable(pager => pager.Refresh(true).Info(true).PageSizes(true))
                 .Sortable()
                 .Filterable()
                 .Scrollable()

@@ -12,7 +12,7 @@ namespace ABB.Infrastructure.Data.Mapping
             builder.ToTable("abb_templatejurnaldetail117");
             
             // ditambahin untuk pk
-            builder.HasKey(t => t.Type);
+            builder.HasKey(t => new { t.Type, t.JenisAss, t.GlAkun });
             builder.Property(t => t.Type).HasColumnName("type");
             builder.Property(t => t.JenisAss).HasColumnName("jn_ass");
             builder.Property(t => t.GlAkun).HasColumnName("gl_akun");
