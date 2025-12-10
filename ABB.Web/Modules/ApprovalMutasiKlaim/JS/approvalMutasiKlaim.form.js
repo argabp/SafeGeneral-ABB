@@ -1,15 +1,10 @@
 ﻿var state;
 
 $(document).ready(function () {
-    $('#PengajuanMutasiKlaimTab').kendoTabStrip();
+    showProgress('#RegisterKlaimWindow');
 
-    showProgress('#PengajuanMutasiKlaimWindow');
-    
-    var tabstrip = $('#PengajuanMutasiKlaimTab').data("kendoTabStrip");
-    tabstrip.select(0);
-    
     setTimeout(() => {
-        $("#ket_rsk").kendoEditor({
+        $("#ket_anev").kendoEditor({
             tools: [
                 "bold", "italic", "underline",
                 "justifyLeft", "justifyCenter", "justifyRight",
@@ -21,18 +16,17 @@ $(document).ready(function () {
             ],
             // other configuration as needed
         });
-        closeProgress('#PengajuanMutasiKlaimWindow');
+        closeProgress('#RegisterKlaimWindow');
     }, 2000)
 });
 
 
-function refreshGridLampiranPengajuanMutasiKlaim(){
+function refreshGridDokumenRegisterKlaim(){
     var kd_cb = $("#kd_cb").val();
     var kd_cob = $("#kd_cob").val();
     var kd_scob = $("#kd_scob").val();
     var kd_thn = $("#kd_thn").val();
     var no_kl = $("#no_kl").val();
-    var no_mts = $("#no_mts").val();
 
     var form = {};
 
@@ -41,14 +35,13 @@ function refreshGridLampiranPengajuanMutasiKlaim(){
     form.kd_scob = kd_scob;
     form.kd_thn = kd_thn;
     form.no_kl = no_kl;
-    form.no_mts = no_mts;
 
     var data = JSON.stringify(form);
 
-    ajaxPost("/ApprovalMutasiKlaim/GetLampiranPengajuanMutasiKlaim", data,
+    ajaxPost("/RegisterKlaim/GetDokumenRegisterKlaims", data,
         function (response) {
-            $('#lampiranPengajuanMutasiKlaimDS').val(JSON.stringify(response));
-            loadLampiranPengajuanMutasiKlaimDS();
+            $('#dokumenRegisterKlaimDS').val(JSON.stringify(response));
+            loadDokumenRegisterKlaimDS();
         }
     );
 }

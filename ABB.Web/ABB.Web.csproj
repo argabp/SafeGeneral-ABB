@@ -4807,6 +4807,7 @@
       <Folder Include="Modules\PostingKomisiTambahan\Models" />
       <Folder Include="Modules\PostingPolis\Models" />
       <Folder Include="wwwroot\img\profile-picture" />
+      <Folder Include="wwwroot\Reports\68249f47093e4c0e9a1b4042d181aee0\" />
     </ItemGroup>
 
     <ItemGroup>
@@ -6119,6 +6120,7 @@
       <Content Update="wwwroot\img\new_logo.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+      <Content Remove="wwwroot\Reports\4ac29f331c1a48889c1540fbe486a1ef\ApprovalMutasiKlaim.pdf" />
     </ItemGroup>
 
     <ItemGroup>

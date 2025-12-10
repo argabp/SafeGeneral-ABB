@@ -88,26 +88,9 @@ namespace ABB.Web.Modules.ApprovalMutasiKlaim
              return Json(ds.AsQueryable().ToDataSourceResult(request));
          }
          
-         public async Task<IActionResult> Edit(string kd_cb, string kd_cob,
-             string kd_scob, string kd_thn, string no_kl, Int16 no_mts)
+         public async Task<IActionResult> Edit(RegisterKlaimModel parameterModel)
          {
-             var mutasiKlaim = await Mediator.Send(new GetMutasiKlaimQuery()
-             {
-                 kd_cb = kd_cb,
-                 kd_cob = kd_cob,
-                 kd_scob = kd_scob,
-                 kd_thn = kd_thn,
-                 no_kl = no_kl,
-                 no_mts = no_mts,
-                 DatabaseName = Request.Cookies["DatabaseValue"]
-             });
-
-             mutasiKlaim.kd_cb = mutasiKlaim.kd_cb.Trim();
-             mutasiKlaim.kd_cob = mutasiKlaim.kd_cob.Trim();
-             mutasiKlaim.kd_scob = mutasiKlaim.kd_scob.Trim();
-             mutasiKlaim.validitas = mutasiKlaim.validitas.Trim();
-            
-             return PartialView(Mapper.Map<MutasiKlaimViewModel>(mutasiKlaim));
+             return PartialView(parameterModel);
          }
         
          [HttpPost]
@@ -223,9 +206,9 @@ namespace ABB.Web.Modules.ApprovalMutasiKlaim
  
                  var reportTemplate = await Mediator.Send(command);
  
-                 _reportGeneratorService.GenerateReport("ApprovalMutasiKlaim.pdf", reportTemplate.Item1, sessionId);
+                 _reportGeneratorService.GenerateReport("ApprovalMutasiKlaim.pdf", reportTemplate.Item1, sessionId, right: 10, top: 10, left: 10, bottom: 10);
                  _reportGeneratorService.GenerateReport("KeteranganApprovalMutasiKlaim.pdf", reportTemplate.Item2,
-                     sessionId);
+                     sessionId, right: 10, top: 10, left: 10, bottom: 10);
  
                  return Ok(new { Status = "OK", Data = sessionId });
              }

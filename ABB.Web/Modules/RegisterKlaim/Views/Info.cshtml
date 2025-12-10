@@ -1,25 +1,24 @@
-﻿@model List<ABB.Application.PengajuanAkseptasi.Queries.PengajuanAkseptasiStatusDto>
-@using ABB.Application.PengajuanAkseptasi.Queries
+﻿@using ABB.Application.ApprovalMutasiKlaims.Queries
 @using Kendo.Mvc.UI
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Kendo.Mvc
 @addTagHelper *, ABB.Web
 
-<script src="~/Modules/PengajuanAkseptasi/JS/pengajuanAkseptasi.info.js"></script>
+<script src="~/Modules/RegisterKlaim/JS/registerKlaim.info.js"></script>
 
 <div class="window-body">
     <div class="row">
         <div class="flat-box-title col-md-8">
         </div>
         <div class="col-md-3">
-            <input type="text" class="search-field-top " id="SearchPengajuanAkseptasiInfoKeyword" placeholder="Search"/>
+            <input type="text" class="search-field-top " id="SearchPengajuanMutasiKlaimInfoKeyword" placeholder="Search"/>
         </div>
     </div>
 
-     @(Html.Kendo().Grid<PengajuanAkseptasiStatusDto>()
-         .Name("PengajuanAkseptasiInfoGrid")
+     @(Html.Kendo().Grid<PengajuanKlaimStatusDto>()
+         .Name("PengajuanMutasiKlaimInfoGrid")
          .DataSource(dataSource => dataSource.Ajax()
-             .Read(read => read.Action("GetPengajuanAkseptasiStatus", "PengajuanAkseptasi").Data("dataPengajuanAkseptasiInfo"))
+             .Read(read => read.Action("GetApprovalMutasiKlaimStatus", "RegisterKlaim").Data("dataPengajuanMutasiKlaimInfo"))
          )
          .Columns(columns =>
          {
@@ -49,20 +48,20 @@
 </div>
 
 <script id="infoDetail" type="text/kendo-tmpl">
-    @(Html.Kendo().Grid<PengajuanAkseptasiStatusAttachmentDto>()
-        .Name("grid_#=Id#")
-        .Columns(columns =>
-        {
-            columns.Bound(o => o.nm_dokumen).Title("Nama Dokumen").ClientTemplate("<a href='/pengajuan-akseptasi-status-attachment/#= Id #/\\#: nm_dokumen \\#' target='_blank'>\\#: nm_dokumen \\#</a>");
-        })
-        .DataSource(dataSource => dataSource
-            .Ajax()
-            .PageSize(5)
-            .Read(read => read.Action("GetLampiranPengajuanAkseptasiStatus", "PengajuanAkseptasi",
-                new { kd_cb = "#=kd_cb#", kd_cob = "#=kd_cob#", kd_scob = "#=kd_scob#",
-                    kd_thn = "#=kd_thn#", no_aks = "#=no_aks#", no_urut = "#=no_urut#" }))
-        )
-        .Pageable()
-        .Sortable()
-        .ToClientTemplate())
+     @(Html.Kendo().Grid<PengajuanKlaimStatusAttachmentDto>()
+         .Name("grid_#=Id#")
+         .Columns(columns =>
+         {
+             columns.Bound(o => o.nm_dokumen).Title("Nama Dokumen").ClientTemplate("<a href='/pengajuan-klaim-status-attachment/#= Id #/\\#: nm_dokumen \\#' target='_blank'>\\#: nm_dokumen \\#</a>");
+         })
+         .DataSource(dataSource => dataSource
+             .Ajax()
+             .PageSize(5)
+             .Read(read => read.Action("GetLampiranApprovalMutasiKlaimStatus", "RegisterKlaim",
+                 new { kd_cb = "#=kd_cb#", kd_cob = "#=kd_cob#", kd_scob = "#=kd_scob#",
+                     kd_thn = "#=kd_thn#", no_kl = "#=no_kl#", no_mts = "#=no_mts#", no_urut = "#=no_urut#" }))
+         )
+         .Pageable()
+         .Sortable()
+         .ToClientTemplate())
 </script>

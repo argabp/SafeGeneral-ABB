@@ -33,7 +33,7 @@ function getDocumentNames() {
 
 function initLampiranPengajuanAkseptasiGrid() {
     $("#LampiranPengajuanAkseptasiGrid").kendoGrid({
-        pageable: false,
+        pageable: true,
         save: saveLampiranPengajuanAkseptasi,
         toolbar: ["create"],
         columns: [

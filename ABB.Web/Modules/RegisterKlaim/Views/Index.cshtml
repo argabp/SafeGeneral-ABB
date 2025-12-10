@@ -48,11 +48,11 @@
                 //     .IconClass("fa fa-eye")
                 //     .HtmlAttributes(new { title = "View" })
                 //     .Click("OnClickViewPengajuanAkseptasi");
-                // command.Custom("Info")
-                //     .Text(" ")
-                //     .IconClass("fa fa-info-circle")
-                //     .HtmlAttributes(new { title = "Info" })
-                //     .Click("OnClickInfoPengajuanAkseptasi");
+                command.Custom("Info")
+                    .Text("Info")
+                    .IconClass("fa fa-info-circle")
+                    .HtmlAttributes(new { title = "Info" })
+                    .Click("OnClickInfoRegisterKlaim");
                 // command.Custom("Submit")
                 //     .Text(" ")
                 //     .IconClass("fa fa-location-arrow")
@@ -105,13 +105,13 @@
             )
         
         @(Html.Kendo().Window()
-                    .Name("InfoPengajuanAkseptasiWindow")
-                    .Title("Info Pengajuan Akseptasi Page")
-                    .Width(1200)
-                    .Modal(true)
-                    .Visible(false)
-                    .Draggable(true)
-            )
+            .Name("InfoApprovalMutasiKlaimWindow")
+            .Title("Info Approval Mutasi Klaim Page")
+            .Width(1200)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+        )
         
         @(Html.Kendo().Window()
                     .Name("ApprovalWindow")

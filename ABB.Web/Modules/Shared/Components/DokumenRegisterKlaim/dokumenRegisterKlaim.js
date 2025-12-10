@@ -38,7 +38,7 @@ function getDocumentNames() {
 
 function initDokumenRegisterKlaimGrid() {
     $("#DokumenRegisterKlaimGrid").kendoGrid({
-        pageable: false,
+        pageable: true,
         save: saveDokumenRegisterKlaim,
         toolbar: ["create"],
         columns: [

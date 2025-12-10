@@ -35,6 +35,7 @@ namespace ABB.Application.RegisterKlaims.Queries
         public DateTime? tgl_akh_ptg { get; set; }
 
         public string? symbol { get; set; }
+        public string? symbol_lks { get; set; }
 
         public decimal? nilai_ttl_ptg { get; set; }
 
@@ -199,5 +200,19 @@ namespace ABB.Application.RegisterKlaims.Queries
         public decimal? nilai_limit_sharemax4 { get; set; }
 
         public decimal? pst_limit_cab { get; set; }
+
+        public string? tempat_kej { get; set; }
+        
+        public string? sebab_kerugian { get; set; }
+
+        public decimal? nilai_lks { get; set; }
+
+        public DateTime? tgl_lns_prm { get; set; }
+
+        public string? no_bukti_lns { get; set; }
+
+        public DateTime? tgl_kej { get; set; }
+
+        public DateTime? tgl_lapor { get; set; }
     }
 }

@@ -2,16 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ABB.Application.ApprovalMutasiKlaims.Queries;
 using ABB.Application.Common;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Exceptions;
 using ABB.Application.Common.Queries;
 using ABB.Application.Common.Services;
-using ABB.Application.PolisInduks.Queries;
 using ABB.Application.RegisterKlaims.Commands;
 using ABB.Application.RegisterKlaims.Queries;
-using ABB.Application.SebabKejadians.Queries;
 using ABB.Web.Extensions;
+using ABB.Web.Modules.ApprovalMutasiKlaim.Models;
 using ABB.Web.Modules.Base;
 using ABB.Web.Modules.RegisterKlaim.Models;
 using Kendo.Mvc.Extensions;
@@ -28,9 +28,9 @@ namespace ABB.Web.Modules.RegisterKlaim
         private readonly IConfiguration _configuration;
         private readonly IReportGeneratorService _reportGeneratorService;
         private readonly ILogger<RegisterKlaimController> _logger;
-        private static List<DropdownOptionDto> _cabangs;
-        private static List<DropdownOptionDto> _cobs;
-        private static List<SCOBDto> _scobs;
+        private static List<DropdownOptionDto> _cabangs = new List<DropdownOptionDto>();
+        private static List<DropdownOptionDto> _cobs  = new List<DropdownOptionDto>();
+        private static List<SCOBDto> _scobs  = new List<SCOBDto>();
 
         public RegisterKlaimController(IConfiguration configuration, IReportGeneratorService reportGeneratorService,
             ILogger<RegisterKlaimController> logger)
@@ -208,22 +208,46 @@ namespace ABB.Web.Modules.RegisterKlaim
             }
         }
         
-        public JsonResult GetCabang()
+        public async Task<JsonResult> GetCabang()
         {
+            if (!_cabangs.Any())
+            {
+                _cabangs = await Mediator.Send(new GetCabangQuery()
+                {
+                    DatabaseName = Request.Cookies["DatabaseValue"]
+                });
+            }
+            
             return Json(_cabangs);
         }
 
-        public JsonResult GetCOB()
+        public async Task<JsonResult> GetCOB()
         {
+            if (!_cobs.Any())
+            {
+                _cobs = await Mediator.Send(new GetCobQuery()
+                {
+                    DatabaseName = Request.Cookies["DatabaseValue"]
+                });
+            }
+            
             return Json(_cobs);
         }
 
-        public JsonResult GetSCOB(string kd_cob)
+        public async Task<JsonResult> GetSCOB(string kd_cob)
         {
             var result = new List<DropdownOptionDto>();
 
             if (string.IsNullOrWhiteSpace(kd_cob))
                 kd_cob = string.Empty;
+
+            if (!_scobs.Any())
+            {
+                _scobs = await Mediator.Send(new GetAllSCOBQuery()
+                {
+                    DatabaseName = Request.Cookies["DatabaseValue"]
+                });
+            }
             
             foreach (var scob in _scobs.Where(w => w.kd_cob == kd_cob.Trim()))
             {
@@ -422,9 +446,9 @@ namespace ABB.Web.Modules.RegisterKlaim
 
                 var reportTemplate = await Mediator.Send(command);
 
-                _reportGeneratorService.GenerateReport("RegisterKlaim.pdf", reportTemplate.Item1, sessionId);
+                _reportGeneratorService.GenerateReport("RegisterKlaim.pdf", reportTemplate.Item1, sessionId, right: 10, top: 10, left: 10, bottom: 10);
                 _reportGeneratorService.GenerateReport("KeteranganRegisterKlaim.pdf", reportTemplate.Item2,
-                    sessionId);
+                    sessionId, right: 10, top: 10, left: 10, bottom: 10);
 
                 return Ok(new { Status = "OK", Data = sessionId });
             }
@@ -433,6 +457,28 @@ namespace ABB.Web.Modules.RegisterKlaim
                 return Ok(new
                     { Status = "ERROR", Message = e.InnerException == null ? e.Message : e.InnerException.Message });
             }
+        }
+         
+        [HttpGet]
+        public  IActionResult Info()
+        {
+            return PartialView();
+        }
+        
+        public async Task<ActionResult> GetApprovalMutasiKlaimStatus([DataSourceRequest] DataSourceRequest request, ApprovalMutasiStatusViewModel model)
+        {
+            var query = Mapper.Map<GetPengajuanKlaimStatusQuery>(model);
+            query.DatabaseName = Request.Cookies["DatabaseValue"];
+            var result = await Mediator.Send(query);
+            return Json(result.AsQueryable().ToDataSourceResult(request));
+        }
+         
+        public async Task<IActionResult> GetLampiranApprovalMutasiKlaimStatus([DataSourceRequest] DataSourceRequest request, ApprovalMutasiStatusAttachmentViewModel model)
+        {
+            var query = Mapper.Map<GetPengajuanKlaimStatusAttachmentsQuery>(model);
+            query.DatabaseName = Request.Cookies["DatabaseValue"];
+            var result = await Mediator.Send(query);
+            return Json(result.AsQueryable().ToDataSourceResult(request));
         }
     }
 }

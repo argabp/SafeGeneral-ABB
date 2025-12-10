@@ -71,6 +71,10 @@ namespace ABB.Application.RegisterKlaims.Queries
             var tgl_dibuat = data.tgl_dibuat == null ? string.Empty : data.tgl_dibuat.Value.ToString("dd MMM yyyy HH:mm:ss");
             var tgl_diperiksa = data.tgl_diperiksa == null ? string.Empty : data.tgl_diperiksa.Value.ToString("dd MMM yyyy HH:mm:ss");
             var tgl_disetujui = data.tgl_disetujui == null ? string.Empty : data.tgl_disetujui.Value.ToString("dd MMM yyyy HH:mm:ss");
+            var tgl_lns_prm = data.tgl_lns_prm == null ? string.Empty : data.tgl_lns_prm.Value.ToString("dd/MM/yyyy");
+            var tgl_kej = data.tgl_kej == null ? string.Empty : data.tgl_kej.Value.ToString("dd/MM/yyyy");
+            var tgl_reg = data.tgl_reg == null ? string.Empty : data.tgl_reg.Value.ToString("dd/MM/yyyy");
+            var tgl_lapor = data.tgl_lapor == null ? string.Empty : data.tgl_lapor.Value.ToString("dd/MM/yyyy");
             
             var keterangan_resiko = GenerateKeteranganDokumen(data);
             
@@ -78,7 +82,7 @@ namespace ABB.Application.RegisterKlaims.Queries
             {
                 data.nm_cb, data.nm_cob, data.nm_scob, data.nm_mkt, data.nm_sb_bis,
                 data.nm_ttg, tgl_pengajuan = data.tgl_reg.Value.ToString("dd/MM/yyyy"),
-                tgl_mul_ptg = data.tgl_mul_ptg.Value.ToString("dd/MM/yyyy"),
+                tgl_mul_ptg = data.tgl_mul_ptg.Value.ToString("dd/MM/yyyy"), data.symbol_lks,
                 tgl_akh_ptg = data.tgl_akh_ptg.Value.ToString("dd/MM/yyyy"), data.symbol,
                 nilai_pertanggungan = ReportHelper.ConvertToReportFormat(data.nilai_ttl_ptg),
                 pst_dis = ReportHelper.ConvertToReportFormat(data.pst_dis),
@@ -119,7 +123,9 @@ namespace ABB.Application.RegisterKlaims.Queries
                 nilai_kapasitas_tty4 = ReportHelper.ConvertToReportFormat(data.nilai_kapasitas_tty4),
                 nilai_limit_tsi4 = ReportHelper.ConvertToReportFormat(data.nilai_limit_tsi4),
                 nilai_limit_sharemax4 = ReportHelper.ConvertToReportFormat(data.nilai_limit_sharemax4),
-                pst_limit_cab = ReportHelper.ConvertToReportFormat(data.pst_limit_cab)
+                pst_limit_cab = ReportHelper.ConvertToReportFormat(data.pst_limit_cab),
+                data.tempat_kej, data.sebab_kerugian, tgl_lns_prm, data.no_bukti_lns, tgl_kej,
+                nilai_lks = ReportHelper.ConvertToReportFormat(data.nilai_lks), tgl_reg, tgl_lapor
             } );
 
             var secondDatas = (await _connectionFactory.QueryProc<ReportKeteranganPengajuanKlaimDto>("sp_KeteranganStatusKlaim", 

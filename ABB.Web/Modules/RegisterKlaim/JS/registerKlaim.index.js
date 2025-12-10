@@ -34,12 +34,15 @@ function OnClickEditRegisterKlaim(e) {
 //     openRegisterKlaimWindow(`/RegisterKlaim/View?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}`, 'View');
 // }
 //
-// function OnClickInfoPengajuanAkseptasi(e) {
-//     e.preventDefault();
-//     dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-//     console.log('dataItem', dataItem);
-//     openWindow('#InfoPengajuanAkseptasiWindow',`/PengajuanAkseptasi/Info`, 'Info');
-// }
+
+
+function OnClickInfoRegisterKlaim(e) {
+    e.preventDefault();
+    dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    console.log('dataItem', dataItem);
+    openWindow('#InfoApprovalMutasiKlaimWindow',`/RegisterKlaim/Info`, 'Info');
+}
+
 //
 // function OnClickSubmitPengajuanAkseptasi(e) {
 //     dataItem = this.dataItem($(e.currentTarget).closest("tr"));

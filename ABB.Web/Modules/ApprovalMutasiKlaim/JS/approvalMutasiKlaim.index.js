@@ -10,14 +10,14 @@ function searchKeyword_OnKeyUp() {
 }
 
 function openPengajuanMutasiKlaimWindow(url, title) {
-    openWindow('#MutasiKlaimWindow', url, title);
+    openWindow('#RegisterKlaimWindow', url, title);
 }
 
 function btnClickEditApprovalMutasiKlaim(e) {
     e.preventDefault();
     dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     console.log('dataItem', dataItem);
-    openPengajuanMutasiKlaimWindow(`/ApprovalMutasiKlaim/Edit?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}&no_mts=${dataItem.no_mts}`, 'Edit');
+    openPengajuanMutasiKlaimWindow(`/ApprovalMutasiKlaim/Edit?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}`, 'Edit');
 }
 
 function OnClickInfoApprovalMutasiKlaim(e) {
