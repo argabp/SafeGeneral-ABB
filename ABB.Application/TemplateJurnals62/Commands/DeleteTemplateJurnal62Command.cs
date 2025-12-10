@@ -32,14 +32,37 @@ namespace ABB.Application.TemplateJurnals62.Commands
             {
                 try
                 {
-                    var entity = _context.TemplateJurnal62
-                        .FirstOrDefault(w => w.Type == request.Type && w.JenisAss == request.JenisAss);
+                    var reqType = request.Type?.Trim();
+                    var reqJenis = request.JenisAss?.Trim();
 
-                    if (entity != null)
+                    // -----------------------------------------------------------
+                    // LANGKAH 1: Hapus DATA DETAIL terlebih dahulu (Cascade Delete Manual)
+                    // -----------------------------------------------------------
+                    var details = _context.TemplateJurnalDetail62
+                        .Where(d => d.Type == reqType && d.JenisAss == reqJenis)
+                        .ToList();
+
+                    if (details.Any())
                     {
-                        _context.TemplateJurnal62.Remove(entity);
-                        await _context.SaveChangesAsync(cancellationToken);
+                        _context.TemplateJurnalDetail62.RemoveRange(details);
                     }
+
+                    // -----------------------------------------------------------
+                    // LANGKAH 2: Hapus DATA HEADER
+                    // -----------------------------------------------------------
+                    var header = _context.TemplateJurnal62
+                        .FirstOrDefault(w => w.Type == reqType && w.JenisAss == reqJenis);
+
+                    if (header != null)
+                    {
+                        _context.TemplateJurnal62.Remove(header);
+                    }
+                
+                    // -----------------------------------------------------------
+                    // LANGKAH 3: Simpan Perubahan (Commit Transaction)
+                    // -----------------------------------------------------------
+                    // SaveChangesAsync akan mengeksekusi penghapusan Detail & Header sekaligus
+                    await _context.SaveChangesAsync(cancellationToken);
                 }
                 catch (Exception ex)
                 {

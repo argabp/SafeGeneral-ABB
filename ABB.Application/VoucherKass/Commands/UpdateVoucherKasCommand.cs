@@ -37,6 +37,13 @@ namespace ABB.Application.VoucherKass.Commands
 
         public async Task<Unit> Handle(UpdateVoucherKasCommand request, CancellationToken cancellationToken)
         {
+
+            DateTime? tglVoucherFix = request.TanggalVoucher;
+
+            if (request.TanggalVoucher.HasValue)
+            {
+                tglVoucherFix = request.TanggalVoucher.Value.ToLocalTime().Date;
+            }
             // 1. Cari data yang ada di database berdasarkan Primary Key (NoVoucher)
             var entity = await _context.VoucherKas
                 .FirstOrDefaultAsync(v => v.NoVoucher == request.NoVoucher, cancellationToken);
@@ -49,7 +56,7 @@ namespace ABB.Application.VoucherKass.Commands
                 entity.DebetKredit = request.DebetKredit;
                 entity.KodeAkun = request.KodeAkun;
                 entity.DibayarKepada = request.DibayarKepada;
-                entity.TanggalVoucher = request.TanggalVoucher;
+                entity.TanggalVoucher = tglVoucherFix;
                 entity.KodeMataUang = request.KodeMataUang;
                 entity.TotalVoucher = request.TotalVoucher;
                 entity.TotalDalamRupiah = request.TotalDalamRupiah;

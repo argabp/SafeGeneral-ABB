@@ -153,17 +153,48 @@ function onSaveTemplateJurnalDetail62(e) {
 }
 
 function onEditTemplateJurnalDetail62(e) {
-    if (!e.model.isNew()) {
+   // === LOGIC SAAT ADD NEW RECORD ===
+    if (e.model.isNew()) {
+        // 1. Logic Auto Number untuk GlUrut
+        var grid = e.sender; // Ambil instance grid
+        var data = grid.dataSource.data(); // Ambil semua data di grid
+        var maxUrut = 0;
+
+        // Loop semua data untuk cari nilai GlUrut tertinggi
+        for (var i = 0; i < data.length; i++) {
+            // Kita abaikan baris yang sedang kita edit/add ini (cek via uid)
+            if (data[i].uid !== e.model.uid) {
+                var currentVal = parseInt(data[i].GlUrut) || 0;
+                if (currentVal > maxUrut) {
+                    maxUrut = currentVal;
+                }
+            }
+        }
+
+        // Set nilai GlUrut baru = (Nilai Tertinggi + 1)
+        // e.model.set trigger update tampilan di grid
+        e.model.set("GlUrut", maxUrut + 1);
+    } 
+    // === LOGIC SAAT EDIT RECORD LAMA ===
+    else {
+        // Readonly GL AKUN jika Edit Mode
         var glAkunField = e.container.find("input[name='GlAkun']");
-        
-        // 2. Disable atau set Readonly input tersebut
         glAkunField.attr("readonly", true);
-        
-        // 3. Tambahkan class biar kelihatan abu-abu (visual cue kalau disabled)
         glAkunField.addClass("k-state-disabled");
-        
-        // Jika inputnya berupa DropDownList atau Numeric, disable juga widget-nya:
-        // var widget = glAkunField.data("kendoDropDownList"); // contoh kalau dropdown
-        // if(widget) widget.enable(false);
+    }
+
+    // === LOGIC DROPDOWN D/K (Berlaku untuk Add & Edit) ===
+    var dkField = e.container.find("input[name='GlDk']");
+    if (dkField.length > 0) {
+        dkField.kendoDropDownList({
+            autoBind: true,
+            dataTextField: "text",
+            dataValueField: "value",
+            dataSource: [
+                { text: "D", value: "D" },
+                { text: "K", value: "K" }
+            ],
+            valuePrimitive: true 
+        });
     }
 }
