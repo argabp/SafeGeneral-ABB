@@ -33,9 +33,9 @@ namespace ABB.Application.DashboardKlaims.Queries
             
             urls.Add("New", "/RegisterrKlaim/Index?");
             urls.Add("LKS", "/RegisterrKlaim/Index?");
-            urls.Add("LKS Process", "/RegisterrKlaim/Index?");
-            urls.Add("LKS Escalated", "/RegisterrKlaim/Index?");
-            urls.Add("LKS Settled", "/RegisterrKlaim/Index?");
+            urls.Add("LKP Process", "/RegisterrKlaim/Index?");
+            urls.Add("LKP Escalated", "/RegisterrKlaim/Index?");
+            urls.Add("LKP Settled", "/RegisterrKlaim/Index?");
             urls.Add("Payment", "/RegisterrKlaim/Index?");
             urls.Add("Rejected", "/RegisterrKlaim/Index?");
             urls.Add("Closed", "/RegisterrKlaim/Index?");
@@ -45,13 +45,13 @@ namespace ABB.Application.DashboardKlaims.Queries
             
             icons.Add("New", "fa-plus-circle");
             icons.Add("LKS", "fa-location-arrow");
-            icons.Add("LKS Process", "fa-check-square");
-            icons.Add("LKS Escalated", "fa-hand-paper");
-            icons.Add("LKS Settled", "fa-child");
-            icons.Add("Payment", "fa-times-circle");
-            icons.Add("Rejected", "fa-edit");
-            icons.Add("Closed", "fa-history");
-            icons.Add("Final", "fa-history");
+            icons.Add("LKP Process", "fa-circle-notch");
+            icons.Add("LKP Escalated", "fa-hand-paper");
+            icons.Add("LKP Settled", "fa-child");
+            icons.Add("Payment", "fa-credit-card");
+            icons.Add("Rejected", "fa-times-circle");
+            icons.Add("Closed", "fa-stop-circle");
+            icons.Add("Final", "fa-check-square");
             var dashboard = new DashboardKlaimDto();
 
             _dbConnectionFactory.CreateDbConnection(request.DatabaseName);

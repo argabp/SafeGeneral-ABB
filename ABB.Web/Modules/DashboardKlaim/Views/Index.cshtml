@@ -27,7 +27,7 @@
 <div class='flat-box'>
     <div class='row'>
         <div class='flat-box-title col-md-12' style="justify-content: center; font-size: 14px">
-        Status Pengajuan Akseptasi
+        Status Pengajuan Klaim
         </div>
     </div>
 
@@ -105,13 +105,22 @@
                     </div>
                 </div>
             </section>
+            <section class='col-sm-3'>
+                <div class='card card-custom' onclick="window.open('@Model.Data[8].url', 'mywindow');" style='cursor: pointer;width:auto; height: 120px; background: #134F5C'>
+                    <div class='card-body' style='display:flex'>
+                        <span class='fa @Model.Data[8].icon' style='font-size: 5em; color: white'></span>
+                        <p style='align-self: center; margin-left:1em; color: white'>@Model.Data[8].nm_status</p>
+                        <p style='position:absolute; bottom:0; right:0; font-size:2em; margin-bottom:0px; margin-right:1em; color: white'>@Model.Data[8].jml_data</p>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
     
     <div class="card card-default color-palette-box">
         <div class="card-header">
             <p class="card-title" style="width: 100%; text-align: center; font-weight: bold; font-size: 14px;">
-                Target dan Realisasi Produksi Umum @ViewBag.DatabaseName
+                Perkiraan dan Realisasi Klaim Produksi Umum @ViewBag.DatabaseName
             </p>
             <p class="card-title" style="width: 100%; text-align: right; padding-top: 1em; padding-right: 1em; font-size: 15px;">
                 @DateTime.Now
