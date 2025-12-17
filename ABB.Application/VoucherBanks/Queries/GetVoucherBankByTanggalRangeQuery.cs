@@ -18,6 +18,7 @@ namespace ABB.Application.VoucherBanks.Queries
         public DateTime TanggalAwal { get; set; }
         public DateTime TanggalAkhir { get; set; }
         public string KodeBank { get; set; } // filter opsional
+        public string KeteranganBank { get; set; }
         public string DatabaseName { get; set; }
         public string UserLogin { get; set; }
     }
@@ -36,6 +37,8 @@ namespace ABB.Application.VoucherBanks.Queries
 
         public async Task<string> Handle(GetVoucherBankByTanggalRangeQuery request, CancellationToken cancellationToken)
         {
+
+            
             // Validasi tanggal
             if (request.TanggalAwal > request.TanggalAkhir)
             {
@@ -126,6 +129,7 @@ namespace ABB.Application.VoucherBanks.Queries
                 tanggal_awal = request.TanggalAwal.ToString("dd-MM-yyyy"),
                 tanggal_akhir = request.TanggalAkhir.ToString("dd-MM-yyyy"),
                 kode_bank = request.KodeBank ?? "-",
+                keterangan_bank = request.KeteranganBank ?? "-",
                 total_data = result.Count
             });
 

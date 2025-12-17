@@ -44,6 +44,14 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
 
         public async Task<string> Handle(CreateHeaderPenyelesaianUtangCommand request, CancellationToken cancellationToken)
         {
+
+            DateTime? tglheaderFix = request.Tanggal;
+
+            if (request.Tanggal.HasValue)
+            { 
+                tglheaderFix = request.Tanggal.Value.ToLocalTime().Date;
+            }
+
             // Mapping dari Command ke Entity
             var entity = new HeaderPenyelesaianUtangEntity 
             {
@@ -58,7 +66,7 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
                JenisPenyelesaian = request.JenisPenyelesaian,
                NomorBukti = request.NomorBukti,
                KodeVoucherAcc = request.KodeVoucherAcc,
-               Tanggal = request.Tanggal,
+               Tanggal = tglheaderFix,
                MataUang = request.MataUang,
                TotalOrg = request.TotalOrg,
                DebetKredit = request.DebetKredit,

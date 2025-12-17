@@ -39,18 +39,28 @@ namespace ABB.Web.Modules.ListVoucher
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetKasBankList(string tipe)
-        {
-            var databaseName = Request.Cookies["DatabaseValue"];
-
-            var result = await _mediator.Send(new GetAllKasBankQuery
+            public async Task<IActionResult> GetKasBankList(string tipe)
             {
-                TipeKasBank = tipe,
-                SearchKeyword = null
-            });
+                var databaseName = Request.Cookies["DatabaseValue"];
 
-            return Json(result);
-        }
+                var result = await _mediator.Send(new GetAllKasBankQuery
+                {
+                    TipeKasBank = tipe,
+                    SearchKeyword = null
+                });
+
+                // --- PERBAIKAN DISINI ---
+                // Kita format datanya sebelum dikirim ke JSON
+                var dataFormatted = result.Select(x => new 
+                {
+                    Kode = x.Kode,
+                    Keterangan = x.Keterangan,
+                    // Gabungkan Kode dan Keterangan jadi satu string
+                    TampilanLengkap = $"{x.Kode} - {x.Keterangan}" 
+                });
+
+                return Json(dataFormatted);
+            }
 
         [HttpPost]
         public async Task<IActionResult> GenerateReport([FromBody] ListVoucherFilterDto model)
@@ -84,6 +94,10 @@ namespace ABB.Web.Modules.ListVoucher
                     {
                         DatabaseName = databaseName,
                         KodeBank = model.kodeBank,
+                        
+                        // Masukkan Keterangan yang dikirim dari JS ke Query
+                        KeteranganBank = model.keterangan, 
+                        
                         TanggalAwal = tglAwal,
                         TanggalAkhir = tglAkhir,
                         UserLogin = user
@@ -123,6 +137,7 @@ namespace ABB.Web.Modules.ListVoucher
     {
         public string tipe { get; set; }       // "KAS" atau "BANK"
         public string kodeBank { get; set; }   // Hanya untuk BANK
+        public string keterangan { get; set; }
         public string tglAwal { get; set; }    // Format "yyyy-MM-dd" atau sesuai input
         public string tglAkhir { get; set; }
     }

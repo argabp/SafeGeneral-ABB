@@ -478,6 +478,27 @@ namespace ABB.Web.Modules.EntriPenyelesaianPiutang
             return Json(new { success = true });
         }
 
+        [HttpPost]
+        public async Task<IActionResult> DeleteHeader([FromBody] DeleteHeaderPenyelesaianUtangCommand command)
+        {
+            try
+            {
+                var result = await Mediator.Send(command);
+                if (result)
+                {
+                    return Json(new { success = true, message = "Data berhasil dihapus." });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Data tidak ditemukan." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
 
 
     }

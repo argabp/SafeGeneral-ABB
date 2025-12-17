@@ -43,6 +43,13 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
 
         public async Task<Unit> Handle(UpdateHeaderPenyelesaianUtangCommand request, CancellationToken cancellationToken)
         {
+            DateTime? tglheaderFix = request.Tanggal;
+
+            if (request.Tanggal.HasValue)
+            { 
+                tglheaderFix = request.Tanggal.Value.ToLocalTime().Date;
+            }
+
             var entity = await _context.HeaderPenyelesaianUtang
                 .FindAsync(new object[] { request.KodeCabang, request.NomorBukti }, cancellationToken);
 
@@ -54,7 +61,7 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
             // Update properti dari request
             entity.JenisPenyelesaian = request.JenisPenyelesaian;
             entity.KodeVoucherAcc = request.KodeVoucherAcc;
-            entity.Tanggal = request.Tanggal;
+            entity.Tanggal = tglheaderFix;
             entity.MataUang = request.MataUang;
             entity.TotalOrg = request.TotalOrg;
             entity.TotalRp = request.TotalRp;

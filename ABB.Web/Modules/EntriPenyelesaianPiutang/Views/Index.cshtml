@@ -43,6 +43,7 @@
 
     @(Html.Kendo().TabStrip()
             .Name("tabStrip")
+            .Events(e => e.Show("onTabShow"))
             .Items(items =>
             {
                 // --- TAB 1: DATA YANG MASIH DI-PROSES (BELUM FINAL) ---
@@ -73,6 +74,10 @@
                                             .Text("Edit Penyelesaian")
                                             .IconClass("fa fa-edit") // Ganti ikon menjadi edit
                                             .Click("btnEntriPenyelesaian_OnClick"); // Sesuaikan nama fungsi JS
+                                        command.Custom("DeleteHeader")
+                                            .Text("Hapus")
+                                            .IconClass("fa fa-trash") // Icon tong sampah
+                                            .Click("onDeleteHeader_Click");
                                     }).Width(200).Title("Action").Locked(true);
                                 })
                                 .Pageable(pager => pager.Refresh(true).PageSizes(true))
@@ -184,5 +189,19 @@
         });
     });
 
-   
+   function onTabShow(e) {
+    // 1. Ambil elemen konten dari tab yang sedang aktif
+    var activeContent = $(e.contentElement);
+    
+    // 2. Cari grid di dalam tab tersebut
+    var grid = activeContent.find(".k-grid").data("kendoGrid");
+    
+    if (grid) {
+        // 3. Paksa Grid menghitung ulang layout-nya (supaya kolom Locked muncul)
+        grid.resize();
+        
+        // Opsional: Jika data masih kosong/salah, bisa dipaksa reload juga
+        // grid.dataSource.read(); 
+    }
+}
 </script>

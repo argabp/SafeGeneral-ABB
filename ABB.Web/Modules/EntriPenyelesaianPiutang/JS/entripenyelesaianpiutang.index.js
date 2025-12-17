@@ -55,7 +55,7 @@ function onSaveHeaderAndProceed() {
     // 2. Validasi Header Sederhana
     // (Anda bisa tambahkan field lain jika wajib)
     if (!tanggal || !mataUang || (totalOrg === null || totalOrg <= 0) || !kodeAkun) {
-        showSwal('warning', 'Harap lengkapi data Header (Tanggal, Mata Uang, Total, Kode Akun) sebelum menyimpan.');
+        showMessage('warning', 'Harap lengkapi data Header (Tanggal, Mata Uang, Total, Kode Akun) sebelum menyimpan.');
         // Mengembalikan promise yang sudah gagal agar .done() tidak berjalan
         return $.Deferred().reject({ error: "Header form is incomplete." }).promise();
     }
@@ -85,13 +85,15 @@ function onSaveHeaderAndProceed() {
         data: JSON.stringify(headerData),
         success: function (response) {
             if (response.success) {
-                
+                showMessage('Success', 'Data Header Penyelesaian Utang Piutang Berhasil Disimpan!');
                 var nomorBukti = response.nomorBukti;
                 console.log("Header save success, NoBukti:", nomorBukti);
                 // Set nomor bukti untuk form detail & grid
                 $('#NewPaymentForm input[name="NoBukti"]').val(nomorBukti);
                 $("#PenyelesaianHeader_NomorBukti").val(nomorBukti);
-
+                $("#BelumFinalGrid").data("kendoGrid").dataSource.read();
+                $("#SudahFinalGrid").data("kendoGrid").dataSource.read();
+           
                 // --- PERBAIKAN DI SINI ---
                 var $footer = $(".window-footer");
                 
@@ -164,22 +166,22 @@ function onSavePembayaran() {
     var NoNotaValue = null;
 
     if (!flagPembayaran) {
-        showSwal('warning', 'Silakan pilih Flag Pembayaran terlebih dahulu.');
+        showMessage('warning', 'Silakan pilih Flag Pembayaran terlebih dahulu.');
         return; // Stop
     }
 
     if (!kodeMataUang) {
-        showSwal('warning', 'Silakan pilih Kode Mata Uang.');
+        showMessage('warning', 'Silakan pilih Kode Mata Uang.');
         return; // Stop
     }
     
     if (totalBayarOrg === null || totalBayarOrg <= 0) {
-        showSwal('warning', 'Total Original harus diisi dan lebih besar dari 0.');
+        showMessage('warning', 'Total Original harus diisi dan lebih besar dari 0.');
         return; // Stop
     }
     
     if (!debetKredit) {
-        showSwal('warning', 'Silakan pilih Debet/Kredit.');
+        showMessage('warning', 'Silakan pilih Debet/Kredit.');
         return; // Stop
     }
 
@@ -187,13 +189,13 @@ function onSavePembayaran() {
     if (flagPembayaran.toUpperCase() === "AKUN") {
         kodeAkunValue = $("#KodeAkun").data("kendoComboBox").value();
         if (!kodeAkunValue) {
-            showSwal('warning', 'Silakan pilih Kode Akun.');
+            showMessage('warning', 'Silakan pilih Kode Akun.');
             return; // Stop
         }
     } else if (flagPembayaran.toUpperCase() === "NOTA") {
         NoNotaValue = $("#NoNota").val();
         if (!NoNotaValue || NoNotaValue.trim() === "") {
-            showSwal('warning', 'Silakan pilih Nomor Nota.');
+            showMessage('warning', 'Silakan pilih Nomor Nota.');
             return; // Stop
         }
     }
@@ -214,7 +216,7 @@ function onSavePembayaran() {
             var noBukti = $("#PenyelesaianHeader_NomorBukti").val(); 
             
             if (!noBukti) {
-                 showSwal('error', 'Gagal mendapatkan Nomor Bukti dari header.');
+                 showMessage('error', 'Gagal mendapatkan Nomor Bukti dari header.');
                  return;
             }
 
@@ -239,30 +241,32 @@ function onSavePembayaran() {
                 success: function (response) {
                     if (response.success) {
                         // Gabungkan pesan sukses
-                        var msg = (data.No ? 'Data berhasil diperbarui.' : 'Data berhasil disimpan.');
-                        showSwal('success', msg); // Pakai showSwal
-                        
+                        showMessage('success', 'Data berhasil diperbarui.'); // Pakai showMessage
+                        updateGridFooter()
                         $("#TempDetailPembayaranGrid").data("kendoGrid").dataSource.read();
+                        $("#BelumFinalGrid").data("kendoGrid").dataSource.read();
+                        $("#SudahFinalGrid").data("kendoGrid").dataSource.read();
+           
                         clearPaymentForm(); // Panggil fungsi clear yang sudah ada
                     }else {
-                       showSwal('error', 'Gagal menyimpan data detail: ' + (response.message || ''));
+                       showMessage('error', 'Gagal menyimpan data detail: ' + (response.message || ''));
                     }
                 },
                 error: function() {
-                    showSwal('error', 'Gagal menyimpan data detail.');
+                    showMessage('error', 'Gagal menyimpan data detail.');
                 }
             });
 
         } else {
             // Ini jika header save me-return success: false
-            showSwal('error', 'Gagal menyimpan header: ' + (headerResponse.message || ''));
+            showMessage('error', 'Gagal menyimpan header: ' + (headerResponse.message || ''));
         }
 
     }).fail(function(jqXHR, textStatus, errorThrown) {
         // Ini jika AJAX header-nya gagal (error 500, 404, atau dari validasi manual)
         // Jika bukan dari validasi manual, tampilkan error
         if (!jqXHR.error) {
-             showSwal('error', 'Gagal menghubungi server untuk menyimpan header.');
+             showMessage('error', 'Gagal menghubungi server untuk menyimpan header.');
         }
     });
 }
@@ -335,7 +339,9 @@ function onDeletePembayaran(e) {
                 if (response.success) {
                     showMessage('Success', 'Data berhasil dihapus.');
                     clearPaymentForm();
-                    $("#DetailPembayaranGrid").data("kendoGrid").dataSource.read(); // Refresh grid
+                    $("#TempDetailPembayaranGrid").data("kendoGrid").dataSource.read();
+                       $("#BelumFinalGrid").data("kendoGrid").dataSource.read();
+                            $("#SudahFinalGrid").data("kendoGrid").dataSource.read(); // Refresh grid
                 } else {
                     showMessage('Error', 'Gagal menghapus data.');
                 }
@@ -382,12 +388,12 @@ if (typeof Toast === "undefined") {
 }
 
 // Fungsi helper baru untuk menampilkan pesan
-function showSwal(type, message) {
-    Toast.fire({
-        icon: type, // 'success', 'error', 'warning', 'info'
-        title: message
-    });
-}
+// function showMessage(type, message) {
+//     Toast.fire({
+//         icon: type, // 'success', 'error', 'warning', 'info'
+//         title: message
+//     });
+// }
 
 
 function clearPaymentForm() {
@@ -460,52 +466,70 @@ function clearFinalPaymentForm() {
 
 // fungsi total pembayaran
 function updateGridFooter() {
-    var grid = $("#DetailPembayaranGrid").data("kendoGrid");
+    console.log("Trigger updateGridFooter...");
+
+    var grid = $("#TempDetailPembayaranGrid").data("kendoGrid"); // Pastikan ID Grid benar
     if (!grid) return;
-    var PiutangDK = $("#PenyelesaianHeader_DebetKredit").data("kendoDropDownList").value()
-    console.log(PiutangDK)
-    var dataForGrid = getNoBuktiForDetailGrid(); 
 
-   if (dataForGrid && dataForGrid.NoBukti) {
-        var NoBukti = dataForGrid.NoBukti;
-        
-        // Panggil endpoint untuk mendapatkan total terbaru dari tabel TEMP
-        $.ajax({
-            type: "GET",
-            url: `/EntriPenyelesaianPiutang/GetTotalPembayaran?no_bukti=${NoBukti}&PiutangDK=${PiutangDK}`,
-            success: function (response) {
-                var totalPembayaran = response.totalPembayaran || 0;
-                var $pembayaranTotalSpan = $("#pembayaranTotal");
-                 var $sisaPembayaranSpan = $("#sisapembayaranTotal");
+    // Ambil NoBukti langsung dari input, karena getNoBuktiForDetailGrid mungkin mengembalikan object wrapper
+    var noBukti = $("#PenyelesaianHeader_NomorBukti").val();
+    
+    // Ambil DebetKredit Header untuk filter perhitungan di server (jika diperlukan)
+    var piutangDK = $("#PenyelesaianHeader_DebetKredit").data("kendoDropDownList").value();
 
-                // Ambil total voucher asli dari header
-                var $footer = $pembayaranTotalSpan.closest(".window-footer");
-                var totalVoucherAsli = parseFloat($footer.data("total-penyelesaian-original")) || 0;
-
-                var sisaPembayaran = totalVoucherAsli - totalPembayaran;
-                // Update teks total pembayaran
-                $pembayaranTotalSpan.text(kendo.toString(totalPembayaran, "n0"));
-                $sisaPembayaranSpan.text(kendo.toString(sisaPembayaran, "n0"));
-                
-                // Ambil referensi ke tombol Final Pembayaran
-                var $btnFinal = $("#btn-save-pembayaran-final"); // <-- Beri ID ini pada tombol Anda
-
-                // --- INI LOGIKA BARUNYA ---
-                // Kita pakai toleransi 1 untuk mengatasi masalah pembulatan desimal
-                if (Math.abs(totalPembayaran - totalVoucherAsli) < 1) {
-                    // 1. JIKA BALANCE
-                    $pembayaranTotalSpan.css("color", "green"); // Warna hijau
-                    $btnFinal.prop("disabled", false); // AKTIFKAN tombol
-                    $btnFinal.removeClass("k-disabled");
-                } else {
-                    // 2. JIKA TIDAK BALANCE
-                    $pembayaranTotalSpan.css("color", "red"); // Warna merah
-                    $btnFinal.prop("disabled", true); // NONAKTIFKAN tombol
-                    $btnFinal.addClass("k-disabled");
-                }
-            }
-        });
+    // Validasi: Jika NoBukti kosong, reset footer dan keluar
+    if (!noBukti) {
+        console.log("NoBukti kosong, reset footer.");
+        $("#pembayaranTotal").text("0");
+        $("#sisapembayaranTotal").text("0");
+        return;
     }
+
+    console.log("Fetching total for NoBukti:", noBukti, "DK:", piutangDK);
+
+    $.ajax({
+        type: "GET",
+        // Pastikan parameter URL cocok dengan Controller (no_bukti vs NoBukti)
+        url: `/EntriPenyelesaianPiutang/GetTotalPembayaran?no_bukti=${noBukti}&PiutangDK=${piutangDK}`,
+        success: function (response) {
+            console.log("Total Response:", response);
+
+            var totalPembayaran = response.totalPembayaran || 0;
+            var $pembayaranTotalSpan = $("#pembayaranTotal");
+            var $sisaPembayaranSpan = $("#sisapembayaranTotal");
+            var $btnFinal = $("#btn-save-pembayaran-final");
+            $("#BelumFinalGrid").data("kendoGrid").dataSource.read();
+             $("#SudahFinalGrid").data("kendoGrid").dataSource.read();
+            // Ambil total header terbaru
+            // PENTING: Ambil dari .data() yang sudah di-update di onSaveHeaderAndProceed
+            var $footer = $(".window-footer");
+            var totalHeader = parseFloat($footer.data("total-penyelesaian-original")) || 0;
+
+            // Hitung Sisa
+            var sisaPembayaran = totalHeader - totalPembayaran;
+
+            // Update UI Text
+            $pembayaranTotalSpan.text(kendo.toString(totalPembayaran, "n0"));
+            $sisaPembayaranSpan.text(kendo.toString(sisaPembayaran, "n0"));
+
+            // Logic Warna & Tombol Final
+            // Toleransi perbedaan desimal kecil
+            if (Math.abs(sisaPembayaran) < 1) {
+                // BALANCE (Sisa 0)
+                $pembayaranTotalSpan.css("color", "green");
+                $sisaPembayaranSpan.css("color", "green");
+                $btnFinal.prop("disabled", false).removeClass("k-disabled");
+            } else {
+                // TIDAK BALANCE
+                $pembayaranTotalSpan.css("color", "red");
+                $sisaPembayaranSpan.css("color", "red");
+                $btnFinal.prop("disabled", true).addClass("k-disabled");
+            }
+        },
+        error: function(err) {
+            console.error("Gagal update footer:", err);
+        }
+    });
 }
 
 
@@ -671,15 +695,17 @@ function onNotaProduksiSelect(e) {
         data: JSON.stringify(payload),
         success: function (response) {
             if (response.Status === "OK") {
-                alert(response.Message || "Data berhasil disimpan!");
+                showMessage("success", "Data berhasil disimpan!");
                 updateGridFooter()
-                // 🔹 Tutup modal PilihNotaWindow
+                
                 var pilihNotaWindow = $("#PilihNotaWindow").data("kendoWindow");
                 if (pilihNotaWindow) {
                     pilihNotaWindow.close();
                 }
-               $("#DetailPembayaranGrid").data("kendoGrid").dataSource.read();
-                
+                $("#TempDetailPembayaranGrid").data("kendoGrid").dataSource.read();
+                $("#BelumFinalGrid").data("kendoGrid").dataSource.read();
+                $("#SudahFinalGrid").data("kendoGrid").dataSource.read();
+           
 
             } else {
                 alert("Error: " + (response.Message || "Gagal menyimpan data."));
@@ -773,9 +799,35 @@ function onSavePembayaranPiutangFinal() {
             if (response.success) {
                 showMessage("Success", "Data berhasil difinalkan.");
 
-                // reload grid dan bersihkan form
-                $("#DetailPembayaranGrid").data("kendoGrid").dataSource.read();
+                // 1. Refresh Grid Internal (Detail di dalam modal)
+                var tempGrid = $("#TempDetailPembayaranGrid").data("kendoGrid");
+                if (tempGrid) {
+                    tempGrid.dataSource.read();
+                }
+                
                 clearPaymentForm();
+
+                // 2. Refresh Grid "Belum Final" (Tab 1)
+                var gridBelum = $("#BelumFinalGrid").data("kendoGrid");
+                if (gridBelum) {
+                    gridBelum.dataSource.read();
+                }
+
+                // 3. Refresh Grid "Sudah Final" (Tab 2)
+                var gridSudah = $("#SudahFinalGrid").data("kendoGrid");
+                if (gridSudah) {
+                    // Jika grid sudah pernah dibuka, refresh datanya
+                    gridSudah.dataSource.read();
+                } 
+                // Catatan: Jika gridSudah 'undefined' (user belum pernah buka tabnya), 
+                // biarkan saja. Nanti pas user klik tabnya, dia otomatis load data terbaru.
+
+                // 4. TUTUP MODAL
+                var wnd = $("#EntriPenyelesaianPiutangWindow").data("kendoWindow");
+                if (wnd) {
+                    wnd.close();
+                }
+           
             } else {
                 showMessage("Error", response.message || "Gagal memproses data.");
             }
@@ -853,17 +905,17 @@ function onFinalSavePembayaran() {
         var NoNotaValue = null;
 
         // 2. Validasi Detail
-        if (!flagPembayaran) { showSwal('warning', 'Silakan pilih Flag Pembayaran.'); return; }
-        if (!kodeMataUang) { showSwal('warning', 'Silakan pilih Kode Mata Uang.'); return; }
-        if (totalBayarOrg === null || totalBayarOrg <= 0) { showSwal('warning', 'Total Original harus diisi > 0.'); return; }
-        if (!debetKredit) { showSwal('warning', 'Silakan pilih Debet/Kredit.'); return; }
+        if (!flagPembayaran) { showMessage('warning', 'Silakan pilih Flag Pembayaran.'); return; }
+        if (!kodeMataUang) { showMessage('warning', 'Silakan pilih Kode Mata Uang.'); return; }
+        if (totalBayarOrg === null || totalBayarOrg <= 0) { showMessage('warning', 'Total Original harus diisi > 0.'); return; }
+        if (!debetKredit) { showMessage('warning', 'Silakan pilih Debet/Kredit.'); return; }
 
         if (flagPembayaran.toUpperCase() === "AKUN") {
             kodeAkunValue = $("#KodeAkun_Lihat").data("kendoComboBox").value();
-            if (!kodeAkunValue) { showSwal('warning', 'Silakan pilih Kode Akun.'); return; }
+            if (!kodeAkunValue) { showMessage('warning', 'Silakan pilih Kode Akun.'); return; }
         } else if (flagPembayaran.toUpperCase() === "NOTA") {
             NoNotaValue = $("#NoNota_Lihat").val().trim();
-            if (!NoNotaValue) { showSwal('warning', 'Silakan pilih Nomor Nota.'); return; }
+            if (!NoNotaValue) { showMessage('warning', 'Silakan pilih Nomor Nota.'); return; }
         }
 
         // 3. Eksekusi Simpan Header dulu -> lanjut Simpan Detail
@@ -891,7 +943,9 @@ function onFinalSavePembayaran() {
                     success: function (response) {
                         if (response.success) {
                           showMessage('Success', 'Data Header & Detail berhasil disimpan.');
-                            $("#DetailPembayaranGrid").data("kendoGrid").dataSource.read();
+                            $("#TempDetailPembayaranGrid").data("kendoGrid").dataSource.read();
+                            $("#BelumFinalGrid").data("kendoGrid").dataSource.read();
+                            $("#SudahFinalGrid").data("kendoGrid").dataSource.read();
                             clearFinalPaymentForm(); // Form detail ditutup, tombol cancel hilang
                         } else {
                            showMessage('Error', 'Gagal detail: ' + response.message);
@@ -927,7 +981,7 @@ function onSaveFinalHeaderAndProceed() {
     // 2. Validasi Header Sederhana
     // (Anda bisa tambahkan field lain jika wajib)
     if (!tanggal || !mataUang || (totalOrg === null || totalOrg <= 0) || !kodeAkun) {
-        showSwal('warning', 'Harap lengkapi data Header (Tanggal, Mata Uang, Total, Kode Akun) sebelum menyimpan.');
+        showMessage('warning', 'Harap lengkapi data Header (Tanggal, Mata Uang, Total, Kode Akun) sebelum menyimpan.');
         // Mengembalikan promise yang sudah gagal agar .done() tidak berjalan
         return $.Deferred().reject({ error: "Header form is incomplete." }).promise();
     }
@@ -964,7 +1018,9 @@ function onSaveFinalHeaderAndProceed() {
                 // Set nomor bukti untuk form detail & grid
                 $('#NewFinalPaymentForm input[name="NoBukti"]').val(nomorBukti);
                 $("#PenyelesaianHeader_NomorBukti_Lihat").val(nomorBukti);
-
+                $("#BelumFinalGrid").data("kendoGrid").dataSource.read();
+                $("#SudahFinalGrid").data("kendoGrid").dataSource.read();
+           
                 // --- PERBAIKAN DI SINI ---
                 var $footer = $(".window-footer");
                 
@@ -1006,9 +1062,20 @@ function btnProsesPembayaranPiutang_OnClick(e) {
                     function (response) {
                         if (response.success) {
                             showMessage('Success', 'Data berhasil Di Proses Ulang.');
-                            setTimeout(function () {
-                                location.reload(true); // reload dari server
-                            }, 500);
+                            // 1. Ambil referensi grid
+                            var gridBelum = $("#BelumFinalGrid").data("kendoGrid");
+                            var gridSudah = $("#SudahFinalGrid").data("kendoGrid");
+
+                            // 2. Baca ulang data
+                            gridBelum.dataSource.read().then(function() {
+                                // 3. SETELAH BACA SELESAI, Resize Grid!
+                                // Ini kuncinya: Memaksa grid menghitung ulang lebar kolom & scrollbar
+                                gridBelum.resize(); 
+                            });
+
+                            gridSudah.dataSource.read().then(function() {
+                                gridSudah.resize();
+                            });
                         } else {
                             showMessage('Error', 'Gagal Memproses data.');
                         }
@@ -1016,4 +1083,36 @@ function btnProsesPembayaranPiutang_OnClick(e) {
                 );
         }
     );
+}
+
+function onDeleteHeader_Click(e) {
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    
+    showConfirmation("Konfirmasi Hapus", `Anda yakin ingin menghapus No. Bukti ${dataItem.NomorBukti}? Data detail juga akan terhapus permanen.`, function() {
+        var payload = {
+            KodeCabang: dataItem.KodeCabang,
+            NomorBukti: dataItem.NomorBukti
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/EntriPenyelesaianPiutang/DeleteHeader",
+            contentType: "application/json",
+            data: JSON.stringify(payload),
+            success: function(response) {
+                if (response.success) {
+                    showMessage('Success', 'Data berhasil dihapus.');
+                    // Refresh Grid
+                    $("#BelumFinalGrid").data("kendoGrid").dataSource.read();
+                    $("#SudahFinalGrid").data("kendoGrid").dataSource.read();
+                } else {
+                    showMessage('Error', response.message);
+                }
+            },
+            error: function() {
+                showMessage('Error', 'Terjadi kesalahan saat menghapus data.');
+            }
+        });
+    });
 }

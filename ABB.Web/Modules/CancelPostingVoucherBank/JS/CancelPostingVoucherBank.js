@@ -19,7 +19,7 @@ function CancelpostingVoucherBank() {
             ajaxPost("/CancelPostingVoucherBank/CancelPosting", JSON.stringify(selectedData),
                 function (response) {
                     if (response.Status === "OK") {
-                        showMessage("Success", "Posting succeed");
+                        showMessage("Success", "Cancel Posting succeed");
                         grid.dataSource.read(); // refresh grid setelah sukses
                          grid.clearSelection();
                     } else {

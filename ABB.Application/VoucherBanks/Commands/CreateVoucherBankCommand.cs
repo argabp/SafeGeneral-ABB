@@ -44,15 +44,8 @@ namespace ABB.Application.VoucherBanks.Commands
             DateTime? tglVoucherFix = request.TanggalVoucher;
 
             if (request.TanggalVoucher.HasValue)
-            {
-                // PERBAIKAN: Tambahkan .ToLocalTime() sebelum .Date
-                // Ini akan mengubah jam 17:00 (tgl 9) menjadi jam 00:00 (tgl 10) kembali.
+            { 
                 tglVoucherFix = request.TanggalVoucher.Value.ToLocalTime().Date;
-
-                // OPSI CADANGAN (JURUS PAMUNGKAS):
-                // Jika servernya settingan UTC (Cloud/Azure) dan ToLocalTime gak mempan,
-                // Paksa tambah 7 jam (WIB):
-                // tglVoucherFix = request.TanggalVoucher.Value.AddHours(7).Date;
             }
 
             var entity = new VoucherBankEntity
