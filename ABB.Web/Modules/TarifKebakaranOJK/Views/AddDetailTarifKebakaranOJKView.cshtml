@@ -1,11 +1,11 @@
 ﻿@using Kendo.Mvc.UI
-@model ABB.Web.Modules.Okupasi.Models.DetailOkupasiViewModel
+@model ABB.Web.Modules.TarifKebakaranOJK.Models.DetailTarifKebakaranOJKViewModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Kendo.Mvc
 @addTagHelper *, ABB.Web
 
 <div class="window-body" style="background-color: lightgray">
-    <form id="DetailOkupasiForm" enctype="multipart/form-data" autocomplete="off">
+    <form id="DetailTarifKebakaranOJKForm" enctype="multipart/form-data" autocomplete="off">
         <div class="form-group col-sm-12">
             <label class="col-sm-12">Kode Pos</label>
             <div class="col-sm-12">
@@ -20,7 +20,7 @@
                                     datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                     <datasource type="DataSourceTagHelperType.Custom">
                         <transport>
-                            <read url="@Url.Action("GetKodeKelasKontruksi", "Okupasi")"/>
+                            <read url="@Url.Action("GetKodeKelasKontruksi", "TarifKebakaranOJK")"/>
                         </transport>
                     </datasource>
                 </kendo-dropdownlist>
@@ -34,7 +34,7 @@
                                     datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                     <datasource type="DataSourceTagHelperType.Custom">
                         <transport>
-                            <read url="@Url.Action("GetSatuanRatePremi", "Okupasi")"/>
+                            <read url="@Url.Action("GetSatuanRatePremi", "TarifKebakaranOJK")"/>
                         </transport>
                     </datasource>
                 </kendo-dropdownlist>
@@ -42,17 +42,24 @@
             </div>
         </div>
         <div class="form-group col-sm-12">
-            <label class="col-sm-12">Rate Premi</label>
+            <label class="col-sm-12">Rate Premi Minimum</label>
             <div class="col-sm-12">
-                <kendo-numerictextbox for="pst_rate_prm" max="100" format="n4" decimals="4" style="width: 100%; background-color: #FFFFE1"/>
-                <span asp-validation-for="pst_rate_prm" class="text-danger"></span>
+                <kendo-numerictextbox for="pst_rate_prm_min" max="100" format="n4" decimals="4" style="width: 100%; background-color: #FFFFE1"/>
+                <span asp-validation-for="pst_rate_prm_min" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Rate Premi Maximum</label>
+            <div class="col-sm-12">
+                <kendo-numerictextbox for="pst_rate_prm_max" max="100" format="n4" decimals="4" style="width: 100%; background-color: #FFFFE1"/>
+                <span asp-validation-for="pst_rate_prm_max" class="text-danger"></span>
             </div>
         </div>
     </form>
 </div>
 
 <div class="window-footer">
-    <button type="button" onclick="onSaveDetailOkupasi()" class="btn btn-success space-right">
+    <button type="button" onclick="onSaveDetailTarifKebakaranOJK()" class="btn btn-success space-right">
         <span class="fa fa-save"></span> Save
     </button>
 </div>

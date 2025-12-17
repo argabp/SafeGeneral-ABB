@@ -22,7 +22,23 @@
     <link rel="stylesheet" href="~/plugins/kendo/styles/kendo.office365.min.css">
     <link rel="stylesheet" href="~/plugins/kendo/styles/kendo.common-office365.min.css">
     <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
-    <!-- EOF CSS INCLUDE -->
+    <!-- EOF CSS INCLUDE -->    
+    
+    <style>
+    body.login-page {
+        background: url("/img/login_bg.jpg") no-repeat center center fixed;
+        background-size: cover;
+    }
+
+    /* Optional overlay for better readability */
+    body.login-page::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        z-index: -1;
+    }
+</style>
 </head>
 <body class="hold-transition login-page">
 @await Html.PartialAsync("~/Modules/Shared/_Scripts.cshtml")

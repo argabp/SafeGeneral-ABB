@@ -18,7 +18,7 @@
         <div class="form-group col-sm-12 row">
             <label class="col-sm-3">Nama Lengkap Sesuai KTP</label>
             <div class="col-sm-6">
-                <kendo-textbox for="ktp_nm" style="width: 100%"/>
+                <kendo-textbox for="ktp_nm" style="width: 100%; background-color: #00FFFF;"/>
                 <span asp-validation-for="ktp_nm" class="text-danger"></span>
             </div>
             <div class="col-sm-3">
@@ -41,14 +41,14 @@
         <div class="form-group col-sm-12 row">
             <label class="col-sm-3">Tempat Dan Tanggal Lahir</label>
             <div class="col-sm-3">
-                <kendo-textbox for="ktp_tempat" style="width: 100%"/>
+                <kendo-textbox for="ktp_tempat" style="width: 100%; background-color: #00FFFF;"/>
             </div>
             <div class="col-sm-3">
-                <kendo-datepicker for="ktp_tgl" style="width: 100%"/>
+                <kendo-datepicker for="ktp_tgl" style="width: 100%; background-color: #00FFFF;"/>
             </div>
             <label class="col-sm-1">Kelamin</label>
             <div class="col-sm-2">
-                <kendo-dropdownlist for="kelamin" style="width: 100%"
+                <kendo-dropdownlist for="kelamin" style="width: 100%" class="primary-dropdown"
                                     datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                     <datasource type="DataSourceTagHelperType.Custom">
                         <transport>
@@ -61,17 +61,17 @@
         <div class="form-group col-sm-12 row">
             <label class="col-sm-3">No. KTP SIM / Paspor</label>
             <div class="col-sm-4">
-                <kendo-textbox for="ktp_no" style="width: 100%"/>
+                <kendo-textbox for="ktp_no" style="width: 100%; background-color: #00FFFF;"/>
             </div>
         </div>
         <div class="form-group col-sm-12 row">
             <label class="col-sm-3">Alamat</label>
             <div class="col-sm-6">
-                <kendo-textbox for="ktp_alamat" style="width: 100%"/>
+                <kendo-textbox for="ktp_alamat" style="width: 100%; background-color: #00FFFF;"/>
             </div>
             <label class="col-sm-1">Kota</label>
             <div class="col-sm-2">
-                <kendo-textbox for="ktp_kota" style="width: 100%"/>
+                <kendo-textbox for="ktp_kota" style="width: 100%; background-color: #00FFFF;"/>
             </div>
             <div class="col-sm-9 offset-3 row" style="padding-top: 1em">
                 <label class="col-sm-1">No</label>
@@ -84,7 +84,7 @@
                 </div>
                 <label class="col-sm-2">Kodepos</label>
                 <div class="col-sm-2">
-                    <kendo-textbox for="kodepos" style="width: 100%"/>
+                    <kendo-textbox for="kodepos" style="width: 100%; background-color: #00FFFF;"/>
                 </div>
             </div>
             <div class="col-sm-9 offset-3 row" style="padding-top: 1em">

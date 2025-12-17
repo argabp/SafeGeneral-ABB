@@ -6,14 +6,11 @@ using ABB.Application.Akseptasis.Commands;
 using ABB.Application.Akseptasis.Queries;
 using ABB.Application.Alokasis.Commands;
 using ABB.Application.Alokasis.Queries;
-using ABB.Application.BiayaMaterais.Queries;
 using ABB.Application.Common;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Exceptions;
 using ABB.Application.Common.Queries;
-using ABB.Application.KapasitasCabangs.Queries;
 using ABB.Application.PolisInduks.Queries;
-using ABB.Application.SebabKejadians.Queries;
 using ABB.Web.Extensions;
 using ABB.Web.Modules.Akseptasi.Models;
 using ABB.Web.Modules.Base;
@@ -4093,6 +4090,28 @@ namespace ABB.Web.Modules.Akseptasi
                 pst_kms = pst_kms,
                 nilai_prm = nilai_prm,
                 nilai_dis = nilai_dis
+            });
+
+            return Json(result);
+        }
+        
+        public async Task<JsonResult> GeneratePstAndStnRatePremi(string kd_cb, string kd_cob, string kd_scob,
+            string kd_thn, string no_aks, Int16 no_updt, Int16 no_rsk, string kd_endt, string flag_pkk,
+            string kd_cvrg)
+        {
+            var result = await Mediator.Send(new GeneratePstAndStnRatePremiQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                kd_cb = kd_cb,
+                kd_cob = kd_cob,
+                kd_scob = kd_scob,
+                kd_thn = kd_thn,
+                no_aks = no_aks,
+                no_updt = no_updt,
+                no_rsk = no_rsk,
+                kd_endt = kd_endt,
+                flag_pkk = flag_pkk,
+                kd_cvrg = kd_cvrg,
             });
 
             return Json(result);

@@ -188,7 +188,7 @@ namespace ABB.Application.Akseptasis.Commands
                 var result = (await _connectionFactory.QueryProc<string>("spe_uw02e_25_01", new
                 {
                     request.wpc, nopol_induk = request.no_pol_induk
-                })).First();
+                })).FirstOrDefault();
 
                 if (!string.IsNullOrWhiteSpace(result))
                     throw new Exception(result);

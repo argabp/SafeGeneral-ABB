@@ -134,6 +134,7 @@ namespace ABB.Application.Common.Interfaces
         DbSet<KlaimStatus> KlaimStatus { get; set; }
         DbSet<KlaimStatusAttachment> KlaimStatusAttachment { get; set; }
         DbSet<ViewTrKlaim> ViewTrKlaim { get; set; }
+        DbSet<DetailTarifKebakaranOJK> DetailTarifKebakaranOJK { get; set; }
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);

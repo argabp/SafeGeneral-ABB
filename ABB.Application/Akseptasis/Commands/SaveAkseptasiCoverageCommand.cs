@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ABB.Application.Common.Interfaces;
@@ -70,6 +71,16 @@ namespace ABB.Application.Akseptasis.Commands
             try
             {
                 var dbContext = _contextFactory.CreateDbContext(request.DatabaseName);
+                
+                var result = (await _connectionFactory.QueryProc<string>("spe_uw09e02_02", new
+                {
+                    request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn,
+                    request.no_aks, request.no_updt, request.no_rsk, request.kd_endt, 
+                    request.flag_pkk, request.kd_cvrg
+                })).FirstOrDefault();
+
+                if (!string.IsNullOrWhiteSpace(result))
+                    throw new Exception(result);
                 
                 var entity = await dbContext.AkseptasiCoverage.FindAsync(request.kd_cb, 
                     request.kd_cob, request.kd_scob, request.kd_thn, request.no_aks, request.no_updt, 

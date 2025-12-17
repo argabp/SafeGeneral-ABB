@@ -46,14 +46,14 @@
         <div class="form-group col-sm-12">
             <label class="col-sm-12">Nama Rekanan</label>
             <div class="col-sm-12">
-                <kendo-textbox for="nm_rk" style="width: 100%"/>
+                <kendo-textbox for="nm_rk" style="width: 100%; background-color: #00FFFF;"/>
                 <span asp-validation-for="nm_rk" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group col-sm-12">
             <label class="col-sm-12">Kota Rekanan</label>
             <div class="col-sm-12">
-                <kendo-dropdownlist for="kt" style="width: 100%"
+                <kendo-dropdownlist for="kt" style="width: 100%" class="primary-dropdown"
                                     datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                     <datasource type="DataSourceTagHelperType.Custom">
                         <transport>
@@ -67,14 +67,14 @@
         <div class="form-group col-sm-12">
             <label class="col-sm-12">Alamat Rekanan</label>
             <div class="col-sm-12">
-                <kendo-textarea name="almt" rows="3" style="width: 100%">@Model.almt</kendo-textarea>
+                <kendo-textarea name="almt" rows="3" style="width: 100%; background-color: #00FFFF;">@Model.almt</kendo-textarea>
                 <span asp-validation-for="almt" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group col-sm-12">
             <label class="col-sm-12">Retail/Corporate</label>
             <div class="col-sm-12">
-                <kendo-dropdownlist for="flag_sic" style="width: 100%"
+                <kendo-dropdownlist for="flag_sic" style="width: 100%" class="primary-dropdown"
                                     datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                     <datasource type="DataSourceTagHelperType.Custom">
                         <transport>

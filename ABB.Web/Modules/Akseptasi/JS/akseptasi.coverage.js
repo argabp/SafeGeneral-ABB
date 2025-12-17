@@ -52,4 +52,10 @@ function OnKodeCoverageChange(e){
         var strings = returnValue.split(",");
         $("#flag_pkk").getKendoDropDownList().value(strings[1]);
     });
+    ajaxGet(`/Akseptasi/GeneratePstAndStnRatePremi?kd_cb=${$("#kd_cb").val()}&kd_cob=${$("#kd_cob").val()}&kd_scob=${$("#kd_scob").val()}&kd_thn=${$("#kd_thn").val()}&no_aks=${$("#no_aks").val()}&no_updt=${$("#no_updt").val()}&no_rsk=${resiko.no_rsk}&kd_endt=${resiko.kd_endt}&flag_pkk=${$("#flag_pkk").val()}&kd_cvrg=${e.sender._cascadedValue}`, (returnValue) => {
+        if(returnValue[0] != null){
+            $("#resiko_coverage_pst_rate_prm").getKendoNumericTextBox().value(returnValue[0].split(",")[1]);
+            $("#resiko_coverage_stn_rate_prm").getKendoDropDownList().value(returnValue[1].split(",")[1]);
+        }
+    });
 }
