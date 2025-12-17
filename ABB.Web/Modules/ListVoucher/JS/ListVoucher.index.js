@@ -77,10 +77,22 @@ function onCetakClick() {
     var tglAwal = $("#TanggalAwal").data("kendoDatePicker").value();
     var tglAkhir = $("#TanggalAkhir").data("kendoDatePicker").value();
 
+    var namaBank = "";
     // 2. Validasi
     if (!tglAwal || !tglAkhir) {
         alert("Silakan pilih tanggal awal dan tanggal akhir.");
         return;
+    }
+    var combobox = $("#KodeBank").data("kendoComboBox");
+    var dataItem = combobox.dataItem(); // Ambil object data yang sedang dipilih
+    
+    if (dataItem) {
+        // Kita ambil field 'Keterangan' dari data aslinya (bukan TampilanLengkap)
+        // Karena di Controller GetKasBankList, 'x.Keterangan' aslinya ada di result query awal
+        // Tapi tunggu, di Controller tadi kita cuma return { Kode, TampilanLengkap } kan?
+        
+        // JADI, KITA HARUS UPDATE CONTROLLER SEDIKIT LAGI (Lihat Poin 4 di bawah)
+        namaBank = dataItem.Keterangan; 
     }
 
     // 3. Format tanggal
@@ -90,9 +102,11 @@ function onCetakClick() {
     var formData = {
         tipe: tipe,
         kodeBank: kodeBank,
+        keterangan: namaBank,
         tglAwal: awal,
         tglAkhir: akhir
     };
+    console.log(namaBank)
 
       $.ajax({
         url: '/ListVoucher/GenerateReport',

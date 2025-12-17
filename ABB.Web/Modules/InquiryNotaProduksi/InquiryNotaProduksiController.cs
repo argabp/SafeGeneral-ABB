@@ -10,17 +10,27 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
 using ABB.Web.Modules.InquiryNotaProduksi.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace ABB.Web.Modules.InquiryNotaProduksi
 {
     public class InquiryNotaProduksiController : AuthorizedBaseController
     {
-        public ActionResult Index()
+         public async Task<IActionResult> Index()
         {
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
-            ViewBag.UserLogin = CurrentUser.UserId;
+            var databaseName = Request.Cookies["DatabaseValue"]; 
+            var kodeCabangCookie = Request.Cookies["UserCabang"];
+            if (string.IsNullOrEmpty(databaseName) || string.IsNullOrEmpty(kodeCabangCookie))
+            {
+                await HttpContext.SignOutAsync("Identity.Application");
 
+                return RedirectToAction("Login", "Account");
+            }
+
+            ViewBag.UserLogin = CurrentUser.UserId;
             return View();
         }
 

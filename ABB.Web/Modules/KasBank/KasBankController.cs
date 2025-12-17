@@ -13,6 +13,8 @@ using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ABB.Application.Coas.Queries;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 
 namespace ABB.Web.Modules.KasBank
@@ -25,6 +27,15 @@ namespace ABB.Web.Modules.KasBank
         {
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
+            var databaseName = Request.Cookies["DatabaseValue"]; 
+             var kodeCabangCookie = Request.Cookies["UserCabang"];
+            if (string.IsNullOrEmpty(databaseName) || string.IsNullOrEmpty(kodeCabangCookie))
+            {
+                await HttpContext.SignOutAsync("Identity.Application");
+
+                return RedirectToAction("Login", "Account");
+            }
+
             ViewBag.UserLogin = CurrentUser.UserId;
 
             return View();
