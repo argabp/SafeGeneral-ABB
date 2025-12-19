@@ -118,7 +118,10 @@ function onSaveDetailRekananIndividu(){
         no_fax: $("#no_fax").val(),
         website: $("#website").val(),
         dirinstitusi: $("#dirinstitusi").val(),
-        kelamin: $("#kelamin").val()
+        kelamin: $("#kelamin").val(),
+
+
+        flag_sic: selectedData.flag_sic
     }
     
     var bentukflag = "";
@@ -288,10 +291,11 @@ function onSaveDetailRekananIndividu(){
         function (response) {
             if (response.Result == "OK") {
                 showMessage('Success', response.Message);
+                closeWindow("#DetailRekananWindow");
             } else
                 showMessage('Error', response.Message);
 
-            closeWindow("#DetailRekananWindow");
+            closeProgress("#DetailRekananWindow");
         }
     );
 }
@@ -313,8 +317,9 @@ function onDeleteDetailRekanan(e){
                 function (response) {
                     if (response.Result == "OK") {
                         showMessage('Success', response.Message);
-                    } else
+                    } else {
                         showMessage('Error', response.Message);
+                    }
 
                     refreshGrid("#RekananGrid");
                     closeProgressOnGrid("#RekananGrid");

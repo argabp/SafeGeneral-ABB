@@ -136,6 +136,8 @@ namespace ABB.Application.TertanggungPrincipals.Commands
         public decimal? penghasilan { get; set; }
 
         public string? kelamin { get; set; }
+
+        public string flag_sic { get; set; }
         
         public void Mapping(Profile profile)
         {
@@ -147,13 +149,15 @@ namespace ABB.Application.TertanggungPrincipals.Commands
     {
         private readonly IDbContextFactory _contextFactory;
         private readonly IMapper _mapper;
+        private readonly IDbConnectionFactory _connectionFactory;
         private readonly ILogger<SaveDetailTertanggungPrincipalCommandHandler> _logger;
 
-        public SaveDetailTertanggungPrincipalCommandHandler(IDbContextFactory contextFactory, IMapper mapper,
+        public SaveDetailTertanggungPrincipalCommandHandler(IDbContextFactory contextFactory, IMapper mapper, IDbConnectionFactory connectionFactory,
             ILogger<SaveDetailTertanggungPrincipalCommandHandler> logger)
         {
             _contextFactory = contextFactory;
             _mapper = mapper;
+            _connectionFactory = connectionFactory;
             _logger = logger;
         }
 
@@ -162,6 +166,29 @@ namespace ABB.Application.TertanggungPrincipals.Commands
             try
             {
                 var dbContext = _contextFactory.CreateDbContext(request.DatabaseName);
+
+                _connectionFactory.CreateDbConnection(request.DatabaseName);
+
+                if (request.flag_sic == "R")
+                {
+                    await _connectionFactory.QueryProc<string>("sp_Cekrf03_02",
+                        new
+                        {
+                            request.ktp_nm, request.ktp_tempat, request.ktp_tgl, request.ktp_no,
+                            request.ktp_alamat, request.ktp_kota, request.kodepos
+                        });    
+                }
+                else
+                {
+                    await _connectionFactory.QueryProc<string>("sp_Cekrf03_01",
+                        new 
+                        { 
+                            request.perusahaaninstitusi, request.npwp, request.kotainstitusi, 
+                            request.kodeposinstitusi, request.telpinstitusi
+                        });
+                }
+                
+                
                 var detailRekanan = dbContext.DetailRekanan.FirstOrDefault(w => w.kd_cb == request.kd_cb
                                                                                     && w.kd_grp_rk == request.kd_grp_rk
                                                                                     && w.kd_rk == request.kd_rk);

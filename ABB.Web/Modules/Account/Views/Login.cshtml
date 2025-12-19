@@ -27,66 +27,68 @@
             padding-bottom: 1.5em;
         }
 
-    .login-logo-image{
-            float: left;
-            line-height: .8;
-            margin-left: 0.8rem;
-            margin-right: 0.5rem;
-            margin-top: -3px;
-            max-height: 150px;
-            width: auto;
-            padding-top: 1.5em;
-            padding-bottom: 1.5em;
-        }
+    .login-logo-image {
+        max-height: 120px;
+        width: auto;
+    }
+    
+    /* Mobile */
+    @@media (max-width: 768px) {
+    .login-logo-image {
+        max-height: 80px;
+        margin-bottom: 30px;
+    }
+    }
 </style>
-<div class="login-box" style="width: 440px">
-    <div style="display: flex; justify-content: center;">
-        <img src="/img/new_logo.png" alt="ABB Logo" class="new-logo-image">
-    </div>
-    <div class="card card-outline card-primary">
-        <div class="card-header text-center">
-            <img src="/img/Logo-Login.png" alt="ABB Logo" class="login-logo-image">
-        </div>
-        <div class="card-body login-card-body">
-            @* <form id="SignInForm" enctype="multipart/form-data"> *@
-            <form method="post" autocomplete="off" id="LoginForm">
-                <div class="input-group mb-3">
-                    <input asp-for="Username" type="text" class="form-control" placeholder="Username" onblur="getUserDatabase()"/>
-                    <div class="input-group-append">
-                        <div class="input-group-text">
-                            <span class="fas fa-user"></span>
+<div class="container-fluid h-100 p-0">
+    <div class="row h-100 g-0">
+        <div class="login-panel col-lg-5 d-block">
+            <div class="text-center">
+                <img src="/img/logo-login.png" alt="ABB Logo" class="login-logo-image">
+            </div>
+            <div class="login-body">
+                <form method="post" autocomplete="off" id="LoginForm">
+                    <div class="login-Title input-group">Hi, Welcome back to SIABB Core</div>
+                    <div class="input-group mb-3">
+                        <input asp-for="Username" type="text" class="form-control" placeholder="Username" onblur="getUserDatabase()"/>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="mb-3">
-                    <span asp-validation-for="Username" class="text-danger"></span>
-                </div>
-                <div class="input-group mb-3">
-                    <input type="password" asp-for="Password" class="form-control" placeholder="Password"  />
-                    <div class="input-group-append">
-                        <div class="input-group-text">
-                            <span class="fas fa-lock"></span>
+                    <div class="mb-3">
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="password" asp-for="Password" class="form-control" placeholder="Password"  />
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="mb-3">
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
-                <div class="input-group mb-3">
-                    <select class="form-control select2" name="UserDatabase" id="UserDatabase" style="width: 100%;">
-                        <option>Pilih Cabang</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <span asp-validation-for="UserDatabase" class="text-danger"></span>
-                </div>
-                <div class="col-12" style="padding: 0px">
-                    <button type="submit" class="btn btn-primary login-btn">Sign In</button>
-                    @* <button id="SignIn" type="button"class="btn btn-primary btn-block">Sign In</button> *@
-                </div>
-            </form>
+                    <div class="mb-3">
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="input-group mb-3">
+                        <select class="form-control select2" name="UserDatabase" id="UserDatabase" style="width: 100%;">
+                            <option>Pilih Cabang</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <span asp-validation-for="UserDatabase" class="text-danger"></span>
+                    </div>
+                    <div class="col-12" style="padding: 0px">
+                        <button type="submit" class="btn btn-primary login-btn">Sign In</button>
+                        @* <button id="SignIn" type="button"class="btn btn-primary btn-block">Sign In</button> *@
+                    </div>
+                    <p style="text-align: center; padding-top: 1em"><strong>Copyright © 2025 PT. Asuransi Bhakti Bhayangkara.</strong> All rights reserved.</p>
+                </form>
+            </div>
         </div>
-        <!-- /.login-card-body -->
+        <div class="login-image col-lg-7 d-none d-lg-block">
+        </div>
     </div>
 </div>
 <input type="hidden" id="show-success-message" value="@ViewData["ShowSuccessMessage"]"/>

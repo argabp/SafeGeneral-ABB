@@ -106,7 +106,7 @@ body {
     width: 86px;
     height: 24px;
     flex-grow: 0;
-    background: url("../img/logo.png");
+    background: url("../img/logo-login.png");
     background-repeat: no-repeat;
     background-size: 86px 24px;
 }
@@ -992,6 +992,13 @@ form .k-textbox, form .k-dropdown, form .k-combobox, form .k-multiselect, form .
     background-color: var(--white);
 }
 
+/* Tablet & Mobile */
+@media (max-width: 992px) {
+    .login-panel {
+        padding: 40px 30px;
+    }
+}
+
 .login-body {
     height: 452px;
     margin: 50px 0 0 0;
@@ -1058,13 +1065,14 @@ form .k-textbox, form .k-dropdown, form .k-combobox, form .k-multiselect, form .
     flex-grow: 0;
     align-self: center;
     align-items: center;
-    background: url("../img/logo.png") no-repeat;
+    background: url("../img/logo-login.png") no-repeat;
     margin-bottom:80px;
 }
 
 .login-image {
-    width: 100%;
-    background: url("../img/login-image.png") no-repeat;
+    height: 100vh;
+    background: url("../img/login-image.png") center center no-repeat;
+    background-size: cover;
 }
 
 /*Large devices (desktops, 992px and up)*/
@@ -1079,7 +1087,6 @@ form .k-textbox, form .k-dropdown, form .k-combobox, form .k-multiselect, form .
     font-size: 25px;
     line-height: 1.3;
     letter-spacing: normal;
-    text-align: center;
     color: var(--darkest);
     margin-top: 20px;
     margin-bottom: 50px;

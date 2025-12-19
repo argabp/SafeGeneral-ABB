@@ -88,6 +88,11 @@ namespace ABB.Application.TertanggungPrincipals.Commands
             try
             {
                 var dbContext = _contextFactory.CreateDbContext(request.DatabaseName);
+
+                _connectionFactory.CreateDbConnection(request.DatabaseName);
+                await _connectionFactory.QueryProc<string>("sp_Cekrf03",
+                    new { request.nm_rk, request.almt, request.kd_kota, request.flag_sic });
+                
                 var rekanan = dbContext.Rekanan.FirstOrDefault(w => w.kd_cb == request.kd_cb
                                                                     && w.kd_grp_rk == request.kd_grp_rk
                                                                     && w.kd_rk == request.kd_rk);
@@ -96,7 +101,6 @@ namespace ABB.Application.TertanggungPrincipals.Commands
                 {
                     request.kd_kota = "00";
                     
-                    _connectionFactory.CreateDbConnection(request.DatabaseName);
                     var result = (await _connectionFactory.QueryProc<string>("spe_rf03e_01",
                         new { request.kd_cb, request.kd_grp_rk, kd_rk_induk = "100", request.kd_kota })).FirstOrDefault();
 

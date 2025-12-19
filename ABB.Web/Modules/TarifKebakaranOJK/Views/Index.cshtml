@@ -102,8 +102,8 @@
                                     columns.Bound(col => col.kd_okup).Width(150).Title("Kode Okupasi");
                                     columns.Bound(col => col.text_kls_konstr).Width(150).Title("Kode Kelas Konstruksi");
                                     columns.Bound(col => col.text_stn_rate_premi).Width(150).Title("Satuan Rate Premi");
-                                    columns.Bound(col => col.pst_rate_prm_min).Width(200).Title("Rate Premi Minimum").Format("{0:n2}");
-                                    columns.Bound(col => col.pst_rate_prm_max).Width(200).Title("Rate Premi Maximum").Format("{0:n2}");
+                                    columns.Bound(col => col.pst_rate_prm_min).Width(200).Title("Tarif Bawah").Format("{0:n2}");
+                                    columns.Bound(col => col.pst_rate_prm_max).Width(200).Title("Tarif Atas").Format("{0:n2}");
                                 })
                                 .Pageable(pager => pager
                                     .Refresh(true)

@@ -132,6 +132,8 @@ namespace ABB.Web.Modules.Rekanan.Models
         public decimal? penghasilan { get; set; }
 
         public string? kelamin { get; set; }
+
+        public string flag_sic { get; set; }
         
         public void Mapping(Profile profile)
         {
