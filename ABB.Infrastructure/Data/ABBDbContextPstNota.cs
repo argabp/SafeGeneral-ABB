@@ -29,6 +29,10 @@ using TemplateJurnal62Entity = ABB.Domain.Entities.TemplateJurnal62;
 using TemplateJurnalDetail62Entity = ABB.Domain.Entities.TemplateJurnalDetail62;
 using TemplateJurnal117Entity = ABB.Domain.Entities.TemplateJurnal117;
 using TemplateJurnalDetail117Entity = ABB.Domain.Entities.TemplateJurnalDetail117;
+using JurnalMemorial104Entity = ABB.Domain.Entities.JurnalMemorial104;
+using DetailJurnalMemorial104Entity = ABB.Domain.Entities.DetailJurnalMemorial104;
+using JurnalMemorial117Entity = ABB.Domain.Entities.JurnalMemorial117;
+using JurnalMemorial117DetailEntitiy = ABB.Domain.Entities.JurnalMemorial117Detail;
 
 namespace ABB.Infrastructure.Data
 {
@@ -64,6 +68,10 @@ namespace ABB.Infrastructure.Data
         public DbSet<TemplateJurnalDetail62Entity> TemplateJurnalDetail62 { get; set; }
         public DbSet<TemplateJurnal117Entity> TemplateJurnal117 { get; set; }
         public DbSet<TemplateJurnalDetail117Entity> TemplateJurnalDetail117 { get; set; }
+        public DbSet<JurnalMemorial104Entity> JurnalMemorial104 { get; set; }
+        public DbSet<DetailJurnalMemorial104Entity> DetailJurnalMemorial104 { get; set; }
+        public DbSet<JurnalMemorial117Entity> JurnalMemorial117 { get; set; }
+        public DbSet<JurnalMemorial117DetailEntitiy> JurnalMemorial117Detail { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -91,6 +99,10 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new TemplateJurnalDetail62Map());
             builder.ApplyConfiguration(new TemplateJurnal117Map());
             builder.ApplyConfiguration(new TemplateJurnalDetail117Map());
+            builder.ApplyConfiguration(new JurnalMemorial104Map());
+            builder.ApplyConfiguration(new DetailJurnalMemorial104Map());
+            builder.ApplyConfiguration(new JurnalMemorial117Map());
+            builder.ApplyConfiguration(new JurnalMemorial117DetailMap());
 
 
         }

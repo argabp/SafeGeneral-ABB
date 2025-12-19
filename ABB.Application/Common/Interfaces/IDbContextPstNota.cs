@@ -27,6 +27,10 @@ using TemplateJurnal62Entity = ABB.Domain.Entities.TemplateJurnal62;
 using TemplateJurnalDetail62Entity = ABB.Domain.Entities.TemplateJurnalDetail62;
 using TemplateJurnal117Entity = ABB.Domain.Entities.TemplateJurnal117;
 using TemplateJurnalDetail117Entity = ABB.Domain.Entities.TemplateJurnalDetail117;
+using JurnalMemorial104Entity = ABB.Domain.Entities.JurnalMemorial104;
+using DetailJurnalMemorial104Entity = ABB.Domain.Entities.DetailJurnalMemorial104;
+using JurnalMemorial117Entity = ABB.Domain.Entities.JurnalMemorial117;
+using DetailJurnalMemorial117Entity = ABB.Domain.Entities.JurnalMemorial117Detail;
 
 
 namespace ABB.Application.Common.Interfaces
@@ -56,6 +60,10 @@ namespace ABB.Application.Common.Interfaces
         DbSet<TemplateJurnalDetail62Entity> TemplateJurnalDetail62 { get; set; }
         DbSet<TemplateJurnal117Entity> TemplateJurnal117 { get; set; }
         DbSet<TemplateJurnalDetail117Entity> TemplateJurnalDetail117 { get; set; }
+        DbSet<JurnalMemorial104Entity> JurnalMemorial104 { get; set; }
+        DbSet<DetailJurnalMemorial104Entity> DetailJurnalMemorial104 { get; set; }
+        DbSet<JurnalMemorial117Entity> JurnalMemorial117 { get; set; }
+        DbSet<DetailJurnalMemorial117Entity> JurnalMemorial117Detail { get; set; }
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
