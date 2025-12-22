@@ -25,6 +25,7 @@ namespace ABB.Application.VoucherBanks.Commands
         public bool FlagPosting { get; set; }
         public string KodeBank { get; set; }
         public string NoBank { get; set; }
+        public string KodeUserUpdate { get; set; }
         public string JenisPembayaran { get; set; }
     }
 
@@ -68,6 +69,7 @@ namespace ABB.Application.VoucherBanks.Commands
                 entity.FlagPosting = request.FlagPosting;
                 entity.KodeBank = request.KodeBank;
                 entity.NoBank = request.NoBank;
+                entity.KodeUserUpdate = request.KodeUserUpdate;
                 entity.TanggalUpdate = DateTime.Now; // Otomatis mengisi tanggal update saat ini
                 entity.JenisPembayaran = request.JenisPembayaran;
                 // 3. Simpan perubahan ke database

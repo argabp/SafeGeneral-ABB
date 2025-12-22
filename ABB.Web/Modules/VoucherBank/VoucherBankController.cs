@@ -240,11 +240,17 @@ namespace ABB.Web.Modules.VoucherBank
 
             if (existingData != null) // Jika data sudah ada, jalankan Update
             {
-                await Mediator.Send(Mapper.Map<UpdateVoucherBankCommand>(model));
+                var command = Mapper.Map<UpdateVoucherBankCommand>(model);
+                command.KodeUserUpdate = CurrentUser.UserId;
+                await Mediator.Send(command);
+
             }
             else // Jika data belum ada, jalankan Create
             {
-                await Mediator.Send(Mapper.Map<CreateVoucherBankCommand>(model));
+                var command = Mapper.Map<CreateVoucherBankCommand>(model);
+                command.KodeUserInput = CurrentUser.UserId;
+                await Mediator.Send(command);
+
             }
 
             return Json(new { success = true });

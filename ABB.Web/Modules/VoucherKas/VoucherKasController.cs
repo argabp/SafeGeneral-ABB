@@ -169,11 +169,18 @@ namespace ABB.Web.Modules.VoucherKas
             var existingData = await Mediator.Send(new GetVoucherKasByIdQuery { NoVoucher = model.NoVoucher });
             if (existingData != null)
             {
-                await Mediator.Send(Mapper.Map<UpdateVoucherKasCommand>(model));
+                  var command = Mapper.Map<UpdateVoucherKasCommand>(model);
+                command.KodeUserUpdate = CurrentUser.UserId;
+                await Mediator.Send(command);
+                
+
             }
             else
             {
-                await Mediator.Send(Mapper.Map<CreateVoucherKasCommand>(model));
+                var command = Mapper.Map<CreateVoucherKasCommand>(model);
+                command.KodeUserInput = CurrentUser.UserId;
+                 await Mediator.Send(command);
+
             }
             return Json(new { success = true });
         }

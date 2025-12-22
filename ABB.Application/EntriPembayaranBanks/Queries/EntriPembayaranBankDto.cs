@@ -22,6 +22,12 @@ namespace ABB.Application.EntriPembayaranBanks.Queries
         public decimal? TotalDlmRupiah { get; set; }
         public int? Kurs { get; set; }
 
+        public string KodeUserInput { get; set; }
+        public string KodeUserUpdate { get; set; }
+
+        public DateTime? TanggalInput { get; set; }
+        public DateTime? TanggalUpdate { get; set; }
+
 
         public decimal TotalBayarCalculated { get; set; }
 

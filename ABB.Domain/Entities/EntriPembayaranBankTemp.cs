@@ -21,6 +21,13 @@ namespace ABB.Domain.Entities
         public int? Kurs { get; set; }
          public decimal? NilaiKurs { get; set; }
         //  public decimal? nilai_kurs { get; set; }
+
+         // tambahan sebagai audit
+         public string KodeUserInput { get; set; }
+        public string KodeUserUpdate { get; set; }
+
+        public DateTime? TanggalInput { get; set; }
+        public DateTime? TanggalUpdate { get; set; }
         
     }
 }

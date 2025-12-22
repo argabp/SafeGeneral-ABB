@@ -2,6 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ABB.Application.Common.Interfaces;
 using MediatR;
+using System;
 using Microsoft.EntityFrameworkCore;
 
 namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
@@ -18,6 +19,12 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
         public string DebetKredit { get; set; }
         //  public int? Kurs { get; set; }
         public decimal? TotalBayarRp { get; set; }
+
+             public string KodeUserInput { get; set; }
+        public string KodeUserUpdate { get; set; }
+
+        public DateTime? TanggalInput { get; set; }
+        public DateTime? TanggalUpdate { get; set; }
        
     }
 
@@ -50,6 +57,8 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
             entity.TotalBayarOrg = request.TotalBayarOrg;
             entity.DebetKredit = request.DebetKredit;
             entity.TotalBayarRp = request.TotalBayarRp;
+               entity.TanggalUpdate = DateTime.Now;
+            entity.KodeUserUpdate = request.KodeUserUpdate;
             // entity.Kurs = request.Kurs;
             
             _context.EntriPenyelesaianPiutang.Update(entity);

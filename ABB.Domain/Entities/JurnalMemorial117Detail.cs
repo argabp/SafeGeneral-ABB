@@ -9,7 +9,8 @@ namespace ABB.Domain.Entities
         
         public string KodeAkun { get; set; }
         public string FlagPosting { get; set; }
-        public string NoNota { get; set; }
+        // public string NoNota { get; set; }
+        public string Keterangan { get; set; }
         public string KodeMataUang { get; set; }
         public decimal? NilaiDebet { get; set; }
         public decimal? NilaiDebetRp { get; set; }

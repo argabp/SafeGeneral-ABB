@@ -16,6 +16,9 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
         public string NoBukti { get; set; }
         public string FlagPembayaran { get; set; } = "NOTA";
 
+         public string KodeUserInput { get; set; }
+        public DateTime? TanggalInput { get; set; }
+
         // Ini yang dikirim dari frontend: list of nota
         public List<PenyelesaianNotaItem> Data { get; set; } = new List<PenyelesaianNotaItem>();
     }
@@ -69,6 +72,9 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
                     TotalBayarRp = nota.TotalBayarRp,
                     KodeAkun = nota.KodeAkun,
                     FlagPembayaran = request.FlagPembayaran,
+
+                     TanggalInput = DateTime.Now, 
+                    KodeUserInput = request.KodeUserInput,
                 };
 
                 _context.EntriPenyelesaianPiutangTemp.Add(entity);

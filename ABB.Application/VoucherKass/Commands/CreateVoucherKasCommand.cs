@@ -22,6 +22,7 @@ namespace ABB.Application.VoucherKass.Commands
         public decimal? TotalDalamRupiah { get; set; }
         public bool FlagPosting { get; set; }
         public string JenisPembayaran { get; set; }
+        public string KodeUserInput { get; set; }
     }
 
     public class CreateVoucherKasCommandHandler : IRequestHandler<CreateVoucherKasCommand, string>
@@ -61,7 +62,7 @@ namespace ABB.Application.VoucherKass.Commands
                 KodeMataUang = request.KodeMataUang,
                 KeteranganVoucher = request.KeteranganVoucher,
                 FlagPosting = request.FlagPosting,
-                
+                KodeUserInput = request.KodeUserInput,
                 // Gunakan tanggal yang sudah diperbaiki
                 TanggalVoucher = tglVoucherFix, 
                 

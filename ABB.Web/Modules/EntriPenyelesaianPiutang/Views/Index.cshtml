@@ -115,7 +115,7 @@
                                     
                                     columns.Command(command =>
                                     {
-                                        command.Custom("EntriPembayaranPiutangProses").Text(" Proses Ulang ").IconClass("fa fa-eye").Click("btnProsesPembayaranPiutang_OnClick");
+                                        command.Custom("EntriPembayaranPiutangProses").Text(" Proses Ulang ").IconClass("fa fa-eye").Visible("showProsesUlang").Click("btnProsesPembayaranPiutang_OnClick");
                                         command.Custom("EntriPembayaranPiutangLihat").Text(" Lihat ").IconClass("fa fa-eye").Click("btnLihatPembayaranPiutang_OnClick");
                                        // command.Custom("EntriPembayaran")
                                        //     .Text("Edit Penyelesaian")
@@ -161,6 +161,10 @@
 </div>
 
 <script>
+
+ function showProsesUlang(dataItem) {
+        return dataItem.FlagPosting === false;
+    }
 
  function getSearchFilterBelumFinal() {
         return {

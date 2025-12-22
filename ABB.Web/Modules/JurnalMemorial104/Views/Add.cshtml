@@ -1,0 +1,212 @@
+@model ABB.Web.Modules.JurnalMemorial104.Models.JurnalMemorial104ViewModel
+@using Kendo.Mvc.UI
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@{
+    // Cek apakah mode Edit (NoVoucher sudah ada)
+    bool isEditMode = !string.IsNullOrEmpty(Model.JurnalHeader?.NoVoucher);
+}
+
+<div class="window-body">
+    <form id="JurnalHeaderForm">
+        <fieldset>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Kode Cabang</label>
+                <div class="col-sm-4">
+                     <kendo-combobox for="JurnalHeader.KodeCabang"
+                                    style="width: 100%;"
+                                    datatextfield="Text"
+                                    datavaluefield="Value"
+                                    bind-to="ViewBag.KodeCabangOptions"
+                                    filter="FilterType.Contains"
+                                    value="@Model.JurnalHeader.KodeCabang"
+                                    text="@ViewBag.DisplayCabang"
+                                    readonly="true">
+                    </kendo-combobox>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">No. Voucher</label>
+                <div class="col-sm-4">
+                
+                  <kendo-textbox for="JurnalHeader.NoVoucher" 
+                    value="@Model.JurnalHeader.NoVoucher" 
+                    style="width: 100%;" 
+                    readonly="true" />
+                </div>
+            </div>
+            <hr>
+             <div class="form-group row">
+                 <label class="col-sm-2 col-form-label">Keterangan Voucher</label>
+                <div class="col-sm-10">
+                   <kendo-textarea name="JurnalHeader.Keterangan" 
+                value="@Model.JurnalHeader?.Keterangan" 
+                rows="2" 
+                style="width: 100%;">
+                    </kendo-textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Tanggal</label>
+                <div class="col-sm-2">
+                    <kendo-datepicker for="JurnalHeader.Tanggal" style="width: 100%;" />
+                </div>
+
+                <label class="col-sm-2 col-form-label">Tanggal Input</label>
+                <div class="col-sm-2">
+                    <kendo-datepicker for="JurnalHeader.TanggalInput" style="width: 100%;" readonly="true" />
+                </div>
+
+                <label class="col-sm-2 col-form-label">Tanggal Update</label>
+                <div class="col-sm-2">
+                    <kendo-datepicker for="JurnalHeader.TanggalUpdate" style="width: 100%;" readonly="true" />
+                </div>
+
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Flag Gl</label>
+                <div class="col-sm-2">
+                    <kendo-textbox for="JurnalHeader.FlagPosting" style="width: 100%;" readonly="true" />
+                </div>
+                <label class="col-sm-2 col-form-label">Kode User Input</label>
+                <div class="col-sm-2">
+                    <kendo-textbox for="JurnalHeader.KodeUserInput" style="width: 100%;" readonly="true" />
+                </div>
+                 <label class="col-sm-2 col-form-label">Kode User Update</label>
+                <div class="col-sm-2">
+                    <kendo-textbox for="JurnalHeader.KodeUserUpdate" style="width: 100%;" readonly="true" />
+                </div>
+            </div>
+
+           
+            
+            <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 10px;">
+                <button type="button" onclick="onSaveHeader()" class="btn btn-primary">
+                    <i class="fa fa-save"></i> Simpan Header
+                </button>
+            </div>
+        </fieldset>
+    </form>
+   
+    <hr/>
+
+    <form id="JurnalDetailForm" style="display:none; background-color: #f9f9f9; padding: 15px; border-radius: 5px;">
+        <input type="hidden" id="DetailNo" asp-for="No" value="0" />
+        
+        <div class="row">
+            <div class="form-group col-sm-3">
+                <label>Kode Akun</label>
+                <kendo-combobox for="KodeAkun"
+                                style="width:100%;"
+                                datatextfield="Text"
+                                datavaluefield="Value"
+                                bind-to="ViewBag.KodeAkunOptions"
+                                filter="FilterType.Contains"
+                                placeholder="Pilih Akun...">
+                </kendo-combobox>
+            </div>
+
+            <div class="form-group col-sm-2">
+                <label>Mata Uang</label>
+                <kendo-combobox for="KodeMataUang"
+                                style="width: 100%;"
+                                datatextfield="Text"
+                                datavaluefield="Value"
+                                bind-to="ViewBag.MataUangOptions"
+                                filter="FilterType.Contains"> 
+                </kendo-combobox>
+            </div>
+
+           
+        </div>
+        <div class="row">
+
+           <div class="form-group col-sm-2">
+                <label>Debet</label>
+                <kendo-numerictextbox for="NilaiDebet" id="NilaiDebet" format="n2" min="0" style="width:100%;" />
+            </div>
+
+            <div class="form-group col-sm-2">
+                <label>Debet Rp</label>
+                <kendo-numerictextbox for="NilaiDebetRp" id="NilaiDebetRp" format="n2" min="0" style="width:100%;" readonly="true" />
+            </div>
+
+            <div class="form-group col-sm-2">
+                <label>Kredit</label>
+                <kendo-numerictextbox for="NilaiKredit" id="NilaiKredit" format="n2" min="0" style="width:100%;" />
+            </div>
+
+            <div class="form-group col-sm-2">
+                <label>Kredit Rp</label>
+                <kendo-numerictextbox for="NilaiKreditRp" id="NilaiKreditRp" format="n2" min="0" style="width:100%;" readonly="true" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-4">
+                 <label>Keterangan Detail</label>
+                <kendo-textarea name="KeteranganDetail" id="KeteranganDetail" rows="2" style="width: 100%;background: white;"></kendo-textarea>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top:5px;">
+            <button type="button" id="btn-cancel-detail" class="btn btn-secondary" onclick="clearDetailForm()" style="display:none;">Batal</button>
+            <button type="button" id="btn-save-detail" onclick="onSaveDetail()" class="btn btn-success">
+                <i class="fa fa-plus"></i> Tambah Jurnal
+            </button>
+        </div>
+    </form>
+
+    <br/>
+
+    <script>
+        function getNoVoucherForGrid() {
+            return { 
+                noVoucher: $("#JurnalHeader_NoVoucher").val() 
+            };
+        }
+    </script>
+
+    @(Html.Kendo().Grid<ABB.Web.Modules.JurnalMemorial104.Models.JurnalMemorial104Item>()
+        .Name("DetailJurnalGrid")
+        .DataSource(ds => ds.Ajax()
+            .Read(read => read.Action("GetDetailJurnal", "JurnalMemorial104").Data("getNoVoucherForGrid"))
+            .Model(m => m.Id(p => p.No))
+        )
+        .Columns(cols => {
+            cols.Bound(c => c.No).Title("No").Width(60);
+            cols.Bound(c => c.KodeAkun).Title("Akun").Width(150);
+            cols.Bound(c => c.KeteranganDetail).Title("Keterangan").Width(150);
+            cols.Bound(c => c.KodeMataUang).Title("MTU").Width(80);
+            cols.Bound(c => c.NilaiDebet).Format("{0:n2}").Title("Debet").Width(120).HtmlAttributes(new { style = "text-align:right;" });
+            cols.Bound(c => c.NilaiKredit).Format("{0:n2}").Title("Kredit").Width(120).HtmlAttributes(new { style = "text-align:right;" });
+            
+            cols.Command(command => {
+                command.Custom("EditDetail").Text(" ").IconClass("fa fa-edit").Click("onEditDetail");
+                command.Custom("DeleteDetail").Text(" ").IconClass("fa fa-trash").Click("onDeleteDetail");
+            }).Title("Action").Width(100);
+        })
+        .NoRecords(nr => nr.Template("Belum ada detail jurnal"))
+        .Pageable(pager => pager.Refresh(true))
+        .Sortable()
+        .Scrollable()
+        .Height(300)
+        .Events(e => e.DataBound("updateFooterTotals"))
+    )
+
+    <div style="margin-top: 10px; padding: 10px; background: #eee; border: 1px solid #ddd; font-weight: bold; display: flex; justify-content: flex-end; gap: 30px;">
+        <span>Total Debet: <span id="lblTotalDebet" style="color:blue">0.00</span></span>
+        <span>Total Kredit: <span id="lblTotalKredit" style="color:blue">0.00</span></span>
+        <span>Balance: <span id="lblBalance" style="color:green">0.00</span></span>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        // Jika mode edit (NoVoucher ada), tampilkan form detail
+        var noVoucher = $("#JurnalHeader_NoVoucher").val();
+        if (noVoucher) {
+            $("#JurnalDetailForm").show();
+        }
+    });
+</script>

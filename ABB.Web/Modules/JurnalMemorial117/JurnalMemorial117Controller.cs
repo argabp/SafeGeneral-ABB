@@ -78,12 +78,18 @@ namespace ABB.Web.Modules.JurnalMemorial117
                 
                 ViewBag.DisplayCabang = $"{userCabang} - {namaCabang}";
 
+                var nextNoVoucher = await Mediator.Send(new GetNextNoVoucherJurnalQuery 
+                { 
+                    KodeCabang = userCabang,
+                    Bulan = now.Month,
+                    Tahun = now.Year
+                });
                 // Generate No Voucher Baru (Opsional, jika ada logic auto number)
                 // var nextNoVoucher = await Mediator.Send(new GetNextNoVoucherJurnalQuery { ... });
                 
                 viewModel.JurnalHeader.KodeCabang = userCabang;
                 viewModel.JurnalHeader.Tanggal = now;
-                // viewModel.JurnalHeader.NoVoucher = nextNoVoucher; // Jika auto number
+                viewModel.JurnalHeader.NoVoucher = nextNoVoucher;
             }
             // MODE EDIT
             else
@@ -214,51 +220,7 @@ namespace ABB.Web.Modules.JurnalMemorial117
             }
         }
 
-        // --- FITUR PILIH NOTA ---
-        public async Task<IActionResult> PilihNota()
-        {
-            // Logic sama, hanya load view partial
-            return PartialView("PilihNota");
-        }
-
-        // [HttpPost]
-        // public async Task<IActionResult> GetNotaProduksi([DataSourceRequest] DataSourceRequest request, string searchKeyword, string jenisAsset)
-        // {
-        //     if (string.IsNullOrEmpty(searchKeyword) && string.IsNullOrEmpty(jenisAsset))
-        //     {
-        //         return Json(await new List<InquiryNotaProduksiDto>().ToDataSourceResultAsync(request));
-        //     }
-
-        //     var data = await Mediator.Send(new GetNotaUntukPembayaranQuery()
-        //     {
-        //         SearchKeyword = searchKeyword,
-        //         JenisAsset = jenisAsset
-        //     });
-
-        //     return Json(await data.ToDataSourceResultAsync(request));
-        // }
-
-        // --- SIMPAN DETAIL DARI NOTA (MULTIPLE) ---
-        [HttpPost]
-        public async Task<ActionResult> SimpanNota([FromBody] CreateJurnalMemorial117DetailNotaCommand command)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(command.NoVoucher))
-                    throw new Exception("Nomor voucher tidak boleh kosong.");
-
-                if (command.Data == null || !command.Data.Any())
-                    throw new Exception("Tidak ada data nota yang dikirim.");
-
-                command.KodeUserInput = CurrentUser.UserId;
-                await Mediator.Send(command);
-                return Ok(new { Status = "OK", Message = "Data berhasil disimpan" });
-            }
-            catch (Exception e)
-            {
-                return Ok(new { Status = "ERROR", Message = e.Message });
-            }
-        }
+       
 
         // --- HELPER: GET KURS ---
         [HttpGet]

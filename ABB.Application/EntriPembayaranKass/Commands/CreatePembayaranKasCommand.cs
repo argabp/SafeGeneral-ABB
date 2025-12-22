@@ -20,6 +20,12 @@ namespace ABB.Application.EntriPembayaranKass.Commands
         public string KodeMataUang { get; set; }
          public int? Kurs { get; set; }
         public decimal? TotalDlmRupiah { get; set; }
+
+         public string KodeUserInput { get; set; }
+        public string KodeUserUpdate { get; set; }
+
+        public DateTime? TanggalInput { get; set; }
+        public DateTime? TanggalUpdate { get; set; }
     }
 
     public class CreatePembayaranKasCommandHandler : IRequestHandler<CreatePembayaranKasCommand, int>
@@ -51,6 +57,8 @@ namespace ABB.Application.EntriPembayaranKass.Commands
                 KodeMataUang = request.KodeMataUang,
                 TotalDlmRupiah = request.TotalDlmRupiah,
                 Kurs = request.Kurs,
+                TanggalInput = DateTime.Now, 
+                KodeUserInput = request.KodeUserInput,
                 FlagPosting = "N"
             };
 

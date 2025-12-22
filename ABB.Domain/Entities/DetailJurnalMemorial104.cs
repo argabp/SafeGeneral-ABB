@@ -11,9 +11,11 @@ namespace ABB.Domain.Entities
         public string NoNota { get; set; }
         public string KodeMataUang { get; set; }
         public decimal? NilaiDebet { get; set; }
-        public decimal? NilaiDebetRP { get; set; }
+        public decimal? NilaiDebetRp { get; set; }
         public decimal? NilaiKredit { get; set; }
-        public decimal? NilaiKreditRP { get; set; }
+        public decimal? NilaiKreditRp { get; set; }
+
+        public string KeteranganDetail { get; set; }
 
         public string UserBayar { get; set; }
         public DateTime? TanggalBayar { get; set; }

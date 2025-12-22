@@ -103,7 +103,7 @@
     </fieldset>
     <hr/>
 
-   <form id="NewPaymentForm">
+   <form id="NewPaymentForm" style=" background-color: #f9f9f9; padding: 15px; border-radius: 5px;" >
         <input type="hidden" asp-for="NoVoucher" />
         <input type="hidden"  asp-for="No" />
         <input type="hidden" asp-for="Kurs" />
@@ -193,11 +193,11 @@
                 </div>
             </div>
         </div>
+            <div style="display: flex;gap: 10px;justify-content: flex-end;">
+            <button type="button" id="btn-cancel-edit" class="btn btn-secondary" style="display: none;" onclick="clearPaymentForm()">Cancel</button>
+            <button type="button" id="btn-save-pembayaran" onclick="onSavePembayaran()" class="btn btn-success">Simpan Pembayaran</button>
+            </div>
     </form>
-    <div style="display: flex;gap: 10px;justify-content: flex-end;">
-    <button type="button" id="btn-cancel-edit" class="btn btn-secondary" style="display: none;" onclick="clearPaymentForm()">Cancel</button>
-    <button type="button" id="btn-save-pembayaran" onclick="onSavePembayaran()" class="btn btn-primary">Simpan Pembayaran</button>
-    </div>
     <hr/>
     <script>
     function getNoVoucherForDetailGrid() {

@@ -15,7 +15,7 @@ namespace ABB.Application.JurnalMemorial117.Commands
         public string NoVoucher { get; set; }
         public int No { get; set; }
         public string KodeAkun { get; set; }
-        public string NoNota { get; set; }
+        public string Keterangan { get; set; }
         public string KodeMataUang { get; set; }
         public decimal? NilaiDebet { get; set; }
         public decimal? NilaiKredit { get; set; }
@@ -42,7 +42,7 @@ namespace ABB.Application.JurnalMemorial117.Commands
             if (entity == null) throw new Exception("Data Detail tidak ditemukan.");
 
             entity.KodeAkun = request.KodeAkun;
-            entity.NoNota = request.NoNota;
+            entity.Keterangan = request.Keterangan;
             entity.KodeMataUang = request.KodeMataUang;
             entity.NilaiDebet = request.NilaiDebet;
             entity.NilaiKredit = request.NilaiKredit;

@@ -17,5 +17,12 @@ namespace ABB.Domain.Entities
         public decimal? TotalBayarRp { get; set; }
         public string UserBayar { get; set; }
         public string DebetKredit { get; set; }
+
+          // tambahan sebagai audit
+         public string KodeUserInput { get; set; }
+        public string KodeUserUpdate { get; set; }
+
+        public DateTime? TanggalInput { get; set; }
+        public DateTime? TanggalUpdate { get; set; }
     }
 }

@@ -22,6 +22,7 @@ namespace ABB.Application.VoucherKass.Commands
         public string KeteranganVoucher { get; set; }
         public bool FlagPosting { get; set; }
         public DateTime? TanggalVoucher { get; set; }
+        public string KodeUserUpdate { get; set; }
         public string JenisPembayaran { get; set; }
     }
 
@@ -63,6 +64,7 @@ namespace ABB.Application.VoucherKass.Commands
                 entity.KeteranganVoucher = request.KeteranganVoucher;
                 entity.FlagPosting = request.FlagPosting;
                 entity.TanggalUpdate = DateTime.Now; 
+                entity.KodeUserUpdate = request.KodeUserUpdate;
                 entity.JenisPembayaran = request.JenisPembayaran;
                 // 3. Simpan perubahan ke database
                 await _context.SaveChangesAsync(cancellationToken);

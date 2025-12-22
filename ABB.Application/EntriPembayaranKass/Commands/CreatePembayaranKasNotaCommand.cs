@@ -19,6 +19,8 @@ namespace ABB.Application.EntriPembayaranKass.Commands
         public string DebetKredit { get; set; }
         public string KodeMataUang { get; set; }
          public int? Kurs { get; set; }
+
+       
     }
 
     // 🧩 Command utama
@@ -29,6 +31,9 @@ namespace ABB.Application.EntriPembayaranKass.Commands
 
         // Default flag
         public string FlagPembayaran { get; set; } = "NOTA";
+
+        public string KodeUserInput { get; set; }
+        public DateTime? TanggalInput { get; set; }
 
         // Data nota yang dikirim dari frontend
         public List<PembayaranKasNotaItem> Data { get; set; } = new List<PembayaranKasNotaItem>();
@@ -76,6 +81,8 @@ namespace ABB.Application.EntriPembayaranKass.Commands
                     TotalDlmRupiah = item.TotalBayarRp,
                     FlagPembayaran = request.FlagPembayaran,
                     Kurs = item.Kurs,
+                    TanggalInput = DateTime.Now, 
+                    KodeUserInput = request.KodeUserInput,
                     FlagPosting = "N"
                 };
 

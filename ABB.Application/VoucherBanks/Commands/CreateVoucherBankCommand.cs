@@ -26,6 +26,7 @@ namespace ABB.Application.VoucherBanks.Commands
         public bool FlagPosting { get; set; }
         public string KodeBank { get; set; }
         public string NoBank { get; set; }
+        public string KodeUserInput { get; set; }
         public string JenisPembayaran { get; set; }
     }
 
@@ -67,6 +68,7 @@ namespace ABB.Application.VoucherBanks.Commands
                 KeteranganVoucher = request.KeteranganVoucher,
                 FlagPosting = request.FlagPosting,
                 KodeBank = request.KodeBank,
+                KodeUserInput = request.KodeUserInput,
                 JenisPembayaran = request.JenisPembayaran,
                 NoBank = request.NoBank,
                 

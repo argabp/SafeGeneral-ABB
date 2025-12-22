@@ -179,6 +179,7 @@ function onEditPembayaran(e) {
         $("#NoNota4").data("kendoTextBox").value(dataItem.NoNota4);
     }
      $("#buttonselectnota").attr("disabled", true);
+     $("#btn-save-pembayaran").css("display", "flex");
     $(".detail-payment-field").show();
      $("#TotalDlmRupiah").data("kendoNumericTextBox").value(dataItem.TotalDlmRupiah);
    

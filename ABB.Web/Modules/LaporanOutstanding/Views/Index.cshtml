@@ -18,22 +18,25 @@
     .filter-section {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 15px; /* Jarak antar elemen sedikit diperlebar */
         margin-bottom: 10px;
-        flex-wrap: wrap;
+        /* flex-wrap: wrap; <-- Dihilangkan atau diganti agar tidak berantakan di layar kecil */
     }
 
     .filter-label {
         font-weight: bold;
-        width: 90px;
+        /* width: 90px; <-- Ini penyebabnya, 90px terlalu kecil */
+        min-width: 170px;    /* Gunakan min-width agar menyesuaikan teks yang panjang */
+        white-space: nowrap; /* Mencegah teks turun ke bawah atau terpotong */
     }
 
     .filter-container {
         padding: 15px;
     }
-     .breadcrumb-item + .breadcrumb-item::before {
-        content: ">"; /* Ganti '/' dengan '>' */
-        padding: 0 .5rem; /* Atur spasi jika perlu */
+
+    .breadcrumb-item + .breadcrumb-item::before {
+        content: ">"; 
+        padding: 0 .5rem; 
     }
 </style>
 
@@ -222,9 +225,9 @@
             )
         </div>
 
-         <hr><label style="margin-top:10px">DATA PELUNASAN</label><hr>
-         <div class="filter-section">
-            <label class="filter-label" for="JenisAsset">PELUNASAN S/D TGL :</label>
+         <hr><label style="margin-top:10px">DATA PEMBAYARAN</label><hr>
+        <div class="filter-section d-flex align-items-center">
+            <label class="filter-label me-2" style="white-space: nowrap;">PELUNASAN S/D TGL :</label>
 
             @(Html.Kendo().DatePicker()
                 .Name("tglpelunasan")

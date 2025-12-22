@@ -239,12 +239,14 @@ namespace ABB.Web.Modules.EntriPenyelesaianPiutang
                 // Kita perlu mapping dari CreateCommand ke UpdateCommand.
                 var command = Mapper.Map<UpdatePenyelesaianPiutangCommand>(model);
                // Atau UserId
+                command.KodeUserUpdate = CurrentUser.UserId;
                 await Mediator.Send(command);
             }
             else // 'No' bernilai 0, berarti ini data BARU.
             {
                 // Atau UserId
                 var command = Mapper.Map<CreatePenyelesaianPiutangCommand>(model);
+                 command.KodeUserInput = CurrentUser.UserId;
                 await Mediator.Send(command);
             }
 

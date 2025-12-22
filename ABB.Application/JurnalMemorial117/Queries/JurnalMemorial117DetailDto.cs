@@ -10,7 +10,7 @@ namespace ABB.Application.JurnalMemorial117.Queries
         public string NoVoucher { get; set; }
         public int No { get; set; }
         public string KodeAkun { get; set; }
-        public string NoNota { get; set; }
+        public string Keterangan { get; set; }
         public string KodeMataUang { get; set; }
         public decimal? NilaiDebet { get; set; }
         public decimal? NilaiDebetRp { get; set; }

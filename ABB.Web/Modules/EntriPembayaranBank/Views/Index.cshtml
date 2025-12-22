@@ -112,7 +112,7 @@
                                         .ClientTemplate("#= FlagPosting ? '<i class=\"fa fa-check text-success\"></i> Yes' : '<i class=\"fa fa-times text-danger\"></i> No' #");
                                     columns.Command(command =>
                                     {
-                                        command.Custom("EntriPembayaranBankProses").Text(" Proses Ulang ").IconClass("fa fa-eye").Click("btnProsesPembayaranBank_OnClick");
+                                        command.Custom("EntriPembayaranBankProses").Text(" Proses Ulang ").IconClass("fa fa-eye").Visible("showProsesUlang").Click("btnProsesPembayaranBank_OnClick");
                                         command.Custom("EntriPembayaranBankLihat").Text(" Lihat ").IconClass("fa fa-eye").Click("btnLihatPembayaranBank_OnClick");
                                         command.Custom("CetakPembayaranBank").Text(" Cetak ").IconClass("fa fa-print").Click("btnCetakPembayaranBank_OnClick");
                                     }).Width(220).Title("Action").Locked(true);
@@ -151,6 +151,10 @@
 </div>
 
 <script>
+    function showProsesUlang(dataItem) {
+        return dataItem.FlagPosting === false;
+    }
+
     // Fungsi untuk filter Tab 1 (Dalam Proses)
     function getSearchFilterBelumFinal() {
         return {

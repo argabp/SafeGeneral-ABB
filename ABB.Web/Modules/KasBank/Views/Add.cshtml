@@ -3,12 +3,13 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Kendo.Mvc
 
+
 <div class="window-body" style="background-color: lightgray">
     <form id="KasBankForm" enctype="multipart/form-data" autocomplete="off">
         <div class="form-group col-sm-12">
             <label class="col-sm-12">Kode</label>
-            <div class="col-sm-12">
-                <kendo-textbox for="Kode" style="width: 100%;"/>
+            <div class="col-sm-12" >
+                <kendo-textbox for="Kode" class="custom-kode" style="width: 100%;" />
                 <span asp-validation-for="Kode" class="text-danger"></span>
             </div>
         </div>

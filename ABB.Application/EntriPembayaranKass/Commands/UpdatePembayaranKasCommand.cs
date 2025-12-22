@@ -2,6 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ABB.Application.Common.Interfaces;
 using MediatR;
+using System;
 using Microsoft.EntityFrameworkCore;
 
 namespace ABB.Application.EntriPembayaranKass.Commands
@@ -18,6 +19,12 @@ namespace ABB.Application.EntriPembayaranKass.Commands
         public string DebetKredit { get; set; }
          public int? Kurs { get; set; }
         public decimal? TotalDlmRupiah { get; set; }
+
+          public string KodeUserInput { get; set; }
+        public string KodeUserUpdate { get; set; }
+
+        public DateTime? TanggalInput { get; set; }
+        public DateTime? TanggalUpdate { get; set; }
     }
 
     public class UpdatePembayaranKasCommandHandler : IRequestHandler<UpdatePembayaranKasCommand>
@@ -49,6 +56,8 @@ namespace ABB.Application.EntriPembayaranKass.Commands
             entity.TotalBayar = request.TotalBayar;
             entity.DebetKredit = request.DebetKredit;
             entity.TotalDlmRupiah = request.TotalDlmRupiah;
+            entity.TanggalUpdate = DateTime.Now;
+            entity.KodeUserUpdate = request.KodeUserUpdate;
 
             _context.EntriPembayaranKasTemp.Update(entity);
             await _context.SaveChangesAsync(cancellationToken);

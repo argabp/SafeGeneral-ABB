@@ -1,0 +1,111 @@
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.TagHelpers
+@using ABB.Application.JurnalMemorial117.Queries 
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Jurnal Memorial 117";
+}
+
+<script src="~/Modules/JurnalMemorial117/JS/JurnalMemorial117.index.js"></script>
+
+<style>
+    .div-box { padding-bottom: 1em; }
+    .swal2-container { z-index: 10050 !important; }
+     .breadcrumb-item + .breadcrumb-item::before {
+        content: ">"; 
+        padding: 0 .5rem; 
+    }
+</style>
+
+<nav aria-label="breadcrumb">
+   <ol class="breadcrumb" style="background: white; ">
+        <li class="breadcrumb-item"><a href="#">Accounting</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Jurnal Memorial 117</li>
+    </ol>
+</nav>
+
+<div class="flat-box">
+    <div class="flat-box-title ">
+       Jurnal Memorial 117
+        <div class="pullright-flex">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search No Voucher/Keterangan..."/>
+            <button class="flat-btn-primary" onclick="btnAddJurnal_OnClick()">Entri Jurnal Baru</button>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        @(Html.Kendo().Grid<JurnalMemorial117Dto>()
+            .Name("JurnalMemorialGrid")
+            .Events(e => e.DataBound("onGridDataBound"))
+            .DataSource(dataSource => dataSource.Ajax()
+                .Read(read => read.Action("GetJurnalMemorial117", "JurnalMemorial117").Data("getSearchFilter"))
+                .PageSize(20)
+            )
+            .Columns(columns =>
+            {
+                columns.Bound(col => col.KodeCabang).Width(100).Title("Cabang");
+                columns.Bound(col => col.NoVoucher).Width(180).Title("No. Voucher");
+                columns.Bound(col => col.Tanggal).Format("{0:dd-MM-yyyy}").Width(120).Title("Tanggal");
+                columns.Bound(col => col.Keterangan).Width(350).Title("Keterangan");
+                columns.Bound(col => col.FlagPosting).Title("Posting").Width(100)
+                    .ClientTemplate("#= FlagPosting ? '<i class=\"fa fa-check text-success\"></i> Yes' : '<i class=\"fa fa-times text-danger\"></i> No' #")
+                    .HtmlAttributes(new { style = "text-align: center;" });
+                
+                columns.Command(command =>
+                {
+                    command.Custom("EditJurnal")
+                        .Text(" Edit")
+                        .IconClass("fa fa-edit")
+                        .Click("btnEditJurnal_OnClick");
+
+                    command.Custom("DeleteJurnal")
+                        .Text(" Hapus")
+                        .IconClass("fa fa-trash")
+                        .Click("onDeleteHeader_Click");
+                        
+                }).Width(220).Title("Action").Locked(true);
+            })
+            .Pageable(pager => pager.Refresh(true).PageSizes(true))
+            .Sortable()
+            .Filterable()
+            .Scrollable()
+            .Height(500)
+            .Resizable(a=>a.Columns(true))
+        )
+    </div>
+</div>
+
+@(Html.Kendo().Window()
+    .Name("JurnalMemorialWindow")
+    .Title("Entri Jurnal Memorial 117")
+    .Width(1100)
+    .Modal(true)
+    .Visible(false)
+    .Draggable(true)
+    .Actions(actions => actions.Close())
+)
+
+<script>
+    function getSearchFilter() {
+        return {
+            searchKeyword: $("#SearchKeyword").val()
+        };
+    }
+
+    $(document).ready(function () {
+        $("#SearchKeyword").on("keyup", function() {
+            $("#JurnalMemorialGrid").data("kendoGrid").dataSource.read();
+        });
+    });
+
+    function onGridDataBound(e) {
+        var grid = e.sender;
+        grid.resize(); // Pastikan layout rapi
+    }
+</script>

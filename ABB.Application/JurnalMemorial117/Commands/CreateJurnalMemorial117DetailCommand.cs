@@ -13,7 +13,7 @@ namespace ABB.Application.JurnalMemorial117.Commands
     {
         public string NoVoucher { get; set; }
         public string KodeAkun { get; set; }
-        public string NoNota { get; set; }
+        public string Keterangan { get; set; }
         public string KodeMataUang { get; set; }
         public decimal? NilaiDebet { get; set; }
         public decimal? NilaiDebetRp { get; set; }
@@ -45,7 +45,7 @@ namespace ABB.Application.JurnalMemorial117.Commands
                 NoVoucher = request.NoVoucher,
                 No = lastNo + 1,
                 KodeAkun = request.KodeAkun,
-                NoNota = request.NoNota,
+                Keterangan = request.Keterangan,
                 KodeMataUang = request.KodeMataUang,
                 NilaiDebet = request.NilaiDebet,
                 NilaiDebetRp = request.NilaiDebetRp,

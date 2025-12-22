@@ -33,13 +33,13 @@ namespace ABB.Infrastructure.Data.Mapping
             builder.Property(t => t.NilaiDebet)
                 .HasColumnName("nilai_debet");
 
-            builder.Property(t => t.NilaiDebetRP)
+            builder.Property(t => t.NilaiDebetRp)
                 .HasColumnName("nilai_debet_rp");
 
             builder.Property(t => t.NilaiKredit)
                 .HasColumnName("nilai_kredit");  
 
-            builder.Property(t => t.NilaiKreditRP)
+            builder.Property(t => t.NilaiKreditRp)
                 .HasColumnName("nilai_kredit_rp");
 
             builder.Property(t => t.UserBayar)
@@ -59,6 +59,9 @@ namespace ABB.Infrastructure.Data.Mapping
 
             builder.Property(t => t.TanggalUserInput)
                 .HasColumnName("tgl_user_input");
+
+            builder.Property(t => t.KeteranganDetail)
+                .HasColumnName("keterangan");
 
            
         }

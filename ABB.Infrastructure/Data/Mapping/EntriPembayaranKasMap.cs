@@ -26,6 +26,23 @@ namespace ABB.Infrastructure.Data.Mapping
             builder.Property(t => t.DebetKredit).HasColumnName("debet_kredit").HasMaxLength(10);
              builder.Property(t => t.Kurs).HasColumnName("kurs");
             builder.Property(t => t.TotalDlmRupiah).HasColumnName("total_dalam_rupiah").HasPrecision(18,2);
+
+             // tambahan sebagai audit
+             builder.Property(t => t.TanggalInput)
+                .HasColumnName("tgl_user_input")
+                .HasColumnType("date");
+
+            builder.Property(t => t.TanggalUpdate)
+                .HasColumnName("tgl_user_update")
+                .HasColumnType("date");
+            
+            builder.Property(t => t.KodeUserInput)
+                .HasColumnName("kode_user_input")
+                .HasMaxLength(255);
+
+            builder.Property(t => t.KodeUserUpdate)
+                .HasColumnName("kode_user_update")
+                .HasMaxLength(255);
         }
     }
 }

@@ -21,6 +21,9 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
         public string UserBayar { get; set; }
         public string DebetKredit { get; set; }
          public string NoBukti { get; set; }
+
+          public string KodeUserInput { get; set; }
+        public DateTime? TanggalInput { get; set; }
        
     }
 
@@ -53,6 +56,8 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
                 DebetKredit = request.DebetKredit,
                 NoNota = request.NoNota,
                 KodeMataUang = request.KodeMataUang,
+                TanggalInput = DateTime.Now, 
+                KodeUserInput = request.KodeUserInput,
                 
                 // Isi field lain yang required atau punya nilai default
             };

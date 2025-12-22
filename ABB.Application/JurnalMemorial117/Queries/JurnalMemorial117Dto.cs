@@ -12,7 +12,11 @@ namespace ABB.Application.JurnalMemorial117.Queries
         public DateTime? Tanggal { get; set; }
         public string Keterangan { get; set; }
         public bool? FlagPosting { get; set; }
+      
+        public DateTime? TanggalInput { get; set; }
         public string KodeUserInput { get; set; }
+        public DateTime? TanggalUpdate { get; set; }
+        public string KodeUserUpdate { get; set; }
 
         public void Mapping(Profile profile)
         {

@@ -30,6 +30,9 @@ namespace ABB.Application.EntriPembayaranBanks.Commands
 
         // Default flag
         public string FlagPembayaran { get; set; } = "NOTA";
+        
+         public string KodeUserInput { get; set; }
+        public DateTime? TanggalInput { get; set; }
 
         // Data nota yang dikirim dari frontend
         public List<PembayaranBankNotaItem> Data { get; set; } = new List<PembayaranBankNotaItem>();
@@ -70,6 +73,8 @@ namespace ABB.Application.EntriPembayaranBanks.Commands
                     TotalDlmRupiah = nota.TotalBayarRp,
                     KodeAkun = nota.KodeAkun,
                     FlagPembayaran = request.FlagPembayaran,
+                    TanggalInput = DateTime.Now, 
+                    KodeUserInput = request.KodeUserInput,
                     Kurs = nota.Kurs,
                     
                 };

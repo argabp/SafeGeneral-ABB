@@ -4,6 +4,7 @@ using ABB.Application.Common.Interfaces;
 using MediatR;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
 {
@@ -19,6 +20,12 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
         public string UserBayar { get; set; }
         public string DebetKredit { get; set; }
          public string NoBukti { get; set; }
+
+             public string KodeUserInput { get; set; }
+        public string KodeUserUpdate { get; set; }
+
+        public DateTime? TanggalInput { get; set; }
+        public DateTime? TanggalUpdate { get; set; }
 
           public void Mapping(Profile profile)
             {
@@ -58,6 +65,9 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
             entity.TotalBayarRp = request.TotalBayarRp;
             entity.DebetKredit = request.DebetKredit;
             entity.UserBayar = request.UserBayar;
+
+             entity.TanggalUpdate = DateTime.Now;
+            entity.KodeUserUpdate = request.KodeUserUpdate;
 
             _context.EntriPenyelesaianPiutangTemp.Update(entity);
             await _context.SaveChangesAsync(cancellationToken);

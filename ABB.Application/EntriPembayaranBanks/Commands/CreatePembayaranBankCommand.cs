@@ -21,6 +21,12 @@ namespace ABB.Application.EntriPembayaranBanks.Commands
          public decimal? TotalDlmRupiah { get; set; }
          public int? Kurs { get; set; }
          public decimal? NilaiKurs { get; set; }
+
+           public string KodeUserInput { get; set; }
+        public string KodeUserUpdate { get; set; }
+
+        public DateTime? TanggalInput { get; set; }
+        public DateTime? TanggalUpdate { get; set; }
     }
 
     public class CreatePembayaranBankCommandHandler : IRequestHandler<CreatePembayaranBankCommand, int>
@@ -53,6 +59,8 @@ namespace ABB.Application.EntriPembayaranBanks.Commands
                 KodeMataUang = request.KodeMataUang,
                 TotalDlmRupiah = request.TotalDlmRupiah,
                 Kurs = request.Kurs,
+                 TanggalInput = DateTime.Now, 
+                KodeUserInput = request.KodeUserInput,
                 // FlagPosting = "N"
                 // Isi field lain yang required atau punya nilai default
             };

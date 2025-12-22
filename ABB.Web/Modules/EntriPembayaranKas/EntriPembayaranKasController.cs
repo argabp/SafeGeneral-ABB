@@ -164,11 +164,13 @@ namespace ABB.Web.Modules.EntriPembayaranKas
             if (model.No > 0) // kalau ada No → update
             {
                 var command = Mapper.Map<UpdatePembayaranKasCommand>(model);
+                command.KodeUserUpdate = CurrentUser.UserId;
                 await Mediator.Send(command);
             }
             else // kalau No = 0 atau null → create baru
             {
                 var command = Mapper.Map<CreatePembayaranKasCommand>(model);
+                  command.KodeUserInput = CurrentUser.UserId;
                 await Mediator.Send(command);
             }
 

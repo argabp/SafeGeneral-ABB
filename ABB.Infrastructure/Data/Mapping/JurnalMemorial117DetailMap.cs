@@ -18,8 +18,8 @@ namespace ABB.Infrastructure.Data.Mapping
             builder.Property(t => t.NoVoucher).HasColumnName("no_voucher").HasMaxLength(50).IsRequired();
             builder.Property(t => t.No).HasColumnName("no").IsRequired();
             builder.Property(t => t.KodeAkun).HasColumnName("kode_akun").HasMaxLength(10);
+            builder.Property(t => t.Keterangan).HasColumnName("keterangan").HasMaxLength(255);
             builder.Property(t => t.FlagPosting).HasColumnName("flag_posting").HasMaxLength(10);
-            builder.Property(t => t.NoNota).HasColumnName("no_nota").HasMaxLength(100);
             builder.Property(t => t.KodeMataUang).HasColumnName("kode_mata_uang").HasMaxLength(5);
             builder.Property(t => t.NilaiDebet).HasColumnName("nilai_debet");
             builder.Property(t => t.NilaiDebetRp).HasColumnName("nilai_debet_rp");

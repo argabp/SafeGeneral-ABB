@@ -135,11 +135,13 @@ namespace ABB.Web.Modules.EntriPembayaranBank
             if (model.No > 0) // kalau ada No → update
             {
                 var command = Mapper.Map<UpdatePembayaranBankCommand>(model);
+                command.KodeUserUpdate = CurrentUser.UserId;
                 await Mediator.Send(command);
             }
             else // kalau No = 0 atau null → create baru
             {
                 var command = Mapper.Map<CreatePembayaranBankCommand>(model);
+                 command.KodeUserInput = CurrentUser.UserId;
                 await Mediator.Send(command);
             }
 
