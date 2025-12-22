@@ -41,7 +41,6 @@ namespace ABB.Web.Modules.COB
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add([FromBody] COBViewModel model)
         {
             try
@@ -74,7 +73,6 @@ namespace ABB.Web.Modules.COB
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit([FromBody] COBViewModel model)
         {
             try
@@ -93,7 +91,6 @@ namespace ABB.Web.Modules.COB
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(string kd_cob)
         {
             try

@@ -61,7 +61,6 @@ namespace ABB.Web.Modules.Role
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add([FromBody] AddRoleModel model)
         {
             try
@@ -86,7 +85,6 @@ namespace ABB.Web.Modules.Role
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit([FromBody] EditRoleModel model)
         {
             try
@@ -104,7 +102,6 @@ namespace ABB.Web.Modules.Role
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(string id)
         {
             var deleted = await Mediator.Send(new DeleteRoleCommand() { Id = id });

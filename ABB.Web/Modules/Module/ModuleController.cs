@@ -42,7 +42,6 @@ namespace ABB.Web.Modules.Module
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add([FromBody] ModuleViewModel model)
         {
             try
@@ -69,7 +68,6 @@ namespace ABB.Web.Modules.Module
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit([FromBody] ModuleViewModel model)
         {
             try
@@ -86,7 +84,6 @@ namespace ABB.Web.Modules.Module
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
             try
