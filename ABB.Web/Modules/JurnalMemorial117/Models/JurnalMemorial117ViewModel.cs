@@ -19,6 +19,7 @@ namespace ABB.Web.Modules.JurnalMemorial117.Models
         public decimal? NilaiDebetRp { get; set; }
         public decimal? NilaiKredit { get; set; }
         public decimal? NilaiKreditRp { get; set; }
+        public string Keterangan { get; set; }
     }
 
     public class JurnalMemorial117ViewModel : IMapFrom<CreateJurnalMemorial117HeaderCommand>
@@ -56,6 +57,9 @@ namespace ABB.Web.Modules.JurnalMemorial117.Models
         public decimal? NilaiKredit { get; set; }
         public decimal? NilaiKreditRp { get; set; }
 
+         [Display(Name = "Keterangan")]
+        public string Keterangan { get; set; }
+
         public void Mapping(Profile profile)
         {
             // Mapping Header
@@ -65,6 +69,8 @@ namespace ABB.Web.Modules.JurnalMemorial117.Models
             profile.CreateMap<JurnalMemorial117ViewModel, CreateJurnalMemorial117DetailCommand>();
             
             // Mapping Detail (Dari DTO ke Item View)
+                profile.CreateMap<JurnalMemorial117ViewModel, UpdateJurnalMemorial117DetailCommand>();
+            
             profile.CreateMap<JurnalMemorial117DetailDto, JurnalMemorial117Item>();
         }
     }

@@ -80,33 +80,51 @@ function onSaveHeader() {
 
 function onDeleteHeader_Click(e) {
     e.preventDefault();
+     var grid = $("#JurnalMemorialGrid").data("kendoGrid");
+    var windowKendo = $("#JurnalMemorialWindow").data("kendoWindow");
+
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-    
-    showMessage({
-        title: 'Konfirmasi Hapus',
-        text: `Yakin ingin menghapus Jurnal ${dataItem.NoVoucher}? Semua detail juga akan terhapus.`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Ya, Hapus',
-        cancelButtonText: 'Batal'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                type: "POST",
-                url: "/JurnalMemorial117/DeleteHeader",
-                contentType: "application/json",
-                data: JSON.stringify({ KodeCabang: dataItem.KodeCabang, NoVoucher: dataItem.NoVoucher }),
-                success: function(response) {
-                    if (response.success) {
-                        showMessage('Deleted!', 'Data berhasil dihapus.');
-                        $("#JurnalMemorialGrid").data("kendoGrid").dataSource.read();
+
+    showConfirmation(
+        'Confirmation',
+        'Are you sure you want to delete?',
+        function () {
+
+            var data = {
+                KodeCabang: dataItem.KodeCabang,
+                NoVoucher: dataItem.NoVoucher
+            };
+
+            ajaxPost(
+                "/JurnalMemorial117/DeleteHeader",
+                JSON.stringify(data),
+                function (response) {
+
+                    if (response.success === true || response.Result === "OK") {
+
+                        showMessage('Success', 'Data berhasil dihapus');
+
+                        // ✅ Refresh GRID utama
+                        if (grid) {
+                            grid.dataSource.read();
+                            grid.refresh();
+                        }
+
+                        // ✅ Tutup window
+                        if (windowKendo) {
+                            windowKendo.close();
+                        }
+
                     } else {
-                        showMessage('Error', response.message);
+                        showMessage(
+                            'Error',
+                            response.message || response.Message || 'Gagal menghapus data'
+                        );
                     }
                 }
-            });
+            );
         }
-    });
+    );
 }
 
 // --- DETAIL LOGIC ---
@@ -195,32 +213,44 @@ function onEditDetail(e) {
 
 function onDeleteDetail(e) {
     e.preventDefault();
-    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+      var grid = $("#DetailJurnalGrid").data("kendoGrid");
+    var dataItem = grid.dataItem($(e.currentTarget).closest("tr"));
+    
+    showConfirmation(
+        'Confirmation',
+        'Are you sure you want to delete?',
+        function () {
 
-    showMessage({
-        title: 'Hapus Detail?',
-        text: "Anda yakin ingin menghapus baris ini?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Ya',
-        cancelButtonText: 'Tidak'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                type: "POST",
-                url: "/JurnalMemorial117/DeleteDetail",
-                contentType: "application/json",
-                data: JSON.stringify({ NoVoucher: dataItem.NoVoucher, No: dataItem.No }),
-                success: function(response) {
-                    if(response.success) {
-                        $("#DetailJurnalGrid").data("kendoGrid").dataSource.read();
+            var data = {
+                NoVoucher: dataItem.NoVoucher,
+                No: dataItem.No
+            };
+
+            ajaxPost(
+                "/JurnalMemorial117/DeleteDetail",
+                JSON.stringify(data),
+                function (response) {
+
+                    if (response.success === true || response.Result === "OK") {
+
+                        // ✅ FIX undefined
+                        showMessage('Success', 'Data berhasil dihapus');
+
+                        // ✅ REFRESH GRID YANG BENAR
+                        grid.dataSource.read();
+                        grid.refresh();
+
                     } else {
-                        showMessage('Error', 'Gagal hapus.');
+                        showMessage(
+                            'Error',
+                            response.message || response.Message || 'Gagal menghapus data'
+                        );
                     }
                 }
-            });
+            );
         }
-    });
+    );
+
 }
 
 function clearDetailForm() {

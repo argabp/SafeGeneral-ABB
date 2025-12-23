@@ -33,6 +33,9 @@ namespace ABB.Infrastructure.Data.Mapping
             builder.Property(t => t.TanggalUpdate)
                 .HasColumnName("tanggal_update");
 
+            builder.Property(t => t.TanggalPosting)
+                .HasColumnName("tanggal_posting");
+
             builder.Property(t => t.KodeUserUpdate)
                 .HasColumnName("kode_user_update");
 

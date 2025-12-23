@@ -13,5 +13,6 @@ namespace ABB.Domain.Entities
         public DateTime? TanggalUpdate { get; set; }
         public string KodeUserUpdate { get; set; }
         public bool? FlagGL { get; set; }
+        public DateTime? TanggalPosting { get; set; }
     }
 }

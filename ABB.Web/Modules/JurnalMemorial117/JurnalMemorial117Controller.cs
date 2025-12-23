@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using ABB.Application.JurnalMemorial117.Commands;
 using ABB.Application.JurnalMemorial117.Queries;
 using ABB.Application.Cabangs.Queries;
-using ABB.Application.Coas.Queries;
+using ABB.Application.Coas117.Queries;
 using ABB.Application.MataUangs.Queries;
 using ABB.Application.InquiryNotaProduksis.Queries;
 
@@ -66,7 +66,7 @@ namespace ABB.Web.Modules.JurnalMemorial117
             // Load Master Data untuk Dropdown
             var cabangList = await Mediator.Send(new GetCabangsQuery { DatabaseName = databaseName });
             var mataUangList = await Mediator.Send(new GetMataUangQuery { DatabaseName = databaseName });
-            var akunList = await Mediator.Send(new GetAllCoaQuery());
+            var akunList = await Mediator.Send(new GetAllCoa117Query());
 
             // MODE ADD (NoVoucher kosong)
             if (string.IsNullOrEmpty(noVoucher))
