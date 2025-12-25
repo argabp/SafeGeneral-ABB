@@ -4,6 +4,31 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Kendo.Mvc
 
+<style>
+    /* WARNA CYAN – custom-kode */
+.custom-kode,
+.custom-kode .k-textbox,
+.custom-kode .k-input,
+.custom-kode input,
+input.custom-kode {
+    background-color: #00FFFF !important;
+}
+
+/* WARNA KUNING – custom-kuning */
+.custom-kuning,
+.custom-kuning .k-textbox,
+.custom-kuning .k-input,
+.custom-kuning input,
+input.custom-kuning {
+    background-color: rgb(255, 255, 225) !important;
+}
+.k-grid .custom-kuning {
+    background-color: rgb(255, 255, 225) !important;
+}
+
+
+</style>
+
 <div class="window-body">
 
 <input type="hidden" id="VoucherDK" value="@Model.VoucherKasHeader.DebetKredit" />
@@ -44,8 +69,7 @@
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">No Voucher</label>
         <div class="col-sm-4">
-            <input class="form-control form-control-sm"
-                
+            <input class="form-control form-control-sm custom-kode"
                    value="@Model.VoucherKasHeader.NoVoucher"
                    readonly style="font-size: 12px;"/>
         </div>

@@ -3,6 +3,27 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Kendo.Mvc
 
+<style>
+    .custom-kode .k-input,
+    .custom-kode .k-input,
+   .custom-kode,
+    .custom-kode .k-textbox,
+    .custom-kode .k-input,
+    .custom-kode input {
+        background-color: #00FFFF !important;
+    }
+    /* No Rekening – warna kuning muda */
+    .custom-kuning,
+    .custom-kuning .k-textbox,
+    .custom-kuning .k-input,
+    .custom-kuning input {
+        background-color: rgb(255, 255, 225) !important;
+    }
+
+
+
+</style>
+
 <div class="window-body" style="background-color: lightgray">
     <form id="VoucherBankForm" enctype="multipart/form-data" autocomplete="off">
         
@@ -34,6 +55,7 @@
                 <label asp-for="DebetKredit"></label>
                 <div>
                     <kendo-dropdownlist for="DebetKredit"
+                                        class="custom-kuning"
                                         style="width: 100%;"
                                         datatextfield="Text"
                                         datavaluefield="Value"
@@ -49,6 +71,7 @@
                 <div>
                     <kendo-combobox for="KodeBank"
                                     style="width: 100%;"
+                                     class="custom-kuning"
                                     datatextfield="Text"
                                     datavaluefield="Value"
                                     bind-to="ViewBag.KodeBankOptions"
@@ -66,7 +89,7 @@
              <div class="form-group col-sm-8">
                 <label asp-for="NoVoucher">Nomor Voucher</label>
                 <div>
-                 <kendo-textbox for="NoVoucher" style="width: 100%;" readonly="true"   />
+                 <kendo-textbox for="NoVoucher"  class="custom-kode" style="width: 100%;" readonly="true"   />
                     <span asp-validation-for="NoVoucher" class-="text-danger"></span>
                 </div>
             </div>
@@ -93,14 +116,14 @@
             <div class="form-group col-sm-6">
                 <label asp-for="NoBank">Nomor Cek/Bank/Transfer</label>
                 <div>
-                    <kendo-textbox for="NoBank" style="width: 100%;"/>
+                    <kendo-textbox for="NoBank" class="custom-kuning" style="width: 100%;"/>
                     <span asp-validation-for="NoBank" class="text-danger"></span>
                 </div>
             </div>
              <div class="form-group col-sm-6">
                 <label asp-for="TanggalVoucher"></label>
                 <div>
-                    <kendo-datepicker for="TanggalVoucher" style="width: 100%;" readonly="true"/>
+                    <kendo-datepicker for="TanggalVoucher" class="custom-kuning" style="width: 100%;" readonly="true"/>
                     <span asp-validation-for="TanggalVoucher" class="text-danger"></span>
                 </div>
             </div>
@@ -108,6 +131,7 @@
                 <label asp-for="KodeMataUang"></label>
                 <div>
                     <kendo-combobox for="KodeMataUang"
+                                     class="custom-kuning"
                                     style="width: 100%;"
                                     datatextfield="Text"
                                     datavaluefield="Value"
@@ -128,7 +152,7 @@
             <div class="form-group col-sm-6">
                 <label asp-for="TotalVoucher"></label>
                 <div>
-                    <kendo-numerictextbox for="TotalVoucher" format="n2" style="width: 100%;"/>
+                    <kendo-numerictextbox for="TotalVoucher" format="n2" class="custom-kuning" style="width: 100%;"/>
                     <span asp-validation-for="TotalVoucher" class="text-danger"></span>
                 </div>
             </div>
@@ -158,6 +182,7 @@
                     <div>
                         
                             <kendo-dropdownlist for="JenisPembayaran"
+                                                 class="custom-kuning"
                                                 id="JenisPembayaran"
                                                 style="width: 100%;"
                                                 datatextfield="Text"

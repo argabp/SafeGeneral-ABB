@@ -40,6 +40,27 @@ namespace ABB.Application.PostingJurnalMemorial104.Queries
 
             query = query.Where(v => _context.DetailJurnalMemorial104.Any(epb => epb.NoVoucher == v.NoVoucher));
 
+             if (request.FlagGL == false)
+            {
+                query = query.Where(h => 
+                    // A. Cek Apakah Punya Detail
+                    _context.DetailJurnalMemorial104.Any(d => d.NoVoucher == h.NoVoucher) 
+                    
+                    && // DAN
+                    
+                    // B. Cek Balance (Total Debet == Total Kredit)
+                    (
+                        _context.DetailJurnalMemorial104
+                            .Where(d => d.NoVoucher == h.NoVoucher)
+                            .Sum(d => d.NilaiDebet) 
+                        == 
+                        _context.DetailJurnalMemorial104
+                            .Where(d => d.NoVoucher == h.NoVoucher)
+                            .Sum(d => d.NilaiKredit)
+                    )
+                );
+            }
+
             // Jika ada kata kunci pencarian, filter lagi
             if (!string.IsNullOrEmpty(request.SearchKeyword))
             {

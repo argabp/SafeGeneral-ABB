@@ -4,6 +4,27 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Kendo.Mvc
 
+
+<style>
+    .custom-kode .k-input,
+    .custom-kode .k-input,
+   .custom-kode,
+    .custom-kode .k-textbox,
+    .custom-kode .k-input,
+    .custom-kode input {
+        background-color: #00FFFF !important;
+    }
+    /* No Rekening – warna kuning muda */
+    .custom-kuning,
+    .custom-kuning .k-textbox,
+    .custom-kuning .k-input,
+    .custom-kuning input {
+        background-color: rgb(255, 255, 225) !important;
+    }
+
+
+</style>
+
 <div class="window-body" style="background-color: lightgray">
     <form id="VoucherKasForm" enctype="multipart/form-data" autocomplete="off">
        <div class="row">
@@ -34,6 +55,7 @@
                 <div>
                     <kendo-dropdownlist for="DebetKredit"
                                         style="width: 100%;"
+                                        class="custom-kuning"
                                         datatextfield="Text"
                                         datavaluefield="Value"
                                         bind-to="ViewBag.DebetKreditOptions"
@@ -48,7 +70,7 @@
             <div class="col-sm-12">
                    <label asp-for="NoVoucher">Nomor Voucher</label>
                     <div>
-                        <kendo-textbox for="NoVoucher" style="width: 100%;" readonly="true"/>
+                        <kendo-textbox for="NoVoucher" class="custom-kode" style="width: 100%;" readonly="true"/>
                         <span asp-validation-for="NoVoucher" class="text-danger"></span>
                     </div>
             </div>
@@ -81,7 +103,7 @@
            <div class="form-group col-sm-6">
                     <label>Tanggal Voucher</label>
                     <div>
-                         <kendo-datepicker for="TanggalVoucher" style="width: 100%"/>
+                         <kendo-datepicker for="TanggalVoucher"  class="custom-kuning" style="width: 100%"/>
                         <span asp-validation-for="TanggalVoucher" class="text-danger"></span>
                     </div>
             </div>
@@ -91,6 +113,7 @@
                     <div>
                          <kendo-combobox for="KodeMataUang"
                                     style="width: 100%;"
+                                     class="custom-kuning"
                                     datatextfield="Text"
                                     datavaluefield="Value"
                                     bind-to="ViewBag.MataUangOptions"
@@ -110,6 +133,7 @@
                     
                         <kendo-dropdownlist for="JenisPembayaran"
                                             style="width: 100%;"
+                                             class="custom-kuning"
                                             datatextfield="Text"
                                             datavaluefield="Value"
                                             bind-to="ViewBag.jenispembayaranOptions">
@@ -124,7 +148,7 @@
            <div class="form-group col-sm-6">
                     <label>Total Voucher</label>
                     <div>
-                         <kendo-numerictextbox  for="TotalVoucher" style="width: 100%"/>
+                         <kendo-numerictextbox  for="TotalVoucher"  class="custom-kuning" style="width: 100%"/>
                         <span asp-validation-for="TotalVoucher" class="text-danger"></span>
                     </div>
             </div>

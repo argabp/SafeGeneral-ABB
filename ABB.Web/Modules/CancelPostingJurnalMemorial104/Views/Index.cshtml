@@ -1,0 +1,76 @@
+@using Kendo.Mvc.UI
+@using ABB.Application.JurnalMemorials104.Queries
+@using ABB.Application.CancelPostingJurnalMemorial104.Queries
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Cancel Jurnal Memorial 104";
+}
+<script src="~/Modules/CancelPostingJurnalMemorial104/JS/CancelPostingJurnalMemorial104.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+    
+     .breadcrumb-item + .breadcrumb-item::before {
+        content: ">"; /* Ganti '/' dengan '>' */
+        padding: 0 .5rem; /* Atur spasi jika perlu */
+    }
+</style>
+<nav  aria-label="breadcrumb">
+   <ol class="breadcrumb" style="background: white; ">
+        <li class="breadcrumb-item"><a href="#">Finance</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Cancel Posting Jurnal Memorial 104</li>
+    </ol>
+    </nav>
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-10">
+           Cancel Posting Jurnal Memorial 104
+        </div>
+
+        <div class="col-md-2">
+                <button class="flat-btn-primary" onclick="CancelPosting()">Cancel</button>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<JurnalMemorial104Dto>()
+                .Name("AkseptasiGrid")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetCancelPostingJurnalMemorial104", "CancelPostingJurnalMemorial104").Data("searchFilter"))
+                    .Model(model => model.Id(p => p.NoVoucher))
+                )
+                .Columns(columns =>
+                {
+                    columns.Select().Width(50);
+                    columns.Bound(col => col.KodeCabang).Width(150).Title("Kode Cabang");
+                    columns.Bound(col => col.NoVoucher).Width(200).Title("No. Voucher");
+                    columns.Bound(col => col.Tanggal).Format("{0:dd-MM-yyyy}").Width(150).Title("Tanggal");
+                    columns.Bound(col => col.Keterangan).Width(150).Title("Keterangan");
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .PersistSelection()
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit"))
+        
+                )    
+        </div>
+    </div>
+</div>
+

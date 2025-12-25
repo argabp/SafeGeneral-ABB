@@ -11,7 +11,7 @@ namespace ABB.Application.JurnalMemorials104.Queries
         public string NoVoucher { get; set; }
         public DateTime? Tanggal { get; set; }
         public string Keterangan { get; set; }
-        public bool? FlagPosting { get; set; }
+        public bool? FlagGL { get; set; }
         public DateTime? TanggalInput { get; set; }
         public string KodeUserInput { get; set; }
         public DateTime? TanggalUpdate { get; set; }

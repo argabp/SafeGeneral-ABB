@@ -103,7 +103,7 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new DetailJurnalMemorial104Map());
             builder.ApplyConfiguration(new JurnalMemorial117Map());
             builder.ApplyConfiguration(new JurnalMemorial117DetailMap());
-
+           
 
         }
 

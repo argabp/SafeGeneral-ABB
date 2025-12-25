@@ -3,13 +3,34 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Kendo.Mvc
 
+<style>
+    .custom-kode .k-input,
+    .custom-kode .k-input,
+   .custom-kode,
+    .custom-kode .k-textbox,
+    .custom-kode .k-input,
+    .custom-kode input {
+        background-color: #00FFFF !important;
+    }
+    /* No Rekening – warna kuning muda */
+    .custom-kuning,
+    .custom-kuning .k-textbox,
+    .custom-kuning .k-input,
+    .custom-kuning input {
+        background-color: rgb(255, 255, 225) !important;
+    }
+
+
+</style>
+
+
 <div class="window-body" style="background-color: lightgray">
     <form id="KasBankForm" enctype="multipart/form-data" autocomplete="off">
         <div class="form-group col-sm-12">
             <label class="col-sm-12">Kode</label>
             <div class="col-sm-12">
                 @* Perbedaannya di sini, Kode tidak bisa diubah saat edit *@
-                <kendo-textbox for="Kode" style="width: 100%;" readonly="true"/>
+                <kendo-textbox for="Kode" style="width: 100%;" class="custom-kode" readonly="true"/>
                 <span asp-validation-for="Kode" class="text-danger"></span>
             </div>
         </div>
@@ -23,7 +44,7 @@
         <div class="form-group col-sm-12">
             <label class="col-sm-12">No. Rekening</label>
             <div class="col-sm-12">
-                <kendo-textbox for="NoRekening" style="width: 100%"/>
+                <kendo-textbox for="NoRekening" class="custom-kuning" style="width: 100%"/>
                 <span asp-validation-for="NoRekening" class="text-danger"></span>
             </div>
         </div>
@@ -32,6 +53,7 @@
             <div class="col-sm-12">
                 <kendo-combobox for="NoPerkiraan"
                                 style="width: 100%;"
+                                class="custom-kuning"
                                 datatextfield="Text"
                                 datavaluefield="Value"
                                 bind-to="ViewBag.NoPerkiraanOptions"
@@ -45,6 +67,7 @@
             <label class="col-sm-12">Tipe</label>
             <div class="col-sm-12">
                  <kendo-dropdownlist for="TipeKasBank"
+                            class="custom-kuning"
                             style="width: 100%;"
                             datatextfield="Text"
                             datavaluefield="Value"
@@ -56,7 +79,7 @@
         <div class="form-group col-sm-12">
             <label class="col-sm-12">Saldo Awal</label>
             <div class="col-sm-12">
-                <kendo-numerictextbox  for="Saldo" style="width: 100%"  format="n2" />
+                <kendo-numerictextbox  for="Saldo" class="custom-kuning" style="width: 100%"  format="n2" />
                 <span asp-validation-for="Saldo" class="text-danger"></span>
             </div>
         </div>
