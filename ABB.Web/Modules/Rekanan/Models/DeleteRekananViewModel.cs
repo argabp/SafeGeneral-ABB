@@ -19,6 +19,7 @@ namespace ABB.Web.Modules.Rekanan.Models
             profile.CreateMap<DeleteRekananViewModel, DeleteDetailRekananCommand>();
             profile.CreateMap<DeleteRekananViewModel, DeleteTertanggungPrincipalCommand>();
             profile.CreateMap<DeleteRekananViewModel, DeleteDetailTertanggungPrincipalCommand>();
+            profile.CreateMap<DeleteRekananViewModel, DeleteDetailSlikCommand>();
         }
     }
 }

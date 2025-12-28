@@ -8,6 +8,8 @@ namespace ABB.Web.Modules.Akseptasi.Models
 {
     public class AkseptasiResikoOtherPAViewModel : IMapFrom<AkseptasiOtherPADto>
     {
+        public bool IsNewOther { get; set; }
+
         public string kd_cb { get; set; }
 
         public string kd_cob { get; set; }

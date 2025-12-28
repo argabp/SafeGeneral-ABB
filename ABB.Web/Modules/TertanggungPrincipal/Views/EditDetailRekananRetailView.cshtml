@@ -42,9 +42,11 @@
             <label class="col-sm-3">Tempat Dan Tanggal Lahir</label>
             <div class="col-sm-3">
                 <kendo-textbox for="ktp_tempat" style="width: 100%; background-color: #FFFFE1;"/>
+                <span asp-validation-for="ktp_tempat" class="text-danger"></span>
             </div>
             <div class="col-sm-3">
                 <kendo-datepicker for="ktp_tgl" style="width: 100%; background-color: #FFFFE1;"/>
+                <span asp-validation-for="ktp_tgl" class="text-danger"></span>
             </div>
             <label class="col-sm-1">Kelamin</label>
             <div class="col-sm-2">
@@ -56,22 +58,26 @@
                         </transport>
                     </datasource>
                 </kendo-dropdownlist>
+                <span asp-validation-for="kelamin" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group col-sm-12 row">
             <label class="col-sm-3">No. KTP SIM / Paspor</label>
             <div class="col-sm-4">
                 <kendo-textbox for="ktp_no" style="width: 100%; background-color: #FFFFE1;"/>
+                <span asp-validation-for="ktp_no" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group col-sm-12 row">
             <label class="col-sm-3">Alamat</label>
             <div class="col-sm-6">
                 <kendo-textbox for="ktp_alamat" style="width: 100%; background-color: #FFFFE1;"/>
+                <span asp-validation-for="ktp_alamat" class="text-danger"></span>
             </div>
             <label class="col-sm-1">Kota</label>
             <div class="col-sm-2">
                 <kendo-textbox for="ktp_kota" style="width: 100%; background-color: #FFFFE1;"/>
+                <span asp-validation-for="ktp_alamat" class="text-danger"></span>
             </div>
             <div class="col-sm-9 offset-3 row" style="padding-top: 1em">
                 <label class="col-sm-1">No</label>
@@ -85,6 +91,7 @@
                 <label class="col-sm-2">Kodepos</label>
                 <div class="col-sm-2">
                     <kendo-textbox for="kodepos" style="width: 100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="kodepos" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-sm-9 offset-3 row" style="padding-top: 1em">
@@ -145,8 +152,8 @@
                         <label class="k-radio-label" for="wnaflag_paspor">PASPOR</label>
                     </li>
                     <li class="flex-fill">
-                        <input type="radio" name="wnaflag" id="wnaflag_kms" class="k-radio">
-                        <label class="k-radio-label" for="wnaflag_kms">KMS</label>
+                        <input type="radio" name="wnaflag" id="wnaflag_kims" class="k-radio">
+                        <label class="k-radio-label" for="wnaflag_kims">KIMS</label>
                     </li>
                     <li class="flex-fill">
                         <input type="radio" name="wnaflag" id="wnaflag_kitas" class="k-radio">
@@ -300,7 +307,7 @@
             </div>
         </div>
         <div class="form-group col-sm-12 row" style="padding-top: 1em;">
-            <label class="col-sm-3">Sumber PenghasilanDana</label>
+            <label class="col-sm-3">Sumber Penghasilan/Dana</label>
             <div class="col-sm-9">
                 <ul class="radio-group d-flex">
                     <li class="flex-fill">

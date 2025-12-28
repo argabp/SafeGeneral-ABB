@@ -42,13 +42,20 @@
 </style>
 <div class="container-fluid h-100 p-0">
     <div class="row h-100 g-0">
-        <div class="login-panel col-lg-5 d-block">
+        <div class="login-panel col-lg-5 d-block" style="
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+">
             <div class="text-center">
                 <img src="/img/logo-login.png" alt="ABB Logo" class="login-logo-image">
             </div>
             <div class="login-body">
                 <form method="post" autocomplete="off" id="LoginForm">
-                    <div class="login-Title input-group">Hi, Welcome back to SIABB Core</div>
+                    <div class="login-Title input-group" style="text-align: left">
+                        <p style="margin: 0px">Hi, Welcome back to SIABB</p>
+                        <p>Core Insurance</p>
+                    </div>
                     <div class="input-group mb-3">
                         <input asp-for="Username" type="text" class="form-control" placeholder="Username" onblur="getUserDatabase()"/>
                         <div class="input-group-append">
@@ -83,9 +90,12 @@
                         <button type="submit" class="btn btn-primary login-btn">Sign In</button>
                         @* <button id="SignIn" type="button"class="btn btn-primary btn-block">Sign In</button> *@
                     </div>
-                    <p style="text-align: center; padding-top: 1em"><strong>Copyright © 2025 PT. Asuransi Bhakti Bhayangkara.</strong> All rights reserved.</p>
                 </form>
             </div>
+            <p style="text-align: center;">
+                <strong>Copyright © 2025 PT. Asuransi Bhakti Bhayangkara.</strong>
+                All rights reserved.
+            </p>
         </div>
         <div class="login-image col-lg-7 d-none d-lg-block">
         </div>

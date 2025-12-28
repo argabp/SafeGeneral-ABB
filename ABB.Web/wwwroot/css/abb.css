@@ -1000,7 +1000,7 @@ form .k-textbox, form .k-dropdown, form .k-combobox, form .k-multiselect, form .
 }
 
 .login-body {
-    height: 452px;
+    height: 70%;
     margin: 50px 0 0 0;
     padding: 0;
 }
@@ -1078,13 +1078,13 @@ form .k-textbox, form .k-dropdown, form .k-combobox, form .k-multiselect, form .
 /*Large devices (desktops, 992px and up)*/
 @media (min-width: 992px) {
     .login-Title {
-        font-size: 30px !important;
+        font-size: 23px !important;
     }
 }
 
 .login-Title {
     font-family: PoppinsSemiBold;
-    font-size: 25px;
+    font-size: 23px;
     line-height: 1.3;
     letter-spacing: normal;
     color: var(--darkest);

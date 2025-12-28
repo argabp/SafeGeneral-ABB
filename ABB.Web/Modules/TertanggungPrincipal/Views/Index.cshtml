@@ -55,18 +55,28 @@
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteRekanan");
                         command.Custom("EditDetailRekanan")
-                            .Text("Detail")
+                            .Text("Edit Detail")
                             .IconClass("fa fa-pencil-alt")
-                            .HtmlAttributes(new { title = "Edit" })
+                            .HtmlAttributes(new { title = "EditDetail" })
                             .Click("btnEditDetailRekanan_OnClick");
                         command.Custom("DeleteDetailRekanan")
                             .Text("Delete Detail")
                             .IconClass("k-icon k-i-delete")
-                            .HtmlAttributes(new { title="Delete"})
+                            .HtmlAttributes(new { title="DeleteDetail"})
                             .Click("onDeleteDetailRekanan");
+                        command.Custom("EditDetailSlik")
+                            .Text("Edit Slik")
+                            .IconClass("fa fa-pencil-alt")
+                            .HtmlAttributes(new { title = "EditSlik" })
+                            .Click("btnEditDetailSlik_OnClick");
+                        command.Custom("DeleteDetailSlik")
+                            .Text("Delete Slik")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="DeleteSlik"})
+                            .Click("onDeleteDetailSlik");
                     }).Width(200).Title("Action").Locked(true);
                     columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
-                    columns.Bound(col => col.nm_grp_rk).Width(150).Title("Nama Group Rekanan");
+                    columns.Bound(col => col.nm_grp_rk).Width(200).Title("Nama Group Rekanan");
                     columns.Bound(col => col.kd_rk).Width(150).Title("Kode Rekanan");
                     columns.Bound(col => col.nm_rk).Width(150).Title("Nama Rekanan");
                     columns.Bound(col => col.nm_kota).Width(150).Title("Kota Rekanan");
@@ -83,7 +93,7 @@
                 .Scrollable()
                 .Height(450)
                 .Resizable(a=>a.Columns(true))
-                .Events(ev => ev.DataBound("gridAutoFit"))
+                .Events(ev => ev.DataBound("setButtonActions"))
         
                 )    
         </div>

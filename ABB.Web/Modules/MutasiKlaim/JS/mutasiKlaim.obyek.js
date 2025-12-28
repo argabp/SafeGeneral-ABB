@@ -20,15 +20,10 @@ function saveMutasiKlaimObyek(url) {
         form.kd_scob.trim() +
         form.kd_thn.trim() +
         form.no_kl.trim() 
-
-    var mutasiGridName = "grid_obyek_" + parentId;
-    var mutasiGridElement = $("#" + mutasiGridName);
     
     var data = JSON.stringify(form);
     ajaxPost(url,  data,
         function (response) {
-            refreshGrid(mutasiGridElement);
-            refreshGrid("#grid_mutasi_" + parentId);
             if (response.Result == "OK") {
                 showMessage('Success', response.Message);
             }
@@ -39,6 +34,7 @@ function saveMutasiKlaimObyek(url) {
 
             closeProgress('#MutasiKlaimWindow');
             closeWindow('#MutasiKlaimWindow')
+            refreshGridWithSelection("#grid_mutasi_" + parentId)
         }
     );
 }

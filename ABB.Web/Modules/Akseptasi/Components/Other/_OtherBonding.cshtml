@@ -22,6 +22,7 @@
 }
 <div class="window-body" style="background-color: lightgray">
     <form id="OtherBondingForm" enctype="multipart/form-data" autocomplete="off">
+    @Html.HiddenFor(h => h. IsNewOther)
     @Html.HiddenFor(h => h. grp_obl)
     @Html.HiddenFor(h => h. kd_grp_obl)
     @Html.HiddenFor(h => h. grp_kontr)
@@ -311,6 +312,9 @@
     </form>
 
     <div class="window-footer">
+        <button type="button" id="btn-delete-akseptasiResikoOtherBonding" class="btn btn-primary space-right">
+            <span class="k-icon k-i-delete"></span> Delete
+        </button>
         <button type="button" id="btn-previous-akseptasiResikoOther" class="btn btn-primary space-right">
             <span class="fa fa-arrow-left"></span> Previous
         </button>

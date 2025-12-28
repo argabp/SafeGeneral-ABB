@@ -1,0 +1,16 @@
+using ABB.Application.Common.Interfaces;
+using ABB.Application.Lookups.Commands;
+using AutoMapper;
+
+namespace ABB.Web.Modules.Lookup.Models
+{
+    public class DeleteLookupViewModel : IMapFrom<DeleteLookupCommand>
+    {
+        public string kd_lookup { get; set; }
+
+        public void Mapping(Profile profile)
+        {
+            profile.CreateMap<DeleteLookupViewModel, DeleteLookupCommand>();
+        }
+    }
+}

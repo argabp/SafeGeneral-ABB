@@ -1,6 +1,7 @@
 ﻿$(document).ready(function () {
     btnPreviousOther();
     btnSaveAkseptasiResikoOther_Click();
+    btnDeleteAkseptasiResikoOtherHull_Click();
     
     if($("#kd_cob").val().trim() == "H"){
         $("#label_no_rangka").text("Nomor IMO");
@@ -8,6 +9,10 @@
     }else {
         $("#label_no_rangka").text("Nomor Rangka");
         $("#label_no_msn").text("Nomor Mesin");
+    }
+
+    if($("#IsNewOther").val() === "True"){
+        $("#btn-delete-akseptasiResikoOtherHull").hide();
     }
 });
 
@@ -17,6 +22,41 @@ function btnPreviousOther(){
     });
 }
 
+function btnDeleteAkseptasiResikoOtherHull_Click(){
+    $('#btn-delete-akseptasiResikoOtherHull').click(function () {
+        showConfirmation('Confirmation', `Are you sure you want to delete?`,
+            function () {
+                showProgress('#AkseptasiWindow');
+                setTimeout(function () { deleteAkseptasiResikoOtherHull(); }, 500);
+            }
+        );
+    });
+}
+
+function deleteAkseptasiResikoOtherHull() {
+    var data = {
+        kd_cb: $("#kd_cb").val(),
+        kd_cob: $("#kd_cob").val(),
+        kd_scob: $("#kd_scob").val(),
+        kd_thn: $("#kd_thn").val(),
+        no_aks: $("#no_aks").val(),
+        no_updt: $("#resiko_other_hull_no_updt").val(),
+        no_rsk: resiko.no_rsk,
+        kd_endt: $("#resiko_other_hull_kd_endt").val()
+    }
+
+    ajaxPost(`/Akseptasi/DeleteOtherHull`, JSON.stringify(data), function (response) {
+        if (response.Result) {
+            showMessage('Success', 'Data has been deleted');
+            $("#btn-delete-akseptasiResikoOtherHull").hide();
+        }
+        else {
+            showMessage('Error', 'Delete data is failed, this data is already used');
+        }
+
+        closeProgress('#AkseptasiWindow');
+    });
+}
 
 function btnSaveAkseptasiResikoOther_Click() {
     $('#btn-save-akseptasiResikoOtherHull').click(function () {

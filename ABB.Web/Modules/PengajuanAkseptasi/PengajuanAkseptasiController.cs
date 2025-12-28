@@ -3,18 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ABB.Application.ApprovalAkseptasis.Commands;
-using ABB.Application.ApprovalAkseptasis.Queries;
-using ABB.Application.BiayaMaterais.Queries;
 using ABB.Application.Common;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Exceptions;
 using ABB.Application.Common.Queries;
 using ABB.Application.Common.Services;
-using ABB.Application.KapasitasCabangs.Queries;
 using ABB.Application.PengajuanAkseptasi.Commands;
 using ABB.Application.PengajuanAkseptasi.Queries;
 using ABB.Application.PolisInduks.Queries;
-using ABB.Application.SebabKejadians.Queries;
 using ABB.Web.Extensions;
 using ABB.Web.Hubs;
 using ABB.Web.Modules.ApprovalAkseptasi.Models;
@@ -521,6 +517,31 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
             });
 
             return Json(result);
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> Delete(string kd_cb, string kd_cob,
+            string kd_scob, string kd_thn, string no_aks)
+        {
+            try
+            {
+                var command = new DeletePengajuanAkseptasiCommand()
+                {
+                    kd_cb = kd_cb,
+                    kd_cob = kd_cob,
+                    kd_scob = kd_scob,
+                    kd_thn = kd_thn,
+                    no_aks = no_aks,
+                    DatabaseName = Request.Cookies["DatabaseValue"]
+                };
+                await Mediator.Send(command);
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", Message = ex.Message });
+            }
         }
     }
 }

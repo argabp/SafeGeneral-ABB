@@ -1,6 +1,11 @@
 ﻿$(document).ready(function () {
     btnPreviousOther();
     btnSaveAkseptasiResikoOther_Click();
+    btnDeleteAkseptasiResikoOtherHoleInOne_Click();
+
+    if($("#IsNewOther").val() === "True"){
+        $("#btn-delete-akseptasiResikoOtherHoleInOne").hide();
+    }
 });
 
 function btnPreviousOther(){
@@ -9,6 +14,41 @@ function btnPreviousOther(){
     });
 }
 
+function btnDeleteAkseptasiResikoOtherHoleInOne_Click(){
+    $('#btn-delete-akseptasiResikoOtherHoleInOne').click(function () {
+        showConfirmation('Confirmation', `Are you sure you want to delete?`,
+            function () {
+                showProgress('#AkseptasiWindow');
+                setTimeout(function () { deleteAkseptasiResikoOtherHoleInOne(); }, 500);
+            }
+        );
+    });
+}
+
+function deleteAkseptasiResikoOtherHoleInOne() {
+    var data = {
+        kd_cb: $("#kd_cb").val(),
+        kd_cob: $("#kd_cob").val(),
+        kd_scob: $("#kd_scob").val(),
+        kd_thn: $("#kd_thn").val(),
+        no_aks: $("#no_aks").val(),
+        no_updt: $("#resiko_other_hole_in_one_no_updt").val(),
+        no_rsk: resiko.no_rsk,
+        kd_endt: $("#resiko_other_hole_in_one_kd_endt").val()
+    }
+
+    ajaxPost(`/Akseptasi/DeleteOtherHoleInOne`, JSON.stringify(data), function (response) {
+        if (response.Result) {
+            showMessage('Success', 'Data has been deleted');
+            $("#btn-delete-akseptasiResikoOtherHoleInOne").hide();
+        }
+        else {
+            showMessage('Error', 'Delete data is failed, this data is already used');
+        }
+
+        closeProgress('#AkseptasiWindow');
+    });
+}
 
 function btnSaveAkseptasiResikoOther_Click() {
     $('#btn-save-akseptasiResikoOtherHoleInOne').click(function () {

@@ -49,6 +49,7 @@
             </div>
             <div class="col-sm-6">
                 <kendo-textbox for="npwp" style="width: 100%; background-color: #FFFFE1;"/>
+                <span asp-validation-for="npwp" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group col-sm-12 row">
@@ -89,18 +90,21 @@
             </div>
         </div>
         <div class="form-group col-sm-12 row">
-            <label class="col-sm-3" style="margin-bottom: 1.5em">Domisili Perusahaan</label>
-            <label class="col-sm-1" style="margin-bottom: 1.5em">Kota</label>
+            <label class="col-sm-3">Domisili Perusahaan</label>
+            <label class="col-sm-1">Kota</label>
             <div class="col-sm-2">
                 <kendo-textbox for="kotainstitusi" style="width: 100%; background-color: #FFFFE1;"/>
+                <span asp-validation-for="kotainstitusi" class="text-danger"></span>
             </div>
             <label class="col-sm-1">Kode Pos</label>
             <div class="col-sm-2">
                 <kendo-textbox for="kodeposinstitusi" style="width: 100%; background-color: #FFFFE1;"/>
+                <span asp-validation-for="kodeposinstitusi" class="text-danger"></span>
             </div>
             <label class="col-sm-1">Telp</label>
             <div class="col-sm-2">
                 <kendo-textbox for="telpinstitusi" style="width: 100%; background-color: #FFFFE1;"/>
+                <span asp-validation-for="telpinstitusi" class="text-danger"></span>
             </div>
             <label class="col-sm-1 offset-9" style="padding-top: 1em">Ext</label>
             <div class="col-sm-2" style="padding-top: 1em">
@@ -126,25 +130,24 @@
             </div>
         </div>
         <div class="form-group col-sm-12 row">
-            <label class="col-sm-3" style="padding-top: 0.5em;">Kewarganegaraan</label>
-            <div class="col-sm-9">
+            <div class="col-sm-2 offset-3">
                 <ul class="radio-group d-flex">
                     <li class="flex-fill">
                         <input type="radio" name="wniwna" id="wniwna_wni" class="k-radio">
-                        <label class="k-radio-label" for="wniwna_wni">WNI Lampirkan</label>
+                        <label class="k-radio-label" for="wniwna_wni">WNI</label>
                     </li>
                     <li class="flex-fill">
                         <input type="radio" name="wniwna" id="wniwna_wna" class="k-radio">
-                        <label class="k-radio-label" for="wniwna_wna">WNA Lampirkan</label>
+                        <label class="k-radio-label" for="wniwna_wna">WNA</label>
                     </li>
                 </ul>
                 <input type="hidden" id="wniwna_value" value="@Model.wniwna">
-                <div>
+                <div style="padding-top: 1em;">
                     <span asp-validation-for="wniwna" class="text-danger"></span>
                 </div>
             </div>
-            
-            <div class="col-sm-4 offset-3" style="padding-top: 2em">
+
+            <div class="col-sm-3">
                 <ul class="radio-group d-flex">
                     <li class="flex-fill">
                         <input type="radio" name="wniflag" id="wniflag_ktp" class="k-radio">
@@ -158,36 +161,37 @@
                         <input type="radio" name="wniflag" id="wniflag_paspor" class="k-radio">
                         <label class="k-radio-label" for="wniflag_paspor">PASPOR</label>
                     </li>
+                    <li class="flex-fill">
+                        <input type="radio" name="wniflag" id="wniflag_suratKuasa" class="k-radio">
+                        <label class="k-radio-label" for="wniflag_suratKuasa">SURAT KUASA</label>
+                    </li>
                 </ul>
                 <input type="hidden" id="wniflag_value" value="@Model.wniflag">
-                <div>
+                <div style="padding-top: 1em;">
                     <span asp-validation-for="wniflag" class="text-danger"></span>
                 </div>
             </div>
-            
-            <div class="col-sm-5" style="padding-top: 2em">
+
+            <div class="col-sm-4">
                 <ul class="radio-group d-flex">
                     <li class="flex-fill">
                         <input type="radio" name="wnaflag" id="wnaflag_paspor" class="k-radio">
                         <label class="k-radio-label" for="wnaflag_paspor">PASPOR</label>
                     </li>
                     <li class="flex-fill">
-                        <input type="radio" name="wnaflag" id="wnaflag_kms" class="k-radio">
-                        <label class="k-radio-label" for="wnaflag_kms">KMS</label>
+                        <input type="radio" name="wnaflag" id="wnaflag_kims" class="k-radio">
+                        <label class="k-radio-label" for="wnaflag_kims">KMS</label>
                     </li>
                     <li class="flex-fill">
                         <input type="radio" name="wnaflag" id="wnaflag_kitas" class="k-radio">
                         <label class="k-radio-label" for="wnaflag_kitas">KITAS</label>
                     </li>
                     <li class="flex-fill">
-                        <input type="radio" name="wnaflag" id="wnaflag_kitap" class="k-radio">
-                        <label class="k-radio-label" for="wnaflag_kitap">KITAP</label>
+                        <input type="radio" name="wnaflag" id="wnaflag_suratKuasa" class="k-radio">
+                        <label class="k-radio-label" for="wnaflag_suratKuasa">SURAT KUASA</label>
                     </li>
                 </ul>
                 <input type="hidden" id="wnaflag_value" value="@Model.wnaflag">
-                <div>
-                    <span asp-validation-for="wnaflag" class="text-danger"></span>
-                </div>
             </div>
         </div>
         <div class="form-group col-sm-12 row" style="padding-top: 1em">

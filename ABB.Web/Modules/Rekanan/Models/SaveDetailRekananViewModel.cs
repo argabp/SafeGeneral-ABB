@@ -137,9 +137,11 @@ namespace ABB.Web.Modules.Rekanan.Models
         
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<SaveDetailRekananViewModel, SaveDetailRekananCommand>();
             profile.CreateMap<DetailRekanan, SaveDetailRekananViewModel>();
-            profile.CreateMap<SaveDetailRekananViewModel, SaveDetailTertanggungPrincipalCommand>();
+            profile.CreateMap<SaveDetailRekananViewModel, SaveDetailTertanggungPrincipalRetailCommand>();
+            profile.CreateMap<SaveDetailRekananViewModel, SaveDetailTertanggungPrincipalCorporateCommand>();
+            profile.CreateMap<SaveDetailRekananViewModel, SaveDetailTertanggungPrincipalRetailFullCommand>();
+            profile.CreateMap<SaveDetailRekananViewModel, SaveDetailTertanggungPrincipalCorporateFullCommand>();
         }
     }
 }

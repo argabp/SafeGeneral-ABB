@@ -1,0 +1,123 @@
+@using ABB.Application.Lookups.Queries
+@using Kendo.Mvc.UI
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Lookup Data";
+}
+<script src="~/Modules/Lookup/JS/lookup.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+    #kd_lookup, #no_lookup{
+        background-color: #00FFFF;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Lookup Data
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<LookupDto>()
+                .Name("LookupGrid")
+                .ToolBar(toolbar => toolbar.Create())
+                .Editable(editable => editable.Mode(GridEditMode.InLine))
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetLookups", "Lookup").Data("searchFilter"))
+                    .Model(model => model.Id(p => p.kd_lookup))
+                )
+                .Columns(columns =>
+                {
+                    columns.Command(command =>
+                    {
+                        command.Edit();
+                        command.Custom("DeleteLookup")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title = "Delete" })
+                            .Click("onDeleteLookup");
+                    }).Width(200).Title("Action");
+                    columns.Bound(col => col.kd_lookup).Width(150).Title("Kode Lookup").Editable("disableGridTextboxWhenEdit");
+                    columns.Bound(col => col.nm_kategori).Width(150).Title("Nama Kategori");
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .ClientDetailTemplateId("template")
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit").Save("onSaveLookup"))
+        
+                )    
+        </div>
+        
+        <script id="template" type="text/kendo-tmpl">
+            @(Html.Kendo().TabStrip()
+                    .Name("tabStrip_#=kd_lookup#")
+                    .SelectedIndex(0)
+                    .Animation(animation => animation.Open(open => open.Fade(FadeDirection.In)))
+                    .Items(items =>
+                    {
+                        items.Add().Text("Detail").Content(@<text>
+                            @(Html.Kendo().Grid<DetailLookupDto>()
+                                .Name("grid_Detail_#=kd_lookup#") // template expression, to be evaluated in the master context
+                                .ToolBar(toolbar => toolbar.Create())
+                                .Editable(editable => editable.Mode(GridEditMode.InLine))
+                                .DataSource(dataSource => dataSource.Ajax()
+                                    .Read(read => read.Action("GetDetailLookups", "Lookup", new { kd_lookup = "#=kd_lookup#" }))
+                                    .Model(m => m.Id(p => p.Id))
+                                )
+                                .Columns(columns =>
+                                {
+                                    columns.Bound(col => col.kd_lookup).Width(150).Title("Kode Lookup").Editable("disableGridTextbox");
+                                    columns.Bound(col => col.no_lookup).Width(150).Title("No Lookup").Editable("disableGridTextboxWhenEdit");
+                                    columns.Bound(col => col.nm_detail_lookup).Width(150).Title("Nama Detail Lookup");
+                                    columns.Bound(col => col.flag_lookup).Width(200).Title("Flag Lookup").EditorTemplateName("KendoCheckBox");
+                                    columns.Command(command =>
+                                    {
+                                        command.Edit();
+                                        command.Custom("DeleteDetailLookup")
+                                            .Text("Delete")
+                                            .IconClass("k-icon k-i-delete")
+                                            .HtmlAttributes(new { title="Delete"})
+                                            .Click("onDeleteDetailLookup");
+                                    }).Width(200).Title("Action");
+                                })
+                                .Pageable(pager => pager
+                                    .Refresh(true)
+                                    .Info(true)
+                                    .PageSizes(true)
+                                )
+                                .Sortable()
+                                .Selectable()
+                                .Filterable()
+                                .Scrollable()
+                                .Height(380)
+                                .Resizable(a=>a.Columns(true))
+                                .Events(ev => ev.DataBound("gridAutoFit").Save("onSaveDetailLookup").Edit("onEditDetailLookup"))
+                                .ToClientTemplate())
+                        </text>
+                        );
+                    })
+                    .ToClientTemplate())
+        </script>
+    </div>
+</div>
+

@@ -1,4 +1,5 @@
 ﻿using System;
+using ABB.Application.Akseptasis.Commands;
 using ABB.Application.Akseptasis.Queries;
 using ABB.Application.Common.Interfaces;
 using AutoMapper;
@@ -34,6 +35,13 @@ namespace ABB.Web.Modules.Akseptasi.Models
             profile.CreateMap<AkseptasiResikoParameterViewModel, GetAkseptasiOtherPAQuery>();
             profile.CreateMap<AkseptasiResikoParameterViewModel, GetAkseptasiOtherHullQuery>();
             profile.CreateMap<AkseptasiResikoParameterViewModel, GetAkseptasiOtherHoleInOneQuery>();
+            profile.CreateMap<AkseptasiResikoParameterViewModel, DeleteOtherBondingCommand>();
+            profile.CreateMap<AkseptasiResikoParameterViewModel, DeleteOtherCargoCommand>();
+            profile.CreateMap<AkseptasiResikoParameterViewModel, DeleteOtherFireCommand>();
+            profile.CreateMap<AkseptasiResikoParameterViewModel, DeleteOtherHoleInOneCommand>();
+            profile.CreateMap<AkseptasiResikoParameterViewModel, DeleteOtherHullCommand>();
+            profile.CreateMap<AkseptasiResikoParameterViewModel, DeleteOtherMotorCommand>();
+            profile.CreateMap<AkseptasiResikoParameterViewModel, DeleteOtherPACommand>();
         }
     }
 }

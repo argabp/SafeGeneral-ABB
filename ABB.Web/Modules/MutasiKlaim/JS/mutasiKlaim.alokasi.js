@@ -26,14 +26,11 @@ function saveMutasiKlaimAlokasi(url) {
         form.kd_scob.trim() +
         form.kd_thn.trim() +
         form.no_kl.trim() 
-
-    var mutasiGridName = "grid_alokasi_" + parentId;
-    var mutasiGridElement = $("#" + mutasiGridName);
     
     var data = JSON.stringify(form);
     ajaxPost(url,  data,
         function (response) {
-            refreshGrid(mutasiGridElement);
+            refreshGridWithSelection("#grid_mutasi_" + parentId)
             if (response.Result == "OK") {
                 showMessage('Success', response.Message);
             }

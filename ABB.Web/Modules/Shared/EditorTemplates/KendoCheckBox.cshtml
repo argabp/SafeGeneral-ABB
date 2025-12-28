@@ -1,0 +1,10 @@
+@using Kendo.Mvc.UI
+@model string
+
+@{
+    var boolModel = Model == "1"; 
+}
+
+@(Html.Kendo().CheckBoxFor(m => m)
+    .Checked(boolModel)
+    )

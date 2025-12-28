@@ -120,6 +120,7 @@ namespace ABB.Web.Modules.MataUang
             try
             {
                 var command = Mapper.Map<EditDetailMataUangCommand>(model);
+                command.DatabaseName = Request.Cookies["DatabaseValue"];
                 await Mediator.Send(command);
                 return Json(new { Result = "OK", Message = Constant.DataDisimpan});
 

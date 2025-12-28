@@ -23,6 +23,7 @@
 
 <div class="window-body" style="background-color: lightgray">
     <form id="OtherForm" enctype="multipart/form-data" autocomplete="off">
+        @Html.HiddenFor(h => h. IsNewOther)
         @Html.HiddenFor(h => h.grp_kond)
         <div class="form-group row">
             <div class="row col-sm-6">
@@ -204,6 +205,9 @@
     </form>
 
     <div class="window-footer">
+        <button type="button" id="btn-delete-akseptasiResikoOtherCargo" class="btn btn-primary space-right">
+            <span class="k-icon k-i-delete"></span> Delete
+        </button>
         <button type="button" id="btn-save-akseptasiResikoOtherCargo" class="btn btn-success space-right">
             <span class="fa fa-save"></span> Save
         </button>

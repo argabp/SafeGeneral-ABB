@@ -1,11 +1,52 @@
 ﻿$(document).ready(function () {
     btnPreviousOther();
     btnSaveAkseptasiResikoOther_Click();
+    btnDeleteAkseptasiResikoOtherBanding_Click();
+    
+    if($("#IsNewOther").val() === "True"){
+        $("#btn-delete-akseptasiResikoOtherBonding").hide();
+    }
 });
 
 function btnPreviousOther(){
     $('#btn-previous-akseptasiResikoOther').click(function () {
         $("#resikoTab").getKendoTabStrip().select(2);
+    });
+}
+
+function btnDeleteAkseptasiResikoOtherBanding_Click(){
+    $('#btn-delete-akseptasiResikoOtherBonding').click(function () {
+        showConfirmation('Confirmation', `Are you sure you want to delete?`,
+            function () {
+                showProgress('#AkseptasiWindow');
+                setTimeout(function () { deleteAkseptasiResikoOtherBanding(); }, 500);
+            }
+        );
+    });
+}
+
+function deleteAkseptasiResikoOtherBanding() {
+    var data = {
+        kd_cb: $("#kd_cb").val(),
+        kd_cob: $("#kd_cob").val(),
+        kd_scob: $("#kd_scob").val(),
+        kd_thn: $("#kd_thn").val(),
+        no_aks: $("#no_aks").val(),
+        no_updt: $("#resiko_other_bonding_no_updt").val(),
+        no_rsk: resiko.no_rsk,
+        kd_endt: $("#resiko_other_bonding_kd_endt").val()
+    }
+    
+    ajaxPost(`/Akseptasi/DeleteOtherBonding`, JSON.stringify(data), function (response) {
+        if (response.Result) {
+            showMessage('Success', 'Data has been deleted');
+            $("#btn-delete-akseptasiResikoOtherBonding").hide();
+        }
+        else {
+            showMessage('Error', 'Delete data is failed, this data is already used');
+        }
+
+        closeProgress('#AkseptasiWindow');
     });
 }
 

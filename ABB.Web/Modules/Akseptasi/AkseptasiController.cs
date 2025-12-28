@@ -1624,6 +1624,7 @@ namespace ABB.Web.Modules.Akseptasi
                         akseptasiBondingViewModel.kd_grp_surety = "5";
                         akseptasiBondingViewModel.kd_rk_surety = "000214";
                         akseptasiBondingViewModel.kd_grp_prc = "P";
+                        akseptasiBondingViewModel.IsNewOther = true;
                     
                         return View("~/Modules/Akseptasi/Components/Other/_OtherBonding.cshtml", akseptasiBondingViewModel);
                     }
@@ -1637,7 +1638,6 @@ namespace ABB.Web.Modules.Akseptasi
                 case "_OtherCargo":
                     return View("~/Modules/Akseptasi/Components/Other/_OtherCargo.cshtml", model);
                 case "_OtherMotor":
-                    // return View("~/Modules/Akseptasi/Components/Other/_OtherMotor.cshtml", model);
                     var akseptasiMotorViewModel = new AkseptasiResikoOtherMotorViewModel()
                     {
                         kd_cb = model.kd_cb.Trim(),
@@ -1654,6 +1654,7 @@ namespace ABB.Web.Modules.Akseptasi
 
                     if (motorResult == null)
                     {
+                        akseptasiMotorViewModel.IsNewOther = true;
                         akseptasiMotorViewModel.grp_jns_kend = "001";
                         akseptasiMotorViewModel.kd_guna = "000";
                         akseptasiMotorViewModel.nilai_casco = 0;
@@ -1727,6 +1728,7 @@ namespace ABB.Web.Modules.Akseptasi
 
                     if (fireResult == null)
                     {
+                        akseptasiFireViewModel.IsNewOther = true;
                         akseptasiFireViewModel.kd_penerangan = "1";
                         akseptasiFireViewModel.kategori_gd = "E";
 
@@ -1737,6 +1739,7 @@ namespace ABB.Web.Modules.Akseptasi
                     akseptasiFireViewModel.kd_cb = akseptasiFireViewModel.kd_cb.Trim();
                     akseptasiFireViewModel.kd_cob = akseptasiFireViewModel.kd_cob.Trim();
                     akseptasiFireViewModel.kd_scob = akseptasiFireViewModel.kd_scob.Trim();
+                    akseptasiFireViewModel.kd_okup = akseptasiFireViewModel.kd_okup.Trim();
                     
                     return View("~/Modules/Akseptasi/Components/Other/_OtherFire.cshtml", akseptasiFireViewModel);
                 case "_OtherHull":
@@ -1756,6 +1759,8 @@ namespace ABB.Web.Modules.Akseptasi
 
                     if (hullResult == null)
                     {
+                        akseptasiHullViewModel.IsNewOther = true;
+                        
                         return View("~/Modules/Akseptasi/Components/Other/_OtherHull.cshtml", akseptasiHullViewModel);
                     }
                 
@@ -1784,6 +1789,7 @@ namespace ABB.Web.Modules.Akseptasi
 
                     if (paResult == null)
                     {
+                        akseptasiPaViewModel.IsNewOther = true;
                         akseptasiPaViewModel.thn_akh = "1";
                         akseptasiPaViewModel.nilai_harga_ptg = 0;
                         akseptasiPaViewModel.pst_rate_std = 0;
@@ -1848,6 +1854,8 @@ namespace ABB.Web.Modules.Akseptasi
 
                     if (holeInOneResult == null)
                     {
+                        akseptasiHoleInOneViewModel.IsNewOther = true;
+                        
                         return PartialView("~/Modules/Akseptasi/Components/Other/_OtherHoleInOne.cshtml", akseptasiHoleInOneViewModel);
                     }
                 
@@ -4118,6 +4126,136 @@ namespace ABB.Web.Modules.Akseptasi
         }
 
         #endregion
+
+        #endregion
+
+        #region Delete Others
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteOtherBonding([FromBody] AkseptasiResikoParameterViewModel model)
+        {
+            try
+            {
+                var command = Mapper.Map<DeleteOtherBondingCommand>(model);
+                command.DatabaseName = Request.Cookies["DatabaseValue"];
+                
+                await Mediator.Send(command);
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", Message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteOtherCargo([FromBody] AkseptasiResikoParameterViewModel model)
+        {
+            try
+            {
+                var command = Mapper.Map<DeleteOtherCargoCommand>(model);
+                command.DatabaseName = Request.Cookies["DatabaseValue"];
+                
+                await Mediator.Send(command);
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", Message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteOtherFire([FromBody] AkseptasiResikoParameterViewModel model)
+        {
+            try
+            {
+                var command = Mapper.Map<DeleteOtherFireCommand>(model);
+                command.DatabaseName = Request.Cookies["DatabaseValue"];
+                
+                await Mediator.Send(command);
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", Message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteOtherHoleInOne([FromBody] AkseptasiResikoParameterViewModel model)
+        {
+            try
+            {
+                var command = Mapper.Map<DeleteOtherHoleInOneCommand>(model);
+                command.DatabaseName = Request.Cookies["DatabaseValue"];
+                
+                await Mediator.Send(command);
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", Message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteOtherHull([FromBody] AkseptasiResikoParameterViewModel model)
+        {
+            try
+            {
+                var command = Mapper.Map<DeleteOtherHullCommand>(model);
+                command.DatabaseName = Request.Cookies["DatabaseValue"];
+                
+                await Mediator.Send(command);
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", Message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteOtherMotor([FromBody] AkseptasiResikoParameterViewModel model)
+        {
+            try
+            {
+                var command = Mapper.Map<DeleteOtherMotorCommand>(model);
+                command.DatabaseName = Request.Cookies["DatabaseValue"];
+                
+                await Mediator.Send(command);
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", Message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteOtherPA([FromBody] AkseptasiResikoParameterViewModel model)
+        {
+            try
+            {
+                var command = Mapper.Map<DeleteOtherPACommand>(model);
+                command.DatabaseName = Request.Cookies["DatabaseValue"];
+                
+                await Mediator.Send(command);
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", Message = ex.Message });
+            }
+        }
 
         #endregion
     }

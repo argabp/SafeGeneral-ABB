@@ -47,7 +47,7 @@ namespace ABB.Application.TertanggungPrincipals.Queries
                 ON r.kd_cb = c.kd_cb
                 INNER JOIN v_rf02 g
                 ON r.kd_grp_rk = g.kd_grp_rk
-                INNER JOIN rf07_00 k
+                LEFT OUTER JOIN rf07_00 k
                 ON r.kd_kota = k.kd_kota
                 WHERE c.kd_cb = @KodeCabang AND g.nm_grp_rk IN ('Tertanggung', 'Principal', 'Bank')", new { request.KodeCabang })).ToList();
 

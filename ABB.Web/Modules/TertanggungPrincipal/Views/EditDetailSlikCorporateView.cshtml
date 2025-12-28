@@ -1,0 +1,596 @@
+@using Kendo.Mvc.UI
+@model ABB.Web.Modules.TertanggungPrincipal.Models.DetailSlikViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/TertanggungPrincipal/JS/rekanan.slikCorporate.js"></script>
+
+<style>
+    label {
+        align-self: center;
+        margin: 0;
+    }
+</style>
+
+<div class="window-body">
+    <form id="DetailSlikCorporateForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-6">
+                <h4 class="col-sm-12">Informasi Debitur Badan Usaha</h4>
+            </div>
+            <div class="col-sm-6">
+                <h4 class="col-sm-12">Informasi Laporan Keuangan Debitur Badan Usaha</h4>
+            </div>
+        </div>
+
+        <!-- Row 1 -->
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Kode Bentuk Badan Usaha</label>
+                <div class="col-sm-12">
+                    <kendo-dropdownlist for="kd_usaha2" style="width:100%;" class="not-null-dropdown"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeBentukBadanUsaha","TertanggungPrincipal")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_usaha2" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Posisi Laporan Keuangan Tahunan Debitur Badan Usaha</label>
+                <div class="col-sm-12">
+                    <kendo-datepicker for="tgl_lap_keu_debitur" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="tgl_lap_keu_debitur" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Tempat Pendirian</label>
+                <div class="col-sm-12">
+                    <kendo-textbox for="tmpt_pendirian" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="tmpt_pendirian" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Aset</label>
+                <div class="col-sm-12">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="Aset" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="Aset" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Nomor Akta Pendirian</label>
+                <div class="col-sm-12">
+                    <kendo-textbox for="akta_pendirian" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="akta_pendirian" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Aset Lancar</label>
+                <div class="col-sm-12">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="Aset_Lancar" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="Aset_Lancar" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 4 -->
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Tanggal Akta Pendirian</label>
+                <div class="col-sm-12">
+                    <kendo-datepicker for="tgl_akta_pendirian" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="tgl_akta_pendirian" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Kas dan Setara Kas (Aset Lancar)</label>
+                <div class="col-sm-12">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="Kas_n_Setara_Kas" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="Kas_n_Setara_Kas" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 5 -->
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Nomor Akta Perubahan Terakhir</label>
+                <div class="col-sm-12">
+                    <kendo-textbox for="akta_berubah_takhir" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="akta_berubah_takhir" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Piutang Usaha atau Pembiayaan (Aset Lancar)</label>
+                <div class="col-sm-12">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="Piutang_Usaha_atau_Pembiayaan" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="Piutang_Usaha_atau_Pembiayaan" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 6 -->
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Tanggal Akta Perubahan Terakhir</label>
+                <div class="col-sm-12">
+                    <kendo-datepicker for="tgl_akta_berubah_takhir" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="tgl_akta_berubah_takhir" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Investasi atau Aset Keuangan Lainnya (Aset Lancar)</label>
+                <div class="col-sm-12">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="Inv_atau_Aset_Keu_Lain" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="Inv_atau_Aset_Keu_Lain" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 7 -->
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Alamat Surat Elektronik</label>
+                <div class="col-sm-12">
+                    <kendo-textbox for="email" style="width:100%;"/>
+                    <span asp-validation-for="email" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Aset Lancar Lainnya (Aset Lancar)</label>
+                <div class="col-sm-12">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="Aset_Lancar_Lain" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="Aset_Lancar_Lain" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 8 -->
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Kode Negara Domisili</label>
+                <div class="col-sm-12">
+                    <kendo-dropdownlist for="kd_negara" style="width:100%;" class="not-null-dropdown"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeNegara","TertanggungPrincipal")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_negara" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Aset Tidak Lancar</label>
+                <div class="col-sm-12">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="Aset_Tak_Lancar" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="Aset_Tak_Lancar" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 9 -->
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Kode Bidang Usaha</label>
+                <div class="col-sm-12">
+                    <kendo-dropdownlist for="kd_usaha" style="width:100%;" class="not-null-dropdown"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeBidangUsaha","TertanggungPrincipal")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_usaha" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Piutang Usaha atau Pembiayaan (Aset Tidak Lancar)</label>
+                <div class="col-sm-12">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="Piut_Usaha_atau_Pembiayaan" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="Piut_Usaha_atau_Pembiayaan" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 10 -->
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Kode Hubungan dengan Pelapor</label>
+                <div class="col-sm-12">
+                    <kendo-dropdownlist for="kd_hub" style="width:100%;" class="not-null-dropdown"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeHubunganPelapor","TertanggungPrincipal")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_hub" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Investasi atau Aset Keuangan Lain (Aset Tidak Lancar)</label>
+                <div class="col-sm-12">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="Inv_atau_Aset_Keu_Lain2" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="Inv_atau_Aset_Keu_Lain2" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 11 -->
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Melanggar BMPK/BMPD/BMPP</label>
+                <div class="col-sm-12">
+                    <kendo-textbox for="langgar_bmpk_pd_pp" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="langgar_bmpk_pd_pp" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Aset Tidak Lancar Lain (Aset Tidak Lancar)</label>
+                <div class="col-sm-12">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="Aset_Tak_lancar_Lain" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="Aset_Tak_lancar_Lain" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 12 -->
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Melampaui BMPK/BMPD/BMPP</label>
+                <div class="col-sm-12">
+                    <kendo-textbox for="lampaui_bmpk_pd_pp" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="lampaui_bmpk_pd_pp" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Liabilitas</label>
+                <div class="col-sm-12">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="Liabilitas" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="Liabilitas" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 13 -->
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Kode Golongan Debitur</label>
+                <div class="col-sm-12">
+                    <kendo-dropdownlist for="kd_gol_deb" style="width:100%;" class="not-null-dropdown"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeGolonganDebitur","TertanggungPrincipal")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_gol_deb" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Liabilitas Jangka Pendek</label>
+                <div class="col-sm-12">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="Liabilitas_Jgk_Pdk" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="Liabilitas_Jgk_Pdk" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 14 -->
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Peringkat atau Rating Debitur</label>
+                <div class="col-sm-12">
+                    <kendo-textbox for="rating_debitur" style="width:100%;"/>
+                    <span asp-validation-for="rating_debitur" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Pinjaman Jangka Pendek (Liabilitas Jangka Pendek)</label>
+                <div class="col-sm-12">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="Pinjam_Jgk_Pdk" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="Pinjam_Jgk_Pdk" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 15 -->
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Lembaga Pemeringkat</label>
+                <div class="col-sm-12">
+                    <kendo-textbox for="lembaga_peringkat" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="lembaga_peringkat" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Utang Usaha Jangka Pendek (Liabilitas Jangka Pendek)</label>
+                <div class="col-sm-12">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="Utang_Jgk_Pdk" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="Utang_Jgk_Pdk" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 16 -->
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Tanggal Pemeringkatan</label>
+                <div class="col-sm-12">
+                    <kendo-datepicker for="tgl_pemeringkatan" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="tgl_pemeringkatan" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Liabilitas Jangka Pendek Lain (Liabilitas Jangka Pendek)</label>
+                <div class="col-sm-12">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="Liabilitas_Jgk_Pdk_Lain" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="Liabilitas_Jgk_Pdk_Lain" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 17 -->
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Nama Grup Usaha Debitur</label>
+                <div class="col-sm-12">
+                    <kendo-textbox for="grp_usaha_deb" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="grp_usaha_deb" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Liabilitas Jangka Panjang</label>
+                <div class="col-sm-12">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="Liabilitas_Jgk_Pjg" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="Liabilitas_Jgk_Pjg" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Informasi Pengurus Section -->
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-6 row">
+                <h4 class="col-sm-12">Informasi Pengurus dan/atau Pemilik Debitur Badan Usaha</h4>
+            </div>
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Pinjaman Jangka Panjang (Liabilitas Jangka Panjang)</label>
+                <div class="col-sm-12">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="Pinjaman_Jgk_Pjg" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="Pinjaman_Jgk_Pjg" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 18 -->
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Nomor Identitas Pengurus dan/atau Pemilik Debitur Badan Usaha</label>
+                <div class="col-sm-12">
+                    <kendo-textbox for="id_pengurus" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="id_pengurus" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Utang Usaha Jangka Panjang (Liabilitas Jangka Panjang)</label>
+                <div class="col-sm-12">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="Utang_Jgk_Pjg" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="Utang_Jgk_Pjg" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 19 -->
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Kode Jenis Identitas Pengurus dan/atau Pemilik Debitur Badan Usaha</label>
+                <div class="col-sm-12">
+                    <kendo-textbox for="kd_jns_id_pengurus" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="kd_jns_id_pengurus" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Liabilitas Jangka Panjang Lain (Liabilitas Jangka Panjang)</label>
+                <div class="col-sm-12">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="Liabilitas_Jgk_Pjg_Lain" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="Liabilitas_Jgk_Pjg_Lain" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 20 -->
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Nama Pengurus dan/atau Pemilik Debitur Badan Usaha</label>
+                <div class="col-sm-12">
+                    <kendo-textbox for="nm_pengurus" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="nm_pengurus" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Ekuitas</label>
+                <div class="col-sm-12">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="Ekuitas" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="Ekuitas" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 21 -->
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Jenis Kelamin</label>
+                <div class="col-sm-12">
+                    <kendo-textbox for="Jenis_Kelamin" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="Jenis_Kelamin" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Pendapatan Usaha atau Operasional</label>
+                <div class="col-sm-12">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="Pendapatan" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="Pendapatan" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 22 -->
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Alamat</label>
+                <div class="col-sm-12">
+                    <kendo-textbox for="Alamat" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="Alamat" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Beban Pokok Pendapatan atau Beban Operasional</label>
+                <div class="col-sm-12">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="Beban_Pkk_Pendapatan" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="Beban_Pkk_Pendapatan" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 23 -->
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Kelurahan</label>
+                <div class="col-sm-12">
+                    <kendo-textbox for="Kelurahan" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="Kelurahan" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Laba atau Rugi Bruto</label>
+                <div class="col-sm-12">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="L_atau_R_Bruto" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="L_atau_R_Bruto" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 24 -->
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Kecamatan</label>
+                <div class="col-sm-12">
+                    <kendo-textbox for="Kecamatan" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="Kecamatan" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Pendapatan lain-lain atau Non Operasional</label>
+                <div class="col-sm-12">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="Pendapatan_Lain" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="Pendapatan_Lain" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 25 -->
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Kode Kabupaten atau Kota</label>
+                <div class="col-sm-12">
+                    <kendo-dropdownlist for="Kabupaten" style="width:100%;" class="not-null-dropdown"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeKabupatenKota","TertanggungPrincipal")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="Kabupaten" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Beban Lain lain atau Non Operasional</label>
+                <div class="col-sm-12">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="Beban_Lain" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="Beban_Lain" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 26 -->
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Kode Jabatan</label>
+                <div class="col-sm-12">
+                    <kendo-dropdownlist for="Kode_Jabatan" style="width:100%;" class="not-null-dropdown"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeJabatan","TertanggungPrincipal")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="Kode_Jabatan" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Laba atau Rugi Sebelum Pajak</label>
+                <div class="col-sm-12">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="L_atau_R_belum_Pjk" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="L_atau_R_belum_Pjk" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 27 -->
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Pangsa Kepemilikan</label>
+                <div class="col-sm-12">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="pangsa_kepemilikan" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="pangsa_kepemilikan" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Laba atau Rugi Tahun Berjalan</label>
+                <div class="col-sm-12">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="L_atau_R_Thn_Bjl" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="L_atau_R_Thn_Bjl" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 28 -->
+        <div class="form-group col-sm-12 row">
+            <div class="col-sm-6 row">
+                <label class="col-sm-12">Status Pengurus dan/atau Pemilik Debitur Badan Usaha</label>
+                <div class="col-sm-12">
+                    <kendo-textbox for="sts_pengurus" style="width:100%; background-color: #FFFFE1;"/>
+                    <span asp-validation-for="sts_pengurus" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6 row">
+                <!-- Empty column to maintain layout -->
+            </div>
+        </div>
+    </form>
+
+<div class="window-footer">
+    <button type="button" onclick="onSaveDetailSlikCorporate()" class="btn btn-success space-right">
+        <span class="fa fa-save"></span> Save
+    </button>
+</div>
+</div>

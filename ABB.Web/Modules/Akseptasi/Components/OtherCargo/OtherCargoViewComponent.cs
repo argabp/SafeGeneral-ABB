@@ -37,6 +37,7 @@ namespace ABB.Web.Modules.Akseptasi.Components.OtherCargo
             if (cargoResult == null)
             {
                 akseptasiCargoViewModel.grp_kond = "003";
+                akseptasiCargoViewModel.IsNewOther = true;
 
                 return View("_OtherCargo", akseptasiCargoViewModel);
             }

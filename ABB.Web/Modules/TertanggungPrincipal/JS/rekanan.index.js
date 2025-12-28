@@ -1,36 +1,38 @@
 ﻿var selectedData;
 
-function onSaveRekanan(){    
-    var url = "/TertanggungPrincipal/SaveRekanan";
+function onSaveRekanan(){
+    showConfirmation('Confirmation', `Are you sure you want to save?`,
+        function () {
+            var url = "/TertanggungPrincipal/SaveRekanan";
 
-    var data = {
-        kd_cb: $("#kd_cb").val(),
-        kd_grp_rk: $("#kd_grp_rk").val(),
-        kd_rk: $("#kd_rk").val(),
-        nm_rk: $("#nm_rk").val(),
-        flag_sic: $("#flag_sic").val(),
-        almt: $("#almt").val(),
-        kt: $("#kt").val(),
-        no_fax: $("#no_fax_rekanan")[0].checked ? "Y" : "N"
-    }
-    
-    showProgress('#RekananWindow');
-    
-    ajaxPost(url, JSON.stringify(data),
-        function (response) {
-            refreshGrid("#RekananGrid");
-            if (response.Result == "OK") {
-                showMessage('Success', response.Message);
-                closeWindow("#RekananWindow");
+            var data = {
+                kd_cb: $("#kd_cb").val(),
+                kd_grp_rk: $("#kd_grp_rk").val(),
+                kd_rk: $("#kd_rk").val(),
+                nm_rk: $("#nm_rk").val(),
+                flag_sic: $("#flag_sic").val(),
+                almt: $("#almt").val(),
+                kt: $("#kt").val(),
+                no_fax: $("#no_fax_rekanan")[0].checked ? "Y" : "N"
             }
-            else if (response.Result == "ERROR")
-                showMessage('Error', response.Message);
-            else
-                $("#RekananWindow").html(response);
 
-            closeProgress('#RekananWindow');
-        }
-    );
+            showProgress('#RekananWindow');
+
+            ajaxPost(url, JSON.stringify(data),
+                function (response) {
+                    refreshGrid("#RekananGrid");
+                    if (response.Result == "OK") {
+                        showMessage('Success', response.Message);
+                        closeWindow("#RekananWindow");
+                    } else if (response.Result == "ERROR")
+                        showMessage('Error', response.Message);
+                    else
+                        $("#RekananWindow").html(response);
+
+                    closeProgress('#RekananWindow');
+                }
+            );
+        })
 }
 
 function onDeleteRekanan(e){
@@ -62,242 +64,255 @@ function onDeleteRekanan(e){
 }
 
 function onSaveDetailRekananIndividu(){
-    var url = "/TertanggungPrincipal/SaveDetailRekanan";
 
-    var data = {
-        kd_cb: selectedData.kd_cb,
-        kd_grp_rk: selectedData.kd_grp_rk,
-        kd_rk: selectedData.kd_rk,
-        ktp_nm: $("#ktp_nm").val(),
-        ktp_tempat: $("#ktp_tempat").val(),
-        ktp_tgl: $("#ktp_tgl").val(),
-        ktp_no: $("#ktp_no").val(),
-        ktp_alamat: $("#ktp_alamat").val(),
-        ktp_kota: $("#ktp_kota").val(),
-        ktp_normh: $("#ktp_normh").val(),
-        ktp_rtrw: $("#ktp_rtrw").val(),
-        kodepos: $("#kodepos").val(),
-        telp: $("#telp").val(),
-        hp: $("#hp").val(),
-        npwp: $("#npwp").val(),
-        kawinflag: $("#kawinflag").val(),
-        pekerjaanflag: $("#pekerjaanflag").val(),
-        pekerjaanlain: $("#pekerjaanlain").val(),
-        jabatan: $("#jabatan").val(),
-        usaha: $("#usaha").val(),
-        usahathn: $("#usahathn").val(),
-        usahabln: $("#usahabln").val(),
-        usahaalamat: $("#usahaalamat").val(),
-        usahakota: $("#usahakota").val(),
-        usahakodepos: $("#usahakodepos").val(),
-        usahatelp: $("#usahatelp").val(),
-        usahatelpext: $("#usahatelpext").val(),
-        usahaflag: $("#usahaflag").val(),
-        usahahasilflag: $("#usahahasilflag").val(),
-        nopolis1: $("#nopolis1").val(),
-        jenispolis1: $("#jenispolis1").val(),
-        nopolis2: $("#nopolis2").val(),
-        jenispolis2: $("#jenispolis2").val(),
-        asuransipolis1: $("#asuransipolis1").val(),
-        asuransipolis2: $("#asuransipolis2").val(),
-        tujuanpolisflag: $("#tujuanpolisflag").val(),
-        tujuanpolislain: $("#tujuanpolislain").val(),
-        
-        //Corporate
-        perusahaaninstitusi: $("#perusahaaninstitusi").val(),
-        siup: $("#siup").val(),
-        npwpinstitusi: $("#npwpinstitusi").val(),
-        siupinstitusi: $("#siupinstitusi").val(),
-        tdpinstitusi: $("#tdpinstitusi").val(),
-        hukumhaminstitusi: $("#hukumhaminstitusi").val(),
-        usahainstitusi: $("#usahainstitusi").val(),
-        kotainstitusi: $("#kotainstitusi").val(),
-        kodeposinstitusi: $("#kodeposinstitusi").val(),
-        telpinstitusi: $("#telpinstitusi").val(),
-        telpextinstitusi: $("#telpextinstitusi").val(),
-        no_fax: $("#no_fax").val(),
-        website: $("#website").val(),
-        dirinstitusi: $("#dirinstitusi").val(),
-        kelamin: $("#kelamin").val(),
+    showConfirmation('Confirmation', `Are you sure you want to save?`,
+        function () {
+            var data = {
+                kd_cb: selectedData.kd_cb,
+                kd_grp_rk: selectedData.kd_grp_rk,
+                kd_rk: selectedData.kd_rk,
+                ktp_nm: $("#ktp_nm").val(),
+                ktp_tempat: $("#ktp_tempat").val(),
+                ktp_tgl: $("#ktp_tgl").val(),
+                ktp_no: $("#ktp_no").val(),
+                ktp_alamat: $("#ktp_alamat").val(),
+                ktp_kota: $("#ktp_kota").val(),
+                ktp_normh: $("#ktp_normh").val(),
+                ktp_rtrw: $("#ktp_rtrw").val(),
+                kodepos: $("#kodepos").val(),
+                telp: $("#telp").val(),
+                hp: $("#hp").val(),
+                npwp: $("#npwp").val(),
+                kawinflag: $("#kawinflag").val(),
+                pekerjaanflag: $("#pekerjaanflag").val(),
+                pekerjaanlain: $("#pekerjaanlain").val(),
+                jabatan: $("#jabatan").val(),
+                usaha: $("#usaha").val(),
+                usahathn: $("#usahathn").val(),
+                usahabln: $("#usahabln").val(),
+                usahaalamat: $("#usahaalamat").val(),
+                usahakota: $("#usahakota").val(),
+                usahakodepos: $("#usahakodepos").val(),
+                usahatelp: $("#usahatelp").val(),
+                usahatelpext: $("#usahatelpext").val(),
+                usahaflag: $("#usahaflag").val(),
+                usahahasilflag: $("#usahahasilflag").val(),
+                nopolis1: $("#nopolis1").val(),
+                jenispolis1: $("#jenispolis1").val(),
+                nopolis2: $("#nopolis2").val(),
+                jenispolis2: $("#jenispolis2").val(),
+                asuransipolis1: $("#asuransipolis1").val(),
+                asuransipolis2: $("#asuransipolis2").val(),
+                tujuanpolisflag: $("#tujuanpolisflag").val(),
+                tujuanpolislain: $("#tujuanpolislain").val(),
+
+                //Corporate
+                perusahaaninstitusi: $("#perusahaaninstitusi").val(),
+                siup: $("#siup").val(),
+                npwpinstitusi: $("#npwpinstitusi").val(),
+                siupinstitusi: $("#siupinstitusi").val(),
+                tdpinstitusi: $("#tdpinstitusi").val(),
+                hukumhaminstitusi: $("#hukumhaminstitusi").val(),
+                usahainstitusi: $("#usahainstitusi").val(),
+                kotainstitusi: $("#kotainstitusi").val(),
+                kodeposinstitusi: $("#kodeposinstitusi").val(),
+                telpinstitusi: $("#telpinstitusi").val(),
+                telpextinstitusi: $("#telpextinstitusi").val(),
+                no_fax: $("#no_fax").val(),
+                website: $("#website").val(),
+                dirinstitusi: $("#dirinstitusi").val(),
+                kelamin: $("#kelamin").val(),
 
 
-        flag_sic: selectedData.flag_sic
-    }
-    
-    var bentukflag = "";
+                flag_sic: selectedData.flag_sic
+            }
 
-    if ($("input[name='bentukflag']")[0].checked)
-        bentukflag = "1"
-    else if($("input[name='bentukflag']")[1].checked)
-        bentukflag = "2"
+            var url;
 
-    data.bentukflag = bentukflag;
+            if (selectedData.kd_grp_rk.trim() == "P") {
+                url = selectedData.flag_sic.trim() == "R" ? "/TertanggungPrincipal/SaveDetailRekananRetailFull" : "/TertanggungPrincipal/SaveDetailRekananCorporateFull";
+            } else {
+                url = selectedData.flag_sic.trim() == "R" ? "/TertanggungPrincipal/SaveDetailRekananRetail" : "/TertanggungPrincipal/SaveDetailRekananCorporate";
+            }
 
-    var wniwna = "";
+            var bentukflag = "";
 
-    if ($("input[name='wniwna']")[0].checked)
-        wniwna = "1"
-    else if($("input[name='wniwna']")[1].checked)
-        wniwna = "2"
-    
-    data.wniwna = wniwna;
-    
-    var wniflag = "";
+            if ($("input[name='bentukflag']")[0].checked)
+                bentukflag = "1"
+            else if ($("input[name='bentukflag']")[1].checked)
+                bentukflag = "2"
 
-    if ($("input[name='wniflag']")[0].checked)
-        wniflag = "1"
-    else if($("input[name='wniflag']")[1].checked)
-        wniflag = "2"
-    else if($("input[name='wniflag']")[2].checked)
-        wniflag = "3"
+            data.bentukflag = bentukflag;
 
-    data.wniflag = wniflag;
-    
-    var wnaflag = "";
+            var wniwna = "";
 
-    if ($("input[name='wnaflag']")[0].checked)
-        wnaflag = "1"
-    else if($("input[name='wnaflag']")[1].checked)
-        wnaflag = "2"
-    else if($("input[name='wnaflag']")[2].checked)
-        wnaflag = "3"
-    else if($("input[name='wnaflag']")[3].checked)
-        wnaflag = "4"
+            if ($("input[name='wniwna']")[0].checked)
+                wniwna = "1"
+            else if ($("input[name='wniwna']")[1].checked)
+                wniwna = "2"
 
-    data.wnaflag = wnaflag;
-    
-    if($("input[name='kawinflag']")[0] != undefined) {
-        var kawinflag = "";
+            data.wniwna = wniwna;
 
-        if ($("input[name='kawinflag']")[0].checked)
-            kawinflag = "1"
-        else if($("input[name='kawinflag']")[1].checked)
-            kawinflag = "2"
-        else if($("input[name='kawinflag']")[2].checked)
-            kawinflag = "3"
+            var wniflag = "";
 
-        data.kawinflag = kawinflag;
-    }
-    
-    if($("input[name='pekerjaanflag']")[0] != undefined) {
+            if ($("input[name='wniflag']")[0].checked)
+                wniflag = "1"
+            else if ($("input[name='wniflag']")[1].checked)
+                wniflag = "2"
+            else if ($("input[name='wniflag']")[2].checked)
+                wniflag = "3"
 
-        var pekerjaanflag = "";
+            data.wniflag = wniflag;
 
-        if ($("input[name='pekerjaanflag']")[0].checked)
-            pekerjaanflag = "1"
-        else if ($("input[name='pekerjaanflag']")[1].checked)
-            pekerjaanflag = "2"
-        else if ($("input[name='pekerjaanflag']")[2].checked)
-            pekerjaanflag = "3"
-        else if ($("input[name='pekerjaanflag']")[3].checked)
-            pekerjaanflag = "4"
+            var wnaflag = "";
 
-        data.pekerjaanflag = pekerjaanflag;
-    }
+            if ($("input[name='wnaflag']")[0].checked)
+                wnaflag = "1"
+            else if ($("input[name='wnaflag']")[1].checked)
+                wnaflag = "2"
+            else if ($("input[name='wnaflag']")[2].checked)
+                wnaflag = "3"
+            else if ($("input[name='wnaflag']")[3].checked)
+                wnaflag = "4"
 
-    if($("input[name='usahahasilflag']")[0] != undefined) {
+            data.wnaflag = wnaflag;
 
-        var usahahasilflag = "";
+            if ($("input[name='kawinflag']")[0] != undefined) {
+                var kawinflag = "";
 
-        if ($("input[name='usahahasilflag']")[0].checked)
-            usahahasilflag = "1"
-        else if ($("input[name='usahahasilflag']")[1].checked)
-            usahahasilflag = "2"
-        else if ($("input[name='usahahasilflag']")[2].checked)
-            usahahasilflag = "3"
-        else if ($("input[name='usahahasilflag']")[3].checked)
-            usahahasilflag = "4"
-        else if ($("input[name='usahahasilflag']")[3].checked)
-            usahahasilflag = "5"
+                if ($("input[name='kawinflag']")[0].checked)
+                    kawinflag = "1"
+                else if ($("input[name='kawinflag']")[1].checked)
+                    kawinflag = "2"
+                else if ($("input[name='kawinflag']")[2].checked)
+                    kawinflag = "3"
 
-        data.usahahasilflag = usahahasilflag;
-    }
-    
-    if($("input[name='usahaflag']")[0] != undefined) {
+                data.kawinflag = kawinflag;
+            }
 
-        var usahaflag = "";
+            if ($("input[name='pekerjaanflag']")[0] != undefined) {
 
-        if ($("input[name='usahaflag']")[0].checked)
-            usahaflag = "1"
-        else if ($("input[name='usahaflag']")[1].checked)
-            usahaflag = "2"
-        else if ($("input[name='usahaflag']")[2].checked)
-            usahaflag = "3"
-        else if ($("input[name='usahaflag']")[3].checked)
-            usahaflag = "4"
+                var pekerjaanflag = "";
 
-        data.usahaflag = usahaflag;
-    }
+                if ($("input[name='pekerjaanflag']")[0].checked)
+                    pekerjaanflag = "1"
+                else if ($("input[name='pekerjaanflag']")[1].checked)
+                    pekerjaanflag = "2"
+                else if ($("input[name='pekerjaanflag']")[2].checked)
+                    pekerjaanflag = "3"
+                else if ($("input[name='pekerjaanflag']")[3].checked)
+                    pekerjaanflag = "4"
 
-    var tujuanpolisflag = "";
+                data.pekerjaanflag = pekerjaanflag;
+            }
 
-    if ($("input[name='tujuanpolisflag']")[0].checked)
-        tujuanpolisflag = "1"
-    else if($("input[name='tujuanpolisflag']")[1].checked)
-        tujuanpolisflag = "2"
+            if ($("input[name='usahahasilflag']")[0] != undefined) {
 
-    data.tujuanpolisflag = tujuanpolisflag;
-    
-    if($("#npwpinstitusi")[0] != undefined) {
+                var usahahasilflag = "";
 
-        var npwpinstitusi;
+                if ($("input[name='usahahasilflag']")[0].checked)
+                    usahahasilflag = "1"
+                else if ($("input[name='usahahasilflag']")[1].checked)
+                    usahahasilflag = "2"
+                else if ($("input[name='usahahasilflag']")[2].checked)
+                    usahahasilflag = "3"
+                else if ($("input[name='usahahasilflag']")[3].checked)
+                    usahahasilflag = "4"
+                else if ($("input[name='usahahasilflag']")[3].checked)
+                    usahahasilflag = "5"
 
-        if ($("#npwpinstitusi")[0].checked)
-            npwpinstitusi = "1"
-        else
-            npwpinstitusi = "2"
+                data.usahahasilflag = usahahasilflag;
+            }
 
-        data.npwpinstitusi = npwpinstitusi;
-    }
+            if ($("input[name='usahaflag']")[0] != undefined) {
 
-    if($("#siupinstitusi")[0] != undefined) {
+                var usahaflag = "";
 
-        var siupinstitusi;
+                if ($("input[name='usahaflag']")[0].checked)
+                    usahaflag = "1"
+                else if ($("input[name='usahaflag']")[1].checked)
+                    usahaflag = "2"
+                else if ($("input[name='usahaflag']")[2].checked)
+                    usahaflag = "3"
+                else if ($("input[name='usahaflag']")[3].checked)
+                    usahaflag = "4"
 
-        if ($("#siupinstitusi")[0].checked)
-            siupinstitusi = "1"
-        else
-            siupinstitusi = "2"
+                data.usahaflag = usahaflag;
+            }
 
-        data.siupinstitusi = siupinstitusi;
-    }
+            var tujuanpolisflag = "";
 
-    if($("#tdpinstitusi")[0] != undefined) {
-        
-    var tdpinstitusi;
+            if ($("input[name='tujuanpolisflag']")[0].checked)
+                tujuanpolisflag = "1"
+            else if ($("input[name='tujuanpolisflag']")[1].checked)
+                tujuanpolisflag = "2"
 
-    if ($("#tdpinstitusi")[0].checked)
-        tdpinstitusi = "1"
-    else
-        tdpinstitusi = "2"
+            data.tujuanpolisflag = tujuanpolisflag;
 
-    data.tdpinstitusi = tdpinstitusi;
-    }
+            if ($("#npwpinstitusi")[0] != undefined) {
 
-    if($("#hukumhaminstitusi")[0] != undefined) {
-        var hukumhaminstitusi;
+                var npwpinstitusi;
 
-        if ($("#hukumhaminstitusi")[0].checked)
-            hukumhaminstitusi = "1"
-        else
-            hukumhaminstitusi = "2"
+                if ($("#npwpinstitusi")[0].checked)
+                    npwpinstitusi = "1"
+                else
+                    npwpinstitusi = "2"
 
-        data.hukumhaminstitusi = hukumhaminstitusi;
-    }
-    
-    showProgress('#DetailRekananWindow');
+                data.npwpinstitusi = npwpinstitusi;
+            }
 
-    ajaxPost(url, JSON.stringify(data),
-        function (response) {
-            if (response.Result == "OK") {
-                showMessage('Success', response.Message);
-                closeWindow("#DetailRekananWindow");
-            } else
-                showMessage('Error', response.Message);
+            if ($("#siupinstitusi")[0] != undefined) {
 
-            closeProgress("#DetailRekananWindow");
-        }
-    );
+                var siupinstitusi;
+
+                if ($("#siupinstitusi")[0].checked)
+                    siupinstitusi = "1"
+                else
+                    siupinstitusi = "2"
+
+                data.siupinstitusi = siupinstitusi;
+            }
+
+            if ($("#tdpinstitusi")[0] != undefined) {
+
+                var tdpinstitusi;
+
+                if ($("#tdpinstitusi")[0].checked)
+                    tdpinstitusi = "1"
+                else
+                    tdpinstitusi = "2"
+
+                data.tdpinstitusi = tdpinstitusi;
+            }
+
+            if ($("#hukumhaminstitusi")[0] != undefined) {
+                var hukumhaminstitusi;
+
+                if ($("#hukumhaminstitusi")[0].checked)
+                    hukumhaminstitusi = "1"
+                else
+                    hukumhaminstitusi = "2"
+
+                data.hukumhaminstitusi = hukumhaminstitusi;
+            }
+
+            showProgress('#DetailRekananWindow');
+
+            ajaxPost(url, JSON.stringify(data),
+                function (response) {
+                    if (response.Result == "OK") {
+                        showMessage('Success', response.Message);
+                        closeWindow("#DetailRekananWindow");
+                    } else if (response.Result == "ERROR") {
+                        showMessage('Error', response.Message);
+                    } else {
+                        $("#DetailRekananWindow").html(response);
+                    }
+
+                    closeProgress("#DetailRekananWindow");
+                }
+            );
+    })
 }
 
 function onDeleteDetailRekanan(e){
@@ -314,6 +329,35 @@ function onDeleteDetailRekanan(e){
             showProgressOnGrid("#RekananGrid");
 
             ajaxPost("/TertanggungPrincipal/DeleteDetailRekanan", JSON.stringify(data),
+                function (response) {
+                    if (response.Result == "OK") {
+                        showMessage('Success', response.Message);
+                    } else {
+                        showMessage('Error', response.Message);
+                    }
+
+                    refreshGrid("#RekananGrid");
+                    closeProgressOnGrid("#RekananGrid");
+                }
+            );
+        }
+    );
+}
+
+function onDeleteDetailSlik(e){
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    showConfirmation('Confirmation', `Are you sure you want to delete?`,
+        function () {
+            var data = {
+                kd_cb: dataItem.kd_cb.trim(),
+                kd_grp_rk: dataItem.kd_grp_rk,
+                kd_rk: dataItem.kd_rk
+            }
+            
+            showProgressOnGrid("#RekananGrid");
+
+            ajaxPost("/TertanggungPrincipal/DeleteDetailSlik", JSON.stringify(data),
                 function (response) {
                     if (response.Result == "OK") {
                         showMessage('Success', response.Message);
@@ -346,5 +390,36 @@ function btnEditDetailRekanan_OnClick(e) {
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     selectedData = dataItem;
     console.log('dataItem', dataItem);
-    openWindow('#DetailRekananWindow', `/TertanggungPrincipal/EditDetailRekananView?kd_cb=${dataItem.kd_cb.trim()}&kd_grp_rk=${dataItem.kd_grp_rk}&kd_rk=${dataItem.kd_rk}&flag_sic=${dataItem.flag_sic}`, 'Edit');
+    openWindow('#DetailRekananWindow', `/TertanggungPrincipal/EditDetailRekananView?kd_cb=${dataItem.kd_cb.trim()}&kd_grp_rk=${dataItem.kd_grp_rk}&kd_rk=${dataItem.kd_rk}&flag_sic=${dataItem.flag_sic}`, 'Edit Detail');
+}
+
+function btnEditDetailSlik_OnClick(e) {
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    selectedData = dataItem;
+    console.log('dataItem', dataItem);
+    openWindow('#DetailRekananWindow', `/TertanggungPrincipal/EditDetailSlikView?kd_cb=${dataItem.kd_cb.trim()}&kd_grp_rk=${dataItem.kd_grp_rk}&kd_rk=${dataItem.kd_rk}&flag_sic=${dataItem.flag_sic}`, 'Edit Slik');
+}
+
+function setButtonActions(e){
+    var grid = this;
+
+    grid.tbody.find("tr").each(function(e, element) {
+        var dataItem = grid.dataItem(this);
+        var uid = $(this).data("uid");
+
+        // Find button container - try locked column first, then regular
+        var buttonContainer = grid.element.find(".k-grid-content-locked tr[data-uid='" + uid + "'] .k-command-cell");
+        if (!buttonContainer.length) {
+            buttonContainer = $(this).find(".k-command-cell");
+        }
+
+        if (buttonContainer.length) {
+            if (dataItem.kd_grp_rk.trim() != "P") {
+                buttonContainer.find(".k-grid-EditDetailSlik, .k-grid-DeleteDetailSlik").hide();
+            }
+        }
+    });
+
+    gridAutoFit(grid);
 }

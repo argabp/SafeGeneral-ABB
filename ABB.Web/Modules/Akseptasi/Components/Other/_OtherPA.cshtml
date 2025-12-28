@@ -22,6 +22,7 @@
 }
 <div class="window-body" style="background-color: lightgray">
     <form id="OtherPAForm" enctype="multipart/form-data" autocomplete="off">
+        @Html.HiddenFor(h => h. IsNewOther)
         @Html.HiddenFor(h => h. kd_grp_asj)
         <input type="hidden" id="other_pa_no_endt" value="@Model.no_endt">
         <input type="hidden" id="other_pa_nilai_bia_mat" value="@Model.nilai_bia_mat">
@@ -495,6 +496,9 @@
     </form>
 
     <div class="window-footer">
+        <button type="button" id="btn-delete-akseptasiResikoOtherPA" class="btn btn-primary space-right">
+            <span class="k-icon k-i-delete"></span> Delete
+        </button>
         <button type="button" id="btn-previous-akseptasiResikoOther" class="btn btn-primary space-right">
             <span class="fa fa-arrow-left"></span> Previous
         </button>

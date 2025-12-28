@@ -26,6 +26,7 @@
 <div class="window-body" style="background-color: lightgray">
     <form id="OtherForm" enctype="multipart/form-data" autocomplete="off">
         @Html.HiddenFor(h => h.grp_jns_kend)
+        @Html.HiddenFor(h => h. IsNewOther)
         <div class="form-group row">
             <div class="row col-sm-6">
                 <label class="col-sm-3">Nomor Akseptasi</label>
@@ -558,6 +559,9 @@
     </form>
 
     <div class="window-footer">
+        <button type="button" id="btn-delete-akseptasiResikoOtherMotor" class="btn btn-primary space-right">
+            <span class="k-icon k-i-delete"></span> Delete
+        </button>
         <button type="button" id="btn-save-akseptasiResikoOther" class="btn btn-success space-right">
             <span class="fa fa-save"></span> Save
         </button>

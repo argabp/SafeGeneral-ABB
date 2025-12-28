@@ -109,6 +109,10 @@ function setButtonActions(e){
                 buttonContainer.find(".k-grid-Edit, .k-grid-Submit").hide();
             }
 
+            if (dataItem.status !== "New") {
+                buttonContainer.find(".k-grid-Delete").hide();
+            }
+
             if(dataItem.flag_banding != "1" || dataItem.flag_closing != "N" || userLogin != dataItem.kd_user_input){
                 buttonContainer.find(".k-grid-Banding").hide();
             }
@@ -116,4 +120,30 @@ function setButtonActions(e){
     });
 
     gridAutoFit(grid);
+}
+
+function OnClickDeletPengajuanAkseptasi(e) {
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    showConfirmation('Confirmation', `Are you sure you want to delete Akseptasi?`,
+        function () {
+            showProgressOnGrid('#PengajuanAkseptasiGrid');
+            setTimeout(function () { deleteAkseptasi(dataItem); }, 500);
+        }
+    );
+}
+
+function deleteAkseptasi(dataItem) {
+    ajaxGet(`/PengajuanAkseptasi/Delete?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_aks=${dataItem.no_aks}`, function (response) {
+        if (response.Result) {
+            showMessage('Success', 'Data has been deleted');
+        }
+        else {
+            showMessage('Error', 'Delete data is failed, this data is already used');
+        }
+        
+        refreshGrid("#PengajuanAkseptasiGrid");
+
+        closeProgressOnGrid('#PengajuanAkseptasiGrid');
+    }, AjaxContentType.URLENCODED);
 }

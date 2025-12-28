@@ -1,6 +1,7 @@
 ﻿$(document).ready(function () {
     btnPreviousOther();
     btnSaveAkseptasiResikoOther_Click();
+    btnDeleteAkseptasiResikoOtherPA_Click();
     
     $("#total_nilai_prm").text(currencyFormatter.format(Number($("#nilai_prm_tl").val()) + Number($("#nilai_prm_std").val())
         + Number($("#nilai_prm_bjr").val()) + Number($("#nilai_prm_gb").val())
@@ -9,11 +10,51 @@
     $("#total_nilai_ptg").text(currencyFormatter.format(Number($("#nilai_ptg_bjr").val()) + Number($("#nilai_harga_ptg").val())
         + Number($("#nilai_ptg_phk").val()) + Number($("#nilai_ptg_gb").val())
         + Number($("#nilai_ptg_tl").val())));
+
+    if($("#IsNewOther").val() === "True"){
+        $("#btn-delete-akseptasiResikoOtherPA").hide();
+    }
 });
 
 function btnPreviousOther(){
     $('#btn-previous-akseptasiResikoOther').click(function () {
         $("#resikoTab").getKendoTabStrip().select(2);
+    });
+}
+
+function btnDeleteAkseptasiResikoOtherPA_Click(){
+    $('#btn-delete-akseptasiResikoOtherPA').click(function () {
+        showConfirmation('Confirmation', `Are you sure you want to delete?`,
+            function () {
+                showProgress('#AkseptasiWindow');
+                setTimeout(function () { deleteAkseptasiResikoOtherPA(); }, 500);
+            }
+        );
+    });
+}
+
+function deleteAkseptasiResikoOtherPA() {
+    var data = {
+        kd_cb: $("#kd_cb").val(),
+        kd_cob: $("#kd_cob").val(),
+        kd_scob: $("#kd_scob").val(),
+        kd_thn: $("#kd_thn").val(),
+        no_aks: $("#no_aks").val(),
+        no_updt: $("#resiko_other_pa_no_updt").val(),
+        no_rsk: resiko.no_rsk,
+        kd_endt: $("#resiko_other_pa_kd_endt").val()
+    }
+
+    ajaxPost(`/Akseptasi/DeleteOtherPA`, JSON.stringify(data), function (response) {
+        if (response.Result) {
+            showMessage('Success', 'Data has been deleted');
+            $("#btn-delete-akseptasiResikoOtherPA").hide();
+        }
+        else {
+            showMessage('Error', 'Delete data is failed, this data is already used');
+        }
+
+        closeProgress('#AkseptasiWindow');
     });
 }
 

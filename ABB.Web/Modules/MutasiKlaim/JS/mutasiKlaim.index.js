@@ -109,8 +109,7 @@ function saveMutasiKlaimObyek(e){
         }
         else
             showMessage('Error', response.Message);
-        refreshGrid("#" + grid.element.attr("id"));
-        refreshGrid("#grid_mutasi_" + parentId);
+        refreshGridWithSelection("#grid_mutasi_" + parentId)
     })
 }
 
@@ -723,4 +722,36 @@ function onDeleteBeban(e){
             );
         }
     );
+}
+
+function refreshGridWithSelection(gridSelector) {
+    var grid = $(gridSelector).data("kendoGrid");
+
+    if (grid) {
+        // Save the selected row's data item ID
+        var selectedRow = grid.select();
+        var selectedDataItemId = null;
+
+        if (selectedRow.length > 0) {
+            var dataItem = grid.dataItem(selectedRow);
+            selectedDataItemId = dataItem.id; // Assuming your data has an 'id' field
+        }
+
+        // Refresh the grid
+        grid.dataSource.read();
+
+        // After refresh, restore selection
+        if (selectedDataItemId) {
+            // Wait for data to load
+            grid.dataSource.one("change", function() {
+                var data = grid.dataSource.data();
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].id === selectedDataItemId) {
+                        grid.select(grid.table.find("tr[data-uid='" + data[i].uid + "']"));
+                        break;
+                    }
+                }
+            });
+        }
+    }
 }

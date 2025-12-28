@@ -1,6 +1,11 @@
 ﻿$(document).ready(function () {
     btnNextResikoOtherCargo();
     btnSaveAkseptasiResikoOtherCargo_Click();
+    btnDeleteAkseptasiResikoOtherCargo_Click();
+
+    if($("#IsNewOther").val() === "True"){
+        $("#btn-delete-akseptasiResikoOtherCargo").hide();
+    }
 });
 
 function btnNextResikoOtherCargo(){
@@ -9,6 +14,41 @@ function btnNextResikoOtherCargo(){
     });
 }
 
+function btnDeleteAkseptasiResikoOtherCargo_Click(){
+    $('#btn-delete-akseptasiResikoOtherCargo').click(function () {
+        showConfirmation('Confirmation', `Are you sure you want to delete?`,
+            function () {
+                showProgress('#AkseptasiWindow');
+                setTimeout(function () { deleteAkseptasiResikoOtherCargo(); }, 500);
+            }
+        );
+    });
+}
+
+function deleteAkseptasiResikoOtherCargo() {
+    var data = {
+        kd_cb: $("#kd_cb").val(),
+        kd_cob: $("#kd_cob").val(),
+        kd_scob: $("#kd_scob").val(),
+        kd_thn: $("#kd_thn").val(),
+        no_aks: $("#no_aks").val(),
+        no_updt: $("#resiko_other_no_updt").val(),
+        no_rsk: resiko.no_rsk,
+        kd_endt: $("#resiko_other_kd_endt").val()
+    }
+
+    ajaxPost(`/Akseptasi/DeleteOtherCargo`, JSON.stringify(data), function (response) {
+        if (response.Result) {
+            showMessage('Success', 'Data has been deleted');
+            $("#btn-delete-akseptasiResikoOtherCargo").hide();
+        }
+        else {
+            showMessage('Error', 'Delete data is failed, this data is already used');
+        }
+
+        closeProgress('#AkseptasiWindow');
+    });
+}
 
 function btnSaveAkseptasiResikoOtherCargo_Click() {
     $('#btn-save-akseptasiResikoOtherCargo').click(function () {
@@ -28,7 +68,7 @@ function saveAkseptasiResikoOtherCargo(url) {
     form.append("no_aks", $("#no_aks").val())
     form.append("no_updt", $("#resiko_other_no_updt").val())
     form.append("no_rsk", resiko.no_rsk);
-    form.append("kd_endt", resiko.kd_endt);
+    form.append("kd_endt", $("#resiko_other_kd_endt").val());
     form.append("no_pol_ttg", $("#no_pol_ttg").val());
 
     $("#linkFileOtherCargo").getKendoUpload().getFiles().forEach((data, index) => {
@@ -45,6 +85,8 @@ function saveAkseptasiResikoOtherCargo(url) {
             else
                 showMessage("Error", response);
 
+            refreshGrid("#AkseptasiOtherCargoDetailGrid");
+            
             closeProgress('#AkseptasiWindow');
         }
     );

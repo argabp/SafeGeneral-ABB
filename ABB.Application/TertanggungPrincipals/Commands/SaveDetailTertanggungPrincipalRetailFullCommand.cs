@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.TertanggungPrincipals.Commands
 {
-    public class SaveDetailTertanggungPrincipalCommand : IRequest, IMapFrom<DetailRekanan>
+    public class SaveDetailTertanggungPrincipalRetailFullCommand : IRequest, IMapFrom<DetailRekanan>
     {
         public string DatabaseName { get; set; }
         public string kd_cb { get; set; }
@@ -141,19 +141,19 @@ namespace ABB.Application.TertanggungPrincipals.Commands
         
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<SaveDetailTertanggungPrincipalCommand, DetailRekanan>();
+            profile.CreateMap<SaveDetailTertanggungPrincipalRetailFullCommand, DetailRekanan>();
         }
     }
 
-    public class SaveDetailTertanggungPrincipalCommandHandler : IRequestHandler<SaveDetailTertanggungPrincipalCommand>
+    public class SaveDetailTertanggungPrincipalRetailFullCommandHandler : IRequestHandler<SaveDetailTertanggungPrincipalRetailFullCommand>
     {
         private readonly IDbContextFactory _contextFactory;
         private readonly IMapper _mapper;
         private readonly IDbConnectionFactory _connectionFactory;
-        private readonly ILogger<SaveDetailTertanggungPrincipalCommandHandler> _logger;
+        private readonly ILogger<SaveDetailTertanggungPrincipalRetailFullCommandHandler> _logger;
 
-        public SaveDetailTertanggungPrincipalCommandHandler(IDbContextFactory contextFactory, IMapper mapper, IDbConnectionFactory connectionFactory,
-            ILogger<SaveDetailTertanggungPrincipalCommandHandler> logger)
+        public SaveDetailTertanggungPrincipalRetailFullCommandHandler(IDbContextFactory contextFactory, IMapper mapper, IDbConnectionFactory connectionFactory,
+            ILogger<SaveDetailTertanggungPrincipalRetailFullCommandHandler> logger)
         {
             _contextFactory = contextFactory;
             _mapper = mapper;
@@ -161,33 +161,20 @@ namespace ABB.Application.TertanggungPrincipals.Commands
             _logger = logger;
         }
 
-        public async Task<Unit> Handle(SaveDetailTertanggungPrincipalCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(SaveDetailTertanggungPrincipalRetailFullCommand request, CancellationToken cancellationToken)
         {
             try
             {
                 var dbContext = _contextFactory.CreateDbContext(request.DatabaseName);
 
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
-
-                if (request.flag_sic == "R")
-                {
-                    await _connectionFactory.QueryProc<string>("sp_Cekrf03_02",
-                        new
-                        {
-                            request.ktp_nm, request.ktp_tempat, request.ktp_tgl, request.ktp_no,
-                            request.ktp_alamat, request.ktp_kota, request.kodepos
-                        });    
-                }
-                else
-                {
-                    await _connectionFactory.QueryProc<string>("sp_Cekrf03_01",
-                        new 
-                        { 
-                            request.perusahaaninstitusi, request.npwp, request.kotainstitusi, 
-                            request.kodeposinstitusi, request.telpinstitusi
-                        });
-                }
                 
+                await _connectionFactory.QueryProc<string>("sp_Cekrf03_02",
+                    new
+                    {
+                        request.ktp_nm, request.ktp_tempat, request.ktp_tgl, request.ktp_no,
+                        request.ktp_alamat, request.ktp_kota, request.kodepos
+                    });    
                 
                 var detailRekanan = dbContext.DetailRekanan.FirstOrDefault(w => w.kd_cb == request.kd_cb
                                                                                     && w.kd_grp_rk == request.kd_grp_rk

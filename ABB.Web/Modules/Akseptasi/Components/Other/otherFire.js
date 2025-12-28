@@ -3,7 +3,48 @@
     btnSaveAkseptasiResikoOther_Click();
     setTimeout(setOtherFireEditedValue, 2000);
     btnOpenLokasResiko();
+    btnDeleteAkseptasiResikoOtherFire_Click();
+
+    if($("#IsNewOther").val() === "True"){
+        $("#btn-delete-akseptasiResikoOtherFire").hide();
+    }
 });
+
+function btnDeleteAkseptasiResikoOtherFire_Click(){
+    $('#btn-delete-akseptasiResikoOtherFire').click(function () {
+        showConfirmation('Confirmation', `Are you sure you want to delete?`,
+            function () {
+                showProgress('#AkseptasiWindow');
+                setTimeout(function () { deleteAkseptasiResikoOtherFire(); }, 500);
+            }
+        );
+    });
+}
+
+function deleteAkseptasiResikoOtherFire() {
+    var data = {
+        kd_cb: $("#kd_cb").val(),
+        kd_cob: $("#kd_cob").val(),
+        kd_scob: $("#kd_scob").val(),
+        kd_thn: $("#kd_thn").val(),
+        no_aks: $("#no_aks").val(),
+        no_updt: $("#resiko_other_fire_no_updt").val(),
+        no_rsk: resiko.no_rsk,
+        kd_endt: $("#resiko_other_fire_kd_endt").val()
+    }
+
+    ajaxPost(`/Akseptasi/DeleteOtherFire`, JSON.stringify(data), function (response) {
+        if (response.Result) {
+            showMessage('Success', 'Data has been deleted');
+            $("#btn-delete-akseptasiResikoOtherFire").hide();
+        }
+        else {
+            showMessage('Error', 'Delete data is failed, this data is already used');
+        }
+
+        closeProgress('#AkseptasiWindow');
+    });
+}
 
 function setOtherFireEditedValue(){
     $("#kd_kab").data("kendoDropDownList").value($("#temp_kd_kab").val().trim());

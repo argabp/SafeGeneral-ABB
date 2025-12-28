@@ -4,7 +4,6 @@ using ABB.Application.Common.Interfaces;
 using ABB.Domain.Entities;
 using ABB.Domain.IdentityModels;
 using ABB.Infrastructure.Data.Mapping;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;

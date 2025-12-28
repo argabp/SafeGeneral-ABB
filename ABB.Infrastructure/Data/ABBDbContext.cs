@@ -145,6 +145,10 @@ namespace ABB.Infrastructure.Data
         public DbSet<KlaimStatusAttachment> KlaimStatusAttachment { get; set; }
         public DbSet<ViewTrKlaim> ViewTrKlaim { get; set; }
         public DbSet<DetailTarifKebakaranOJK> DetailTarifKebakaranOJK { get; set; }
+        public DbSet<AkseptasiLimit> AkseptasiLimit { get; set; }
+        public DbSet<Lookup> Lookup { get; set; }
+        public DbSet<LookupDetail> LookupDetail { get; set; }
+        public DbSet<DetailSlik> DetailSlik { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -283,6 +287,10 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new KlaimStatusAttachmentMap());
             builder.ApplyConfiguration(new ViewTRKlaimMap());
             builder.ApplyConfiguration(new DetailTarifKebakaranOJKMap());
+            builder.ApplyConfiguration(new AkseptasiLimitMap());
+            builder.ApplyConfiguration(new LookupMap());
+            builder.ApplyConfiguration(new LookupDetailMap());
+            builder.ApplyConfiguration(new DetailSlikMap());
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

@@ -2,7 +2,48 @@
     btnNextResikoOtherMotor();
     btnSaveAkseptasiResikoOther_Click();
     setTimeout(setOtherMotorEditedValue, 2000);
+    btnDeleteAkseptasiResikoOtherMotor_Click();
+
+    if($("#IsNewOther").val() === "True"){
+        $("#btn-delete-akseptasiResikoOtherMotor").hide();
+    }
 });
+
+function btnDeleteAkseptasiResikoOtherMotor_Click(){
+    $('#btn-delete-akseptasiResikoOtherMotor').click(function () {
+        showConfirmation('Confirmation', `Are you sure you want to delete?`,
+            function () {
+                showProgress('#AkseptasiWindow');
+                setTimeout(function () { deleteAkseptasiResikoOtherMotor(); }, 500);
+            }
+        );
+    });
+}
+
+function deleteAkseptasiResikoOtherMotor() {
+    var data = {
+        kd_cb: $("#kd_cb").val(),
+        kd_cob: $("#kd_cob").val(),
+        kd_scob: $("#kd_scob").val(),
+        kd_thn: $("#kd_thn").val(),
+        no_aks: $("#no_aks").val(),
+        no_updt: $("#resiko_other_no_updt").val(),
+        no_rsk: resiko.no_rsk,
+        kd_endt: $("#resiko_other_kd_endt").val()
+    }
+
+    ajaxPost(`/Akseptasi/DeleteOtherMotor`, JSON.stringify(data), function (response) {
+        if (response.Result) {
+            showMessage('Success', 'Data has been deleted');
+            $("#btn-delete-akseptasiResikoOtherMotor").hide();
+        }
+        else {
+            showMessage('Error', 'Delete data is failed, this data is already used');
+        }
+
+        closeProgress('#AkseptasiWindow');
+    });
+}
 
 function setOtherMotorEditedValue(){
     $("#kd_merk_kend").data("kendoDropDownList").value($("#temp_kd_merk_kend").val().trim());
@@ -47,7 +88,7 @@ function saveAkseptasiResikoOther(url) {
     form.no_aks = $("#no_aks").val();
     form.no_updt = $("#resiko_other_no_updt").val();
     form.no_rsk = resiko.no_rsk;
-    form.kd_endt = resiko.kd_endt;
+    form.kd_endt = $("#resiko_other_kd_endt").val();
 
     form.tgl_mul_ptg = $("#resiko_other_tgl_mul_ptg").val();
     form.tgl_akh_ptg = $("#resiko_other_tgl_akh_ptg").val();
