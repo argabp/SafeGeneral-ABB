@@ -12,9 +12,28 @@
     var itemsForJson = Model.PembayaranItems ?? new List<PenyelesaianPiutangItem>();
     var initialDetailsJson = JsonSerializer.Serialize(itemsForJson);
 }
+<style>
+    .custom-kode .k-input,
+    .custom-kode .k-input,
+   .custom-kode,
+    .custom-kode .k-textbox,
+    .custom-kode .k-input,
+    .custom-kode input {
+        background-color: #00FFFF !important;
+    }
+    /* No Rekening – warna kuning muda */
+    .custom-kuning,
+    .custom-kuning .k-textbox,
+    .custom-kuning .k-input,
+    .custom-kuning input {
+        background-color: rgb(255, 255, 225) !important;
+    }
+
+
+</style>
+
 
 <div class="window-body">
-
    <form id="PenyelesaianPiutangFormFinal">
         <fieldset>
             <div class="form-group row">
@@ -59,7 +78,7 @@
               
                  <label  class="col-sm-2 col-form-label"> Nomor Bukti</label>
                 <div class="col-sm-4">
-                     <kendo-textbox name="PenyelesaianHeader.NomorBukti_Lihat"  value="@Model.PenyelesaianHeader.NomorBukti" style="width: 100%;" readonly="true" placeholder="[AUTO]" />
+                     <kendo-textbox name="PenyelesaianHeader.NomorBukti_Lihat"  value="@Model.PenyelesaianHeader.NomorBukti" class="custom-kode" style="width: 100%;" readonly="true" placeholder="[AUTO]" />
                 </div>
             </div>
             
@@ -67,7 +86,7 @@
               
                  <label  class="col-sm-2 col-form-label" asp-for="PenyelesaianHeader.KodeVoucherAcc">Nomor Voucher Referensi</label>
                 <div class="col-sm-4">
-                   <kendo-textbox name="PenyelesaianHeader.KodeVoucherAcc_Lihat" value="@Model.PenyelesaianHeader.KodeVoucherAcc" style="width: 100%;" />
+                   <kendo-textbox name="PenyelesaianHeader.KodeVoucherAcc_Lihat" value="@Model.PenyelesaianHeader.KodeVoucherAcc" class="custom-kuning" style="width: 100%;" />
                 </div>
             </div>
             
@@ -92,6 +111,7 @@
                 <div class="col-sm-4">
                      <kendo-combobox name="PenyelesaianHeader.MataUang_Lihat"
                                     style="width: 100%;"
+                                    class="custom-kuning"
                                     datatextfield="Text"
                                     datavaluefield="Value"
                                     bind-to="ViewBag.MataUangOptions"
@@ -110,7 +130,7 @@
              <div class="form-group row">
                 <label class="col-sm-2 col-form-label" asp-for="PenyelesaianHeader.TotalOrg">Total </label>
                 <div class="col-sm-2">
-                    <kendo-numerictextbox name="PenyelesaianHeader.TotalOrg_Lihat" value="@((double?)Model.PenyelesaianHeader?.TotalOrg)" format="n2" style="width: 50%;" />
+                    <kendo-numerictextbox name="PenyelesaianHeader.TotalOrg_Lihat" value="@((double?)Model.PenyelesaianHeader?.TotalOrg)" format="n2" class="custom-kuning" style="width: 50%;" />
                 </div>
                   <label class="col-sm-2 col-form-label" asp-for="PenyelesaianHeader.TotalRp">(Dalam Rupiah)</label>
               
@@ -120,6 +140,7 @@
                 <div class=" col-sm-1">
                     <kendo-dropdownlist  name="PenyelesaianHeader.DebetKredit_Lihat"
                                         style="width: 100%;"
+                                        class="custom-kuning"
                                         datatextfield="Text"
                                         datavaluefield="Value"
                                         bind-to="ViewBag.DebetKreditOptions"
@@ -139,6 +160,7 @@
                 <div class="col-sm-4">
                     <kendo-combobox name="PenyelesaianHeader.KodeAkun_Lihat"
                                     style="width:100%;"
+                                    class="custom-kuning"
                                     datatextfield="Text"
                                     datavaluefield="Value"
                                     bind-to="ViewBag.COAoptions"

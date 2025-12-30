@@ -7,6 +7,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
 
+
 namespace ABB.Application.PostingVoucherBank.Commands
 {
     public class PostingVoucherBankCommand : IRequest
@@ -15,13 +16,13 @@ namespace ABB.Application.PostingVoucherBank.Commands
         // public string DatabaseName { get; set; }
 
         public List<string> Data { get; set; } // Berisi daftar NoVoucher
+        public string UserId { get; set; }
     }
 
     public class PostingVoucherBankCommandHandler : IRequestHandler<PostingVoucherBankCommand>
     {
         // DIGANTI: Gunakan IDbContextPstNota
         private readonly IDbContextPstNota _context;
-
         public PostingVoucherBankCommandHandler(IDbContextPstNota context)
         {
             _context = context;
@@ -29,20 +30,20 @@ namespace ABB.Application.PostingVoucherBank.Commands
 
         public async Task<Unit> Handle(PostingVoucherBankCommand request, CancellationToken cancellationToken)
         {
-            // 1. Ambil semua entity VoucherKas yang NoVoucher-nya ada di dalam daftar request.Data
-            var vouchersToUpdate = await _context.VoucherBank
-                .Where(v => request.Data.Contains(v.NoVoucher))
-                .ToListAsync(cancellationToken);
+            // Ambil User ID yang sedang login
+            var userId = request.UserId ?? "SYSTEM";
+            var tanggalPosting = DateTime.Now;
 
-            // 2. Loop melalui hasil yang ditemukan dan update flag_posting-nya
-            foreach (var voucher in vouchersToUpdate)
+            // Loop setiap NoVoucher yang dikirim dari client
+            foreach (var noVoucher in request.Data)
             {
-                voucher.FlagPosting = true; // Atau 'Y', sesuaikan dengan standar Anda
-                voucher.TanggalPosting = DateTime.Now;
+                await _context.Database.ExecuteSqlRawAsync(
+                    "EXEC sp_posting_voucher_bank {0}, {1}, {2}",
+                    noVoucher,      // Masuk ke {0} -> @NoVoucher
+                    userId,         // Masuk ke {1} -> @KodeUserUpdate
+                    tanggalPosting  // Masuk ke {2} -> @TanggalPosting
+                );
             }
-
-            // 3. Simpan semua perubahan ke database dalam satu kali perintah
-            await _context.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }

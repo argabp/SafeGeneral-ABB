@@ -54,7 +54,8 @@ namespace ABB.Web.Modules.PostingVoucherBank
                     // DatabaseName = Request.Cookies["DatabaseValue"],
                     
                     // 2. Ubah List<VoucherBankDto> menjadi List<string> berisi NoVoucher
-                    Data = model.Select(m => m.NoVoucher).ToList() 
+                    Data = model.Select(m => m.NoVoucher).ToList(),
+                    UserId = CurrentUser.UserId 
                 };
                 // -------------------------
 

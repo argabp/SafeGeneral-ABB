@@ -7,6 +7,26 @@
     bool isEditMode = Model.ThnPrd != null && Model.ThnPrd > 0;
 }
 
+
+<style>
+   
+    /* warna kuning untuk semua Kendo yang dikasih class custom-kuning */
+    .custom-kuning,
+    .custom-kuning .k-input,
+    .custom-kuning .k-input-inner,
+    .custom-kuning .k-dropdown-wrap,
+    .custom-kuning .k-picker-wrap,
+    .custom-kuning .k-textbox,
+    .k-dropdown.custom-kuning .k-input-inner,
+    .k-textbox.custom-kuning input {
+        background-color: rgb(255, 255, 225) !important;
+    }
+
+
+
+
+</style>
+
 <div class="window-body" style="padding: 15px;">
     <form id="EntriPeriodeForm">
         
@@ -32,7 +52,7 @@
                 {
                      // Trik: Tampilkan Textbox readonly berisi Nama Bulan, tapi simpan Value angka di hidden
                      // Atau gunakan Dropdown readonly
-                    <input class="k-textbox" style="width:100%" readonly 
+                    <input class="k-textbox custom-kuning" style="width:100%" readonly 
                            value="@System.Globalization.CultureInfo.CreateSpecificCulture("id-ID").DateTimeFormat.GetMonthName(Model.BlnPrd ?? 1)" />
                     <input type="hidden" asp-for="BlnPrd" />
                 }
@@ -56,7 +76,7 @@
                             new SelectListItem { Text = "Desember", Value = "12" }
                         })
                         .OptionLabel("Pilih Bulan...")
-                        .HtmlAttributes(new { style = "width: 100%" })
+                        .HtmlAttributes(new { style = "width: 100%", @class = "custom-kuning" })
                     )
                 }
                 <span asp-validation-for="BlnPrd" class="text-danger"></span>
