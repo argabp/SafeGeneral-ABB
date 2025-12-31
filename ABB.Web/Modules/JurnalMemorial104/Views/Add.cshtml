@@ -8,6 +8,27 @@
     bool isEditMode = !string.IsNullOrEmpty(Model.JurnalHeader?.NoVoucher);
 }
 
+
+<style>
+    .custom-kode .k-input,
+    .custom-kode .k-input,
+   .custom-kode,
+    .custom-kode .k-textbox,
+    .custom-kode .k-input,
+    .custom-kode input {
+        background-color: #00FFFF !important;
+    }
+    /* No Rekening – warna kuning muda */
+    .custom-kuning,
+    .custom-kuning .k-textbox,
+    .custom-kuning .k-input,
+    .custom-kuning input {
+        background-color: rgb(255, 255, 225) !important;
+    }
+
+
+</style>
+
 <div class="window-body">
     <form id="JurnalHeaderForm">
         <fieldset>
@@ -32,6 +53,7 @@
                 
                   <kendo-textbox for="JurnalHeader.NoVoucher" 
                     value="@Model.JurnalHeader.NoVoucher" 
+                    class="custom-kode"
                     style="width: 100%;" 
                     readonly="true" />
                 </div>
@@ -41,16 +63,17 @@
                  <label class="col-sm-2 col-form-label">Keterangan Voucher</label>
                 <div class="col-sm-10">
                    <kendo-textarea name="JurnalHeader.Keterangan" 
-                value="@Model.JurnalHeader?.Keterangan" 
-                rows="2" 
-                style="width: 100%;">
+                    value="@Model.JurnalHeader?.Keterangan" 
+                    class="custom-kuning"
+                    rows="5" 
+                    style="width: 100%;">
                     </kendo-textarea>
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label">Tanggal</label>
                 <div class="col-sm-2">
-                    <kendo-datepicker for="JurnalHeader.Tanggal" style="width: 100%;" />
+                    <kendo-datepicker for="JurnalHeader.Tanggal" class="custom-kuning" style="width: 100%;" />
                 </div>
 
                 <label class="col-sm-2 col-form-label">Tanggal Input</label>
@@ -99,6 +122,7 @@
                 <label>Kode Akun</label>
                 <kendo-combobox for="KodeAkun"
                                 style="width:100%;"
+                                class="custom-kuning"
                                 datatextfield="Text"
                                 datavaluefield="Value"
                                 bind-to="ViewBag.KodeAkunOptions"
@@ -111,6 +135,7 @@
                 <label>Mata Uang</label>
                 <kendo-combobox for="KodeMataUang"
                                 style="width: 100%;"
+                                class="custom-kuning"
                                 datatextfield="Text"
                                 datavaluefield="Value"
                                 bind-to="ViewBag.MataUangOptions"
@@ -124,7 +149,7 @@
 
            <div class="form-group col-sm-2">
                 <label>Debet</label>
-                <kendo-numerictextbox for="NilaiDebet" id="NilaiDebet" format="n2" min="0" style="width:100%;" />
+                <kendo-numerictextbox for="NilaiDebet" id="NilaiDebet" class="custom-kuning" format="n2" min="0" style="width:100%;" />
             </div>
 
             <div class="form-group col-sm-2">
@@ -134,7 +159,7 @@
 
             <div class="form-group col-sm-2">
                 <label>Kredit</label>
-                <kendo-numerictextbox for="NilaiKredit" id="NilaiKredit" format="n2" min="0" style="width:100%;" />
+                <kendo-numerictextbox for="NilaiKredit" id="NilaiKredit" class="custom-kuning" format="n2" min="0" style="width:100%;" />
             </div>
 
             <div class="form-group col-sm-2">
@@ -143,9 +168,9 @@
             </div>
         </div>
         <div class="row">
-            <div class="form-group col-sm-4">
+            <div class="form-group col-sm-8">
                  <label>Keterangan Detail</label>
-                <kendo-textarea name="KeteranganDetail" id="KeteranganDetail" rows="2" style="width: 100%;background: white;"></kendo-textarea>
+                <kendo-textarea name="KeteranganDetail" id="KeteranganDetail" rows="3" style="width: 100%;background: white;"></kendo-textarea>
             </div>
         </div>
 

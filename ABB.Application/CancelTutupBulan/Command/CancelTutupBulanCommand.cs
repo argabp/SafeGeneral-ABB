@@ -24,30 +24,30 @@ namespace ABB.Application.CancelTutupBulan.Commands
         }
 
         public async Task<Unit> Handle(CancelTutupBulanCommand request, CancellationToken cancellationToken)
-            {
-               // 1. Parsing Tipe Data (Sesuai Entity EntriPeriode)
+        {
+
             decimal thn = decimal.Parse(request.ThnPrd);
             short bln = short.Parse(request.BlnPrd);
-
-            // 2. Cari di Tabel PERIODE
-            var entity = await _context.EntriPeriode
-                .FirstOrDefaultAsync(x => x.ThnPrd == thn && x.BlnPrd == bln, cancellationToken);
-
-            if (entity == null) 
-            {
-                throw new Exception($"Periode {request.ThnPrd}-{request.BlnPrd} tidak ditemukan di tabel Periode.");
-            }
-
-            // 3. Update Flag
-            entity.FlagClosing = "N"; 
             
-            // Update audit trail jika ada di entity EntriPeriode
-            // entity.UserUpdate = request.UserUpdate;
-
-            // 4. Simpan (Sekarang pasti bisa karena ini Tabel Fisik, bukan View)
-            await _context.SaveChangesAsync(cancellationToken);
-
+            await _context.Database.ExecuteSqlRawAsync(
+                "EXEC sp_cancel_tutup_bulan {0}, {1}",
+                thn,     
+                bln 
+            );
+            
             return Unit.Value;
-            }
+              
+            // decimal thn = decimal.Parse(request.ThnPrd);
+            // short bln = short.Parse(request.BlnPrd);
+            // var entity = await _context.EntriPeriode
+            //     .FirstOrDefaultAsync(x => x.ThnPrd == thn && x.BlnPrd == bln, cancellationToken);
+            // if (entity == null) 
+            // {
+            //     throw new Exception($"Periode {request.ThnPrd}-{request.BlnPrd} tidak ditemukan di tabel Periode.");
+            // }
+            // entity.FlagClosing = "N"; 
+            // await _context.SaveChangesAsync(cancellationToken);
+            // return Unit.Value;
+        }
     }
 }

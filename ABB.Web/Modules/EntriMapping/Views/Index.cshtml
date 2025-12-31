@@ -1,0 +1,29 @@
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.TagHelpers
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Entri Mapping";
+}
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+    .div-box { padding-bottom: 1em; }
+    .swal2-container { z-index: 10050 !important; }
+     .breadcrumb-item + .breadcrumb-item::before {
+        content: ">"; /* Ganti '/' dengan '>' */
+        padding: 0 .5rem; /* Atur spasi jika perlu */
+    }
+</style>
+
+<nav  aria-label="breadcrumb">
+   <ol class="breadcrumb" style="background: white; ">
+        <li class="breadcrumb-item"><a href="#">Accounting</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Entri Mapping</li>
+    </ol>
+</nav>
