@@ -49,7 +49,14 @@ namespace ABB.Application.TertanggungPrincipals.Queries
                 ON r.kd_grp_rk = g.kd_grp_rk
                 LEFT OUTER JOIN rf07_00 k
                 ON r.kd_kota = k.kd_kota
-                WHERE c.kd_cb = @KodeCabang AND g.nm_grp_rk IN ('Tertanggung', 'Principal', 'Bank')", new { request.KodeCabang })).ToList();
+                WHERE c.kd_cb = @KodeCabang AND g.nm_grp_rk IN ('Tertanggung', 'Principal', 'Bank') AND (c.nm_cb like '%'+@SearchKeyword+'%' 
+					OR g.nm_grp_rk like '%'+@SearchKeyword+'%' 
+					OR r.kd_rk like '%'+@SearchKeyword+'%' 
+					OR r.nm_rk like '%'+@SearchKeyword+'%' 
+					OR k.nm_kota like '%'+@SearchKeyword+'%' 
+					OR r.almt like '%'+@SearchKeyword+'%'
+					OR @SearchKeyword = '' OR @SearchKeyword IS NULL)", 
+                    new { request.KodeCabang, request.SearchKeyword })).ToList();
 
                 foreach (var rekanan in rekanans)
                     rekanan.nm_sic = rekanan.flag_sic == "R" ? "Retail" : "Corporate";

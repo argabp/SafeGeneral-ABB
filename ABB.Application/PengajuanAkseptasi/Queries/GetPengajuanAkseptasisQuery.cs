@@ -18,10 +18,12 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
     public class GetPengajuanAkseptasisQueryHandler : IRequestHandler<GetPengajuanAkseptasisQuery, List<PengajuanAkseptasiDto>>
     {
         private readonly IDbConnectionFactory _dbConnectionFactory;
+        private readonly ICurrentUserService _userService;
 
-        public GetPengajuanAkseptasisQueryHandler(IDbConnectionFactory dbConnectionFactory)
+        public GetPengajuanAkseptasisQueryHandler(IDbConnectionFactory dbConnectionFactory, ICurrentUserService userService)
         {
             _dbConnectionFactory = dbConnectionFactory;
+            _userService = userService;
         }
 
         public async Task<List<PengajuanAkseptasiDto>> Handle(GetPengajuanAkseptasisQuery request,
@@ -39,7 +41,7 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
 			                                                                        OR user_status like '%'+@SearchKeyword+'%'
 			                                                                        OR tgl_pengajuan like '%'+@SearchKeyword+'%'
 			                                                                        OR @SearchKeyword = '' OR @SearchKeyword is null
-		                                                                        )", new { request.SearchKeyword })).ToList();
+		                                                                        )", new { _userService.UserId,  request.SearchKeyword })).ToList();
 
             foreach (var result in results)
             {

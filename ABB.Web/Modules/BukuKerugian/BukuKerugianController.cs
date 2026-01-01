@@ -5,8 +5,6 @@ using ABB.Application.BukuKerugian.Queries;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Queries;
 using ABB.Application.Common.Services;
-using ABB.Application.KapasitasCabangs.Queries;
-using ABB.Application.SebabKejadians.Queries;
 using ABB.Web.Modules.Base;
 using ABB.Web.Modules.BukuKerugian.Models;
 using DinkToPdf;

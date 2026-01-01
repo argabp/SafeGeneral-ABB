@@ -59,28 +59,72 @@ namespace ABB.Application.CetakNotaKlaim.Queries
 
             var data = datas.FirstOrDefault();
             
-            var nilai_nt = ReportHelper.ConvertToReportFormat(data.nilai_nt);
-            var nilai_01 = data.nilai_01 == 0 ? "" : ReportHelper.ConvertToReportFormat(data.nilai_01);
-            var nilai_02 = data.nilai_02 == 0 ? "" : ReportHelper.ConvertToReportFormat(data.nilai_02);
-            var nilai_03 = data.nilai_03 == 0 ? "" : ReportHelper.ConvertToReportFormat(data.nilai_03);
-            var nilai_04 = data.nilai_04 == 0 ? "" : ReportHelper.ConvertToReportFormat(data.nilai_04);
-            var nilai_05 = data.nilai_05 == 0 ? "" : ReportHelper.ConvertToReportFormat(data.nilai_05);
-            var nilai_total = ReportHelper.ConvertToReportFormat(data.nilai_01 + data.nilai_02 + data.nilai_03 + data.nilai_04 + data.nilai_05);
-            var grand_nilai_total = ReportHelper.ConvertToReportFormat(data.nilai_nt + data.nilai_01 + data.nilai_02 + data.nilai_03 + data.nilai_04 + data.nilai_05);
-            var header = data.st_nota == "D" ? "NOTA DEBET" : "NOTA KREDIT";
+            var nilai_nt = data.nilai_nt == 0 ? string.Empty : ReportHelper.ConvertToReportFormat(data.nilai_nt);
+            string nilai_01 = string.Empty;
+            string nilai_02 = string.Empty;
+            string nilai_03 = string.Empty;
+            string nilai_04 = string.Empty;
+            string nilai_05 = string.Empty;
 
-            var first_nilai_nota = data.st_nota == "D" ? nilai_nt : "";
-            var second_nilai_nota = data.st_nota == "K" ? nilai_nt : "";
+            string nilai_01_1 = string.Empty;
+            string nilai_02_1 = string.Empty;
+            string nilai_03_1 = string.Empty;
+            string nilai_04_1 = string.Empty;
+            string nilai_05_1 = string.Empty;
+
+            string header;
+            string first_nilai_nota = string.Empty;
+            string second_nilai_nota = string.Empty;
+
+            if (data.st_nota == "D")
+            {
+                header = "NOTA DEBET";
+                first_nilai_nota = nilai_nt;
+
+                // CREDIT SIDE (no leading space)
+                nilai_01 = FormatIf(!StartsWithSpace(data.uraian_01), data.nilai_01);
+                nilai_02 = FormatIf(!StartsWithSpace(data.uraian_02), data.nilai_02);
+                nilai_03 = FormatIf(!StartsWithSpace(data.uraian_03), data.nilai_03);
+                nilai_04 = FormatIf(!StartsWithSpace(data.uraian_04), data.nilai_04);
+                nilai_05 = FormatIf(!StartsWithSpace(data.uraian_05), data.nilai_05);
+            }
+            else
+            {
+                header = "NOTA KREDIT";
+                second_nilai_nota = nilai_nt;
+
+                // DEBIT SIDE (leading space)
+                nilai_01_1 = FormatIf(StartsWithSpace(data.uraian_01), data.nilai_01);
+                nilai_02_1 = FormatIf(StartsWithSpace(data.uraian_02), data.nilai_02);
+                nilai_03_1 = FormatIf(StartsWithSpace(data.uraian_03), data.nilai_03);
+                nilai_04_1 = FormatIf(StartsWithSpace(data.uraian_04), data.nilai_04);
+                nilai_05_1 = FormatIf(StartsWithSpace(data.uraian_05), data.nilai_05);
+            }
+            
+            decimal total =
+                (data.st_nota == "D" ? 0 : Math.Abs(data.nilai_nt))
+                + (!StartsWithSpace(data.uraian_01) ? Math.Abs(data.nilai_01) : 0)
+                + (!StartsWithSpace(data.uraian_02) ? Math.Abs(data.nilai_02) : 0)
+                + (!StartsWithSpace(data.uraian_03) ? Math.Abs(data.nilai_03) : 0)
+                + (!StartsWithSpace(data.uraian_04) ? Math.Abs(data.nilai_04) : 0)
+                + (!StartsWithSpace(data.uraian_05) ? Math.Abs(data.nilai_05) : 0);
+
+            var nilai_total = total != 0
+                ? ReportHelper.ConvertToReportFormat(total)
+                : string.Empty;
+
+            var grand_nilai_total = nilai_total;
             
             var view_jumlah_untuk = @$"
                 <tr class='no-border'>
-                    <td style='width: 20%;'>JUMLAH UNTUK</td>
+                    <td style='width: 20%;'>JUMLAH UNTUK ANDA</td>
                     <td style='width: 20%; text-align: right;'>{first_nilai_nota}</td>
                     <td style='width: 20%; text-align: right;'>{second_nilai_nota}</td>
                 </tr>";
             
             var resultTemplate = templateProfileResult.Render( new
             {
+                nilai_01_1, nilai_02_1, nilai_03_1, nilai_04_1, nilai_05_1,
                 nilai_nt, nilai_01, nilai_02, nilai_03, nilai_04, nilai_05, nilai_total, 
                 data.jns_tr, data.jns_nt_msk, data.jns_nt_kel, data.nm_cb, data.almt_ttj,
                 data.almt_ttg, data.flag_postr, data.nm_ttg, data.nm_ttj, data.kt_ttj,
@@ -95,5 +139,13 @@ namespace ABB.Application.CetakNotaKlaim.Queries
 
             return resultTemplate;
         }
+        
+        bool StartsWithSpace(string s)
+            => !string.IsNullOrEmpty(s) && s.StartsWith(" ");
+
+        string FormatIf(bool condition, decimal value)
+            => condition && value != 0
+                ? ReportHelper.ConvertToReportFormat(Math.Abs(value))
+                : string.Empty;
     }
 }

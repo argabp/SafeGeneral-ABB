@@ -48,8 +48,8 @@
                     .HtmlAttributes(new { title = "Delete" });
             }).Title("Action").Width(250).Locked(true);
             columns.Bound(col => col.userid).Hidden();
-            columns.Bound(col => col.username).Title("Username");
-            columns.Bound(col => col.nm_cb).Title("Nama Cabang").ClientTemplate("#= brTemplateComma(nm_cb) #");
+            columns.Bound(col => col.username).Width(250) .Title("Username");
+            columns.Bound(col => col.nm_cb).Width(250).Title("Nama Cabang").ClientTemplate("#= brTemplateComma(nm_cb) #");
         })
         .Pageable(pager => pager
                     .Refresh(true)

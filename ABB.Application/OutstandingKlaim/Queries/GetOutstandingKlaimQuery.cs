@@ -105,7 +105,7 @@ namespace ABB.Application.OutstandingKlaim.Queries
                     foreach (var outerGroup in groupedData)
                     {
                         // 💡 Now group by kd_mkt INSIDE the outer group
-                        var innerGroups = outerGroup.GroupBy(x => new { x.kd_mtu_symbol, x.kd_mtu_symbol_tsi }).ToList();
+                        var innerGroups = outerGroup.GroupBy(x => x.kd_mtu_symbol?.Trim()).ToList();
                         
                         foreach (var innerGroup in innerGroups)
                         {

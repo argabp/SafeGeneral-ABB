@@ -27,8 +27,8 @@
     <form id="BukuKerugianForm" enctype="multipart/form-data" autocomplete="off">
         <div class="form-group row">
             <div class="row col-sm-6">
-                <label class="col-sm-6">Kode Cabang</label>
-                <div class="col-sm-6">
+                <label class="col-sm-4">Kode Cabang</label>
+                <div class="col-sm-8">
                     <kendo-dropdownlist for="kd_cb" style="width: 100%" option-label="Pilih Cabang"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
@@ -43,8 +43,8 @@
         </div>
         <div class="form-group row">
             <div class="row col-sm-6">
-                <label class="col-sm-6">Kode COB</label>
-                <div class="col-sm-6">
+                <label class="col-sm-4">Kode COB</label>
+                <div class="col-sm-8">
                     <kendo-dropdownlist for="kd_cob" style="width: 100%" option-label="Pilih COB"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
@@ -59,8 +59,8 @@
         </div>
         <div class="form-group row">
             <div class="row col-sm-6">
-                <label class="col-sm-6">Periode</label>
-                <div class="col-sm-6 row">
+                <label class="col-sm-4">Periode</label>
+                <div class="col-sm-8 row">
                     <div class="col-sm-5">
                         <kendo-datepicker for="kd_mul" value="DateTime.Now"/>
                         <span asp-validation-for="kd_mul" class="text-danger"></span>

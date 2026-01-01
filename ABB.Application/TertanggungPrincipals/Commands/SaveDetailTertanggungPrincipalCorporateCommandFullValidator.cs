@@ -36,7 +36,7 @@ namespace ABB.Application.TertanggungPrincipals.Commands
             
             RuleFor(p => p.usahainstitusi)
                 .Cascade(CascadeMode.Stop)
-                .NotEmpty().WithMessage("Bidang Ysaga Wajib Diisi");
+                .NotEmpty().WithMessage("Bidang Usaha Wajib Diisi");
             
             RuleFor(p => p.kotainstitusi)
                 .Cascade(CascadeMode.Stop)

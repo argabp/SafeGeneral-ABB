@@ -41,6 +41,25 @@ function deleteAkseptasiResikoOtherMotor() {
             showMessage('Error', 'Delete data is failed, this data is already used');
         }
 
+        var dataOther = {
+            kd_cb: $("#kd_cb").val(),
+            kd_cob: $("#kd_cob").val(),
+            kd_scob: $("#kd_scob").val(),
+            kd_thn: $("#kd_thn").val(),
+            no_aks: $("#no_aks").val(),
+            no_updt: $("#no_updt").val(),
+            no_rsk: resiko.no_rsk,
+            kd_endt: resiko.kd_endt,
+            pst_share: resiko.pst_share_bgu,
+        }
+
+        ajaxPost(`/Akseptasi/CheckOther`, JSON.stringify(dataOther),
+            function (response) {
+                $("#tabOther").html(response);
+                closeProgress('#AkseptasiWindow');
+            }
+        );
+
         closeProgress('#AkseptasiWindow');
     });
 }

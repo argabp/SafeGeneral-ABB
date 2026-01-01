@@ -77,13 +77,6 @@ namespace ABB.Application.BukuKerugian.Queries
             {
                 // 💡 Now group by kd_mkt INSIDE the outer group
                 var innerGroups = outerGroup.GroupBy(x => x.nm_mtu).ToList();
-                
-                decimal total_outer_nilai_tsi_pst = 0;
-                decimal total_outer_nilai_tsi = 0;
-                decimal total_outer_nilai_tsi_pst_idr = 0;
-                decimal total_outer_nilai_tsi_idr = 0;
-                decimal total_outer_nilai_ttl_kl = 0;
-                decimal total_outer_nilai_ttl_kl_idr = 0;
 
                 var lastInnerKey = innerGroups.Last().Key;
                 
@@ -143,7 +136,6 @@ namespace ABB.Application.BukuKerugian.Queries
                     decimal total_nilai_tsi_pst = 0;
                     decimal total_nilai_tsi = 0;
                     decimal total_nilai_tsi_pst_idr = 0;
-                    decimal total_nilai_tsi_idr = 0;
                     decimal total_nilai_ttl_kl = 0;
                     decimal total_nilai_ttl_kl_idr = 0;
                     
@@ -155,7 +147,6 @@ namespace ABB.Application.BukuKerugian.Queries
                         var nilai_tsi_pst_idr = ReportHelper.ConvertToReportFormat(data.nilai_share_bgu_idr / data.pst_share_bgu * 100);
                         var nilai_ttl_kl = ReportHelper.ConvertToReportFormat(data.nilai_ttl_kl);
                         var nilai_ttl_kl_idr = ReportHelper.ConvertToReportFormat(data.nilai_ttl_kl_idr);
-                        var pst_share_bgu = ReportHelper.ConvertToReportFormat(data.pst_share_bgu, true);
                         stringBuilder.Append(@$"
                             <tr>
                                 <td style='vertical-align: top'>{sequence}</td>
@@ -172,9 +163,8 @@ namespace ABB.Application.BukuKerugian.Queries
                         total_nilai_tsi_pst += ReportHelper.ConvertToDecimalFormat(nilai_tsi_pst);
                         total_nilai_tsi += ReportHelper.ConvertToDecimalFormat(nilai_tsi);
                         total_nilai_tsi_pst_idr += ReportHelper.ConvertToDecimalFormat(nilai_tsi_pst_idr);
-                        total_nilai_tsi_idr += ReportHelper.ConvertToDecimalFormat(nilai_ttl_kl);
-                        total_nilai_ttl_kl += ReportHelper.ConvertToDecimalFormat(nilai_ttl_kl_idr);
-                        total_nilai_ttl_kl_idr += ReportHelper.ConvertToDecimalFormat(pst_share_bgu);
+                        total_nilai_ttl_kl += ReportHelper.ConvertToDecimalFormat(nilai_ttl_kl);
+                        total_nilai_ttl_kl_idr += ReportHelper.ConvertToDecimalFormat(nilai_ttl_kl_idr);
                     }
 
                     stringBuilder.Append($@"
@@ -193,14 +183,6 @@ namespace ABB.Application.BukuKerugian.Queries
                         // append - i.e. if outer isn't last OR inner isn't last
                         stringBuilder.Append("</table></div></div>");
                     }
-
-                    // accumulate subtotal to outer total
-                    total_outer_nilai_tsi_pst += total_nilai_tsi_pst;
-                    total_outer_nilai_tsi += total_nilai_tsi;
-                    total_outer_nilai_tsi_pst_idr += total_nilai_tsi_pst_idr;
-                    total_outer_nilai_tsi_idr += total_nilai_tsi_idr;
-                    total_outer_nilai_ttl_kl += total_nilai_ttl_kl;
-                    total_outer_nilai_ttl_kl_idr += total_nilai_ttl_kl_idr;
                 }
             }
             

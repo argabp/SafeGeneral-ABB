@@ -40,10 +40,10 @@
                 {
                     columns.Command(command =>
                     {
-                        command.Custom("Preview")
-                            .Text(" ")
+                        command.Custom("Print")
+                            .Text("Print")
                             .IconClass("fa fa-print")
-                            .HtmlAttributes(new { title = "Preview" })
+                            .HtmlAttributes(new { title = "Print" })
                             .Click("viewReport");
                     }).Title("Action").Width(100).Locked(true);
                     columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");

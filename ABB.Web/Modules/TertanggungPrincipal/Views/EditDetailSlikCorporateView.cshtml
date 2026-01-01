@@ -17,10 +17,10 @@
     <form id="DetailSlikCorporateForm" enctype="multipart/form-data" autocomplete="off">
         <div class="form-group col-sm-12 row">
             <div class="col-sm-6">
-                <h4 class="col-sm-12">Informasi Debitur Badan Usaha</h4>
+                <span class="col-sm-12" style="font-size: 1.6em; line-height: 1.25; font-weight: 700; padding: 0">Informasi Debitur Badan Usaha</span>
             </div>
             <div class="col-sm-6">
-                <h4 class="col-sm-12">Informasi Laporan Keuangan Debitur Badan Usaha</h4>
+                <span class="col-sm-12" style="font-size: 1.6em; line-height: 1.25; font-weight: 700; padding: 0">Informasi Laporan Keuangan Debitur Badan Usaha</span>
             </div>
         </div>
 
@@ -29,7 +29,7 @@
             <div class="col-sm-6 row">
                 <label class="col-sm-12">Kode Bentuk Badan Usaha</label>
                 <div class="col-sm-12">
-                    <kendo-dropdownlist for="kd_usaha2" style="width:100%;" class="not-null-dropdown"
+                    <kendo-dropdownlist for="kd_usaha2" style="width:100%;" class="not-null-dropdown" option-label="Pilih Kode Bentuk Badan Usaha"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -162,7 +162,7 @@
             <div class="col-sm-6 row">
                 <label class="col-sm-12">Kode Negara Domisili</label>
                 <div class="col-sm-12">
-                    <kendo-dropdownlist for="kd_negara" style="width:100%;" class="not-null-dropdown"
+                    <kendo-dropdownlist for="kd_negara" style="width:100%;" class="not-null-dropdown" option-label="Pilih Kode Negara Domisili"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -187,7 +187,7 @@
             <div class="col-sm-6 row">
                 <label class="col-sm-12">Kode Bidang Usaha</label>
                 <div class="col-sm-12">
-                    <kendo-dropdownlist for="kd_usaha" style="width:100%;" class="not-null-dropdown"
+                    <kendo-dropdownlist for="kd_usaha" style="width:100%;" class="not-null-dropdown" option-label="Pilih Kode Bidang Usaha"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -212,7 +212,7 @@
             <div class="col-sm-6 row">
                 <label class="col-sm-12">Kode Hubungan dengan Pelapor</label>
                 <div class="col-sm-12">
-                    <kendo-dropdownlist for="kd_hub" style="width:100%;" class="not-null-dropdown"
+                    <kendo-dropdownlist for="kd_hub" style="width:100%;" class="not-null-dropdown" option-label="Pilih Kode Hubungan dengan Pelapor"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -273,7 +273,7 @@
             <div class="col-sm-6 row">
                 <label class="col-sm-12">Kode Golongan Debitur</label>
                 <div class="col-sm-12">
-                    <kendo-dropdownlist for="kd_gol_deb" style="width:100%;" class="not-null-dropdown"
+                    <kendo-dropdownlist for="kd_gol_deb" style="width:100%;" class="not-null-dropdown" option-label="Pilih Kode Golongan Debitur"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -368,7 +368,7 @@
         <!-- Informasi Pengurus Section -->
         <div class="form-group col-sm-12 row">
             <div class="col-sm-6 row">
-                <h4 class="col-sm-12">Informasi Pengurus dan/atau Pemilik Debitur Badan Usaha</h4>
+                <span class="col-sm-12" style="font-size: 1.6em; line-height: 1.25; font-weight: 700; padding: 0">Informasi Pengurus dan/atau Pemilik Debitur Badan Usaha</span>
             </div>
             <div class="col-sm-6 row">
                 <label class="col-sm-12">Pinjaman Jangka Panjang (Liabilitas Jangka Panjang)</label>
@@ -438,7 +438,14 @@
             <div class="col-sm-6 row">
                 <label class="col-sm-12">Jenis Kelamin</label>
                 <div class="col-sm-12">
-                    <kendo-textbox for="Jenis_Kelamin" style="width:100%; background-color: #FFFFE1;"/>
+                    <kendo-dropdownlist for="Jenis_Kelamin" style="width: 100%" class="not-null-dropdown" option-label="Pilih Jenis Kelamin"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKelamin", "TertanggungPrincipal")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
                     <span asp-validation-for="Jenis_Kelamin" class="text-danger"></span>
                 </div>
             </div>
@@ -510,7 +517,7 @@
             <div class="col-sm-6 row">
                 <label class="col-sm-12">Kode Kabupaten atau Kota</label>
                 <div class="col-sm-12">
-                    <kendo-dropdownlist for="Kabupaten" style="width:100%;" class="not-null-dropdown"
+                    <kendo-dropdownlist for="Kabupaten" style="width:100%;" class="not-null-dropdown" option-label="Pilih Kode Kabupaten atau Kota"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -535,7 +542,7 @@
             <div class="col-sm-6 row">
                 <label class="col-sm-12">Kode Jabatan</label>
                 <div class="col-sm-12">
-                    <kendo-dropdownlist for="Kode_Jabatan" style="width:100%;" class="not-null-dropdown"
+                    <kendo-dropdownlist for="Kode_Jabatan" style="width:100%;" class="not-null-dropdown" option-label="Pilih Kode Jabatan"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>

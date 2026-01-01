@@ -98,7 +98,7 @@ function setButtonActions(e){
         if (buttonContainer.length) {
             // Apply your business logic to hide buttons
             if(userLogin != dataItem.kd_user_input){
-                buttonContainer.find(".k-grid-Edit, .k-grid-Submit").hide();
+                buttonContainer.find(".k-grid-Edit, .k-grid-Submit, .k-grid-Delete").hide();
             }
 
             if(userLogin != dataItem.kd_user_status){

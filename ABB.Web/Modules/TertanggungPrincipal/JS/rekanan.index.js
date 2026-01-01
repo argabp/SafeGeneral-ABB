@@ -1,5 +1,11 @@
 ﻿var selectedData;
 
+function searchKeyword_OnKeyUp() {
+    $('#SearchKeyword').keyup(function () {
+        refreshGrid("#RekananGrid");
+    });
+}
+
 function onSaveRekanan(){
     showConfirmation('Confirmation', `Are you sure you want to save?`,
         function () {
