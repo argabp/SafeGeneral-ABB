@@ -49,7 +49,8 @@ namespace ABB.Web.Modules.PostingJurnalMemorial104
                 
                 var command = new PostingJurnalMemorial104Command()
                 {
-                    Data = model.Select(m => m.NoVoucher).ToList() 
+                    Data = model.Select(m => m.NoVoucher).ToList(),
+                      UserId = CurrentUser.UserId 
                 };
                 // -------------------------
 

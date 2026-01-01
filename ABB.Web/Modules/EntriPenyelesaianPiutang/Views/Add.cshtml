@@ -13,6 +13,27 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Kendo.Mvc
 
+<style>
+    .custom-kode .k-input,
+    .custom-kode .k-input,
+   .custom-kode,
+    .custom-kode .k-textbox,
+    .custom-kode .k-input,
+    .custom-kode input {
+        background-color: #00FFFF !important;
+    }
+    /* No Rekening – warna kuning muda */
+    .custom-kuning,
+    .custom-kuning .k-textbox,
+    .custom-kuning .k-input,
+    .custom-kuning input {
+        background-color: rgb(255, 255, 225) !important;
+    }
+
+
+</style>
+
+
 <div class="window-body">
 
    <form id="PenyelesaianPiutangForm">
@@ -58,7 +79,8 @@
               
                  <label  class="col-sm-2 col-form-label" asp-for="PenyelesaianHeader.NomorBukti"> Nomor Bukti</label>
                 <div class="col-sm-4">
-                     <kendo-textbox for="PenyelesaianHeader.NomorBukti" style="width: 100%;" readonly="true" placeholder="[AUTO]" />
+                     <kendo-textbox for="PenyelesaianHeader.NomorBukti" class="custom-kode"
+                         style="width: 100%;" readonly="true" placeholder="[AUTO]" />
                 </div>
             </div>
             
@@ -66,7 +88,7 @@
               
                  <label  class="col-sm-2 col-form-label" asp-for="PenyelesaianHeader.KodeVoucherAcc">Nomor Voucher Referensi</label>
                 <div class="col-sm-4">
-                   <kendo-textbox for="PenyelesaianHeader.KodeVoucherAcc" style="width: 100%;" />
+                   <kendo-textbox for="PenyelesaianHeader.KodeVoucherAcc" class="custom-kuning" style="width: 100%;" />
                 </div>
             </div>
             
@@ -78,7 +100,7 @@
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label" asp-for="PenyelesaianHeader.Tanggal"></label>
                 <div class="col-sm-4">
-                    <kendo-datepicker for="PenyelesaianHeader.Tanggal" style="width: 100%;" />
+                    <kendo-datepicker for="PenyelesaianHeader.Tanggal" class="custom-kuning" style="width: 100%;" />
                 </div>
                 <div class="col-sm-3"></div>
                 <label class="col-sm-1 col-form-label" asp-for="PenyelesaianHeader.TanggalInput">Tanggal Input</label>
@@ -91,6 +113,7 @@
                 <div class="col-sm-4">
                      <kendo-combobox for="PenyelesaianHeader.MataUang"
                                     style="width: 100%;"
+                                    class="custom-kuning"
                                     datatextfield="Text"
                                     datavaluefield="Value"
                                     bind-to="ViewBag.MataUangOptions"
@@ -108,7 +131,7 @@
              <div class="form-group row">
                 <label class="col-sm-2 col-form-label" asp-for="PenyelesaianHeader.TotalOrg">Total </label>
                 <div class="col-sm-2">
-                    <kendo-numerictextbox for="PenyelesaianHeader.TotalOrg" format="n2" style="width: 50%;" />
+                    <kendo-numerictextbox for="PenyelesaianHeader.TotalOrg" format="n2" class="custom-kuning" style="width: 50%;" />
                 </div>
                   <label class="col-sm-2 col-form-label" asp-for="PenyelesaianHeader.TotalRp">(Dalam Rupiah)</label>
               
@@ -118,6 +141,7 @@
                 <div class=" col-sm-1">
                     <kendo-dropdownlist  for="PenyelesaianHeader.DebetKredit"
                                         style="width: 100%;"
+                                        class="custom-kuning"
                                         datatextfield="Text"
                                         datavaluefield="Value"
                                         bind-to="ViewBag.DebetKreditOptions"
@@ -136,6 +160,7 @@
                 <div class="col-sm-4">
                     <kendo-combobox for="PenyelesaianHeader.KodeAkun"
                                     style="width:100%;"
+                                    class="custom-kuning"
                                     datatextfield="Text"
                                     datavaluefield="Value"
                                     bind-to="ViewBag.COAoptions"
@@ -187,6 +212,7 @@
                 <div>
                     <kendo-dropdownlist for="FlagPembayaran"
                                         style="width: 100%;"
+                                        class="custom-kuning"
                                         datatextfield="Text"
                                         datavaluefield="Value"
                                         bind-to="ViewBag.FlagPembayaranOptions">
@@ -198,7 +224,7 @@
             <div class="form-group col-sm-3" id="notaField"> 
                 <label asp-for="NoNota"></label>
                 <div class="input-group" style=" display: flex;     width: 100%;     flex-direction: row;     flex-wrap: nowrap;     align-content: center;     justify-content: center;     align-items: center; ">
-                    <kendo-textbox for="NoNota" style="width:100%;" readonly="true" />
+                    <kendo-textbox for="NoNota" class="custom-kuning" style="width:100%;" readonly="true" />
                     <div class="input-group-append">
                         <button type="button" class="btn btn-info" onclick="openPilihNotaWindow()">Select</button>
                     </div>
@@ -220,6 +246,7 @@
                 <div>
                     <kendo-combobox for="KodeAkun"
                                     style="width:100%;"
+                                    class="custom-kuning"
                                     datatextfield="Text"
                                     datavaluefield="Value"
                                     bind-to="ViewBag.COAoptions"
@@ -236,6 +263,7 @@
                         <div>
                             <kendo-combobox for="KodeMataUang"
                                             style="width: 100%;"
+                                            class="custom-kuning"
                                             datatextfield="Text"
                                             datavaluefield="Value"
                                             bind-to="ViewBag.MataUangOptions"
@@ -251,7 +279,7 @@
             <div class="form-group col-sm-2 detail-payment-field">
                
                     <label asp-for="TotalBayarOrg">Total Original</label>
-                    <kendo-numerictextbox for="TotalBayarOrg" format="n0" style="width:100%;" />
+                    <kendo-numerictextbox for="TotalBayarOrg" format="n0" class="custom-kuning" style="width:100%;" />
                
             </div>
 
@@ -270,6 +298,7 @@
                     <div>
                         <kendo-dropdownlist for="DebetKredit"
                                             style="width: 100%;"
+                                            class="custom-kuning"
                                             datatextfield="Text"
                                             datavaluefield="Value"
                                             bind-to="ViewBag.DebetKreditOptions">

@@ -14,6 +14,7 @@ namespace ABB.Application.CancelPostingVoucherBank.Commands
         // public string DatabaseName { get; set; }
 
         public List<string> Data { get; set; } // Berisi daftar NoVoucher
+        public string UserId { get; set; }
     }
 
     public class CancelPostingVoucherBankCommandHandler : IRequestHandler<CancelPostingVoucherBankCommand>
@@ -28,21 +29,34 @@ namespace ABB.Application.CancelPostingVoucherBank.Commands
 
         public async Task<Unit> Handle(CancelPostingVoucherBankCommand request, CancellationToken cancellationToken)
         {
-            // 1. Ambil semua entity VoucherKas yang NoVoucher-nya ada di dalam daftar request.Data
-            var vouchersToUpdate = await _context.VoucherBank
-                .Where(v => request.Data.Contains(v.NoVoucher))
-                .ToListAsync(cancellationToken);
 
-            // 2. Loop melalui hasil yang ditemukan dan update flag_posting-nya
-            foreach (var voucher in vouchersToUpdate)
+             // Ambil User ID yang sedang login
+            var userId = request.UserId ?? "SYSTEM";
+            // var tanggalPosting = DateTime.Now;
+
+            // Loop setiap NoVoucher yang dikirim dari client
+            foreach (var noVoucher in request.Data)
             {
-                voucher.FlagPosting = false; // Atau 'Y', sesuaikan dengan standar Anda
+                await _context.Database.ExecuteSqlRawAsync(
+                    "EXEC sp_cancel_voucher_bank {0}, {1}",
+                    noVoucher,      // Masuk ke {0} -> @NoVoucher
+                    userId      // Masuk ke {1} -> @KodeUserUpdate
+                );
             }
 
-            // 3. Simpan semua perubahan ke database dalam satu kali perintah
-            await _context.SaveChangesAsync(cancellationToken);
-
             return Unit.Value;
+          
+            // var vouchersToUpdate = await _context.VoucherBank
+            //     .Where(v => request.Data.Contains(v.NoVoucher))
+            //     .ToListAsync(cancellationToken);
+
+            // foreach (var voucher in vouchersToUpdate)
+            // {
+            //     voucher.FlagPosting = false;
+            // }
+            // await _context.SaveChangesAsync(cancellationToken);
+
+            // return Unit.Value;
         }
     }
 }

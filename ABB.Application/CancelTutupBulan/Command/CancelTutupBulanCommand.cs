@@ -1,0 +1,53 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using ABB.Application.Common.Interfaces;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+
+namespace ABB.Application.CancelTutupBulan.Commands
+{
+    public class CancelTutupBulanCommand : IRequest<Unit>
+    {
+        public string ThnPrd { get; set; }
+        public string BlnPrd { get; set; }
+        public string UserUpdate { get; set; }
+    }
+
+    public class CancelTutupBulanCommandHandler : IRequestHandler<CancelTutupBulanCommand, Unit>
+    {
+        private readonly IDbContextPstNota _context;
+
+        public CancelTutupBulanCommandHandler(IDbContextPstNota context)
+        {
+            _context = context;
+        }
+
+        public async Task<Unit> Handle(CancelTutupBulanCommand request, CancellationToken cancellationToken)
+        {
+
+            decimal thn = decimal.Parse(request.ThnPrd);
+            short bln = short.Parse(request.BlnPrd);
+            
+            await _context.Database.ExecuteSqlRawAsync(
+                "EXEC sp_cancel_tutup_bulan {0}, {1}",
+                thn,     
+                bln 
+            );
+            
+            return Unit.Value;
+              
+            // decimal thn = decimal.Parse(request.ThnPrd);
+            // short bln = short.Parse(request.BlnPrd);
+            // var entity = await _context.EntriPeriode
+            //     .FirstOrDefaultAsync(x => x.ThnPrd == thn && x.BlnPrd == bln, cancellationToken);
+            // if (entity == null) 
+            // {
+            //     throw new Exception($"Periode {request.ThnPrd}-{request.BlnPrd} tidak ditemukan di tabel Periode.");
+            // }
+            // entity.FlagClosing = "N"; 
+            // await _context.SaveChangesAsync(cancellationToken);
+            // return Unit.Value;
+        }
+    }
+}

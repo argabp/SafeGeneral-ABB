@@ -27,25 +27,35 @@ namespace ABB.Application.JurnalMemorial117.Commands
 
         public async Task<Unit> Handle(PostingJurnalMemorial117Command request, CancellationToken cancellationToken)
         {
-            // 1. Ambil semua data berdasarkan list NoVoucher
-            var recordsToPost = await _context.JurnalMemorial117
-                .Where(x => request.NoVouchers.Contains(x.NoVoucher) && x.KodeCabang == request.KodeCabang)
-                .ToListAsync(cancellationToken);
+            var userId = request.KodeUserUpdate ?? "SYSTEM";
+            var tanggalPosting = DateTime.Now;
 
-            // 2. Loop dan Update statusnya
-            foreach (var item in recordsToPost)
+            foreach (var voucher in request.NoVouchers)
             {
-                item.FlagPosting = true; // Set jadi Posting
-                
-                // Audit Trail
-                item.KodeUserUpdate = request.KodeUserUpdate;
-                item.TanggalUpdate = DateTime.Now;
+                await _context.Database.ExecuteSqlRawAsync(
+                    "EXEC sp_posting_jurnal_memorial_117 {0}, {1}, {2}",
+                    voucher,      // Masuk ke {0} -> @NoVoucher
+                    userId,         // Masuk ke {1} -> @KodeUserUpdate
+                    tanggalPosting  // Masuk ke {2} -> @TanggalPosting
+                );
             }
 
-            // 3. Simpan perubahan (Bulk Update)
-            await _context.SaveChangesAsync(cancellationToken);
-
             return Unit.Value;
+
+            // var recordsToPost = await _context.JurnalMemorial117
+            //     .Where(x => request.NoVouchers.Contains(x.NoVoucher) && x.KodeCabang == request.KodeCabang)
+            //     .ToListAsync(cancellationToken);
+
+           
+            // foreach (var item in recordsToPost)
+            // {
+            //     item.FlagPosting = true; 
+            //     item.KodeUserUpdate = request.KodeUserUpdate;
+            //     item.TanggalUpdate = DateTime.Now;
+            // }
+            // await _context.SaveChangesAsync(cancellationToken);
+
+            // return Unit.Value;
         }
     }
 }

@@ -48,7 +48,8 @@ namespace ABB.Web.Modules.CancelPostingVoucherKas
                     // DatabaseName = Request.Cookies["DatabaseValue"],
                     
                     // 2. Ubah List<VoucherKasDto> menjadi List<string> berisi NoVoucher
-                    Data = model.Select(m => m.NoVoucher).ToList() 
+                    Data = model.Select(m => m.NoVoucher).ToList(),
+                    UserId = CurrentUser.UserId 
                 };
                 // -------------------------
 

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using ABB.Domain.Entities;
 using ABB.Domain.IdentityModels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 // alias
 using KasBankEntity = ABB.Domain.Entities.KasBank; 
@@ -37,6 +38,7 @@ namespace ABB.Application.Common.Interfaces
 {
     public interface IDbContextPstNota
     {
+        DatabaseFacade Database { get; }
         DbSet<T> Set<T>() where T : class;
         DbSet<KasBankEntity> KasBank { get; set; }
         DbSet<VoucherKasEntity> VoucherKas { get; set; }

@@ -15,16 +15,14 @@ input.custom-kode {
 }
 
 /* WARNA KUNING – custom-kuning */
-.custom-kuning,
-.custom-kuning .k-textbox,
-.custom-kuning .k-input,
-.custom-kuning input,
-input.custom-kuning {
-    background-color: rgb(255, 255, 225) !important;
-}
-.k-grid .custom-kuning {
-    background-color: rgb(255, 255, 225) !important;
-}
+/* No Rekening – warna kuning muda */
+    .custom-kuning,
+    .custom-kuning .k-textbox,
+    .custom-kuning .k-input,
+    .custom-kuning input {
+        background-color: rgb(255, 255, 225) !important;
+    }
+
 
 
 </style>
@@ -146,6 +144,7 @@ input.custom-kuning {
                 <div>
                     <kendo-dropdownlist for="FlagPembayaran"
                                         style="width: 100%;"
+                                        class="custom-kuning"
                                         datatextfield="Text"
                                         datavaluefield="Value"
                                         bind-to="ViewBag.FlagPembayaranOptions">
@@ -157,7 +156,7 @@ input.custom-kuning {
             <div class="form-group col-sm-3" id="notaField"> 
                 <label asp-for="NoNota4"></label>
                 <div class="input-group" style=" display: flex;     width: 100%;     flex-direction: row;     flex-wrap: nowrap;     align-content: center;     justify-content: center;     align-items: center; ">
-                    <kendo-textbox for="NoNota4" style="width:100%;" readonly="true" />
+                    <kendo-textbox for="NoNota4" class="custom-kuning" style="width:100%;" readonly="true" />
                     <div class="input-group-append">
                         <button id="buttonselectnota" type="button" class="btn btn-info" onclick="openPilihNotaWindow()">Select</button>
                     </div>
@@ -177,6 +176,7 @@ input.custom-kuning {
                     <label asp-for="KodeAkun"></label>
                     <kendo-Combobox for="KodeAkun"
                                     style="width:100%;"
+                                    class="custom-kuning"
                                     datatextfield="Text"
                                     datavaluefield="Value"
                                      bind-to="ViewBag.KodeAkunOptions"
@@ -190,6 +190,7 @@ input.custom-kuning {
                     <div>
                         <kendo-combobox for="KodeMataUang"
                                         style="width: 100%;"
+                                        class="custom-kuning"
                                         datatextfield="Text"
                                         datavaluefield="Value"
                                         bind-to="ViewBag.MataUangOptions"
@@ -203,7 +204,7 @@ input.custom-kuning {
            
             <div class="form-group col-sm-3 detail-payment-field">
                 <label asp-for="TotalBayar"></label>
-                <kendo-numerictextbox for="TotalBayar" format="n0" style="width:100%;" />
+                <kendo-numerictextbox for="TotalBayar" class="custom-kuning" format="n0" style="width:100%;" />
             </div>
 
              <div class="form-group col-sm-3 detail-payment-field">
@@ -216,6 +217,7 @@ input.custom-kuning {
                 <div>
                     <kendo-dropdownlist for="DebetKredit"
                                         style="width: 100%;"
+                                        class="custom-kuning"
                                         datatextfield="Text"
                                         datavaluefield="Value"
                                         bind-to="ViewBag.DebetKreditOptions">

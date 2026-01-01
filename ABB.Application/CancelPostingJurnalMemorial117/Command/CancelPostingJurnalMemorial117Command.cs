@@ -27,25 +27,31 @@ namespace ABB.Application.JurnalMemorial117.Commands
 
         public async Task<Unit> Handle(CancelPostingJurnalMemorial117Command request, CancellationToken cancellationToken)
         {
-            // 1. Ambil data yang sesuai request
-            var recordsToCancel = await _context.JurnalMemorial117
-                .Where(x => request.NoVouchers.Contains(x.NoVoucher) && x.KodeCabang == request.KodeCabang)
-                .ToListAsync(cancellationToken);
 
-            // 2. Loop dan Update statusnya ke FALSE
-            foreach (var item in recordsToCancel)
+            var userId = request.KodeUserUpdate ?? "SYSTEM";
+
+            foreach (var voucher in request.NoVouchers)
             {
-                item.FlagPosting = false; // BALIKKAN JADI FALSE
-                
-                // Audit Trail
-                item.KodeUserUpdate = request.KodeUserUpdate;
-                item.TanggalUpdate = DateTime.Now;
+                await _context.Database.ExecuteSqlRawAsync(
+                    "EXEC sp_cancel_jurnal_memorial_117 {0}, {1}",
+                    voucher,      // Masuk ke {0} -> @NoVoucher
+                    userId     // Masuk ke {1} -> @KodeUserUpdate
+                );
             }
 
-            // 3. Simpan perubahan
-            await _context.SaveChangesAsync(cancellationToken);
-
             return Unit.Value;
+            // var recordsToCancel = await _context.JurnalMemorial117
+            //     .Where(x => request.NoVouchers.Contains(x.NoVoucher) && x.KodeCabang == request.KodeCabang)
+            //     .ToListAsync(cancellationToken);
+            // foreach (var item in recordsToCancel)
+            // {
+            //     item.FlagPosting = false; 
+            //     item.KodeUserUpdate = request.KodeUserUpdate;
+            //     item.TanggalUpdate = DateTime.Now;
+            // }
+            // await _context.SaveChangesAsync(cancellationToken);
+
+            // return Unit.Value;
         }
     }
 }
