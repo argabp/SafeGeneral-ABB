@@ -46,7 +46,6 @@ namespace ABB.Web.Modules.Shared.Components.RegisterKlaim
                 registerKlaimViewModel.flag_tty_msk = "N";
                 registerKlaimViewModel.no_updt = 0;
                 registerKlaimViewModel.flag_settled = "N";
-                registerKlaimViewModel.st_reg = "P";
                 registerKlaimViewModel.kd_grp_bkl = "B";
                 registerKlaimViewModel.flag_konv = "N";
                 registerKlaimViewModel.tgl_input = DateTime.Now;

@@ -1,19 +1,24 @@
 using System;
 using ABB.Application.Common.Interfaces;
-using ABB.Application.PengajuanAkseptasi.Queries;
-using ABB.Application.RegisterKlaims.Commands;
-using ABB.Application.RegisterKlaims.Queries;
+using ABB.Domain.Entities;
 using AutoMapper;
 
-namespace ABB.Web.Modules.RegisterKlaim.Models
+namespace ABB.Application.UpdateKlaims.Queries
 {
-    public class RegisterKlaimViewModel : IMapFrom<GetPengajuanAkseptasiStatusQuery>
+    public class UpdateKlaimDto : IMapFrom<RegisterKlaim>
     {
+        public string Id { get; set; }
+
         public string kd_cb { get; set; }
 
         public string kd_cob { get; set; }
 
         public string kd_scob { get; set; }
+
+        public string nm_cb { get; set; }
+        public string nm_cob { get; set; }
+        public string nm_scob { get; set; }
+        public string register_klaim { get; set; }
 
         public string kd_thn { get; set; }
 
@@ -45,9 +50,9 @@ namespace ABB.Web.Modules.RegisterKlaim.Models
 
         public string? ket_oby { get; set; }
 
-        public DateTime? tgl_lapor { get; set; }
+        public DateTime tgl_lapor { get; set; }
 
-        public DateTime? tgl_kej { get; set; }
+        public DateTime tgl_kej { get; set; }
 
         public string? tempat_kej { get; set; }
 
@@ -83,7 +88,7 @@ namespace ABB.Web.Modules.RegisterKlaim.Models
 
         public string? penerima { get; set; }
 
-        public short? kd_status { get; set; }
+        public string st_reg { get; set; }
 
         public string? kd_wilayah { get; set; }
 
@@ -91,17 +96,13 @@ namespace ABB.Web.Modules.RegisterKlaim.Models
 
         public string? kd_rk_bkl { get; set; }
 
-        public bool IsEdit { get; set; }
+        public string nm_ttg { get; set; }
 
-        public string? kd_pas { get; set; }
+        public Int16 no_mts { get; set; }
 
-        public string? flag_konv { get; set; }
-        
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<RegisterKlaimDto, RegisterKlaimViewModel>();
-            profile.CreateMap<Domain.Entities.RegisterKlaim, RegisterKlaimViewModel>();
-            profile.CreateMap<RegisterKlaimViewModel, SaveRegisterKlaimCommand>();
+            profile.CreateMap<RegisterKlaim, UpdateKlaimDto>();
         }
     }
 }

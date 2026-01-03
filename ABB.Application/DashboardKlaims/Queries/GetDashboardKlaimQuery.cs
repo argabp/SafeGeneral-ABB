@@ -31,15 +31,15 @@ namespace ABB.Application.DashboardKlaims.Queries
         {
             var urls = new Dictionary<string, string>();
             
-            urls.Add("New", "/RegisterrKlaim/Index?");
-            urls.Add("LKS", "/RegisterrKlaim/Index?");
-            urls.Add("LKP Process", "/RegisterrKlaim/Index?");
-            urls.Add("LKP Escalated", "/RegisterrKlaim/Index?");
-            urls.Add("LKP Settled", "/RegisterrKlaim/Index?");
-            urls.Add("Payment", "/RegisterrKlaim/Index?");
-            urls.Add("Rejected", "/RegisterrKlaim/Index?");
-            urls.Add("Closed", "/RegisterrKlaim/Index?");
-            urls.Add("Final", "/RegisterrKlaim/Index?");
+            urls.Add("New", "/RegisterKlaim/Index?");
+            urls.Add("LKS", "/RegisterKlaim/Index?");
+            urls.Add("LKP Process", "/RegisterKlaim/Index?");
+            urls.Add("LKP Escalated", "/RegisterKlaim/Index?");
+            urls.Add("LKP Settled", "/RegisterKlaim/Index?");
+            urls.Add("Payment", "/RegisterKlaim/Index?");
+            urls.Add("Rejected", "/RegisterKlaim/Index?");
+            urls.Add("Closed", "/RegisterKlaim/Index?");
+            urls.Add("Final", "/RegisterKlaim/Index?");
             
             var icons = new Dictionary<string, string>();
             

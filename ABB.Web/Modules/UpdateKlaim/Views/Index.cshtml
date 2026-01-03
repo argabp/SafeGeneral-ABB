@@ -1,0 +1,108 @@
+﻿@using Kendo.Mvc.UI
+@using ABB.Application.UpdateKlaims.Queries
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Update Klaim";
+}
+<script src="~/Modules/UpdateKlaim/JS/updateKlaim.index.js"></script>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-8">
+            Update Klaim
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        @(Html.Kendo().Grid<UpdateKlaimDto>()
+        .Name("UpdateKlaimGrid")
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetUpdateKlaims", "UpdateKlaim").Data("searchFilter"))
+        )
+        .Columns(columns =>
+        {
+            columns.Command(command =>
+            {
+                command.Custom("Info")
+                    .Text("Info")
+                    .IconClass("fa fa-info-circle")
+                    .HtmlAttributes(new { title = "Info" })
+                    .Click("OnClickInfoUpdateKlaim");
+                command.Custom("Reject")
+                    .Text("Reject")
+                    .IconClass("fa fa-times-circle")
+                    .HtmlAttributes(new { title = "Reject" })
+                    .Click("OnClickRejectUpdateKlaim");
+                command.Custom("Closed")
+                    .Text("Closed")
+                    .IconClass("fa fa-stop-circle")
+                    .HtmlAttributes(new { title = "Closed" })
+                    .Click("OnClickClosedUpdateKlaim");
+                command.Custom("Final")
+                    .Text("Final")
+                    .IconClass("fa fa-check-square")
+                    .HtmlAttributes(new { title = "Final" })
+                    .Click("OnClickFinalUpdateKlaim");
+                command.Custom("Print")
+                    .Text("Print")
+                    .IconClass("fa fa-print")
+                    .HtmlAttributes(new { title = "Print" })
+                    .Click("OnClickPrintUpdateKlaim");
+
+            }).Title("Action").Width(300).Locked(true);
+            columns.Bound(col => col.Id).Hidden();
+            columns.Bound(col => col.nm_cb).Title("Cabang");
+            columns.Bound(col => col.nm_cob).Title("COB");
+            columns.Bound(col => col.nm_scob).Title("SCOB");
+            columns.Bound(col => col.no_pol_lama).Width(250).Title("Nomor Polis").ClientTemplate("#= formatNoPol(no_pol_lama) #");
+            columns.Bound(col => col.register_klaim).Title("Nomor Berkas");
+            columns.Bound(col => col.nm_ttg).Title("Nama Tertanggung");
+            columns.Bound(col => col.sebab_kerugian).Title("Sebab Klaim");
+            columns.Bound(col => col.tgl_kej).Title("Tanggal Kejadian").Format("{0: dd-MM-yyyy}");
+            columns.Bound(col => col.tgl_lapor).Title("Tanggal Lapor").Format("{0: dd-MM-yyyy}");
+            columns.Bound(col => col.tgl_reg).Title("Tanggal Register").Format("{0: dd-MM-yyyy}");
+        })
+        .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                    )
+        .Sortable()
+        .Filterable()
+        .Scrollable()
+        .Height(380)
+        .Resizable(a=>a.Columns(true))
+        .Events(ev => ev.DataBound("setButtonActions"))
+    
+            )
+        
+        @(Html.Kendo().Window()
+                    .Name("InfoUpdateKlaimWindow")
+                    .Title("Info Update Klaim Page")
+                    .Width(1200)
+                    .Modal(true)
+                    .Visible(false)
+                    .Draggable(true)
+            )
+        
+        @(Html.Kendo().Window()
+                    .Name("UpdateKlaimWindow")
+                    .Title("Update Klaim Page")
+                    .Width(1000)
+                    .Modal(true)
+                    .Visible(false)
+                    .Draggable(true)
+            )
+    </div>
+</div>
+

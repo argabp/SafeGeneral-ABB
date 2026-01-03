@@ -22,8 +22,6 @@ namespace ABB.Application.ApprovalMutasiKlaims.Queries
 
         public string no_kl { get; set; }
 
-        public Int16 no_mts { get; set; }
-
         public string DatabaseName { get; set; }
     }
 
@@ -45,7 +43,7 @@ namespace ABB.Application.ApprovalMutasiKlaims.Queries
 	                                                            From v_TR_Klaim_history p 
 	                                                            Where @kd_cb = p.kd_cb AND @kd_cob = p.kd_cob
 			                                                            AND @kd_scob = p.kd_scob AND @kd_thn = p.kd_thn
-			                                                            AND @no_kl = p.no_kl AND @no_mts = p.no_mts  
+			                                                            AND @no_kl = p.no_kl
 			                                                            AND (CONVERT(varchar(15), p.tgl_status, 106) like '%'+@SearchKeyword+'%'
 			                                                            OR p.nm_status like '%'+@SearchKeyword+'%'
 			                                                            OR p.nm_user like '%'+@SearchKeyword+'%'
@@ -54,7 +52,7 @@ namespace ABB.Application.ApprovalMutasiKlaims.Queries
                     new
                     {
                         request.SearchKeyword, request.kd_cb, request.kd_cob,
-                        request.kd_scob, request.kd_thn, request.no_kl, request.no_mts, request.DatabaseName
+                        request.kd_scob, request.kd_thn, request.no_kl, request.DatabaseName
                     })).ToList();
 
             for (int i = 0; i < result.Count; i++)

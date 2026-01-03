@@ -59,20 +59,19 @@ function btnSaveMutasiKlaim_Click() {
 function saveMutasiKlaim(url) {
     var form = getFormData($('#MutasiKlaimForm'));
 
-    var parentId =
-        form.kd_cb.trim() +
-        form.kd_cob.trim() +
-        form.kd_scob.trim() +
-        form.kd_thn.trim() +
-        form.no_kl.trim() +
-        form.no_mts;
-
-    var mutasiGridName = "grid_mutasi_" + parentId;
-    var mutasiGridElement = $("#" + mutasiGridName);
-
     var data = JSON.stringify(form);
     ajaxPost(url,  data,
         function (response) {
+
+            var parentId =
+                form.kd_cb.trim() +
+                form.kd_cob.trim() +
+                form.kd_scob.trim() +
+                form.kd_thn.trim() +
+                form.no_kl.trim();
+
+            var mutasiGridName = "grid_mutasi_" + parentId;
+            var mutasiGridElement = $("#" + mutasiGridName);
             refreshGrid(mutasiGridElement);
             if (response.Result == "OK") {
                 showMessage('Success', response.Message);

@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,7 +8,6 @@ using ABB.Application.Common.Services;
 using ABB.Domain.Entities;
 using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -93,7 +91,7 @@ namespace ABB.Application.RegisterKlaims.Commands
 
         public string? penerima { get; set; }
 
-        public string st_reg { get; set; }
+        public short? kd_status { get; set; }
 
         public string? kd_wilayah { get; set; }
 
@@ -180,6 +178,14 @@ namespace ABB.Application.RegisterKlaims.Commands
                     await _connectionFactory.QueryProc<string>("sp_InsertDokumenKlaim",
                         new { request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn, request.no_kl });
 
+                    await _connectionFactory.QueryProc<string>("sp_ApprovalPengajuanKlaimNew",
+                        new
+                        {
+                            request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn, request.no_kl, no_mts = 1,
+                            kd_user_status = _currentUserService.UserId, kd_status = 1, tgl_status = DateTime.Now,
+                            keterangan = "Registrasi Klaim Berhasil", kd_user_sign1 = _currentUserService.UserId
+                        });
+
                     return registerKlaim;
                 }
                 else
@@ -197,7 +203,7 @@ namespace ABB.Application.RegisterKlaims.Commands
                     entity.kd_wilayah = request.kd_wilayah;
                     entity.flag_tty_msk = request.flag_tty_msk;
                     entity.flag_pol_lama = request.flag_pol_lama;
-                    entity.st_reg = request.st_reg;
+                    entity.kd_status = request.kd_status;
                     entity.no_pol_lama = request.no_pol_lama;
                     entity.no_updt = request.no_updt;
                     entity.no_rsk = request.no_rsk;

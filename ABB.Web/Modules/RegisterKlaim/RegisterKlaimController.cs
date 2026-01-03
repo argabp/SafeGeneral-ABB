@@ -296,14 +296,12 @@ namespace ABB.Web.Modules.RegisterKlaim
             return Json(result);
         }
         
-        public JsonResult GetStatusKlaim()
+        public async Task<JsonResult> GetStatusKlaim()
         {
-            var result = new List<DropdownOptionDto>()
+            var result = await Mediator.Send(new GetStatusKlaimQuery()
             {
-                new DropdownOptionDto() { Text = "Diajukan (PLA)", Value = "P" },
-                new DropdownOptionDto() { Text = "Disetujui (DLA)", Value = "D" },
-                new DropdownOptionDto() { Text = "Ditolak", Value = "T" }
-            };
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            });
 
             return Json(result);
         }

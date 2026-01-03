@@ -9,7 +9,6 @@ using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Queries;
 using ABB.Application.Common.Services;
 using ABB.Application.MutasiKlaims.Commands;
-using ABB.Application.MutasiKlaims.Queries;
 using ABB.Application.RegisterKlaims.Queries;
 using ABB.Web.Modules.ApprovalMutasiKlaim.Models;
 using ABB.Web.Modules.Base;

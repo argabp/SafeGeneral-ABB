@@ -45,7 +45,7 @@ namespace ABB.Application.RegisterKlaims.Queries
 
         public string? st_pas { get; set; }
 
-        public decimal? pst_share { get; set; }
+        public decimal? pst_share_bgu { get; set; }
 
         public string? no_pol_pas { get; set; }
 
@@ -69,7 +69,7 @@ namespace ABB.Application.RegisterKlaims.Queries
 
         public decimal? pst_pas5 { get; set; }
 
-        public string? ket_rsk { get; set; }
+        public string? analisa_klaim { get; set; }
 
         public string? ttd_dibuat { get; set; }
 
@@ -141,7 +141,7 @@ namespace ABB.Application.RegisterKlaims.Queries
         
         public bool? st_dokumen10 { get; set; }
 
-        public decimal? nilai_tsi_share { get; set; }
+        public decimal? nilai_ttl_ptg_share { get; set; }
 
         public string? nm_tol { get; set; }
 
