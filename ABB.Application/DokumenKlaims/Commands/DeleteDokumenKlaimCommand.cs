@@ -13,7 +13,7 @@ namespace ABB.Application.DokumenKlaims.Commands
         public string DatabaseName { get; set; }
         public string kd_cob { get; set; }
 
-        public string kd_dok { get; set; }
+        public string kd_scob { get; set; }
     }
 
     public class DeleteDokumenKlaimCommandHandler : IRequestHandler<DeleteDokumenKlaimCommand>
@@ -34,10 +34,15 @@ namespace ABB.Application.DokumenKlaims.Commands
             {
                 var dbContext = _contextFactory.CreateDbContext(request.DatabaseName);
                 var dokumenKlaim = dbContext.DokumenKlaim.FirstOrDefault(dokumenKlaim =>
-                    dokumenKlaim.kd_dok == request.kd_dok && dokumenKlaim.kd_cob == request.kd_cob);
+                    dokumenKlaim.kd_scob == request.kd_scob && dokumenKlaim.kd_cob == request.kd_cob);
+                var dokumenKlaimDetils = dbContext.DokumenKlaimDetil.Where(dokumenKlaim =>
+                    dokumenKlaim.kd_scob == request.kd_scob && dokumenKlaim.kd_cob == request.kd_cob);
 
                 if (dokumenKlaim != null)
+                {
                     dbContext.DokumenKlaim.Remove(dokumenKlaim);
+                    dbContext.DokumenKlaimDetil.RemoveRange(dokumenKlaimDetils);
+                }
 
                 await dbContext.SaveChangesAsync(cancellationToken);
             }

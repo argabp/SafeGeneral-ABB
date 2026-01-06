@@ -149,6 +149,7 @@ namespace ABB.Infrastructure.Data
         public DbSet<Lookup> Lookup { get; set; }
         public DbSet<LookupDetail> LookupDetail { get; set; }
         public DbSet<DetailSlik> DetailSlik { get; set; }
+        public DbSet<DokumenKlaimDetil> DokumenKlaimDetil { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -291,6 +292,7 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new LookupMap());
             builder.ApplyConfiguration(new LookupDetailMap());
             builder.ApplyConfiguration(new DetailSlikMap());
+            builder.ApplyConfiguration(new DokumenKlaimDetilMap());
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

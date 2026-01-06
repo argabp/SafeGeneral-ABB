@@ -8,8 +8,8 @@ namespace ABB.Infrastructure.Data.Mapping
     {
         public void Configure(EntityTypeBuilder<DokumenKlaim> builder)
         {
-            builder.ToTable("dp20", "dbo");
-            builder.HasKey(k => new { k.kd_cob, k.kd_dok });
+            builder.ToTable("MS_DokumenKlaim", "dbo");
+            builder.HasKey(k => new { k.kd_cob, k.kd_scob });
         }
     }
 }

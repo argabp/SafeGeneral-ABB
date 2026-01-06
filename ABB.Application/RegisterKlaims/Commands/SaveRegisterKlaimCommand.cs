@@ -170,6 +170,7 @@ namespace ABB.Application.RegisterKlaims.Commands
                     registerKlaim.kd_user_status = _currentUserService.UserId;
                     registerKlaim.kd_usr_input = _currentUserService.UserId;
                     registerKlaim.kd_usr_updt = _currentUserService.UserId;
+                    registerKlaim.st_reg = "P";
 
                     dbContext.RegisterKlaim.Add(registerKlaim);
 

@@ -1,16 +1,12 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using ABB.Application.Approvals.Commands;
-using ABB.Application.Approvals.Queries;
 using ABB.Application.Common;
 using ABB.Application.Common.Queries;
 using ABB.Application.DokumenAkseptasis.Commands;
 using ABB.Application.DokumenAkseptasis.Queries;
 using ABB.Application.PengajuanAkseptasi.Queries;
 using ABB.Application.PolisInduks.Queries;
-using ABB.Application.SebabKejadians.Queries;
-using ABB.Web.Modules.Approval.Models;
 using ABB.Web.Modules.Base;
 using ABB.Web.Modules.DokumenAkseptasi.Models;
 using Kendo.Mvc.Extensions;

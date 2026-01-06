@@ -3,44 +3,41 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ABB.Application.Common.Interfaces;
+using AutoMapper;
 using MediatR;
-using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.DokumenKlaims.Queries
 {
     public class GetDokumenKlaimQuery : IRequest<DokumenKlaimDto>
     {
         public string DatabaseName { get; set; }
+
         public string kd_cob { get; set; }
-        
-        public string kd_dok { get; set; }
+
+        public string kd_scob { get; set; }
     }
 
     public class GetDokumenKlaimQueryHandler : IRequestHandler<GetDokumenKlaimQuery, DokumenKlaimDto>
     {
-        private readonly IDbConnectionFactory _connectionFactory;
-        private readonly ILogger<GetDokumenKlaimQueryHandler> _logger;
+        private readonly IDbContextFactory _contextFactory;
+        private readonly IMapper _mapper;
 
-        public GetDokumenKlaimQueryHandler(IDbConnectionFactory connectionFactory, ILogger<GetDokumenKlaimQueryHandler> logger)
+        public GetDokumenKlaimQueryHandler(IDbContextFactory contextFactory, IMapper mapper)
         {
-            _connectionFactory = connectionFactory;
-            _logger = logger;
+            _contextFactory = contextFactory;
+            _mapper = mapper;
         }
 
-        public async Task<DokumenKlaimDto> Handle(GetDokumenKlaimQuery request,
-            CancellationToken cancellationToken)
+        public async Task<DokumenKlaimDto> Handle(GetDokumenKlaimQuery request, CancellationToken cancellationToken)
         {
-            try
-            {
-                _connectionFactory.CreateDbConnection(request.DatabaseName);
-                return (await _connectionFactory.Query<DokumenKlaimDto>("SELECT * FROM dp20 WHERE kd_cob = @kd_cob AND kd_dok = @kd_dok",
-                    new { request.kd_cob, request.kd_dok })).FirstOrDefault();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                throw;
-            }
+            var dbContext = _contextFactory.CreateDbContext(request.DatabaseName);
+            var dokumenKlaim = dbContext.DokumenKlaim.FirstOrDefault(approval => approval.kd_cob.Trim() == request.kd_cob.Trim()
+                && approval.kd_scob.Trim() == request.kd_scob.Trim());
+
+            if (dokumenKlaim == null)
+                throw new NullReferenceException();
+
+            return _mapper.Map<DokumenKlaimDto>(dokumenKlaim);
         }
     }
 }

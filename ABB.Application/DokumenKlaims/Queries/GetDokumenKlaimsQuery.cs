@@ -32,12 +32,25 @@ namespace ABB.Application.DokumenKlaims.Queries
             try
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
-                return (await _connectionFactory.Query<DokumenKlaimDto>(@"
-                    SELECT d.kd_cob + d.kd_dok Id,
-	                    d.kd_cob, c.nm_cob, d.kd_dok,
-	                    d.nm_dok FROM dp20 d
-	                    INNER JOIN rf04 c
-		                    ON d.kd_cob = c.kd_cob")).ToList();
+                var results = (await _connectionFactory.Query<DokumenKlaimDto>(@"SELECT p.*, cob.nm_cob, scob.nm_scob 
+				FROM MS_DokumenKlaim p
+					INNER JOIN rf04 cob
+						ON p.kd_cob = cob.kd_cob
+					INNER JOIN rf05 scob
+						ON p.kd_scob = scob.kd_scob
+				WHERE (cob.nm_cob like '%'+@SearchKeyword+'%' 
+					OR scob.nm_scob like '%'+@SearchKeyword+'%' 
+					OR p.nm_dokumenklaim like '%'+@SearchKeyword+'%' 
+					OR @SearchKeyword = '' OR @SearchKeyword IS NULL)", new { request.SearchKeyword })).ToList();
+
+                var sequence = 0;
+                foreach (var result in results)
+                {
+                    sequence++;
+                    result.Id = sequence;
+                }
+
+                return results;
             }
             catch (Exception ex)
             {

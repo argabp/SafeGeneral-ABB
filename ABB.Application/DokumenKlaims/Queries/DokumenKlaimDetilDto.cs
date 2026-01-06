@@ -5,24 +5,21 @@ using AutoMapper;
 
 namespace ABB.Application.DokumenKlaims.Queries
 {
-    public class DokumenKlaimDto : IMapFrom<DokumenKlaim>
+    public class DokumenKlaimDetilDto : IMapFrom<DokumenKlaimDetil>
     {
         public int Id { get; set; }
         public string kd_cob { get; set; }
 
-        public string nm_cob { get; set; }
-
         public string kd_scob { get; set; }
 
         public Int16 kd_dokumen { get; set; }
-
         public string? nm_dokumenklaim { get; set; }
 
-        public string nm_scob { get; set; }
+        public bool flag_wajib { get; set; }
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<DokumenKlaim, DokumenKlaimDto>();
+            profile.CreateMap<DokumenKlaimDetil, DokumenKlaimDetilDto>();
         }
     }
 }

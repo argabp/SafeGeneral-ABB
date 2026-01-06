@@ -1,23 +1,21 @@
 ﻿@using Kendo.Mvc.UI
-@model ABB.Web.Modules.DokumenAkseptasi.Models.DokumenAkseptasiDetailViewModel
+@model ABB.Web.Modules.DokumenKlaim.Models.DokumenKlaimDetailViewModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Kendo.Mvc
 @addTagHelper *, ABB.Web
 
-<script src="~/Modules/DokumenAkseptasi/JS/dokumenAkseptasiDetail.edit.js"></script>
-
 <div class="window-body" style="background-color: lightgray">
-    <form id="DokumenAkseptasiDetailForm" enctype="multipart/form-data" autocomplete="off">
+    <form id="DokumenKlaimDetailForm" enctype="multipart/form-data" autocomplete="off">
         @Html.HiddenFor(p => p.kd_cob)
         @Html.HiddenFor(p => p.kd_scob)
         <div class="form-group col-sm-12">
             <label class="col-sm-12">Kode Dokumen</label>
             <div class="col-sm-12">
-                <kendo-dropdownlist for="kd_dokumen" style="width: 100%" class="primary-dropdown" readonly="true"
+                <kendo-dropdownlist for="kd_dokumen" style="width: 100%" class="primary-dropdown"
                                     datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                     <datasource type="DataSourceTagHelperType.Custom">
                         <transport>
-                            <read url="@Url.Action("GetKodeDokumen", "DokumenAkseptasi")"/>
+                            <read url="@Url.Action("GetKodeDokumen", "DokumenKlaim")"/>
                         </transport>
                     </datasource>
                 </kendo-dropdownlist>
@@ -26,7 +24,7 @@
         </div>
         <div class="form-group col-sm-12">
             <div class="row col-sm-12">
-                <input type="hidden" id="tempFlag_wajib" value="@Convert.ToInt32(Model.flag_wajib)">
+                <input type="hidden" id="tempFlag_wajib" value="@Model.flag_wajib">
                 <label class="col-sm-6">Flag Wajib</label>
                 <div class="col-sm-6">
                     <label>
@@ -40,7 +38,7 @@
 </div>
 
 <div class="window-footer">
-    <button type="button" onclick="onEditDokumenAkseptasiDetail()" class="btn btn-success space-right">
+    <button type="button" onclick="onSaveDokumenKlaimDetail()" class="btn btn-success space-right">
         <span class="fa fa-save"></span> Save
     </button>
 </div>

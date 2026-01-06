@@ -11,7 +11,9 @@ namespace ABB.Web.Modules.DokumenKlaim.Models
 
         public string kd_dok { get; set; }
 
-        public string? nm_dok { get; set; }
+        public string kd_scob { get; set; }
+
+        public string nm_dokumenklaim { get; set; }
         
         public void Mapping(Profile profile)
         {

@@ -35,8 +35,10 @@ namespace ABB.Application.RegisterKlaims.Queries
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
                 return (await _connectionFactory.Query<DropdownOptionDto>(
-                    "SELECT kd_dok Value, nm_dok Text " +
-                    "FROM dp20 WHERE kd_cob = @kd_cob", new { request.kd_cob })).ToList();
+                    "SELECT k.kd_dokumen Value, s.nm_dokumenklaim Text " +
+                    "FROM MS_DokumenKlaimDetil k " +
+                    "INNER JOIN MS_DokumenKlaim s " +
+                    "  ON k.kd_cob = s.kd_cob AND s.kd_scob = k.kd_scob WHERE k.kd_cob = @kd_cob", new { request.kd_cob })).ToList();
             }
             catch (Exception ex)
             {

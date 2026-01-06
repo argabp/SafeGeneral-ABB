@@ -14,9 +14,9 @@ namespace ABB.Application.DokumenKlaims.Commands
         public string DatabaseName { get; set; }
         public string kd_cob { get; set; }
 
-        public string kd_dok { get; set; }
+        public string kd_scob { get; set; }
 
-        public string nm_dok { get; set; }
+        public string nm_dokumenklaim { get; set; }
     }
 
     public class SaveDokumenKlaimCommandHandler : IRequestHandler<SaveDokumenKlaimCommand>
@@ -37,19 +37,19 @@ namespace ABB.Application.DokumenKlaims.Commands
             {
                 var dbContext = _contextFactory.CreateDbContext(request.DatabaseName);
                 var dokumenKlaim = dbContext.DokumenKlaim.FirstOrDefault(dokumenKlaim =>
-                    dokumenKlaim.kd_cob == request.kd_cob && request.kd_dok == dokumenKlaim.kd_dok);
+                    dokumenKlaim.kd_cob == request.kd_cob && request.kd_scob == dokumenKlaim.kd_scob);
 
                 if (dokumenKlaim == null)
                 {
                     dbContext.DokumenKlaim.Add(new DokumenKlaim()
                     {
                         kd_cob = request.kd_cob,
-                        kd_dok = request.kd_dok,
-                        nm_dok = request.nm_dok
+                        kd_scob = request.kd_scob,
+                        nm_dokumenklaim = request.nm_dokumenklaim
                     });
                 }
                 else
-                    dokumenKlaim.nm_dok = request.nm_dok;
+                    dokumenKlaim.nm_dokumenklaim = request.nm_dokumenklaim;
 
                 await dbContext.SaveChangesAsync(cancellationToken);
             }
