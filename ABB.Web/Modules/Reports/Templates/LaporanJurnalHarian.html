@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Cetak Laporan Jurnal Harian</title>
+    <style>
+        body { font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #000; }
+        .report-header { text-align: center; margin-bottom: 12px; }
+        .report-title { font-size: 16px; font-weight: bold; }
+        .report-sub { text-align: center; font-size: 12px; color: #333; margin-top: 4px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        table th, table td { border: 1px solid #666; padding: 6px 8px; text-align: left; }
+        table th { background: #f2f2f2; font-weight: bold; }
+        .right { text-align: right; }
+        .center { text-align: center; }
+        .no-border { border: none; }
+        .footer { margin-top: 16px; font-size: 11px; color:#333; }
+    </style>
+</head>
+<body>
+    <div class="report-header">
+          <div class="report-title">JURNAL TRANSAKSI</div>
+          <div class="report-sub">PERIODE : {{ PeriodeAwal }} - {{ PeriodeAkhir }}</div>
+    </div>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="4">
+    <thead>
+        <tr style="font-weight:bold; border-bottom:1px solid black;">
+            <td>No</td>
+            <td>Tgl</td>
+            <td>Perkiraan</td>
+            <td>Mtu</td>
+            <td style="text-align:right">Debet (IDR)</td>
+            <td style="text-align:right">Kredit (IDR)</td>
+            <td>Keterangan</td>
+        </tr>
+    </thead>
+    <tbody>
+        {{ details }}
+    </tbody>
+</table>
+</body>
+</html>

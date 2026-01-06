@@ -32,6 +32,7 @@ using JurnalMemorial104Entity = ABB.Domain.Entities.JurnalMemorial104;
 using DetailJurnalMemorial104Entity = ABB.Domain.Entities.DetailJurnalMemorial104;
 using JurnalMemorial117Entity = ABB.Domain.Entities.JurnalMemorial117;
 using DetailJurnalMemorial117Entity = ABB.Domain.Entities.JurnalMemorial117Detail;
+using Jurnal62Entity = ABB.Domain.Entities.Jurnal62;
 
 
 namespace ABB.Application.Common.Interfaces
@@ -66,6 +67,7 @@ namespace ABB.Application.Common.Interfaces
         DbSet<DetailJurnalMemorial104Entity> DetailJurnalMemorial104 { get; set; }
         DbSet<JurnalMemorial117Entity> JurnalMemorial117 { get; set; }
         DbSet<DetailJurnalMemorial117Entity> JurnalMemorial117Detail { get; set; }
+        DbSet<Jurnal62Entity> Jurnal62 { get; set; }
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);

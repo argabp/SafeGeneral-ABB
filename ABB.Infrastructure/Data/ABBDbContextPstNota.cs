@@ -33,6 +33,7 @@ using JurnalMemorial104Entity = ABB.Domain.Entities.JurnalMemorial104;
 using DetailJurnalMemorial104Entity = ABB.Domain.Entities.DetailJurnalMemorial104;
 using JurnalMemorial117Entity = ABB.Domain.Entities.JurnalMemorial117;
 using JurnalMemorial117DetailEntitiy = ABB.Domain.Entities.JurnalMemorial117Detail;
+using Jurnal62Entitiy = ABB.Domain.Entities.Jurnal62;
 
 namespace ABB.Infrastructure.Data
 {
@@ -72,6 +73,7 @@ namespace ABB.Infrastructure.Data
         public DbSet<DetailJurnalMemorial104Entity> DetailJurnalMemorial104 { get; set; }
         public DbSet<JurnalMemorial117Entity> JurnalMemorial117 { get; set; }
         public DbSet<JurnalMemorial117DetailEntitiy> JurnalMemorial117Detail { get; set; }
+        public DbSet<Jurnal62Entitiy> Jurnal62 { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -103,6 +105,7 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new DetailJurnalMemorial104Map());
             builder.ApplyConfiguration(new JurnalMemorial117Map());
             builder.ApplyConfiguration(new JurnalMemorial117DetailMap());
+            builder.ApplyConfiguration(new Jurnal62Map());
            
 
         }

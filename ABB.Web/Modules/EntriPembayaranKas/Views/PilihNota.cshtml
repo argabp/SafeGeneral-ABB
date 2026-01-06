@@ -9,82 +9,68 @@
 <!-- <script src="~/Modules/EntriPembayaranKas/JS/entripembayarankas.index.js"></script> -->
 
 <script>
+    // Variable untuk data source akun (jika masih dipakai)
     var coaDataSource = @Html.Raw(JsonConvert.SerializeObject(ViewBag.KodeAkunOptions ?? new List<SelectListItem>()));
 
-        // 2. BUAT FUNGSI DATABOUND
-        // Fungsi ini akan mengubah <input class='coa-combobox'> menjadi Kendo ComboBox
+    // 1. FUNGSI DATABOUND (Style Grid)
     function onPilihNotaGridDataBound(e) {
-        // Panggil fungsi auto-fit Anda (jika Anda masih menggunakannya)
-        // gridAutoFit(e); 
-
         var grid = e.sender;
-        grid.tbody.find("input.coa-combobox").each(function () {
-            var input = $(this);
-            
-            // Cek agar tidak inisialisasi ulang
-            if (!input.data("kendoComboBox")) {
-                input.kendoComboBox({
-                    placeholder: "Pilih Akun...",
-                    dataTextField: "Text",   // Sesuai properti SelectListItem
-                    dataValueField: "Value", // Sesuai properti SelectListItem
-                    filter: "contains",
-                    dataSource: coaDataSource // <-- Gunakan data dari ViewBag
-                });
-            }
-        });
-         var pager = grid.pager;
+        
+        // Logic Pagination "All"
+        var pager = grid.pager;
         var totalItems = grid.dataSource.total();
-            if (pager) {
-                var pageSizeDropDown = pager.element.find("select[data-role='dropdownlist']").data("kendoDropDownList");
-                
-                if (pageSizeDropDown) {
-                    var ds = pageSizeDropDown.dataSource.data();
-                    var found = false;
-                    
-                    // Loop untuk mencari 'angka ajaib' kita (50000)
-                    for (var i = 0; i < ds.length; i++) {
-                        
-                        // Kita cari angka ajaib (50000) ATAU
-                        // angka yang sudah kita ubah (jika totalItems > 500)
-                        var currentValue = ds[i].value;
-                        if (currentValue == 50000 || (currentValue > 500 && currentValue == totalItems)) { 
-                            
-                            // 2. GANTI VALUE-NYA DARI 50000 MENJADI TOTAL ITEM
-                            ds[i].value = totalItems; 
-                            
-                            // 3. GANTI TEKS-NYA MENJADI "All"
-                            ds[i].text = "All"; 
-                            
-                            found = true;
-                            break;
-                        }
+        if (pager) {
+            var pageSizeDropDown = pager.element.find("select[data-role='dropdownlist']").data("kendoDropDownList");
+            if (pageSizeDropDown) {
+                var ds = pageSizeDropDown.dataSource.data();
+                var found = false;
+                for (var i = 0; i < ds.length; i++) {
+                    var currentValue = ds[i].value;
+                    if (currentValue == 50000 || (currentValue > 500 && currentValue == totalItems)) { 
+                        ds[i].value = totalItems; 
+                        ds[i].text = "All"; 
+                        found = true;
+                        break;
                     }
-                    
-                    if (found) {
-                        pageSizeDropDown.refresh();
-                        
-                        // Jika "All" (yang sekarang bernilai totalItems) sedang dipilih
-                        if (pageSizeDropDown.value() == totalItems) {
-                            pageSizeDropDown.span.text("All");
-                        }
+                }
+                if (found) {
+                    pageSizeDropDown.refresh();
+                    if (pageSizeDropDown.value() == totalItems) {
+                        pageSizeDropDown.span.text("All");
                     }
                 }
             }
+        }
     }
-    // Fungsi ini mengirimkan nilai dari search box ke Controller
-    // function getNotaProduksiSearchFilter() {
-    //     return {
-    //         searchKeyword: $("#PilihNotaSearchKeyword").val()
-    //     };
-    // }
 
-    // // Fungsi ini berjalan setelah konten window dimuat
-    // $(function() {
-    //     // Pasang event listener 'keyup' pada search box
-    //     $("#PilihNotaSearchKeyword").on("keyup", function() {
-    //         $("#PilihNotaGrid").data("kendoGrid").dataSource.read();
-    //     });
-    // });
+    // 2. FUNGSI FILTER (PENTING: JANGAN DI-COMMENT)
+    // Fungsi ini dipanggil otomatis oleh Grid saat .read()
+    function getNotaProduksiSearchFilter() {
+        return {
+            // Ambil nilai dari TextBox Search
+            searchKeyword: $("#PilihNotaSearchKeyword").val(), 
+            
+            // Ambil nilai dari Dropdown Jenis Asset
+            jenisAsset: $("#JenisAsset").val() 
+        };
+    }
+
+    // 3. FUNGSI TOMBOL CARI
+    function onSearchClick() {
+        // Paksa Grid untuk refresh data (baca ulang ke controller)
+        var grid = $("#PilihNotaGrid").data("kendoGrid");
+        grid.dataSource.page(1); // Reset ke halaman 1
+        grid.dataSource.read();  // Panggil Controller
+    }
+
+    // 4. ENTER KEY (Supaya pas ketik enter langsung cari)
+    $(function() {
+        $("#PilihNotaSearchKeyword").on("keyup", function(e) {
+            if (e.key === "Enter") {
+                onSearchClick();
+            }
+        });
+    });
 </script>
 <div class="p-2">
      <!-- Label Jenis Asset -->
@@ -139,28 +125,42 @@
         columns.Bound(c => c.no_nd).Title("Nomor Nota").Width(200);
         columns.Bound(c => c.no_pl).Title("Nomor Polis").Width(200);
         columns.Bound(c => c.saldo).Title("Saldo").Format("{0:n2}").Width(150);
-        columns.Template("<input type='number'  class='k-textbox total-org-input' value='0' style='width: 100%;' />")
-                .Title("Jumlah Dibayarkan")
-                .Width(150);
-
-         columns.Template(
-                "<select class='k-dropdown dk-input' style='width: 100%;'>" +
-                    "<option value='D'>Debet</option>" +
-                    "<option value='K'>Kredit</option>" +
-                "</select>"
-            )
-            .Title("D/K").Width(100);
-        columns.Template("<input class='coa-combobox' style='width: 100%;' />")
-                .Title("Kode Akun")
-                .Width(250);
-        columns.Bound(c => c.curensi).Title("Curensi").Width(100);
-        columns.Template("<input type='number' class='k-textbox total-rp-input' readonly value='0' style='width: 100%;' />")
-        .Title("Total Rupiah")   // <-- Ganti menjadi .Title()
+        
+        // --- [PERUBAHAN 2: Auto Fill Saldo] ---
+        columns.Template(
+            "<input type='number' class='k-textbox total-org-input' " + 
+            "value='#= saldo #' " + // <--- AMBIL NILAI SALDO
+            "style='width: 100%;' />")
+        .Title("Jumlah Dibayarkan")
         .Width(150);
+
+        // --- [PERUBAHAN 3: Auto Select D/K] ---
+        columns.Template(
+            "<select class='k-dropdown dk-input' disabled='disabled' style='width: 100%;'>" +
+                "<option value='D' #= DefaultDK == 'D' ? 'selected' : '' #>Debet</option>" +
+                "<option value='K' #= DefaultDK == 'K' ? 'selected' : '' #>Kredit</option>" +
+            "</select>"
+        )
+        .Title("D/K").Width(100);
+        
+        // --- [PERUBAHAN 4: Kode Akun Readonly & Auto Fill] ---
+        columns.Template(
+            "<input class='k-textbox coa-input' " +
+            "value='#= DefaultKodeAkun #' " + // Cukup begini, karena dari SP sudah pasti tidak NULL
+            "readonly='readonly' " +
+            // PENTING: Ganti #e9ecef menjadi rgb(233, 236, 239)
+            "style='width: 100%; background-color: rgb(233, 236, 239);' />") 
+        .Title("Kode Akun")
+        .Width(250);
+
+        columns.Bound(c => c.curensi).Title("Curensi").Width(100);
+        
+        columns.Template("<input type='number' class='k-textbox total-rp-input' readonly value='0' style='width: 100%;' />")
+        .Title("Total Rupiah")   
+        .Width(150);
+        
         columns.Bound(c => c.kd_mtu).Title("Kode Mata Uang").Width(100);
         columns.Bound(c => c.nm_cust2).Title("Nama Tertanggung").Width(250);
-
-        
     })
     .Pageable(pager => pager
         .Refresh(true)

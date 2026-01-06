@@ -14,6 +14,7 @@ namespace ABB.Application.EntriPembayaranKass.Commands
     public class PembayaranKasNotaItem
     {
         public string NoNota { get; set; }
+         public string KodeAkun { get; set; }
         public decimal TotalBayarOrg { get; set; }
         public decimal TotalBayarRp { get; set; }
         public string DebetKredit { get; set; }
@@ -75,6 +76,7 @@ namespace ABB.Application.EntriPembayaranKass.Commands
                     NoVoucher = request.NoVoucher,
                     No = lastNo,
                     NoNota4 = item.NoNota,
+                    KodeAkun = item.KodeAkun,
                     DebetKredit = item.DebetKredit,
                     KodeMataUang = item.KodeMataUang,
                     TotalBayar = item.TotalBayarOrg,
