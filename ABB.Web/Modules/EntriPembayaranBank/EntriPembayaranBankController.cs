@@ -180,7 +180,9 @@ namespace ABB.Web.Modules.EntriPembayaranBank
        [HttpPost]
         public async Task<IActionResult> GetNotaProduksi([DataSourceRequest] DataSourceRequest request,
             string searchKeyword,
-            string jenisAsset)
+            string jenisAsset,
+            DateTime? startDate, // <--- Tambahkan parameter ini
+            DateTime? endDate)   // <--- Tambahkan parameter ini
         {
             // ✅ Cegah load data jika semua filter kosong
             if (string.IsNullOrEmpty(searchKeyword) && string.IsNullOrEmpty(jenisAsset))
@@ -193,11 +195,13 @@ namespace ABB.Web.Modules.EntriPembayaranBank
             var data = await Mediator.Send(new GetNotaUntukPembayaranQuery()
             {
                 SearchKeyword = searchKeyword,
-                JenisAsset = jenisAsset
+                JenisAsset = jenisAsset,
+                StartDate = startDate, // <--- Mapping Tanggal
+                EndDate = endDate      // <--- Mapping Tanggal
             });
 
             return Json(await data.ToDataSourceResultAsync(request));
-        }  
+        }
 
         // delete
         [HttpPost]

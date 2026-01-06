@@ -213,7 +213,9 @@ namespace ABB.Web.Modules.EntriPembayaranKas
         [HttpPost]
         public async Task<IActionResult> GetNotaProduksi([DataSourceRequest] DataSourceRequest request,
             string searchKeyword,
-            string jenisAsset)
+            string jenisAsset,
+            DateTime? startDate, 
+            DateTime? endDate)
         {
             // ✅ Cegah load data jika semua filter kosong
             if (string.IsNullOrEmpty(searchKeyword) &&
@@ -227,7 +229,9 @@ namespace ABB.Web.Modules.EntriPembayaranKas
             var data = await Mediator.Send(new GetNotaUntukPembayaranQuery()
             {
                 SearchKeyword = searchKeyword,
-                JenisAsset = jenisAsset
+                JenisAsset = jenisAsset,
+                StartDate = startDate, 
+                EndDate = endDate
             });
 
             // ✅ Jika hasil kosong, kirim response dengan indikator “tidak ditemukan”

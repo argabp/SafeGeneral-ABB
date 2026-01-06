@@ -11,13 +11,39 @@
     ViewData["Title"] = "Laporan Jurnal Harian";
 }
 
+<script src="~/Modules/LaporanJurnalHarian/JS/LaporanJurnalHarian.index.js"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
-    .div-box { padding-bottom: 1em; }
-    .swal2-container { z-index: 10050 !important; }
-     .breadcrumb-item + .breadcrumb-item::before {
-        content: ">"; /* Ganti '/' dengan '>' */
-        padding: 0 .5rem; /* Atur spasi jika perlu */
+    .filter-section {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px; /* Tambah sedikit margin agar lebih lega */
+    }
+
+    .filter-label {
+        font-weight: bold;
+        /* Kuncinya di sini: Gunakan width tetap agar titik dua (:) sejajar vertikal */
+        width: 140px; 
+        min-width: 140px;
+        white-space: nowrap;
+        margin-right: 15px; /* Jarak dari label ke input pertama */
+    }
+
+    /* Khusus untuk pembungkus input agar gap antar input tidak merusak margin label */
+    .filter-input-group {
+        display: flex;
+        align-items: center;
+        gap: 10px; 
+    }
+
+    .sd-text {
+        font-weight: 600;
+        margin: 0 5px;
+    }
+    
+    /* Memastikan widget Kendo tidak overflow */
+    .k-widget {
+        vertical-align: middle;
     }
 </style>
 
@@ -27,3 +53,80 @@
         <li class="breadcrumb-item active" aria-current="page">Laporan Jurnal Harian</li>
     </ol>
 </nav>
+
+<div class="flat-box filter-box">
+    <div class="flat-box-content filter-container">
+        <div class="filter-section">
+            <label class="filter-label" for="KodeCabang">Kode Cabang :</label>
+            @(Html.Kendo().ComboBox()
+                .Name("KodeCabang")
+                .Placeholder("Pilih Cabang ...")
+                .DataTextField("nm_cb")
+                .DataValueField("kd_cb")
+                .Filter("contains")
+                .Suggest(true)
+                .HtmlAttributes(new { style = "width:300px;" })
+                .Template("#: kd_cb # - #: nm_cb #")
+                .DataSource(source => {
+                    source.Read(read => {
+                        read.Action("GetKodeCabang", "LaporanJurnalHarian");
+                    });
+                })
+                .AutoBind(true)
+                .Enable(false)
+                .Value(ViewBag.UserCabangValue) 
+                .Text(ViewBag.UserCabangText)   
+            )
+        </div>
+
+      <div class="filter-section">
+        <label class="filter-label">Periode :</label>
+        <div class="filter-input-group">
+            @(Html.Kendo().DatePicker()
+                .Name("tgl1")
+                .Format("dd-MM-yyyy")
+                .HtmlAttributes(new { style = "width:120px;" })
+            )
+
+            <span class="sd-text">s/d</span>
+
+            @(Html.Kendo().DatePicker()
+                .Name("tgl2")
+                .Format("dd-MM-yyyy")
+                .HtmlAttributes(new { style = "width:120px;" })
+            )
+        </div>
+    </div>
+
+       <div class="filter-section">
+            <label class="filter-label">Jenis Laporan :</label>
+            @(Html.Kendo().DropDownList()
+                .Name("JenisTransaksi")
+                .DataTextField("Text")
+                .DataValueField("Value")
+                .BindTo(new List<SelectListItem>() {
+                    new SelectListItem() { Text = "Pilih...", Value = "" },
+                    new SelectListItem() { Text = "Bank Kredit", Value = "BK" },
+                    new SelectListItem() { Text = "Bank Debit", Value = "BD" },
+                    new SelectListItem() { Text = "Kas Kredit", Value = "KK" },
+                    new SelectListItem() { Text = "Kas Debit", Value = "KD" },
+                    new SelectListItem() { Text = "Penyelesaian Utang Piutang", Value = "BM" },
+                    new SelectListItem() { Text = "Memorial", Value = "MM" }
+                })
+                .Value("Detail")
+                .HtmlAttributes(new { style = "width:300px;" })
+            )
+        </div>
+
+        <!-- Baris 4: Tombol Cari -->
+        <div class="filter-section">
+            @(Html.Kendo().Button()
+                .Name("btnSearch")
+                .Content("<span class='k-icon k-i-search'></span> Cari")
+                .HtmlAttributes(new { @class = "k-primary", style = "border-radius:6px; width:120px;" })
+                .Events(e => e.Click("onSearchClick"))
+            )
+        </div>
+
+    </div>
+</div>

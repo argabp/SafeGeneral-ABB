@@ -1,5 +1,4 @@
 function btnEntriPembayaranKas_OnClick(e) {
-    console.log("cli entri")
     e.preventDefault();
     // var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     // var noVoucher = dataItem.NoVoucher;
@@ -408,6 +407,7 @@ function updateGridFooter() {
     var selectedData = [];
     var noVoucher = $("#NoVoucher").val();
 
+    // Loop baris yang dipilih (dicentang)
     grid.select().each(function () {
         var row = $(this);
         var dataItem = grid.dataItem(this);
@@ -415,13 +415,22 @@ function updateGridFooter() {
         var totalOrg = parseFloat(row.find('.total-org-input').val()) || 0;
         var totalRp = parseFloat(row.find('.total-rp-input').val()) || 0;
         var totalRpInput = row.find('.total-rp-input');
+
+        // Ambil value dari input elemen (karena sudah otomatis terisi dari SP)
+        var akunOtomatis = row.find('.coa-input').val(); 
+        var dkOtomatis = row.find('.dk-input').val();
+
         selectedData.push({
             NoNota: dataItem.no_nd,
             TotalBayarOrg: totalOrg,
             TotalBayarRp: totalRp,
-            DebetKredit: dataItem.d_k,
-            KodeMataUang: dataItem.kd_mtu,
-             Kurs: parseFloat(totalRpInput.data('kurs')) || 1
+            
+            // [FIX] Ambil dari input element agar sesuai yang tampil di layar
+            DebetKredit: dkOtomatis, 
+            KodeAkun: akunOtomatis,  
+            
+            KodeMataUang: dataItem.kd_mtu, // Ambil dari dataItem (hasil SP)
+            Kurs: parseFloat(totalRpInput.data('kurs')) || 1
         });
     });
 
@@ -444,16 +453,16 @@ function updateGridFooter() {
             if (response.Status === "OK") {
                 showMessage('Success','Data berhasil disimpan.');
 
-                // 🔹 Tutup modal PilihNotaWindow
+                // Tutup window & Refresh
                 var pilihNotaWindow = $("#PilihNotaWindow").data("kendoWindow");
                 if (pilihNotaWindow) {
                     pilihNotaWindow.close();
                 }
-                clearPaymentForm()
-                // 🔹 Refresh grid PilihNotaGrid (jika ingin reload daftar nota)
-                grid.dataSource.read();
-
-                // 🔹 Refresh grid DetailPembayaranGrid di window utama
+                
+                // Bersihkan form utama biar fresh
+                // (Optional: clearPaymentForm() jika diperlukan logika reset tertentu)
+                
+                // Refresh Grid Detail di Window Utama
                 var detailGrid = $("#DetailPembayaranGrid").data("kendoGrid");
                 if (detailGrid) {
                     detailGrid.dataSource.read();

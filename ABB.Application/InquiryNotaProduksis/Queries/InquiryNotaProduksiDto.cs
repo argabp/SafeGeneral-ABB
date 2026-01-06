@@ -69,6 +69,9 @@ namespace ABB.Application.InquiryNotaProduksis.Queries
 // tambahan kode mtu
          public string kd_mtu { get; set; }
 
+        public string DefaultKodeAkun { get; set; }
+        public string DefaultDK { get; set; }
+
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Produksi, InquiryNotaProduksiDto>();
