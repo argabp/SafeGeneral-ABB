@@ -177,12 +177,12 @@ namespace ABB.Application.RegisterKlaims.Commands
                     await dbContext.SaveChangesAsync(cancellationToken);
 
                     await _connectionFactory.QueryProc<string>("sp_InsertDokumenKlaim",
-                        new { request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn, request.no_kl });
+                        new { request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn, registerKlaim.no_kl });
 
                     await _connectionFactory.QueryProc<string>("sp_ApprovalPengajuanKlaimNew",
                         new
                         {
-                            request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn, request.no_kl, no_mts = 1,
+                            request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn, registerKlaim.no_kl, no_mts = 1,
                             kd_user_status = _currentUserService.UserId, kd_status = 1, tgl_status = DateTime.Now,
                             keterangan = "Registrasi Klaim Berhasil", kd_user_sign1 = _currentUserService.UserId
                         });
@@ -228,13 +228,8 @@ namespace ABB.Application.RegisterKlaims.Commands
                     
                     await dbContext.SaveChangesAsync(cancellationToken);
 
-                    await _connectionFactory.QueryProc<string>("sp_InsertDokumenKlaim",
-                        new { request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn, request.no_kl });
-
                     return entity;
                 }
-                
-                
             }
             catch (Exception e)
             {

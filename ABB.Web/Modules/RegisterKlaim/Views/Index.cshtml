@@ -80,6 +80,7 @@
             columns.Bound(col => col.tgl_kej).Title("Tanggal Kejadian").Format("{0: dd-MM-yyyy}");
             columns.Bound(col => col.tgl_lapor).Title("Tanggal Lapor").Format("{0: dd-MM-yyyy}");
             columns.Bound(col => col.tgl_reg).Title("Tanggal Register").Format("{0: dd-MM-yyyy}");
+            columns.Bound(col => col.nm_status).Title("Status");
         })
         .Pageable(pager => pager
                     .Refresh(true)

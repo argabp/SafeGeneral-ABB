@@ -3,7 +3,7 @@
 @model ABB.Web.Modules.MutasiKlaim.Models.MutasiKlaimViewModel
 
 @{
-    var display = Model.flag_closing == "N" ? "" : "none";
+    var display = Model.flag_closing.Trim() == "N" ? "" : "none";
 }
 
 <style>

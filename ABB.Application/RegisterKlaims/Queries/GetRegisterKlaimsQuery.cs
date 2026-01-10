@@ -26,7 +26,7 @@ namespace ABB.Application.RegisterKlaims.Queries
         public async Task<List<RegisterKlaimDto>> Handle(GetRegisterKlaimsQuery request, CancellationToken cancellationToken)
         {
             _connectionFactory.CreateDbConnection(request.DatabaseName);
-            var results = (await _connectionFactory.Query<RegisterKlaimDto>(@"SELECT p.*, p2.nm_ttg, cb.nm_cb, cob.nm_cob, scob.nm_scob
+            var results = (await _connectionFactory.Query<RegisterKlaimDto>(@"SELECT p.*, p2.nm_ttg, cb.nm_cb, cob.nm_cob, scob.nm_scob, s.nm_status 
 				FROM cl01 p
 				    INNER JOIN uw01e p2
 						ON p.kd_cb = p2.kd_cb
@@ -42,6 +42,8 @@ namespace ABB.Application.RegisterKlaims.Queries
 					INNER JOIN rf05 scob
 						ON p.kd_cob = scob.kd_cob
 						AND p.kd_scob = scob.kd_scob
+					INNER JOIN MS_StatusKlaim s
+						ON s.kd_status = p.kd_status
 				WHERE cb.kd_cb = @KodeCabang AND (cb.nm_cb like '%'+@SearchKeyword+'%' 
 					OR cob.nm_cob like '%'+@SearchKeyword+'%' 
 					OR scob.nm_scob like '%'+@SearchKeyword+'%' 

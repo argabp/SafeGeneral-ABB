@@ -1,6 +1,7 @@
 ﻿$(document).ready(function () {
     searchKeyword_OnKeyUp();
 });
+var mutasiKlaim;
 
 var processData;
 
@@ -54,6 +55,7 @@ function OnClickViewMutasiKlaim(e) {
 function OnMutasiChange(e) {
     var grid = e.sender;
     var selected = grid.dataItem(grid.select());
+    mutasiKlaim = selected;
     if (!selected) return;
 
     // Build the same id as in your C# template
@@ -415,7 +417,7 @@ function OnMutasiKlaimObyekDataBound(e){
         }
 
         if (buttonContainer.length) {
-            if (dataItem.flag_closing == "Y") {
+            if (mutasiKlaim.flag_closing == "Y") {
                 // Find the "Closing" button and hide it
                 buttonContainer.find("a[title='Edit']").hide();
                 buttonContainer.find("a[title='Delete']").hide();
@@ -445,7 +447,7 @@ function OnMutasiKlaimAlokasiDataBound(e){
         }
 
         if (buttonContainer.length) {
-            if (dataItem.flag_closing == "Y") {
+            if (mutasiKlaim.flag_closing == "Y") {
                 // Find the "Closing" button and hide it
                 buttonContainer.find("a[title='Edit']").hide();
                 buttonContainer.find("a[title='Delete']").hide();
@@ -488,7 +490,7 @@ function OnMutasiKlaimBebanDataBound(e){
         }
 
         if (buttonContainer.length) {
-            if (dataItem.flag_closing == "Y") {
+            if (mutasiKlaim.flag_closing == "Y") {
                 // Find the "Closing" button and hide it
                 buttonContainer.find("a[title='Edit']").hide();
                 buttonContainer.find("a[title='Delete']").hide();

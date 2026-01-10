@@ -102,7 +102,7 @@
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteDokumenKlaimDetail");
                     }).Width(200).Title("Action").Locked(true);
-                    columns.Bound(col => col.nm_dokumenklaim).Title("Nama Dokumen");
+                    columns.Bound(col => col.nm_dokumen).Title("Nama Dokumen");
                     columns.Bound(col => col.flag_wajib).Title("Flag Wajib");
                 })
                 .Pageable(pager => pager

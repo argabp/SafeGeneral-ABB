@@ -6,6 +6,7 @@
 @{
     var id = Model.kd_cb.Trim() + Model.kd_cob.Trim() +
             Model.kd_scob.Trim() + Model.kd_thn.Trim() + Model.no_kl.Trim();
+    var display = Model.flag_closing.Trim() == "N" ? "" : "none";
 }
 
 <style>
@@ -14,7 +15,7 @@
     }
 </style>
 
-<div class="row">
+<div class="row" style="display: @display">
     <div class="col-md-2">
         <button class="flat-btn-primary" style="height: 1em" onclick="OnClickAddMutasiKlaimBeban('@Model.kd_cb', '@Model.kd_cob', '@Model.kd_scob', '@Model.kd_thn', '@Model.no_kl', '@Model.no_mts', '@Model.tipe_mts', '@Model.kd_mtu')">Add Beban</button>
     </div>

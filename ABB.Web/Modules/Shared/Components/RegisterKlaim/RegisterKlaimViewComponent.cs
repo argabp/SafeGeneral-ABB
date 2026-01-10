@@ -42,6 +42,7 @@ namespace ABB.Web.Modules.Shared.Components.RegisterKlaim
                 registerKlaimViewModel.kd_thn = string.Empty;
                 registerKlaimViewModel.no_kl = string.Empty;
                 
+                registerKlaimViewModel.kd_status = 1;
                 registerKlaimViewModel.flag_pol_lama = "N";
                 registerKlaimViewModel.flag_tty_msk = "N";
                 registerKlaimViewModel.no_updt = 0;

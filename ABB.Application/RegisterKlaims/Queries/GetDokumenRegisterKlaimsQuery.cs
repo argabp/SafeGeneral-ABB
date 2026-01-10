@@ -39,10 +39,9 @@ namespace ABB.Application.RegisterKlaims.Queries
         {
             _db.CreateDbConnection(request.DatabaseName);
             var lampirans = (await _db.Query<DokumenRegisterKlaimDto>(
-                @$"SELECT a.*, d.nm_dok dokumenName FROM cl01d a
+                @$"SELECT a.*, d.nm_dokumen dokumenName FROM cl01d a
                                 INNER JOIN dp20 d
-                                    ON a.kd_dok = d.kd_dok
-										AND d.kd_cob = a.kd_cob
+                                    ON a.kd_dok = d.kd_dokumen
                                    WHERE a.kd_cb = '{request.kd_cb}' AND 
                                a.kd_cob = '{request.kd_cob}' AND a.kd_scob = '{request.kd_scob}' AND a.kd_thn = '{request.kd_thn}' AND
                                a.no_kl = '{request.no_kl}'")).ToList();

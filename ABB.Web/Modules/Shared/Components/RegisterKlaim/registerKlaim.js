@@ -86,6 +86,8 @@ function saveRegisterKlaim(url) {
                 if (response.Model != undefined) {
                     setRegisterKlaimModel(response.Model);
                 }
+
+                refreshGridDokumenRegisterKlaim();
             }
             else if (response.Result == "ERROR")
                 showMessage("Error", response.Message);

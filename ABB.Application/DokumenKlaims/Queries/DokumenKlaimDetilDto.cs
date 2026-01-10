@@ -13,7 +13,7 @@ namespace ABB.Application.DokumenKlaims.Queries
         public string kd_scob { get; set; }
 
         public Int16 kd_dokumen { get; set; }
-        public string? nm_dokumenklaim { get; set; }
+        public string? nm_dokumen { get; set; }
 
         public bool flag_wajib { get; set; }
 
