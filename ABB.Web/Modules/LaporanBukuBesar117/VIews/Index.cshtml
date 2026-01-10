@@ -4,17 +4,13 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Kendo.Mvc
 
-@inject IConfiguration Configuration
-
 @{
     Layout = "~/Modules/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Laporan Buku Besar";
+    ViewData["Title"] = "Laporan Buku Besar 117";
 }
-
-<script src="~/Modules/LaporanBukuBesar/JS/LaporanBukuBesar.index.js"></script>
+<script src="~/Modules/LaporanBukuBesar/JS/LaporanBukuBesar117.index.js"></script>
 
 <style>
-    /* Gunakan Style yang sama dengan Jurnal Harian agar konsisten */
     .filter-section { display: flex; align-items: center; margin-bottom: 15px; }
     .filter-label { font-weight: bold; width: 140px; min-width: 140px; white-space: nowrap; margin-right: 15px; }
     .filter-input-group { display: flex; align-items: center; gap: 10px; }
@@ -33,7 +29,7 @@
         
         <div class="filter-section">
             <label class="filter-label">Kode Cabang :</label>
-            <input class="k-textbox" value="@ViewBag.UserCabangText" readonly style="width:300px; background-color: #e9ecef;" />
+             <input class="k-textbox" value="@ViewBag.UserCabangText" readonly style="width:300px; background-color: #e9ecef;" />
              <input type="hidden" id="KodeCabang" value="@ViewBag.UserCabangValue" />
         </div>
 
@@ -46,7 +42,7 @@
             </div>
         </div>
 
-       <div class="filter-section">
+        <div class="filter-section">
             <label class="filter-label">Kode Akun :</label>
             <div class="filter-input-group">
                 @(Html.Kendo().ComboBox()
@@ -54,16 +50,17 @@
                     .Placeholder("Ketik kode/nama akun...")
                     .DataTextField("Display")
                     .DataValueField("Kode")
-                    .Filter(FilterType.Contains)
-                    .MinLength(2) // Cari setelah 2 karakter
-                    .AutoBind(false) // Jangan load saat awal buka
+                    .Filter(FilterType.Contains) // Filter contains
+                    .MinLength(2) // Baru cari setelah user ketik 2 huruf (Biar gak request pas kosong)
+                    .AutoBind(false) // PENTING: Jangan load data saat page load!
                     .Suggest(true)
                     .HtmlAttributes(new { style = "width:250px;" })
                     .DataSource(source => { 
                         source.Read(read => { 
-                            read.Action("GetCoaList", "LaporanBukuBesar"); 
+                            read.Action("GetCoaList", "LaporanBukuBesar117"); 
+                            // Kendo otomatis kirim parameter bernama 'text' saat user ngetik
                         })
-                        .ServerFiltering(true); // Aktifkan filter di server
+                        .ServerFiltering(true); // PENTING: Filter dilakukan di Controller, bukan di Browser
                     })
                 )
 
@@ -76,27 +73,25 @@
                     .DataValueField("Kode")
                     .Filter(FilterType.Contains)
                     .MinLength(2)
-                    .AutoBind(false)
+                    .AutoBind(false) // PENTING
                     .Suggest(true)
                     .HtmlAttributes(new { style = "width:250px;" })
                     .DataSource(source => { 
                         source.Read(read => { 
-                            read.Action("GetCoaList", "LaporanBukuBesar"); 
+                            read.Action("GetCoaList", "LaporanBukuBesar117"); 
                         })
-                        .ServerFiltering(true);
+                        .ServerFiltering(true); // PENTING
                     })
                 )
             </div>
         </div>
 
         <div class="filter-section">
-            @(Html.Kendo().Button()
-                .Name("btnSearch")
-                .Content("<span class='k-icon k-i-search'></span> Cari")
-                .HtmlAttributes(new { @class = "k-primary", style = "border-radius:6px; width:120px;" })
-                .Events(e => e.Click("onSearchClick")) // <--- Pastikan ini memanggil onSearchClick
-            )
+             <button id="btnSearch" class="k-button k-primary" style="border-radius:6px; width:120px;" onclick="generateBukuBesar117()">
+                <span class='k-icon k-i-search'></span> Cari
+            </button>
         </div>
 
     </div>
 </div>
+

@@ -314,7 +314,7 @@ namespace ABB.Web.Modules.EntriPembayaranKas
 
                     if (command.Data == null || !command.Data.Any())
                         throw new Exception("Tidak ada data nota yang dikirim.");
-
+                    command.KodeUserInput = CurrentUser.UserId;
                     await Mediator.Send(command);
                     return Ok(new { Status = "OK", Message = "Data berhasil disimpan" });
                 }

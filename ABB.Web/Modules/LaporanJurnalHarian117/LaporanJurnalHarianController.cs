@@ -8,91 +8,84 @@ using ABB.Web.Modules.Base;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using ABB.Application.Cabangs.Queries;
-// using ABB.Application.Coas.Queries; // Tidak dipakai karena akses langsung db
-using ABB.Application.LaporanBukuBesars.Queries;
+using ABB.Application.LaporanJurnalHarian117s117.Queries;
 using ABB.Application.Common.Interfaces;
 using ABB.Application.Common.Services;
 using DinkToPdf;
-using ABB.Domain.Entities;
 
-namespace ABB.Web.Modules.LaporanBukuBesar
+
+namespace ABB.Web.Modules.LaporanJurnalHarian117
 {
-    public class LaporanBukuBesarController : AuthorizedBaseController
+    public class LaporanJurnalHarian117Controller : AuthorizedBaseController
     {
-        private readonly IReportGeneratorService _reportGeneratorService;
-        
-        // [PERBAIKAN 1]: Deklarasikan variabel _context
-        private readonly IDbContextPstNota _context; 
 
-        // [PERBAIKAN 2]: Tambahkan IDbContextPstNota ke dalam parameter Constructor
-        public LaporanBukuBesarController(IReportGeneratorService reportGeneratorService, IDbContextPstNota context)
+         private readonly IReportGeneratorService _reportGeneratorService;
+        // private readonly IViewRenderService _viewRenderService;
+
+        public LaporanJurnalHarian117Controller(IReportGeneratorService reportGeneratorService)
         {
             _reportGeneratorService = reportGeneratorService;
-            _context = context; // Sekarang 'context' dikenali dari parameter di atas
         }
 
         public async Task<IActionResult> Index()
         {
+           
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             var databaseName = Request.Cookies["DatabaseValue"]; 
             ViewBag.UserLogin = CurrentUser.UserId;
             var kodeCabangCookie = Request.Cookies["UserCabang"];
 
-            // Load Cabang Info
             var cabangList = await Mediator.Send(new GetCabangsQuery { DatabaseName = databaseName });
-            var userCabang = cabangList.FirstOrDefault(c => string.Equals(c.kd_cb.Trim(), kodeCabangCookie?.Trim(), StringComparison.OrdinalIgnoreCase));
+
+           
+            var userCabang = cabangList
+                .FirstOrDefault(c => string.Equals(c.kd_cb.Trim(), kodeCabangCookie?.Trim(), StringComparison.OrdinalIgnoreCase));
             
+           
             string displayCabang = userCabang != null 
                 ? $"{userCabang.kd_cb.Trim()} - {userCabang.nm_cb.Trim()}" 
                 : kodeCabangCookie;
 
+           
             ViewBag.UserCabangValue = kodeCabangCookie; 
             ViewBag.UserCabangText = displayCabang;
-
             return View();
         }
 
-        // Dropdown Kode Akun
-        [HttpGet]
-        public async Task<IActionResult> GetCoaList(string text)
+         [HttpGet]
+        public async Task<IActionResult> GetKodeCabang(string tipe)
         {
-            // 1. Siapkan Query ke tabel Coa (104/Umum)
-            // Pastikan _context sudah tidak merah lagi
-            var query = _context.Set<Coa>()
-                .AsNoTracking()
-                .AsQueryable();
+            var databaseName = Request.Cookies["DatabaseValue"];
+            var kodeCabangCookie = Request.Cookies["UserCabang"];
 
-            // 2. Jika user mengetik sesuatu, filter datanya
-            if (!string.IsNullOrEmpty(text))
+            if (string.IsNullOrWhiteSpace(kodeCabangCookie))
+                return Json(new List<object>()); // cookie tidak ada → kirim kosong
+
+            var result = await Mediator.Send(new GetCabangsQuery
             {
-                query = query.Where(x => 
-                    x.gl_kode.Contains(text) || 
-                    x.gl_nama.Contains(text));
-            }
+                DatabaseName = databaseName
+            });
 
-            // 3. Ambil 50 data teratas saja agar ringan
-            var list = await query
-                .OrderBy(x => x.gl_kode)
-                .Take(50) 
-                .Select(x => new 
+            var filtered = result
+                .Where(c => c.kd_cb?.Trim() == kodeCabangCookie.Trim())
+                .Select(c => new
                 {
-                    Kode = x.gl_kode.Trim(),
-                    Nama = x.gl_nama.Trim(),
-                    Display = $"{x.gl_kode.Trim()} - {x.gl_nama.Trim()}"
+                    kd_cb = c.kd_cb.Trim(),
+                    nm_cb = c.nm_cb.Trim()
                 })
-                .ToListAsync();
+                .ToList(); 
+            ViewBag.UserCabang = kodeCabangCookie;
 
-            return Json(list);
+            return Json(filtered);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> GenerateReport([FromBody] LaporanBukuBesarFilterDto model)
+         [HttpPost]
+        public async Task<IActionResult> GenerateReport([FromBody] LaporanJurnalHarian117FilterDto model)
         {
             try
             {
@@ -102,27 +95,27 @@ namespace ABB.Web.Modules.LaporanBukuBesar
                 if (string.IsNullOrWhiteSpace(user))
                     throw new Exception("User ID tidak ditemukan.");
 
-                var query = new GetLaporanBukuBesarQuery
+                // Sesuaikan QUERY dengan data yang datang dari JS
+                var query = new GetLaporanJurnalHarian117Query
                 {
                     DatabaseName = databaseName,
                     KodeCabang = model.KodeCabang,
                     PeriodeAwal = model.PeriodeAwal,
                     PeriodeAkhir = model.PeriodeAkhir,
-                    AkunAwal = model.AkunAwal,
-                    AkunAkhir = model.AkunAkhir,
+                    JenisTransaksi = model.JenisTransaksi,
                     UserLogin = user
                 };
 
                 var reportTemplate = await Mediator.Send(query);
 
-                if (string.IsNullOrEmpty(reportTemplate))
+                if (reportTemplate == null || !reportTemplate.Any())
                     throw new Exception("Data tidak ditemukan.");
 
                 _reportGeneratorService.GenerateReport(
-                    "LaporanBukuBesar.pdf",
+                    "LaporanJurnalHarian117.pdf",
                     reportTemplate,
                     user,
-                    Orientation.Landscape, 
+                    Orientation.Landscape,
                     5, 5, 5, 5,
                     PaperKind.Legal
                 );
@@ -136,12 +129,11 @@ namespace ABB.Web.Modules.LaporanBukuBesar
         }
     }
 
-    public class LaporanBukuBesarFilterDto
+      public class LaporanJurnalHarian117FilterDto
     {
         public string KodeCabang { get; set; }
         public string PeriodeAwal { get; set; }
         public string PeriodeAkhir { get; set; }
-        public string AkunAwal { get; set; }
-        public string AkunAkhir { get; set; }
+        public string JenisTransaksi { get; set; }
     }
 }

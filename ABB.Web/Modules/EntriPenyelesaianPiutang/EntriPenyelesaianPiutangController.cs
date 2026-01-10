@@ -269,25 +269,26 @@ namespace ABB.Web.Modules.EntriPenyelesaianPiutang
         [HttpPost]
         public async Task<IActionResult> GetNotaProduksi([DataSourceRequest] DataSourceRequest request,
             string searchKeyword,
-            string jenisAsset)
+            string jenisAsset,
+            DateTime? startDate, // <--- TAMBAH
+            DateTime? endDate)   // <--- TAMBAH
         {
-            // ✅ Cegah load data jika semua filter kosong
             if (string.IsNullOrEmpty(searchKeyword) && string.IsNullOrEmpty(jenisAsset))
             {
                 var emptyList = new List<InquiryNotaProduksiDto>();
                 return Json(await emptyList.ToDataSourceResultAsync(request));
             }
 
-            // 🔹 Ambil data sesuai filter
             var data = await Mediator.Send(new GetNotaUntukPembayaranQuery()
             {
                 SearchKeyword = searchKeyword,
-                JenisAsset = jenisAsset
+                JenisAsset = jenisAsset,
+                StartDate = startDate, // <--- MAPPING
+                EndDate = endDate      // <--- MAPPING
             });
 
-
             return Json(await data.ToDataSourceResultAsync(request));
-        }  
+        } 
 
         // delete
         [HttpPost]
@@ -327,7 +328,7 @@ namespace ABB.Web.Modules.EntriPenyelesaianPiutang
 
                 if (command.Data == null || !command.Data.Any())
                     throw new Exception("Tidak ada data nota yang dikirim.");
-
+                command.KodeUserInput = CurrentUser.UserId;
                 await Mediator.Send(command);
                 return Ok(new { Status = "OK", Message = "Data berhasil disimpan" });
             }

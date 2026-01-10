@@ -16,11 +16,11 @@ using ABB.Application.Common.Interfaces;
 using ABB.Application.Common.Dtos;
 using ABB.Domain.Entities;
 using ABB.Application.Jurnals62.Queries;
-using ABB.Application.Coas.Queries;
+using ABB.Application.Coas117.Queries;
 
-namespace ABB.Application.LaporanJurnalHarians.Queries
+namespace ABB.Application.LaporanJurnalHarian117s117.Queries
 {
-    public class GetLaporanJurnalHarianQuery : IRequest<string>
+    public class GetLaporanJurnalHarian117Query : IRequest<string>
     {
         public string DatabaseName { get; set; }
         public string KodeCabang { get; set; }
@@ -30,14 +30,14 @@ namespace ABB.Application.LaporanJurnalHarians.Queries
         public string UserLogin { get; set; }
     }
 
-    public class GetLaporanJurnalHarianQueryHandler 
-        : IRequestHandler<GetLaporanJurnalHarianQuery, string>
+    public class GetLaporanJurnalHarian117QueryHandler 
+        : IRequestHandler<GetLaporanJurnalHarian117Query, string>
     {
         private readonly IDbContextPstNota _context;
         private readonly IMapper _mapper;
         private readonly IHostEnvironment _environment;
 
-        public GetLaporanJurnalHarianQueryHandler(
+        public GetLaporanJurnalHarian117QueryHandler(
             IDbContextPstNota context,
             IMapper mapper,
             IHostEnvironment environment)
@@ -48,7 +48,7 @@ namespace ABB.Application.LaporanJurnalHarians.Queries
         }
 
         public async Task<string> Handle(
-            GetLaporanJurnalHarianQuery request,
+            GetLaporanJurnalHarian117Query request,
             CancellationToken cancellationToken)
         {
             // ===============================
@@ -64,10 +64,11 @@ namespace ABB.Application.LaporanJurnalHarians.Queries
                              .AsQueryable();
 
             db = db.Where(j =>
-                _context.Set<Coa>().Any(c =>
+                _context.Set<Coa117>().Any(c =>
                     c.gl_kode == j.GlAkun
                 )
             );
+
             // ===============================
             // 2. FILTER CABANG
             // ===============================
@@ -195,7 +196,7 @@ namespace ABB.Application.LaporanJurnalHarians.Queries
             // ===============================
             string templatePath = Path.Combine(
                 _environment.ContentRootPath,
-                "Modules", "Reports", "Templates", "LaporanJurnalHarian.html");
+                "Modules", "Reports", "Templates", "LaporanJurnalHarian117.html");
 
             string templateHtml = await File.ReadAllTextAsync(templatePath);
             var template = Template.Parse(templateHtml);
