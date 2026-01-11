@@ -650,44 +650,59 @@ function onNotaProduksiSelect(e) {
 
 
 
- function SimpanNota() {
+function SimpanNota() {
     var grid = $("#PilihNotaGrid").data("kendoGrid");
-    var noBukti = $("#PenyelesaianHeader_NomorBukti").val();
-    console.log(noBukti)
-     var selectedItems = grid.select().map(function() {
+    
+    // --- [PERBAIKAN DISINI] ---
+    // Coba ambil dari Header Input yang sudah pasti ada isinya setelah save header
+    var noBukti = $("#PenyelesaianHeader_NomorBukti").val(); 
+
+    // Backup: Kalau kosong, coba cari di hidden field form detail
+    if (!noBukti) {
+        noBukti = $('#NewPaymentForm input[name="NoBukti"]').val();
+    }
+    
+    // Validasi akhir
+    if (!noBukti) {
+        showMessage("Warning", "Nomor Bukti belum terbentuk. Silakan simpan Header terlebih dahulu.");
+        return;
+    }
+    // --------------------------
+
+    var selectedData = [];
+
+    grid.select().each(function () {
         var row = $(this);
-        var dataItem = grid.dataItem(row);
-        var rpInputElement = row.find('.total-rp-input');
+        var dataItem = grid.dataItem(this);
+
         var totalOrg = parseFloat(row.find('.total-org-input').val()) || 0;
         var totalRp = parseFloat(row.find('.total-rp-input').val()) || 0;
-      
-        
-        var inputElement = row.find('input.coa-combobox[data-role="combobox"]');
-        var kendoCombo = inputElement.data("kendoComboBox");
-        var kodeAkun = kendoCombo ? kendoCombo.value() : null; 
+        var totalRpInput = row.find('.total-rp-input');
 
-        return {
+        var akunOtomatis = row.find('.coa-input').val(); 
+        var dkOtomatis = row.find('.dk-input').val();
+
+        selectedData.push({
             NoNota: dataItem.no_nd,
             TotalBayarOrg: Math.floor(totalOrg),
             TotalBayarRp: totalRp,
-            DebetKredit: row.find('.dk-input').val(),
+            DebetKredit: dkOtomatis,
+            KodeAkun: akunOtomatis,
             KodeMataUang: dataItem.kd_mtu,
-            KodeAkun: kodeAkun
-        };
-    }).get();
+            Kurs: parseFloat(totalRpInput.data('kurs')) || 1
+        });
+    });
 
-    if (selectedItems.length === 0) {
-        alert("Silakan pilih minimal satu nota untuk disimpan.");
+    if (selectedData.length === 0) {
+        showMessage("Silakan pilih minimal satu nota untuk disimpan.");
         return;
     }
 
     var payload = {
-        NoBukti: noBukti,
-        Data: selectedItems
+        NoBukti: noBukti, // Variable ini sekarang sudah aman
+        Data: selectedData
     };
-    console.log(payload)
-    onSaveHeaderAndProceed()
-   
+
     $.ajax({
         url: '/EntriPenyelesaianPiutang/SimpanNota',
         type: 'POST',
@@ -695,18 +710,18 @@ function onNotaProduksiSelect(e) {
         data: JSON.stringify(payload),
         success: function (response) {
             if (response.Status === "OK") {
-                showMessage("success", "Data berhasil disimpan!");
-                updateGridFooter()
-                
+                 showMessage('Success','Data berhasil disimpan.');
                 var pilihNotaWindow = $("#PilihNotaWindow").data("kendoWindow");
                 if (pilihNotaWindow) {
                     pilihNotaWindow.close();
                 }
-                $("#TempDetailPembayaranGrid").data("kendoGrid").dataSource.read();
-                $("#BelumFinalGrid").data("kendoGrid").dataSource.read();
-                $("#SudahFinalGrid").data("kendoGrid").dataSource.read();
-           
-
+                
+                // Refresh Grid Detail (pastikan ID grid benar)
+                // Cek apakah pakai TempDetailPembayaranGrid atau DetailPembayaranGrid
+                var detailGrid = $("#TempDetailPembayaranGrid").data("kendoGrid");
+                if(detailGrid) detailGrid.dataSource.read();
+                
+                updateGridFooter(); // Update footer total
             } else {
                 alert("Error: " + (response.Message || "Gagal menyimpan data."));
             }

@@ -9,31 +9,24 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using ABB.Application.Cabangs.Queries;
-// using ABB.Application.Coas.Queries; // Tidak dipakai karena akses langsung db
-using ABB.Application.LaporanBukuBesars.Queries;
+using ABB.Application.LaporanBukuBesars117.Queries; // Namespace Baru
 using ABB.Application.Common.Interfaces;
 using ABB.Application.Common.Services;
 using DinkToPdf;
-using ABB.Domain.Entities;
+using ABB.Domain.Entities; 
 
-namespace ABB.Web.Modules.LaporanBukuBesar
+namespace ABB.Web.Modules.LaporanBukuBesar117
 {
-    public class LaporanBukuBesarController : AuthorizedBaseController
+    public class LaporanBukuBesar117Controller : AuthorizedBaseController
     {
         private readonly IReportGeneratorService _reportGeneratorService;
-        
-        // [PERBAIKAN 1]: Deklarasikan variabel _context
-        private readonly IDbContextPstNota _context; 
+        private readonly IDbContextPstNota _context; // Inject Context buat ambil coa117 buat dropdown
 
-        // [PERBAIKAN 2]: Tambahkan IDbContextPstNota ke dalam parameter Constructor
-        public LaporanBukuBesarController(IReportGeneratorService reportGeneratorService, IDbContextPstNota context)
+        public LaporanBukuBesar117Controller(IReportGeneratorService reportGeneratorService, IDbContextPstNota context)
         {
             _reportGeneratorService = reportGeneratorService;
-            _context = context; // Sekarang 'context' dikenali dari parameter di atas
+            _context = context;
         }
 
         public async Task<IActionResult> Index()
@@ -44,7 +37,6 @@ namespace ABB.Web.Modules.LaporanBukuBesar
             ViewBag.UserLogin = CurrentUser.UserId;
             var kodeCabangCookie = Request.Cookies["UserCabang"];
 
-            // Load Cabang Info
             var cabangList = await Mediator.Send(new GetCabangsQuery { DatabaseName = databaseName });
             var userCabang = cabangList.FirstOrDefault(c => string.Equals(c.kd_cb.Trim(), kodeCabangCookie?.Trim(), StringComparison.OrdinalIgnoreCase));
             
@@ -58,25 +50,26 @@ namespace ABB.Web.Modules.LaporanBukuBesar
             return View();
         }
 
-        // Dropdown Kode Akun
+        // Dropdown Kode Akun (KHUSUS COA 104)
         [HttpGet]
         public async Task<IActionResult> GetCoaList(string text)
         {
-            // 1. Siapkan Query ke tabel Coa (104/Umum)
-            // Pastikan _context sudah tidak merah lagi
-            var query = _context.Set<Coa>()
+            // 1. Siapkan Query
+            var query = _context.Set<Coa117>()
                 .AsNoTracking()
                 .AsQueryable();
 
-            // 2. Jika user mengetik sesuatu, filter datanya
+            // 2. Jika ada text pencarian (user mengetik)
             if (!string.IsNullOrEmpty(text))
             {
+                // Cari berdasarkan Kode ATAU Nama
                 query = query.Where(x => 
                     x.gl_kode.Contains(text) || 
                     x.gl_nama.Contains(text));
             }
 
-            // 3. Ambil 50 data teratas saja agar ringan
+            // 3. Ambil data secukupnya saja (misal 50 teratas)
+            // Ini kuncinya biar TIDAK BERAT
             var list = await query
                 .OrderBy(x => x.gl_kode)
                 .Take(50) 
@@ -92,17 +85,14 @@ namespace ABB.Web.Modules.LaporanBukuBesar
         }
 
         [HttpPost]
-        public async Task<IActionResult> GenerateReport([FromBody] LaporanBukuBesarFilterDto model)
+        public async Task<IActionResult> GenerateReport([FromBody] LaporanBukuBesar117FilterDto model)
         {
             try
             {
                 var databaseName = Request.Cookies["DatabaseValue"];
                 var user = CurrentUser.UserId;
 
-                if (string.IsNullOrWhiteSpace(user))
-                    throw new Exception("User ID tidak ditemukan.");
-
-                var query = new GetLaporanBukuBesarQuery
+                var query = new GetLaporanBukuBesar117Query
                 {
                     DatabaseName = databaseName,
                     KodeCabang = model.KodeCabang,
@@ -118,11 +108,13 @@ namespace ABB.Web.Modules.LaporanBukuBesar
                 if (string.IsNullOrEmpty(reportTemplate))
                     throw new Exception("Data tidak ditemukan.");
 
+                // Kita pakai template PDF yang sama (LaporanBukuBesar.pdf) karena formatnya sama
+                // Cuma beda isinya saja
                 _reportGeneratorService.GenerateReport(
-                    "LaporanBukuBesar.pdf",
+                    "LaporanBukuBesar117.pdf",
                     reportTemplate,
                     user,
-                    Orientation.Landscape, 
+                    Orientation.Landscape,
                     5, 5, 5, 5,
                     PaperKind.Legal
                 );
@@ -136,7 +128,7 @@ namespace ABB.Web.Modules.LaporanBukuBesar
         }
     }
 
-    public class LaporanBukuBesarFilterDto
+    public class LaporanBukuBesar117FilterDto
     {
         public string KodeCabang { get; set; }
         public string PeriodeAwal { get; set; }

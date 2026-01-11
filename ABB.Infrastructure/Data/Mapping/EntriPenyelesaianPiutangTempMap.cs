@@ -25,6 +25,11 @@ namespace ABB.Infrastructure.Data.Mapping
             builder.Property(t => t.TotalBayarRp).HasColumnName("total_bayar_rp");
             builder.Property(t => t.DebetKredit).HasColumnName("debet_kredit");
             builder.Property(t => t.UserBayar).HasColumnName("user_bayar").HasMaxLength(25);
+
+            builder.Property(t => t.KodeUserInput).HasColumnName("kode_user_input").HasMaxLength(50);
+            builder.Property(t => t.KodeUserUpdate).HasColumnName("kode_user_update").HasMaxLength(50);
+            builder.Property(t => t.TanggalInput).HasColumnName("tgl_user_input");
+            builder.Property(t => t.TanggalUpdate).HasColumnName("tgl_user_update");
         }
     }
 }

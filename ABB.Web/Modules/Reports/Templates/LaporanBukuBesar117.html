@@ -1,0 +1,115 @@
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.TagHelpers
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Laporan Buku Besar 117";
+}
+
+<style>
+    .filter-section { display: flex; align-items: center; margin-bottom: 15px; }
+    .filter-label { font-weight: bold; width: 140px; min-width: 140px; white-space: nowrap; margin-right: 15px; }
+    .filter-input-group { display: flex; align-items: center; gap: 10px; }
+    .sd-text { font-weight: 600; margin: 0 5px; }
+</style>
+
+<div class="flat-box filter-box">
+    <div class="flat-box-content filter-container">
+        
+        <div class="filter-section">
+            <label class="filter-label">Kode Cabang :</label>
+             <input class="k-textbox" value="@ViewBag.UserCabangText" readonly style="width:300px; background-color: #e9ecef;" />
+             <input type="hidden" id="KodeCabang" value="@ViewBag.UserCabangValue" />
+        </div>
+
+        <div class="filter-section">
+            <label class="filter-label">Periode :</label>
+            <div class="filter-input-group">
+                @(Html.Kendo().DatePicker().Name("tgl1").Format("dd-MM-yyyy").HtmlAttributes(new { style = "width:120px;" }))
+                <span class="sd-text">s/d</span>
+                @(Html.Kendo().DatePicker().Name("tgl2").Format("dd-MM-yyyy").HtmlAttributes(new { style = "width:120px;" }))
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <label class="filter-label">Kode Akun 104 :</label>
+            <div class="filter-input-group">
+                @(Html.Kendo().ComboBox()
+                    .Name("AkunAwal")
+                    .Placeholder("Dari Akun...")
+                    .DataTextField("Display")
+                    .DataValueField("Kode")
+                    .Filter("contains")
+                    .Suggest(true)
+                    .HtmlAttributes(new { style = "width:250px;" })
+                    // Arahkan ke Controller LaporanBukuBesar117
+                    .DataSource(source => { source.Read(read => { read.Action("GetCoaList", "LaporanBukuBesar117"); }); })
+                )
+
+                <span class="sd-text">s/d</span>
+
+                @(Html.Kendo().ComboBox()
+                    .Name("AkunAkhir")
+                    .Placeholder("Sampai Akun...")
+                    .DataTextField("Display")
+                    .DataValueField("Kode")
+                    .Filter("contains")
+                    .Suggest(true)
+                    .HtmlAttributes(new { style = "width:250px;" })
+                    .DataSource(source => { source.Read(read => { read.Action("GetCoaList", "LaporanBukuBesar117"); }); })
+                )
+            </div>
+        </div>
+
+        <div class="filter-section">
+             <button id="btnSearch" class="k-button k-primary" style="border-radius:6px; width:120px;" onclick="generateBukuBesar117()">
+                <span class='k-icon k-i-print'></span> Cetak
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function generateBukuBesar117() {
+        var kodeCabang = $("#KodeCabang").val();
+        var tgl1 = kendo.toString($("#tgl1").data("kendoDatePicker").value(), "yyyy-MM-dd");
+        var tgl2 = kendo.toString($("#tgl2").data("kendoDatePicker").value(), "yyyy-MM-dd");
+        var akun1 = $("#AkunAwal").data("kendoComboBox").value();
+        var akun2 = $("#AkunAkhir").data("kendoComboBox").value();
+
+        if (!tgl1 || !tgl2) {
+            alert("Periode tanggal harus diisi!");
+            return;
+        }
+
+        var payload = {
+            KodeCabang: kodeCabang,
+            PeriodeAwal: tgl1,
+            PeriodeAkhir: tgl2,
+            AkunAwal: akun1,
+            AkunAkhir: akun2
+        };
+        
+        // Panggil Controller LaporanBukuBesar117
+        $.ajax({
+            url: '/LaporanBukuBesar117/GenerateReport',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(payload),
+            success: function (res) {
+                if (res.Status === "OK") {
+                    window.open("/Reports/" + res.Data + "/LaporanBukuBesar117.pdf", "_blank");
+                } else {
+                    alert("Error: " + res.Message);
+                }
+            },
+            error: function () {
+                alert("Terjadi kesalahan server");
+            }
+        });
+    }
+</script>

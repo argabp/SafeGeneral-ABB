@@ -4,13 +4,33 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Kendo.Mvc
 
+
+<style>
+    .custom-kode .k-input,
+    .custom-kode .k-input,
+   .custom-kode,
+    .custom-kode .k-textbox,
+    .custom-kode .k-input,
+    .custom-kode input {
+        background-color: #00FFFF !important;
+    }
+    /* No Rekening – warna kuning muda */
+    .custom-kuning,
+    .custom-kuning .k-textbox,
+    .custom-kuning .k-input,
+    .custom-kuning input {
+        background-color: rgb(255, 255, 225) !important;
+    }
+
+
+</style>
 <div class="window-body" style="background-color: lightgray">
     <form id="Coa117Form" enctype="multipart/form-data" autocomplete="off">
         <div class="row">
             <div class="form-group col-sm-8">
                     <label asp-for="Kode"></label>
                     <div>
-                        <kendo-textbox for="Kode" style="width: 100%;" />
+                        <kendo-textbox for="Kode" class="custom-kode" style="width: 100%;" />
                         <span asp-validation-for="Kode" class="text-danger"></span>
                     </div>
             </div>
@@ -20,7 +40,7 @@
             <div class="form-group col-sm-8">
                     <label asp-for="Nama"></label>
                     <div>
-                        <kendo-textbox for="Nama" style="width: 100%;" />
+                        <kendo-textbox for="Nama" class="custom-kuning" style="width: 100%;" />
                         <span asp-validation-for="Nama" class="text-danger"></span>
                     </div>
             </div>
@@ -30,7 +50,7 @@
             <div class="form-group col-sm-8">
                     <label asp-for="Dept">Lokasi</label>
                     <div>
-                        <kendo-textbox for="Dept" style="width: 100%;" maxlength="2"/>
+                        <kendo-textbox for="Dept" class="custom-kuning" style="width: 100%;" maxlength="2"/>
                         <span asp-validation-for="Dept" class="text-danger"></span>
                     </div>
             </div>
@@ -40,7 +60,7 @@
             <div class="form-group col-sm-8">
                     <label asp-for="Type"></label>
                     <div>
-                        <kendo-textbox for="Type" style="width: 100%;" maxlength="2" />
+                        <kendo-textbox for="Type" class="custom-kuning" style="width: 100%;" maxlength="2" />
                         <span asp-validation-for="Type" class="text-danger"></span>
                     </div>
             </div>

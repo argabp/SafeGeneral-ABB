@@ -292,7 +292,7 @@ namespace ABB.Web.Modules.EntriPembayaranBank
                     {
                         throw new System.Exception("Data yang dikirim tidak lengkap.");
                     }
-
+                    command.KodeUserInput = CurrentUser.UserId;
                     // Langsung kirim command yang sudah ter-binding
                     await Mediator.Send(command);
                     return Ok(new { Status = "OK", Message = "Data berhasil disimpan" });
