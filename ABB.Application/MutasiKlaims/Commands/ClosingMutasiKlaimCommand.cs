@@ -17,7 +17,7 @@ namespace ABB.Application.MutasiKlaims.Commands
         public string no_kl { get; set; }
         public Int16 no_mts { get; set; }
 
-        public DateTime tgl_closing { get; set; }
+        public DateTime? tgl_closing { get; set; }
 
         public string kd_usr_input { get; set; }
     }

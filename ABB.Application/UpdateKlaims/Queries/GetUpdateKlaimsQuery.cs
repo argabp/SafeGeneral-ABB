@@ -48,13 +48,6 @@ namespace ABB.Application.UpdateKlaims.Queries
 					OR p2.nm_ttg like '%'+@SearchKeyword+'%' 
 					OR p.sebab_kerugian like '%'+@SearchKeyword+'%' 
 					OR @SearchKeyword = '' OR @SearchKeyword IS NULL)", new { request.SearchKeyword, request.KodeCabang })).ToList();
-            
-            
-            foreach (var result in results)
-            {
-	            result.Id =
-		            $"{result.kd_cb.Trim()}{result.kd_cob.Trim()}{result.kd_scob.Trim()}{result.kd_thn}{result.no_kl}";
-            }
 
             return results;
         }

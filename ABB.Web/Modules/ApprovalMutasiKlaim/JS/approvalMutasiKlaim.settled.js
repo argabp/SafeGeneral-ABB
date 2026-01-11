@@ -31,7 +31,7 @@ function approvalMutasiKlaimSettled(){
     form.append("kd_status", 5);
     form.append("tgl_status", Date());
     form.append("keterangan", $("#keterangan").val());
-    form.append("status_name", "Banding");
+    form.append("status_name", "Settled");
     form.append("kd_user_sign", $("#kd_user_sign").val());
     
     $("#upload").getKendoUpload().getFiles().forEach((data, index) => {

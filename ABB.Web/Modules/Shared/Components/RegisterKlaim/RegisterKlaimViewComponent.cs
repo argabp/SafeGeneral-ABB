@@ -63,7 +63,7 @@ namespace ABB.Web.Modules.Shared.Components.RegisterKlaim
             registerKlaimViewModel.kd_cb = registerKlaimViewModel.kd_cb.Trim();
             registerKlaimViewModel.kd_cob = registerKlaimViewModel.kd_cob.Trim();
             registerKlaimViewModel.kd_scob = registerKlaimViewModel.kd_scob.Trim();
-            registerKlaimViewModel.kd_wilayah = registerKlaimViewModel.kd_wilayah.Trim();
+            registerKlaimViewModel.kd_wilayah = registerKlaimViewModel.kd_wilayah?.Trim();
             registerKlaimViewModel.IsEdit = true;
 
             return View("_RegisterKlaim", registerKlaimViewModel);

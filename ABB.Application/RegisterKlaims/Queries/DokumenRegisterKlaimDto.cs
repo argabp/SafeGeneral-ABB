@@ -23,6 +23,8 @@ namespace ABB.Application.RegisterKlaims.Queries
         public string? link_file { get; set; }
 
         public string dokumenName  { get; set; }
+
+        public bool? flag_wajib { get; set; }
         
         public void Mapping(Profile profile)
         {

@@ -24,6 +24,8 @@ namespace ABB.Web.Modules.RegisterKlaim.Models
 
         public string? link_file { get; set; }
 
+        public bool? flag_wajib { get; set; }
+
         public IFormFile file { get; set; }
         
         public void Mapping(Profile profile)

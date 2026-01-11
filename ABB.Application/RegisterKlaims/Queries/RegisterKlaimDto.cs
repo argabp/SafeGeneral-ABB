@@ -100,6 +100,8 @@ namespace ABB.Application.RegisterKlaims.Queries
 
         public Int16 no_mts { get; set; }
 
+        public short? kd_status { get; set; }
+
         public string? nm_status { get; set; }
         
         public void Mapping(Profile profile)

@@ -7,7 +7,7 @@ namespace ABB.Application.UpdateKlaims.Queries
 {
     public class UpdateKlaimDto : IMapFrom<RegisterKlaim>
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         public string kd_cb { get; set; }
 

@@ -287,7 +287,7 @@ function closingMutasiKlaim(dataItem){
     form.kd_thn = dataItem.kd_thn;
     form.no_kl = dataItem.no_kl;
     form.no_mts = dataItem.no_mts;
-    form.tgl_closing = dataItem.tgl_mts;
+    form.tgl_closing = kendo.toString(dataItem.tgl_closing, "MM/dd/yyyy");
     form.kd_usr_input = dataItem.kd_usr_input;
 
     var data = JSON.stringify(form);

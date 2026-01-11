@@ -63,7 +63,7 @@ namespace ABB.Application.ApprovalMutasiKlaims.Commands
             var userIds = new List<string>();
             try
             {
-                    message = (await _connectionFactory.QueryProc<string>("sp_ApprovalPengajuanKlaim",
+                    message = (await _connectionFactory.QueryProc<string>("sp_ApprovalPengajuanEsc",
                     new
                     {
                         request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn, 

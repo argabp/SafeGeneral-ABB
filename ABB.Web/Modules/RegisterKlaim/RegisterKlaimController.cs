@@ -463,6 +463,12 @@ namespace ABB.Web.Modules.RegisterKlaim
             return PartialView();
         }
         
+        [HttpGet]
+        public  IActionResult View(RegisterKlaimModel parameterModel)
+        {
+            return PartialView(parameterModel);
+        }
+        
         public async Task<ActionResult> GetApprovalMutasiKlaimStatus([DataSourceRequest] DataSourceRequest request, ApprovalMutasiStatusViewModel model)
         {
             var query = Mapper.Map<GetPengajuanKlaimStatusQuery>(model);

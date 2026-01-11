@@ -38,6 +38,16 @@ namespace ABB.Web.Modules.UpdateKlaim
          public async Task<ActionResult> GetUpdateKlaims([DataSourceRequest] DataSourceRequest request, string searchkeyword)
          {
              var ds = await Mediator.Send(new GetUpdateKlaimsQuery() { SearchKeyword = searchkeyword, KodeCabang = Request.Cookies["UserCabang"], DatabaseName = Request.Cookies["DatabaseValue"]});
+             
+             var counter = 1;
+             foreach (var data in ds)
+             {
+                 data.Id = counter;
+                 data.register_klaim = "K." + data.kd_cb.Trim() + "." + data.kd_scob.Trim() 
+                                             + "." + data.kd_thn.Trim() + "." + data.no_kl.Trim();
+
+                 counter++;
+             }
              return Json(ds.AsQueryable().ToDataSourceResult(request));
          }
          

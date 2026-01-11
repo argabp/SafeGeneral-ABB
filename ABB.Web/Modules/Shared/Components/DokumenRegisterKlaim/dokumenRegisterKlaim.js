@@ -77,39 +77,17 @@ function initDokumenRegisterKlaimGrid() {
                 width: "450px"
             },
             {
-                field: "flag_dok", title: "Berkas Dokumen",
-                editor: function (container, options) {
-                    // Generate unique IDs for each row to avoid conflicts
-                    var uniqueId = options.model.uid || 'temp_' + Date.now();
-
-                    // Create radio group with iCheck structure
-                    var radioGroup = $(`
-                        <div class="form-group clearfix">
-                            <div class="icheck-primary d-inline">
-                                <input type="radio" id="${options.field}_ada_${uniqueId}" name="${options.field}" value="Y">
-                                <label for="${options.field}_ada_${uniqueId}">Ada</label>
-                            </div>
-                            <div class="icheck-primary d-inline">
-                                <input type="radio" id="${options.field}_tidak_ada_${uniqueId}" name="${options.field}" value="N">
-                                <label for="${options.field}_tidak_ada_${uniqueId}">Tidak Ada</label>
-                            </div>
-                        </div>
-                    `).appendTo(container);
-
-                    // Set the initial value based on the model
-                    var currentValue = options.model[options.field];
-                    if (currentValue === "Y") {
-                        radioGroup.find(`#${options.field}_ada_${uniqueId}`).prop('checked', true);
-                    } else {
-                        radioGroup.find(`#${options.field}_tidak_ada_${uniqueId}`).prop('checked', true);
-                    }
+                field: "flag_wajib", title: "Wajib",
+                editor: function (container, options) {checkBoxEditor({
+                    container: container,
+                    options: options})
                 },
                 template: function (dataItem) {
                     var result;
-                    if (dataItem.flag_dok === "Y") {
-                        result = `<p>Ada</p>`;
+                    if (dataItem.flag_wajib === true) {
+                        result = `<i class="fas fa-check-circle fa-lg" style = "color:var(--jade-green)" ></i>`;
                     } else {
-                        result = `<p>Tidak Ada</p>`;
+                        result = `<i class="fas fa-times-circle fa-lg" style = "color:var(--coral-red)" ></i>`;
                     }
                     return result;
                 },
@@ -137,7 +115,7 @@ function loadDokumenRegisterKlaimDS() {
             fields: {
                 kd_dok: { type: "numeric" },
                 link_file: { type: "string" },
-                flag_dok: { type: "string" },
+                flag_wajib: { type: "boolean" },
             }
         }
     });
@@ -158,7 +136,7 @@ function saveDokumenRegisterKlaim(e){
     var no_kl = $("#no_kl").val();
     var kd_dok = e.model.kd_dok?.Value === undefined ?  e.model.kd_dok : e.model.kd_dok.Value;
     var file = $("#link_file")[0].files[0];
-    var flag_dok = e.model.flag_dok;
+    var flag_wajib = e.model.flag_wajib;
     
     var form = new FormData();
 
@@ -169,7 +147,7 @@ function saveDokumenRegisterKlaim(e){
     form.append("no_kl", no_kl);
     form.append("kd_dok", kd_dok);
     form.append("File", file);
-    form.append("flag_dok", flag_dok);
+    form.append("flag_wajib", flag_wajib);
     
     ajaxUpload("/RegisterKlaim/SaveDokumenRegisterKlaim", form, function (response) {
         closeProgressOnGrid("#DokumenRegisterKlaimGrid");

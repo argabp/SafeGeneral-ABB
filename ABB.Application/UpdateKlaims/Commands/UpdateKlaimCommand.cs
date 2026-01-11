@@ -57,7 +57,7 @@ namespace ABB.Application.UpdateKlaims.Commands
                     new
                     {
                         request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn, 
-                        request.no_kl, no_mts = 1, kd_user_status = _userService.UserId,
+                        request.no_kl, no_mts = 2, kd_user_status = _userService.UserId,
                         request.kd_status, tgl_status = DateTime.Now, request.keterangan,
                         kd_user_sign1 = _userService.UserId
                     })).First();
@@ -70,15 +70,19 @@ namespace ABB.Application.UpdateKlaims.Commands
                                                                               w.kd_scob == request.kd_scob &&
                                                                               w.kd_thn == request.kd_thn &&
                                                                               w.no_kl == request.no_kl &&
-                                                                              w.no_mts == 1);
+                                                                              w.no_mts == 2);
 
+                if (viewKlaim == null)
+                {
+                    throw new NullReferenceException("Data v_tr_klaim tidak ditemukan.");
+                }
                 
                 userIds = dbContext.KlaimStatus.Where(w => w.kd_cb == request.kd_cb &&
                                                                     w.kd_cob == request.kd_cob &&
                                                                     w.kd_scob == request.kd_scob &&
                                                                     w.kd_thn == request.kd_thn &&
                                                                     w.no_kl == request.no_kl &&
-                                                                    w.no_mts == 1)
+                                                                    w.no_mts == 2)
                     .Select(s => s.kd_user_sign).ToList();
                 
                 userIds.Add(viewKlaim.kd_usr_input);

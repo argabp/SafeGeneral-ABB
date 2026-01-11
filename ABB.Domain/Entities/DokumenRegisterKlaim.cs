@@ -17,5 +17,7 @@ namespace ABB.Domain.Entities
         public string? flag_dok { get; set; }
 
         public string? link_file { get; set; }
+
+        public bool? flag_wajib { get; set; }
     }
 }

@@ -31,7 +31,7 @@ function approvalMutasiKlaimProcess(){
     form.append("kd_status", 3);
     form.append("tgl_status", Date());
     form.append("keterangan", $("#keterangan").val());
-    form.append("status_name", "Approved");
+    form.append("status_name", "Process");
     
     $("#upload").getKendoUpload().getFiles().forEach((data, index) => {
         form.append("Files", data.rawFile);

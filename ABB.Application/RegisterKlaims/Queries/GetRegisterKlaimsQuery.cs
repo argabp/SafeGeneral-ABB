@@ -42,7 +42,7 @@ namespace ABB.Application.RegisterKlaims.Queries
 					INNER JOIN rf05 scob
 						ON p.kd_cob = scob.kd_cob
 						AND p.kd_scob = scob.kd_scob
-					INNER JOIN MS_StatusKlaim s
+					LEFT OUTER JOIN MS_StatusKlaim s
 						ON s.kd_status = p.kd_status
 				WHERE cb.kd_cb = @KodeCabang AND (cb.nm_cb like '%'+@SearchKeyword+'%' 
 					OR cob.nm_cob like '%'+@SearchKeyword+'%' 

@@ -30,8 +30,7 @@ namespace ABB.Web.Modules.UpdateSettledKlaim
                 SearchKeyword = searchkeyword,
                 DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
             });
-
-
+            
             var counter = 1;
             foreach (var data in ds)
             {

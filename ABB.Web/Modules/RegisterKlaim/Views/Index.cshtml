@@ -43,11 +43,11 @@
                     .IconClass("fa fa-pencil-alt")
                     .HtmlAttributes(new { title = "Edit" })
                     .Click("OnClickEditRegisterKlaim");
-                // command.Custom("View")
-                //     .Text(" ")
-                //     .IconClass("fa fa-eye")
-                //     .HtmlAttributes(new { title = "View" })
-                //     .Click("OnClickViewPengajuanAkseptasi");
+                command.Custom("View")
+                    .Text("View")
+                    .IconClass("fa fa-eye")
+                    .HtmlAttributes(new { title = "View" })
+                    .Click("OnClickViewRegisterKlaim");
                 command.Custom("Info")
                     .Text("Info")
                     .IconClass("fa fa-info-circle")
@@ -92,7 +92,7 @@
         .Scrollable()
         .Height(380)
         .Resizable(a=>a.Columns(true))
-        .Events(ev => ev.DataBound("gridAutoFit"))
+        .Events(ev => ev.DataBound("setButtonActions"))
     
             )
 

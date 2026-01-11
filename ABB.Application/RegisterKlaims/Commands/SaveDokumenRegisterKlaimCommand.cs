@@ -33,6 +33,8 @@ namespace ABB.Application.RegisterKlaims.Commands
         public string? flag_dok { get; set; }
 
         public string? link_file { get; set; }
+
+        public bool? flag_wajib { get; set; }
         
         public IFormFile File { get; set; }
 
@@ -92,7 +94,7 @@ namespace ABB.Application.RegisterKlaims.Commands
                     {
                         entity.link_file = request.File.FileName;
                     }
-                    entity.flag_dok = request.flag_dok;
+                    entity.flag_wajib = request.flag_wajib;
                 }
 
                 await dbContext.SaveChangesAsync(cancellationToken);
