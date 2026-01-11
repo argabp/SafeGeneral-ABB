@@ -159,7 +159,7 @@ namespace ABB.Web.Modules.ApprovalMutasiKlaim
                      await ApplicationHub.SendPengajuanAkseptasiNotification(notifTo, model.nomor_berkas, model.status_name);
                  }
                  
-                 return Json(new { Result = "OK", Message = result.Item1 });
+                 return Json(new { Result = "OK", Message = model.status_name + " Sucessfully" });
              }
              catch (Exception e)
              {
