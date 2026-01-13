@@ -34,11 +34,17 @@ using DetailJurnalMemorial104Entity = ABB.Domain.Entities.DetailJurnalMemorial10
 using JurnalMemorial117Entity = ABB.Domain.Entities.JurnalMemorial117;
 using JurnalMemorial117DetailEntitiy = ABB.Domain.Entities.JurnalMemorial117Detail;
 using Jurnal62Entitiy = ABB.Domain.Entities.Jurnal62;
+using BukuBesarSpDto = ABB.Domain.Entities.BukuBesarSpDto;
+using BukuBesarSp117Dto = ABB.Domain.Entities.BukuBesarSp117Dto;
+using JenisTransaksiEntitiy = ABB.Domain.Entities.JenisTransaksi;
+using SpLaporanJurnalHarianResult = ABB.Domain.Entities.SpLaporanJurnalHarianResult;
+using TemplateLapKeuEntity = ABB.Domain.Entities.TemplateLapKeu;
 
 namespace ABB.Infrastructure.Data
 {
     public class ABBDbContextPstNota : IdentityDbContext<AppUser, AppRole, string>, IDbContextPstNota
     {
+        
         public ABBDbContextPstNota(DbContextOptions<ABBDbContextPstNota> options) : base(options)
         {
             DatabaseContext = Database;
@@ -74,6 +80,12 @@ namespace ABB.Infrastructure.Data
         public DbSet<JurnalMemorial117Entity> JurnalMemorial117 { get; set; }
         public DbSet<JurnalMemorial117DetailEntitiy> JurnalMemorial117Detail { get; set; }
         public DbSet<Jurnal62Entitiy> Jurnal62 { get; set; }
+        public DbSet<BukuBesarSpDto> BukuBesarSpResults { get; set; }
+        public DbSet<BukuBesarSp117Dto> BukuBesarSp117Results { get; set; }
+        public DbSet<JenisTransaksiEntitiy> JenisTransaksi { get; set; }
+        public DbSet<SpLaporanJurnalHarianResult> SpLaporanJurnalHarianResults { get; set; }
+        public DbSet<SpLaporanJurnalHarian117Result> SpLaporanJurnalHarian117Results { get; set; }
+        public DbSet<TemplateLapKeuEntity> TemplateLapKeu { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -106,6 +118,31 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new JurnalMemorial117Map());
             builder.ApplyConfiguration(new JurnalMemorial117DetailMap());
             builder.ApplyConfiguration(new Jurnal62Map());
+            builder.ApplyConfiguration(new JenisTransaksiMap());
+            builder.ApplyConfiguration(new TemplateLapKeuMap());
+
+            builder.Entity<BukuBesarSpDto>(entity =>
+            {
+                entity.HasNoKey();
+                entity.ToView(null); 
+            });
+            builder.Entity<BukuBesarSp117Dto>(entity =>
+            {
+                entity.HasNoKey();
+                entity.ToView(null); 
+            });
+
+            builder.Entity<SpLaporanJurnalHarianResult>(entity =>
+            {
+                entity.HasNoKey();
+                entity.ToView(null); 
+            });
+
+              builder.Entity<SpLaporanJurnalHarian117Result>(entity =>
+            {
+                entity.HasNoKey();
+                entity.ToView(null); 
+            });
            
 
         }

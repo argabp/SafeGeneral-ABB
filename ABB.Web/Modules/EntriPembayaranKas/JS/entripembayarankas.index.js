@@ -54,8 +54,25 @@ function btnEntriPembayaranKas_OnClick(e) {
 }
 
 $(document).ready(function () {
-    $("#SearchKeyword").on("keyup", function () {
-        $("#EntriPembayaranKasGrid").data("kendoGrid").dataSource.read();
+   $("#SearchKeyword").on("keyup", function () {
+        // 1. Cek Tab mana yang sedang aktif
+        var tabStrip = $("#tabStrip").data("kendoTabStrip");
+        
+        // Jaga-jaga jika tabstrip belum ter-init
+        if (!tabStrip) return; 
+
+        var activeTabIndex = tabStrip.select().index();
+
+        // 2. Refresh Grid sesuai Tab yang aktif
+        if (activeTabIndex === 0) {
+            // Tab 1: Dalam Proses
+            var gridBelum = $("#BelumFinalGrid").data("kendoGrid");
+            if (gridBelum) gridBelum.dataSource.read();
+        } else {
+            // Tab 2: Sudah Final
+            var gridSudah = $("#SudahFinalGrid").data("kendoGrid");
+            if (gridSudah) gridSudah.dataSource.read();
+        }
     });
 
      $(document).on("keyup", "#PilihNotaSearchKeyword", function() {

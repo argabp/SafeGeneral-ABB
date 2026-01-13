@@ -33,7 +33,8 @@ using DetailJurnalMemorial104Entity = ABB.Domain.Entities.DetailJurnalMemorial10
 using JurnalMemorial117Entity = ABB.Domain.Entities.JurnalMemorial117;
 using DetailJurnalMemorial117Entity = ABB.Domain.Entities.JurnalMemorial117Detail;
 using Jurnal62Entity = ABB.Domain.Entities.Jurnal62;
-
+using JenisTransaksiEntity = ABB.Domain.Entities.JenisTransaksi;
+using TemplateLapKeuEntity = ABB.Domain.Entities.TemplateLapKeu;
 
 namespace ABB.Application.Common.Interfaces
 {
@@ -69,6 +70,14 @@ namespace ABB.Application.Common.Interfaces
         DbSet<DetailJurnalMemorial117Entity> JurnalMemorial117Detail { get; set; }
         DbSet<Jurnal62Entity> Jurnal62 { get; set; }
 
+        DbSet<BukuBesarSpDto> BukuBesarSpResults { get; set; }
+        DbSet<BukuBesarSp117Dto> BukuBesarSp117Results { get; set; }
+
+        DbSet<SpLaporanJurnalHarianResult> SpLaporanJurnalHarianResults { get; set; }
+        DbSet<SpLaporanJurnalHarian117Result> SpLaporanJurnalHarian117Results { get; set; }
+
+        DbSet<JenisTransaksiEntity> JenisTransaksi { get; set; }
+        DbSet<TemplateLapKeuEntity> TemplateLapKeu { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
