@@ -144,7 +144,23 @@ function getSearchFilter() {
 }
 $(document).ready(function () {
     $("#SearchKeyword").on("keyup", function() {
-        $("#EntriPenyelesaianPiutangGrid").data("kendoGrid").dataSource.read();
+        var keyword = $(this).val(); // Opsional: jika ingin log keyword
+
+        // 1. Refresh Grid Belum Final (Jika ada)
+        var gridBelum = $("#BelumFinalGrid").data("kendoGrid");
+        if (gridBelum) {
+            gridBelum.dataSource.read();
+        }
+
+        // 2. Refresh Grid Sudah Final (Jika ada)
+        var gridSudah = $("#SudahFinalGrid").data("kendoGrid");
+        if (gridSudah) {
+            gridSudah.dataSource.read();
+        }
+        
+        // Catatan: Jika ID grid utama Anda memang #EntriPenyelesaianPiutangGrid,
+        // pastikan ID di HTML View (.cshtml) sudah sesuai.
+        // Tapi melihat kode lain, sepertinya Anda menggunakan 2 grid terpisah.
     });
 
     $(document).on("keyup", "#PilihNotaSearchKeyword", function() {

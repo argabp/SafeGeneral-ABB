@@ -8,7 +8,7 @@ function onSearchClick() {
     var tgl2 = kendo.toString(dateObj_tgl2, "yyyy-MM-dd");
    
     var kodeCabang = $("#KodeCabang").data("kendoComboBox").value().trim();
-    var jenisTransaksi = $("input[name='JenisTransaksi']:checked").val();
+    var jenisTransaksi =  $("#JenisTransaksi").data("kendoComboBox").value().trim();
 
     if (!kodeCabang) {
         alert("Silakan pilih lokasi terlebih dahulu.");
@@ -20,7 +20,7 @@ function onSearchClick() {
         KodeCabang: kodeCabang,
         PeriodeAwal: tgl1,
         PeriodeAkhir: tgl2,
-        JenisTransaksi: $("#JenisTransaksi").val()
+        JenisTransaksi: jenisTransaksi
     };
 
     console.log(formData);

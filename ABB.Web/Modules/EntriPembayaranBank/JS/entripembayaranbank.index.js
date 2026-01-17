@@ -39,9 +39,7 @@ function getSearchFilter() {
     };
 }
 $(document).ready(function () {
-    $("#SearchKeyword").on("keyup", function() {
-        $("#EntriPembayaranBankGrid").data("kendoGrid").dataSource.read();
-    });
+  
 
     // $("#PilihNotaSearchKeyword").on("keyup", function() {
     //     $("#PilihNotaGrid").data("kendoGrid").dataSource.read();

@@ -99,21 +99,19 @@
     </div>
 
        <div class="filter-section">
-            <label class="filter-label">Jenis Laporan :</label>
-            @(Html.Kendo().DropDownList()
-                .Name("JenisTransaksi")
-                .DataTextField("Text")
-                .DataValueField("Value")
-                .BindTo(new List<SelectListItem>() {
-                    new SelectListItem() { Text = "Pilih...", Value = "" },
-                    new SelectListItem() { Text = "Bank Kredit", Value = "BK" },
-                    new SelectListItem() { Text = "Bank Debit", Value = "BD" },
-                    new SelectListItem() { Text = "Kas Kredit", Value = "KK" },
-                    new SelectListItem() { Text = "Kas Debit", Value = "KD" },
-                    new SelectListItem() { Text = "Penyelesaian Utang Piutang", Value = "BM" },
-                    new SelectListItem() { Text = "Memorial", Value = "MM" }
+            <label class="filter-label">Jenis Transaksi :</label>
+            @(Html.Kendo().ComboBox()
+               .Name("JenisTransaksi")
+                .Placeholder("Pilih ...")
+                .DataTextField("NamaJenisTransaksi")
+                .DataValueField("KodeJenisTransaksi")
+                .Filter("contains")
+                .Suggest(true)
+                .DataSource(source => {
+                    source.Read(read => {
+                        read.Action("GetJenisTransaksi", "LaporanJurnalHarian");
+                    });
                 })
-                .Value("Detail")
                 .HtmlAttributes(new { style = "width:300px;" })
             )
         </div>

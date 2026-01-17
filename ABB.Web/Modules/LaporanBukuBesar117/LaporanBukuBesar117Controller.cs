@@ -16,6 +16,7 @@ using ABB.Application.Common.Services;
 using DinkToPdf;
 using ABB.Domain.Entities; 
 
+
 namespace ABB.Web.Modules.LaporanBukuBesar117
 {
     public class LaporanBukuBesar117Controller : AuthorizedBaseController
@@ -126,6 +127,8 @@ namespace ABB.Web.Modules.LaporanBukuBesar117
                 return Ok(new { Status = "ERROR", Message = ex.InnerException?.Message ?? ex.Message });
             }
         }
+
+        
     }
 
     public class LaporanBukuBesar117FilterDto

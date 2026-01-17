@@ -44,78 +44,50 @@ namespace ABB.Application.LaporanBukuBesars117.Queries
             DateTime tglAwal = DateTime.Parse(request.PeriodeAwal).Date;
             DateTime tglAkhir = DateTime.Parse(request.PeriodeAkhir).Date.AddHours(23).AddMinutes(59).AddSeconds(59);
 
-            // 2. Filter Cabang
-            string cabang2Digit = "";
-            if (!string.IsNullOrEmpty(request.KodeCabang))
-            {
-                var trimCabang = request.KodeCabang.Trim();
-                cabang2Digit = trimCabang.Length >= 2 ? trimCabang.Substring(trimCabang.Length - 2, 2) : trimCabang;
-            }
-
-            // 3. Query Dasar Jurnal (PAKAI JURNAL 117)
-            var dbJurnal = _context.Set<Jurnal62>().AsNoTracking().AsQueryable();
-
-            if (!string.IsNullOrEmpty(cabang2Digit))
-            {
-                dbJurnal = dbJurnal.Where(x => x.GlLok == cabang2Digit);
-            }
-
-            // 4. Ambil Akun yang terlibat (PAKAI COA 104)
-            var queryAkun = _context.Set<Coa117>().AsNoTracking().AsQueryable();
-            
-            // Menggunakan gl_kode (Asumsi coa117 fieldnya sama)
-            if (!string.IsNullOrEmpty(request.AkunAwal))
-                queryAkun = queryAkun.Where(x => x.gl_kode.CompareTo(request.AkunAwal) >= 0);
-            
-            if (!string.IsNullOrEmpty(request.AkunAkhir))
-                queryAkun = queryAkun.Where(x => x.gl_kode.CompareTo(request.AkunAkhir) <= 0);
-
-            var listAkun = await queryAkun
-                .OrderBy(x => x.gl_kode)
-                .Select(x => new 
-                { 
-                    Kode = x.gl_kode, 
-                    Nama = x.gl_nama  
-                })
+            // 2. Eksekusi Stored Procedure
+            var rawData = await _context.BukuBesarSp117Results 
+                .FromSqlRaw("EXEC sp_LaporanBukuBesar117 {0}, {1}, {2}, {3}, {4}",
+                    request.KodeCabang ?? "",
+                    tglAwal,
+                    tglAkhir,
+                    request.AkunAwal ?? "",
+                    request.AkunAkhir ?? "ZZZZZ"
+                )
+                .AsNoTracking()
                 .ToListAsync(cancellationToken);
 
-            if (!listAkun.Any()) throw new Exception("Tidak ada akun yang ditemukan dalam range tersebut.");
+            if (!rawData.Any()) throw new Exception("Data tidak ditemukan dalam periode tersebut.");
 
-            // 5. Build HTML (SAMA PERSIS DENGAN BUKU BESAR BIASA)
+            // 3. Grouping Data
+            var groupedData = rawData.GroupBy(x => x.KodeAkun);
+
+            // 4. Build HTML
             StringBuilder sb = new StringBuilder();
 
-            foreach (var akun in listAkun)
+            foreach (var group in groupedData)
             {
-                string kodeAkun = (akun.Kode ?? "").Trim();
-                string namaAkun = (akun.Nama ?? "").Trim();
+                var headerInfo = group.First();
+                string kodeAkun = headerInfo.KodeAkun;
+                string namaAkun = headerInfo.NamaAkun;
+                
+                // Handle Nullable decimal
+                decimal saldoAwal = headerInfo.SaldoAwal ?? 0;
 
-                // --- A. Hitung Saldo Awal ---
-                var saldoAwalQuery = dbJurnal.Where(x => x.GlAkun == kodeAkun && x.GlTanggal < tglAwal);
-                var sumDebetAwal = await saldoAwalQuery.Where(x => x.GlDk == "D").SumAsync(x => x.GlNilaiIdr ?? 0, cancellationToken);
-                var sumKreditAwal = await saldoAwalQuery.Where(x => x.GlDk == "K").SumAsync(x => x.GlNilaiIdr ?? 0, cancellationToken);
-                decimal saldoAwal = sumDebetAwal - sumKreditAwal;
-
-                // --- B. Ambil Transaksi Periode Ini ---
-                var transaksiList = await dbJurnal
-                    .Where(x => x.GlAkun == kodeAkun && x.GlTanggal >= tglAwal && x.GlTanggal <= tglAkhir)
-                    .OrderBy(x => x.GlTanggal).ThenBy(x => x.GlBukti)
-                    .Select(x => new 
-                    {
-                        x.GlTanggal, x.GlBukti, x.GlKet, x.GlDk, Nilai = x.GlNilaiIdr ?? 0
-                    })
-                    .ToListAsync(cancellationToken);
-
-                if (saldoAwal == 0 && !transaksiList.Any()) continue;
-
-                // --- C. Render Row Transaksi ---
                 decimal totalDebetBulanIni = 0;
                 decimal totalKreditBulanIni = 0;
-                bool isFirstRow = true; 
+                bool isFirstRow = true;
+
+                // [PERBAIKAN 1]: Hapus '?? 0' karena RowType di DTO kamu sepertinya 'int'
+                var transaksiList = group
+                    .Where(x => x.RowType == 1) 
+                    .OrderBy(x => x.Tanggal).ThenBy(x => x.NoBukti)
+                    .ToList(); 
 
                 foreach (var item in transaksiList)
                 {
-                    decimal debet = item.GlDk == "D" ? item.Nilai : 0;
-                    decimal kredit = item.GlDk == "K" ? item.Nilai : 0;
+                    decimal debet = item.Debet ?? 0;
+                    decimal kredit = item.Kredit ?? 0;
+
                     string displayKode = isFirstRow ? kodeAkun : "";
                     string displayNama = isFirstRow ? namaAkun : "";
                     string rowClass = isFirstRow ? "border-top-black" : "";
@@ -124,9 +96,9 @@ namespace ABB.Application.LaporanBukuBesars117.Queries
                     <tr class='{rowClass}'>
                         <td style='font-weight:bold;'>{displayKode}</td>
                         <td style='font-weight:bold;'>{displayNama}</td>
-                        <td class='center'>{item.GlTanggal:dd/MM/yyyy}</td>
-                        <td>{item.GlBukti}</td>
-                        <td>{item.GlKet}</td>
+                        <td class='center'>{(item.Tanggal.HasValue ? item.Tanggal.Value.ToString("dd/MM/yyyy") : "")}</td>
+                        <td>{item.NoBukti}</td>
+                        <td>{item.Keterangan}</td>
                         <td class='right'>{debet:N2}</td>
                         <td class='right'>{kredit:N2}</td>
                     </tr>");
@@ -136,7 +108,8 @@ namespace ABB.Application.LaporanBukuBesars117.Queries
                     isFirstRow = false; 
                 }
                 
-                if (transaksiList.Count == 0 && saldoAwal != 0)
+                // [PERBAIKAN 2]: Gunakan !transaksiList.Any() agar lebih aman daripada .Count == 0
+                if (!transaksiList.Any() && saldoAwal != 0)
                 {
                      sb.Append($@"
                     <tr>
@@ -150,13 +123,16 @@ namespace ABB.Application.LaporanBukuBesars117.Queries
                     </tr>");
                 }
 
+                // --- Footer Summary ---
                 decimal selisihBulanBerjalan = totalDebetBulanIni - totalKreditBulanIni;
                 decimal saldoAkhir = saldoAwal + selisihBulanBerjalan;
 
                 string saDebet = saldoAwal >= 0 ? saldoAwal.ToString("N2") : "0.00";
                 string saKredit = saldoAwal < 0 ? Math.Abs(saldoAwal).ToString("N2") : "0.00";
+
                 string selisihDebet = selisihBulanBerjalan >= 0 ? selisihBulanBerjalan.ToString("N2") : "0.00";
                 string selisihKredit = selisihBulanBerjalan < 0 ? Math.Abs(selisihBulanBerjalan).ToString("N2") : "0.00";
+
                 string sakDebet = saldoAkhir >= 0 ? saldoAkhir.ToString("N2") : "0.00";
                 string sakKredit = saldoAkhir < 0 ? Math.Abs(saldoAkhir).ToString("N2") : "0.00";
 
@@ -183,7 +159,6 @@ namespace ABB.Application.LaporanBukuBesars117.Queries
                 <tr><td colspan='7' style='border:none; height:15px;'></td></tr>");
             }
 
-            // 6. Template (GUNAKAN TEMPLATE YANG SAMA)
             string templatePath = Path.Combine(_environment.ContentRootPath, "Modules", "Reports", "Templates", "LaporanBukuBesar.html");
             if (!File.Exists(templatePath)) throw new FileNotFoundException("Template LaporanBukuBesar.html tidak ditemukan");
 

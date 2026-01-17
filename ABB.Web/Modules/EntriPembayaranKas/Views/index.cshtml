@@ -173,16 +173,5 @@
     }
 
     // Skrip untuk me-refresh grid yang aktif
-    $(document).ready(function () {
-        $("#SearchKeyword").on("keyup", function() {
-            var tabStrip = $("#tabStrip").data("kendoTabStrip");
-            var activeTabIndex = tabStrip.select().index();
-
-            if(activeTabIndex === 0) {
-                $("#BelumFinalGrid").data("kendoGrid").dataSource.read();
-            } else {
-                $("#SudahFinalGrid").data("kendoGrid").dataSource.read();
-            }
-        });
-    });
+   
 </script>

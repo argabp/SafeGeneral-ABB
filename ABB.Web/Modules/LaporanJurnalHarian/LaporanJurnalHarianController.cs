@@ -16,6 +16,7 @@ using ABB.Application.LaporanJurnalHarians.Queries;
 using ABB.Application.Common.Interfaces;
 using ABB.Application.Common.Services;
 using DinkToPdf;
+using ABB.Application.JenisTransaksis.Queries;
 
 
 namespace ABB.Web.Modules.LaporanJurnalHarian
@@ -126,6 +127,20 @@ namespace ABB.Web.Modules.LaporanJurnalHarian
             {
                 return Ok(new { Status = "ERROR", Message = ex.InnerException?.Message ?? ex.Message });
             }
+        }
+
+         [HttpGet]
+            public async Task<IActionResult> GetJenisTransaksi()
+        {
+            var list = await Mediator.Send(new GetAllJenisTransaksiQuery());
+
+            var result = list.Select(x => new
+            {
+                NamaJenisTransaksi = $"{x.nama.Trim()} ({x.kode.Trim()})",
+                KodeJenisTransaksi = x.kode.Trim()
+            }).ToList();
+
+            return Json(result);
         }
     }
 

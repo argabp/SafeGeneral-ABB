@@ -51,81 +51,98 @@ namespace ABB.Application.LaporanJurnalHarians.Queries
             GetLaporanJurnalHarianQuery request,
             CancellationToken cancellationToken)
         {
-            // ===============================
-            // 1. PERIODE (HANYA TANGGAL)
-            DateTime tglProdAwal = DateTime.Parse(request.PeriodeAwal).Date; 
+            // // ===============================
+            // // 1. PERIODE (HANYA TANGGAL)
+            // DateTime tglProdAwal = DateTime.Parse(request.PeriodeAwal).Date; 
             
-            // Tambahkan waktu sampai ujung hari untuk tanggal akhir
-            DateTime tglProdAkhir = DateTime.Parse(request.PeriodeAkhir).Date
-                                            .AddHours(23).AddMinutes(59).AddSeconds(59);
+            // // Tambahkan waktu sampai ujung hari untuk tanggal akhir
+            // DateTime tglProdAkhir = DateTime.Parse(request.PeriodeAkhir).Date
+            //                                 .AddHours(23).AddMinutes(59).AddSeconds(59);
 
-            var db = _context.Set<Jurnal62>()
-                             .AsNoTracking()
-                             .AsQueryable();
+            // var db = _context.Set<Jurnal62>()
+            //                  .AsNoTracking()
+            //                  .AsQueryable();
 
-            db = db.Where(j =>
-                _context.Set<Coa>().Any(c =>
-                    c.gl_kode == j.GlAkun
-                )
-            );
-            // ===============================
-            // 2. FILTER CABANG
-            // ===============================
+            // db = db.Where(j =>
+            //     _context.Set<Coa>().Any(c =>
+            //         c.gl_kode == j.GlAkun
+            //     )
+            // );
+            // // ===============================
+            // // 2. FILTER CABANG
+            // // ===============================
          
-            // FILTER KODE CABANG
-            if (!string.IsNullOrEmpty(request.KodeCabang))
-            {
-                var kodeCabangTrimmed = request.KodeCabang.Trim();
-                var cabang2Digit = kodeCabangTrimmed.Length >= 2
-                    ? kodeCabangTrimmed.Substring(kodeCabangTrimmed.Length - 2, 2) // ambil "50"
-                    : kodeCabangTrimmed;
+            // // FILTER KODE CABANG
+            // if (!string.IsNullOrEmpty(request.KodeCabang))
+            // {
+            //     var kodeCabangTrimmed = request.KodeCabang.Trim();
+            //     var cabang2Digit = kodeCabangTrimmed.Length >= 2
+            //         ? kodeCabangTrimmed.Substring(kodeCabangTrimmed.Length - 2, 2) // ambil "50"
+            //         : kodeCabangTrimmed;
 
-                db = db.Where(x =>
-                    !string.IsNullOrEmpty(x.GlLok) &&
-                    x.GlLok.Trim() == cabang2Digit);
-            }
+            //     db = db.Where(x =>
+            //         !string.IsNullOrEmpty(x.GlLok) &&
+            //         x.GlLok.Trim() == cabang2Digit);
+            // }
 
-            // FILTER GLTRAN
-            if (!string.IsNullOrEmpty(request.JenisTransaksi))
-            {
-                var jenisTransaksiTrimmed = request.JenisTransaksi.Trim(); // "MM"
+            // // FILTER GLTRAN
+            // if (!string.IsNullOrEmpty(request.JenisTransaksi))
+            // {
+            //     var jenisTransaksiTrimmed = request.JenisTransaksi.Trim(); // "MM"
 
-                db = db.Where(x =>
-                    !string.IsNullOrEmpty(x.GlTran) &&
-                    x.GlTran.Trim() == jenisTransaksiTrimmed
-                );
-            }
+            //     db = db.Where(x =>
+            //         !string.IsNullOrEmpty(x.GlTran) &&
+            //         x.GlTran.Trim() == jenisTransaksiTrimmed
+            //     );
+            // }
 
-            // ===============================
-            // 3. FILTER TANGGAL
-            // ===============================
-            db = db.Where(x =>
-                x.GlTanggal.HasValue &&
-                x.GlTanggal.Value >= tglProdAwal &&
-                x.GlTanggal.Value <= tglProdAkhir
-            );
+            // // ===============================
+            // // 3. FILTER TANGGAL
+            // // ===============================
+            // db = db.Where(x =>
+            //     x.GlTanggal.HasValue &&
+            //     x.GlTanggal.Value >= tglProdAwal &&
+            //     x.GlTanggal.Value <= tglProdAkhir
+            // );
 
           
-            // ===============================
-            // 4. AMBIL NAMA CABANG
-            // ===============================
-            string namaCabang = "-";
-            var cabang = await _context.Set<Cabang>()
-                .FirstOrDefaultAsync(x => x.kd_cb == request.KodeCabang, cancellationToken);
+            // // ===============================
+            // // 4. AMBIL NAMA CABANG
+            // // ===============================
+            // string namaCabang = "-";
+            // var cabang = await _context.Set<Cabang>()
+            //     .FirstOrDefaultAsync(x => x.kd_cb == request.KodeCabang, cancellationToken);
 
-            if (cabang != null)
-                namaCabang = cabang.nm_cb;
+            // if (cabang != null)
+            //     namaCabang = cabang.nm_cb;
 
-            // ===============================
-            // 5. AMBIL DATA JURNAL
-            // ===============================
-            var dataLaporan = await db
-                .ProjectTo<Jurnals62Dto>(_mapper.ConfigurationProvider)
-                .OrderBy(x => x.GlBukti)
-                .ThenBy(x => x.GlTran)
+            // // ===============================
+            // // 5. AMBIL DATA JURNAL
+            // // ===============================
+            // var dataLaporan = await db
+            //     .ProjectTo<Jurnals62Dto>(_mapper.ConfigurationProvider)
+            //     .OrderBy(x => x.GlBukti)
+            //     .ThenBy(x => x.GlTran)
+            //     .ToListAsync(cancellationToken);
+
+            // 1. Parsing Periode
+            DateTime tglAwal = DateTime.Parse(request.PeriodeAwal).Date;
+            DateTime tglAkhir = DateTime.Parse(request.PeriodeAkhir).Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+
+            // 2. Eksekusi Stored Procedure
+            var rawData = await _context.SpLaporanJurnalHarianResults
+                .FromSqlRaw("EXEC sp_LaporanJurnalHarian104 {0}, {1}, {2}, {3}",
+                    request.KodeCabang ?? "",
+                    tglAwal,
+                    tglAkhir,
+                    request.JenisTransaksi ?? ""
+                )
+                .AsNoTracking()
                 .ToListAsync(cancellationToken);
 
-            if (!dataLaporan.Any())
+
+
+            if (!rawData.Any())
                 throw new Exception("Data jurnal tidak ditemukan.");
 
             // ===============================
@@ -133,7 +150,7 @@ namespace ABB.Application.LaporanJurnalHarians.Queries
             // ===============================
             StringBuilder detailsBuilder = new StringBuilder();
 
-            foreach (var group in dataLaporan
+            foreach (var group in rawData
                 .GroupBy(x => x.GlBukti ?? "TANPA JURNAL")
                 .OrderBy(g => g.Key))
             {
@@ -204,9 +221,8 @@ namespace ABB.Application.LaporanJurnalHarians.Queries
             {
                 details = detailsBuilder.ToString(),
                 KodeCabang = request.KodeCabang,
-                NamaCabang = namaCabang,
-                PeriodeAwal = tglProdAwal.ToString("dd-MM-yyyy"),
-                PeriodeAkhir = tglProdAkhir.ToString("dd-MM-yyyy"),
+                PeriodeAwal = tglAwal.ToString("dd-MM-yyyy"),
+                PeriodeAkhir = tglAkhir.ToString("dd-MM-yyyy"),
                 TanggalCetak = DateTime.Now.ToString("dd-MM-yyyy"),
                 JudulLaporan = "LAPORAN JURNAL HARIAN"
             };
