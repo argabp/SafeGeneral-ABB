@@ -36,6 +36,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         private readonly IDbConnectionFactory _connectionFactory;
         private readonly IHostEnvironment _environment;
         private readonly ReportConfig _reportConfig;
+        private readonly IHostEnvironment _root;
 
         private List<string> ReportHaveDetails = new List<string>()
         {
@@ -53,11 +54,12 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         };
 
         public GetCetakSchedulePolisQueryHandler(IDbConnectionFactory connectionFactory, IHostEnvironment environment,
-            ReportConfig reportConfig)
+            ReportConfig reportConfig, IHostEnvironment root)
         {
             _connectionFactory = connectionFactory;
             _environment = environment;
             _reportConfig = reportConfig;
+            _root = root;
         }
 
         public async Task<string> Handle(GetCetakSchedulePolisQuery request, CancellationToken cancellationToken)
@@ -984,6 +986,35 @@ namespace ABB.Application.CetakSchedulePolis.Queries
             decimal total_prm_tjh = 0;
             decimal total_tjh = 0;
             decimal total_ttg = 0;
+
+            var footer_template = string.Empty;
+
+            if (cetakSchedulePolis.kd_cb.Length >= 4 && cetakSchedulePolis.kd_cb.Substring(3, 1) != "0")
+            {
+                var ttdImageBase64 = string.Empty;
+                var wwwroot = Path.Combine(_root.ContentRootPath, "wwwroot", "ttd");
+                var imageFile = Path.Combine(wwwroot, reportConfig.NamaTTDFile);
+                if (File.Exists(imageFile))
+                {
+                    ttdImageBase64 = Convert.ToBase64String(File.ReadAllBytes(imageFile));
+                }
+                string extension = Path.GetExtension(imageFile).ToLower();
+                string mimeType = extension switch
+                {
+                    ".png" => "image/png",
+                    ".jpg" => "image/jpeg",
+                    ".jpeg" => "image/jpeg",
+                    ".gif" => "image/gif",
+                    ".bmp" => "image/bmp",
+                    _ => "application/octet-stream"
+                };
+                footer_template = $@"<div>
+                    $""<img src='data:${mimeType};base64,${ttdImageBase64}' style='max-width: 200px;' />"");
+                    <p><strong><u>${reportConfig.NamaPejabat}</u></strong></p>
+                    <p><strong>${reportConfig.Jabatan}<strong></p>
+                    </div>";
+            }
+            
             if (ReportHaveDetails.Contains(reportTemplateName))
             {
                 StringBuilder stringBuilder = new StringBuilder();
@@ -1197,7 +1228,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                         cetakSchedulePolis.nm_grp_oby, cetakSchedulePolis.nm_grp_oby_1,
                         sub_total_kebakaran, cetakSchedulePolis.cover, cetakSchedulePolis.tgl_closing,
                         cetakSchedulePolis.no_pol_lama,cetakSchedulePolis.st_pas,
-                        nilai_prm_pkk,nilai_prm_tbh_03,
+                        nilai_prm_pkk,nilai_prm_tbh_03, footer_template,
                         nilai_prm_tbh_04, nilai_prm_tbh_05,
                         cetakSchedulePolis.kd_cvrg_03, cetakSchedulePolis.kd_cvrg_04,
                         cetakSchedulePolis.kd_cvrg_05,cetakSchedulePolis.nm_cvrg_03,
@@ -1311,7 +1342,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                         nilai_aksesories,nilai_tjh, suku_premi,
                         cetakSchedulePolis.kd_jns_ptg,nilai_pad,
                         nilai_pap, nilai_tjp, nilai_rsk_sendiri,cetakSchedulePolis.desk_deduct,
-                        nilai_prm_casco,nilai_prm_tjh,
+                        nilai_prm_casco,nilai_prm_tjh, footer_template,
                         nilai_prm_pad,nilai_prm_banjir,
                         nilai_prm_aog,nilai_prm_hh, percentage_diskon,
                         nilai_prm_trs,nilai_prm_tjp,

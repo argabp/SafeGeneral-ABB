@@ -12,6 +12,12 @@ namespace ABB.Domain.Models
         public string Database { get; set; }
 
         public Title Title { get; set; }
+
+        public string NamaPejabat { get; set; }
+
+        public string Jabatan { get; set; }
+
+        public string NamaTTDFile { get; set; }
     }
 
     public class Title

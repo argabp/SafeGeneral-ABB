@@ -221,6 +221,10 @@ namespace ABB.Application.TertanggungPrincipals.Commands
             RuleFor(p => p.L_atau_R_Thn_Bjl)
                 .Cascade(CascadeMode.Stop)
                 .GreaterThan(0).WithMessage("Wajib Diisi");
+            
+            RuleFor(p => p.no_rek)
+                .Cascade(CascadeMode.Stop)
+                .NotEmpty().WithMessage("Wajib Diisi");
 
         }
     }

@@ -37,6 +37,11 @@ function OnClickEscalatedApprovalMutasiKlaim(e) {
     openWindow('#ApprovalWindow',`/ApprovalMutasiKlaim/EscalatedView`, 'Escalated');
 }
 
+function OnClickRevisedApprovalMutasiKlaim(e) {
+    dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    openWindow('#ApprovalWindow',`/ApprovalMutasiKlaim/RevisedView`, 'Revised');
+}
+
 function OnClickSettledApprovalMutasiKlaim(e) {
     dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     openWindow('#ApprovalWindow',`/ApprovalMutasiKlaim/SettledView`, 'Settled');

@@ -146,6 +146,11 @@ namespace ABB.Web.Modules.ApprovalMutasiKlaim
              return View("Escalated");
          }
          
+         public IActionResult RevisedView()
+         {
+             return View("Revised");
+         }
+         
          public async Task<IActionResult> ApprovalMutasiKlaim(ApprovalMutasiKlaimModel model)
          {
              try
@@ -189,6 +194,28 @@ namespace ABB.Web.Modules.ApprovalMutasiKlaim
                      { Result = "ERROR", Message = e.InnerException == null ? e.Message : e.InnerException.Message });
              }
          }
+         
+         public async Task<IActionResult> ApprovalMutasiKlaimRev(ApprovalMutasiKlaimEscModel model)
+         {
+             try
+             {
+                 var command = Mapper.Map<ApprovalMutasiKlaimRevCommand>(model);
+                 command.DatabaseName = Request.Cookies["DatabaseValue"];
+                 var result = await Mediator.Send(command);
+ 
+                 foreach (var notifTo in result.Item2)
+                 {
+                     await ApplicationHub.SendPengajuanAkseptasiNotification(notifTo, model.nomor_berkas, "Revised");
+                 }
+                 
+                 return Json(new { Result = "OK", Message = result.Item1 });
+             }
+             catch (Exception e)
+             {
+                 return Json(new
+                     { Result = "ERROR", Message = e.InnerException == null ? e.Message : e.InnerException.Message });
+             }
+         }
  
          [HttpPost]
          public async Task<ActionResult> GenerateReport([FromBody] RegisterKlaimModel model)
@@ -220,7 +247,7 @@ namespace ABB.Web.Modules.ApprovalMutasiKlaim
  
          public async Task<JsonResult> GetUserSign()
          {
-             var result = await Mediator.Send(new GetUserSignEscQuery()
+             var result = await Mediator.Send(new GetUserSignEscKlaimQuery()
              {
                  DatabaseName = Request.Cookies["DatabaseValue"]
              });

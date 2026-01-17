@@ -130,6 +130,7 @@ namespace ABB.Application.TertanggungPrincipals.Commands
         public decimal L_atau_R_belum_Pjk { get; set; }
         
         public decimal L_atau_R_Thn_Bjl { get; set; }
+        public string? no_rek { get; set; }
         
         public void Mapping(Profile profile)
         {
@@ -161,11 +162,11 @@ namespace ABB.Application.TertanggungPrincipals.Commands
 
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
                 
-                var DetailSlik = dbContext.DetailSlik.FirstOrDefault(w => w.kd_cb == request.kd_cb
-                                                                                    && w.kd_grp_rk == request.kd_grp_rk
-                                                                                    && w.kd_rk == request.kd_rk);
+                var detailSlik = dbContext.DetailSlik.FirstOrDefault(w => w.kd_cb == request.kd_cb
+                                                                          && w.kd_grp_rk == request.kd_grp_rk
+                                                                          && w.kd_rk == request.kd_rk);
 
-                if (DetailSlik == null)
+                if (detailSlik == null)
                 {
                     var data = _mapper.Map<DetailSlik>(request);
                     data.kd_pekerjaan = string.Empty;
@@ -174,7 +175,7 @@ namespace ABB.Application.TertanggungPrincipals.Commands
                     dbContext.DetailSlik.Add(data);
                 }
                 else
-                    _mapper.Map(request, DetailSlik);
+                    _mapper.Map(request, detailSlik);
 
                 await dbContext.SaveChangesAsync(cancellationToken);
             }

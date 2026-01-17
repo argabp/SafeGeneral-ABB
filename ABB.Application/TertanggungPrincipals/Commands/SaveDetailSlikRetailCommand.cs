@@ -56,6 +56,7 @@ namespace ABB.Application.TertanggungPrincipals.Commands
         public string lampaui_bmpk_pd_pp { get; set; }
         
         public string nm_ibu_kdg { get; set; }
+        public string? no_rek { get; set; }
         
         public void Mapping(Profile profile)
         {

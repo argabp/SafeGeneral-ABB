@@ -6121,6 +6121,9 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
       <Content Remove="wwwroot\Reports\4ac29f331c1a48889c1540fbe486a1ef\ApprovalMutasiKlaim.pdf" />
+      <Content Update="Configs\ReportTTDConfig.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>

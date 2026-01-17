@@ -48,6 +48,11 @@
                     .IconClass("fa fa-check-square")
                     .HtmlAttributes(new { title = "Process" })
                     .Click("OnClickProcessApprovalMutasiKlaim");
+                command.Custom("Revised")
+                    .Text("Revised")
+                    .IconClass("fa fa-edit")
+                    .HtmlAttributes(new { title = "Revised" })
+                    .Click("OnClickRevisedApprovalMutasiKlaim");
                 command.Custom("Escalated")
                     .Text("Escalated")
                     .IconClass("fa fa-hand-paper")

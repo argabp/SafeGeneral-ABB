@@ -148,11 +148,10 @@ namespace ABB.Infrastructure.Services
                 MailAddress to = new MailAddress(sentTo);
 
                 MailMessage message = new MailMessage(from, to);
-                message.Subject = $"Nomor Pengajuan Klaim {viewTrKlaim.nomor_berkas} {viewTrKlaim.status}";
 
                 message.Body = body;
                 message.IsBodyHtml = true;
-                message.Subject = $"Nomor Pengajuan Akseptasi {viewTrKlaim.nomor_berkas} {viewTrKlaim.status}";
+                message.Subject = $"Nomor Registrasi Klaim {viewTrKlaim.nomor_berkas} {viewTrKlaim.status}";
                 
                 try
                 {

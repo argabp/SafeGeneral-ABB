@@ -41,6 +41,10 @@ namespace ABB.Application.TertanggungPrincipals.Commands
             RuleFor(p => p.nm_ibu_kdg)
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty().WithMessage("Wajib Diisi");
+            
+            RuleFor(p => p.no_rek)
+                .Cascade(CascadeMode.Stop)
+                .NotEmpty().WithMessage("Wajib Diisi");
         }
     }
 }

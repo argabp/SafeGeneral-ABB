@@ -79,6 +79,7 @@ namespace ABB.Web.Modules.TertanggungPrincipal.Models
         public decimal Beban_Lain { get; set; }
         public decimal L_atau_R_belum_Pjk { get; set; }
         public decimal L_atau_R_Thn_Bjl { get; set; }
+        public string? no_rek { get; set; }
         
         public void Mapping(Profile profile)
         {

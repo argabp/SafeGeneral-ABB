@@ -34,6 +34,7 @@ namespace ABB.Application.DashboardKlaims.Queries
             urls.Add("New", "/RegisterKlaim/Index?");
             urls.Add("LKS", "/RegisterKlaim/Index?");
             urls.Add("LKP Process", "/RegisterKlaim/Index?");
+            urls.Add("LKP Revised", "/RegisterKlaim/Index?");
             urls.Add("LKP Escalated", "/RegisterKlaim/Index?");
             urls.Add("LKP Settled", "/RegisterKlaim/Index?");
             urls.Add("Payment", "/RegisterKlaim/Index?");
@@ -46,6 +47,7 @@ namespace ABB.Application.DashboardKlaims.Queries
             icons.Add("New", "fa-plus-circle");
             icons.Add("LKS", "fa-location-arrow");
             icons.Add("LKP Process", "fa-circle-notch");
+            icons.Add("LKP Revised", "fa-edit");
             icons.Add("LKP Escalated", "fa-hand-paper");
             icons.Add("LKP Settled", "fa-child");
             icons.Add("Payment", "fa-credit-card");
