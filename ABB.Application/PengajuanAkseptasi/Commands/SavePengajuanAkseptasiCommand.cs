@@ -137,6 +137,7 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
 
             try
             {
+                _connectionFactory.CreateDbConnection(request.DatabaseName);
                 await _connectionFactory.QueryProc<string>("sp_ValidasiAkseptasi",
                     new { request.kd_cob, request.kd_scob, request.kd_thn, request.pst_dis, request.pst_kms });
                 
@@ -147,7 +148,6 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
                                                                       && w.no_aks == request.no_aks);
 
 
-                _connectionFactory.CreateDbConnection(request.DatabaseName);
                 var no_aks = (await _connectionFactory.QueryProc<string>("sp_MaksNomorAks",
                     new { request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn })).FirstOrDefault();
 

@@ -4803,11 +4803,7 @@
 
     <ItemGroup>
       <Folder Include="Logs" />
-      <Folder Include="Modules\CancelCSM\Models" />
-      <Folder Include="Modules\PostingKomisiTambahan\Models" />
-      <Folder Include="Modules\PostingPolis\Models" />
       <Folder Include="wwwroot\img\profile-picture" />
-      <Folder Include="wwwroot\Reports\68249f47093e4c0e9a1b4042d181aee0\" />
     </ItemGroup>
 
     <ItemGroup>
