@@ -42,9 +42,9 @@
                     .IconClass("fa fa-trash")
                     .HtmlAttributes(new { title = "Delete" })
                     .Click("btnDeleteModuleNavigation_OnClick");
-            }).Title("Action").Width(80).Locked(true);
+            }).Title("Action").Width(150).Locked(true);
             columns.Bound(col => col.ModuleId).Hidden();
-            columns.Bound(col => col.ModuleName).Width(100);
+            columns.Bound(col => col.ModuleName).Width(150);
             columns.Bound(col => col.Navigations).ClientTemplate("#= brTemplate(Navigations)#").Width(250);
 
         })

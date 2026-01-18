@@ -51,9 +51,9 @@
                     .Click("btnDeleteModule_OnClick");
             }).Title("Action").Width(180).Locked(true);
             columns.Bound(col => col.Id).Hidden();
-            columns.Bound(col => col.Name);
+            columns.Bound(col => col.Name).Width(250);
             columns.Bound(col => col.Icon).Title("Icon").ClientTemplate("<span class='fas #= Icon #'> </span>").Width(100);
-            columns.Bound(col => col.Sequence);
+            columns.Bound(col => col.Sequence).Width(150);;
         })
         .Pageable(pager => pager
                     .Refresh(true)

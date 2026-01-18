@@ -1,19 +1,25 @@
 using System;
 using ABB.Application.Common.Interfaces;
-using ABB.Application.LimitAkseptasis.Commands;
-using ABB.Application.LimitAkseptasis.Queries;
+using ABB.Domain.Entities;
 using AutoMapper;
 
-namespace ABB.Web.Modules.LimitAkseptasi.Models
+namespace ABB.Application.LimitAkseptasis.Queries
 {
-    public class LimitAkseptasiViewModel : IMapFrom<AddLimitAkseptasiCommand>
+    public class LimitAkseptasiDto : IMapFrom<LimitAkseptasi>
     {
+        public int Id { get; set; }
         
         public string kd_cb { get; set; }
 
+        public string nm_cb { get; set; }
+
         public string kd_cob { get; set; }
 
+        public string nm_cob { get; set; }
+
         public string kd_scob { get; set; }
+
+        public string nm_scob { get; set; }
 
         public int thn { get; set; }
 
@@ -27,9 +33,7 @@ namespace ABB.Web.Modules.LimitAkseptasi.Models
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<LimitAkseptasiViewModel, AddLimitAkseptasiCommand>();
-            profile.CreateMap<LimitAkseptasiViewModel, EditLimitAkseptasiCommand>();
-            profile.CreateMap<LimitAkseptasiDto, LimitAkseptasiViewModel>();
+            profile.CreateMap<LimitAkseptasi, LimitAkseptasiDto>();
         }
     }
 }

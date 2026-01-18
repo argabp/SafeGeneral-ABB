@@ -1,0 +1,48 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.LimitKlaim.Models.LimitKlaimDetilViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="LimitKlaimDetailForm" enctype="multipart/form-data" autocomplete="off">
+        @Html.HiddenFor(p => p.kd_cb)
+        @Html.HiddenFor(p => p.kd_cob)
+        @Html.HiddenFor(p => p.kd_scob)
+        @Html.HiddenFor(p => p.thn)
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">User</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="kd_user" style="width: 100%" class="primary-dropdown" readonly="true"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetUsers", "LimitKlaim")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="kd_user" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Nilai Limit Awal</label>
+            <div class="col-sm-12">
+                <kendo-numerictextbox for="nilai_limit_awal" style="width: 100%;"/>
+                <span asp-validation-for="nilai_limit_awal" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Nilai Limit Akhir</label>
+            <div class="col-sm-12">
+                <kendo-numerictextbox for="nilai_limit_akhir" style="width: 100%;"/>
+                <span asp-validation-for="nilai_limit_akhir" class="text-danger"></span>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="window-footer">
+    <button type="button" onclick="onEditLimitKlaimDetail()" class="btn btn-success space-right">
+        <span class="fa fa-save"></span> Save
+    </button>
+</div>

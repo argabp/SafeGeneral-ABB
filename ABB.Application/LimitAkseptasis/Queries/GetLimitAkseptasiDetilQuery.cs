@@ -6,7 +6,7 @@ using ABB.Application.Common.Interfaces;
 using AutoMapper;
 using MediatR;
 
-namespace ABB.Application.LimitAkseptasis.Quries
+namespace ABB.Application.LimitAkseptasis.Queries
 {
     public class GetLimitAkseptasiDetilQuery : IRequest<LimitAkseptasiDetilDto>
     {

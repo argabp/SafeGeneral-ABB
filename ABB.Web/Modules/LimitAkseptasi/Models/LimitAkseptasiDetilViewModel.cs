@@ -1,7 +1,7 @@
 using System;
 using ABB.Application.Common.Interfaces;
 using ABB.Application.LimitAkseptasis.Commands;
-using ABB.Application.LimitAkseptasis.Quries;
+using ABB.Application.LimitAkseptasis.Queries;
 using AutoMapper;
 
 namespace ABB.Web.Modules.LimitAkseptasi.Models

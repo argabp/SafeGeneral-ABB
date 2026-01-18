@@ -1,0 +1,69 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.ApprovalKlaim.Models.ApprovalKlaimViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/ApprovalKlaim/JS/approvalKlaim.edit.js"></script>
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="ApprovalKlaimForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kode Cabang</label>
+            <div class="col-sm-12">
+                <kendo-dropdownlist for="kd_cb" style="width: 100%" class="primary-dropdown" option-label="Pilih Cabang" readonly="true"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetCabang", "Approval")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="kd_cb" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kode COB</label>
+            <div class="col-sm-12">
+                <input type="hidden" id="temp_kd_cob" value="@Model.kd_cob">
+                <kendo-dropdownlist for="kd_cob" style="width: 100%" class="primary-dropdown" on-change="OnKodeCOBChange" option-label="Pilih COB"
+                                     readonly="true" datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetCOB", "Approval")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="kd_cob" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kode SCOB</label>
+            <div class="col-sm-12">
+                <input type="hidden" id="temp_kd_scob" value="@Model.kd_scob">
+                <kendo-dropdownlist for="kd_scob" style="width: 100%" class="primary-dropdown" option-label="Pilih SCOB" readonly="true"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetSCOB", "Approval")" data="dataKodeSCOBDropDown"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+                <span asp-validation-for="kd_scob" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Nama Approval</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="nm_approval" style="width: 100%; background-color: #FFFFE1"/>
+                <span asp-validation-for="nm_approval" class="text-danger"></span>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="window-footer">
+    <button type="button" onclick="onEditApprovalKlaim()" class="btn btn-success space-right">
+        <span class="fa fa-save"></span> Save
+    </button>
+</div>

@@ -150,6 +150,10 @@ namespace ABB.Infrastructure.Data
         public DbSet<LookupDetail> LookupDetail { get; set; }
         public DbSet<DetailSlik> DetailSlik { get; set; }
         public DbSet<DokumenKlaimDetil> DokumenKlaimDetil { get; set; }
+         public DbSet<ApprovalKlaim> ApprovalKlaim { get; set; }
+        public DbSet<ApprovalKlaimDetail> ApprovalKlaimDetail { get; set; }
+        public DbSet<LimitKlaim> LimitKlaim { get; set; }
+        public DbSet<LimitKlaimDetil> LimitKlaimDetail { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -293,6 +297,10 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new LookupDetailMap());
             builder.ApplyConfiguration(new DetailSlikMap());
             builder.ApplyConfiguration(new DokumenKlaimDetilMap());
+            builder.ApplyConfiguration(new ApprovalKlaimMap());
+            builder.ApplyConfiguration(new ApprovalKlaimDetailMap());
+            builder.ApplyConfiguration(new LimitKlaimMap());
+            builder.ApplyConfiguration(new LimitKlaimDetilMap());
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

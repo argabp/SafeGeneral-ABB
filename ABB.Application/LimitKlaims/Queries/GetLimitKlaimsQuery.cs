@@ -7,9 +7,9 @@ using ABB.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace ABB.Application.LimitAkseptasis.Quries
+namespace ABB.Application.LimitKlaims.Queries
 {
-    public class GetLimitAkseptasisQuery : IRequest<List<LimitAkseptasiDto>>
+    public class GetLimitKlaimsQuery : IRequest<List<LimitKlaimDto>>
     {
         public string DatabaseName { get; set; }
         public string SearchKeyword { get; set; }
@@ -17,25 +17,25 @@ namespace ABB.Application.LimitAkseptasis.Quries
         public string KodeCabang { get; set; }
     }
 
-    public class GetLimitAkseptasisQueryHandler : IRequestHandler<GetLimitAkseptasisQuery, List<LimitAkseptasiDto>>
+    public class GetLimitKlaimsQueryHandler : IRequestHandler<GetLimitKlaimsQuery, List<LimitKlaimDto>>
     {
         private readonly IDbConnectionFactory _connectionFactory;
-        private readonly ILogger<GetLimitAkseptasisQueryHandler> _logger;
+        private readonly ILogger<GetLimitKlaimsQueryHandler> _logger;
 
-        public GetLimitAkseptasisQueryHandler(IDbConnectionFactory connectionFactory, ILogger<GetLimitAkseptasisQueryHandler> logger)
+        public GetLimitKlaimsQueryHandler(IDbConnectionFactory connectionFactory, ILogger<GetLimitKlaimsQueryHandler> logger)
         {
             _connectionFactory = connectionFactory;
             _logger = logger;
         }
 
-        public async Task<List<LimitAkseptasiDto>> Handle(GetLimitAkseptasisQuery request,
+        public async Task<List<LimitKlaimDto>> Handle(GetLimitKlaimsQuery request,
             CancellationToken cancellationToken)
         {
             try
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
-                var results = (await _connectionFactory.Query<LimitAkseptasiDto>(@"SELECT p.*, cb.nm_cb, cob.nm_cob, scob.nm_scob
-				FROM MS_LimitAkseptasi p
+                var results = (await _connectionFactory.Query<LimitKlaimDto>(@"SELECT p.*, cb.nm_cb, cob.nm_cob, scob.nm_scob
+				FROM MS_LimitKlaim p
 					INNER JOIN rf01 cb
 						ON p.kd_cb = cb.kd_cb
 					INNER JOIN rf04 cob

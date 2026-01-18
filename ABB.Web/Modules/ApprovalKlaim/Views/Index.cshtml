@@ -1,5 +1,5 @@
 ﻿@using Kendo.Mvc.UI
-@using ABB.Application.Approvals.Queries
+@using ABB.Application.ApprovalKlaims.Queries
 @using Microsoft.Extensions.Configuration
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Kendo.Mvc
@@ -8,9 +8,9 @@
 
 @{
     Layout = "~/Modules/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Setup Approval Akseptasi";
+    ViewData["Title"] = "Setup Approval Klaim";
 }
-<script src="~/Modules/Approval/JS/approval.index.js"></script>
+<script src="~/Modules/ApprovalKlaim/JS/approvalKlaim.index.js"></script>
 
 <style>
     .div-box{
@@ -21,39 +21,39 @@
 <div class="flat-box">
     <div class="row">
         <div class="flat-box-title col-md-6">
-            Setup Approval Akseptasi
+            Setup Approval Klaim
         </div>
         <div class="col-md-4">
             <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
         </div>
         <div class="col-md-2">
-            <button class="flat-btn-primary" onclick="btnAddApproval()">Add Approval Akseptasi</button>
+            <button class="flat-btn-primary" onclick="btnAddApprovalKlaim()">Add Approval Klaim</button>
         </div>
     </div>
 
     <div class="flat-box-content">
         <div class="div-box">
-            @(Html.Kendo().Grid<ApprovalDto>()
-                .Name("ApprovalGrid")
+            @(Html.Kendo().Grid<ApprovalKlaimDto>()
+                .Name("ApprovalKlaimGrid")
                 .Editable(editable => editable.Mode(GridEditMode.InLine))
                 .DataSource(dataSource => dataSource.Ajax()
-                    .Read(read => read.Action("GetApprovals", "Approval").Data("searchFilter"))
+                    .Read(read => read.Action("GetApprovalKlaims", "ApprovalKlaim").Data("searchFilter"))
                     .Model(model => model.Id(p => p.Id))
                 )
                 .Columns(columns =>
                 {
                     columns.Command(command =>
                     {
-                        command.Custom("EditApproval")
+                        command.Custom("EditApprovalKlaim")
                             .Text("Edit")
                             .IconClass("fa fa-pencil-alt")
                             .HtmlAttributes(new { title = "Edit" })
-                            .Click("btnEditApproval");
-                        command.Custom("DeleteApproval")
+                            .Click("btnEditApprovalKlaim");
+                        command.Custom("DeleteApprovalKlaim")
                             .Text("Delete")
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title = "Delete" })
-                            .Click("onDeleteApproval");
+                            .Click("onDeleteApprovalKlaim");
                     }).Width(200).Title("Action");
                     columns.Bound(col => col.nm_cb).Title("Nama Cabang");
                     columns.Bound(col => col.nm_cob).Title("Nama COB");
@@ -79,13 +79,13 @@
         <script id="template" type="text/kendo-tmpl">
             <div class="row">
                 <div class="col-md-4 k-button k-button-icontext">
-                    <button style="border: none;" onclick="btnAddApprovalDetail('#=kd_cb#', '#=kd_cob#', '#=kd_scob#')">+ ADD NEW RECORD</button>
+                    <button style="border: none;" onclick="btnAddApprovalDetailKlaim('#=kd_cb#', '#=kd_cob#', '#=kd_scob#')">+ ADD NEW RECORD</button>
                 </div>
             </div>
-            @(Html.Kendo().Grid<ApprovalDetailDto>()
+            @(Html.Kendo().Grid<ApprovalKlaimDetailDto>()
                 .Name("grid_Detail_#=Id#") // template expression, to be evaluated in the master context
                 .DataSource(dataSource => dataSource.Ajax()
-                    .Read(read => read.Action("GetApprovalDetails", "Approval", new { kd_cb = "#=kd_cb#", kd_cob = "#=kd_cob#", kd_scob = "#=kd_scob#" }))//.Data("getAsumsiPeriodeParam"))
+                    .Read(read => read.Action("GetApprovalKlaimDetails", "ApprovalKlaim", new { kd_cb = "#=kd_cb#", kd_cob = "#=kd_cob#", kd_scob = "#=kd_scob#" }))//.Data("getAsumsiPeriodeParam"))
                     .Model(m => m.Id(p => p.Id))
                 )
                 .Columns(columns =>
@@ -96,16 +96,16 @@
                     columns.Bound(col => col.sla).Title("SLA");
                     columns.Command(command =>
                     {
-                        command.Custom("EditApprovalDetail")
+                        command.Custom("EditApprovalKlaimDetail")
                             .Text("Edit")
                             .IconClass("fa fa-pencil-alt")
                             .HtmlAttributes(new { title = "Edit" })
-                            .Click("btnEditApprovalDetail");
-                        command.Custom("DeleteApprovalDetail")
+                            .Click("btnEditApprovalKlaimDetail");
+                        command.Custom("DeleteApprovalKlaimDetail")
                             .Text("Delete")
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
-                            .Click("onDeleteApprovalDetail");
+                            .Click("onDeleteApprovalKlaimDetail");
                     }).Width(200).Title("Action");
                 })
                 .Pageable(pager => pager
@@ -124,8 +124,8 @@
         </script>
 
         @(Html.Kendo().Window()
-            .Name("ApprovalWindow")
-            .Title("Approval")
+            .Name("ApprovalKlaimWindow")
+            .Title("Approval Klaim")
             .Width(500)
             .Modal(true)
             .Visible(false)

@@ -1,5 +1,5 @@
 ﻿@using Kendo.Mvc.UI
-@using ABB.Application.Approvals.Queries
+@using ABB.Application.LimitKlaims.Queries
 @using Microsoft.Extensions.Configuration
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Kendo.Mvc
@@ -8,9 +8,9 @@
 
 @{
     Layout = "~/Modules/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Setup Approval Akseptasi";
+    ViewData["Title"] = "Setup Limit Klaim";
 }
-<script src="~/Modules/Approval/JS/approval.index.js"></script>
+<script src="~/Modules/LimitKlaim/JS/limitKlaim.index.js"></script>
 
 <style>
     .div-box{
@@ -21,44 +21,45 @@
 <div class="flat-box">
     <div class="row">
         <div class="flat-box-title col-md-6">
-            Setup Approval Akseptasi
+            Setup Limit Klaim
         </div>
         <div class="col-md-4">
             <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
         </div>
         <div class="col-md-2">
-            <button class="flat-btn-primary" onclick="btnAddApproval()">Add Approval Akseptasi</button>
+            <button class="flat-btn-primary" onclick="btnAddLimitKlaim()">Add Limit Klaim</button>
         </div>
     </div>
 
     <div class="flat-box-content">
         <div class="div-box">
-            @(Html.Kendo().Grid<ApprovalDto>()
-                .Name("ApprovalGrid")
+            @(Html.Kendo().Grid<LimitKlaimDto>()
+                .Name("LimitKlaimGrid")
                 .Editable(editable => editable.Mode(GridEditMode.InLine))
                 .DataSource(dataSource => dataSource.Ajax()
-                    .Read(read => read.Action("GetApprovals", "Approval").Data("searchFilter"))
+                    .Read(read => read.Action("GetLimitKlaims", "LimitKlaim").Data("searchFilter"))
                     .Model(model => model.Id(p => p.Id))
                 )
                 .Columns(columns =>
                 {
                     columns.Command(command =>
                     {
-                        command.Custom("EditApproval")
+                        command.Custom("EditLimitKlaim")
                             .Text("Edit")
                             .IconClass("fa fa-pencil-alt")
                             .HtmlAttributes(new { title = "Edit" })
-                            .Click("btnEditApproval");
-                        command.Custom("DeleteApproval")
+                            .Click("btnEditLimitKlaim");
+                        command.Custom("DeleteLimitKlaim")
                             .Text("Delete")
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title = "Delete" })
-                            .Click("onDeleteApproval");
+                            .Click("onDeleteLimitKlaim");
                     }).Width(200).Title("Action");
-                    columns.Bound(col => col.nm_cb).Title("Nama Cabang");
+                    columns.Bound(col => col.nm_cb).Title("Nama Cabang").Width(150);
                     columns.Bound(col => col.nm_cob).Title("Nama COB");
                     columns.Bound(col => col.nm_scob).Title("Nama Sub COB");
-                    columns.Bound(col => col.nm_approval).Title("Nama Approval");
+                    columns.Bound(col => col.thn).Title("Tahun");
+                    columns.Bound(col => col.nm_limit).Title("Nama Limit Klaim");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)
@@ -79,33 +80,32 @@
         <script id="template" type="text/kendo-tmpl">
             <div class="row">
                 <div class="col-md-4 k-button k-button-icontext">
-                    <button style="border: none;" onclick="btnAddApprovalDetail('#=kd_cb#', '#=kd_cob#', '#=kd_scob#')">+ ADD NEW RECORD</button>
+                    <button style="border: none;" onclick="btnAddLimitKlaimDetail('#=kd_cb#', '#=kd_cob#', '#=kd_scob#', '#=thn#')">+ ADD NEW RECORD</button>
                 </div>
             </div>
-            @(Html.Kendo().Grid<ApprovalDetailDto>()
+            @(Html.Kendo().Grid<LimitKlaimDetilDto>()
                 .Name("grid_Detail_#=Id#") // template expression, to be evaluated in the master context
                 .DataSource(dataSource => dataSource.Ajax()
-                    .Read(read => read.Action("GetApprovalDetails", "Approval", new { kd_cb = "#=kd_cb#", kd_cob = "#=kd_cob#", kd_scob = "#=kd_scob#" }))//.Data("getAsumsiPeriodeParam"))
+                    .Read(read => read.Action("GetLimitKlaimDetails", "LimitKlaim", new { kd_cb = "#=kd_cb#", kd_cob = "#=kd_cob#", kd_scob = "#=kd_scob#", thn = "#=thn#" }))//.Data("getAsumsiPeriodeParam"))
                     .Model(m => m.Id(p => p.Id))
                 )
                 .Columns(columns =>
                 {
                     columns.Bound(col => col.nm_user).Title("Nama User");
-                    columns.Bound(col => col.nm_status).Title("Status");
-                    columns.Bound(col => col.nm_user_sign).Title("Nama User Sign");
-                    columns.Bound(col => col.sla).Title("SLA");
+                    columns.Bound(col => col.nilai_limit_awal).Title("Nilai Limit Awal (%)");
+                    columns.Bound(col => col.nilai_limit_akhir).Title("Nilai Limit Akhir (%)");
                     columns.Command(command =>
                     {
-                        command.Custom("EditApprovalDetail")
+                        command.Custom("EditLimitKlaimDetil")
                             .Text("Edit")
                             .IconClass("fa fa-pencil-alt")
                             .HtmlAttributes(new { title = "Edit" })
-                            .Click("btnEditApprovalDetail");
-                        command.Custom("DeleteApprovalDetail")
+                            .Click("btnEditLimitKlaimDetil");
+                        command.Custom("DeleteLimitKlaimDetail")
                             .Text("Delete")
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
-                            .Click("onDeleteApprovalDetail");
+                            .Click("onDeleteLimitKlaimDetail");
                     }).Width(200).Title("Action");
                 })
                 .Pageable(pager => pager
@@ -124,8 +124,8 @@
         </script>
 
         @(Html.Kendo().Window()
-            .Name("ApprovalWindow")
-            .Title("Approval")
+            .Name("LimitKlaimWindow")
+            .Title("LimitKlaim")
             .Width(500)
             .Modal(true)
             .Visible(false)

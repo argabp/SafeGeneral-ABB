@@ -7,9 +7,9 @@ using ABB.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace ABB.Application.LimitAkseptasis.Quries
+namespace ABB.Application.LimitKlaims.Queries
 {
-    public class GetLimitAkseptasiDetilsQuery : IRequest<List<LimitAkseptasiDetilDto>>
+    public class GetLimitKlaimDetilsQuery : IRequest<List<LimitKlaimDetilDto>>
     {
         public string DatabaseName { get; set; }
         
@@ -22,18 +22,18 @@ namespace ABB.Application.LimitAkseptasis.Quries
         public int thn { get; set; }
     }
 
-    public class GetLimitAkseptasiDetilsQueryHandler : IRequestHandler<GetLimitAkseptasiDetilsQuery, List<LimitAkseptasiDetilDto>>
+    public class GetLimitKlaimDetilsQueryHandler : IRequestHandler<GetLimitKlaimDetilsQuery, List<LimitKlaimDetilDto>>
     {
         private readonly IDbConnectionFactory _connectionFactory;
-        private readonly ILogger<GetLimitAkseptasiDetilsQueryHandler> _logger;
+        private readonly ILogger<GetLimitKlaimDetilsQueryHandler> _logger;
 
-        public GetLimitAkseptasiDetilsQueryHandler(IDbConnectionFactory connectionFactory, ILogger<GetLimitAkseptasiDetilsQueryHandler> logger)
+        public GetLimitKlaimDetilsQueryHandler(IDbConnectionFactory connectionFactory, ILogger<GetLimitKlaimDetilsQueryHandler> logger)
         {
             _connectionFactory = connectionFactory;
             _logger = logger;
         }
 
-        public async Task<List<LimitAkseptasiDetilDto>> Handle(GetLimitAkseptasiDetilsQuery request,
+        public async Task<List<LimitKlaimDetilDto>> Handle(GetLimitKlaimDetilsQuery request,
             CancellationToken cancellationToken)
         {
             await Task.Delay(0, cancellationToken);
@@ -41,7 +41,7 @@ namespace ABB.Application.LimitAkseptasis.Quries
             try
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
-                var results = (await _connectionFactory.Query<LimitAkseptasiDetilDto>(@"SELECT ad.*, ISNULL(u2.FirstName, '') + ' ' + ISNULL(u2.LastName, '') nm_user FROM MS_LimitAkseptasiDetil ad 
+                var results = (await _connectionFactory.Query<LimitKlaimDetilDto>(@"SELECT ad.*, ISNULL(u2.FirstName, '') + ' ' + ISNULL(u2.LastName, '') nm_user FROM MS_LimitKlaimDetil ad 
                                 INNER JOIN MS_User u2 
                                     ON u2.UserId = ad.kd_user
                                 WHERE kd_cb = @kd_cb AND thn = @thn

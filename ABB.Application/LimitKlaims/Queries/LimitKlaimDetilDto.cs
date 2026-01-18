@@ -2,12 +2,12 @@ using ABB.Application.Common.Interfaces;
 using ABB.Domain.Entities;
 using AutoMapper;
 
-namespace ABB.Application.LimitAkseptasis.Quries
+namespace ABB.Application.LimitKlaims.Queries
 {
-    public class LimitAkseptasiDetilDto : IMapFrom<LimitAkseptasiDetil>
+    public class LimitKlaimDetilDto : IMapFrom<LimitKlaimDetil>
     {
         public int Id { get; set; }
-        
+
         public string kd_cb { get; set; }
 
         public string kd_cob { get; set; }
@@ -19,12 +19,14 @@ namespace ABB.Application.LimitAkseptasis.Quries
         public string nm_user { get; set; }
 
         public int thn { get; set; }
-        
-        public decimal pst_limit { get; set; }
+
+        public decimal nilai_limit_awal { get; set; }
+
+        public decimal nilai_limit_akhir { get; set; }
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<LimitAkseptasiDetil, LimitAkseptasiDetilDto>();
+            profile.CreateMap<LimitKlaimDetil, LimitKlaimDetilDto>();
         }
     }
 }

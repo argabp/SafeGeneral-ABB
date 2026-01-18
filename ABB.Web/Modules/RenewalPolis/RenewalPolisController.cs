@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using ABB.Application.Common.Queries;
 using ABB.Application.PolisInduks.Queries;
 using ABB.Application.RenewalPolis.Commands;
 using ABB.Application.RenewalPolis.Queries;

@@ -140,6 +140,10 @@ namespace ABB.Application.Common.Interfaces
         DbSet<LookupDetail> LookupDetail { get; set; }
         DbSet<DetailSlik> DetailSlik { get; set; }
         DbSet<DokumenKlaimDetil> DokumenKlaimDetil { get; set; }
+        DbSet<ApprovalKlaim> ApprovalKlaim { get; set; }
+        DbSet<ApprovalKlaimDetail> ApprovalKlaimDetail { get; set; }
+        DbSet<LimitKlaim> LimitKlaim { get; set; }
+        DbSet<LimitKlaimDetil> LimitKlaimDetail { get; set; }
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
