@@ -13,6 +13,7 @@ namespace ABB.Application.PostingMutasiKlaims.Queries
     {
         public string SearchKeyword { get; set; }
         public string DatabaseName { get; set; }
+        public string kd_cb { get; set; }
     }
 
     public class GetPostingMutasiKlaimQueryHandler : IRequestHandler<GetPostingMutasiKlaimQuery, List<PostingMutasiKlaimDto>>
@@ -52,7 +53,7 @@ namespace ABB.Application.PostingMutasiKlaims.Queries
 						INNER JOIN rf05 scob
 							ON p.kd_cob = scob.kd_cob
 							AND p.kd_scob = scob.kd_scob
-					WHERE p.flag_posting = 'N' AND p.no_dla = 0 AND (p.no_mts like '%'+@SearchKeyword+'%' 
+					WHERE p.flag_posting = 'N' AND p.no_dla = 0 AND p.kd_cb = @kd_cb AND (p.no_mts like '%'+@SearchKeyword+'%' 
 						OR p.tgl_nt like '%'+@SearchKeyword+'%' 
 						OR cb.nm_cb like '%'+@SearchKeyword+'%' 
 						OR cob.nm_cob like '%'+@SearchKeyword+'%' 
@@ -61,7 +62,7 @@ namespace ABB.Application.PostingMutasiKlaims.Queries
 						OR cob.kd_cob like '%'+@SearchKeyword+'%' 
 						OR scob.kd_scob like '%'+@SearchKeyword+'%' 
 						OR p.nm_ttj like '%'+@SearchKeyword+'%' 
-						OR @SearchKeyword = '' OR @SearchKeyword IS NULL)", new { request.SearchKeyword })).ToList();
+						OR @SearchKeyword = '' OR @SearchKeyword IS NULL)", new { request.SearchKeyword, request.kd_cb })).ToList();
             }
             catch (Exception ex)
             {

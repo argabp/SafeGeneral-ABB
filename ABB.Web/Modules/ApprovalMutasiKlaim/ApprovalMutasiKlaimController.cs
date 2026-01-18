@@ -249,9 +249,24 @@ namespace ABB.Web.Modules.ApprovalMutasiKlaim
          {
              var result = await Mediator.Send(new GetUserSignEscKlaimQuery()
              {
-                 DatabaseName = Request.Cookies["DatabaseValue"]
+                 DatabaseName = Request.Cookies["DatabaseValue"],kd_cb = Request.Cookies["UserCabang"] ?? string.Empty
              });
  
+             return Json(result);
+         }
+     
+         public async Task<JsonResult> GetUserSignRevised(string kd_cb, string kd_cob, string kd_scob, string kd_thn, string no_kl)
+         {
+             var result = await Mediator.Send(new GetUserSignRevisedQuery()
+             {
+                 DatabaseName = Request.Cookies["DatabaseValue"],
+                 kd_cb = kd_cb,
+                 kd_cob = kd_cob,
+                 kd_scob = kd_scob,
+                 kd_thn = kd_thn,
+                 no_kl = no_kl
+             });
+     
              return Json(result);
          }
          

@@ -18,7 +18,7 @@
                                 datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                 <datasource type="DataSourceTagHelperType.Custom">
                     <transport>
-                        <read url="@Url.Action("GetUserSign", "ApprovalMutasiKlaim")"/>
+                        <read url="@Url.Action("GetUserSignRevised", "ApprovalMutasiKlaim")" data="dataUserSignRevised"/>
                     </transport>
                 </datasource>
             </kendo-dropdownlist>

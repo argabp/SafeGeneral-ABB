@@ -105,7 +105,8 @@ namespace ABB.Web.Modules.EntriNotaKlaim
             var ds = await Mediator.Send(new GetEntriNotaKlaimsQuery()
             {
                 SearchKeyword = searchkeyword,
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                kd_cb = Request.Cookies["UserCabang"] ?? string.Empty
             });
 
             var counter = 1;

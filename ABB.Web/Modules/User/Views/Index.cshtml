@@ -61,7 +61,6 @@
             columns.Bound(col => col.PhoneNumber);
             columns.Bound(col => col.Address).Width(250);
             columns.Bound(col => col.PasswordExpiryDate);
-            columns.Bound(col => col.LeaderName);
             columns.Bound(col => col.IsActive).ClientTemplate("#=booleanTemplate(data.IsActive)#").Width(100);
             columns.Bound(col => col.LockoutEnabled).Title("Locked Out").ClientTemplate("#=booleanTemplate(data.LockoutEnabled)#");
         })

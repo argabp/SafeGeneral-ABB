@@ -378,7 +378,7 @@ namespace ABB.Web.Modules.ApprovalAkseptasi
              {
                  var result = await Mediator.Send(new GetUserSignEscQuery()
                  {
-                     DatabaseName = Request.Cookies["DatabaseValue"]
+                     DatabaseName = Request.Cookies["DatabaseValue"],kd_cb = Request.Cookies["UserCabang"] ?? string.Empty
                  });
      
                  return Json(result);

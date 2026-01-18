@@ -29,6 +29,7 @@ namespace ABB.Web.Modules.UpdateSettledKlaim
             {
                 SearchKeyword = searchkeyword,
                 DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                kd_cb = Request.Cookies["UserCabang"] ?? string.Empty
             });
             
             var counter = 1;

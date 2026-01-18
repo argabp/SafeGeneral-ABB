@@ -98,6 +98,11 @@ function setButtonActions(e){
             if(userLogin != dataItem.kd_usr_input){
                 buttonContainer.find(".k-grid-Edit").hide();
             }
+            
+            var allowedStatuses = [1, 10];
+            if(!allowedStatuses.includes(dataItem.kd_status)){
+                buttonContainer.find(".k-grid-Edit").hide();
+            }
         }
     });
 

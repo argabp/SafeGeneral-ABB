@@ -107,6 +107,7 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
         public async Task<IActionResult> GetLampiranPengajuanAkseptasi([FromBody] PengajuanAkseptasiModel model)
         {
             var command = Mapper.Map<GetPengajuanAkseptasiAttachmentQuery>(model);
+            command.DatabaseName = Request.Cookies["DatabaseValue"];
             var result = await Mediator.Send(command);
 
             return Json(result);
@@ -513,7 +514,7 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
         {
             var result = await Mediator.Send(new GetUserSignEscQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = Request.Cookies["DatabaseValue"],kd_cb = Request.Cookies["UserCabang"] ?? string.Empty
             });
 
             return Json(result);

@@ -193,7 +193,7 @@ function OnNoPolisChange(e){
         kd_cb: $("#kd_cb").val(),
         kd_cob: $("#kd_cob").val(),
         kd_scob: $("#kd_scob").val(),
-        kd_thn: $("#kd_thn").val(),
+        kd_thn: $("#kd_thn_pol").val(),
         no_kl: $("#no_kl").val(),
         no_pol: $("#no_pol").val(),
         no_updt: $("#no_updt").val(),

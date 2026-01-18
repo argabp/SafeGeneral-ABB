@@ -13,6 +13,7 @@ namespace ABB.Application.Common.Queries
     public class GetUserSignEscKlaimQuery : IRequest<List<DropdownOptionDto>>
     {
         public string DatabaseName { get; set; }
+        public string kd_cb { get; set; }
     }
 
     public class GetUserSignEscKlaimQueryHandler : IRequestHandler<GetUserSignEscKlaimQuery, List<DropdownOptionDto>>
@@ -33,7 +34,7 @@ namespace ABB.Application.Common.Queries
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
                 return (await _connectionFactory.Query<DropdownOptionDto>("SELECT DISTINCT kd_user_sign Value, nm_user_sign Text " +
-                                                                          "FROM v_user_esc_cl")).ToList();
+                                                                          "FROM v_user_esc_cl WHERE kd_cb = @kd_cb", new { request.kd_cb })).ToList();
             }
             catch (Exception ex)
             {

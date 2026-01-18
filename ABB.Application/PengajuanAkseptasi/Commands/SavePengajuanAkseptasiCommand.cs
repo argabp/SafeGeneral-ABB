@@ -147,17 +147,17 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
                                                                       w.kd_thn == request.kd_thn
                                                                       && w.no_aks == request.no_aks);
 
-
-                var no_aks = (await _connectionFactory.QueryProc<string>("sp_MaksNomorAks",
-                    new { request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn })).FirstOrDefault();
-
-                var nomor_pengajuan = (await _connectionFactory.QueryProc<string>("sp_GenerateNomorPengajuanAks",
-                    new { request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn, no_aks })).FirstOrDefault();
-
+                var no_aks = request.no_aks;
+                var nomor_pengajuan = request.nomor_pengajuan;
+                
                 var dateNow = DateTime.Now;
                 if (entity == null)
                 {
-                    
+                    no_aks = (await _connectionFactory.QueryProc<string>("sp_MaksNomorAks",
+                        new { request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn })).FirstOrDefault();
+
+                    nomor_pengajuan = (await _connectionFactory.QueryProc<string>("sp_GenerateNomorPengajuanAks",
+                        new { request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn, no_aks })).FirstOrDefault();
                     trAkseptasi.no_aks = no_aks;
                     trAkseptasi.nomor_pengajuan = nomor_pengajuan;
                     trAkseptasi.tgl_input = dateNow;

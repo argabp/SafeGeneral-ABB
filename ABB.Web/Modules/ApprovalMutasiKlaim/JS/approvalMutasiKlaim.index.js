@@ -98,3 +98,13 @@ function setButtonActions(e){
     });
     gridAutoFit(grid);
 }
+
+function dataUserSignRevised(){
+    return {
+        kd_cb: dataItem.kd_cb,
+        kd_cob: dataItem.kd_cob,
+        kd_scob: dataItem.kd_scob,
+        kd_thn: dataItem.kd_thn,
+        no_kl: dataItem.no_kl,
+    }
+}

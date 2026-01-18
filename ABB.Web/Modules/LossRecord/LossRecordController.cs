@@ -5,13 +5,9 @@ using System.Threading.Tasks;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Queries;
 using ABB.Application.Common.Services;
-using ABB.Application.KapasitasCabangs.Queries;
-using ABB.Application.LaporanProduksiAsuransi.Queries;
 using ABB.Application.LossRecord.Queries;
 using ABB.Application.PolisInduks.Queries;
-using ABB.Application.SebabKejadians.Queries;
 using ABB.Web.Modules.Base;
-using ABB.Web.Modules.LaporanProduksiAsuransi.Models;
 using ABB.Web.Modules.LossRecord.Models;
 using DinkToPdf;
 using Microsoft.AspNetCore.Http;
@@ -40,7 +36,10 @@ namespace ABB.Web.Modules.LossRecord
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
             
-            return View(new LossRecordViewModel());
+            return View(new LossRecordViewModel()
+            {
+                kd_cb = Request.Cookies["UserCabang"]?.Trim() ?? string.Empty
+            });
         }
 
         public async Task<JsonResult> GetCabang()

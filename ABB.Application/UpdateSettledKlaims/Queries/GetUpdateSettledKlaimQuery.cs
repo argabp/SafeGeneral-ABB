@@ -13,6 +13,7 @@ namespace ABB.Application.UpdateSettledKlaims.Queries
     {
         public string SearchKeyword { get; set; }
         public string DatabaseName { get; set; }
+        public string kd_cb { get; set; }
     }
 
     public class GetUpdateSettledKlaimQueryHandler : IRequestHandler<GetUpdateSettledKlaimQuery, List<UpdateSettledKlaimDto>>
@@ -41,7 +42,7 @@ namespace ABB.Application.UpdateSettledKlaims.Queries
 						INNER JOIN rf05 scob
 							ON p.kd_cob = scob.kd_cob
 							AND p.kd_scob = scob.kd_scob
-					WHERE p.flag_settled = 'N' AND (p.no_rsk like '%'+@SearchKeyword+'%' 
+					WHERE p.flag_settled = 'N' AND p.kd_cb = @kd_cb AND (p.no_rsk like '%'+@SearchKeyword+'%' 
 						OR p.tgl_updt like '%'+@SearchKeyword+'%' 
 						OR p.no_updt like '%'+@SearchKeyword+'%' 
 						OR cb.nm_cb like '%'+@SearchKeyword+'%' 
@@ -52,7 +53,7 @@ namespace ABB.Application.UpdateSettledKlaims.Queries
 						OR scob.kd_scob like '%'+@SearchKeyword+'%' 
 						OR p.no_kl like '%'+@SearchKeyword+'%' 
 						OR p.no_pol_lama like '%'+@SearchKeyword+'%' 
-						OR @SearchKeyword = '' OR @SearchKeyword IS NULL)", new { request.SearchKeyword })).ToList();
+						OR @SearchKeyword = '' OR @SearchKeyword IS NULL)", new { request.SearchKeyword, request.kd_cb })).ToList();
             }
             catch (Exception ex)
             {
