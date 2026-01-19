@@ -1,0 +1,124 @@
+@model ABB.Application.TemplateLapKeus.Queries.TemplateLapKeuDto
+@using Kendo.Mvc.UI
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@{
+    bool isEditMode = Model.Id > 0;
+}
+
+<style>
+    .custom-kode .k-input,
+    .custom-kode .k-textbox,
+    .custom-kode input {
+        background-color: #00FFFF !important;
+    }
+
+    .custom-kuning .k-input,
+    .custom-kuning .k-textbox,
+    .custom-kuning input,
+    .custom-kuning textarea {
+        background-color: rgb(255, 255, 225) !important;
+    }
+    
+    .window-body {
+        padding: 10px;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+</style>
+
+<div class="window-body">
+    <form id="TemplateForm">
+        @Html.HiddenFor(m => m.Id)
+
+        <fieldset>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">No. Urut</label>
+                <div class="col-sm-3">
+                    <kendo-numerictextbox name="Urutan" for="Urutan"
+                                          min="0"
+                                          format="n0"
+                                          class="custom-kuning"
+                                          style="width: 100%;" />
+                </div>
+                <div class="col-sm-6">
+                    <small class="text-muted" style="line-height: 2.5;">
+                        * Ubah angka ini untuk mengatur posisi baris.
+                    </small>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Tipe Laporan</label>
+                <div class="col-sm-9">
+                    <kendo-dropdownlist name="TipeLaporan" for="TipeLaporan"
+                                        style="width: 100%;"
+                                        class="custom-kuning"
+                                        bind-to='new List<string>() { "NERACA", "LABARUGI" }'>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Tipe Baris</label>
+                <div class="col-sm-9">
+                   <kendo-dropdownlist name="TipeBaris" for="TipeBaris"
+                    style="width: 100%;"
+                    class="custom-kuning"
+                    bind-to='new List<string>() { "HEADING", "BLANK", "DETAIL", "TOTAL" }'
+                    on-change="onTipeBarisChange"> </kendo-dropdownlist>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Deskripsi</label>
+                <div class="col-sm-9">
+                    <kendo-textbox name="Deskripsi" for="Deskripsi" 
+                                   class="custom-kuning" 
+                                   style="width: 100%;" 
+                                   placeholder="Contoh: ASET LANCAR" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Level (Indentasi)</label>
+                <div class="col-sm-3">
+                    <kendo-numerictextbox name="Level"  for="Level" 
+                                          min="1" 
+                                          max="5" 
+                                          format="n0" 
+                                          class="custom-kuning" 
+                                          style="width: 100%;" />
+                </div>
+            </div>
+            
+            <hr />
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Rumus / Akun</label>
+                <div class="col-sm-9">
+                     <kendo-textarea name="Rumus" for="Rumus" 
+                                     rows="3" 
+                                     class="custom-kuning" 
+                                     style="width: 100%;" 
+                                     placeholder="Masukkan Kode Akun dipisah koma (cth: 1101,1102)">
+                    </kendo-textarea>
+                    <small class="text-muted" id="rumus-hint" style="display:block; margin-top:5px; font-style:italic;">
+                        * Untuk DETAIL: Masukkan Kode Akun (pisahkan koma).
+                    </small>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px;">
+                <button type="button" class="btn btn-secondary" onclick="closeWindow()">
+                    <i class="fa fa-times"></i> Batal
+                </button>
+                <button type="button" class="btn btn-primary" onclick="saveTemplate()">
+                    <i class="fa fa-save"></i> Simpan
+                </button>
+            </div>
+        </fieldset>
+    </form>
+</div>

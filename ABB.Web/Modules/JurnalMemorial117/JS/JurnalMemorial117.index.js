@@ -150,7 +150,7 @@ function onSaveDetail() {
             // --- TAMBAHKAN INI ---
             NilaiDebetRp: $("#NilaiDebetRp").data("kendoNumericTextBox").value() || 0,
             NilaiKreditRp: $("#NilaiKreditRp").data("kendoNumericTextBox").value() || 0,
-           Keterangan: $("#Keterangan").val() || ""
+           Keterangan: $("#KeteranganDetail").data("kendoTextArea").value() || ""
             // ---------------------
         };
 
@@ -198,7 +198,7 @@ function onEditDetail(e) {
     
     $("#NilaiDebet").data("kendoNumericTextBox").value(dataItem.NilaiDebet);
     $("#NilaiKredit").data("kendoNumericTextBox").value(dataItem.NilaiKredit);
-
+    $("#KeteranganDetail").data("kendoTextArea").value(dataItem.Keterangan);
     // --- TAMBAHAN: Isi field Rp juga ---
     $("#NilaiDebetRp").data("kendoNumericTextBox").value(dataItem.NilaiDebetRp);
     $("#NilaiKreditRp").data("kendoNumericTextBox").value(dataItem.NilaiKreditRp);
@@ -260,9 +260,12 @@ function clearDetailForm() {
     $("#KodeMataUang").data("kendoComboBox").value(""); // Atau set default IDR
     $("#NilaiDebet").data("kendoNumericTextBox").value(0);
     $("#NilaiKredit").data("kendoNumericTextBox").value(0);
-    
+    $("#NilaiDebetRp").data("kendoNumericTextBox").value(0);
+    $("#NilaiKreditRp").data("kendoNumericTextBox").value(0);
+    $("#KeteranganDetail").data("kendoTextArea").value("");
     $("#btn-save-detail").html('<i class="fa fa-plus"></i> Tambah Jurnal');
     $("#btn-cancel-detail").hide();
+    
 }
 
 // --- UTILITIES ---

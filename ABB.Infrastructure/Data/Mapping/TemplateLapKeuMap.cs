@@ -11,12 +11,17 @@ namespace ABB.Infrastructure.Data.Mapping
             builder.ToTable("abb_template_lapkeu");
             builder.HasKey(t => t.Id);
 
-            builder.Property(t => t.Id).HasColumnName("id");
+            // UPDATE BAGIAN INI
+            builder.Property(t => t.Id)
+                .HasColumnName("id");
+               
+
             builder.Property(t => t.TipeLaporan).HasColumnName("tipe_laporan").HasMaxLength(255);
             builder.Property(t => t.TipeBaris).HasColumnName("tipe_baris").HasMaxLength(255);
             builder.Property(t => t.Deskripsi).HasColumnName("deskripsi").HasMaxLength(255);
             builder.Property(t => t.Rumus).HasColumnName("rumus").HasMaxLength(255);
             builder.Property(t => t.Level).HasColumnName("level").HasMaxLength(255);
+            builder.Property(t => t.Urutan).HasColumnName("urutan");
         }
     }
 }
