@@ -26,7 +26,7 @@ function updateMutasiKlaimReject(){
         no_kl: dataItem.no_kl,
         no_mts: dataItem.no_mts,
         kd_user_status: dataItem.kd_user_status,
-        nomor_berkas: dataItem.nomor_berkas,
+        nomor_berkas: dataItem.register_klaim,
         kd_status: 7,
         tgl_status: new Date().toISOString(),
         keterangan: $("#keterangan").val(),

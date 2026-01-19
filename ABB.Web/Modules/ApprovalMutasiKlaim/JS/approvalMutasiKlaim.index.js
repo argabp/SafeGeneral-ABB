@@ -47,6 +47,11 @@ function OnClickSettledApprovalMutasiKlaim(e) {
     openWindow('#ApprovalWindow',`/ApprovalMutasiKlaim/SettledView`, 'Settled');
 }
 
+function OnClickRejectApprovalMutasiKlaim(e) {
+    dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    openWindow('#ApprovalWindow',`/ApprovalMutasiKlaim/RejectView`, 'Reject');
+}
+
 function OnClickPrintApprovalMutasiKlaim(e) {
     showProgressOnGrid('#ApprovalMutasiKlaimGrid');
     dataItem = this.dataItem($(e.currentTarget).closest("tr"));

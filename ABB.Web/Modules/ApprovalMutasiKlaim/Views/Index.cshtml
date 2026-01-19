@@ -63,6 +63,11 @@
                     .IconClass("fa fa-child")
                     .HtmlAttributes(new { title = "Settled" })
                     .Click("OnClickSettledApprovalMutasiKlaim");
+                command.Custom("Reject")
+                    .Text("Reject")
+                    .IconClass("fa fa-times-circle")
+                    .HtmlAttributes(new { title = "Reject" })
+                    .Click("OnClickRejectApprovalMutasiKlaim");
                 command.Custom("Print")
                     .Text("Print")
                     .IconClass("fa fa-print")

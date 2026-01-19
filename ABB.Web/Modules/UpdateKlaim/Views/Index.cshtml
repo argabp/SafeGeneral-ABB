@@ -16,7 +16,7 @@
 <div class="flat-box">
     <div class="row">
         <div class="flat-box-title col-md-8">
-            Update Klaim Reject/Closed/Final
+            Update Klaim Closed/Final
         </div>
         <div class="col-md-4">
             <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
@@ -38,11 +38,11 @@
                     .IconClass("fa fa-info-circle")
                     .HtmlAttributes(new { title = "Info" })
                     .Click("OnClickInfoUpdateKlaim");
-                command.Custom("Reject")
-                    .Text("Reject")
-                    .IconClass("fa fa-times-circle")
-                    .HtmlAttributes(new { title = "Reject" })
-                    .Click("OnClickRejectUpdateKlaim");
+                // command.Custom("Reject")
+                //     .Text("Reject")
+                //     .IconClass("fa fa-times-circle")
+                //     .HtmlAttributes(new { title = "Reject" })
+                //     .Click("OnClickRejectUpdateKlaim");
                 command.Custom("Closed")
                     .Text("Closed")
                     .IconClass("fa fa-stop-circle")

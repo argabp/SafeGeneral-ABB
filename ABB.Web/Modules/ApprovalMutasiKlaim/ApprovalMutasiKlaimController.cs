@@ -151,11 +151,38 @@ namespace ABB.Web.Modules.ApprovalMutasiKlaim
              return View("Revised");
          }
          
+         public IActionResult RejectView()
+         {
+             return View("Reject");
+         }
+         
          public async Task<IActionResult> ApprovalMutasiKlaim(ApprovalMutasiKlaimModel model)
          {
              try
              {
                  var command = Mapper.Map<ApprovalMutasiKlaimCommand>(model);
+                 command.DatabaseName = Request.Cookies["DatabaseValue"];
+                 var result = await Mediator.Send(command);
+ 
+                 foreach (var notifTo in result.Item2)
+                 {
+                     await ApplicationHub.SendPengajuanAkseptasiNotification(notifTo, model.nomor_berkas, model.status_name);
+                 }
+                 
+                 return Json(new { Result = "OK", Message = model.status_name + " Sucessfully" });
+             }
+             catch (Exception e)
+             {
+                 return Json(new
+                     { Result = "ERROR", Message = e.InnerException == null ? e.Message : e.InnerException.Message });
+             }
+         }
+         
+         public async Task<IActionResult> ApprovalMutasiKlaimReject(ApprovalMutasiKlaimModel model)
+         {
+             try
+             {
+                 var command = Mapper.Map<ApprovalMutasiKlaimRejectCommand>(model);
                  command.DatabaseName = Request.Cookies["DatabaseValue"];
                  var result = await Mediator.Send(command);
  

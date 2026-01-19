@@ -42,7 +42,7 @@ namespace ABB.Application.UpdateKlaims.Queries
 					INNER JOIN rf05 scob
 						ON p.kd_cob = scob.kd_cob
 						AND p.kd_scob = scob.kd_scob
-				WHERE cb.kd_cb = @KodeCabang AND kd_status NOT IN ('7','8','9') AND (cb.nm_cb like '%'+@SearchKeyword+'%' 
+				WHERE cb.kd_cb = @KodeCabang AND kd_status NOT IN ('8','9') AND (cb.nm_cb like '%'+@SearchKeyword+'%' 
 					OR cob.nm_cob like '%'+@SearchKeyword+'%' 
 					OR scob.nm_scob like '%'+@SearchKeyword+'%' 
 					OR p2.nm_ttg like '%'+@SearchKeyword+'%' 

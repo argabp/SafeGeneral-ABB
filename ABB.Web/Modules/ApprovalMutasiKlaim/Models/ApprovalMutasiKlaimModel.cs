@@ -29,6 +29,7 @@ namespace ABB.Web.Modules.ApprovalMutasiKlaim.Models
         public void Mapping(Profile profile)
         {
             profile.CreateMap<ApprovalMutasiKlaimModel, ApprovalMutasiKlaimCommand>();
+            profile.CreateMap<ApprovalMutasiKlaimModel, ApprovalMutasiKlaimRejectCommand>();
         }
     }
 }
