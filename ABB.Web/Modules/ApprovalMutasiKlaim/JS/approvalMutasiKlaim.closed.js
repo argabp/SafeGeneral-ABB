@@ -1,9 +1,9 @@
 ﻿$(document).ready(function () {
-    btnApprovalMutasiKlaimReject();
+    btnApprovalMutasiKlaimClosed();
 });
 
-function btnApprovalMutasiKlaimReject(){
-    $('#btn-approvalMutasiKlaim-reject').click(function () {
+function btnApprovalMutasiKlaimClosed(){
+    $('#btn-approvalMutasiKlaim-closed').click(function () {
 
         if($("#keterangan").val().trim() === ""){
             showMessage('Error', "Keterangan Wajib Diisi");
@@ -12,12 +12,12 @@ function btnApprovalMutasiKlaimReject(){
 
         showProgress('#ApprovalWindow');
         setTimeout(function () {
-            approvalMutasiKlaimReject();
+            approvalMutasiKlaimClosed();
         }, 500);
     });
 }
 
-function approvalMutasiKlaimReject(){
+function approvalMutasiKlaimClosed(){
     var form = new FormData();
 
     form.append("kd_cb", dataItem.kd_cb);
@@ -28,17 +28,17 @@ function approvalMutasiKlaimReject(){
     form.append("no_mts", dataItem.no_mts);
     form.append("kd_user_status", dataItem.kd_user_status);
     form.append("nomor_berkas", dataItem.nomor_berkas);
-    form.append("kd_status", 7);
+    form.append("kd_status", 8);
     form.append("tgl_status", Date());
     form.append("keterangan", $("#keterangan").val());
-    form.append("status_name", "Reject");
+    form.append("status_name", "Closed");
     form.append("kd_user_sign", $("#kd_user_sign").val());
     
     $("#upload").getKendoUpload().getFiles().forEach((data, index) => {
         form.append("Files", data.rawFile);
     });
 
-    ajaxUpload("/ApprovalMutasiKlaim/ApprovalMutasiKlaimReject", form, function (response) {
+    ajaxUpload("/ApprovalMutasiKlaim/ApprovalMutasiKlaimClosed", form, function (response) {
         closeProgress("#ApprovalWindow");
         if (response.Result == "OK") {
             showMessage('Success', response.Message);

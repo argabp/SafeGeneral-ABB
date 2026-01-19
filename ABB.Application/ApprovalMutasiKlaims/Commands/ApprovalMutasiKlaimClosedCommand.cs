@@ -14,7 +14,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace ABB.Application.ApprovalMutasiKlaims.Commands
 {
-    public class ApprovalMutasiKlaimRejectCommand : IRequest<(string, List<string>)>
+    public class ApprovalMutasiKlaimClosedCommand : IRequest<(string, List<string>)>
     {
         public string DatabaseName { get; set; }
         public string kd_cb { get; set; }
@@ -31,7 +31,7 @@ namespace ABB.Application.ApprovalMutasiKlaims.Commands
         public List<IFormFile> Files { get; set; }
     }
 
-    public class ApprovalMutasiKlaimRejectCommandHandler : IRequestHandler<ApprovalMutasiKlaimRejectCommand, (string, List<string>)>
+    public class ApprovalMutasiKlaimClosedCommandHandler : IRequestHandler<ApprovalMutasiKlaimClosedCommand, (string, List<string>)>
     {
         private readonly IDbConnectionFactory _connectionFactory;
         private readonly IConfiguration _configuration;
@@ -41,7 +41,7 @@ namespace ABB.Application.ApprovalMutasiKlaims.Commands
         private readonly IDbContextFactory _dbContextFactory;
         private readonly IDbContext _dbContext;
 
-        public ApprovalMutasiKlaimRejectCommandHandler(IDbConnectionFactory connectionFactory,
+        public ApprovalMutasiKlaimClosedCommandHandler(IDbConnectionFactory connectionFactory,
             IConfiguration configuration, IProfilePictureHelper pictureHelper, ICurrentUserService userService, 
             IEmailService emailService, IDbContextFactory dbContextFactory, IDbContext dbContext)
         {
@@ -54,14 +54,14 @@ namespace ABB.Application.ApprovalMutasiKlaims.Commands
             _dbContext = dbContext;
         }
 
-        public async Task<(string, List<string>)> Handle(ApprovalMutasiKlaimRejectCommand request, CancellationToken cancellationToken)
+        public async Task<(string, List<string>)> Handle(ApprovalMutasiKlaimClosedCommand request, CancellationToken cancellationToken)
         {
             _connectionFactory.CreateDbConnection(request.DatabaseName);
             var message = string.Empty;
             var userIds = new List<string>();
             try
             {
-                    message = (await _connectionFactory.QueryProc<string>("sp_ApprovalPengajuanKlaimReject",
+                    message = (await _connectionFactory.QueryProc<string>("sp_ApprovalPengajuanKlaimClosed",
                     new
                     {
                         request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn, 

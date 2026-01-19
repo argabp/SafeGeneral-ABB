@@ -151,9 +151,9 @@ namespace ABB.Web.Modules.ApprovalMutasiKlaim
              return View("Revised");
          }
          
-         public IActionResult RejectView()
+         public IActionResult ClosedView()
          {
-             return View("Reject");
+             return View("Closed");
          }
          
          public async Task<IActionResult> ApprovalMutasiKlaim(ApprovalMutasiKlaimModel model)
@@ -178,11 +178,11 @@ namespace ABB.Web.Modules.ApprovalMutasiKlaim
              }
          }
          
-         public async Task<IActionResult> ApprovalMutasiKlaimReject(ApprovalMutasiKlaimModel model)
+         public async Task<IActionResult> ApprovalMutasiKlaimClosed(ApprovalMutasiKlaimModel model)
          {
              try
              {
-                 var command = Mapper.Map<ApprovalMutasiKlaimRejectCommand>(model);
+                 var command = Mapper.Map<ApprovalMutasiKlaimClosedCommand>(model);
                  command.DatabaseName = Request.Cookies["DatabaseValue"];
                  var result = await Mediator.Send(command);
  

@@ -38,7 +38,7 @@ namespace ABB.Application.DashboardKlaims.Queries
             urls.Add("LKP Escalated", "/RegisterKlaim/Index?");
             urls.Add("LKP Settled", "/RegisterKlaim/Index?");
             urls.Add("Payment", "/RegisterKlaim/Index?");
-            urls.Add("Rejected", "/RegisterKlaim/Index?");
+            // urls.Add("Rejected", "/RegisterKlaim/Index?");
             urls.Add("Closed", "/RegisterKlaim/Index?");
             urls.Add("Final", "/RegisterKlaim/Index?");
             
@@ -51,7 +51,7 @@ namespace ABB.Application.DashboardKlaims.Queries
             icons.Add("LKP Escalated", "fa-hand-paper");
             icons.Add("LKP Settled", "fa-child");
             icons.Add("Payment", "fa-credit-card");
-            icons.Add("Rejected", "fa-times-circle");
+            // icons.Add("Rejected", "fa-times-circle");
             icons.Add("Closed", "fa-stop-circle");
             icons.Add("Final", "fa-check-square");
             var dashboard = new DashboardKlaimDto();

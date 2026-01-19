@@ -47,9 +47,9 @@ function OnClickSettledApprovalMutasiKlaim(e) {
     openWindow('#ApprovalWindow',`/ApprovalMutasiKlaim/SettledView`, 'Settled');
 }
 
-function OnClickRejectApprovalMutasiKlaim(e) {
+function OnClickClosedApprovalMutasiKlaim(e) {
     dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-    openWindow('#ApprovalWindow',`/ApprovalMutasiKlaim/RejectView`, 'Reject');
+    openWindow('#ApprovalWindow',`/ApprovalMutasiKlaim/ClosedView`, 'Closed');
 }
 
 function OnClickPrintApprovalMutasiKlaim(e) {
