@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { 
+            /* GANTI FONT: Verdana lebih lebar/renggang dibanding Arial */
+            font-family: 'Verdana', sans-serif; 
+            font-size: 12px; /* Sesuaikan ukuran jika Verdana terlalu besar */
+            margin: 0; 
+            padding: 0; 
+        }
+        .header-table { width: 100%; border-bottom: 3px double #000; margin-bottom: 20px;  }
+        .table-report { width: 100%; border-collapse: collapse; font-size: 11px; }
+        .table-report td { padding: 4px; vertical-align: top; }
+        /* Header Kolom */
+        .table-report thead td {
+            font-weight: bold;
+            border-top: 1px solid black;
+            border-bottom: 1px solid black;
+            padding: 6px;
+            text-align: center;
+        }
+        /* Indentasi Level */
+        /* LEVEL 1 (ASET): Seperti Header Section */
+        .lvl-1 { 
+            font-weight: bold; 
+            text-transform: uppercase; 
+            text-align: center; /* Tengah */
+            background-color: #f0f0f0; /* Abu-abu muda biar kayak header */
+            padding: 5px;
+            border: 1px solid black;
+           
+        }
+
+        /* LEVEL 2 (INVESTASI): Romawi */
+        .lvl-2 { padding-left: 20px; font-weight: bold;
+        
+        }
+        
+        /* LEVEL 3 (DETAIL): Angka */
+        .lvl-3 { padding-left: 35px; }
+        
+        .lvl-4 { padding-left: 50px; font-style: italic; }
+        
+        .text-right { text-align: right; }
+        .grand-total { border-top: 1px solid #000; border-bottom: 3px double #000; font-weight: bold; }
+        .total-line { border-top: 1px solid #000; font-weight: bold; }
+        .center { text-align: center; }
+    </style>
+</head>
+<body>
+    <table class="header-table">
+        <tr>
+            <td width="80" >
+                <img src="https://instagram.fbdo7-1.fna.fbcdn.net/v/t51.2885-19/245088074_1583011225383069_6188679451357748579_n.jpg?efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby4xMDgwLmMyIn0&_nc_ht=instagram.fbdo7-1.fna.fbcdn.net&_nc_cat=109&_nc_oc=Q6cZ2QGYS8zaQjvfnKeWB9JtD_7VPMgR4BYCNN8ukm2PL9ASBJSQMoYtpjFRPzRqgkAeB_U&_nc_ohc=9QIRi3ipAwEQ7kNvwGosroo&_nc_gid=8Lw2U06yVs7QK7fN1mPqUQ&edm=AP4sbd4BAAAA&ccb=7-5&oh=00_Afq6gnapx54Yrhms4oNOI4dhBHVVxeT4FerInPi_Vk37ew&oe=69737F7C&_nc_sid=7a9f4b" 
+                     width="70 "> 
+            </td>
+            <td >
+                <h2 style="margin:0; ">PT. ASURANSI BHAKTI BHAYANGKARA</h2>
+                <p style="margin: 0; ">Jl. Palatehan No. 5 Kebayoran Baru, Jakarta 12160</p>
+                <p style="margin: 0; ">Telp : (62-21) 7204021 - 23, 7204025 - 26</p>
+            </td>
+            <td align="right">
+                <h3 style="margin:0; font-family: 'Arial';  font-size:10px; padding-bottom:5px; ">LAPORAN KEUANGAN (NERACA)</h3>
+                <p style="margin:0;font-size:9px; ">Per Tanggal: {{ TanggalLaporan }}</p>
+            </td>
+        </tr>
+    </table>
+
+    <table class="table-report">
+        <thead>
+            
+        </thead>
+        <tbody>
+            {{ Rows }} 
+        </tbody>
+    </table>
+
+    <div style="margin-top: 30px; font-size: 10px; color: gray; text-align:center;">
+        <i>Dicetak oleh System pada: {{ WaktuCetak }}</i>
+    </div>
+</body>
+</html>

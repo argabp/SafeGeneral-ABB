@@ -11,6 +11,9 @@ namespace ABB.Domain.Entities
         [Column("id")]
         public long Id { get; set; } // bigint di DB = long di C#
 
+        [Column("urutan")]
+        public int Urutan { get; set; }
+
         [Column("tipe_laporan")]
         public string TipeLaporan { get; set; } // Contoh: 'NERACA', 'LABARUGI'
 

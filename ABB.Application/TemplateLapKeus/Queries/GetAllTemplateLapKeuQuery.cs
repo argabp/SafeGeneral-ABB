@@ -13,7 +13,10 @@ namespace ABB.Application.TemplateLapKeus.Queries
 {
     public class GetAllTemplateLapKeuQuery : IRequest<List<TemplateLapKeuDto>>
     {
-        public string TipeLaporan { get; set; } // Filter optional: NR / LR
+        public string TipeLaporan { get; set; } 
+        
+        // [TAMBAHKAN INI] Agar Controller tidak error
+        public string SearchKeyword { get; set; } 
     }
 
     public class GetAllTemplateLapKeuQueryHandler : IRequestHandler<GetAllTemplateLapKeuQuery, List<TemplateLapKeuDto>>
@@ -31,15 +34,25 @@ namespace ABB.Application.TemplateLapKeus.Queries
         {
             var query = _context.TemplateLapKeu.AsNoTracking().AsQueryable();
 
+            // Filter Tipe Laporan (Opsional)
             if (!string.IsNullOrEmpty(request.TipeLaporan))
             {
                 query = query.Where(x => x.TipeLaporan == request.TipeLaporan);
             }
 
-            // Urutkan berdasarkan ID (asumsi ID merepresentasikan urutan baris)
-            // Atau nanti bisa tambah kolom 'Urutan' int jika butuh insert di tengah2
+            // [TAMBAHKAN LOGIC PENCARIAN INI]
+            if (!string.IsNullOrEmpty(request.SearchKeyword))
+            {
+                var lowerKeyword = request.SearchKeyword.ToLower();
+                query = query.Where(x => 
+                    x.Deskripsi.ToLower().Contains(lowerKeyword) || 
+                    x.Rumus.ToLower().Contains(lowerKeyword) ||
+                    x.TipeLaporan.ToLower().Contains(lowerKeyword)
+                );
+            }
+
             return await query
-                .OrderBy(x => x.Id)
+                .OrderBy(x => x.Id) // Urutkan berdasarkan ID agar susunan baris rapi
                 .ProjectTo<TemplateLapKeuDto>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
         }

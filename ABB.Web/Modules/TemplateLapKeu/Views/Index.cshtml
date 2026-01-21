@@ -1,0 +1,109 @@
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.TagHelpers
+@using ABB.Application.TemplateLapKeus.Queries
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Template Laporan Keuangan";
+}
+
+<script src="~/Modules/TemplateLapKeu/JS/templatelapkeu.index.js"></script>
+
+<style>
+    .div-box { padding-bottom: 1em; }
+    .swal2-container { z-index: 10050 !important; }
+     .breadcrumb-item + .breadcrumb-item::before {
+        content: ">"; 
+        padding: 0 .5rem; 
+    }
+</style>
+
+<nav aria-label="breadcrumb">
+   <ol class="breadcrumb" style="background: white; ">
+        <li class="breadcrumb-item"><a href="#">Accounting</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Template Laporan Keuangan</li>
+    </ol>
+</nav>
+
+<div class="flat-box">
+    <div class="flat-box-title ">
+       Daftar Template
+        <div class="pullright-flex">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Cari Deskripsi/Rumus..."/>
+            <button class="flat-btn-primary" onclick="onAddClick()">Tambah Template</button>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<TemplateLapKeuDto>()
+                .Name("TemplateGrid")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetGridData", "TemplateLapKeu").Data("getSearchFilter"))
+                    .Model(model => model.Id(p => p.Id)) // Primary Key
+                    .PageSize(20)
+                    .Sort(sort => sort.Add("Urutan").Ascending()) // Default sort by ID agar urutan baris benar
+                )
+                .Columns(columns =>
+                {
+                    columns.Bound(c => c.Urutan).Title("No Urut").Width(80).Sortable(true);
+                    columns.Bound(col => col.TipeLaporan).Title("Tipe Lap").Width(120);
+                    columns.Bound(col => col.TipeBaris).Title("Tipe Baris").Width(120);
+                    columns.Bound(col => col.Deskripsi).Title("Deskripsi").Width(200);
+                    columns.Bound(col => col.Rumus).Title("Rumus / Akun").Width(200);
+                    
+                    columns.Bound(col => col.Level).Title("Level").Width(80).HtmlAttributes(new { style = "text-align:center" });
+                    
+                    columns.Command(command =>
+                    {
+                        command.Custom("EditTemplate")
+                            .Text(" Edit ")
+                            .IconClass("fa fa-edit")
+                            .Click("onEditClick");
+
+                        command.Custom("DeleteTemplate")
+                            .Text(" Hapus ")
+                            .IconClass("fa fa-trash")
+                            .Click("onDeleteClick");
+                    }).Width(180).Title("Aksi").Locked(true);
+                })
+                .Pageable(pager => pager.Refresh(true).PageSizes(true))
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(500)
+                .Resizable(a => a.Columns(true))
+            )
+        </div>
+
+        @* Window untuk Form Add/Edit *@
+        @(Html.Kendo().Window()
+            .Name("TemplateWindow")
+            .Title("Form Template Laporan")
+            .Width(600)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+        )
+    </div>
+</div>
+
+<script>
+    // Fungsi untuk mengirim parameter pencarian ke Controller
+    function getSearchFilter() {
+        return {
+            // Parameter ini harus ada di Controller GetGridData jika ingin filtering server-side
+            // atau Grid akan melakukan filtering di client side jika data sudah diload semua
+            searchKeyword: $("#SearchKeyword").val()
+        };
+    }
+
+    $(document).ready(function () {
+        // Event listener pencarian
+        $("#SearchKeyword").on("keyup", function() {
+            $("#TemplateGrid").data("kendoGrid").dataSource.read();
+        });
+    });
+</script>
