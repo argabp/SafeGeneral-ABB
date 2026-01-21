@@ -31,14 +31,14 @@ namespace ABB.Application.DashboardUnderwriting.Queries
         {
             var urls = new Dictionary<string, string>();
             
-            urls.Add("New", "/PengajuanAkseptasi/Index?");
-            urls.Add("Submited", "/PengajuanAkseptasi/Index?");
-            urls.Add("Checked", "/PengajuanAkseptasi/Index?");
-            urls.Add("Escalated", "/PengajuanAkseptasi/Index?");
-            urls.Add("Approved", "/PengajuanAkseptasi/Index?");
-            urls.Add("Rejected", "/PengajuanAkseptasi/Index?");
-            urls.Add("Revised", "/PengajuanAkseptasi/Index?");
-            urls.Add("Banding", "/PengajuanAkseptasi/Index?");
+            urls.Add("New", "/PengajuanAkseptasi/Index?status=New");
+            urls.Add("Submited", "/PengajuanAkseptasi/Index?status=Submited");
+            urls.Add("Checked", "/PengajuanAkseptasi/Index?status=Checked");
+            urls.Add("Escalated", "/PengajuanAkseptasi/Index?status=Escalated");
+            urls.Add("Approved", "/PengajuanAkseptasi/Index?status=Approved");
+            urls.Add("Rejected", "/PengajuanAkseptasi/Index?status=Rejected");
+            urls.Add("Revised", "/PengajuanAkseptasi/Index?status=Revised");
+            urls.Add("Banding", "/PengajuanAkseptasi/Index?status=Banding");
             
             var icons = new Dictionary<string, string>();
             

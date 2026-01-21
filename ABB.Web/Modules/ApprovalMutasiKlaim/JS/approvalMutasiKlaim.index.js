@@ -97,6 +97,7 @@ function setButtonActions(e){
                 buttonContainer.find(".k-grid-Process").hide(); // "custom" is the command name
             } else {
                 buttonContainer.find(".k-grid-Escalated").hide(); // "custom" is the command name
+                buttonContainer.find(".k-grid-Closed").hide(); // "custom" is the command name
                 buttonContainer.find(".k-grid-Settled").hide(); // "custom" is the command name
             }
         }

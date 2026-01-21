@@ -4,6 +4,8 @@
     btnAddPengajuanAkseptasi_Click();
 });
 
+let statusFilterApplied = false;
+
 function searchKeyword_OnKeyUp() {
     $('#SearchKeyword').keyup(function () {
         refreshGrid("#PengajuanAkseptasiGrid");
@@ -120,6 +122,23 @@ function setButtonActions(e){
     });
 
     gridAutoFit(grid);
+
+    const params = new URLSearchParams(window.location.search);
+    const dashboardStatus = params.get("status");
+
+    // No status OR already applied → exit
+    if (!dashboardStatus || statusFilterApplied) {
+        return;
+    }
+
+    // IMPORTANT: set flag BEFORE filtering
+    statusFilterApplied = true;
+
+    grid.dataSource.filter({
+        field: "status",
+        operator: "eq",
+        value: dashboardStatus
+    });
 }
 
 function OnClickDeletPengajuanAkseptasi(e) {

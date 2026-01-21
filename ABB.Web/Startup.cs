@@ -64,6 +64,14 @@ namespace ABB.Web
 
             services.AddSingleton(reportConfig);
             
+            var reportTTDConfig = new ReportTTDConfig();
+            // Or bind directly from a custom JSON file:
+            var configFileTTDPath = Path.Combine(WebHostEnvironment.ContentRootPath, "Configs", "ReportTTDConfig.json");
+            var configTTDJson = File.ReadAllText(configFileTTDPath);
+            reportTTDConfig = JsonConvert.DeserializeObject<ReportTTDConfig>(configTTDJson);
+
+            services.AddSingleton(reportTTDConfig);
+            
             services.AddSingleton(Configuration);
             services.AddSingleton(new ProgressBarDto());
             services.AddApplication();

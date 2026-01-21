@@ -37,6 +37,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         private readonly IHostEnvironment _environment;
         private readonly ReportConfig _reportConfig;
         private readonly IHostEnvironment _root;
+        private readonly ReportTTDConfig _reportTtdConfig;
 
         private List<string> ReportHaveDetails = new List<string>()
         {
@@ -54,12 +55,13 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         };
 
         public GetCetakSchedulePolisQueryHandler(IDbConnectionFactory connectionFactory, IHostEnvironment environment,
-            ReportConfig reportConfig, IHostEnvironment root)
+            ReportConfig reportConfig, IHostEnvironment root, ReportTTDConfig reportTtdConfig)
         {
             _connectionFactory = connectionFactory;
             _environment = environment;
             _reportConfig = reportConfig;
             _root = root;
+            _reportTtdConfig = reportTtdConfig;
         }
 
         public async Task<string> Handle(GetCetakSchedulePolisQuery request, CancellationToken cancellationToken)
@@ -989,31 +991,31 @@ namespace ABB.Application.CetakSchedulePolis.Queries
 
             var footer_template = string.Empty;
 
-            if (cetakSchedulePolis.kd_cb.Length >= 4 && cetakSchedulePolis.kd_cb.Substring(3, 1) != "0")
-            {
-                var ttdImageBase64 = string.Empty;
-                var wwwroot = Path.Combine(_root.ContentRootPath, "wwwroot", "ttd");
-                var imageFile = Path.Combine(wwwroot, reportConfig.NamaTTDFile);
-                if (File.Exists(imageFile))
-                {
-                    ttdImageBase64 = Convert.ToBase64String(File.ReadAllBytes(imageFile));
-                }
-                string extension = Path.GetExtension(imageFile).ToLower();
-                string mimeType = extension switch
-                {
-                    ".png" => "image/png",
-                    ".jpg" => "image/jpeg",
-                    ".jpeg" => "image/jpeg",
-                    ".gif" => "image/gif",
-                    ".bmp" => "image/bmp",
-                    _ => "application/octet-stream"
-                };
-                footer_template = $@"<div>
-                    $""<img src='data:${mimeType};base64,${ttdImageBase64}' style='max-width: 200px;' />"");
-                    <p><strong><u>${reportConfig.NamaPejabat}</u></strong></p>
-                    <p><strong>${reportConfig.Jabatan}<strong></p>
-                    </div>";
-            }
+            // if (cetakSchedulePolis.kd_cb.Length >= 4 && cetakSchedulePolis.kd_cb.Substring(3, 1) != "0")
+            // {
+            //     var ttdImageBase64 = string.Empty;
+            //     var wwwroot = Path.Combine(_root.ContentRootPath, "wwwroot", "ttd");
+            //     var imageFile = Path.Combine(wwwroot, _reportTtdConfig.NamaTTDFile);
+            //     if (File.Exists(imageFile))
+            //     {
+            //         ttdImageBase64 = Convert.ToBase64String(File.ReadAllBytes(imageFile));
+            //     }
+            //     string extension = Path.GetExtension(imageFile).ToLower();
+            //     string mimeType = extension switch
+            //     {
+            //         ".png" => "image/png",
+            //         ".jpg" => "image/jpeg",
+            //         ".jpeg" => "image/jpeg",
+            //         ".gif" => "image/gif",
+            //         ".bmp" => "image/bmp",
+            //         _ => "application/octet-stream"
+            //     };
+            //     footer_template = $@"<div>
+            //         $""<img src='data:${mimeType};base64,${ttdImageBase64}' style='max-width: 200px;' />"");
+            //         <p><strong><u>${_reportTtdConfig.NamaPejabat}</u></strong></p>
+            //         <p><strong>${_reportTtdConfig.Jabatan}<strong></p>
+            //         </div>";
+            // }
             
             if (ReportHaveDetails.Contains(reportTemplateName))
             {

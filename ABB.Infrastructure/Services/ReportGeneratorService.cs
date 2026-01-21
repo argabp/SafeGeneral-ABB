@@ -20,7 +20,7 @@ namespace ABB.Infrastructure.Services
 
         public void GenerateReport(string reportName, string templateReport, string path, 
             Orientation orientation = Orientation.Portrait, double right = 20, double left = 20, 
-            double top = 20, double bottom = 20, PaperKind paperSize = PaperKind.A4)
+            double top = 20, double bottom = 20, PaperKind paperSize = PaperKind.A4, bool useFooter = false)
         {
             var doc = new HtmlToPdfDocument()
             {
@@ -34,7 +34,13 @@ namespace ABB.Infrastructure.Services
                     new ObjectSettings() {
                         PagesCount = true,
                         HtmlContent = templateReport,
-                        WebSettings = { DefaultEncoding = "utf-8", EnableIntelligentShrinking = false }
+                        WebSettings = { DefaultEncoding = "utf-8", EnableIntelligentShrinking = false },
+                        FooterSettings = useFooter ? new FooterSettings
+                        {
+                        Center = "Test",   // or Page numbering
+                        FontSize = 9,
+                        Spacing = 5
+                        } : null
                     }
                 }
             };

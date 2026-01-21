@@ -31,16 +31,16 @@ namespace ABB.Application.DashboardKlaims.Queries
         {
             var urls = new Dictionary<string, string>();
             
-            urls.Add("New", "/RegisterKlaim/Index?");
-            urls.Add("LKS", "/RegisterKlaim/Index?");
-            urls.Add("LKP Process", "/RegisterKlaim/Index?");
-            urls.Add("LKP Revised", "/RegisterKlaim/Index?");
-            urls.Add("LKP Escalated", "/RegisterKlaim/Index?");
-            urls.Add("LKP Settled", "/RegisterKlaim/Index?");
-            urls.Add("Payment", "/RegisterKlaim/Index?");
+            urls.Add("New", "/RegisterKlaim/Index?status=New");
+            urls.Add("LKS", "/RegisterKlaim/Index?status=LKS");
+            urls.Add("LKP Process", "/RegisterKlaim/Index?status=LKP Process");
+            urls.Add("LKP Revised", "/RegisterKlaim/Index?status=LKP Revised");
+            urls.Add("LKP Escalated", "/RegisterKlaim/Index?status=LKP Escalated");
+            urls.Add("LKP Settled", "/RegisterKlaim/Index?status=LKP Settled");
+            urls.Add("Payment", "/RegisterKlaim/Index?status=Payment");
             // urls.Add("Rejected", "/RegisterKlaim/Index?");
-            urls.Add("Closed", "/RegisterKlaim/Index?");
-            urls.Add("Final", "/RegisterKlaim/Index?");
+            urls.Add("Closed", "/RegisterKlaim/Index?status=Closed");
+            urls.Add("Final", "/RegisterKlaim/Index?status=Final");
             
             var icons = new Dictionary<string, string>();
             
