@@ -102,10 +102,6 @@ namespace ABB.Application.TertanggungPrincipals.Commands
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty().WithMessage("Wajib Diisi");
 
-            RuleFor(p => p.pangsa_kepemilikan)
-                .Cascade(CascadeMode.Stop)
-                .GreaterThan(0).WithMessage("Wajib Diisi");
-
             RuleFor(p => p.sts_pengurus)
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty().WithMessage("Wajib Diisi");
@@ -113,114 +109,6 @@ namespace ABB.Application.TertanggungPrincipals.Commands
             RuleFor(p => p.tgl_lap_keu_debitur)
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty().WithMessage("Wajib Diisi");
-
-            RuleFor(p => p.Aset)
-                .Cascade(CascadeMode.Stop)
-                .GreaterThan(0).WithMessage("Wajib Diisi");
-
-            RuleFor(p => p.Aset_Lancar)
-                .Cascade(CascadeMode.Stop)
-                .GreaterThan(0).WithMessage("Wajib Diisi");
-
-            RuleFor(p => p.Kas_n_Setara_Kas)
-                .Cascade(CascadeMode.Stop)
-                .GreaterThan(0).WithMessage("Wajib Diisi");
-
-            RuleFor(p => p.Piutang_Usaha_atau_Pembiayaan)
-                .Cascade(CascadeMode.Stop)
-                .GreaterThan(0).WithMessage("Wajib Diisi");
-
-            RuleFor(p => p.Inv_atau_Aset_Keu_Lain)
-                .Cascade(CascadeMode.Stop)
-                .GreaterThan(0).WithMessage("Wajib Diisi");
-
-            RuleFor(p => p.Aset_Lancar_Lain)
-                .Cascade(CascadeMode.Stop)
-                .GreaterThan(0).WithMessage("Wajib Diisi");
-
-            RuleFor(p => p.Aset_Tak_Lancar)
-                .Cascade(CascadeMode.Stop)
-                .GreaterThan(0).WithMessage("Wajib Diisi");
-
-            RuleFor(p => p.Piut_Usaha_atau_Pembiayaan)
-                .Cascade(CascadeMode.Stop)
-                .GreaterThan(0).WithMessage("Wajib Diisi");
-
-            RuleFor(p => p.Inv_atau_Aset_Keu_Lain2)
-                .Cascade(CascadeMode.Stop)
-                .GreaterThan(0).WithMessage("Wajib Diisi");
-
-            RuleFor(p => p.Aset_Tak_lancar_Lain)
-                .Cascade(CascadeMode.Stop)
-                .GreaterThan(0).WithMessage("Wajib Diisi");
-
-            RuleFor(p => p.Liabilitas)
-                .Cascade(CascadeMode.Stop)
-                .GreaterThan(0).WithMessage("Wajib Diisi");
-
-            RuleFor(p => p.Liabilitas_Jgk_Pdk)
-                .Cascade(CascadeMode.Stop)
-                .GreaterThan(0).WithMessage("Wajib Diisi");
-
-            RuleFor(p => p.Pinjam_Jgk_Pdk)
-                .Cascade(CascadeMode.Stop)
-                .GreaterThan(0).WithMessage("Wajib Diisi");
-
-            RuleFor(p => p.Utang_Jgk_Pdk)
-                .Cascade(CascadeMode.Stop)
-                .GreaterThan(0).WithMessage("Wajib Diisi");
-
-            RuleFor(p => p.Liabilitas_Jgk_Pdk_Lain)
-                .Cascade(CascadeMode.Stop)
-                .GreaterThan(0).WithMessage("Wajib Diisi");
-
-            RuleFor(p => p.Liabilitas_Jgk_Pjg)
-                .Cascade(CascadeMode.Stop)
-                .GreaterThan(0).WithMessage("Wajib Diisi");
-
-            RuleFor(p => p.Pinjaman_Jgk_Pjg)
-                .Cascade(CascadeMode.Stop)
-                .GreaterThan(0).WithMessage("Wajib Diisi");
-
-            RuleFor(p => p.Utang_Jgk_Pjg)
-                .Cascade(CascadeMode.Stop)
-                .GreaterThan(0).WithMessage("Wajib Diisi");
-
-            RuleFor(p => p.Liabilitas_Jgk_Pjg_Lain)
-                .Cascade(CascadeMode.Stop)
-                .GreaterThan(0).WithMessage("Wajib Diisi");
-
-            RuleFor(p => p.Ekuitas)
-                .Cascade(CascadeMode.Stop)
-                .GreaterThan(0).WithMessage("Wajib Diisi");
-
-            RuleFor(p => p.Pendapatan)
-                .Cascade(CascadeMode.Stop)
-                .GreaterThan(0).WithMessage("Wajib Diisi");
-
-            RuleFor(p => p.Beban_Pkk_Pendapatan)
-                .Cascade(CascadeMode.Stop)
-                .GreaterThan(0).WithMessage("Wajib Diisi");
-
-            RuleFor(p => p.L_atau_R_Bruto)
-                .Cascade(CascadeMode.Stop)
-                .GreaterThan(0).WithMessage("Wajib Diisi");
-
-            RuleFor(p => p.Pendapatan_Lain)
-                .Cascade(CascadeMode.Stop)
-                .GreaterThan(0).WithMessage("Wajib Diisi");
-
-            RuleFor(p => p.Beban_Lain)
-                .Cascade(CascadeMode.Stop)
-                .GreaterThan(0).WithMessage("Wajib Diisi");
-
-            RuleFor(p => p.L_atau_R_belum_Pjk)
-                .Cascade(CascadeMode.Stop)
-                .GreaterThan(0).WithMessage("Wajib Diisi");
-
-            RuleFor(p => p.L_atau_R_Thn_Bjl)
-                .Cascade(CascadeMode.Stop)
-                .GreaterThan(0).WithMessage("Wajib Diisi");
             
             RuleFor(p => p.no_rek)
                 .Cascade(CascadeMode.Stop)

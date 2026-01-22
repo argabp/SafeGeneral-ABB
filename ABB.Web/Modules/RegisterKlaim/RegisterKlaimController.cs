@@ -361,12 +361,13 @@ namespace ABB.Web.Modules.RegisterKlaim
             return Json(result);
         }
 
-        public async Task<JsonResult> GetDocumentNames(string kd_cob)
+        public async Task<JsonResult> GetDocumentNames(string kd_cob, string kd_scob)
         {
             var result = await Mediator.Send(new GetKodeDokumenQuery()
             {
                 DatabaseName = Request.Cookies["DatabaseValue"],
-                kd_cob = kd_cob
+                kd_cob = kd_cob,
+                kd_scob = kd_scob
             });
 
             return Json(result);

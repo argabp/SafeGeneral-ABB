@@ -84,7 +84,10 @@ namespace ABB.Application.RegisterKlaims.Commands
                 {
                     entity = _mapper.Map<DokumenRegisterKlaim>(request);
 
-                    entity.link_file = request.File.FileName;
+                    if (request.File != null)
+                    {
+                        entity.link_file = request.File.FileName;
+                    }
                     
                     dbContext.DokumenRegisterKlaim.Add(entity);
                 }
@@ -99,12 +102,15 @@ namespace ABB.Application.RegisterKlaims.Commands
 
                 await dbContext.SaveChangesAsync(cancellationToken);
 
-                var registerKlaimPath =
-                    $"{entity.kd_cb.Trim()}{entity.kd_cob.Trim()}{entity.kd_scob.Trim()}{entity.kd_thn.Trim()}{entity.no_kl.Trim()}";
-                var path = _config.GetSection("DokumenRegisterKlaim").Value.TrimEnd('/');
-                path = Path.Combine(path, registerKlaimPath);
+                if (request.File != null)
+                {
+                    var registerKlaimPath =
+                        $"{entity.kd_cb.Trim()}{entity.kd_cob.Trim()}{entity.kd_scob.Trim()}{entity.kd_thn.Trim()}{entity.no_kl.Trim()}";
+                    var path = _config.GetSection("DokumenRegisterKlaim").Value.TrimEnd('/');
+                    path = Path.Combine(path, registerKlaimPath);
                 
-                await _pictureHelper.UploadToFolder(request.File, path);
+                    await _pictureHelper.UploadToFolder(request.File, path);
+                }
             }
             catch (Exception ex)
             {

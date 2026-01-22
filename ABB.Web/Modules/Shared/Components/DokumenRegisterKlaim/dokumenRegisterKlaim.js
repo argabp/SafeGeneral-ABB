@@ -31,7 +31,7 @@ function parameterDokumen() {
 var documentNames;
 
 function getDocumentNames() {
-    ajaxGet(`/RegisterKlaim/GetDocumentNames?kd_cob=${$("#kd_cob").val()}`, function (result) {
+    ajaxGet(`/RegisterKlaim/GetDocumentNames?kd_cob=${$("#kd_cob").val()}&kd_scob=${$("#kd_scob").val()}`, function (result) {
         documentNames = result;
     });
 }

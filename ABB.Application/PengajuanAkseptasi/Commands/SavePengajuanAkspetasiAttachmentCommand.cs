@@ -87,7 +87,10 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
                 {
                     var akseptasiAttachment = _mapper.Map<TRAkseptasiAttachment>(request);
 
-                    akseptasiAttachment.nm_dokumen = request.File.FileName;
+                    if (request.File != null)
+                    {
+                        akseptasiAttachment.nm_dokumen = request.File.FileName;
+                    }
                     
                     _context.TRAkseptasiAttachment.Add(akseptasiAttachment);
                 }
@@ -97,15 +100,19 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
                     {
                         entity.nm_dokumen = request.File.FileName;
                     }
+                    
                     entity.flag_wajib = request.flag_wajib;
                 }
 
                 await _context.SaveChangesAsync(cancellationToken);
 
-                var path = _config.GetSection("PengajuanAkseptasiAttachment").Value.TrimEnd('/');
-                path = Path.Combine(path, nomor_pengajuan.Replace("/", string.Empty));
-                
-                await _pictureHelper.UploadToFolder(request.File, path);
+                if (request.File != null)
+                {
+                    var path = _config.GetSection("PengajuanAkseptasiAttachment").Value.TrimEnd('/');
+                    path = Path.Combine(path, nomor_pengajuan.Replace("/", string.Empty));
+                    
+                    await _pictureHelper.UploadToFolder(request.File, path);
+                }
             }
             catch (Exception ex)
             {

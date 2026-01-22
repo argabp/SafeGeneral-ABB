@@ -15,6 +15,7 @@ namespace ABB.Application.RegisterKlaims.Queries
         public string DatabaseName { get; set; }
 
         public string kd_cob { get; set; }
+        public string kd_scob { get; set; }
     }
 
     public class GetKodeDokumenQueryHandler : IRequestHandler<GetKodeDokumenQuery, List<DropdownOptionDto>>
@@ -35,10 +36,10 @@ namespace ABB.Application.RegisterKlaims.Queries
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
                 return (await _connectionFactory.Query<DropdownOptionDto>(
-                    "SELECT k.kd_dokumen Value, s.nm_dokumenklaim Text " +
+                    "SELECT k.kd_dokumen Value, s.nm_dokumen Text " +
                     "FROM MS_DokumenKlaimDetil k " +
-                    "INNER JOIN MS_DokumenKlaim s " +
-                    "  ON k.kd_cob = s.kd_cob AND s.kd_scob = k.kd_scob WHERE k.kd_cob = @kd_cob", new { request.kd_cob })).ToList();
+                    "INNER JOIN MS_DokumenDetil s " +
+                    "  ON k.kd_dokumen = s.kd_dokumen WHERE k.kd_cob = @kd_cob AND k.kd_scob = @kd_scob", new { request.kd_cob, request.kd_scob })).ToList();
             }
             catch (Exception ex)
             {
