@@ -40,6 +40,7 @@ namespace ABB.Application.MutasiKlaims.Queries
                     INNER JOIN cl01 c
                         ON c.kd_cb = p.kd_cb
                             AND  c.kd_cob = p.kd_cob
+                            AND  c.kd_scob = p.kd_scob
                             AND  c.kd_thn = p.kd_thn
                             AND  c.no_kl = p.no_kl
 				WHERE p.kd_cb = @kd_cb 
