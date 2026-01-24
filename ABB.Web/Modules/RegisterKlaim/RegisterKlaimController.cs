@@ -25,19 +25,11 @@ namespace ABB.Web.Modules.RegisterKlaim
 {
     public class RegisterKlaimController : AuthorizedBaseController
     {
-        private readonly IConfiguration _configuration;
         private readonly IReportGeneratorService _reportGeneratorService;
-        private readonly ILogger<RegisterKlaimController> _logger;
-        private static List<DropdownOptionDto> _cabangs = new List<DropdownOptionDto>();
-        private static List<DropdownOptionDto> _cobs  = new List<DropdownOptionDto>();
-        private static List<SCOBDto> _scobs  = new List<SCOBDto>();
 
-        public RegisterKlaimController(IConfiguration configuration, IReportGeneratorService reportGeneratorService,
-            ILogger<RegisterKlaimController> logger)
+        public RegisterKlaimController(IReportGeneratorService reportGeneratorService)
         {
-            _configuration = configuration;
             _reportGeneratorService = reportGeneratorService;
-            _logger = logger;
         }
         
         public async Task<IActionResult> Index()
@@ -45,21 +37,6 @@ namespace ABB.Web.Modules.RegisterKlaim
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
-            
-            _cabangs =  await Mediator.Send(new GetCabangQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"]
-            });
-            
-            _cobs = await Mediator.Send(new GetCobQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"]
-            });
-            
-            _scobs = await Mediator.Send(new GetAllSCOBQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"]
-            });
             
             return View();
         }
@@ -207,56 +184,34 @@ namespace ABB.Web.Modules.RegisterKlaim
                 return Json(new { Result = "ERROR", Message = "Failed Delete Lampiran " + e.Message });
             }
         }
-        
+
         public async Task<JsonResult> GetCabang()
         {
-            if (!_cabangs.Any())
+            var result = await Mediator.Send(new GetCabangQuery()
             {
-                _cabangs = await Mediator.Send(new GetCabangQuery()
-                {
-                    DatabaseName = Request.Cookies["DatabaseValue"]
-                });
-            }
-            
-            return Json(_cabangs);
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            });
+
+            return Json(result);
         }
 
         public async Task<JsonResult> GetCOB()
         {
-            if (!_cobs.Any())
+            var cobs = await Mediator.Send(new GetCobQuery()
             {
-                _cobs = await Mediator.Send(new GetCobQuery()
-                {
-                    DatabaseName = Request.Cookies["DatabaseValue"]
-                });
-            }
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            });
             
-            return Json(_cobs);
+            return Json(cobs);
         }
 
         public async Task<JsonResult> GetSCOB(string kd_cob)
         {
-            var result = new List<DropdownOptionDto>();
-
-            if (string.IsNullOrWhiteSpace(kd_cob))
-                kd_cob = string.Empty;
-
-            if (!_scobs.Any())
+            var result = await Mediator.Send(new GetSCOBQuery()
             {
-                _scobs = await Mediator.Send(new GetAllSCOBQuery()
-                {
-                    DatabaseName = Request.Cookies["DatabaseValue"]
-                });
-            }
-            
-            foreach (var scob in _scobs.Where(w => w.kd_cob == kd_cob.Trim()))
-            {
-                result.Add(new DropdownOptionDto()
-                {
-                    Text = scob.nm_scob,
-                    Value = scob.kd_scob
-                });
-            }
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                kd_cob = kd_cob
+            });
 
             return Json(result);
         }

@@ -1,13 +1,14 @@
-﻿$(document).ready(function () {
+﻿$(document).ready(async function () {
     btnSaveLKS_Click();
-    setTimeout(setLKSEditedValue, 1000);
+    await setLKSEditedValue();
 });
 
-function setLKSEditedValue(){
+async function setLKSEditedValue(){
+    showProgress('#LKSWindow');
     var flag_posting = $("#tempFlag_posting").val();
     flag_posting == "Y" ? $("#flag_posting").prop("checked", true) : $("#flag_posting").prop("checked", false);
 
-    $("#kd_rk_pas").data("kendoDropDownList").value($("#temp_kd_rk_pas").val().trim());
+    await restoreDropdownValue("#kd_rk_pas", "#temp_kd_rk_pas");
 
     closeProgress('#LKSWindow');
 }

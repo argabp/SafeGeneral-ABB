@@ -1,8 +1,8 @@
-﻿$(document).ready(function () {
+﻿$(document).ready(async function () {
     btnSaveAkseptasi_Click();
     btnNextAkseptasi();
     showProgress('#AkseptasiWindow');
-    setTimeout(setAkseptasiEditedValue, 3000);
+    await setAkseptasiEditedValue();
 });
 
 function dataKodeTertanggungDropDown(){
@@ -54,17 +54,18 @@ function dataKodeSCOBDropDown(){
     }
 }
 
-function setAkseptasiEditedValue(){
+async function setAkseptasiEditedValue(){
+    showProgress('#AkseptasiWindow');
     var flag_konv = $("#tempFlag_konv").val();
     flag_konv == "Y" ? $("#flag_konv").prop("checked", true) : $("#flag_konv").prop("checked", false);
     
-    $("#kd_rk_ttg").data("kendoDropDownList").value($("#temp_kd_rk_ttg").val().trim());
-    $("#kd_rk_sb_bis").data("kendoDropDownList").value($("#temp_kd_rk_sb_bis").val().trim());
-    $("#kd_rk_brk").data("kendoDropDownList").value($("#temp_kd_rk_brk").val().trim());
-    $("#kd_rk_pas").data("kendoDropDownList").value($("#temp_kd_rk_pas").val().trim());
-    $("#kd_rk_bank").data("kendoDropDownList").value($("#temp_kd_rk_bank").val().trim());
-    $("#kd_rk_mkt").data("kendoDropDownList").value($("#temp_kd_rk_mkt").val().trim());
-    $("#kd_scob").data("kendoDropDownList").value($("#temp_kd_scob").val().trim());
+    await restoreDropdownValue("#kd_rk_ttg", "#temp_kd_rk_ttg");
+    await restoreDropdownValue("#kd_rk_sb_bis", "#temp_kd_rk_sb_bis");
+    await restoreDropdownValue("#kd_rk_brk", "#temp_kd_rk_brk");
+    await restoreDropdownValue("#kd_rk_pas", "#kd_rk_pas");
+    await restoreDropdownValue("#kd_rk_bank", "#kd_rk_bank");
+    await restoreDropdownValue("#kd_rk_mkt", "#temp_kd_rk_mkt");
+    await restoreDropdownValue("#kd_scob", "#temp_kd_scob");
     
     if($("#IsEdit").val() === 'True')
     {

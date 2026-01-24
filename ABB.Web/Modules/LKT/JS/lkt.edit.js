@@ -1,10 +1,11 @@
-﻿$(document).ready(function () {
+﻿$(document).ready(async function () {
     btnSaveLKT_Click();
-    setTimeout(setLKTEditedValue, 1000);
+    await setLKTEditedValue();
 });
 
-function setLKTEditedValue(){
-    $("#kd_rk_pas").data("kendoDropDownList").value($("#temp_kd_rk_pas").val().trim());
+async function setLKTEditedValue(){
+    showProgress('#LKTWindow');
+    await restoreDropdownValue("#kd_rk_pas", "#temp_kd_rk_pas");
 
     closeProgress('#LKTWindow');
 }

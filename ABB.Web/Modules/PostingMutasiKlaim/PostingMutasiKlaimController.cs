@@ -14,21 +14,11 @@ namespace ABB.Web.Modules.PostingMutasiKlaim
 {
     public class PostingMutasiKlaimController : AuthorizedBaseController
     {
-        private static List<DropdownOptionDto> _tipeMutasi;
-        
         public ActionResult Index()
         {
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
-
-            _tipeMutasi = new List<DropdownOptionDto>()
-            {
-                new DropdownOptionDto() { Text = "PLA", Value = "P" },
-                new DropdownOptionDto() { Text = "DLA", Value = "D" },
-                new DropdownOptionDto() { Text = "Beban", Value = "B" },
-                new DropdownOptionDto() { Text = "Recovery", Value = "R" }
-            };
             
             return View();
         }
@@ -41,6 +31,14 @@ namespace ABB.Web.Modules.PostingMutasiKlaim
                 DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
                 kd_cb = Request.Cookies["UserCabang"] ?? string.Empty
             });
+            
+            var _tipeMutasi = new List<DropdownOptionDto>()
+            {
+                new DropdownOptionDto() { Text = "PLA", Value = "P" },
+                new DropdownOptionDto() { Text = "DLA", Value = "D" },
+                new DropdownOptionDto() { Text = "Beban", Value = "B" },
+                new DropdownOptionDto() { Text = "Recovery", Value = "R" }
+            };
             
             var counter = 1;
             foreach (var data in ds)

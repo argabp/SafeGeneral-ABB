@@ -35,14 +35,16 @@ namespace ABB.Application.MutasiKlaims.Queries
         public async Task<List<MutasiKlaimDetailDto>> Handle(GetMutasiKlaimDetailsQuery request, CancellationToken cancellationToken)
         {
             _connectionFactory.CreateDbConnection(request.DatabaseName);
-            return (await _connectionFactory.Query<MutasiKlaimDetailDto>(@"SELECT p.*, c.flag_pol_lama, c.no_rsk 
-				FROM cl03 p
-                    INNER JOIN cl01 c
-                        ON c.kd_cb = p.kd_cb
+            return (await _connectionFactory.Query<MutasiKlaimDetailDto>(@"SELECT p.*, c.flag_pol_lama, c.no_rsk, r.nm_mtu nm_kd_mtu 
+				FROM cl03 p 
+                    INNER JOIN cl01 c 
+                        ON c.kd_cb = p.kd_cb 
                             AND  c.kd_cob = p.kd_cob
                             AND  c.kd_scob = p.kd_scob
                             AND  c.kd_thn = p.kd_thn
                             AND  c.no_kl = p.no_kl
+				    INNER JOIN rf06 r
+				        ON p.kd_mtu = r.kd_mtu
 				WHERE p.kd_cb = @kd_cb 
 				    AND p.kd_cob = @kd_cob 
 				    AND p.kd_scob = @kd_scob 

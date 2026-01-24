@@ -22,18 +22,11 @@ namespace ABB.Web.Modules.PolisInduk
 {
     public class PolisIndukController : AuthorizedBaseController
     {
-        private static List<RekananDto> _rekanans;
-
         public async Task<ActionResult> Index()
         {
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
-
-            _rekanans = await Mediator.Send(new GetRekanansQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty
-            });
             
             return View();
         }
@@ -204,16 +197,12 @@ namespace ABB.Web.Modules.PolisInduk
         [HttpGet]
         public async Task<JsonResult> GetKodeRekanan(string kd_grp_rk, string kd_cb)
         {
-            var result = new List<DropdownOptionDto>();
-
-            foreach (var rekanan in _rekanans.Where(w => w.kd_grp_rk.Trim() == kd_grp_rk && w.kd_cb.Trim() == kd_cb))
+            var result = await Mediator.Send(new GetRekanansByKodeGroupAndCabangQuery()
             {
-                result.Add(new DropdownOptionDto()
-                {
-                    Text = rekanan.nm_rk,
-                    Value = rekanan.kd_rk
-                });
-            }
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                kd_cb = kd_cb,
+                kd_grp_rk = kd_grp_rk
+            });
 
             return Json(result);
         }

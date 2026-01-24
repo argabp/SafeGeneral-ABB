@@ -1,10 +1,11 @@
-﻿$(document).ready(function () {
-    showProgress("#LimitAkseptasiWindow")
-    setTimeout(setLimitAkseptasiEditedValue, 2000);
+﻿$(document).ready(async function () {
+    showProgress("#LimitAkseptasiWindow");
+    await setLimitAkseptasiEditedValue();
 });
 
-function setLimitAkseptasiEditedValue(){
-    $("#kd_scob").data("kendoDropDownList").value($("#temp_kd_scob").val().trim());
+async function setLimitAkseptasiEditedValue(){
+    showProgress("#LimitAkseptasiWindow");
+    await restoreDropdownValue("#kd_scob", "#temp_kd_scob");
 
     closeProgress('#LimitAkseptasiWindow');
 }

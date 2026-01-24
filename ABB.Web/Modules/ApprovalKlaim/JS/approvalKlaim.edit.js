@@ -1,10 +1,11 @@
-﻿$(document).ready(function () {
-    showProgress("#ApprovalKlaimWindow")
-    setTimeout(setApprovalKlaimEditedValue, 2000);
+﻿$(document).ready(async function () {
+    showProgress("#ApprovalKlaimWindow");
+    await setApprovalKlaimEditedValue();
 });
 
-function setApprovalKlaimEditedValue(){
-    $("#kd_scob").data("kendoDropDownList").value($("#temp_kd_scob").val().trim());
+async function setApprovalKlaimEditedValue(){
+    showProgress("#ApprovalKlaimWindow");
+    await restoreDropdownValue("#kd_scob", "#temp_kd_scob");
 
     closeProgress('#ApprovalKlaimWindow');
 }

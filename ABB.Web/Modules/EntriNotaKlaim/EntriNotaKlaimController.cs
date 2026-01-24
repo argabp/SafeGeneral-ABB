@@ -17,41 +17,11 @@ namespace ABB.Web.Modules.EntriNotaKlaim
 {
     public class EntriNotaKlaimController : AuthorizedBaseController
     {
-        private static List<RekananDto> _rekanans;
-        private static List<DropdownOptionDto> _mataUang;
-        private static List<DropdownOptionDto> _tipeMutasi;
-        private static List<DropdownOptionDto> _statusTipeDla;
-        
         public async Task<ActionResult> Index()
         {
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
-            
-            _rekanans = await Mediator.Send(new GetRekanansQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty
-            });
-            
-            _mataUang = await Mediator.Send(new GetMataUangQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"]
-            });
-            
-            _tipeMutasi = new List<DropdownOptionDto>()
-            {
-                new DropdownOptionDto() { Text = "PLA", Value = "P" },
-                new DropdownOptionDto() { Text = "DLA", Value = "D" },
-                new DropdownOptionDto() { Text = "Beban", Value = "B" },
-                new DropdownOptionDto() { Text = "Recovery", Value = "R" }
-            };
-            
-            _statusTipeDla = new List<DropdownOptionDto>()
-            {
-                new DropdownOptionDto() { Text = "Tertanggung", Value = "T" },
-                new DropdownOptionDto() { Text = "Koasuransi", Value = "K" },
-                new DropdownOptionDto() { Text = "Reasuransi", Value = "R" }
-            };
             
             return View();
         }
@@ -109,6 +79,14 @@ namespace ABB.Web.Modules.EntriNotaKlaim
                 kd_cb = Request.Cookies["UserCabang"] ?? string.Empty
             });
 
+            var tipeMutasi = new List<DropdownOptionDto>()
+            {
+                new DropdownOptionDto() { Text = "PLA", Value = "P" },
+                new DropdownOptionDto() { Text = "DLA", Value = "D" },
+                new DropdownOptionDto() { Text = "Beban", Value = "B" },
+                new DropdownOptionDto() { Text = "Recovery", Value = "R" }
+            };
+            
             var counter = 1;
             foreach (var data in ds)
             {
@@ -116,7 +94,7 @@ namespace ABB.Web.Modules.EntriNotaKlaim
                 counter++;
                 data.nomor_register = "K." + data.kd_cb.Trim() + "." + data.kd_scob.Trim() 
                                       + "." + data.kd_thn.Trim() + "." + data.no_kl.Trim();
-                data.nm_tipe_mts = _tipeMutasi.FirstOrDefault(w => w.Value.Trim() == data.tipe_mts.Trim())?.Text ?? string.Empty;
+                data.nm_tipe_mts = tipeMutasi.FirstOrDefault(w => w.Value.Trim() == data.tipe_mts.Trim())?.Text ?? string.Empty;
             }
             
             return Json(ds.AsQueryable().ToDataSourceResult(request));
@@ -138,19 +116,39 @@ namespace ABB.Web.Modules.EntriNotaKlaim
             }
         }
         
-        public JsonResult GetMataUang()
+        public async Task<JsonResult> GetMataUang()
         {
-            return Json(_mataUang);
+            var mataUang = await Mediator.Send(new GetMataUangQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            });
+            
+            return Json(mataUang);
         }
         
         public JsonResult GetTipeMutasi()
         {
-            return Json(_tipeMutasi);
+            var tipeMutasi = new List<DropdownOptionDto>()
+            {
+                new DropdownOptionDto() { Text = "PLA", Value = "P" },
+                new DropdownOptionDto() { Text = "DLA", Value = "D" },
+                new DropdownOptionDto() { Text = "Beban", Value = "B" },
+                new DropdownOptionDto() { Text = "Recovery", Value = "R" }
+            };
+            
+            return Json(tipeMutasi);
         }
         
         public JsonResult GetStatusTipeDLA()
         {
-            return Json(_statusTipeDla);
+            var statusTipeDla = new List<DropdownOptionDto>()
+            {
+                new DropdownOptionDto() { Text = "Tertanggung", Value = "T" },
+                new DropdownOptionDto() { Text = "Koasuransi", Value = "K" },
+                new DropdownOptionDto() { Text = "Reasuransi", Value = "R" }
+            };
+            
+            return Json(statusTipeDla);
         }
         
         public async Task<JsonResult> GetKodeTertuju()
@@ -163,11 +161,15 @@ namespace ABB.Web.Modules.EntriNotaKlaim
             return Json(result);
         }
         
-        public JsonResult GetKodeRekananTertuju(string kd_grp_ttj)
+        public async Task<JsonResult> GetKodeRekananTertuju(string kd_grp_ttj)
         {
-            return Json(_rekanans.Where(w => w.kd_grp_rk == kd_grp_ttj)
-                .Select(rekanan => new DropdownOptionDto() { Text = rekanan.nm_rk, Value = rekanan.kd_rk })
-                .ToList());
+            var result = await Mediator.Send(new GetRekanansByKodeGroupQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                kd_grp_rk = kd_grp_ttj
+            });
+
+            return Json(result);
         }
 
         public async Task<JsonResult> GenerateEntriNotaKlaimData(string kd_cb, string kd_grp_rk, string kd_rk)

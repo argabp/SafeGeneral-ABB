@@ -1,10 +1,11 @@
-﻿$(document).ready(function () {
-    showProgress("#LimitKlaimWindow")
-    setTimeout(setLimitKlaimEditedValue, 2000);
+﻿$(document).ready(async function () {
+    showProgress("#LimitKlaimWindow");
+    await setLimitKlaimEditedValue();
 });
 
-function setLimitKlaimEditedValue(){
-    $("#kd_scob").data("kendoDropDownList").value($("#temp_kd_scob").val().trim());
+async function setLimitKlaimEditedValue(){
+    showProgress("#LimitKlaimWindow");
+    await restoreDropdownValue("#kd_scob", "#temp_kd_scob");
 
     closeProgress('#LimitKlaimWindow');
 }

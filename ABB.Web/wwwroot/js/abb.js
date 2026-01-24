@@ -1223,3 +1223,38 @@ function formatNomorNota(kd_cb, jns_tr, kd_thn, kd_bln,
       no_nt_msk.trim() + "." + jns_nt_kel.trim() +
       "." + no_nt_kel.trim();
 }
+
+function restoreDropdownValue(dropdownSelector, tempSelector) {
+  return new Promise((resolve) => {
+    const value = $(tempSelector).val()?.trim();
+    if (!value) {
+      resolve();
+      return;
+    }
+
+    const ddl = $(dropdownSelector).data("kendoDropDownList");
+
+    if (!ddl) {
+      resolve();
+      return;
+    }
+
+    const ds = ddl.dataSource;
+
+    // If data already loaded
+    if (ds.view().length > 0) {
+      ddl.value(value);
+      resolve();
+      return;
+    }
+
+    // Wait for dataBound event
+    ddl.one("dataBound", function () {
+      ddl.value(value);
+      resolve();
+    });
+
+    // Trigger load
+    ds.read();
+  });
+}

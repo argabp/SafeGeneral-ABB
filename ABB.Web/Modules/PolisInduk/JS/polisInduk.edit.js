@@ -1,18 +1,16 @@
-﻿$(document).ready(function () {
+﻿$(document).ready(async function () {
     btnEdit_Click();
 
     var flag_konv = $("#tempFlag_konv").val();
     flag_konv == "N" ? $("#flag_konv").prop("checked", false) : $("#flag_konv").prop("checked", true);
     
-    setTimeout(() => {
-        $("#kd_rk_ttg").data("kendoDropDownList").value($("#temp_kd_rk_ttg").val().trim());
-        $("#kd_rk_sb_bis").data("kendoDropDownList").value($("#temp_kd_rk_sb_bis").val().trim());
-        $("#kd_rk_brk").data("kendoDropDownList").value($("#temp_kd_rk_brk").val().trim());
-        $("#kd_rk_pas").data("kendoDropDownList").value($("#temp_kd_rk_pas").val().trim());
-        $("#kd_rk_bank").data("kendoDropDownList").value($("#temp_kd_rk_bank").val().trim());
-        $("#kd_rk_mkt").data("kendoDropDownList").value($("#temp_kd_rk_mkt").val().trim());
-        $("#kd_scob").data("kendoDropDownList").value($("#temp_kd_scob").val().trim());
-    }, 500);
+    await restoreDropdownValue("#kd_rk_ttg", "#temp_kd_rk_ttg");
+    await restoreDropdownValue("#kd_rk_sb_bis", "#temp_kd_rk_sb_bis");
+    await restoreDropdownValue("#kd_rk_brk", "#temp_kd_rk_brk");
+    await restoreDropdownValue("#kd_rk_pas", "#kd_rk_pas");
+    await restoreDropdownValue("#kd_rk_bank", "#kd_rk_bank");
+    await restoreDropdownValue("#kd_rk_mkt", "#temp_kd_rk_mkt");
+    await restoreDropdownValue("#kd_scob", "#temp_kd_scob");
 });
 
 function btnEdit_Click() {

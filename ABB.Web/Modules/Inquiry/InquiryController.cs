@@ -27,24 +27,11 @@ namespace ABB.Web.Modules.Inquiry
 {
     public class InquiryController : AuthorizedBaseController
     {
-        private static List<RekananDto> _rekanans;
-        private static IEnumerable<DropdownOptionDto> _cobs;
-
         public async Task<ActionResult> Index()
         {
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
-
-            _rekanans = await Mediator.Send(new GetRekanansQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty
-            });
-            
-            _cobs = await Mediator.Send(new GetCobQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"]
-            });
             
             return View();
         }
@@ -87,9 +74,14 @@ namespace ABB.Web.Modules.Inquiry
             return Json(result);
         }
 
-        public JsonResult GetCOB()
+        public async Task<JsonResult> GetCOB()
         {
-            return Json(_cobs);
+            var cobs = await Mediator.Send(new GetCobQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            });
+             
+            return Json(cobs);
         }
 
         public async Task<JsonResult> GetSCOB(string kd_cob)
@@ -169,18 +161,26 @@ namespace ABB.Web.Modules.Inquiry
         [HttpGet]
         public async Task<JsonResult> GetKodeRekanan(string kd_grp_rk, string kd_cb, string no_fax)
         {
-            var result = new List<DropdownOptionDto>();
-
+            List<DropdownOptionDto> result;
+            
             if (string.IsNullOrWhiteSpace(no_fax))
             {
-                result.AddRange(_rekanans.Where(w => w.kd_grp_rk.Trim() == kd_grp_rk && w.kd_cb.Trim() == kd_cb)
-                    .Select(rekanan => new DropdownOptionDto() { Text = rekanan.nm_rk, Value = rekanan.kd_rk }));
+                result = await Mediator.Send(new GetRekanansByKodeGroupAndCabangQuery()
+                {
+                    DatabaseName = Request.Cookies["DatabaseValue"],
+                    kd_cb = kd_cb,
+                    kd_grp_rk = kd_grp_rk
+                });
             }
             else
             {
-                result.AddRange(_rekanans
-                    .Where(w => w.kd_grp_rk.Trim() == kd_grp_rk && w.kd_cb.Trim() == kd_cb && w.no_fax == no_fax)
-                    .Select(rekanan => new DropdownOptionDto() { Text = rekanan.nm_rk, Value = rekanan.kd_rk }));
+                result = await Mediator.Send(new GetRekanansByKodeGroupAndCabangAndNoFaxQuery()
+                {
+                    DatabaseName = Request.Cookies["DatabaseValue"],
+                    kd_cb = kd_cb,
+                    kd_grp_rk = kd_grp_rk,
+                    no_fax = no_fax
+                });
             }
 
             return Json(result);

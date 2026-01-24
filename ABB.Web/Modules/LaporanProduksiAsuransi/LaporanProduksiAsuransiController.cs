@@ -20,7 +20,6 @@ namespace ABB.Web.Modules.LaporanProduksiAsuransi
     public class LaporanProduksiAsuransiController : AuthorizedBaseController
     {
         private readonly IReportGeneratorService _reportGeneratorService;
-        private static List<RekananDto> _rekanans;
 
         public LaporanProduksiAsuransiController(IReportGeneratorService reportGeneratorService)
         {
@@ -29,11 +28,6 @@ namespace ABB.Web.Modules.LaporanProduksiAsuransi
         
         public async Task<ActionResult> Index()
         {
-            _rekanans = await Mediator.Send(new GetRekanansQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty
-            });
-            
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
@@ -124,14 +118,14 @@ namespace ABB.Web.Modules.LaporanProduksiAsuransi
                 }
             };
             
-            foreach (var rekanan in _rekanans.Where(w => w.kd_grp_rk.Trim() == kd_grp_rk && w.kd_cb.Trim() == kd_cb))
+            var rekanan = await Mediator.Send(new GetRekanansByKodeGroupAndCabangQuery()
             {
-                result.Add(new DropdownOptionDto()
-                {
-                    Text = rekanan.nm_rk,
-                    Value = rekanan.kd_rk
-                });
-            }
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                kd_grp_rk = kd_grp_rk,
+                kd_cb = kd_cb
+            });
+            
+            result.AddRange(rekanan);
 
             return Json(result);
         }

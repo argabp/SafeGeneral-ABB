@@ -1,12 +1,12 @@
-﻿$(document).ready(function () {
+﻿$(document).ready(async function () {
     btnSaveAkseptasiPranotaKoas_Click();
-    setTimeout(setPranotaKoasEditedValue, 2000);
+    await setPranotaKoasEditedValue();
     
     $("#premi_100").getKendoNumericTextBox().value(Number(pranota.nilai_prm));
 });
 
-function setPranotaKoasEditedValue(){
-    $("#pranota_koas_kd_rk_pas").data("kendoDropDownList").value($("#temp_pranota_koas_kd_rk_pas").val().trim());
+async function setPranotaKoasEditedValue(){
+    await restoreDropdownValue("#pranota_koas_kd_rk_pas", "#temp_pranota_koas_kd_rk_pas");
 }
 
 function btnSaveAkseptasiPranotaKoas_Click() {

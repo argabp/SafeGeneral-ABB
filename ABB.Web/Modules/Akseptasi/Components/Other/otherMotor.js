@@ -1,7 +1,7 @@
-﻿$(document).ready(function () {
+﻿$(document).ready(async function () {
     btnNextResikoOtherMotor();
     btnSaveAkseptasiResikoOther_Click();
-    setTimeout(setOtherMotorEditedValue, 2000);
+    await setOtherMotorEditedValue();
     btnDeleteAkseptasiResikoOtherMotor_Click();
 
     if($("#IsNewOther").val() === "True"){
@@ -64,8 +64,8 @@ function deleteAkseptasiResikoOtherMotor() {
     });
 }
 
-function setOtherMotorEditedValue(){
-    $("#kd_merk_kend").data("kendoDropDownList").value($("#temp_kd_merk_kend").val().trim());
+async function setOtherMotorEditedValue(){
+    await restoreDropdownValue("#kd_merk_kend", "#temp_kd_merk_kend");
     var flag_hh = $("#tempFlag_hh").val();
     flag_hh == "Y" ? $("#flag_hh").prop("checked", true) : $("#flag_hh").prop("checked", false);
     var flag_aog = $("#tempFlag_aog").val();

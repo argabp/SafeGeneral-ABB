@@ -27,24 +27,11 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
 {
     public class PengajuanAkseptasiController : AuthorizedBaseController
     {
-        private readonly IConfiguration _configuration;
         private readonly IReportGeneratorService _reportGeneratorService;
-        private readonly ILogger<PengajuanAkseptasiController> _logger;
-        private static List<RekananDto> _rekanans;
-        private static List<DropdownOptionDto> _cabangs;
-        private static List<DropdownOptionDto> _cobs;
-        private static List<DropdownOptionDto> _kodeTertanggung;
-        private static List<SCOBDto> _scobs;
-        private static List<DropdownOptionDto> _documentNames;
-        private static List<DropdownOptionDto> _mataUangs;
-        private static List<RF48Dto> _kodeTols;
 
-        public PengajuanAkseptasiController(IConfiguration configuration, IReportGeneratorService reportGeneratorService,
-            ILogger<PengajuanAkseptasiController> logger)
+        public PengajuanAkseptasiController(IReportGeneratorService reportGeneratorService)
         {
-            _configuration = configuration;
             _reportGeneratorService = reportGeneratorService;
-            _logger = logger;
         }
         
         public async Task<IActionResult> Index()
@@ -52,47 +39,6 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
-            
-            _rekanans = await Mediator.Send(new GetRekanansQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty
-            });
-            
-            _cabangs =  await Mediator.Send(new GetCabangQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"]
-            });
-            
-            _cobs = await Mediator.Send(new GetCobQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"]
-            });
-            
-            _scobs = await Mediator.Send(new GetAllSCOBQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"]
-            });
-            
-            _kodeTertanggung = await Mediator.Send(new GetKodeTertanggungQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"]
-            });
-            
-            _mataUangs = await Mediator.Send(new GetMataUangQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"]
-            });
-            
-            _documentNames = await Mediator.Send(new GetDokumensQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"]
-            });
-            
-            _kodeTols = await Mediator.Send(new GetAllRF48Query()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"]
-            });
-            
             return View();
         }
         
@@ -264,33 +210,35 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
             }
         }
         
-        public JsonResult GetCabang()
+        public async Task<JsonResult> GetCabang()
         {
-            return Json(_cabangs);
-        }
-
-        public JsonResult GetCOB()
-        {
-            return Json(_cobs);
-        }
-
-        public JsonResult GetSCOB(string kd_cob)
-        {
-            var result = new List<DropdownOptionDto>();
-
-            if (string.IsNullOrWhiteSpace(kd_cob))
-                kd_cob = string.Empty;
-            
-            foreach (var scob in _scobs.Where(w => w.kd_cob == kd_cob.Trim()))
+            var cabangs =  await Mediator.Send(new GetCabangQuery()
             {
-                result.Add(new DropdownOptionDto()
-                {
-                    Text = scob.nm_scob,
-                    Value = scob.kd_scob
-                });
-            }
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            });
+            
+            return Json(cabangs);
+        }
 
-            return Json(result);
+        public async Task<JsonResult> GetCOB()
+        {
+            var cobs = await Mediator.Send(new GetCobQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            });
+            
+            return Json(cobs);
+        }
+
+        public async Task<JsonResult> GetSCOB(string kd_cob)
+        {
+            var cobs = await Mediator.Send(new GetSCOBQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                kd_cob = kd_cob
+            });
+
+            return Json(cobs);
         }
         
         public JsonResult GetStatusPolis()
@@ -306,26 +254,39 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
             return Json(result);
         }
         
-        public JsonResult GetKodeTertanggung()
+        public async Task<JsonResult> GetKodeTertanggung()
         {
-            return Json(_kodeTertanggung);
+            var kodeTertanggung = await Mediator.Send(new GetKodeTertanggungQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            });
+            
+            return Json(kodeTertanggung);
         }
         
         [HttpGet]
-        public JsonResult GetKodeRekanan(string kd_grp_rk, string kd_cb, string no_fax)
+        public async Task<JsonResult> GetKodeRekanan(string kd_grp_rk, string kd_cb, string no_fax)
         {
-            var result = new List<DropdownOptionDto>();
+            List<DropdownOptionDto> result;
             
             if (string.IsNullOrWhiteSpace(no_fax))
             {
-                result.AddRange(_rekanans.Where(w => w.kd_grp_rk.Trim() == kd_grp_rk && w.kd_cb.Trim() == kd_cb)
-                    .Select(rekanan => new DropdownOptionDto() { Text = rekanan.nm_rk, Value = rekanan.kd_rk }));
+                result = await Mediator.Send(new GetRekanansByKodeGroupAndCabangQuery()
+                {
+                    DatabaseName = Request.Cookies["DatabaseValue"],
+                    kd_cb = kd_cb,
+                    kd_grp_rk = kd_grp_rk
+                });
             }
             else
             {
-                result.AddRange(_rekanans
-                    .Where(w => w.kd_grp_rk.Trim() == kd_grp_rk && w.kd_cb.Trim() == kd_cb && w.no_fax == no_fax)
-                    .Select(rekanan => new DropdownOptionDto() { Text = rekanan.nm_rk, Value = rekanan.kd_rk }));
+                result = await Mediator.Send(new GetRekanansByKodeGroupAndCabangAndNoFaxQuery()
+                {
+                    DatabaseName = Request.Cookies["DatabaseValue"],
+                    kd_cb = kd_cb,
+                    kd_grp_rk = kd_grp_rk,
+                    no_fax = no_fax
+                });
             }
 
             return Json(result);
@@ -351,9 +312,14 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
             return Json(result);
         }
         
-        public JsonResult GetDocumentNames()
+        public async Task<JsonResult> GetDocumentNames()
         {
-            return Json(_documentNames);
+            var documentNames = await Mediator.Send(new GetDokumensQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            });
+            
+            return Json(documentNames);
         }
         
         [HttpGet]
@@ -372,9 +338,14 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
             return Json(result);
         }
 
-        public JsonResult GetMataUang()
+        public async Task<JsonResult> GetMataUang()
         {
-            return Json(_mataUangs);
+            var mataUangs = await Mediator.Send(new GetMataUangQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            });
+            
+            return Json(mataUangs);
         }
         
         [HttpPost]
@@ -421,23 +392,14 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
             }
         }
         
-        public JsonResult GetKodeTol(string kd_cob)
+        public async Task<JsonResult> GetKodeTol(string kd_cob)
         {
-            var result = new List<DropdownOptionDto>();
-
-            if (string.IsNullOrWhiteSpace(kd_cob))
-                kd_cob = string.Empty;
-            
-            foreach (var tol in _kodeTols.Where(w => w.kd_cob == kd_cob.Trim()))
+            var kodeTols = await Mediator.Send(new GetKodeTolsQuery()
             {
-                result.Add(new DropdownOptionDto()
-                {
-                    Text = tol.nm_tol,
-                    Value = tol.kd_tol
-                });
-            }
+                DatabaseName = Request.Cookies["DatabaseValue"]
+            });
 
-            return Json(result);
+            return Json(kodeTols);
         }
         
         public async Task<ActionResult> GenerateNilaiLimit(string kd_cob, string kd_tol, decimal pst_share, decimal nilai_ttl_ptg)

@@ -4,18 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using ABB.Application.ApprovalAkseptasis.Commands;
 using ABB.Application.ApprovalAkseptasis.Queries;
-using ABB.Application.BiayaMaterais.Queries;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Queries;
 using ABB.Application.Common.Services;
-using ABB.Application.KapasitasCabangs.Queries;
-using ABB.Application.PengajuanAkseptasi.Commands;
 using ABB.Application.PengajuanAkseptasi.Queries;
 using ABB.Application.PolisInduks.Queries;
-using ABB.Application.SebabKejadians.Queries;
 using ABB.Web.Modules.ApprovalAkseptasi.Models;
 using ABB.Web.Modules.Base;
-using ABB.Web.Modules.PengajuanAkseptasi;
 using ABB.Web.Modules.PengajuanAkseptasi.Models;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
@@ -28,17 +23,11 @@ namespace ABB.Web.Modules.ApprovalAkseptasi
 {
     public class ApprovalAkseptasiController : AuthorizedBaseController
          {
-             private readonly IConfiguration _configuration;
              private readonly IReportGeneratorService _reportGeneratorService;
-             private readonly ILogger<ApprovalAkseptasiController> _logger;
-             private static List<RekananDto> _rekanans;
      
-             public ApprovalAkseptasiController(IConfiguration configuration, IReportGeneratorService reportGeneratorService,
-                 ILogger<ApprovalAkseptasiController> logger)
+             public ApprovalAkseptasiController(IReportGeneratorService reportGeneratorService)
              {
-                 _configuration = configuration;
                  _reportGeneratorService = reportGeneratorService;
-                 _logger = logger;
              }
              
              public async Task<IActionResult> Index()
@@ -46,11 +35,6 @@ namespace ABB.Web.Modules.ApprovalAkseptasi
                  ViewBag.Module = Request.Cookies["Module"];
                  ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
                  ViewBag.UserLogin = CurrentUser.UserId;
-                 
-                 _rekanans = await Mediator.Send(new GetRekanansQuery()
-                 {
-                     DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty
-                 });
                  
                  return View();
              }
@@ -274,16 +258,13 @@ namespace ABB.Web.Modules.ApprovalAkseptasi
              [HttpGet]
              public async Task<JsonResult> GetKodeRekanan(string kd_grp_rk, string kd_cb)
              {
-                 var result = new List<DropdownOptionDto>();
-     
-                 foreach (var rekanan in _rekanans.Where(w => w.kd_grp_rk.Trim() == kd_grp_rk && w.kd_cb.Trim() == kd_cb))
+                 
+                 var result = await Mediator.Send(new GetRekanansByKodeGroupAndCabangQuery()
                  {
-                     result.Add(new DropdownOptionDto()
-                     {
-                         Text = rekanan.nm_rk,
-                         Value = rekanan.kd_rk
-                     });
-                 }
+                     DatabaseName = Request.Cookies["DatabaseValue"],
+                     kd_cb = kd_cb,
+                     kd_grp_rk = kd_grp_rk,
+                 });
      
                  return Json(result);
              }

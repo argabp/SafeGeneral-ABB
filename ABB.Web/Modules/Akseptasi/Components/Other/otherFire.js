@@ -1,7 +1,7 @@
-﻿$(document).ready(function () {
+﻿$(document).ready(async function () {
     btnPreviousOther();
     btnSaveAkseptasiResikoOther_Click();
-    setTimeout(setOtherFireEditedValue, 2000);
+    await setOtherFireEditedValue();
     btnOpenLokasResiko();
     btnDeleteAkseptasiResikoOtherFire_Click();
 
@@ -65,10 +65,10 @@ function deleteAkseptasiResikoOtherFire() {
     });
 }
 
-function setOtherFireEditedValue(){
-    $("#kd_kab").data("kendoDropDownList").value($("#temp_kd_kab").val().trim());
-    $("#kd_kec").data("kendoDropDownList").value($("#temp_kd_kec").val().trim());
-    $("#kd_kel").data("kendoDropDownList").value($("#temp_kd_kel").val().trim());
+async function setOtherFireEditedValue(){
+    await restoreDropdownValue("#kd_kab", "#temp_kd_kab");
+    await restoreDropdownValue("#kd_kec", "#temp_kd_kec");
+    await restoreDropdownValue("#kd_kel", "#temp_kd_kel");
 }
 
 function dataKodeKabupatenDropDown(){

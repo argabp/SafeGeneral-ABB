@@ -1,10 +1,11 @@
-﻿$(document).ready(function () {
-    showProgress("#DokumenAkseptasiWindow")
-    setTimeout(setDokumenAkseptasiEditedValue, 2000);
+﻿$(document).ready(async function () {
+    showProgress("#DokumenAkseptasiWindow");
+    await setDokumenAkseptasiEditedValue();
 });
 
-function setDokumenAkseptasiEditedValue(){
-    $("#kd_scob").data("kendoDropDownList").value($("#temp_kd_scob").val().trim());
+async function setDokumenAkseptasiEditedValue(){
+    showProgress("#DokumenAkseptasiWindow");
+    await restoreDropdownValue("#kd_scob", "#temp_kd_scob");
 
     closeProgress('#DokumenAkseptasiWindow');
 }

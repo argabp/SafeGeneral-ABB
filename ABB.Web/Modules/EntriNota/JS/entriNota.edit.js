@@ -1,16 +1,17 @@
-﻿$(document).ready(function () {
+﻿$(document).ready(async function () {
     btnSaveEntriNota_Click();
     btnCancelEntriNota_Click();
-    setTimeout(setEntriNotaEditedValue, 1000);
+    await setEntriNotaEditedValue();
 });
 
-function setEntriNotaEditedValue(){
+async function setEntriNotaEditedValue(){
+    showProgress('#EntriNotaWindow');
     var flag_posting = $("#tempFlag_posting").val();
     flag_posting == "Y" ? $("#flag_posting").prop("checked", true) : $("#flag_posting").prop("checked", false);
     var flag_cancel = $("#tempFlag_cancel").val();
     flag_cancel == "Y" ? $("#flag_cancel").prop("checked", true) : $("#flag_cancel").prop("checked", false);
 
-    $("#kd_rk_ttj").data("kendoDropDownList").value($("#temp_kd_rk_ttj").val().trim());
+    await restoreDropdownValue("#kd_rk_ttj", "#temp_kd_rk_ttj");
 
     closeProgress('#EntriNotaWindow');
 }

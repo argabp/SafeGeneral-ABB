@@ -9,30 +9,32 @@ using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.Common.Queries
 {
-    public class GetAllSCOBQuery : IRequest<List<SCOBDto>>
+    public class GetKodeTolsQuery : IRequest<List<RF48Dto>>
     {
         public string DatabaseName { get; set; }
+
+        public string kd_cob { get; set; }
     }
 
-    public class GetAllSCOBQueryHandler : IRequestHandler<GetAllSCOBQuery, List<SCOBDto>>
+    public class GetKodeTolsQueryHandler : IRequestHandler<GetKodeTolsQuery, List<RF48Dto>>
     {
         private readonly IDbConnectionFactory _connectionFactory;
-        private readonly ILogger<GetAllSCOBQueryHandler> _logger;
+        private readonly ILogger<GetKodeTolsQueryHandler> _logger;
 
-        public GetAllSCOBQueryHandler(IDbConnectionFactory connectionFactory, ILogger<GetAllSCOBQueryHandler> logger)
+        public GetKodeTolsQueryHandler(IDbConnectionFactory connectionFactory, ILogger<GetKodeTolsQueryHandler> logger)
         {
             _connectionFactory = connectionFactory;
             _logger = logger;
         }
 
-        public async Task<List<SCOBDto>> Handle(GetAllSCOBQuery request,
+        public async Task<List<RF48Dto>> Handle(GetKodeTolsQuery request,
             CancellationToken cancellationToken)
         {
             try
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
-                return (await _connectionFactory.Query<SCOBDto>(
-                    @"SELECT RTRIM(LTRIM(kd_scob)) kd_scob, nm_scob, RTRIM(LTRIM(kd_cob)) kd_cob FROM rf05")).ToList();
+                return (await _connectionFactory.Query<RF48Dto>(
+                    @"SELECT RTRIM(LTRIM(kd_tol)) kd_tol, nm_tol, RTRIM(LTRIM(kd_cob)) kd_cob FROM rf48 WHERE kd_cob = @kd_cob", new { request.kd_cob})).ToList();
             }
             catch (Exception ex)
             {

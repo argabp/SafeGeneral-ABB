@@ -23,13 +23,6 @@ namespace ABB.Web.Modules.ApprovalMutasiKlaim
 {
     public class ApprovalMutasiKlaimController : AuthorizedBaseController
      {
-         private static List<RekananDto> _rekanans;
-         private static List<DropdownOptionDto> _cabangs;
-         private static List<DropdownOptionDto> _cobs;
-         private static List<SCOBDto> _scobs;
-         private static List<DropdownOptionDto> _mataUang;
-         private static List<DropdownOptionDto> _tipeMutasi;
-         private static List<DropdownOptionDto> _users;
          private readonly IReportGeneratorService _reportGeneratorService;
  
          public ApprovalMutasiKlaimController(IReportGeneratorService reportGeneratorService)
@@ -42,41 +35,6 @@ namespace ABB.Web.Modules.ApprovalMutasiKlaim
              ViewBag.Module = Request.Cookies["Module"];
              ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
              ViewBag.UserLogin = CurrentUser.UserId;
-             
-             _rekanans = await Mediator.Send(new GetRekanansQuery()
-             {
-                 DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty
-             });
-            
-             _cabangs = await Mediator.Send(new GetCabangQuery()
-             {
-                 DatabaseName = Request.Cookies["DatabaseValue"]
-             });
-            
-             _cobs = await Mediator.Send(new GetCobQuery()
-             {
-                 DatabaseName = Request.Cookies["DatabaseValue"]
-             });
-            
-             _scobs = await Mediator.Send(new GetAllSCOBQuery()
-             {
-                 DatabaseName = Request.Cookies["DatabaseValue"]
-             });
-            
-             _mataUang = await Mediator.Send(new GetMataUangQuery()
-             {
-                 DatabaseName = Request.Cookies["DatabaseValue"]
-             });
-            
-             _tipeMutasi = new List<DropdownOptionDto>()
-             {
-                 new DropdownOptionDto() { Text = "PLA", Value = "P" },
-                 new DropdownOptionDto() { Text = "DLA", Value = "D" },
-                 new DropdownOptionDto() { Text = "Beban", Value = "B" },
-                 new DropdownOptionDto() { Text = "Recovery", Value = "R" }
-             };
-            
-             _users = await Mediator.Send(new GetUsersQuery());
              
              return View();
          }
@@ -297,43 +255,58 @@ namespace ABB.Web.Modules.ApprovalMutasiKlaim
              return Json(result);
          }
          
-         public JsonResult GetCabang()
+         public async Task<JsonResult> GetCabang()
          {
-             return Json(_cabangs);
-         }
-
-         public JsonResult GetCOB()
-         {
-             return Json(_cobs);
-         }
-
-         public JsonResult GetSCOB(string kd_cob)
-         {
-             var result = new List<DropdownOptionDto>();
-
-             if (string.IsNullOrWhiteSpace(kd_cob))
-                 kd_cob = string.Empty;
-            
-             foreach (var scob in _scobs.Where(w => w.kd_cob == kd_cob.Trim()))
+             var cabangs = await Mediator.Send(new GetCabangQuery()
              {
-                 result.Add(new DropdownOptionDto()
-                 {
-                     Text = scob.nm_scob,
-                     Value = scob.kd_scob
-                 });
-             }
+                 DatabaseName = Request.Cookies["DatabaseValue"]
+             });
+             
+             return Json(cabangs);
+         }
 
+         public async Task<JsonResult> GetCOB()
+         {
+             var cobs = await Mediator.Send(new GetCobQuery()
+             {
+                 DatabaseName = Request.Cookies["DatabaseValue"]
+             });
+             
+             return Json(cobs);
+         }
+
+         public async Task<JsonResult> GetSCOB(string kd_cob)
+         {
+             var result = await Mediator.Send(new GetSCOBQuery()
+             {
+                 DatabaseName = Request.Cookies["DatabaseValue"],
+                 kd_cob = kd_cob
+             });
+     
              return Json(result);
          }
         
-         public JsonResult GetMataUang()
+         public async Task<JsonResult> GetMataUang()
          {
-             return Json(_mataUang);
+             var mataUang = await Mediator.Send(new GetMataUangQuery()
+             {
+                 DatabaseName = Request.Cookies["DatabaseValue"]
+             });
+             
+             return Json(mataUang);
          }
         
          public JsonResult GetTipeMutasi()
          {
-             return Json(_tipeMutasi);
+             var tipeMutasi = new List<DropdownOptionDto>()
+             {
+                 new DropdownOptionDto() { Text = "PLA", Value = "P" },
+                 new DropdownOptionDto() { Text = "DLA", Value = "D" },
+                 new DropdownOptionDto() { Text = "Beban", Value = "B" },
+                 new DropdownOptionDto() { Text = "Recovery", Value = "R" }
+             };
+             
+             return Json(tipeMutasi);
          }
         
          public JsonResult GetValiditas()
@@ -364,9 +337,11 @@ namespace ABB.Web.Modules.ApprovalMutasiKlaim
              return Json(result);
          }
         
-         public JsonResult GetUsers()
+         public async Task<JsonResult> GetUsers()
          {
-             return Json(_users);
+             var users = await Mediator.Send(new GetUsersQuery());
+             
+             return Json(users);
          }
         
          public JsonResult GetGroupRekanan()
@@ -379,11 +354,15 @@ namespace ABB.Web.Modules.ApprovalMutasiKlaim
              return Json(result);
          }
         
-         public JsonResult GetRekanan(string kd_grp_pas)
+         public async Task<JsonResult> GetRekanan(string kd_grp_pas)
          {
-             return Json(_rekanans.Where(w => w.kd_grp_rk == kd_grp_pas)
-                 .Select(rekanan => new DropdownOptionDto() { Text = rekanan.nm_rk, Value = rekanan.kd_rk })
-                 .ToList());
+             var result = await Mediator.Send(new GetRekanansByKodeGroupQuery()
+             {
+                 DatabaseName = Request.Cookies["DatabaseValue"],
+                 kd_grp_rk = kd_grp_pas
+             });
+
+             return Json(result);
          }
      }
 }

@@ -1,10 +1,11 @@
-﻿$(document).ready(function () {
+﻿$(document).ready(async function () {
     btnSaveNomorRegistrasiPolis_Click();
-    setTimeout(setNomorRegistrasiPolisEditedValue, 1000);
+    await setNomorRegistrasiPolisEditedValue();
 });
 
-function setNomorRegistrasiPolisEditedValue(){
-    $("#kd_scob").data("kendoDropDownList").value($("#temp_kd_scob").val().trim());
+async function setNomorRegistrasiPolisEditedValue(){
+    showProgress('#NomorRegistrasiPolisWindow');
+    await restoreDropdownValue("#kd_scob", "#temp_kd_scob");
 
     closeProgress('#NomorRegistrasiPolisWindow');
 }

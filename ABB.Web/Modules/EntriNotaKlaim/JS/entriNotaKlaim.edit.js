@@ -1,15 +1,16 @@
-﻿$(document).ready(function () {
+﻿$(document).ready(async function () {
     btnSaveEntriNotaKlaim_Click();
-    setTimeout(setEntriNotaKlaimEditedValue, 1000);
+    await setEntriNotaKlaimEditedValue();
 });
 
-function setEntriNotaKlaimEditedValue(){
+async function setEntriNotaKlaimEditedValue(){
+    showProgress('#EntriNotaKlaimWindow');
     var flag_posting = $("#tempFlag_posting").val();
     flag_posting == "Y" ? $("#flag_posting").prop("checked", true) : $("#flag_posting").prop("checked", false);
     var flag_cancel = $("#tempFlag_cancel").val();
     flag_cancel == "Y" ? $("#flag_cancel").prop("checked", true) : $("#flag_cancel").prop("checked", false);
 
-    $("#kd_rk_ttj").data("kendoDropDownList").value($("#temp_kd_rk_ttj").val().trim());
+    await restoreDropdownValue("#kd_rk_ttj", "#temp_kd_rk_ttj");
 
     closeProgress('#EntriNotaKlaimWindow');
 }

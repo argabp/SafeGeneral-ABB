@@ -1,9 +1,9 @@
-﻿$(document).ready(function () {
+﻿$(document).ready(async function () {
     btnSaveRegisterKlaim_Click();
     btnNextRegisterKlaim();
     btnSelectNoPolis();
     showProgress('#RegisterKlaimWindow');
-    setTimeout(setRegisterKlaimEditedValue, 3000);
+    await setRegisterKlaimEditedValue();
 });
 
 function dataKodeSCOBDropDown(){
@@ -12,11 +12,12 @@ function dataKodeSCOBDropDown(){
     }
 }
 
-function setRegisterKlaimEditedValue(){
+async function setRegisterKlaimEditedValue(){
+    showProgress('#RegisterKlaimWindow');
     var flag_konv = $("#tempFlag_konv").val();
     flag_konv == "Y" ? $("#flag_konv").prop("checked", true) : $("#flag_konv").prop("checked", false);
     
-    $("#kd_scob").data("kendoDropDownList").value($("#temp_kd_scob").val().trim());
+    await restoreDropdownValue("#kd_scob", "#temp_kd_scob");
     
     if($("#IsEdit").val() === 'True')
     {

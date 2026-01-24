@@ -1,10 +1,11 @@
-﻿$(document).ready(function () {
-    showProgress("#DokumenKlaimWindow")
-    setTimeout(setDokumenKlaimEditedValue, 2000);
+﻿$(document).ready(async function () {
+    showProgress("#DokumenKlaimWindow");
+    await setDokumenKlaimEditedValue();
 });
 
-function setDokumenKlaimEditedValue(){
-    $("#kd_scob").data("kendoDropDownList").value($("#temp_kd_scob").val().trim());
+async function setDokumenKlaimEditedValue(){
+    showProgress("#DokumenKlaimWindow");
+    await restoreDropdownValue("#kd_scob", "#temp_kd_scob");
 
     closeProgress('#DokumenKlaimWindow');
 }

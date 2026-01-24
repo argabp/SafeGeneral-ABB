@@ -23,7 +23,7 @@ namespace ABB.Web.Modules.TertanggungPrincipal
 {
     public class TertanggungPrincipalController : AuthorizedBaseController
     {
-        private static List<LookupDetailDto> _lookupDetails;
+        // private static List<LookupDetailDto> _lookupDetails;
         
         public async Task<ActionResult> Index()
         {
@@ -31,10 +31,10 @@ namespace ABB.Web.Modules.TertanggungPrincipal
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
             ViewBag.KodeCabang = Request.Cookies["UserCabang"];
-            
-            ViewBag.bentukflag =  new List<IInputGroupItem>()
+
+            ViewBag.bentukflag = new List<IInputGroupItem>()
             {
-                new InputGroupItemModel ()
+                new InputGroupItemModel()
                 {
                     Label = "Baru",
                     Enabled = true,
@@ -42,7 +42,7 @@ namespace ABB.Web.Modules.TertanggungPrincipal
                     Encoded = false,
                     Value = "1",
                 },
-                new InputGroupItemModel ()
+                new InputGroupItemModel()
                 {
                     Label = "Lama",
                     Enabled = true,
@@ -51,11 +51,6 @@ namespace ABB.Web.Modules.TertanggungPrincipal
                     Value = "2"
                 }
             };
-
-            _lookupDetails = await Mediator.Send(new GetAllLookupDetailsQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty
-            });
             
             return View();
         }
@@ -398,85 +393,103 @@ namespace ABB.Web.Modules.TertanggungPrincipal
             return Json(result);
         }
         
-        public JsonResult GetKodeHubunganPelapor()
+        public async Task<JsonResult> GetKodeHubunganPelapor()
         {
-            return Json(_lookupDetails.Where(w => w.kd_lookup == "005").Select(s => new DropdownOptionDto()
+            var result = await Mediator.Send(new GetLookupDetailsQuery()
             {
-                Text = s.nm_detail_lookup,
-                Value = s.no_lookup.ToString()
-            }).ToList());
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                kd_lookup = "005"
+            });
+
+            return Json(result);
         }
         
-        public JsonResult GetKodeGolonganDebitur()
+        public async Task<JsonResult> GetKodeGolonganDebitur()
         {
-            return Json(_lookupDetails.Where(w => w.kd_lookup == "006").Select(s => new DropdownOptionDto()
+            var result = await Mediator.Send(new GetLookupDetailsQuery()
             {
-                Text = s.nm_detail_lookup,
-                Value = s.no_lookup.ToString()
-            }).ToList());
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                kd_lookup = "006"
+            });
+
+            return Json(result);
         }
         
-        public JsonResult GetKodeNegara()
+        public async Task<JsonResult> GetKodeNegara()
         {
-            return Json(_lookupDetails.Where(w => w.kd_lookup == "001").Select(s => new DropdownOptionDto()
+            var result = await Mediator.Send(new GetLookupDetailsQuery()
             {
-                Text = s.nm_detail_lookup,
-                Value = s.no_lookup.ToString()
-            }).ToList());
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                kd_lookup = "001"
+            });
+
+            return Json(result);
         }
         
-        public JsonResult GetKodePekerjaan()
+        public async Task<JsonResult> GetKodePekerjaan()
         {
-            return Json(_lookupDetails.Where(w => w.kd_lookup == "002").Select(s => new DropdownOptionDto()
+            var result = await Mediator.Send(new GetLookupDetailsQuery()
             {
-                Text = s.nm_detail_lookup,
-                Value = s.no_lookup.ToString()
-            }).ToList());
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                kd_lookup = "002"
+            });
+
+            return Json(result);
         }
         
-        public JsonResult GetKodeBidangUsaha()
+        public async Task<JsonResult> GetKodeBidangUsaha()
         {
-            return Json(_lookupDetails.Where(w => w.kd_lookup == "003").Select(s => new DropdownOptionDto()
+            var result = await Mediator.Send(new GetLookupDetailsQuery()
             {
-                Text = s.nm_detail_lookup,
-                Value = s.no_lookup.ToString()
-            }).ToList());
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                kd_lookup = "003"
+            });
+
+            return Json(result);
         }
         
-        public JsonResult GetKodeSumberPenghasilan()
+        public async Task<JsonResult> GetKodeSumberPenghasilan()
         {
-            return Json(_lookupDetails.Where(w => w.kd_lookup == "004").Select(s => new DropdownOptionDto()
+            var result = await Mediator.Send(new GetLookupDetailsQuery()
             {
-                Text = s.nm_detail_lookup,
-                Value = s.no_lookup.ToString()
-            }).ToList());
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                kd_lookup = "004"
+            });
+
+            return Json(result);
         }
         
-        public JsonResult GetKodeBentukBadanUsaha()
+        public async Task<JsonResult> GetKodeBentukBadanUsaha()
         {
-            return Json(_lookupDetails.Where(w => w.kd_lookup == "007").Select(s => new DropdownOptionDto()
+            var result = await Mediator.Send(new GetLookupDetailsQuery()
             {
-                Text = s.nm_detail_lookup,
-                Value = s.no_lookup.ToString()
-            }).ToList());
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                kd_lookup = "007"
+            });
+
+            return Json(result);
         }
         
-        public JsonResult GetKodeKabupatenKota()
+        public async Task<JsonResult> GetKodeKabupatenKota()
         {
-            return Json(_lookupDetails.Where(w => w.kd_lookup == "008").Select(s => new DropdownOptionDto()
+            var result = await Mediator.Send(new GetLookupDetailsQuery()
             {
-                Text = s.nm_detail_lookup,
-                Value = s.no_lookup.ToString()
-            }).ToList());
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                kd_lookup = "008"
+            });
+
+            return Json(result);
         }
         
-        public JsonResult GetKodeJabatan()
+        public async Task<JsonResult> GetKodeJabatan()
         {
-            return Json(_lookupDetails.Where(w => w.kd_lookup == "009").Select(s => new DropdownOptionDto()
+            var result = await Mediator.Send(new GetLookupDetailsQuery()
             {
-                Text = s.nm_detail_lookup,
-                Value = s.no_lookup.ToString()
-            }).ToList());
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                kd_lookup = "009"
+            });
+
+            return Json(result);
         }
     }
 }

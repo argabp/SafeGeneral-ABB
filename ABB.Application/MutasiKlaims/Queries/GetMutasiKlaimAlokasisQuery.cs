@@ -37,8 +37,11 @@ namespace ABB.Application.MutasiKlaims.Queries
         public async Task<List<MutasiKlaimAlokasiDto>> Handle(GetMutasiKlaimAlokasisQuery request, CancellationToken cancellationToken)
         {
             _connectionFactory.CreateDbConnection(request.DatabaseName);
-            return (await _connectionFactory.Query<MutasiKlaimAlokasiDto>(@"SELECT p.* 
+            return (await _connectionFactory.Query<MutasiKlaimAlokasiDto>(@"SELECT p.*, r.nm_rk 
 				FROM cl05 p
+				    INNER JOIN rf03 r 
+				        ON r.kd_rk = p.kd_rk_pas
+				            AND r.kd_grp_rk = p.kd_grp_pas
 				WHERE p.kd_cb = @kd_cb 
 				    AND p.kd_cob = @kd_cob 
 				    AND p.kd_scob = @kd_scob 
