@@ -113,15 +113,16 @@ namespace ABB.Web
                 app.UseExceptionHandler("/Error");
             }
 
+            app.UseRouting();
+            app.UseSession();
+            app.UseMiddleware<SessionGuardMiddleware>();
             app.UseMiddleware<ErrorHandlerMiddleware>();
             app.UseMiddleware<HeaderMiddleware>();
             app.UseMiddleware<JwtMiddleware>();
-            app.UseSession();
             app.UseStatusCodePagesWithReExecute("/Error/{0}");
             // app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UserStaticFilesModulesFolder();
-            app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseCors();

@@ -83,7 +83,10 @@ namespace ABB.Web.Modules.Account
         [AllowAnonymous]
         public IActionResult Login()
         {
-            if (HttpContext.User.Identity.Name != null)
+            // real auth state check
+            var user = HttpContext.Session.GetString("User");
+
+            if (!string.IsNullOrEmpty(user))
                 return Redirect("/Home/Index");
 
             if ((bool)(TempData["SuccessChangePassword"] ?? false)) ViewData["ShowSuccessMessage"] = "true";
