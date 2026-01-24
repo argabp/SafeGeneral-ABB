@@ -5,42 +5,69 @@
 @{
     Layout = "~/Modules/Shared/_Layout.cshtml";
     ViewData["Title"] = "Laporan Keuangan";
+    int currentYear = DateTime.Now.Year;
 }
 
 <style>
-    .filter-box { background: #fff; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
-    .form-group { margin-bottom: 15px; }
+    .flat-box {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        border: 1px solid #e0e0e0;
+        overflow: hidden;
+    }
+    .flat-box-content { padding: 25px; }
+    label { font-weight: 600; font-size: 12px; color: #555; margin-bottom: 5px; display: block;}
+    .btn-generate { background-color: var(--primary-blue); color: white; font-weight: bold; }
+    .btn-generate:hover{
+        color: grey;
+    }
 </style>
 
 <nav aria-label="breadcrumb">
-
-   <ol class="breadcrumb" style="background: white;">
-
+   <ol class="breadcrumb" style="background: transparent; padding-left: 0;">
         <li class="breadcrumb-item"><a href="#">Accounting</a></li>
-
-        <li class="breadcrumb-item active" aria-current="page">Laporan Keuangan</li>
-
+        <li class="breadcrumb-item active">Laporan Keuangan</li>
     </ol>
-
 </nav>
+
 <div class="flat-box">
-    <div class="flat-box-title">Filter Laporan</div>
     <div class="flat-box-content">
         <div class="row">
-            <div class="col-md-4">
-                <label>Jenis Laporan</label>
-                @(Html.Kendo().DropDownList().Name("TipeLaporan")
-                    .BindTo(new List<string>() { "NERACA", "LABARUGI" })
-                    .HtmlAttributes(new { style = "width: 100%" }))
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Jenis Laporan</label>
+                    @(Html.Kendo().DropDownList().Name("TipeLaporan")
+                        .BindTo(new List<string>() { "NERACA", "LABARUGI","ARUSKAS" })
+                        .HtmlAttributes(new { style = "width: 100%" }))
+                </div>
             </div>
-            <div class="col-md-4">
-                <label>Per Tanggal</label>
-                @(Html.Kendo().DatePicker().Name("PerTanggal")
-                    .Value(DateTime.Now).Format("dd MMMM yyyy")
-                    .HtmlAttributes(new { style = "width: 100%" }))
+
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label>Periode</label>
+                    @(Html.Kendo().DropDownList().Name("JenisPeriode")
+                        .BindTo(new List<string>() { "TAHUNAN" })
+                        .Events(e => e.Change("onPeriodeChange")) // Trigger saat ganti
+                        .HtmlAttributes(new { style = "width: 100%" }))
+                </div>
             </div>
-            <div class="col-md-4" style="display:flex; align-items:flex-end;">
-                <button class="btn btn-primary btn-block" onclick="onGenerateClick()">
+
+           
+
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label>Tahun</label>
+                    @(Html.Kendo().NumericTextBox<int>().Name("Tahun")
+                        .Format("#")
+                        .Min(2000).Max(2099)
+                        .Value(currentYear)
+                        .HtmlAttributes(new { style = "width: 100%" }))
+                </div>
+            </div>
+
+            <div class="col-md-3" style="display:flex;align-items: center;">
+                <button class="btn btn-block btn-generate" onclick="onGenerateClick()">
                     <i class="fa fa-print"></i> Generate PDF
                 </button>
             </div>
@@ -49,32 +76,46 @@
 </div>
 
 <script>
-    function onGenerateClick() {
-        var tipe = $("#TipeLaporan").val();
-        var tanggal = $("#PerTanggal").data("kendoDatePicker").value();
-
-        if (!tanggal) {
-            alert("Silakan pilih tanggal terlebih dahulu.");
-            return;
-        }
+    // Event saat dropdown Periode berubah
+    function onPeriodeChange() {
+        var periode = $("#JenisPeriode").val();
         
-        if (tipe !== "NERACA") {
-            alert("Laporan Laba Rugi belum tersedia.");
+        if (periode === "TAHUNAN") {
+            $("#divBulan").hide(); // Sembunyikan Bulan
+        } else {
+            $("#divBulan").show(); // Tampilkan Bulan
+        }
+    }
+
+    function onGenerateClick() {
+        var tipeLaporan = $("#TipeLaporan").val();
+        var jenisPeriode = $("#JenisPeriode").val();
+        var tahun = $("#Tahun").val();
+        
+        // Logika Bulan
+        var bulan = 12; // Default 12 jika TAHUNAN (Biar keambil Jan-Des)
+        
+        if (jenisPeriode === "BULANAN") {
+            bulan = $("#Bulan").val();
+        }
+
+        // Validasi Sederhana
+        if (!tahun) {
+            alert("Harap isi Tahun.");
             return;
         }
 
-        var formattedDate = kendo.toString(tanggal, "yyyy-MM-dd");
-
-        // Data yang dikirim ke Controller
+        // Siapkan Data DTO Baru
         var formData = {
-            TipeLaporan: tipe,
-            PerTanggal: formattedDate
+            TipeLaporan: tipeLaporan,
+            JenisPeriode: jenisPeriode,
+            Bulan: parseInt(bulan),
+            Tahun: parseInt(tahun)
         };
 
-        // UI Loading sederhana (opsional)
-        var btn = $("button.btn-primary");
+        var btn = $("button.btn-generate");
         var originalText = btn.html();
-        btn.html('<i class="fa fa-spinner fa-spin"></i> Processing...').prop("disabled", true);
+        btn.html('<i class="fa fa-spinner fa-spin"></i> Loading...').prop("disabled", true);
 
         $.ajax({
             url: '/LaporanKeuangan/GenerateReport',
@@ -82,22 +123,28 @@
             contentType: 'application/json',
             data: JSON.stringify(formData),
             success: function (response) {
-                // Balikkan tombol
                 btn.html(originalText).prop("disabled", false);
 
                 if (response.Status === "OK") {
-                    // [LOGIC SAMA KAYAK JURNAL HARIAN]
-                    // Buka PDF di tab baru. 
-                    // Asumsi ReportGenerator menyimpan file di: /Reports/{UserID}/NamaFile.pdf
-                    window.open("/Reports/" + response.Data + "/LaporanNeraca.pdf", '_blank');
+                    var userId = response.Data;
+                    var fileName = response.Filename; // Contoh: "LaporanLabaRugi.pdf"
+                    
+                    var url = "/Reports/" + userId + "/" + fileName;
+                    
+                    window.open(url, '_blank');
                 } else {
-                    alert("Gagal membuat laporan: " + response.Message);
+                    alert("Gagal: " + response.Message);
                 }
             },
             error: function () {
                 btn.html(originalText).prop("disabled", false);
-                alert("Terjadi kesalahan koneksi saat membuat laporan.");
+                alert("Error koneksi server.");
             }
         });
     }
+
+    $(document).ready(function() {
+        // Trigger sekali di awal untuk set state awal
+        onPeriodeChange();
+    });
 </script>

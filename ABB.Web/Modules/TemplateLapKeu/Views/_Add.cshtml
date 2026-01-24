@@ -8,117 +8,133 @@
 }
 
 <style>
-    .custom-kode .k-input,
-    .custom-kode .k-textbox,
-    .custom-kode input {
-        background-color: #00FFFF !important;
-    }
-
     .custom-kuning .k-input,
     .custom-kuning .k-textbox,
     .custom-kuning input,
     .custom-kuning textarea {
         background-color: rgb(255, 255, 225) !important;
     }
+    .window-body { padding: 10px; }
+    .form-group { margin-bottom: 1rem; }
     
-    .window-body {
+    /* Style untuk Box Range Total */
+    .box-range {
+        background-color: #f0f8ff;
+        border: 1px solid #cce5ff;
         padding: 10px;
-    }
-
-    .form-group {
-        margin-bottom: 1rem;
+        border-radius: 5px;
     }
 </style>
 
 <div class="window-body">
     <form id="TemplateForm">
         @Html.HiddenFor(m => m.Id)
+        
+        @Html.HiddenFor(m => m.Rumus, new { id = "RumusFinal" }) 
 
         <fieldset>
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">No. Urut</label>
                 <div class="col-sm-3">
-                    <kendo-numerictextbox name="Urutan" for="Urutan"
-                                          min="0"
-                                          format="n0"
-                                          class="custom-kuning"
-                                          style="width: 100%;" />
+                    <kendo-numerictextbox name="Urutan" for="Urutan" min="0" format="n0" class="custom-kuning" style="width: 100%;" />
                 </div>
                 <div class="col-sm-6">
-                    <small class="text-muted" style="line-height: 2.5;">
-                        * Ubah angka ini untuk mengatur posisi baris.
-                    </small>
+                    <small class="text-muted" style="line-height: 2.5;">* Posisi baris.</small>
                 </div>
             </div>
+
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Tipe Laporan</label>
                 <div class="col-sm-9">
-                    <kendo-dropdownlist name="TipeLaporan" for="TipeLaporan"
-                                        style="width: 100%;"
-                                        class="custom-kuning"
-                                        bind-to='new List<string>() { "NERACA", "LABARUGI" }'>
-                    </kendo-dropdownlist>
+                    <kendo-dropdownlist name="TipeLaporan" for="TipeLaporan" style="width: 100%;" class="custom-kuning"
+                                        bind-to='new List<string>() { "NERACA", "LABARUGI", "ARUSKAS" }'
+                                        on-change="onTipeLaporanChange"> </kendo-dropdownlist>
                 </div>
             </div>
 
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Tipe Baris</label>
                 <div class="col-sm-9">
-                   <kendo-dropdownlist name="TipeBaris" for="TipeBaris"
-                    style="width: 100%;"
-                    class="custom-kuning"
-                    bind-to='new List<string>() { "HEADING", "BLANK", "DETAIL", "TOTAL" }'
-                    on-change="onTipeBarisChange"> </kendo-dropdownlist>
+                   <kendo-dropdownlist name="TipeBaris" for="TipeBaris" style="width: 100%;" class="custom-kuning"
+                                       bind-to='new List<string>() { "HEADING", "BLANK", "DETAIL", "TOTAL" }'
+                                       on-change="onTipeBarisChange"> </kendo-dropdownlist>
                 </div>
             </div>
 
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label">Deskripsi</label>
                 <div class="col-sm-9">
-                    <kendo-textbox name="Deskripsi" for="Deskripsi" 
-                                   class="custom-kuning" 
-                                   style="width: 100%;" 
-                                   placeholder="Contoh: ASET LANCAR" />
+                    <kendo-textbox name="Deskripsi" for="Deskripsi" class="custom-kuning" style="width: 100%;" placeholder="Contoh: ASET LANCAR" />
                 </div>
             </div>
 
             <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Level (Indentasi)</label>
+                <label class="col-sm-3 col-form-label">Level</label>
                 <div class="col-sm-3">
-                    <kendo-numerictextbox name="Level"  for="Level" 
-                                          min="1" 
-                                          max="5" 
-                                          format="n0" 
-                                          class="custom-kuning" 
-                                          style="width: 100%;" />
+                    <kendo-numerictextbox name="Level" for="Level" min="1" max="5" format="n0" class="custom-kuning" style="width: 100%;" />
                 </div>
             </div>
             
             <hr />
 
-            <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Rumus / Akun</label>
+            <div class="form-group row" id="div-manual">
+                <label class="col-sm-3 col-form-label">Kode Akun</label>
                 <div class="col-sm-9">
-                     <kendo-textarea name="Rumus" for="Rumus" 
+                     <kendo-textarea name="RumusManual" 
                                      rows="3" 
                                      class="custom-kuning" 
                                      style="width: 100%;" 
-                                     placeholder="Masukkan Kode Akun dipisah koma (cth: 1101,1102)">
+                                     placeholder="Contoh: 1101,1102">
                     </kendo-textarea>
-                    <small class="text-muted" id="rumus-hint" style="display:block; margin-top:5px; font-style:italic;">
-                        * Untuk DETAIL: Masukkan Kode Akun (pisahkan koma).
-                    </small>
+                    <small class="text-muted">* Masukkan Kode Akun dipisah koma.</small>
                 </div>
             </div>
 
-            <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px;">
-                <button type="button" class="btn btn-secondary" onclick="closeWindow()">
-                    <i class="fa fa-times"></i> Batal
-                </button>
-                <button type="button" class="btn btn-primary" onclick="saveTemplate()">
-                    <i class="fa fa-save"></i> Simpan
-                </button>
+            <div class="form-group row" id="div-range" style="display:none;">
+                <label class="col-sm-3 col-form-label">Hitung Total</label>
+                <div class="col-sm-9">
+                    <div class="box-range">
+                        <div class="row">
+                           <div class="col-md-6">
+                                <label>Dari Baris</label>
+                                <kendo-dropdownlist name="StartRow" style="width: 100%;"
+                                                    datatextfield="Text" 
+                                                    datavaluefield="Value" 
+                                                    option-label="-- Pilih Awal --">
+                                    <datasource>
+                                        <transport>
+                                            <read url="/TemplateLapKeu/GetTemplateOptions" data="getTemplateParam" />
+                                        </transport>
+                                    </datasource>
+                                </kendo-dropdownlist>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Sampai Baris</label>
+                                <kendo-dropdownlist name="EndRow" style="width: 100%;"
+                                                    datatextfield="Text" 
+                                                    datavaluefield="Value" 
+                                                    option-label="-- Pilih Akhir --">
+                                    <datasource>
+                                        <transport>
+                                            <read url="/TemplateLapKeu/GetTemplateOptions" data="getTemplateParam" />
+                                        </transport>
+                                    </datasource>
+                                </kendo-dropdownlist>
+                            </div>
+                        </div>
+                        <small class="text-muted mt-2 d-block">* Sistem akan menjumlahkan angka dari baris Awal s/d Akhir.</small>
+                    </div>
+                    
+                    <div style="margin-top:10px;">
+                        <input type="checkbox" id="chkManualTotal" onchange="toggleManualTotal()"> 
+                        <label for="chkManualTotal" style="font-size:11px;">Input Manual (Untuk Grand Total Acak)</label>
+                    </div>
+                </div>
             </div>
+
+           <button type="button" class="btn btn-primary" onclick="saveTemplate()">
+                <i class="fa fa-save"></i> Simpan
+            </button>
         </fieldset>
     </form>
 </div>

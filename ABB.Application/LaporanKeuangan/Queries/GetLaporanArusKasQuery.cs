@@ -15,25 +15,25 @@ using Microsoft.Extensions.Hosting;
 
 namespace ABB.Application.LaporanKeuangan.Queries
 {
-    public class GetLaporanNeracaQuery : IRequest<string>
+    public class GetLaporanArusKasQuery : IRequest<string>
     {
         public string JenisPeriode { get; set; } 
         public int Bulan { get; set; } 
         public int Tahun { get; set; } 
     }
 
-    public class GetLaporanNeracaQueryHandler : IRequestHandler<GetLaporanNeracaQuery, string>
+    public class GetLaporanArusKasQueryHandler : IRequestHandler<GetLaporanArusKasQuery, string>
     {
         private readonly IDbContextPstNota _context;
         private readonly IHostEnvironment _environment;
 
-        public GetLaporanNeracaQueryHandler(IDbContextPstNota context, IHostEnvironment environment)
+        public GetLaporanArusKasQueryHandler(IDbContextPstNota context, IHostEnvironment environment)
         {
             _context = context;
             _environment = environment;
         }
 
-        public async Task<string> Handle(GetLaporanNeracaQuery request, CancellationToken cancellationToken)
+        public async Task<string> Handle(GetLaporanArusKasQuery request, CancellationToken cancellationToken)
         {
             // 1. TENTUKAN RANGE WAKTU
             int thnIni = request.Tahun;
@@ -73,7 +73,7 @@ namespace ABB.Application.LaporanKeuangan.Queries
             var dataSaldoLalu = await GetSaldoByFilter(filterLalu);
             
             var templates = await _context.TemplateLapKeu
-                                    .Where(t => t.TipeLaporan == "NERACA")
+                                    .Where(t => t.TipeLaporan == "ARUSKAS")
                                     .OrderBy(t => t.Urutan).ThenBy(t => t.Id)
                                     .AsNoTracking().ToListAsync(cancellationToken);
 
@@ -259,7 +259,7 @@ namespace ABB.Application.LaporanKeuangan.Queries
             // --- DATE TIME ---
             DateTime tanggalLaporan = new DateTime(request.Tahun, request.Bulan, 1).AddMonths(1).AddDays(-1); 
 
-            string reportPath = Path.Combine(_environment.ContentRootPath, "Modules", "Reports", "Templates", "LaporanNeraca.html");
+            string reportPath = Path.Combine(_environment.ContentRootPath, "Modules", "Reports", "Templates", "LaporanArusKas.html");
             if (!File.Exists(reportPath)) throw new FileNotFoundException($"Template not found: {reportPath}");
 
             string templateHtml = await File.ReadAllTextAsync(reportPath, cancellationToken);

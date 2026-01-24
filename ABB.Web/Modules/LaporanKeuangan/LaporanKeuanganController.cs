@@ -14,7 +14,6 @@ namespace ABB.Web.Modules.LaporanKeuangan
     {
         private readonly IReportGeneratorService _reportGeneratorService;
 
-        // Constructor Bersih (Hanya IReportGeneratorService)
         public LaporanKeuanganController(IReportGeneratorService reportGeneratorService)
         {
             _reportGeneratorService = reportGeneratorService;
@@ -34,43 +33,82 @@ namespace ABB.Web.Modules.LaporanKeuangan
             try
             {
                 var user = CurrentUser.UserId;
+                string reportTemplate = "";
+                string outputFileName = "";
 
-                if (!DateTime.TryParse(model.PerTanggal, out DateTime tanggalParsed))
-                    throw new Exception("Format tanggal tidak valid.");
-
-                var query = new GetLaporanNeracaQuery
+                // PERCABANGAN LOGIKA BERDASARKAN TIPE LAPORAN
+                switch (model.TipeLaporan)
                 {
-                    PerTanggal = tanggalParsed
-                };
+                    case "NERACA":
+                        var queryNeraca = new GetLaporanNeracaQuery
+                        {
+                            JenisPeriode = model.JenisPeriode,
+                            Bulan = model.Bulan,
+                            Tahun = model.Tahun
+                        };
+                        reportTemplate = await Mediator.Send(queryNeraca);
+                        outputFileName = "LaporanNeraca.pdf";
+                        break;
 
-                // SEKARANG INI ISINYA SUDAH STRING HTML (Bukan List lagi)
-                string reportTemplate = await Mediator.Send(query);
+                    case "LABARUGI":
+                        // Kamu harus buat Class Query baru: GetLaporanLabaRugiQuery
+                        var queryLR = new GetLaporanLabaRugiQuery 
+                        {
+                            JenisPeriode = model.JenisPeriode,
+                            Bulan = model.Bulan,
+                            Tahun = model.Tahun
+                        };
+                        reportTemplate = await Mediator.Send(queryLR);
+                        outputFileName = "LaporanLabaRugi.pdf";
+                        break;
 
+                    case "ARUSKAS":
+                        // Kamu harus buat Class Query baru: GetLaporanArusKasQuery
+                        var queryAK = new GetLaporanArusKasQuery
+                        {
+                            JenisPeriode = model.JenisPeriode,
+                            Bulan = model.Bulan,
+                            Tahun = model.Tahun
+                        };
+                        reportTemplate = await Mediator.Send(queryAK);
+                        outputFileName = "LaporanArusKas.pdf";
+                        break;
+
+                    default:
+                        throw new Exception("Tipe Laporan tidak valid atau belum tersedia.");
+                }
+
+                // VALIDASI HASIL
                 if (string.IsNullOrEmpty(reportTemplate))
-                    throw new Exception("Data tidak ditemukan.");
+                    throw new Exception("Data tidak ditemukan atau Template kosong.");
 
-                // Langsung kirim ke Generator (Sama kayak Jurnal Harian)
+                // GENERATE PDF (Nama File Dinamis sesuai switch case diatas)
                 _reportGeneratorService.GenerateReport(
-                    "LaporanNeraca.pdf",
-                    reportTemplate,    // String HTML
+                    outputFileName, 
+                    reportTemplate,
                     user,
                     Orientation.Portrait,
                     5, 5, 5, 5,
                     PaperKind.A4
                 );
 
-                return Ok(new { Status = "OK", Data = user });
+                return Ok(new { Status = "OK", Data = user, Filename = outputFileName });
             }
             catch (Exception ex)
             {
                 return Ok(new { Status = "ERROR", Message = ex.InnerException?.Message ?? ex.Message });
             }
         }
+
+    
     }
 
+    // UPDATE DTO AGAR SESUAI DENGAN KIRIMAN JAVASCRIPT
     public class LaporanKeuanganFilterDto
     {
         public string TipeLaporan { get; set; }
-        public string PerTanggal { get; set; }
+        public string JenisPeriode { get; set; } // Baru
+        public int Bulan { get; set; }           // Baru (int)
+        public int Tahun { get; set; }           // Baru (int)
     }
 }
