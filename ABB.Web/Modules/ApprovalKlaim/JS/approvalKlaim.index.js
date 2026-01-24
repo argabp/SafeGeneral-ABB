@@ -19,7 +19,7 @@ function btnEditApprovalKlaim(e) {
     openWindow('#ApprovalKlaimWindow', `/ApprovalKlaim/Edit?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}`, 'Edit');
 }
 
-function btnAddApprovalDetail(kd_cb, kd_cob, kd_scob){
+function btnAddApprovalDetailKlaim(kd_cb, kd_cob, kd_scob){
     openWindow('#ApprovalKlaimWindow', `/ApprovalKlaim/AddDetail?kd_cb=${kd_cb}&kd_cob=${kd_cob}&kd_scob=${kd_scob}`, 'Add Detail');
 }
 
