@@ -1,46 +1,20 @@
 {
   "Configurations": [
     {
-      "Database": "abb_kons",
+      "KodeCabang": "BD20",
       "Title": {
         "Title1": "PT. ASURANSI BHAKTI BHAYANGKARA",
         "Title2": "ASURANSI UMUM",
-        "Title3": "Jl. Palatehan No. 5 Kebayoran Baru",
-        "Title4": "Jakarta Selatan",
-        "Title5": "Jakarta",
-        "Title6": "(021) 83701002",
-        "Title7": "www.abb.co.id",
-        "Title8": "(021) 8295975"
-      }
-    },
-    {
-      "Database": "abb_pst",
-      "Title": {
-        "Title1": "PT. ASURANSI BHAKTI BHAYANGKARA",
-        "Title2": "ASURANSI UMUM",
-        "Title3": "Jl. Palatehan No. 5 Kebayoran Baru",
-        "Title4": "Jakarta Selatan",
-        "Title5": "Jakarta",
-        "Title6": "(021) 83701002",
-        "Title7": "www.abb.co.id",
-        "Title8": "(021) 8295975"
-      }
-    },
-    {
-      "Database": "abb_kp00",
-      "Title": {
-        "Title1": "PT. ASURANSI BHAKTI BHAYANGKARA",
-        "Title2": "ASURANSI UMUM",
-        "Title3": "Jl. Palatehan No. 5 Kebayoran Baru",
-        "Title4": "Jakarta Selatan",
-        "Title5": "Jakarta",
+        "Title3": "Jl. Gurame No. 16 Buah Batu 40262",
+        "Title4": "Bandung",
+        "Title5": "Bandung",
         "Title6": "(021) 83701002",
         "Title7": "www.abb.co.id",
         "Title8": ""
       }
     },
     {
-      "Database": "abb_jkt",
+      "KodeCabang": "JK50",
       "Title": {
         "Title1": "PT. ASURANSI BHAKTI BHAYANGKARA",
         "Title2": "ASURANSI UMUM",
@@ -53,7 +27,7 @@
       }
     },
     {
-      "Database": "abb_jkt2",
+      "KodeCabang": "JK70",
       "Title": {
         "Title1": "PT. ASURANSI BHAKTI BHAYANGKARA",
         "Title2": "ASURANSI UMUM",
@@ -66,7 +40,137 @@
       }
     },
     {
-      "Database": "abb_smg",
+      "KodeCabang": "MD60",
+      "Title": {
+        "Title1": "PT. ASURANSI BHAKTI BHAYANGKARA",
+        "Title2": "ASURANSI UMUM",
+        "Title3": "Jl. Palatehan No. 5 Kebayoran Baru",
+        "Title4": "Jakarta Selatan",
+        "Title5": "Jakarta",
+        "Title6": "(021) 83701002",
+        "Title7": "www.abb.co.id",
+        "Title8": ""
+      }
+    },
+    {
+      "KodeCabang": "PS10",
+      "Title": {
+        "Title1": "PT. ASURANSI BHAKTI BHAYANGKARA",
+        "Title2": "ASURANSI UMUM",
+        "Title3": "Jl. Palatehan No. 5 Kebayoran Baru",
+        "Title4": "Jakarta Selatan",
+        "Title5": "Jakarta",
+        "Title6": "(021) 83701002",
+        "Title7": "www.abb.co.id",
+        "Title8": ""
+      }
+    },
+    {
+      "KodeCabang": "PS11",
+      "Title": {
+        "Title1": "PT. ASURANSI BHAKTI BHAYANGKARA",
+        "Title2": "ASURANSI UMUM",
+        "Title3": "Jl. Palatehan No. 5 Kebayoran Baru",
+        "Title4": "Jakarta Selatan",
+        "Title5": "Jakarta",
+        "Title6": "(021) 83701002",
+        "Title7": "www.abb.co.id",
+        "Title8": ""
+      }
+    },
+    {
+      "KodeCabang": "PS12",
+      "Title": {
+        "Title1": "PT. ASURANSI BHAKTI BHAYANGKARA",
+        "Title2": "ASURANSI UMUM",
+        "Title3": "Jl. Palatehan No. 5 Kebayoran Baru",
+        "Title4": "Jakarta Selatan",
+        "Title5": "Jakarta",
+        "Title6": "(021) 83701002",
+        "Title7": "www.abb.co.id",
+        "Title8": ""
+      }
+    },
+    {
+      "KodeCabang": "PS13",
+      "Title": {
+        "Title1": "PT. ASURANSI BHAKTI BHAYANGKARA",
+        "Title2": "ASURANSI UMUM",
+        "Title3": "Jl. Palatehan No. 5 Kebayoran Baru",
+        "Title4": "Jakarta Selatan",
+        "Title5": "Jakarta",
+        "Title6": "(021) 83701002",
+        "Title7": "www.abb.co.id",
+        "Title8": ""
+      }
+    },
+    {
+      "KodeCabang": "PS14",
+      "Title": {
+        "Title1": "PT. ASURANSI BHAKTI BHAYANGKARA",
+        "Title2": "ASURANSI UMUM",
+        "Title3": "Jl. Palatehan No. 5 Kebayoran Baru",
+        "Title4": "Jakarta Selatan",
+        "Title5": "Jakarta",
+        "Title6": "(021) 83701002",
+        "Title7": "www.abb.co.id",
+        "Title8": ""
+      }
+    },
+    {
+      "KodeCabang": "PS15",
+      "Title": {
+        "Title1": "PT. ASURANSI BHAKTI BHAYANGKARA",
+        "Title2": "ASURANSI UMUM",
+        "Title3": "Jl. Palatehan No. 5 Kebayoran Baru",
+        "Title4": "Jakarta Selatan",
+        "Title5": "Jakarta",
+        "Title6": "(021) 83701002",
+        "Title7": "www.abb.co.id",
+        "Title8": ""
+      }
+    },
+    {
+      "KodeCabang": "PS16",
+      "Title": {
+        "Title1": "PT. ASURANSI BHAKTI BHAYANGKARA",
+        "Title2": "ASURANSI UMUM",
+        "Title3": "Jl. Palatehan No. 5 Kebayoran Baru",
+        "Title4": "Jakarta Selatan",
+        "Title5": "Jakarta",
+        "Title6": "(021) 83701002",
+        "Title7": "www.abb.co.id",
+        "Title8": ""
+      }
+    },
+    {
+      "KodeCabang": "PS17",
+      "Title": {
+        "Title1": "PT. ASURANSI BHAKTI BHAYANGKARA",
+        "Title2": "ASURANSI UMUM",
+        "Title3": "Jl. Palatehan No. 5 Kebayoran Baru",
+        "Title4": "Jakarta Selatan",
+        "Title5": "Jakarta",
+        "Title6": "(021) 83701002",
+        "Title7": "www.abb.co.id",
+        "Title8": ""
+      }
+    },
+    {
+      "KodeCabang": "PS18",
+      "Title": {
+        "Title1": "PT. ASURANSI BHAKTI BHAYANGKARA",
+        "Title2": "ASURANSI UMUM",
+        "Title3": "Jl. Palatehan No. 5 Kebayoran Baru",
+        "Title4": "Jakarta Selatan",
+        "Title5": "Jakarta",
+        "Title6": "(021) 83701002",
+        "Title7": "www.abb.co.id",
+        "Title8": ""
+      }
+    },
+    {
+      "KodeCabang": "SB40",
       "Title": {
         "Title1": "PT. ASURANSI BHAKTI BHAYANGKARA",
         "Title2": "ASURANSI UMUM",
@@ -79,14 +183,14 @@
       }
     },
     {
-      "Database": "abb_bdg",
+      "KodeCabang": "SM30",
       "Title": {
         "Title1": "PT. ASURANSI BHAKTI BHAYANGKARA",
         "Title2": "ASURANSI UMUM",
-        "Title3": "Jl. Gurame No. 16 Buah Batu 40262",
-        "Title4": "Bandung",
-        "Title5": "Bandung",
-        "Title6": "(021) 83701002",
+        "Title3": "Mataram Plaza Blok C-9 Jl. MT Haryono 427-429",
+        "Title4": "Semarang",
+        "Title5": "Semarang",
+        "Title6": "(021) 3565869",
         "Title7": "www.abb.co.id",
         "Title8": ""
       }

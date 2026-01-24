@@ -92,7 +92,7 @@ namespace ABB.Application.OutstandingKlaim.Queries
 
             var outstandingKlaimData = outstandingKlaimDatas.FirstOrDefault();
             
-            var reportConfig = _reportConfig.Configurations.First(w => w.Database == request.DatabaseName);
+            var reportConfig = _reportConfig.GetReportData(request.kd_cb);
 
             int sequence;
             switch (request.jenis_laporan)

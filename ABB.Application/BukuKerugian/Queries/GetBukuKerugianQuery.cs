@@ -70,8 +70,8 @@ namespace ABB.Application.BukuKerugian.Queries
                 .ToList();
             
             var lastOuterKey = groupedData.Last().Key;
-            
-            var reportConfig = _reportConfig.Configurations.First(w => w.Database == request.DatabaseName);
+
+            var reportConfig = _reportConfig.GetReportData(request.kd_cb);
             
             foreach (var outerGroup in groupedData)
             {

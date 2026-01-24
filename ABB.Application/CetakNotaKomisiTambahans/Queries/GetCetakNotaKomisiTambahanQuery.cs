@@ -61,8 +61,8 @@ namespace ABB.Application.CetakNotaKomisiTambahans.Queries
             if (datas.Count == 0)
                 throw new NullReferenceException("Data tidak ditemukan");
 
-            var reportConfig = _reportConfig.Configurations.First(w => w.Database == request.DatabaseName);
-            
+            var reportConfig = _reportConfig.GetReportData(request.kd_cb);
+
             Template templateProfileResult = Template.Parse( templateReportHtml );
 
             var data = datas.FirstOrDefault();

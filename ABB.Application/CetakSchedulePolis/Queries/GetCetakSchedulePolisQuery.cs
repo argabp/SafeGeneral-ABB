@@ -973,8 +973,8 @@ namespace ABB.Application.CetakSchedulePolis.Queries
             var total_nilai_prm_pad = ReportHelper.ConvertToReportFormat((cetakSchedulePolis.nilai_prm_pad ?? 0) 
                                       + (cetakSchedulePolis.nilai_prm_pap ?? 0));
             
-            var reportConfig = _reportConfig.Configurations.First(w => w.Database == request.DatabaseName);
-            
+            var reportConfig = _reportConfig.GetReportData(request.kd_cb);
+
             decimal total_sub_nilai_ttl_ptg = 0;
             decimal total_nilai_ttl_ptg = 0;
             decimal total_nitai_ptg = 0;

@@ -77,9 +77,9 @@ namespace ABB.Application.CetakKwitansiKlaim.Queries
                             </table>
                         </div>";
             }
-
-            var reportConfig = _reportConfig.Configurations.First(w => w.Database == request.DatabaseName);
-
+            
+            var reportConfig = _reportConfig.GetReportData(request.kd_cb);
+            
             var nilai_nt = ReportHelper.ConvertToReportFormat(data.nilai_nt);
             var resultTemplate = templateProfileResult.Render( new
             {

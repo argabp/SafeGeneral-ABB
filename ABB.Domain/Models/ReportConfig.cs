@@ -1,15 +1,21 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ABB.Domain.Models
 {
     public class ReportConfig
     {
         public List<ReportData> Configurations { get; set; }
+
+        public ReportData GetReportData(string kodeCabang)
+        {
+            return Configurations.FirstOrDefault(w => w.KodeCabang.Trim() == kodeCabang.Trim()) ?? new ReportData();
+        }
     }
 
     public class ReportData
     {
-        public string Database { get; set; }
+        public string KodeCabang { get; set; }
 
         public Title Title { get; set; }
     }

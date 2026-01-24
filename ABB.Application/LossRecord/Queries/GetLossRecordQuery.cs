@@ -54,8 +54,7 @@ namespace ABB.Application.LossRecord.Queries
                                 $"{request.kd_grp_ttg?.Trim()},{request.kd_rk_ttg?.Trim()}"
                 })).ToList();
             
-            var reportConfig = _reportConfig.Configurations.First(w => w.Database == request.DatabaseName);
-
+            var reportConfig = _reportConfig.GetReportData(request.kd_cb);
             
             string reportPath = Path.Combine( _environment.ContentRootPath, "Modules", "Reports", "Templates", "LossRecord.html" );
             

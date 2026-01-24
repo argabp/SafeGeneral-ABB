@@ -113,8 +113,8 @@ namespace ABB.Application.CetakNotaDanKwitansiPolis.Queries
                                                                  cetakNotaDanKwitansiPolis.nilai_ppn +
                                                                  cetakNotaDanKwitansiPolis.nilai_pph +
                                                                  cetakNotaDanKwitansiPolis.nilai_lain);
-
-            var reportConfig = _reportConfig.Configurations.First(w => w.Database == request.DatabaseName);
+            
+            var reportConfig = _reportConfig.GetReportData(request.kd_cb);
             
             if (ReportHaveDetails.Contains(reportTemplateName))
             {
