@@ -115,14 +115,19 @@ namespace ABB.Web
 
             app.UseRouting();
             app.UseSession();
-            app.UseMiddleware<SessionGuardMiddleware>();
+            // app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UserStaticFilesModulesFolder();
+            app.UseWhen(context => 
+                    !context.Request.Path.StartsWithSegments("/account/login"),
+                appBuilder =>
+                {
+                    appBuilder.UseMiddleware<SessionGuardMiddleware>();
+                });
             app.UseMiddleware<ErrorHandlerMiddleware>();
             app.UseMiddleware<HeaderMiddleware>();
             app.UseMiddleware<JwtMiddleware>();
             app.UseStatusCodePagesWithReExecute("/Error/{0}");
-            // app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            app.UserStaticFilesModulesFolder();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseCors();

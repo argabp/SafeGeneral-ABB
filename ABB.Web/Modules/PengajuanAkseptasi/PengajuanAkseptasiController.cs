@@ -12,7 +12,6 @@ using ABB.Application.PengajuanAkseptasi.Commands;
 using ABB.Application.PengajuanAkseptasi.Queries;
 using ABB.Application.PolisInduks.Queries;
 using ABB.Web.Extensions;
-using ABB.Web.Hubs;
 using ABB.Web.Modules.ApprovalAkseptasi.Models;
 using ABB.Web.Modules.Base;
 using ABB.Web.Modules.PengajuanAkseptasi.Models;
@@ -20,8 +19,6 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 namespace ABB.Web.Modules.PengajuanAkseptasi
 {

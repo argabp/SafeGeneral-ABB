@@ -36,7 +36,16 @@ function OnClickViewRegisterKlaim(e) {
     openRegisterKlaimWindow(`/RegisterKlaim/View?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}`, 'View');
 }
 
-
+function OnClickDeleteRegisterKlaim(e) {
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    showConfirmation('Confirmation', `Are you sure you want to delete Klaim?`,
+        function () {
+            showProgressOnGrid('#RegisterKlaimGrid');
+            setTimeout(function () { deleteRegisterKlaim(dataItem); }, 500);
+        }
+    );
+}
 
 function OnClickInfoRegisterKlaim(e) {
     e.preventDefault();
@@ -99,9 +108,14 @@ function setButtonActions(e){
             // Apply your business logic to hide buttons
             if(userLogin != dataItem.kd_usr_input){
                 buttonContainer.find(".k-grid-Edit").hide();
+                buttonContainer.find(".k-grid-Delete").hide();
             }
             
-            var allowedStatuses = [1, 10];
+            if(dataItem.kd_status != 1){
+                buttonContainer.find(".k-grid-Delete").hide();
+            }
+            
+            var allowedStatuses = [1, 2, 10];
             if(!allowedStatuses.includes(dataItem.kd_status)){
                 buttonContainer.find(".k-grid-Edit").hide();
             }
@@ -126,4 +140,19 @@ function setButtonActions(e){
         operator: "eq",
         value: dashboardStatus
     });
+}
+
+function deleteRegisterKlaim(dataItem) {
+    ajaxGet(`/RegisterKlaim/Delete?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}`, function (response) {
+        if (response.Result) {
+            showMessage('Success', 'Data has been deleted');
+        }
+        else {
+            showMessage('Error', 'Delete data is failed, this data is already used');
+        }
+
+        refreshGrid("#RegisterKlaimGrid");
+
+        closeProgressOnGrid('#RegisterKlaimGrid');
+    }, AjaxContentType.URLENCODED);
 }

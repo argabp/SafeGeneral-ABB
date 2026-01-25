@@ -18,8 +18,6 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 namespace ABB.Web.Modules.RegisterKlaim
 {
@@ -166,6 +164,31 @@ namespace ABB.Web.Modules.RegisterKlaim
             }
 
             return PartialView("~/Modules/Shared/Components/AnalisaDanEvaluasi/_AnalisaDanEvaluasi.cshtml" ,model);
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> Delete(string kd_cb, string kd_cob,
+            string kd_scob, string kd_thn, string no_kl)
+        {
+            try
+            {
+                var command = new DeleteRegisterKlaimCommand()
+                {
+                    kd_cb = kd_cb,
+                    kd_cob = kd_cob,
+                    kd_scob = kd_scob,
+                    kd_thn = kd_thn,
+                    no_kl = no_kl,
+                    DatabaseName = Request.Cookies["DatabaseValue"]
+                };
+                await Mediator.Send(command);
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", Message = ex.Message });
+            }
         }
 
         [HttpPost]

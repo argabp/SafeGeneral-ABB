@@ -49,7 +49,7 @@ namespace ABB.Application.CancelPostingNotaKomisiTambahans.Queries
                             AND pp.kd_thn = p.kd_thn
                             AND pp.no_pol = p.no_pol
                             AND pp.no_updt = p.no_updt
-                            WHERE (p.no_pol_ttg like '%'+@SearchKeyword+'%' 
+                            WHERE p.flag_posting = 'Y' AND (p.no_pol_ttg like '%'+@SearchKeyword+'%' 
                             OR pp.tgl_mul_ptg like '%'+@SearchKeyword+'%' 
                             OR pp.tgl_akh_ptg like '%'+@SearchKeyword+'%' 
                             OR pp.tgl_closing like '%'+@SearchKeyword+'%' 

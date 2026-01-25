@@ -141,7 +141,7 @@ function setButtonActions(e){
     });
 }
 
-function OnClickDeletPengajuanAkseptasi(e) {
+function OnClickDeletePengajuanAkseptasi(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     showConfirmation('Confirmation', `Are you sure you want to delete Akseptasi?`,

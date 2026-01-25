@@ -42,7 +42,38 @@ namespace ABB.Web.Filters
                         { UserID = userId, Controller = controller, Action = action }).Result;
                     if (!allowed)
                     {
-                        context.Result = new StatusCodeResult((int)HttpStatusCode.Forbidden);
+                        // AJAX request
+                        if (context.HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                        {
+                            context.Result = new JsonResult(new
+                            {
+                                code = "ACCESS_DENIED",
+                                title = "Access Denied",
+                                message = "You don't have permission to access this feature."
+                            })
+                            {
+                                StatusCode = (int)HttpStatusCode.Forbidden
+                            };
+                        }
+                        else
+                        {
+                            // Not logged in
+                            if (context.HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                            {
+                                context.Result = new JsonResult(new
+                                {
+                                    code = "SESSION_EXPIRED",
+                                    redirect = "/Account/Login"
+                                })
+                                {
+                                    StatusCode = 401
+                                };
+                            }
+                            else
+                            {
+                                context.Result = new RedirectToActionResult("Login", "Account", null);
+                            }
+                        }
                     }
                 }
                 else

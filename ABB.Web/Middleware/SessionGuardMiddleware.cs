@@ -1,3 +1,4 @@
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
@@ -14,16 +15,9 @@ namespace ABB.Web.Middleware
 
         public async Task Invoke(HttpContext context)
         {
-            var path = context.Request.Path.Value?.ToLower();
+            var path = context.Request.Path.Value;
 
-            // allow login + static + public endpoints
-            if (path.StartsWith("/account/login") ||
-                path.StartsWith("/css") ||
-                path.StartsWith("/js") ||
-                path.StartsWith("/img") ||
-                path.StartsWith("/plugins") ||
-                path.StartsWith("/swagger") ||
-                path.StartsWith("/error"))
+            if (Path.HasExtension(path))
             {
                 await _next(context);
                 return;

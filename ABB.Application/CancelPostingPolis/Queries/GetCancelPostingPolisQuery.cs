@@ -42,7 +42,7 @@ namespace ABB.Application.CancelPostingPolis.Queries
                     INNER JOIN rf05 scob
                     ON p.kd_cob = scob.kd_cob
                     AND p.kd_scob = scob.kd_scob
-                    WHERE (p.no_pol_ttg like '%'+@SearchKeyword+'%' 
+                    WHERE p.flag_posting = 'Y' AND (p.no_pol_ttg like '%'+@SearchKeyword+'%' 
                     OR p.tgl_mul_ptg like '%'+@SearchKeyword+'%' 
                     OR p.tgl_akh_ptg like '%'+@SearchKeyword+'%' 
                     OR p.tgl_closing like '%'+@SearchKeyword+'%' 

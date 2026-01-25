@@ -112,18 +112,28 @@
     @await Html.PartialAsync("~/Modules/Shared/_PostScript.cshtml")
     
     <script>
-    $(document).ajaxError(function (event, xhr) {
-        if (xhr.status === 401) {
+        $(document).ajaxError(function (event, xhr) {
             try {
                 let res = JSON.parse(xhr.responseText);
-                if (res.code === "SESSION_EXPIRED") {
+
+                if (xhr.status === 401 && res.code === "SESSION_EXPIRED") {
                     window.location.href = res.redirect;
                 }
+
+                if (xhr.status === 403 && res.code === "ACCESS_DENIED") {
+                    showMessage(res.title, res.message);
+                }
+
             } catch {
-                window.location.href = "/Account/Login";
+                if (xhr.status === 401) {
+                    window.location.href = "/Account/Login";
+                }
+
+                if (xhr.status === 403) {
+                    showMessage("Access Denied", "You don't have permission to access this feature.");
+                }
             }
-        }
-    });
+        });
     </script>
 </div>
 </body>
