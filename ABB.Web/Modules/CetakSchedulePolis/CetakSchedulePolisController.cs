@@ -93,7 +93,7 @@ namespace ABB.Web.Modules.CetakSchedulePolis
                 if (string.IsNullOrWhiteSpace(sessionId))
                     throw new Exception("Session user tidak ditemukan");
                 
-                var reportTemplate = await Mediator.Send(command);
+                var result = await Mediator.Send(command);
 
                 var reportOrientation = Orientation.Portrait;
                 var right = 20;
@@ -117,11 +117,12 @@ namespace ABB.Web.Modules.CetakSchedulePolis
                     right = 10;
                     left = 10;
                 }
-                
-                _reportGeneratorService.GenerateReport("CetakSchedulePolis.pdf", 
-                    reportTemplate, sessionId, reportOrientation, right, left);
 
-                return Ok(new { Status = "OK", Data = sessionId});
+                var reportName = result.Item1 + ".pdf";
+                _reportGeneratorService.GenerateReport(reportName, 
+                    result.Item2, sessionId, reportOrientation, right, left);
+
+                return Ok(new { Status = "OK", Data = sessionId, ReportName = reportName});
             }
             catch (Exception e)
             {

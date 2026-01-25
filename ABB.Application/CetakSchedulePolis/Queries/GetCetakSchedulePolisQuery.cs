@@ -16,7 +16,7 @@ using Scriban;
 
 namespace ABB.Application.CetakSchedulePolis.Queries
 {
-    public class GetCetakSchedulePolisQuery : IRequest<string>
+    public class GetCetakSchedulePolisQuery : IRequest<(string, string)>
     {
         public string DatabaseName { get; set; }
         public string kd_cb { get; set; }
@@ -31,7 +31,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         public string jenisLampiran { get; set; }
     }
 
-    public class GetCetakSchedulePolisQueryHandler : IRequestHandler<GetCetakSchedulePolisQuery, string>
+    public class GetCetakSchedulePolisQueryHandler : IRequestHandler<GetCetakSchedulePolisQuery, (string, string)>
     {
         private readonly IDbConnectionFactory _connectionFactory;
         private readonly IHostEnvironment _environment;
@@ -64,7 +64,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
             _reportTtdConfig = reportTtdConfig;
         }
 
-        public async Task<string> Handle(GetCetakSchedulePolisQuery request, CancellationToken cancellationToken)
+        public async Task<(string, string)> Handle(GetCetakSchedulePolisQuery request, CancellationToken cancellationToken)
         {
             _connectionFactory.CreateDbConnection(request.DatabaseName);
             var templateName = (await _connectionFactory.QueryProc<string>("spi_uw01r_01", 
@@ -106,10 +106,40 @@ namespace ABB.Application.CetakSchedulePolis.Queries
 
             string resultTemplate = string.Empty;;
 
-            if (MultipleReport.Contains(reportTemplateName))
-                return GenerateMultipleReport(reportTemplateName, cetakSchedulePolisData, templateReportHtml);
-            
+            var footer_template = string.Empty;
+            var ttd_image = string.Empty;
+            var nm_pejabat = string.Empty;
+            var jabatan = string.Empty;
+
             var cetakSchedulePolis = cetakSchedulePolisData.FirstOrDefault();
+            if (cetakSchedulePolis.kd_cb.Length >= 4 && cetakSchedulePolis.kd_cb.Substring(3, 1) != "0")
+            {
+                var ttdImageBase64 = string.Empty;
+                var wwwroot = Path.Combine(_root.ContentRootPath, "wwwroot", "img");
+                var imageFile = Path.Combine(wwwroot, _reportTtdConfig.NamaTTDFile);
+                if (File.Exists(imageFile))
+                {
+                    ttdImageBase64 = Convert.ToBase64String(File.ReadAllBytes(imageFile));
+                }
+                string extension = Path.GetExtension(imageFile).ToLower();
+                string mimeType = extension switch
+                {
+                    ".png" => "image/png",
+                    ".jpg" => "image/jpeg",
+                    ".jpeg" => "image/jpeg",
+                    ".gif" => "image/gif",
+                    ".bmp" => "image/bmp",
+                    _ => "application/octet-stream"
+                };
+                ttd_image = $"<img src='data:${mimeType};base64,${ttdImageBase64}' style='max-width: 200px;' />";
+                nm_pejabat = $"<p style='margin: 0'><strong><u>{_reportTtdConfig.NamaPejabat}</u></strong></p>";
+                jabatan = $"<p style='margin: 0'><strong>{_reportTtdConfig.Jabatan}<strong></p>";
+                footer_template = $@"<div style='text-align: center;'>{ttd_image}{nm_pejabat}{jabatan}</div>";
+            }
+            
+            if (MultipleReport.Contains(reportTemplateName))
+                return GenerateMultipleReport(reportTemplateName, cetakSchedulePolisData, templateReportHtml, footer_template);
+            
             var sub_total_kebakaran = ReportHelper.ConvertToReportFormat(cetakSchedulePolis.nilai_ttl -
                                       (cetakSchedulePolis.nilai_bia_mat + cetakSchedulePolis.nilai_bia_pol));
 
@@ -988,34 +1018,6 @@ namespace ABB.Application.CetakSchedulePolis.Queries
             decimal total_prm_tjh = 0;
             decimal total_tjh = 0;
             decimal total_ttg = 0;
-
-            var footer_template = string.Empty;
-
-            // if (cetakSchedulePolis.kd_cb.Length >= 4 && cetakSchedulePolis.kd_cb.Substring(3, 1) != "0")
-            // {
-            //     var ttdImageBase64 = string.Empty;
-            //     var wwwroot = Path.Combine(_root.ContentRootPath, "wwwroot", "ttd");
-            //     var imageFile = Path.Combine(wwwroot, _reportTtdConfig.NamaTTDFile);
-            //     if (File.Exists(imageFile))
-            //     {
-            //         ttdImageBase64 = Convert.ToBase64String(File.ReadAllBytes(imageFile));
-            //     }
-            //     string extension = Path.GetExtension(imageFile).ToLower();
-            //     string mimeType = extension switch
-            //     {
-            //         ".png" => "image/png",
-            //         ".jpg" => "image/jpeg",
-            //         ".jpeg" => "image/jpeg",
-            //         ".gif" => "image/gif",
-            //         ".bmp" => "image/bmp",
-            //         _ => "application/octet-stream"
-            //     };
-            //     footer_template = $@"<div>
-            //         $""<img src='data:${mimeType};base64,${ttdImageBase64}' style='max-width: 200px;' />"");
-            //         <p><strong><u>${_reportTtdConfig.NamaPejabat}</u></strong></p>
-            //         <p><strong>${_reportTtdConfig.Jabatan}<strong></p>
-            //         </div>";
-            // }
             
             if (ReportHaveDetails.Contains(reportTemplateName))
             {
@@ -1274,7 +1276,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                         nilai_prm_a,nilai_prm_b, nilai_prm_c,nilai_prm_d,
                         cetakSchedulePolis.obyek_ptg,cetakSchedulePolis.ket_event,
                         cetakSchedulePolis.lokasi,cetakSchedulePolis.jml_peserta,
-                        tgl_mul_ptg,tgl_akh_ptg,
+                        tgl_mul_ptg,tgl_akh_ptg, ttd_image, nm_pejabat, jabatan,
                         cetakSchedulePolis.spek_hole,cetakSchedulePolis.ket_hadiah,
                         cetakSchedulePolis.own_risk,cetakSchedulePolis.kd_mtu,
                         cetakSchedulePolis.kota_cab,nilai_ttl_prm,
@@ -1374,7 +1376,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                         nilai_prm_a,nilai_prm_b, nilai_prm_c,nilai_prm_d,
                         cetakSchedulePolis.obyek_ptg,cetakSchedulePolis.ket_event,
                         cetakSchedulePolis.lokasi,cetakSchedulePolis.jml_peserta,
-                        tgl_mul_ptg,tgl_akh_ptg,
+                        tgl_mul_ptg,tgl_akh_ptg, ttd_image, nm_pejabat, jabatan,
                         cetakSchedulePolis.spek_hole,cetakSchedulePolis.ket_hadiah,
                         cetakSchedulePolis.own_risk,cetakSchedulePolis.kd_mtu,
                         cetakSchedulePolis.kota_cab,nilai_ttl_prm,
@@ -1395,8 +1397,9 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                         fire_multi_desk_oby_3, fire_multi_desk_oby_4, fire_multi_desk_oby_5
                 } );
             }
-            
-            return resultTemplate;
+
+            var reportName = reportTemplateName.Split(".")[0];
+            return (reportName, resultTemplate);
         }
         
         private string GenerateDetailReport(string reportType, CetakSchedulePolisDto data, int sequence)
@@ -1848,7 +1851,8 @@ namespace ABB.Application.CetakSchedulePolis.Queries
             }
         }
 
-        private string GenerateMultipleReport(string reportType, List<CetakSchedulePolisDto> datas, string template)
+        private (string, string) GenerateMultipleReport(string reportType, List<CetakSchedulePolisDto> datas, 
+            string template, string footer_template)
         {
             Template templateProfileResult = Template.Parse( template );
             StringBuilder stringBuilder = new StringBuilder();
@@ -1969,8 +1973,11 @@ namespace ABB.Application.CetakSchedulePolis.Queries
                     break;
             }
 
+            stringBuilder.Append(footer_template);
             stringBuilder.Append(Constant.FooterReport);
-            return stringBuilder.ToString();
+
+            var reportName = reportType.Split(".")[0];
+            return (reportName, stringBuilder.ToString());
         }
     }
 }

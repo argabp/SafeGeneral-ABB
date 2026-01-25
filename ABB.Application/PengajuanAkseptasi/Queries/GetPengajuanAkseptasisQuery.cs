@@ -13,6 +13,8 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
         public string SearchKeyword { get; set; }
 
         public string DatabaseName { get; set; }
+
+        public string kd_cb { get; set; }
     }
 
     public class GetPengajuanAkseptasisQueryHandler : IRequestHandler<GetPengajuanAkseptasisQuery, List<PengajuanAkseptasiDto>>
@@ -31,7 +33,7 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
         {
             _dbConnectionFactory.CreateDbConnection(request.DatabaseName);
             var results =
-                (await _dbConnectionFactory.Query<PengajuanAkseptasiDto>(@"SELECT * FROM v_TR_Akseptasi Where (nm_cb like '%'+@SearchKeyword+'%'
+                (await _dbConnectionFactory.Query<PengajuanAkseptasiDto>(@"SELECT * FROM v_TR_Akseptasi Where kd_cb = @kd_cb AND (nm_cb like '%'+@SearchKeyword+'%'
 			                                                                        OR nm_cob like '%'+@SearchKeyword+'%'
 			                                                                        OR nm_scob like '%'+@SearchKeyword+'%'
 			                                                                        OR nm_tertanggung like '%'+@SearchKeyword+'%'
@@ -41,7 +43,7 @@ namespace ABB.Application.PengajuanAkseptasi.Queries
 			                                                                        OR user_status like '%'+@SearchKeyword+'%'
 			                                                                        OR tgl_pengajuan like '%'+@SearchKeyword+'%'
 			                                                                        OR @SearchKeyword = '' OR @SearchKeyword is null
-		                                                                        )", new { _userService.UserId,  request.SearchKeyword })).ToList();
+		                                                                        )", new { _userService.UserId,  request.SearchKeyword, request.kd_cb })).ToList();
 
             foreach (var result in results)
             {

@@ -100,7 +100,7 @@ function copyEndorsInsert(dataItem){
     var form = {};
 
     form.kd_cb = dataItem.kd_cb;
-    form.kd_cob = dataItem.kd_cobF;
+    form.kd_cob = dataItem.kd_cob;
     form.kd_scob = dataItem.kd_scob;
     form.kd_thn = dataItem.kd_thn;
     form.no_aks = $("#no_aks").val();

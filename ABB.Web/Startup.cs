@@ -87,7 +87,7 @@ namespace ABB.Web
             services.AddSwaggerGen();
             services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromDays(1);
+                options.IdleTimeout = TimeSpan.FromMinutes(15);
                 options.Cookie.HttpOnly = true;
             });
             // services.AddScoped<ICustomerServices, CustomerServices>();

@@ -86,11 +86,11 @@ namespace ABB.Web.Modules.CetakNotaDanKwitansiPolis
                 if (string.IsNullOrWhiteSpace(sessionId))
                     throw new Exception("Session user tidak ditemukan");
                 
-                var reportTemplate = await Mediator.Send(command);
+                var result = await Mediator.Send(command);
+                var reportName = result.Item1 + ".pdf";
+                _reportGeneratorService.GenerateReport(reportName, result.Item2, sessionId, right: 0, left: 0, top: 0, bottom: 0);
 
-                _reportGeneratorService.GenerateReport("CetakNotaDanKwitansiPolis.pdf", reportTemplate, sessionId, right: 0, left: 0, top: 0, bottom: 0);
-
-                return Ok(new { Status = "OK", Data = sessionId});
+                return Ok(new { Status = "OK", Data = sessionId, ReportName = reportName});
             }
             catch (Exception e)
             {

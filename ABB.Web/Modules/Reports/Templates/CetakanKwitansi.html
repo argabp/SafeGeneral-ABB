@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Cetakan Nota Debet Kredit</title>
+	<title>Cetakan Kwitansi</title>
 </head>
 <style>
 	body {
@@ -118,7 +118,7 @@
 			<strong>Pembayaran Dengan</strong>
 		</td>
 		<td style="width: 1%; padding-left: 3em" colspan=2>:</td>
-		<td colspan=4 style="text-align: right; padding-right: 10em">{{kt_cb}}, {{tgl_nt_ind}}</td>
+		<td colspan="5" style="text-align: center; padding-right: 10em">{{kt_cb}}, {{tgl_nt_ind}}</td>
 	</tr>
 </table>
 
@@ -157,6 +157,10 @@
 			<input type="checkbox" style="height: 40px; width: 40px; vertical-align: middle;" id="vehicle4" name="vehicle3" value="Bike">
 			<label for="vehicle3" style="font-size: 11pt; vertical-align: middle;"><strong>Bilyet Giro</strong></label><br>
 		</div>
+	</div>
+	
+	<div style="float: left; width: 50%">
+		{{footer_template}}
 	</div>
 </div>
 

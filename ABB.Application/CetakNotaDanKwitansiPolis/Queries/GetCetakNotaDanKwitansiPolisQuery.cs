@@ -16,7 +16,7 @@ using Scriban;
 
 namespace ABB.Application.CetakNotaDanKwitansiPolis.Queries
 {
-    public class GetCetakNotaDanKwitansiPolisQuery : IRequest<string>
+    public class GetCetakNotaDanKwitansiPolisQuery : IRequest<(string, string)>
     {
         public string DatabaseName { get; set; }
         public string kd_cb { get; set; }
@@ -30,11 +30,12 @@ namespace ABB.Application.CetakNotaDanKwitansiPolis.Queries
         public string mataUang { get; set; }
     }
 
-    public class GetCetakNotaDanKwitansiPolisQueryHandler : IRequestHandler<GetCetakNotaDanKwitansiPolisQuery, string>
+    public class GetCetakNotaDanKwitansiPolisQueryHandler : IRequestHandler<GetCetakNotaDanKwitansiPolisQuery, (string, string)>
     {
         private readonly IDbConnectionFactory _connectionFactory;
         private readonly IHostEnvironment _environment;
         private readonly ReportConfig _reportConfig;
+        private readonly ReportTTDConfig _reportTtdConfig;
 
         private List<string> ReportHaveDetails = new List<string>()
         {
@@ -44,15 +45,16 @@ namespace ABB.Application.CetakNotaDanKwitansiPolis.Queries
         {
         };
 
-        public GetCetakNotaDanKwitansiPolisQueryHandler(IDbConnectionFactory connectionFactory, 
-            IHostEnvironment environment, ReportConfig reportConfig)
+        public GetCetakNotaDanKwitansiPolisQueryHandler(IDbConnectionFactory connectionFactory, IHostEnvironment environment, 
+            ReportConfig reportConfig, ReportTTDConfig reportTtdConfig)
         {
             _connectionFactory = connectionFactory;
             _environment = environment;
             _reportConfig = reportConfig;
+            _reportTtdConfig = reportTtdConfig;
         }
 
-        public async Task<string> Handle(GetCetakNotaDanKwitansiPolisQuery request, CancellationToken cancellationToken)
+        public async Task<(string, string)> Handle(GetCetakNotaDanKwitansiPolisQuery request, CancellationToken cancellationToken)
         {
             _connectionFactory.CreateDbConnection(request.DatabaseName);
             var templateName = (await _connectionFactory.QueryProc<string>("spi_uw02r_01", 
@@ -90,10 +92,40 @@ namespace ABB.Application.CetakNotaDanKwitansiPolis.Queries
             
             string resultTemplate;
 
+            var footer_template = string.Empty;
+            var ttd_image = string.Empty;
+            var nm_pejabat = string.Empty;
+            var jabatan = string.Empty;
+
+            var cetakNotaDanKwitansiPolis = cetakNotaDanKwitansiPolisData.FirstOrDefault();
+            if (cetakNotaDanKwitansiPolis.kd_cb.Length >= 4 && cetakNotaDanKwitansiPolis.kd_cb.Substring(3, 1) != "0")
+            {
+                var ttdImageBase64 = string.Empty;
+                var wwwroot = Path.Combine(_environment.ContentRootPath, "wwwroot", "img");
+                var imageFile = Path.Combine(wwwroot, _reportTtdConfig.NamaTTDFile);
+                if (File.Exists(imageFile))
+                {
+                    ttdImageBase64 = Convert.ToBase64String(File.ReadAllBytes(imageFile));
+                }
+                string extension = Path.GetExtension(imageFile).ToLower();
+                string mimeType = extension switch
+                {
+                    ".png" => "image/png",
+                    ".jpg" => "image/jpeg",
+                    ".jpeg" => "image/jpeg",
+                    ".gif" => "image/gif",
+                    ".bmp" => "image/bmp",
+                    _ => "application/octet-stream"
+                };
+                ttd_image = $"<img src='data:${mimeType};base64,${ttdImageBase64}' style='max-width: 200px;' />";
+                nm_pejabat = $"<p style='margin: 0'><strong><u>{_reportTtdConfig.NamaPejabat}</u></strong></p>";
+                jabatan = $"<p style='margin: 0'><strong>{_reportTtdConfig.Jabatan}<strong></p>";
+                footer_template = $@"<div style='text-align: center;'>{ttd_image}{nm_pejabat}{jabatan}</div>";
+            }
+
             if (MultipleReport.Contains(reportTemplateName))
                 return GenerateMultipleReport(reportTemplateName, cetakNotaDanKwitansiPolisData, templateReportHtml);
             
-            var cetakNotaDanKwitansiPolis = cetakNotaDanKwitansiPolisData.FirstOrDefault();
             var nilai_01 = ReportHelper.ConvertToReportFormat(cetakNotaDanKwitansiPolis.nilai_01);
             var nilai_02 = ReportHelper.ConvertToReportFormat(cetakNotaDanKwitansiPolis.nilai_02);
             var nilai_03 = ReportHelper.ConvertToReportFormat(cetakNotaDanKwitansiPolis.nilai_03);
@@ -150,7 +182,7 @@ namespace ABB.Application.CetakNotaDanKwitansiPolis.Queries
                     kd_mtu_symbol_4 = cetakNotaDanKwitansiPolis.kd_mtu_symbol, cetakNotaDanKwitansiPolis.ket_nt_kms,
                     total_nilai, pst_kms, nilai_lain,
                     nilai_net_kms, kd_mtu_symbol_11 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
-                    pst_ppn, nilai_ppn,
+                    pst_ppn, nilai_ppn, footer_template, ttd_image, jabatan, nm_pejabat,
                     pst_pph_title = cetakNotaDanKwitansiPolis.pst_pph == 2 ? "PPH 23" : "PPH 21",
                     pst_pph, nilai_pph, cetakNotaDanKwitansiPolis.almt_nota, cetakNotaDanKwitansiPolis.nm_nota,
                     pst_lain, kd_mtu_symbol_9 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
@@ -186,7 +218,7 @@ namespace ABB.Application.CetakNotaDanKwitansiPolis.Queries
                     kd_mtu_symbol_4 = cetakNotaDanKwitansiPolis.kd_mtu_symbol, cetakNotaDanKwitansiPolis.ket_nt_kms,
                     total_nilai, pst_kms, nilai_lain,
                     nilai_net_kms, kd_mtu_symbol_11 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
-                    pst_ppn, nilai_ppn,
+                    pst_ppn, nilai_ppn, footer_template, ttd_image, jabatan, nm_pejabat,
                     pst_pph_title = cetakNotaDanKwitansiPolis.pst_pph == 2 ? "PPH 23" : "PPH 21",
                     pst_pph, nilai_pph, cetakNotaDanKwitansiPolis.almt_nota, cetakNotaDanKwitansiPolis.nm_nota,
                     pst_lain, kd_mtu_symbol_9 = cetakNotaDanKwitansiPolis.kd_mtu_symbol,
@@ -196,7 +228,8 @@ namespace ABB.Application.CetakNotaDanKwitansiPolis.Queries
                 } );
             }
 
-            return resultTemplate;
+            var reportName = reportTemplateName.Split(".")[0];
+            return (reportName, resultTemplate);
         }
         
         private string GenerateDetailReport(string reportType, CetakNotaDanKwitansiPolisDto data)
@@ -234,7 +267,7 @@ namespace ABB.Application.CetakNotaDanKwitansiPolis.Queries
             }
         }
         
-        private string GenerateMultipleReport(string reportType, List<CetakNotaDanKwitansiPolisDto> datas, string template)
+        private (string, string) GenerateMultipleReport(string reportType, List<CetakNotaDanKwitansiPolisDto> datas, string template)
         {
             Template templateProfileResult = Template.Parse( template );
             StringBuilder stringBuilder = new StringBuilder();
@@ -289,7 +322,9 @@ namespace ABB.Application.CetakNotaDanKwitansiPolis.Queries
             // }
 
             stringBuilder.Append(Constant.FooterReport);
-            return stringBuilder.ToString();
+
+            var reportName = reportType.Split(".")[0];
+            return (reportName, stringBuilder.ToString());
         }
     }
 }

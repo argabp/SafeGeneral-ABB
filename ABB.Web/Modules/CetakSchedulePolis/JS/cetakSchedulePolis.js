@@ -36,7 +36,7 @@ function viewReport(element){
     ajaxPost("/CetakSchedulePolis/GenerateReport", JSON.stringify(form),
         function (response) {
             if(response.Status === "OK"){
-                window.open("/Reports/" + response.Data + "/CetakSchedulePolis.pdf",  '_blank');
+                window.open("/Reports/" + response.Data + "/" + response.ReportName,  '_blank');
             } else {
                 showMessage('Error', response.Message);
             }

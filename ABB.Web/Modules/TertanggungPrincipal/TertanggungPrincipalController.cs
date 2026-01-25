@@ -381,16 +381,19 @@ namespace ABB.Web.Modules.TertanggungPrincipal
                 }
                 : Mapper.Map<DetailSlikViewModel>(detailDetailRekanan);
 
-            data.kd_usaha2 = data.kd_usaha2.Trim();
-            data.kd_negara = data.kd_negara.Trim();
-            data.kd_usaha = data.kd_usaha.Trim();
-            data.kd_hub = data.kd_hub.Trim();
-            data.kd_gol_deb = data.kd_gol_deb.Trim();
-            data.Jenis_Kelamin = data.Jenis_Kelamin.Trim();
-            data.Kabupaten = data.Kabupaten.Trim();
-            data.Kode_Jabatan = data.Kode_Jabatan.Trim();
-            data.kd_pekerjaan = data.kd_pekerjaan.Trim();
-            data.kd_hasil = data.kd_hasil?.Trim();
+            if (detailDetailRekanan != null)
+            {
+                data.kd_usaha2 = data.kd_usaha2.Trim();
+                data.kd_negara = data.kd_negara.Trim();
+                data.kd_usaha = data.kd_usaha.Trim();
+                data.kd_hub = data.kd_hub.Trim();
+                data.kd_gol_deb = data.kd_gol_deb.Trim();
+                data.Jenis_Kelamin = data.Jenis_Kelamin.Trim();
+                data.Kabupaten = data.Kabupaten.Trim();
+                data.Kode_Jabatan = data.Kode_Jabatan.Trim();
+                data.kd_pekerjaan = data.kd_pekerjaan.Trim();
+                data.kd_hasil = data.kd_hasil?.Trim();
+            }
             
             return PartialView(view, data);
         }

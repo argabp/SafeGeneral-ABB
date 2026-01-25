@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
@@ -41,11 +42,28 @@ namespace ABB.Web.Middleware
 
             if (!hasSession || !hasDbCookie)
             {
-                context.Response.Redirect("/Account/Login");
+                if (IsAjaxRequest(context.Request))
+                {
+                    // ❗ AJAX: return 401 instead of redirect
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    await context.Response.WriteAsync("SESSION_EXPIRED");
+                }
+                else
+                {
+                    // 🌐 Normal browser navigation
+                    context.Response.Redirect("/Account/Login");
+                }
                 return;
             }
 
             await _next(context);
+        }
+    
+        private bool IsAjaxRequest(HttpRequest request)
+        {
+            return request.Headers["X-Requested-With"] == "XMLHttpRequest"
+                   || request.Headers["Accept"].Any(h => h.Contains("application/json"))
+                   || request.Headers["Content-Type"].Any(h => h.Contains("application/json"));
         }
     }
 }

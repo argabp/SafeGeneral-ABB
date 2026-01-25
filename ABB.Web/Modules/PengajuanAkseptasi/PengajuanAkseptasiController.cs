@@ -41,7 +41,12 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
         
         public async Task<ActionResult> GetPengajuanAkseptasis([DataSourceRequest] DataSourceRequest request, string searchkeyword)
         {
-            var ds = await Mediator.Send(new GetPengajuanAkseptasisQuery() { SearchKeyword = searchkeyword, DatabaseName = Request.Cookies["DatabaseValue"]});
+            var ds = await Mediator.Send(new GetPengajuanAkseptasisQuery()
+            {
+                SearchKeyword = searchkeyword, 
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                kd_cb = Request.Cookies["UserCabang"]
+            });
             return Json(ds.AsQueryable().ToDataSourceResult(request));
         }
         

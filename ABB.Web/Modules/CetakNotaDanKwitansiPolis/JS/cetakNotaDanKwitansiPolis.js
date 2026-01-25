@@ -33,7 +33,7 @@ function viewReport(element){
     ajaxPost("/CetakNotaDanKwitansiPolis/GenerateReport", JSON.stringify(form),
         function (response) {
             if(response.Status === "OK"){
-                window.open("/Reports/" + response.Data + "/CetakNotaDanKwitansiPolis.pdf",  '_blank');
+                window.open("/Reports/" + response.Data + "/" + response.ReportName,  '_blank');
             } else {
                 showMessage('Error', response.Message);
             }
