@@ -41,6 +41,7 @@ namespace ABB.Application.MutasiKlaims.Queries
 				FROM cl05 p
 				    INNER JOIN rf03 r 
 				        ON r.kd_rk = p.kd_rk_pas
+				            AND p.kd_cb = r.kd_cb 
 				            AND r.kd_grp_rk = p.kd_grp_pas
 				WHERE p.kd_cb = @kd_cb 
 				    AND p.kd_cob = @kd_cob 
