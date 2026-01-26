@@ -103,26 +103,13 @@ namespace ABB.Application.Akseptasis.Commands
             {
                 var dbContext = _contextFactory.CreateDbContext(request.DatabaseName);
 
-                if (request.kd_cb.Length >= 4 && request.kd_cb.Substring(3, 1) != "0")
+                var result = (await _connectionFactory.QueryProc<string>("spe_uw02e_25_02", new
                 {
-                    var result = (await _connectionFactory.QueryProc<string>("spe_uw02e_25_02", new
-                    {
-                        request.kd_tol, request.kode, request.kd_cob
-                    })).First();
+                    request.kd_tol, request.kode, request.kd_cob
+                })).First();
 
-                    if (!string.IsNullOrWhiteSpace(result))
-                        throw new Exception(result);
-                }
-                else
-                {
-                    var result = (await _connectionFactory.QueryProc<string>("spe_uw02e_25_02", new
-                    {
-                        request.kd_tol, request.kode
-                    })).First();
-
-                    if (!string.IsNullOrWhiteSpace(result))
-                        throw new Exception(result);
-                }
+                if (!string.IsNullOrWhiteSpace(result))
+                    throw new Exception(result);
                 
                 var entity = await dbContext.AkseptasiResiko.FindAsync(request.kd_cb, 
                     request.kd_cob, request.kd_scob, request.kd_thn, request.no_aks, request.no_updt, 
