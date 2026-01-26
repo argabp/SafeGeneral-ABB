@@ -98,6 +98,7 @@ namespace ABB.Web.Modules.CetakSchedulePolis
                 var reportOrientation = Orientation.Portrait;
                 var right = 20;
                 var left = 20;
+                var top = 20;
 
                 if (model.jenisLaporan == "L" && model.jenisLampiran != "D")
                 {
@@ -110,6 +111,7 @@ namespace ABB.Web.Modules.CetakSchedulePolis
                 {
                     right = 10;
                     left = 10;
+                    top = 10;
                 }
 
                 if (model.jenisLampiran == "D")
@@ -120,7 +122,7 @@ namespace ABB.Web.Modules.CetakSchedulePolis
 
                 var reportName = result.Item1 + ".pdf";
                 _reportGeneratorService.GenerateReport(reportName, 
-                    result.Item2, sessionId, reportOrientation, right, left);
+                    result.Item2, sessionId, reportOrientation, right, left, top);
 
                 return Ok(new { Status = "OK", Data = sessionId, ReportName = reportName});
             }
