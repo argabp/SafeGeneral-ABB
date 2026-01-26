@@ -398,7 +398,8 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
         {
             var kodeTols = await Mediator.Send(new GetKodeTolsQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                kd_cob = kd_cob
             });
 
             return Json(kodeTols);
