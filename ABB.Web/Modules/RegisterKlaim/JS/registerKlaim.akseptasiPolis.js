@@ -2,13 +2,21 @@
     searchKeywordAkseptasiPolis_OnKeyUp();
 });
 
-function searchFilterAkseptasiPolis(){
+function searchFilterAkseptasiPolis() {
     return {
+        page: $("#AkseptasiPolisGrid").data("kendoGrid").dataSource.page(),
+        pageSize: $("#AkseptasiPolisGrid").data("kendoGrid").dataSource.pageSize(),
+
+        sortField: $("#AkseptasiPolisGrid").data("kendoGrid").dataSource.sort()?.[0]?.field,
+        sortDir: $("#AkseptasiPolisGrid").data("kendoGrid").dataSource.sort()?.[0]?.dir,
+
+        filterField: $("#AkseptasiPolisGrid").data("kendoGrid").dataSource.filter()?.filters?.[0]?.field,
+        filterValue: $("#AkseptasiPolisGrid").data("kendoGrid").dataSource.filter()?.filters?.[0]?.value,
         searchKeyword: $("#SearchKeywordAkseptasiPolis").val(),
         kd_cb: $("#kd_cb").val(),
         kd_cob: $("#kd_cob").val(),
         kd_scob: $("#kd_scob").val()
-    }
+    };
 }
 
 function searchKeywordAkseptasiPolis_OnKeyUp() {

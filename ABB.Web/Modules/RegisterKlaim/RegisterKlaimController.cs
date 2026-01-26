@@ -72,17 +72,30 @@ namespace ABB.Web.Modules.RegisterKlaim
         
         [HttpPost]
         public async Task<IActionResult> GetAkseptasiPolis([DataSourceRequest] DataSourceRequest request, 
-            string searchKeyword, string kd_cb, string kd_cob, string kd_scob)
+            string searchKeyword, string kd_cb, string kd_cob, string kd_scob,
+            int page,
+            int pageSize,
+            string sortField,
+            string sortDir,
+            string filterField,
+            string filterValue)
         {
-            var ds = await Mediator.Send(new GetAkseptasisQuery()
+            var result = await Mediator.Send(new GetAkseptasisQuery()
             {
                 DatabaseName = Request.Cookies["DatabaseValue"],
                 KodeCabang = kd_cb,
                 kd_scob = kd_scob,
                 kd_cob = kd_cob,
-                SearchKeyword = searchKeyword
+                SearchKeyword = searchKeyword,
+
+                Page = page,
+                PageSize = pageSize,
+                SortField = sortField,
+                SortDir = sortDir,
+                FilterField = filterField,
+                FilterValue = filterValue
             });
-            return Json(ds.AsQueryable().ToDataSourceResult(request));
+            return Json(result);
         }
         
         [HttpGet]

@@ -21,7 +21,7 @@
     
     @(Html.Kendo().Grid<AkseptasiDto>()
         .Name("AkseptasiPolisGrid")
-        .DataSource(dataSource => dataSource.Ajax()
+        .DataSource(dataSource => dataSource.Ajax().ServerOperation(true).PageSize(25)
             .Read(read => read.Action("GetAkseptasiPolis", "RegisterKlaim").Data("searchFilterAkseptasiPolis"))
         )
         .Columns(columns =>

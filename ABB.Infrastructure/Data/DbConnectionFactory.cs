@@ -133,5 +133,10 @@ namespace ABB.Infrastructure.Data
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
+        
+        public async Task<SqlMapper.GridReader> QueryMultipleAsync(string query, object param = null)
+        {
+            return await Connection.QueryMultipleAsync(query, param, commandTimeout: 1000);
+        }
     }
 }
