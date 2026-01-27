@@ -171,7 +171,7 @@
                 <label class="col-sm-6">Kode Sumber Bisnis</label>
                 <div class="col-sm-6">
                     <input type="hidden" id="temp_kd_grp_sb_bis" value="@Model.kd_grp_sb_bis">
-                    <kendo-dropdownlist for="kd_grp_sb_bis" style="width: 100%" on-change="OnKodeSumberBisnisChange" option-label="Pilih Kode Sumber Bisnis"
+                    <kendo-dropdownlist for="kd_grp_sb_bis" style="width: 100%" on-change="OnKodeSumberBisnisChange" option-label="Pilih Group Sumber Bisnis"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="not-null-dropdown" >
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -185,7 +185,7 @@
             <div class="row col-sm-6">
                 <div class="col-sm-6">
                     <input type="hidden" id="temp_kd_rk_sb_bis" value="@Model.kd_rk_sb_bis">
-                    <kendo-dropdownlist for="kd_rk_sb_bis" style="width: 100%" class="not-null-dropdown" on-change="OnKodeRekananSumberBisnisChange"
+                    <kendo-dropdownlist for="kd_rk_sb_bis" style="width: 100%" class="not-null-dropdown" option-label="Pilih Rekanan Sumber Bisnis" on-change="OnKodeRekananSumberBisnisChange"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -202,7 +202,7 @@
                 <label class="col-sm-6">Kode Tertanggung</label>
                 <div class="col-sm-6">
                     <input type="hidden" id="temp_kd_grp_ttg" value="@Model.kd_grp_ttg">
-                    <kendo-dropdownlist for="kd_grp_ttg" style="width: 100%" on-change="OnKodeTertanggungChange" option-label="Pilih Kode Tertanggung"
+                    <kendo-dropdownlist for="kd_grp_ttg" style="width: 100%" on-change="OnKodeTertanggungChange" option-label="Pilih Group Tertanggung"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -216,7 +216,7 @@
             <div class="row col-sm-6">
                 <div class="col-sm-6">
                     <input type="hidden" id="temp_kd_rk_ttg" value="@Model.kd_rk_ttg">
-                    <kendo-dropdownlist for="kd_rk_ttg" style="width: 100%" on-change="OnKodeRekananTertanggungChange"
+                    <kendo-dropdownlist for="kd_rk_ttg" style="width: 100%" on-change="OnKodeRekananTertanggungChange" option-label="Pilih Rekanan Tertanggung"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -354,7 +354,7 @@
                 <label class="col-sm-6">Kode Persh Asuransi</label>
                 <div class="col-sm-6">
                     <input type="hidden" id="temp_kd_grp_pas" value="@Model.kd_grp_pas">
-                    <kendo-dropdownlist for="kd_grp_pas" style="width: 100%" on-change="OnKodePershAsuransiChange" option-label="Pilih Kode Persh Asuransi"
+                    <kendo-dropdownlist for="kd_grp_pas" style="width: 100%" on-change="OnKodePershAsuransiChange" option-label="Pilih Group Persh Asuransi"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -368,7 +368,7 @@
             <div class="row col-sm-6">
                 <div class="col-sm-6">
                     <input type="hidden" id="temp_kd_rk_pas" value="@Model.kd_rk_pas">
-                    <kendo-dropdownlist for="kd_rk_pas" style="width: 100%"
+                    <kendo-dropdownlist for="kd_rk_pas" style="width: 100%" option-label="Pilih Rekanan Persh Asuransi"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -385,7 +385,7 @@
                 <label class="col-sm-6">Kode Broker / Agen</label>
                 <div class="col-sm-6">
                     <input type="hidden" id="temp_kd_grp_brk" value="@Model.kd_grp_brk">
-                    <kendo-dropdownlist for="kd_grp_brk" style="width: 100%" on-change="OnKodeBrokerChange" option-label="Pilih Kode Broker / Agen"
+                    <kendo-dropdownlist for="kd_grp_brk" style="width: 100%" on-change="OnKodeBrokerChange" option-label="Pilih Group Broker / Agen"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -399,7 +399,7 @@
             <div class="row col-sm-6">
                 <div class="col-sm-6">
                     <input type="hidden" id="temp_kd_rk_brk" value="@Model.kd_rk_brk">
-                    <kendo-dropdownlist for="kd_rk_brk" style="width: 100%"
+                    <kendo-dropdownlist for="kd_rk_brk" style="width: 100%" option-label="Pilih Rekanan Broker / Agen"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -416,7 +416,7 @@
                 <label class="col-sm-6">Kode Bank</label>
                 <div class="col-sm-6">
                     <input type="hidden" id="temp_kd_grp_bank" value="@Model.kd_grp_bank">
-                    <kendo-dropdownlist for="kd_grp_bank" style="width: 100%" on-change="OnKodeBankChange" option-label="Pilih Kode Bank"
+                    <kendo-dropdownlist for="kd_grp_bank" style="width: 100%" on-change="OnKodeBankChange" option-label="Pilih Group Bank"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -430,7 +430,7 @@
             <div class="row col-sm-6">
                 <div class="col-sm-6">
                     <input type="hidden" id="temp_kd_rk_bank" value="@Model.kd_rk_bank">
-                    <kendo-dropdownlist for="kd_rk_bank" style="width: 100%"
+                    <kendo-dropdownlist for="kd_rk_bank" style="width: 100%" option-label="Pilih Rekanan Bank"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -447,7 +447,7 @@
                 <label class="col-sm-6">Kode Marketing</label>
                 <div class="col-sm-6">
                     <input type="hidden" id="temp_kd_grp_mkt" value="@Model.kd_grp_mkt">
-                    <kendo-dropdownlist for="kd_grp_mkt" style="width: 100%" on-change="OnKodeMarketingChange" option-label="Pilih Kode Marketing"
+                    <kendo-dropdownlist for="kd_grp_mkt" style="width: 100%" on-change="OnKodeMarketingChange" option-label="Pilih Group Marketing"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -461,7 +461,7 @@
             <div class="row col-sm-6">
                 <div class="col-sm-6">
                     <input type="hidden" id="temp_kd_rk_mkt" value="@Model.kd_rk_mkt">
-                    <kendo-dropdownlist for="kd_rk_mkt" style="width: 100%"
+                    <kendo-dropdownlist for="kd_rk_mkt" style="width: 100%" option-label="Pilih Rekanan Marketing"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
