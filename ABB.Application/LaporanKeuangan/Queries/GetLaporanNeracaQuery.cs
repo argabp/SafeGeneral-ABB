@@ -82,8 +82,9 @@ namespace ABB.Application.LaporanKeuangan.Queries
             // 3. RAKIT HTML
             StringBuilder sb = new StringBuilder();
 
-            int romanCounter = 0; 
-            int detailCounter = 0;
+            int romanCounter = 0;       // Level 2 (I, II)
+            int detailCounter = 0;      // Level 3 (1, 2, 3) & Total
+            int subDetailCounter = 0;   // Level 4 (a, b, c)
 
             // --- LOGIKA BARU: KAMUS HASIL ---
             // Key: No Urut (int), Value: (NilaiTahunIni, NilaiTahunLalu)
@@ -150,9 +151,6 @@ namespace ABB.Application.LaporanKeuangan.Queries
                         // SKENARIO 2: PILIHAN MANUAL (Koma) -> Contoh: "10,20" (Grand Total)
                         else 
                         {
-                            // Kalo manual biasanya buat Grand Total (Jumlahan dari TOTAL ke TOTAL)
-                            // Jadi disini TIDAK KITA FILTER 'DETAIL'. 
-                            // Biarkan dia menjumlahkan apapun yang ditunjuk (bisa Detail, bisa Total lain).
                             var urutanList = item.Rumus.Split(',', StringSplitOptions.RemoveEmptyEntries);
                             foreach (var strUrutan in urutanList)
                             {
@@ -171,10 +169,8 @@ namespace ABB.Application.LaporanKeuangan.Queries
                 }
 
                 // PENTING: SIMPAN HASIL BARIS INI KE KAMUS
-                // Agar bisa dipanggil oleh baris TOTAL di bawahnya nanti
                 if (item.Urutan > 0) 
                 {
-                    // Jika key sudah ada (duplikat urutan), kita override
                     hasilPerBaris[item.Urutan] = (nilaiIni, nilaiLalu);
                 }
 
@@ -208,25 +204,47 @@ namespace ABB.Application.LaporanKeuangan.Queries
                         if(currentLevel == 1) cssClass += " grand-total"; 
                     }
 
-                    // Reset Counter logic
+                    // --------------------------------------------------------
+                    // UPDATE LOGIKA PENOMORAN NERACA (Biar support Level 4 & 5)
+                    // --------------------------------------------------------
                     string deskripsiFinal = item.Deskripsi; 
+                    
                     if (item.TipeBaris == "HEADING")
                     {
                         if (currentLevel == 1)
                         {
                             romanCounter = 0; 
                             detailCounter = 0;
+                            subDetailCounter = 0; // Reset
                         }
                         else 
                         {
                             romanCounter++;
+                            // detailCounter = 0;    // Reset anak
+                            subDetailCounter = 0; // Reset cucu
                             deskripsiFinal = $"{ToRoman(romanCounter)}. {item.Deskripsi}";
                         }
                     }
                     else if (item.TipeBaris == "DETAIL" || (item.TipeBaris == "TOTAL" && currentLevel > 1))
                     {
-                        detailCounter++;
-                        deskripsiFinal = $"{detailCounter}. {item.Deskripsi}";
+                        // KASUS 1: Level 5 (POIN STRIP)
+                        if (currentLevel == 5)
+                        {
+                            deskripsiFinal = $"- {item.Deskripsi}";
+                        }
+                        // KASUS 2: Level 4 (Sub-Detail Huruf a, b, c)
+                        else if (currentLevel == 4)
+                        {
+                            subDetailCounter++;
+                            deskripsiFinal = $"{ToAlpha(subDetailCounter)}. {item.Deskripsi}";
+                        }
+                        // KASUS 3: Level 3 & Total (Angka 1, 2, 3)
+                        else 
+                        {
+                            detailCounter++;
+                            subDetailCounter = 0; // Reset level 4 kalau induknya ganti
+                            deskripsiFinal = $"{detailCounter}. {item.Deskripsi}";
+                        }
                     }
 
                     sb.Append("<tr>");
@@ -255,6 +273,30 @@ namespace ABB.Application.LaporanKeuangan.Queries
                     sb.Append("</tr>");
                 }
             }
+            
+            // ===============================================
+            // LOGIKA GAMBAR LOGO (BASE64)
+            // ===============================================
+            string logoBase64 = "";
+            try 
+            {
+                // 1. Arahkan ke wwwroot/img/Logo-Icon.png
+                string webRootPath = Path.Combine(_environment.ContentRootPath, "wwwroot"); 
+                string imagePath = Path.Combine(webRootPath, "img", "Logo-Icon.png"); 
+
+                if (File.Exists(imagePath))
+                {
+                    byte[] imageArray = await File.ReadAllBytesAsync(imagePath, cancellationToken);
+                    string base64Data = Convert.ToBase64String(imageArray);
+                    
+                    // PENTING: Karena filenya .png, header-nya pakai image/png
+                    logoBase64 = $"data:image/png;base64,{base64Data}"; 
+                }
+            }
+            catch
+            {
+                logoBase64 = ""; 
+            }
 
             // --- DATE TIME ---
             DateTime tanggalLaporan = new DateTime(request.Tahun, request.Bulan, 1).AddMonths(1).AddDays(-1); 
@@ -271,7 +313,8 @@ namespace ABB.Application.LaporanKeuangan.Queries
                 HeaderTahunIni = request.Tahun.ToString(),
                 HeaderTahunLalu = (request.Tahun - 1).ToString(),
                 TanggalLaporan = tanggalLaporan.ToString("dd MMMM yyyy"), 
-                WaktuCetak = DateTime.Now.ToString("dd/MM/yyyy HH:mm")
+                WaktuCetak = DateTime.Now.ToString("dd/MM/yyyy HH:mm"),
+                LogoImage = logoBase64
             };
 
             var context = new TemplateContext();
@@ -288,6 +331,12 @@ namespace ABB.Application.LaporanKeuangan.Queries
             if (number >= 20) return number.ToString(); 
             string[] romans = { "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV" };
             return romans[number - 1];
+        }
+
+        private string ToAlpha(int number)
+        {
+            if (number < 1) return "";
+            return ((char)('a' + number - 1)).ToString();
         }
 
         public class AkunSaldo 

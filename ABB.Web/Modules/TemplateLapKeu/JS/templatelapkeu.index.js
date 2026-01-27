@@ -31,31 +31,28 @@ function onTipeBarisChange() {
 }
 
 // 3. Fungsi inti mengatur Show/Hide elemen
+// Fungsi Setup UI (Update text hint biar lebih jelas)
+// 4. FUNGSI SETUP UI (SHOW/HIDE)
 function setupUI(tipe) {
     var hint = $("#rumus-hint");
     var manualInput = $("#RumusManual").data("kendoTextArea");
 
     if (tipe === "TOTAL") {
+        // Tampilkan Range, Sembunyikan Manual
         $("#div-manual").hide();
         $("#div-range").show();
-        // Set hint untuk manual input jaga-jaga kalau checkbox dicentang
-        if (hint) hint.text("* Masukkan No Urut dipisah koma (Contoh: 10, 20).");
     } 
     else if (tipe === "DETAIL") {
+        // Tampilkan Manual, Sembunyikan Range
         $("#div-manual").show();
         $("#div-range").hide();
         if (manualInput) manualInput.enable(true);
         if (hint) hint.html("* Masukkan <b>Kode Akun</b> dipisah koma (Contoh: 1101,1102).");
     } 
     else {
-        // Heading / Blank
-        $("#div-manual").show();
+        // HEADING atau SPASI -> SEMBUNYIKAN SEMUA RUMUS
+        $("#div-manual").hide(); // <--- INI YG BIKIN HILANG TOTAL
         $("#div-range").hide();
-        if (manualInput) {
-            manualInput.value("");
-            manualInput.enable(false); // Disable input
-        }
-        if (hint) hint.text("* Tipe ini tidak memerlukan rumus.");
     }
 }
 
@@ -81,37 +78,74 @@ function toggleManualTotal() {
 }
 
 // 5. Fungsi Inisialisasi Data saat Edit Mode (Parsing "5-8")
-function initEditForm() {
-    var currentTipe = $("#TipeBaris").val();
-    var currentRumus = $("#RumusFinal").val(); // Ambil dari Hidden Field
+// ==========================================================================
+// LOGIKA UI FORM (VISIBILITY & INTERACTION)
+// ==========================================================================
 
-    // Atur tampilan awal
+// FUNGSI INIT (Dipanggil saat Edit)
+function initEditForm() {
+    var currentTipe = $("#TipeBaris").val();  
+    var currentLevel = $("#Level").val();     
+    var currentRumus = $("#RumusFinal").val();
+
+    // Set Dropdown Kategori
+    var comboValue = currentTipe + "-" + currentLevel; 
+    var dropdown = $("#KategoriSelect").data("kendoDropDownList");
+    if(dropdown) {
+        dropdown.value(comboValue);
+    }
+
     setupUI(currentTipe);
 
-    // Jika ada rumus dan Tipe TOTAL
+    // Isi Rumus
     if (currentRumus && currentTipe === "TOTAL") {
-        // Cek apakah format range "5-8"
         if (currentRumus.includes("-")) {
             var parts = currentRumus.split("-");
-            // Delay 500ms agar DataSource Dropdown sempat loading
             setTimeout(function() {
                 var startDrop = $("#StartRow").data("kendoDropDownList");
                 var endDrop = $("#EndRow").data("kendoDropDownList");
-                
                 if (startDrop) startDrop.value(parts[0]);
                 if (endDrop) endDrop.value(parts[1]);
             }, 500);
         } else {
-            // Kalau isinya koma (10,20), berarti itu Manual Total
-            // Centang checkbox manual
             $("#chkManualTotal").prop("checked", true);
             toggleManualTotal();
             $("#RumusManual").data("kendoTextArea").value(currentRumus);
         }
     } else if (currentRumus) {
-        // Detail (Kode Akun)
         $("#RumusManual").data("kendoTextArea").value(currentRumus);
     }
+}
+// 2. FUNGSI LOCK NO URUT (Otomatis/Ceklis)
+function toggleUrutanLock() {
+    var isLocked = $("#chkLockUrutan").is(":checked");
+    var numBox = $("#Urutan").data("kendoNumericTextBox");
+    
+    // Kalau Locked (Ceklis) -> Disable input
+    // Kalau Unlocked -> Enable input
+    if (numBox) {
+        numBox.enable(!isLocked); 
+    }
+}
+
+// FUNGSI SAAT DROPDOWN "JENIS BARIS" DIGANTI
+function onKategoriChange() {
+    var dropdown = $("#KategoriSelect").data("kendoDropDownList");
+    var selectedValue = dropdown.value(); // Contoh: "DETAIL-3" atau "HEADING-1"
+
+    if (!selectedValue) return;
+
+    // Pecah String: "DETAIL-3" -> ["DETAIL", "3"]
+    var parts = selectedValue.split("-");
+    var tipe = parts[0];
+    var lvl = parts[1];
+
+    // Isi ke Hidden Field (agar tersimpan ke DB)
+    $("#TipeBaris").val(tipe);
+    $("#Level").val(lvl);
+
+    // Atur Tampilan
+    setupUI(tipe);
 }
 
 
@@ -119,27 +153,13 @@ function initEditForm() {
 // WINDOW & GRID EVENTS
 // ==========================================================================
 
-function onAddClick() {
-    var win = $("#TemplateWindow").data("kendoWindow");
-    
-    // Event Refresh: Jalan setelah konten HTML termuat
-    win.one("refresh", function() {
-        // Panggil init
-        setTimeout(function(){ 
-            onTipeBarisChange(); // Set default state
-        }, 100);
-    });
-
-    win.refresh({ url: "/TemplateLapKeu/Add" });
-    win.center().open();
-}
 function onTipeLaporanChange() {
-        var startDrop = $("#StartRow").data("kendoDropDownList");
-        var endDrop = $("#EndRow").data("kendoDropDownList");
+    var startDrop = $("#StartRow").data("kendoDropDownList");
+    var endDrop = $("#EndRow").data("kendoDropDownList");
 
-        if (startDrop) startDrop.dataSource.read();
-        if (endDrop) endDrop.dataSource.read();
-    }
+    if (startDrop) startDrop.dataSource.read();
+    if (endDrop) endDrop.dataSource.read();
+}
 
 function onEditClick(e) {
     e.preventDefault();
@@ -167,12 +187,14 @@ function closeWindow() {
 // ==========================================================================
 // CRUD OPERATIONS (SAVE & DELETE)
 // ==========================================================================
-
 function saveTemplate() {
     // 1. Validasi Form Standard HTML5
     var form = $("#TemplateForm");
-    if (form.length === 0) { console.error("Form tidak ditemukan"); return; }
-    
+    if (form.length === 0) {
+        console.error("Form tidak ditemukan");
+        return;
+    }
+
     // 2. Logic Konstruksi Rumus
     var tipe = $("#TipeBaris").val();
     var finalRumus = "";
@@ -181,18 +203,19 @@ function saveTemplate() {
     if (tipe === "TOTAL" && !$("#chkManualTotal").is(":checked")) {
         var start = $("#StartRow").val();
         var end = $("#EndRow").val();
-        
-        if(!start || !end) {
-            alert("Harap pilih Range Baris (Awal & Akhir)");
+
+        if (!start || !end) {
+            // GANTI ALERT JADI SHOWMESSAGE
+            showMessage("Warning", "Harap pilih Range Baris (Awal & Akhir)");
             return;
         }
-        if(parseInt(start) > parseInt(end)){
-            alert("Baris Awal tidak boleh lebih besar dari baris Akhir");
+        if (parseInt(start) > parseInt(end)) {
+            // GANTI ALERT JADI SHOWMESSAGE
+            showMessage("Warning", "Baris Awal tidak boleh lebih besar dari baris Akhir");
             return;
         }
         finalRumus = start + "-" + end; // Gabungkan jadi string "5-8"
-    } 
-    else {
+    } else {
         // Ambil dari Text Area (Detail / Manual Total)
         finalRumus = $("#RumusManual").val();
     }
@@ -216,48 +239,55 @@ function saveTemplate() {
         data: JSON.stringify(dataToSend),
         success: function(res) {
             if (res.success) {
-                // if (typeof showMessage === 'function') showMessage('Success', 'Data berhasil disimpan');
-                alert("Data Berhasil Disimpan");
+                // GANTI ALERT JADI SHOWMESSAGE
+                showMessage("Success", "Data Berhasil Disimpan");
                 closeWindow();
-                
+
                 // Refresh Grid yang aktif
                 refreshActiveGrid();
             } else {
-                alert(res.message || "Gagal menyimpan data");
+                showMessage("Error", res.message || "Gagal menyimpan data");
             }
         },
         error: function(err) {
             console.error(err);
-            alert("Terjadi kesalahan server");
+            showMessage("Error", "Terjadi kesalahan server");
         }
     });
 }
 
 function onDeleteClick(e) {
     e.preventDefault();
+
+    // Ambil Data Item
     var tr = $(e.target).closest("tr");
     var grid = $(e.target).closest(".k-grid").data("kendoGrid");
-    var data = grid.dataItem(tr);
+    var dataItem = grid.dataItem(tr);
 
-    if (confirm("Yakin ingin menghapus baris ini?")) {
+    // --- IMPLEMENTASI SHOW CONFIRMATION ---
+    showConfirmation("Confirmation", "Yakin ingin menghapus baris ini?", function() {
+        
+        // Logic Hapus dijalankan jika user klik YES
         $.ajax({
             url: "/TemplateLapKeu/Delete",
             type: "POST",
             contentType: "application/json",
-            data: JSON.stringify({ Id: data.Id }),
+            data: JSON.stringify({
+                Id: dataItem.Id
+            }),
             success: function(res) {
                 if (res.success) {
-                    alert("Data dihapus");
+                    showMessage("Success", "Data dihapus");
                     grid.dataSource.read(); // Refresh grid spesifik yang diklik
                 } else {
-                    alert(res.message || "Gagal menghapus data");
+                    showMessage("Error", res.message || "Gagal menghapus data");
                 }
             },
             error: function() {
-                alert("Terjadi kesalahan server saat menghapus");
+                showMessage("Error", "Terjadi kesalahan server saat menghapus");
             }
         });
-    }
+    });
 }
 
 // Helper untuk refresh grid sesuai Tab yang aktif

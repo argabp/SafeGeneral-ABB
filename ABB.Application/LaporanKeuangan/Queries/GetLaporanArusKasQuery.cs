@@ -256,6 +256,30 @@ namespace ABB.Application.LaporanKeuangan.Queries
                 }
             }
 
+            // ===============================================
+            // LOGIKA GAMBAR LOGO (BASE64)
+            // ===============================================
+            string logoBase64 = "";
+            try 
+            {
+                // 1. Arahkan ke wwwroot/img/Logo-Icon.png
+                string webRootPath = Path.Combine(_environment.ContentRootPath, "wwwroot"); 
+                string imagePath = Path.Combine(webRootPath, "img", "Logo-Icon.png"); 
+
+                if (File.Exists(imagePath))
+                {
+                    byte[] imageArray = await File.ReadAllBytesAsync(imagePath, cancellationToken);
+                    string base64Data = Convert.ToBase64String(imageArray);
+                    
+                    // PENTING: Karena filenya .png, header-nya pakai image/png
+                    logoBase64 = $"data:image/png;base64,{base64Data}"; 
+                }
+            }
+            catch
+            {
+                logoBase64 = ""; 
+            }
+
             // --- DATE TIME ---
             DateTime tanggalLaporan = new DateTime(request.Tahun, request.Bulan, 1).AddMonths(1).AddDays(-1); 
 
@@ -271,7 +295,8 @@ namespace ABB.Application.LaporanKeuangan.Queries
                 HeaderTahunIni = request.Tahun.ToString(),
                 HeaderTahunLalu = (request.Tahun - 1).ToString(),
                 TanggalLaporan = tanggalLaporan.ToString("dd MMMM yyyy"), 
-                WaktuCetak = DateTime.Now.ToString("dd/MM/yyyy HH:mm")
+                WaktuCetak = DateTime.Now.ToString("dd/MM/yyyy HH:mm"),
+                LogoImage = logoBase64
             };
 
             var context = new TemplateContext();
