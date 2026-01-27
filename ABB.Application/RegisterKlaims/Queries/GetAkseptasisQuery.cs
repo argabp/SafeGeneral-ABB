@@ -51,7 +51,7 @@ namespace ABB.Application.RegisterKlaims.Queries
                   AND p.kd_scob = @kd_scob
             ");
 
-            // 🔍 Global search across all columns
+            // 🔍 Global search (any column)
             if (!string.IsNullOrWhiteSpace(request.SearchKeyword))
             {
                 var key = request.SearchKeyword.Replace("'", "''");
@@ -70,7 +70,17 @@ namespace ABB.Application.RegisterKlaims.Queries
                 ");
             }
 
-            // ---- Sorting ----
+            // 🧱 Column filter (single field)
+            if (!string.IsNullOrWhiteSpace(request.FilterField) &&
+                !string.IsNullOrWhiteSpace(request.FilterValue))
+            {
+                var col = MapColumn(request.FilterField);
+                var val = request.FilterValue.Replace("'", "''");
+
+                where.Append($" AND {col} LIKE '%{val}%'");
+            }
+
+            // ↕ Sorting
             var orderBy = "ORDER BY p.no_pol_ttg";
             if (!string.IsNullOrEmpty(request.SortField))
             {
