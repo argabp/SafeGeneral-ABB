@@ -211,7 +211,7 @@ namespace ABB.Web.Modules.TertanggungPrincipal
             }
             catch (Exception ex)
             {
-                return Json(new { Result = "ERROR", Message = ex.Message });
+                return Json(new { Result = "ERROR", Message = ex.InnerException?.Message ?? ex.Message });
             }
             
             return PartialView("EditDetailSlikRetailView", model);
