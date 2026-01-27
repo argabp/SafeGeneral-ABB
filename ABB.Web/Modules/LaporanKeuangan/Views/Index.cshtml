@@ -16,6 +16,10 @@
         border: 1px solid #e0e0e0;
         overflow: hidden;
     }
+     .breadcrumb-item + .breadcrumb-item::before {
+        content: ">"; 
+        padding: 0 .5rem; 
+    }
     .flat-box-content { padding: 25px; }
     label { font-weight: 600; font-size: 12px; color: #555; margin-bottom: 5px; display: block;}
     .btn-generate { background-color: var(--primary-blue); color: white; font-weight: bold; }
@@ -25,13 +29,16 @@
 </style>
 
 <nav aria-label="breadcrumb">
-   <ol class="breadcrumb" style="background: transparent; padding-left: 0;">
+   <ol class="breadcrumb" style="background: white; ">
         <li class="breadcrumb-item"><a href="#">Accounting</a></li>
-        <li class="breadcrumb-item active">Laporan Keuangan</li>
+        <li class="breadcrumb-item active" aria-current="page">Laporan Keuangan</li>
     </ol>
 </nav>
 
 <div class="flat-box">
+    <div class="flat-box-title ">
+       Laporan Keuangan
+       </div>
     <div class="flat-box-content">
         <div class="row">
             <div class="col-md-3">

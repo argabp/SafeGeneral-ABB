@@ -3,34 +3,20 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Kendo.Mvc
 
-@{
-    bool isEditMode = Model.Id > 0;
-}
-
 <style>
-    .custom-kuning .k-input,
-    .custom-kuning .k-textbox,
-    .custom-kuning input,
-    .custom-kuning textarea {
-        background-color: rgb(255, 255, 225) !important;
-    }
+    .custom-kuning .k-input, .custom-kuning .k-textbox, .custom-kuning input { background-color: rgb(255, 255, 225) !important; }
     .window-body { padding: 10px; }
     .form-group { margin-bottom: 1rem; }
-    
-    /* Style untuk Box Range Total */
-    .box-range {
-        background-color: #f0f8ff;
-        border: 1px solid #cce5ff;
-        padding: 10px;
-        border-radius: 5px;
-    }
+    .box-range { background-color: #f0f8ff; border: 1px solid #cce5ff; padding: 10px; border-radius: 5px; }
 </style>
 
 <div class="window-body">
     <form id="TemplateForm">
         @Html.HiddenFor(m => m.Id)
-        
         @Html.HiddenFor(m => m.Rumus, new { id = "RumusFinal" }) 
+        
+        @Html.HiddenFor(m => m.TipeBaris)
+        @Html.HiddenFor(m => m.Level)
 
         <fieldset>
             <div class="form-group row">
@@ -38,8 +24,9 @@
                 <div class="col-sm-3">
                     <kendo-numerictextbox name="Urutan" for="Urutan" min="0" format="n0" class="custom-kuning" style="width: 100%;" />
                 </div>
-                <div class="col-sm-6">
-                    <small class="text-muted" style="line-height: 2.5;">* Posisi baris.</small>
+                <div class="col-sm-4" style="display: flex; align-items: center;">
+                    <input type="checkbox" id="chkLockUrutan" onchange="toggleUrutanLock()">
+                    <label for="chkLockUrutan" style="margin-left: 5px; margin-bottom: 0; font-size: 12px; cursor:pointer;">Lock (Otomatis)</label>
                 </div>
             </div>
 
@@ -53,11 +40,25 @@
             </div>
 
             <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Tipe Baris</label>
+                <label class="col-sm-3 col-form-label">Jenis Baris</label>
                 <div class="col-sm-9">
-                   <kendo-dropdownlist name="TipeBaris" for="TipeBaris" style="width: 100%;" class="custom-kuning"
-                                       bind-to='new List<string>() { "HEADING", "BLANK", "DETAIL", "TOTAL" }'
-                                       on-change="onTipeBarisChange"> </kendo-dropdownlist>
+                   @(Html.Kendo().DropDownList()
+                        .Name("KategoriSelect") 
+                        .DataTextField("Text")
+                        .DataValueField("Value")
+                        .BindTo(new List<dynamic>() {
+                            new { Text = "JUDUL UTAMA (ASET, KEWAJIBAN)", Value = "HEADING-1" },
+                            new { Text = "SUB JUDUL (Investasi, Lancar)", Value = "HEADING-2" },
+                            new { Text = "DETAIL AKUN (1, 2, 3)", Value = "DETAIL-3" },
+                            new { Text = "SUB DETAIL (a, b, c)", Value = "DETAIL-4" },
+                            new { Text = "POIN DETAIL ( - )", Value = "DETAIL-5" }, // <--- TAMBAHAN BARU
+                            new { Text = "SUB TOTAL (Jumlah Investasi)", Value = "TOTAL-2" },
+                            new { Text = "GRAND TOTAL (JUMLAH ASET)", Value = "TOTAL-3" },
+                            new { Text = "SPASI KOSONG", Value = "SPASI-1" }
+                        })
+                        .Events(e => e.Change("onKategoriChange"))
+                        .HtmlAttributes(new { style = "width: 100%", @class="custom-kuning" })
+                   )
                 </div>
             </div>
 
@@ -67,26 +68,15 @@
                     <kendo-textbox name="Deskripsi" for="Deskripsi" class="custom-kuning" style="width: 100%;" placeholder="Contoh: ASET LANCAR" />
                 </div>
             </div>
-
-            <div class="form-group row">
-                <label class="col-sm-3 col-form-label">Level</label>
-                <div class="col-sm-3">
-                    <kendo-numerictextbox name="Level" for="Level" min="1" max="5" format="n0" class="custom-kuning" style="width: 100%;" />
-                </div>
-            </div>
             
             <hr />
 
             <div class="form-group row" id="div-manual">
                 <label class="col-sm-3 col-form-label">Kode Akun</label>
                 <div class="col-sm-9">
-                     <kendo-textarea name="RumusManual" 
-                                     rows="3" 
-                                     class="custom-kuning" 
-                                     style="width: 100%;" 
-                                     placeholder="Contoh: 1101,1102">
+                     <kendo-textarea name="RumusManual" rows="3" class="custom-kuning" style="width: 100%;" placeholder="Contoh: 1101,1102">
                     </kendo-textarea>
-                    <small class="text-muted">* Masukkan Kode Akun dipisah koma.</small>
+                    <small class="text-muted" id="rumus-hint">* Masukkan Kode Akun dipisah koma.</small>
                 </div>
             </div>
 
@@ -95,30 +85,24 @@
                 <div class="col-sm-9">
                     <div class="box-range">
                         <div class="row">
-                           <div class="col-md-6">
+                            <div class="col-md-6">
                                 <label>Dari Baris</label>
-                                <kendo-dropdownlist name="StartRow" style="width: 100%;"
-                                                    datatextfield="Text" 
-                                                    datavaluefield="Value" 
-                                                    option-label="-- Pilih Awal --">
-                                    <datasource>
-                                        <transport>
-                                            <read url="/TemplateLapKeu/GetTemplateOptions" data="getTemplateParam" />
-                                        </transport>
-                                    </datasource>
+                                @* FITUR SEARCHABLE: .Filter(FilterType.Contains) *@
+                                <kendo-dropdownlist name="StartRow" style="width: 100%;" 
+                                                    datatextfield="Text" datavaluefield="Value" 
+                                                    option-label="-- Cari/Pilih Awal --"
+                                                    filter="FilterType.Contains"> 
+                                    <datasource><transport><read url="/TemplateLapKeu/GetTemplateOptions" data="getTemplateParam" /></transport></datasource>
                                 </kendo-dropdownlist>
                             </div>
                             <div class="col-md-6">
                                 <label>Sampai Baris</label>
-                                <kendo-dropdownlist name="EndRow" style="width: 100%;"
-                                                    datatextfield="Text" 
-                                                    datavaluefield="Value" 
-                                                    option-label="-- Pilih Akhir --">
-                                    <datasource>
-                                        <transport>
-                                            <read url="/TemplateLapKeu/GetTemplateOptions" data="getTemplateParam" />
-                                        </transport>
-                                    </datasource>
+                                @* FITUR SEARCHABLE: .Filter(FilterType.Contains) *@
+                                <kendo-dropdownlist name="EndRow" style="width: 100%;" 
+                                                    datatextfield="Text" datavaluefield="Value" 
+                                                    option-label="-- Cari/Pilih Akhir --"
+                                                    filter="FilterType.Contains">
+                                    <datasource><transport><read url="/TemplateLapKeu/GetTemplateOptions" data="getTemplateParam" /></transport></datasource>
                                 </kendo-dropdownlist>
                             </div>
                         </div>
@@ -132,9 +116,12 @@
                 </div>
             </div>
 
-           <button type="button" class="btn btn-primary" onclick="saveTemplate()">
-                <i class="fa fa-save"></i> Simpan
-            </button>
+            <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px;">
+                <button type="button" class="btn btn-secondary" onclick="closeWindow()">Batal</button>
+                <button type="button" class="btn btn-primary" onclick="saveTemplate()">
+                    <i class="fa fa-save"></i> Simpan
+                </button>
+            </div>
         </fieldset>
     </form>
 </div>

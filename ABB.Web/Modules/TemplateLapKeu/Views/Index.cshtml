@@ -14,9 +14,18 @@
 <style>
     .div-box { padding-bottom: 1em; }
     .swal2-container { z-index: 10050 !important; }
-     .breadcrumb-item + .breadcrumb-item::before {
+    .breadcrumb-item + .breadcrumb-item::before {
         content: ">"; 
         padding: 0 .5rem; 
+    }
+    
+    /* STYLE DRAG & DROP */
+    .k-grid tbody tr { cursor: move; }
+    .k-grid tbody tr.k-state-selected { background-color: #e3f2fd; }
+    .custom-placeholder {
+        background-color: #ffeba0; 
+        border: 1px dashed #fbc02d;
+        height: 40px;
     }
 </style>
 
@@ -49,29 +58,27 @@
                     .Content(@<text>
                         <div class="div-box">
                             @(Html.Kendo().Grid<TemplateLapKeuDto>()
-                                .Name("GridNeraca") // ID Grid Unik
+                                .Name("GridNeraca")
                                 .DataSource(dataSource => dataSource.Ajax()
-                                    .Read(read => read.Action("GetGridData", "TemplateLapKeu").Data("getFilterNeraca")) // Filter Khusus Neraca
+                                    .Read(read => read.Action("GetGridData", "TemplateLapKeu").Data("getFilterNeraca"))
                                     .Model(model => model.Id(p => p.Id))
-                                    .PageSize(20)
+                                    .PageSize(500) // PageSize besar agar DragDrop lancar
                                     .Sort(sort => sort.Add("Urutan").Ascending())
                                 )
                                 .Columns(columns =>
                                 {
-                                    columns.Bound(c => c.Urutan).Title("No Urut").Width(80).Sortable(true);
-                                    // TipeLaporan bisa dihide karena sudah ada di Tab, tapi ditampilkan juga tidak apa-apa
-                                    columns.Bound(col => col.TipeLaporan).Title("Tipe Lap").Width(120).Hidden(true); 
-                                    columns.Bound(col => col.TipeBaris).Title("Tipe Baris").Width(120);
+                                    columns.Bound(c => c.Urutan).Title("No").Width(50).Sortable(true);
+                                    columns.Bound(col => col.TipeBaris).Title("Tipe").Width(100);
                                     columns.Bound(col => col.Deskripsi).Title("Deskripsi").Width(300);
                                     columns.Bound(col => col.Rumus).Title("Rumus / Akun").Width(200);
-                                    columns.Bound(col => col.Level).Title("Level").Width(80).HtmlAttributes(new { style = "text-align:center" });
+                                    columns.Bound(col => col.Level).Title("Lvl").Width(60).HtmlAttributes(new { style = "text-align:center" });
                                     columns.Command(command =>
                                     {
-                                        command.Custom("EditTemplate").Text(" Edit ").IconClass("fa fa-edit").Click("onEditClick");
-                                        command.Custom("DeleteTemplate").Text(" Hapus ").IconClass("fa fa-trash").Click("onDeleteClick");
-                                    }).Width(180).Title("Aksi").Locked(true);
+                                        command.Custom("EditTemplate").Text(" Edit").IconClass("fa fa-edit").Click("onEditClick");
+                                        command.Custom("DeleteTemplate").Text(" Hapus").IconClass("fa fa-trash").Click("onDeleteClick");
+                                    }).Width(200).Title("Aksi").Locked(true);
                                 })
-                                .Pageable(pager => pager.Refresh(true).PageSizes(true)).Sortable().Filterable().Scrollable().Height(500).Resizable(a => a.Columns(true))
+                                .Sortable().Filterable().Scrollable().Height(600).Resizable(a => a.Columns(true))
                             )
                         </div>
                     </text>);
@@ -81,28 +88,27 @@
                     .Content(@<text>
                         <div class="div-box">
                             @(Html.Kendo().Grid<TemplateLapKeuDto>()
-                                .Name("GridLabaRugi") // ID Grid Unik
+                                .Name("GridLabaRugi")
                                 .DataSource(dataSource => dataSource.Ajax()
-                                    .Read(read => read.Action("GetGridData", "TemplateLapKeu").Data("getFilterLabaRugi")) // Filter Khusus Laba Rugi
+                                    .Read(read => read.Action("GetGridData", "TemplateLapKeu").Data("getFilterLabaRugi"))
                                     .Model(model => model.Id(p => p.Id))
-                                    .PageSize(20)
+                                    .PageSize(500)
                                     .Sort(sort => sort.Add("Urutan").Ascending())
                                 )
                                 .Columns(columns =>
                                 {
-                                    columns.Bound(c => c.Urutan).Title("No Urut").Width(80).Sortable(true);
-                                    columns.Bound(col => col.TipeLaporan).Title("Tipe Lap").Width(120).Hidden(true);
-                                    columns.Bound(col => col.TipeBaris).Title("Tipe Baris").Width(120);
+                                    columns.Bound(c => c.Urutan).Title("No").Width(50).Sortable(true);
+                                    columns.Bound(col => col.TipeBaris).Title("Tipe").Width(100);
                                     columns.Bound(col => col.Deskripsi).Title("Deskripsi").Width(300);
                                     columns.Bound(col => col.Rumus).Title("Rumus / Akun").Width(200);
-                                    columns.Bound(col => col.Level).Title("Level").Width(80).HtmlAttributes(new { style = "text-align:center" });
+                                    columns.Bound(col => col.Level).Title("Lvl").Width(60).HtmlAttributes(new { style = "text-align:center" });
                                     columns.Command(command =>
                                     {
-                                        command.Custom("EditTemplate").Text(" Edit ").IconClass("fa fa-edit").Click("onEditClick");
-                                        command.Custom("DeleteTemplate").Text(" Hapus ").IconClass("fa fa-trash").Click("onDeleteClick");
-                                    }).Width(180).Title("Aksi").Locked(true);
+                                        command.Custom("EditTemplate").Text(" Edit").IconClass("fa fa-edit").Click("onEditClick");
+                                        command.Custom("DeleteTemplate").Text(" Hapus").IconClass("fa fa-trash").Click("onDeleteClick");
+                                    }).Width(200).Title("Aksi").Locked(true);
                                 })
-                                .Pageable(pager => pager.Refresh(true).PageSizes(true)).Sortable().Filterable().Scrollable().Height(500).Resizable(a => a.Columns(true))
+                                .Sortable().Filterable().Scrollable().Height(600).Resizable(a => a.Columns(true))
                             )
                         </div>
                     </text>);
@@ -112,28 +118,27 @@
                     .Content(@<text>
                         <div class="div-box">
                             @(Html.Kendo().Grid<TemplateLapKeuDto>()
-                                .Name("GridArusKas") // ID Grid Unik
+                                .Name("GridArusKas")
                                 .DataSource(dataSource => dataSource.Ajax()
-                                    .Read(read => read.Action("GetGridData", "TemplateLapKeu").Data("getFilterArusKas")) // Filter Khusus Arus Kas
+                                    .Read(read => read.Action("GetGridData", "TemplateLapKeu").Data("getFilterArusKas"))
                                     .Model(model => model.Id(p => p.Id))
-                                    .PageSize(20)
+                                    .PageSize(500)
                                     .Sort(sort => sort.Add("Urutan").Ascending())
                                 )
                                 .Columns(columns =>
                                 {
-                                    columns.Bound(c => c.Urutan).Title("No Urut").Width(80).Sortable(true);
-                                    columns.Bound(col => col.TipeLaporan).Title("Tipe Lap").Width(120).Hidden(true);
-                                    columns.Bound(col => col.TipeBaris).Title("Tipe Baris").Width(120);
+                                    columns.Bound(c => c.Urutan).Title("No").Width(50).Sortable(true);
+                                    columns.Bound(col => col.TipeBaris).Title("Tipe").Width(100);
                                     columns.Bound(col => col.Deskripsi).Title("Deskripsi").Width(300);
                                     columns.Bound(col => col.Rumus).Title("Rumus / Akun").Width(200);
-                                    columns.Bound(col => col.Level).Title("Level").Width(80).HtmlAttributes(new { style = "text-align:center" });
+                                    columns.Bound(col => col.Level).Title("Lvl").Width(60).HtmlAttributes(new { style = "text-align:center" });
                                     columns.Command(command =>
                                     {
-                                        command.Custom("EditTemplate").Text(" Edit ").IconClass("fa fa-edit").Click("onEditClick");
-                                        command.Custom("DeleteTemplate").Text(" Hapus ").IconClass("fa fa-trash").Click("onDeleteClick");
-                                    }).Width(180).Title("Aksi").Locked(true);
+                                        command.Custom("EditTemplate").Text(" Edit").IconClass("fa fa-edit").Click("onEditClick");
+                                        command.Custom("DeleteTemplate").Text(" Hapus").IconClass("fa fa-trash").Click("onDeleteClick");
+                                    }).Width(200).Title("Aksi").Locked(true);
                                 })
-                                .Pageable(pager => pager.Refresh(true).PageSizes(true)).Sortable().Filterable().Scrollable().Height(500).Resizable(a => a.Columns(true))
+                                .Sortable().Filterable().Scrollable().Height(600).Resizable(a => a.Columns(true))
                             )
                         </div>
                     </text>);
@@ -153,46 +158,115 @@
 </div>
 
 <script>
-    // --- FUNGSI FILTER UNTUK MASING-MASING TAB ---
-    
-    // 1. Filter Neraca
-    function getFilterNeraca() {
-        return {
-            searchKeyword: $("#SearchKeyword").val(),
-            tipeLaporan: "NERACA" // Value ini harus sama dengan yang di DB
-        };
-    }
-
-    // 2. Filter Laba Rugi
-    function getFilterLabaRugi() {
-        return {
-            searchKeyword: $("#SearchKeyword").val(),
-            tipeLaporan: "LABARUGI" // Sesuaikan dengan value DB (misal: "LR" atau "LABARUGI")
-        };
-    }
-
-    // 3. Filter Arus Kas
-    function getFilterArusKas() {
-        return {
-            searchKeyword: $("#SearchKeyword").val(),
-            tipeLaporan: "ARUSKAS" // Sesuaikan dengan value DB
-        };
-    }
+    // --- FUNGSI FILTER GRID ---
+    function getFilterNeraca() { return { searchKeyword: $("#SearchKeyword").val(), tipeLaporan: "NERACA" }; }
+    function getFilterLabaRugi() { return { searchKeyword: $("#SearchKeyword").val(), tipeLaporan: "LABARUGI" }; }
+    function getFilterArusKas() { return { searchKeyword: $("#SearchKeyword").val(), tipeLaporan: "ARUSKAS" }; }
 
     $(document).ready(function () {
-        // Event listener pencarian
+        // 1. Search Logic
         $("#SearchKeyword").on("keyup", function() {
-            // Logika Search: Cek Tab mana yang aktif, lalu refresh grid di dalamnya
             var tabStrip = $("#tabStripTemplate").data("kendoTabStrip");
-            var activeTab = tabStrip.select().index();
+            var activeIndex = tabStrip.select().index();
+            
+            if (activeIndex === 0) $("#GridNeraca").data("kendoGrid").dataSource.read();
+            else if (activeIndex === 1) $("#GridLabaRugi").data("kendoGrid").dataSource.read();
+            else if (activeIndex === 2) $("#GridArusKas").data("kendoGrid").dataSource.read();
+        });
 
-            if (activeTab === 0) {
-                $("#GridNeraca").data("kendoGrid").dataSource.read();
-            } else if (activeTab === 1) {
-                $("#GridLabaRugi").data("kendoGrid").dataSource.read();
-            } else if (activeTab === 2) {
-                $("#GridArusKas").data("kendoGrid").dataSource.read();
+        // 2. INIT DRAG AND DROP (PERBAIKAN LOGIKA)
+        var gridIds = ["GridNeraca", "GridLabaRugi", "GridArusKas"];
+        
+        $.each(gridIds, function(i, id) {
+            var grid = $("#" + id).data("kendoGrid");
+            
+            if(grid) {
+                grid.table.kendoSortable({
+                    // PENTING: Filter baris yang bukan Group/Header, dan pastikan target ke baris data
+                    filter: ">tbody >tr:not(.k-grouping-row):not(.k-detail-row)",
+                    hint: function(element) { 
+                        return element.clone().addClass("k-state-selected").css("width", element.width());
+                    },
+                    placeholder: function(element) { 
+                        return element.clone().addClass("custom-placeholder").text("Lepas disini..."); 
+                    },
+                    change: function(e) {
+                        var oldIndex = e.oldIndex;
+                        var newIndex = e.newIndex; // Index DOM Visual (0, 1, 2...)
+
+                        if (oldIndex === newIndex) return;
+
+                        var ds = grid.dataSource;
+                        var dataItem = ds.getByUid(e.item.data("uid")); // Item yang sedang kita seret
+                        
+                        // --- LOGIKA BARU: INTIP TETANGGA ---
+                        // Kita ambil data item yang BERADA DI POSISI TUJUAN (sebelum digeser)
+                        // ds.view() masih memegang urutan lama, jadi aman untuk diintip.
+                        var targetItemInView = ds.view()[newIndex];
+                        
+                        var targetUrutan = 0;
+
+                        if (targetItemInView) {
+                            // Ambil Urutan milik tetangga yang kita geser
+                            targetUrutan = targetItemInView.Urutan;
+                        } else {
+                            // Jaga-jaga kalau drop di paling bawah banget (luar index)
+                            // Ambil urutan terakhir + 1
+                            var lastItem = ds.view()[ds.view().length - 1];
+                            targetUrutan = lastItem ? (lastItem.Urutan + 1) : 1;
+                        }
+
+                        // Tampilkan Loading
+                        kendo.ui.progress(grid.element, true);
+
+                        $.ajax({
+                            url: "/TemplateLapKeu/Reorder",
+                            type: "POST",
+                            contentType: "application/json",
+                            data: JSON.stringify({ Id: dataItem.Id, NewIndex: targetUrutan }),
+                            success: function(res) {
+                                kendo.ui.progress(grid.element, false);
+                                if(res.success) {
+                                    grid.dataSource.read();
+                                } else { 
+                                    alert("Gagal reorder"); 
+                                    grid.dataSource.read(); // Balikin posisi semula
+                                }
+                            },
+                            error: function() {
+                                kendo.ui.progress(grid.element, false);
+                                alert("Error koneksi");
+                                grid.dataSource.read();
+                            }
+                        });
+                    }
+                });
             }
         });
     });
+
+    // --- SMART ADD CLICK ---
+    function onAddClick() {
+        var win = $("#TemplateWindow").data("kendoWindow");
+        var tabStrip = $("#tabStripTemplate").data("kendoTabStrip");
+        var activeIndex = tabStrip.select().index();
+        
+        var tipe = "NERACA";
+        if (activeIndex === 1) tipe = "LABARUGI";
+        if (activeIndex === 2) tipe = "ARUSKAS";
+
+        win.refresh({ url: "/TemplateLapKeu/Add?tipeLaporan=" + tipe }); // sesuaikan var tipe dari tab
+    
+        win.one("refresh", function() {
+            setTimeout(function(){ 
+                // Default Init
+                var dd = $("#KategoriSelect").data("kendoDropDownList");
+                if(dd) { dd.select(0); dd.trigger("change"); }
+                
+                // Default Lock Urutan (Optional: mau auto lock atau engga)
+                // $("#chkLockUrutan").prop("checked", true); toggleUrutanLock();
+            }, 100);
+        });
+        win.center().open();
+    }
 </script>

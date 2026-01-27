@@ -34,14 +34,18 @@ namespace ABB.Web.Modules.TemplateLapKeu
             return Json(await data.ToDataSourceResultAsync(request));
         }
 
-        public async Task<IActionResult> Add(long? id)
+        public async Task<IActionResult> Add(long? id, string tipeLaporan = "") // <--- Tambah parameter ini
         {
             var dto = new TemplateLapKeuDto();
 
             if (id.HasValue && id.Value > 0)
             {
-                // Mode Edit: Ambil data lama
                 dto = await Mediator.Send(new GetTemplateLapKeuByIdQuery { Id = id.Value });
+            }
+            else 
+            {
+                // Set Default Tipe Laporan dari Tab yang aktif
+                dto.TipeLaporan = tipeLaporan; 
             }
 
             return PartialView("_Add", dto);
@@ -132,8 +136,106 @@ namespace ABB.Web.Modules.TemplateLapKeu
         [HttpPost]
         public async Task<IActionResult> Delete([FromBody] DeleteTemplateLapKeuCommand command)
         {
-            await Mediator.Send(command);
+            // 1. CEK DATA YANG MAU DIHAPUS DULU
+            // Kita butuh tahu dia No Urut berapa & Tipe Laporannya apa
+            var target = await _context.TemplateLapKeu.FindAsync(command.Id);
+
+            if (target == null)
+            {
+                return Json(new { success = false, message = "Data tidak ditemukan." });
+            }
+
+            int urutanDihapus = target.Urutan;
+            string tipeLaporan = target.TipeLaporan;
+
+            // 2. HAPUS DATA TARGET
+            _context.TemplateLapKeu.Remove(target);
+
+            // 3. LOGIKA GESER NAIK (SHIFT UP)
+            // Cari semua "Adik-adiknya" (Yang urutannya lebih besar)
+            // Filter by TipeLaporan biar Neraca gak ngacak-ngacak Laba Rugi
+            var tetanggaBawah = await _context.TemplateLapKeu
+                .Where(x => x.Urutan > urutanDihapus && x.TipeLaporan == tipeLaporan)
+                .ToListAsync();
+
+            if (tetanggaBawah.Any())
+            {
+                foreach (var row in tetanggaBawah)
+                {
+                    row.Urutan -= 1; // Kurangi 1 biar naik ngisi posisi kosong
+                }
+
+                // Tandai untuk diupdate
+                _context.TemplateLapKeu.UpdateRange(tetanggaBawah);
+            }
+
+            // 4. SIMPAN PERUBAHAN (Delete + Update sekaligus)
+            await _context.SaveChangesAsync(System.Threading.CancellationToken.None);
+
             return Json(new { success = true });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Reorder([FromBody] ReorderDto model)
+        {
+            // 1. Ambil data yang mau dipindah
+            var itemPindah = await _context.TemplateLapKeu.FindAsync(model.Id);
+            if (itemPindah == null) return Json(new { success = false });
+
+            string tipeLaporan = itemPindah.TipeLaporan;
+            int urutanLama = itemPindah.Urutan;
+            int urutanBaru = model.NewIndex; // Ini index dari UI (misal row ke-3 jadi urutan 3)
+
+            // Jika posisi gak berubah, skip aja
+            if (urutanLama == urutanBaru) return Json(new { success = true });
+
+            // 2. LOGIKA GESER TETANGGA
+            // Kita cari tetangga yang terdampak
+            // Filter: Hanya Tipe Laporan yang sama (Biar Neraca gak geser Laba Rugi)
+            
+            if (urutanLama < urutanBaru) 
+            {
+                // SKENARIO: TURUN KE BAWAH (Misal dari 2 pindah ke 5)
+                // Maka tetangga di 3, 4, 5 harus NAIK (-1)
+                // Logika: Cari yang urutannya > Lama DAN <= Baru
+                var tetangga = await _context.TemplateLapKeu
+                    .Where(x => x.TipeLaporan == tipeLaporan && 
+                                x.Urutan > urutanLama && 
+                                x.Urutan <= urutanBaru)
+                    .ToListAsync();
+
+                foreach (var t in tetangga) t.Urutan -= 1;
+            }
+            else
+            {
+                // SKENARIO: NAIK KE ATAS (Misal dari 8 pindah ke 3)
+                // Maka tetangga di 3, 4, 5, 6, 7 harus TURUN (+1)
+                // Logika: Cari yang urutannya >= Baru DAN < Lama
+                var tetangga = await _context.TemplateLapKeu
+                    .Where(x => x.TipeLaporan == tipeLaporan && 
+                                x.Urutan >= urutanBaru && 
+                                x.Urutan < urutanLama)
+                    .ToListAsync();
+
+                foreach (var t in tetangga) t.Urutan += 1;
+            }
+
+            // 3. UPDATE ITEM UTAMA
+            itemPindah.Urutan = urutanBaru;
+            
+            // Tandai tetangga + item utama untuk diupdate
+            // _context.UpdateRange(tetangga) <-- Udah otomatis karena tracking EF
+            
+            await _context.SaveChangesAsync(System.Threading.CancellationToken.None);
+
+            return Json(new { success = true });
+        }
+
+        // DTO KHUSUS UNTUK REORDER
+        public class ReorderDto
+        {
+            public long Id { get; set; }
+            public int NewIndex { get; set; }
         }
 
         [HttpGet]

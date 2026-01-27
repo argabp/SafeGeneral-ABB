@@ -62,6 +62,7 @@ namespace ABB.Application.LaporanKeuangan.Queries
                     .Select(g => new AkunSaldo 
                     {
                         KodeAkun = g.Key,
+                        // Cast double ke decimal
                        Total = g.Sum(x => x.gl_dk == "D" ? (decimal)x.gl_nilai_idr : -(decimal)x.gl_nilai_idr)
                     })
                     .ToListAsync(cancellationToken);
@@ -81,9 +82,9 @@ namespace ABB.Application.LaporanKeuangan.Queries
             // 3. RAKIT HTML
             StringBuilder sb = new StringBuilder();
 
-            int romanCounter = 0;       // Level 2 (I, II, III)
-            int detailCounter = 0;      // Level 3 (1, 2, 3)
-            int subDetailCounter = 0;   // Level 4 (a, b, c) -> BARU
+            int romanCounter = 0;       // Level 2 Heading (I, II, III)
+            int detailCounter = 0;      // Level 3 & Total (1, 2, 3)
+            int subDetailCounter = 0;   // Level 4 (a, b, c)
 
             var hasilPerBaris = new Dictionary<int, (decimal Ini, decimal Lalu)>();
 
@@ -120,6 +121,7 @@ namespace ABB.Application.LaporanKeuangan.Queries
                             {
                                 for (int i = startUrutan; i <= endUrutan; i++)
                                 {
+                                    // Hitung jika target ada di kamus dan target adalah DETAIL
                                     if (hasilPerBaris.ContainsKey(i) && mapTipeBaris.ContainsKey(i) && mapTipeBaris[i] == "DETAIL")
                                     {
                                         var hasilTarget = hasilPerBaris[i];
@@ -131,6 +133,7 @@ namespace ABB.Application.LaporanKeuangan.Queries
                         }
                         else 
                         {
+                            // Manual (Koma)
                             var urutanList = item.Rumus.Split(',', StringSplitOptions.RemoveEmptyEntries);
                             foreach (var strUrutan in urutanList)
                             {
@@ -148,6 +151,7 @@ namespace ABB.Application.LaporanKeuangan.Queries
                     }
                 }
 
+                // Simpan hasil baris ini
                 if (item.Urutan > 0) 
                 {
                     hasilPerBaris[item.Urutan] = (nilaiIni, nilaiLalu);
@@ -180,40 +184,46 @@ namespace ABB.Application.LaporanKeuangan.Queries
                     }
 
                     // ==========================================
-                    // C. LOGIKA PENOMORAN (UPDATED)
+                    // C. LOGIKA PENOMORAN (UPDATED LEVEL 5)
                     // ==========================================
                     string deskripsiFinal = item.Deskripsi; 
                     
                     if (item.TipeBaris == "HEADING")
                     {
-                        if (currentLevel == 1) // Judul Besar (PENDAPATAN, BEBAN)
+                        if (currentLevel == 1) // Judul Besar
                         {
                             romanCounter = 0; 
                             detailCounter = 0;
-                            subDetailCounter = 0; // Reset
+                            subDetailCounter = 0; 
                         }
                         else // Judul Sub Bab (I, II)
                         {
                             romanCounter++;
-                            detailCounter = 0; // Reset anak
+                            // detailCounter = 0; // Reset anak
                             subDetailCounter = 0; // Reset cucu
                             deskripsiFinal = $"{ToRoman(romanCounter)}. {item.Deskripsi}";
                         }
                     }
                     else if (item.TipeBaris == "DETAIL" || (item.TipeBaris == "TOTAL" && currentLevel > 1))
                     {
-                        // Jika Level 3 -> Pakai Angka (1, 2, 3)
-                        if (currentLevel == 3)
+                        // KASUS 1: POIN STRIP (Level 5) -> Pake Strip "-"
+                        if (currentLevel == 5)
                         {
-                            detailCounter++;
-                            subDetailCounter = 0; // Reset level 4 kalau induknya ganti
-                            deskripsiFinal = $"{detailCounter}. {item.Deskripsi}";
+                            // Tidak perlu counter, langsung strip
+                            deskripsiFinal = $"- {item.Deskripsi}";
                         }
-                        // Jika Level 4 -> Pakai Huruf (a, b, c)
+                        // KASUS 2: SUB-DETAIL (Level 4) -> Huruf (a, b, c)
                         else if (currentLevel == 4)
                         {
                             subDetailCounter++;
                             deskripsiFinal = $"{ToAlpha(subDetailCounter)}. {item.Deskripsi}";
+                        }
+                        // KASUS 3: Level 3 & Total Level 2 -> Angka (1, 2, 3)
+                        else 
+                        {
+                            detailCounter++;
+                            subDetailCounter = 0; // Reset level 4 kalau induknya ganti
+                            deskripsiFinal = $"{detailCounter}. {item.Deskripsi}";
                         }
                     }
 
@@ -223,7 +233,6 @@ namespace ABB.Application.LaporanKeuangan.Queries
                     {
                         if (currentLevel == 1)
                         {
-                             // HEADER LEVEL 1
                             string spaced = string.Join("  ", item.Deskripsi.Trim().ToCharArray());
                             sb.Append($"<td class='lvl-1'>{spaced}</td>");
                             sb.Append($"<td class='lvl-1' style='text-align:center;'>{request.Tahun}</td>");
@@ -244,6 +253,24 @@ namespace ABB.Application.LaporanKeuangan.Queries
                 }
             }
 
+            // ===============================================
+            // LOGIKA GAMBAR LOGO
+            // ===============================================
+            string logoBase64 = "";
+            try 
+            {
+                string webRootPath = Path.Combine(_environment.ContentRootPath, "wwwroot"); 
+                string imagePath = Path.Combine(webRootPath, "img", "Logo-Icon.png"); 
+
+                if (File.Exists(imagePath))
+                {
+                    byte[] imageArray = await File.ReadAllBytesAsync(imagePath, cancellationToken);
+                    string base64Data = Convert.ToBase64String(imageArray);
+                    logoBase64 = $"data:image/png;base64,{base64Data}"; 
+                }
+            }
+            catch { logoBase64 = ""; }
+
             DateTime tanggalLaporan = new DateTime(request.Tahun, request.Bulan, 1).AddMonths(1).AddDays(-1); 
 
             string reportPath = Path.Combine(_environment.ContentRootPath, "Modules", "Reports", "Templates", "LaporanLabaRugi.html");
@@ -258,7 +285,8 @@ namespace ABB.Application.LaporanKeuangan.Queries
                 HeaderTahunIni = request.Tahun.ToString(),
                 HeaderTahunLalu = (request.Tahun - 1).ToString(),
                 TanggalLaporan = tanggalLaporan.ToString("dd MMMM yyyy"), 
-                WaktuCetak = DateTime.Now.ToString("dd/MM/yyyy HH:mm")
+                WaktuCetak = DateTime.Now.ToString("dd/MM/yyyy HH:mm"),
+                LogoImage = logoBase64
             };
 
             var context = new TemplateContext();
@@ -269,7 +297,6 @@ namespace ABB.Application.LaporanKeuangan.Queries
             return template.Render(context);
         }
 
-        // Helper Angka Romawi
         private string ToRoman(int number)
         {
             if (number < 1) return string.Empty;
@@ -278,12 +305,9 @@ namespace ABB.Application.LaporanKeuangan.Queries
             return romans[number - 1];
         }
 
-        // Helper Angka ke Huruf (1->a, 2->b, 3->c)
         private string ToAlpha(int number)
         {
             if (number < 1) return "";
-            // ASCII: 'a' dimulai dari 97
-            // Jika number=1, 97 + 1 - 1 = 97 ('a')
             return ((char)('a' + number - 1)).ToString();
         }
 
