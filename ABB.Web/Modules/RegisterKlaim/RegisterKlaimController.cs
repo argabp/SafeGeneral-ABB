@@ -6,6 +6,7 @@ using ABB.Application.ApprovalMutasiKlaims.Queries;
 using ABB.Application.Common;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Exceptions;
+using ABB.Application.Common.Grids.Models;
 using ABB.Application.Common.Queries;
 using ABB.Application.Common.Services;
 using ABB.Application.RegisterKlaims.Commands;
@@ -71,14 +72,10 @@ namespace ABB.Web.Modules.RegisterKlaim
         
         
         [HttpPost]
-        public async Task<IActionResult> GetAkseptasiPolis([DataSourceRequest] DataSourceRequest request, 
-            string searchKeyword, string kd_cb, string kd_cob, string kd_scob,
-            int page,
-            int pageSize,
-            string sortField,
-            string sortDir,
-            string filterField,
-            string filterValue)
+        public async Task<IActionResult> GetAkseptasiPolis(GridRequest grid,
+            string kd_cb,
+            string kd_cob,
+            string kd_scob)
         {
             var result = await Mediator.Send(new GetAkseptasisQuery()
             {
@@ -86,15 +83,9 @@ namespace ABB.Web.Modules.RegisterKlaim
                 KodeCabang = kd_cb,
                 kd_scob = kd_scob,
                 kd_cob = kd_cob,
-                SearchKeyword = searchKeyword,
-
-                Page = page,
-                PageSize = pageSize,
-                SortField = sortField,
-                SortDir = sortDir,
-                FilterField = filterField,
-                FilterValue = filterValue
+                Grid = grid,
             });
+
             return Json(result);
         }
         

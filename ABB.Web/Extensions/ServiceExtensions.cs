@@ -1,9 +1,11 @@
 using System;
 using System.IO;
 using System.Reflection;
+using ABB.Application.Common.Grids.Interfaces;
 using ABB.Application.Common.Interfaces;
 using ABB.Domain.IdentityModels;
 using ABB.Infrastructure.Data;
+using ABB.Infrastructure.Data.Grid;
 using ABB.Infrastructure.Validators;
 using ABB.Web.JobSchedules;
 using FluentValidation.AspNetCore;
@@ -114,6 +116,7 @@ namespace ABB.Web.Extensions
             
             services.AddSingleton<IDbContextFactory, DbContextFactory>();
             services.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
+            services.AddScoped<IGridQueryEngine, SqlGridQueryEngine>();
             services.AddHttpContextAccessor();
 
             services.AddKendo();

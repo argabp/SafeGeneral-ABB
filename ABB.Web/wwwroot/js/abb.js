@@ -1258,3 +1258,27 @@ function restoreDropdownValue(dropdownSelector, tempSelector) {
     ds.read();
   });
 }
+
+function buildGridRequest(e, searchKeywordProperty) {
+  const req = {
+    Page: e.page || 1,
+    PageSize: e.pageSize || 20,
+    SortField: null,
+    SortDir: null,
+    SearchKeyword: $("#" + searchKeywordProperty).val() || null,
+    FiltersJson: null
+  };
+
+  // ---- sorting ----
+  if (e.sort && e.sort.length > 0) {
+    req.SortField = e.sort[0].field;
+    req.SortDir = e.sort[0].dir;
+  }
+
+  // ---- filters ----
+  if (e.filter) {
+    req.FiltersJson = JSON.stringify(e.filter);
+  }
+
+  return req;
+}
