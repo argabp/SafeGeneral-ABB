@@ -1733,6 +1733,7 @@ namespace ABB.Web.Modules.Akseptasi
                     akseptasiFireViewModel.kd_cb = akseptasiFireViewModel.kd_cb.Trim();
                     akseptasiFireViewModel.kd_cob = akseptasiFireViewModel.kd_cob.Trim();
                     akseptasiFireViewModel.kd_scob = akseptasiFireViewModel.kd_scob.Trim();
+                    akseptasiFireViewModel.kd_zona = akseptasiFireViewModel.kd_zona?.Trim();
                     akseptasiFireViewModel.kd_okup = akseptasiFireViewModel.kd_okup.Trim();
                     
                     return View("~/Modules/Akseptasi/Components/Other/_OtherFire.cshtml", akseptasiFireViewModel);

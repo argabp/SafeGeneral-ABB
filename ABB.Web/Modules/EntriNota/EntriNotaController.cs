@@ -112,11 +112,6 @@ namespace ABB.Web.Modules.EntriNota
                 new DropdownOptionDto() { Text = "Transaksi Direct", Value = "O" },
                 new DropdownOptionDto() { Text = "Inward Fakultatif", Value = "C" }
             };
-
-            foreach (var data in ds)
-            {
-                data.st_pas = statusPolis.FirstOrDefault(w => w.Value == data.st_pas)?.Text ?? string.Empty;
-            }
             
             return Json(ds.AsQueryable().ToDataSourceResult(request));
         }

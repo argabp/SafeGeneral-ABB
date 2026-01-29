@@ -38,8 +38,8 @@
             columns.Bound(col => col.no_oby).Width(150).Title("Nomor Obyek");
             columns.Bound(col => col.nm_asal).Width(250).Title("Asal");
             columns.Bound(col => col.ket_tujuan).Width(150).Title("Tujuan");
-            columns.Bound(col => col.nilai_kas).Width(150).Title("Nilai Pertanggungan");
-            columns.Bound(col => col.pst_rate).Width(150).Title("Rate");
+            columns.Bound(col => col.nilai_kas).Width(150).Title("Nilai Pertanggungan").Format("{0:n2}");
+            columns.Bound(col => col.pst_rate).Width(150).Title("Rate").Format("{0:n2}");
         })
         .Pageable(pager => pager
             .Refresh(true)

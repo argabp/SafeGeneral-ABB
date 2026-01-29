@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using ABB.Application.EntriNotas.Queries;
 using ABB.Domain.Entities;
 using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.EntriNotas.Commands
@@ -148,10 +150,21 @@ namespace ABB.Application.EntriNotas.Commands
 
                 await dbContext.SaveChangesAsync(cancellationToken);
             }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException is SqlException sqlEx)
+                {
+                    foreach (SqlError err in sqlEx.Errors)
+                    {
+                        _logger.LogError($"SQL ERROR {err.Number}: {err.Message}");
+                    }
+                }
+                throw ex.InnerException ?? ex;
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.InnerException == null ? ex.Message : ex.InnerException.Message);
-                throw ex;
+                throw ex.InnerException ?? ex;
             }
 
             return Unit.Value;

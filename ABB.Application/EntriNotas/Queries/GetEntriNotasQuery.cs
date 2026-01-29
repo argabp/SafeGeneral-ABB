@@ -32,7 +32,7 @@ namespace ABB.Application.EntriNotas.Queries
             try
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
-                var results = (await _connectionFactory.Query<NotaDto>(@"SELECT pp.nm_ttg, pp.st_pas, p.*, cb.nm_cb, cob.nm_cob, scob.nm_scob FROM uw08e p 
+                var results = (await _connectionFactory.Query<NotaDto>(@"SELECT p.*, cb.nm_cb, cob.nm_cob, scob.nm_scob FROM uw08e p 
                         INNER JOIN rf01 cb
                            ON p.kd_cb = cb.kd_cb
                         INNER JOIN rf04 cob
@@ -40,13 +40,6 @@ namespace ABB.Application.EntriNotas.Queries
                         INNER JOIN rf05 scob
                            ON p.kd_cob = scob.kd_cob
                            AND p.kd_scob = scob.kd_scob
-                        INNER JOIN uw01e pp
-                            ON pp.kd_cb = p.kd_cb
-                            AND pp.kd_cob = p.kd_cob
-                            AND pp.kd_scob = p.kd_scob
-                            AND pp.kd_thn = p.kd_thn
-                            AND pp.no_pol = p.no_pol
-                            AND pp.no_updt = p.no_updt
                         WHERE p.flag_cancel = 'N' AND 
                               (p.no_nt_msk like '%'+@SearchKeyword+'%' 
 					OR p.no_pol_ttg like '%'+@SearchKeyword+'%' 

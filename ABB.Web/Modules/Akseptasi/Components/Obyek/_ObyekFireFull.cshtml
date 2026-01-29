@@ -37,7 +37,7 @@
             }).Width(200).Locked(true).Title("Action");
             columns.Bound(col => col.no_oby).Width(150).Title("Nomor Obyek");
             columns.Bound(col => col.desk_oby).Width(150).Title("Uraian Pertanggungan");
-            columns.Bound(col => col.nilai_ttl_ptg).Width(150).Title("Nilai Pertanggungan");
+            columns.Bound(col => col.nilai_ttl_ptg).Width(150).Title("Nilai Pertanggungan").Format("{0:n2}");
         })
         .Pageable(pager => pager
             .Refresh(true)
