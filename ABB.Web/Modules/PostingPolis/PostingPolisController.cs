@@ -29,6 +29,7 @@ namespace ABB.Web.Modules.PostingPolis
             {
                 SearchKeyword = searchkeyword,
                 DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                kd_cb = Request.Cookies["UserCabang"]
             });
 
             return Json(ds.AsQueryable().ToDataSourceResult(request));
