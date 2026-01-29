@@ -2072,6 +2072,8 @@ namespace ABB.Web.Modules.Inquiry
                     inquiryFireViewModel.kd_cb = inquiryFireViewModel.kd_cb.Trim();
                     inquiryFireViewModel.kd_cob = inquiryFireViewModel.kd_cob.Trim();
                     inquiryFireViewModel.kd_scob = inquiryFireViewModel.kd_scob.Trim();
+                    inquiryFireViewModel.kd_zona = inquiryFireViewModel.kd_zona?.Trim();
+                    inquiryFireViewModel.kd_okup = inquiryFireViewModel.kd_okup.Trim();
                     
                     return View("~/Modules/Inquiry/Components/InquiryOther/_InquiryOtherFire.cshtml", inquiryFireViewModel);
                 case "_OtherHull":

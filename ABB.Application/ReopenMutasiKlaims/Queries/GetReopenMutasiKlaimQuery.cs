@@ -39,7 +39,7 @@ namespace ABB.Application.ReopenMutasiKlaims.Queries
 					INNER JOIN rf05 scob
 						ON p.kd_cob = scob.kd_cob
 						AND p.kd_scob = scob.kd_scob
-				WHERE cb.kd_cb = @KodeCabang AND (p.no_mts like '%'+@SearchKeyword+'%' 
+				WHERE cb.kd_cb = @KodeCabang AND p.flag_closing = 'Y' AND (p.no_mts like '%'+@SearchKeyword+'%' 
 						OR p.tgl_mts like '%'+@SearchKeyword+'%' 
 						OR cb.nm_cb like '%'+@SearchKeyword+'%' 
 						OR cob.nm_cob like '%'+@SearchKeyword+'%' 
