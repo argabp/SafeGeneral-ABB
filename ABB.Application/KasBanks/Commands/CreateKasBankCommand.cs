@@ -15,6 +15,7 @@ namespace ABB.Application.KasBanks.Commands
         public string NoPerkiraan { get; set; }
         public string Kasbank { get; set; }
         public decimal? Saldo { get; set; }
+        public string KodeCabang { get; set; }
     }
 
     // ---> INI BAGIAN YANG HILANG: "Petugas Pelaksana" <---
@@ -37,6 +38,7 @@ namespace ABB.Application.KasBanks.Commands
                 NoRekening = request.NoRekening,
                 NoPerkiraan = request.NoPerkiraan,
                 TipeKasBank = request.Kasbank,
+                KodeCabang = request.KodeCabang,
                 Saldo = request.Saldo
             };
 

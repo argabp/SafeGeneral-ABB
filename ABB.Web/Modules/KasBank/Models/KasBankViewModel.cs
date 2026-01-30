@@ -30,6 +30,10 @@ namespace ABB.Web.Modules.KasBank.Models
         [Display(Name = "Tipe")]
         public string TipeKasBank { get; set; }
 
+         [StringLength(5)]
+        [Display(Name = "KodeCabang")]
+        public string KodeCabang { get; set; }
+
         [Display(Name = "Saldo")]
         public decimal? Saldo { get; set; }
 

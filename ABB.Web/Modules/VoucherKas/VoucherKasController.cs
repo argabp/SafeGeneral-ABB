@@ -138,7 +138,7 @@ namespace ABB.Web.Modules.VoucherKas
                 }).ToList();
 
                 // kodeakun
-                var akunlist = await Mediator.Send(new GetAllKasBankQuery { TipeKasBank = "KAS" });
+                var akunlist = await Mediator.Send(new GetAllKasBankQuery { TipeKasBank = "KAS" , KodeCabang = userCabang});
                 ViewBag.KodeAkun = akunlist.FirstOrDefault()?.NoPerkiraan;
                 ViewBag.Kode = akunlist.FirstOrDefault()?.Kode;
 
