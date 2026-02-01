@@ -28,9 +28,9 @@ function deleteAkseptasiResikoOtherFire() {
         kd_scob: $("#kd_scob").val(),
         kd_thn: $("#kd_thn").val(),
         no_aks: $("#no_aks").val(),
-        no_updt: $("#resiko_other_fire_no_updt").val(),
+        no_updt: resiko.no_updt,
         no_rsk: resiko.no_rsk,
-        kd_endt: $("#resiko_other_fire_kd_endt").val()
+        kd_endt: resiko.kd_endt
     }
 
     ajaxPost(`/Akseptasi/DeleteOtherFire`, JSON.stringify(data), function (response) {
@@ -48,7 +48,7 @@ function deleteAkseptasiResikoOtherFire() {
             kd_scob: $("#kd_scob").val(),
             kd_thn: $("#kd_thn").val(),
             no_aks: $("#no_aks").val(),
-            no_updt: $("#no_updt").val(),
+            no_updt: resiko.no_updt,
             no_rsk: resiko.no_rsk,
             kd_endt: resiko.kd_endt,
             pst_share: resiko.pst_share_bgu,
@@ -120,9 +120,9 @@ function saveAkseptasiResikoOther(url) {
     form.kd_scob = $("#kd_scob").val();
     form.kd_thn = $("#kd_thn").val();
     form.no_aks = $("#no_aks").val();
-    form.no_updt = $("#resiko_other_fire_no_updt").val();
+    form.no_updt = resiko.no_updt;
     form.no_rsk = resiko.no_rsk;
-    form.kd_endt = $("#resiko_other_fire_kd_endt").val();
+    form.kd_endt = resiko.kd_endt;
     form.no_pol_ttg = $("#no_pol_ttg").val();
 
     var data = JSON.stringify(form);

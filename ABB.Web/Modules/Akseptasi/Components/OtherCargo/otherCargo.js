@@ -32,9 +32,9 @@ function deleteAkseptasiResikoOtherCargo() {
         kd_scob: $("#kd_scob").val(),
         kd_thn: $("#kd_thn").val(),
         no_aks: $("#no_aks").val(),
-        no_updt: $("#resiko_other_no_updt").val(),
+        no_updt: resiko.no_updt,
         no_rsk: resiko.no_rsk,
-        kd_endt: $("#resiko_other_kd_endt").val()
+        kd_endt: resiko.kd_endt
     }
 
     ajaxPost(`/Akseptasi/DeleteOtherCargo`, JSON.stringify(data), function (response) {
@@ -52,7 +52,7 @@ function deleteAkseptasiResikoOtherCargo() {
             kd_scob: $("#kd_scob").val(),
             kd_thn: $("#kd_thn").val(),
             no_aks: $("#no_aks").val(),
-            no_updt: $("#no_updt").val(),
+            no_updt: resiko.no_updt,
             no_rsk: resiko.no_rsk,
             kd_endt: resiko.kd_endt,
             pst_share: resiko.pst_share_bgu,
@@ -85,9 +85,9 @@ function saveAkseptasiResikoOtherCargo(url) {
     form.append("kd_scob", $("#kd_scob").val())
     form.append("kd_thn", $("#kd_thn").val())
     form.append("no_aks", $("#no_aks").val())
-    form.append("no_updt", $("#resiko_other_no_updt").val())
+    form.append("no_updt", resiko.no_updt);
     form.append("no_rsk", resiko.no_rsk);
-    form.append("kd_endt", $("#resiko_other_kd_endt").val());
+    form.append("kd_endt", resiko.kd_endt);
     form.append("no_pol_ttg", $("#no_pol_ttg").val());
 
     $("#linkFileOtherCargo").getKendoUpload().getFiles().forEach((data, index) => {

@@ -106,7 +106,7 @@ body {
     width: 86px;
     height: 24px;
     flex-grow: 0;
-    background: url("../img/logo-login.png");
+    background: url("../img/new_logo_login.png");
     background-repeat: no-repeat;
     background-size: 86px 24px;
 }
@@ -988,7 +988,7 @@ form .k-textbox, form .k-dropdown, form .k-combobox, form .k-multiselect, form .
 }
 
 .login-panel {
-    padding: 70px 100px 50px 100px;
+    padding: 20px 100px 50px 100px;
     background-color: var(--white);
 }
 
@@ -1001,7 +1001,6 @@ form .k-textbox, form .k-dropdown, form .k-combobox, form .k-multiselect, form .
 
 .login-body {
     height: 70%;
-    margin: 50px 0 0 0;
     padding: 0;
 }
 
@@ -1065,7 +1064,7 @@ form .k-textbox, form .k-dropdown, form .k-combobox, form .k-multiselect, form .
     flex-grow: 0;
     align-self: center;
     align-items: center;
-    background: url("../img/logo-login.png") no-repeat;
+    background: url("../img/new_logo_login.png") no-repeat;
     margin-bottom:80px;
 }
 

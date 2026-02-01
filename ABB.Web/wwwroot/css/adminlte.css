@@ -13199,12 +13199,11 @@ body:not(.layout-fixed) .main-sidebar .sidebar {
 
 .user-panel .image {
   display: inline-block;
-  padding-left: 0.8rem;
 }
 
 .user-panel img {
   height: auto;
-  width: 2.1rem;
+  width: 5rem;
 }
 
 .user-panel .info {

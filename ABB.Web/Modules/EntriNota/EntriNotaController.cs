@@ -102,7 +102,8 @@ namespace ABB.Web.Modules.EntriNota
             var ds = await Mediator.Send(new GetEntriNotasQuery()
             {
                 SearchKeyword = searchkeyword,
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                kd_cb = Request.Cookies["UserCabang"]
             });
             
             var statusPolis = new List<DropdownOptionDto>()

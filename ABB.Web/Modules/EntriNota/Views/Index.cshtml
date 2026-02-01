@@ -60,7 +60,7 @@
                     columns.Bound(col => col.no_pol_ttg).Width(200).Title("Nomor Polis").ClientTemplate("#= formatNoPol(no_pol_ttg) #");
                     columns.Bound(col => col.no_nt_msk).Width(200).Title("Nomor Nota").ClientTemplate("#= formatNomorNota(kd_cb, jns_tr, kd_thn, kd_bln, no_nt_msk, jns_nt_kel, no_nt_kel) #");;
                     columns.Bound(col => col.nm_ttj).Width(150).Title("Nama Tertuju");
-                    columns.Bound(col => col.no_pol_pas).Width(175).Title("Nomor Polis Ceding");
+                    columns.Bound(col => col.tgl_nt).Title("Tanggal Nota").Format("{0: dd-MM-yyyy}");
                     columns.Bound(col => col.nilai_nt).Width(150).Title("Nilai Nota").Format("{0:n2}");
                     columns.Bound(col => col.flag_posting).Width(150).Title("Flag Posting");
                 })

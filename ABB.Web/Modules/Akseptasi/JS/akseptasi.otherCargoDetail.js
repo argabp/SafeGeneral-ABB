@@ -18,9 +18,9 @@ function saveAkseptasiOtherCargoDetail(url) {
     form.kd_scob = $("#kd_scob").val();
     form.kd_thn = $("#kd_thn").val();
     form.no_aks = $("#no_aks").val();
-    form.no_updt = $("#other_motor_detail_no_updt").val();
+    form.no_updt = resiko.no_updt;
     form.no_rsk = resiko.no_rsk;
-    form.kd_endt = $("#resiko_other_cargo_detail_kd_endt").val();
+    form.kd_endt = resiko.kd_endt;
     form.no_urut = $("#resiko_other_cargo_no_urut").val();
     form.no_bl = $("#resiko_other_cargo_detail_no_bl").val();
     form.no_inv = $("#resiko_other_cargo_detail_no_inv").val();

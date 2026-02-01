@@ -45,7 +45,7 @@ function saveAkseptasiResikoOther(url) {
     form.kd_scob = $("#kd_scob").val();
     form.kd_thn = $("#kd_thn").val();
     form.no_aks = $("#no_aks").val();
-    form.no_updt = $("#resiko_other_no_updt").val();
+    form.no_updt = resiko.no_updt;
     form.no_rsk = resiko.no_rsk;
     form.kd_endt = resiko.kd_endt;
     

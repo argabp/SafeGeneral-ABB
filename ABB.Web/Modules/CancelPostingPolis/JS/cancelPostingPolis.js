@@ -36,6 +36,7 @@ function cancelPolis(){
                         showMessage('Error', response.Message);
                     }
                     closeProgressOnGrid('#CancelPostingPolisGrid');
+                    refreshGrid("#CancelPostingPolisGrid")
                 },
             );
         }

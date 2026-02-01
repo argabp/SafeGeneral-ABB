@@ -52,8 +52,8 @@ function searchFilterOtherCargoDetail() {
         kd_scob: $("#kd_scob").val(),
         kd_thn: $("#kd_thn").val(),
         no_aks: $("#no_aks").val(),
-        no_updt: $("#other_cargo_detail_no_updt").val(),
-        kd_endt: $("#resiko_other_kd_endt").val(),
+        no_updt: resiko.no_updt,
+        kd_endt: resiko.kd_endt,
         no_rsk: resiko?.no_rsk,
     }
 }

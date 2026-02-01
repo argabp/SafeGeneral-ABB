@@ -22,9 +22,9 @@ function saveAkseptasiCoverage(url) {
     form.kd_scob = $("#kd_scob").val();
     form.kd_thn = $("#kd_thn").val();
     form.no_aks = $("#no_aks").val();
-    form.no_updt = $("#no_updt").val();
+    form.no_updt = resiko.no_updt;
     form.no_rsk = resiko.no_rsk;
-    form.kd_endt = resiko.kd_endt;
+    form.kd_endt = $("#resiko_coverage_kd_endt").val();
     form.no_pol_ttg = $("#no_pol_ttg").val();
     
     var data = JSON.stringify(form);

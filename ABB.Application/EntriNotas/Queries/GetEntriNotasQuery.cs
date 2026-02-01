@@ -13,6 +13,7 @@ namespace ABB.Application.EntriNotas.Queries
     {
         public string DatabaseName { get; set; }
         public string SearchKeyword { get; set; }
+        public string kd_cb { get; set; }
     }
 
     public class GetEntriNotasQueryHandler : IRequestHandler<GetEntriNotasQuery, List<NotaDto>>
@@ -40,7 +41,7 @@ namespace ABB.Application.EntriNotas.Queries
                         INNER JOIN rf05 scob
                            ON p.kd_cob = scob.kd_cob
                            AND p.kd_scob = scob.kd_scob
-                        WHERE p.flag_cancel = 'N' AND 
+                        WHERE p.flag_cancel = 'N' AND p.kd_cb = @kd_cb AND 
                               (p.no_nt_msk like '%'+@SearchKeyword+'%' 
 					OR p.no_pol_ttg like '%'+@SearchKeyword+'%' 
 					OR p.nm_ttj like '%'+@SearchKeyword+'%' 
@@ -51,7 +52,10 @@ namespace ABB.Application.EntriNotas.Queries
 					OR cb.kd_cb like '%'+@SearchKeyword+'%' 
 					OR cob.kd_cob like '%'+@SearchKeyword+'%' 
 					OR scob.kd_scob like '%'+@SearchKeyword+'%' 
-					OR @SearchKeyword = '' OR @SearchKeyword IS NULL)", new { request.SearchKeyword })).ToList();
+					OR @SearchKeyword = '' OR @SearchKeyword IS NULL)", new
+                {
+                    request.SearchKeyword, request.kd_cb
+                })).ToList();
 
                 var sequence = 1;
                 foreach (var result in results)
