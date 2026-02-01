@@ -26,7 +26,34 @@
 
 <div class="window-body" style="background-color: lightgray">
     <form id="KasBankForm" enctype="multipart/form-data" autocomplete="off">
-       <div class="form-group col-sm-12">
+
+        <div class="form-group col-sm-12">
+            <div class="filter-section">
+                <label class="filter-label" for="KodeCabang">Kode Cabang :</label>
+                @(Html.Kendo().ComboBox()
+                    .Name("KodeCabang")
+                    .Placeholder("Pilih Cabang ...")
+                    .DataTextField("nm_cb")
+                    .DataValueField("kd_cb")
+                    .Filter("contains")
+                    .Suggest(true)
+                    .HtmlAttributes(new { style = "width:250px;" })
+                    .Template("#: kd_cb # - #: nm_cb #")
+                    .DataSource(source => {
+                        source.Read(read => {
+                            read.Action("GetKodeCabang", "KasBank");
+                        });
+                    })
+                    .AutoBind(true)
+                    .Enable(false)
+                    .Value(ViewBag.UserCabangValue) 
+                    .Text(ViewBag.UserCabangText)   
+                )
+            </div>
+        </div>
+
+
+        <div class="form-group col-sm-12">
             <label class="col-sm-12">Kode</label>
             <div class="col-sm-12">
                 <kendo-textbox for="Kode" class="custom-kode" style="width: 100%;" />

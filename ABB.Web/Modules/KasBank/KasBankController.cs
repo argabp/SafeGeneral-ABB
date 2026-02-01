@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using ABB.Application.Coas.Queries;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using ABB.Application.Cabangs.Queries;
 
 
 namespace ABB.Web.Modules.KasBank
@@ -38,7 +39,39 @@ namespace ABB.Web.Modules.KasBank
 
             ViewBag.UserLogin = CurrentUser.UserId;
 
+
+
             return View();
+        }
+
+         [HttpGet]
+        public async Task<IActionResult> GetKodeCabang(string tipe)
+        {
+            var databaseName = Request.Cookies["DatabaseValue"];
+            var kodeCabangCookie = Request.Cookies["UserCabang"];
+
+            if (string.IsNullOrWhiteSpace(kodeCabangCookie))
+                return Json(new List<object>()); // cookie tidak ada → kirim kosong
+
+            var result = await Mediator.Send(new GetCabangsQuery
+            {
+                DatabaseName = databaseName
+            });
+
+            // Filter cabang sesuai cookie user
+            var filtered = result
+                .Where(c => c.kd_cb?.Trim() == kodeCabangCookie.Trim())
+                .Select(c => new
+                {
+                    kd_cb = c.kd_cb.Trim(),
+                    nm_cb = c.nm_cb.Trim()
+                })
+                .ToList(); // <-- WAJIB untuk ComboBox
+
+            // kirim ke View kalau ingin dipakai
+            ViewBag.UserCabang = kodeCabangCookie;
+
+            return Json(filtered);
         }
 
         [HttpPost]
@@ -51,6 +84,10 @@ namespace ABB.Web.Modules.KasBank
         // Action untuk menampilkan form Add
         public async Task<IActionResult> Add()
         {
+
+             var databaseName = Request.Cookies["DatabaseValue"]; 
+            var kodeCabangCookie = Request.Cookies["UserCabang"];
+
             ViewBag.TipeKasBankOptions = new List<SelectListItem>
             {
                 new SelectListItem { Text = "Kas", Value = "KAS" },
@@ -64,7 +101,23 @@ namespace ABB.Web.Modules.KasBank
                 Text = $"{x.Kode} - {x.Nama}" 
             }).ToList();
             
-            var model = new KasBankViewModel();
+            ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
+            ViewBag.UserLogin = CurrentUser.UserId;
+
+            var cabangList = await Mediator.Send(new GetCabangsQuery { DatabaseName = databaseName });
+            var userCabang = cabangList
+                .FirstOrDefault(c => string.Equals(c.kd_cb.Trim(), kodeCabangCookie?.Trim(), StringComparison.OrdinalIgnoreCase));
+            
+           
+            string displayCabang = userCabang != null 
+                ? $"{userCabang.kd_cb.Trim()} - {userCabang.nm_cb.Trim()}" 
+                : kodeCabangCookie;
+
+           
+            ViewBag.UserCabangValue = kodeCabangCookie; 
+            ViewBag.UserCabangText = displayCabang;
+
+             var model = new KasBankViewModel();
             return PartialView(model);
         }
 

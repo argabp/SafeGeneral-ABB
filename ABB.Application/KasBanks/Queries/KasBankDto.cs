@@ -11,7 +11,9 @@ namespace ABB.Application.KasBanks.Queries
         public string NoRekening { get; set; }
         public string NoPerkiraan { get; set; }
         public string TipeKasBank { get; set; }
+        public string KodeCabang { get; set; }
         public decimal? Saldo { get; set; }
+        public string NamaCabang { get; set; }
 
         public void Mapping(Profile profile)
         {

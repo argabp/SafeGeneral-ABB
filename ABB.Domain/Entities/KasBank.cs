@@ -8,5 +8,6 @@ namespace ABB.Domain.Entities
         public string NoPerkiraan { get; set; }
         public string TipeKasBank { get; set; }
         public decimal? Saldo { get; set; }
+        public string KodeCabang { get; set; }
     }
 }

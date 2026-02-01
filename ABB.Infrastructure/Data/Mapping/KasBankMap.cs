@@ -39,6 +39,10 @@ namespace ABB.Infrastructure.Data.Mapping
                 .HasColumnName("kasbank")
                 .HasMaxLength(4);
 
+            builder.Property(t => t.KodeCabang)
+                .HasColumnName("kode_cabang")
+                .HasMaxLength(5);
+
             builder.Property(t => t.Saldo).HasColumnName("saldo").HasPrecision(18,2);
         }
     }

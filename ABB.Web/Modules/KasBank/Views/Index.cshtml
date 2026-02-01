@@ -53,6 +53,8 @@
                 .Columns(columns =>
                 {
                     columns.Bound(col => col.Kode).Width(150).Title("Kode");
+                    columns.Bound(col => col.KodeCabang).Title("Cabang").Width(200)
+                    .ClientTemplate("#= KodeCabang # - #= NamaCabang #");
                     columns.Bound(col => col.Keterangan).Width(250).Title("Keterangan");
                     columns.Bound(col => col.NoRekening).Width(150).Title("No. Rekening");
                     columns.Bound(col => col.NoPerkiraan).Width(150).Title("No. Perkiraan");
