@@ -14,6 +14,7 @@ namespace ABB.Application.VoucherKass.Commands
         public string DebetKredit { get; set; }
         public string NoVoucher { get; set; }
         public string KodeAkun { get; set; }
+        public string KodeKas { get; set; }
         public string DibayarKepada { get; set; }
         public DateTime? TanggalVoucher { get; set; }
         public decimal? TotalVoucher { get; set; }
@@ -60,6 +61,7 @@ namespace ABB.Application.VoucherKass.Commands
                 KodeAkun = request.KodeAkun,
                 DibayarKepada = request.DibayarKepada,
                 KodeMataUang = request.KodeMataUang,
+                KodeKas = request.KodeKas,
                 KeteranganVoucher = request.KeteranganVoucher,
                 FlagPosting = request.FlagPosting,
                 KodeUserInput = request.KodeUserInput,

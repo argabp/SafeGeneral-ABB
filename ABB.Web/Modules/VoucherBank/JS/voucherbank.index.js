@@ -166,10 +166,12 @@ function onTanggalVoucherChange() {
 function attachChangeEvents() {
     // Panggil semua fungsi sekali saat form pertama kali dimuat
    
-    var isEditMode = $("#NoVoucher").val() !== "";
-     if (!isEditMode) {
-        generateNoVoucher();
-    }
+    // var isEditMode = $("#NoVoucher").val() !== "";
+    //  if (!isEditMode) {
+    //     generateNoVoucher();
+    // }
+
+    
     // Dapatkan referensi ke setiap widget Kendo
     var jenisVoucher = $("#JenisVoucher");
     var debetKredit = $("#DebetKredit").data("kendoDropDownList");
@@ -179,6 +181,8 @@ function attachChangeEvents() {
     var totalVoucher = $("#TotalVoucher").data("kendoNumericTextBox");
     var tanggalVoucher = $("#TanggalVoucher").data("kendoDatePicker");
 
+
+    if (tanggalVoucher) tanggalVoucher.bind("change", generateNoVoucher);
     // --- Pasang pendengar ke fungsi yang sesuai ---
 
     // Pemicu untuk generator nomor voucher
@@ -242,11 +246,22 @@ function generateNoVoucher() {
     var debetKredit = $("#DebetKredit").data("kendoDropDownList") ? $("#DebetKredit").data("kendoDropDownList").value() : "";
     var kodeCabang = $("#KodeCabang").data("kendoComboBox") ? $("#KodeCabang").data("kendoComboBox").value() : "";
     var kodeBank = $("#KodeBank").data("kendoComboBox") ? $("#KodeBank").data("kendoComboBox").value() : "";
+    var tanggalVoucher = $("#TanggalVoucher").data("kendoDatePicker");
+    var tanggal = tanggalVoucher ? tanggalVoucher.value() : null;
+
+
+     if (!tanggal) {
+        $("#NoVoucher").val("");
+        return;
+    }
 
     // Panggil AJAX untuk mendapatkan nomor urut berikutnya dari server
     $.ajax({
         type: "GET",
         url: "/VoucherBank/GetNextVoucherNumber",
+        data: {
+           tanggalVoucher: kendo.toString(tanggal, "yyyy-MM-dd")
+        },
         success: function (response) {
             if (response && response.success) {
                 var noUrut = response.nextNumber; // Nomor urut dari server
@@ -272,10 +287,9 @@ function generateNoVoucher() {
                 var bagian4 = kodeBank;
                 
                 // 5. Bulan dan Tahun hari ini
-                var tanggalHariIni = new Date();
-                var bulan = ('0' + (tanggalHariIni.getMonth() + 1)).slice(-2);
-                var tahun = tanggalHariIni.getFullYear().toString().slice(-2);
-                var bagian5 = bulan + "/" + tahun;
+                var bulan = ('0' + (tanggal.getMonth() + 1)).slice(-2);
+                var tahun = tanggal.getFullYear().toString().slice(-2);
+                var bagian5 = `${bulan}/${tahun}`;
 
                 // Gabungkan jika semua bagian penting sudah terisi
                 if (bagian1 && bagian2 && bagian3 && bagian4 && bagian5) {

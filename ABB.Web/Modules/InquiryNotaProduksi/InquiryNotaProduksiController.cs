@@ -42,6 +42,31 @@ namespace ABB.Web.Modules.InquiryNotaProduksi
             DateTime? endDate,
             string jenisAsset)
         {
+            var rawCabang = Request.Cookies["UserCabang"];
+            string kodeCabang = "";
+            // 2. LOGIKA AMBIL 2 ANGKA BELAKANG
+            if (!string.IsNullOrEmpty(rawCabang))
+            {
+                // Bersihkan spasi dulu
+                rawCabang = rawCabang.Trim(); 
+
+                if (rawCabang.Length >= 2)
+                {
+                    // Ambil 2 karakter terakhir. Contoh: "JK10" -> "10"
+                    kodeCabang = rawCabang.Substring(rawCabang.Length - 2);
+                }
+                else 
+                {
+                    // Jaga-jaga kalau isinya cuma "1" atau "5", ambil apa adanya
+                    kodeCabang = rawCabang;
+                }
+            }
+            else 
+            {
+                // Kalau cookie kosong, return kosong (Safety)
+                return Json(new List<object>().ToDataSourceResult(request));
+            }
+
             // ✅ Cegah load data jika semua filter kosong
             if (string.IsNullOrEmpty(searchKeyword) &&
                 !startDate.HasValue &&
@@ -57,7 +82,8 @@ namespace ABB.Web.Modules.InquiryNotaProduksi
                 SearchKeyword = searchKeyword,
                 StartDate = startDate,
                 EndDate = endDate,
-                JenisAsset = jenisAsset
+                JenisAsset = jenisAsset,
+                KodeCabang = kodeCabang
             });
 
             // ✅ Jika hasil kosong, kirim response dengan indikator “tidak ditemukan”
@@ -93,7 +119,25 @@ namespace ABB.Web.Modules.InquiryNotaProduksi
         [HttpGet]
         public async Task<IActionResult> GetJenisAssetList()
         {
-            var list = await Mediator.Send(new GetDistinctJenisAssetQuery());
+            // 1. Logic potong string (Sama seperti diatas)
+            var rawCabang = Request.Cookies["UserCabang"];
+            string kodeCabang = "";
+
+            if (!string.IsNullOrEmpty(rawCabang))
+            {
+                rawCabang = rawCabang.Trim();
+                if (rawCabang.Length >= 2)
+                {
+                    kodeCabang = rawCabang.Substring(rawCabang.Length - 2);
+                }
+                else
+                {
+                    kodeCabang = rawCabang;
+                }
+            }
+
+            // 2. Kirim ke Query
+            var list = await Mediator.Send(new GetDistinctJenisAssetQuery { KodeCabang = kodeCabang });
 
             var result = list.Select(x => new
             {

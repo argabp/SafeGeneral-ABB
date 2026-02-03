@@ -16,8 +16,7 @@ using System.IO;
 
 namespace ABB.Application.VoucherKass.Queries
 {
-
-       // DTO untuk hasil join VoucherKas + KasBank
+    // DTO untuk hasil join VoucherKas + KasBank
     public class VoucherKasJoinDto
     {
         public string NoVoucher { get; set; }
@@ -27,17 +26,23 @@ namespace ABB.Application.VoucherKass.Queries
         public string DibayarKepada { get; set; }
         public string DebetKredit { get; set; }
         public decimal? TotalDalamRupiah { get; set; }
-        public string Keterangan { get; set; }
+        
+        // Data dari KasBank
+        public string KodeKas { get; set; }     // Tambahan: Biar tau ini K01 atau K02
+        public string NamaKas { get; set; }     // Keterangan dari tabel KasBank
         public decimal? Saldo { get; set; }
+        public string KodeCabang { get; set; } 
     }
 
-    // Query untuk mengambil Voucher KAS dan merender HTML
     public class GetVoucherKasByTanggalRangeQuery : IRequest<string>
     {
         public DateTime TanggalAwal { get; set; }
         public DateTime TanggalAkhir { get; set; }
         public string DatabaseName { get; set; }
         public string UserLogin { get; set; }
+        public string KodeKas { get; set; } // filter opsional
+        public string KeteranganKas { get; set; }
+        public string KodeCabang { get; set; }
     }
 
     public class GetVoucherKasByTanggalRangeQueryHandler
@@ -55,14 +60,17 @@ namespace ABB.Application.VoucherKass.Queries
         public async Task<string> Handle(GetVoucherKasByTanggalRangeQuery request, CancellationToken cancellationToken)
         {
             // Ambil data voucher KAS + join KasBank
+            // PERBAIKAN: Join berdasarkan KodeKas yang tersimpan di VoucherKas (v.KodeKas)
+            // agar lebih akurat daripada join by Akun (karena 1 akun bisa dipake >1 kode kas walau jarang)
+            
             var vouchers = await (
                 from v in _context.VoucherKas
                 join k in _context.KasBank
-                    on v.KodeAkun equals k.NoPerkiraan
+                    on v.KodeKas equals k.Kode // Join langsung by Kode Kas (K01, K02)
                 where v.TanggalVoucher.HasValue
                       && v.TanggalVoucher.Value >= request.TanggalAwal
                       && v.TanggalVoucher.Value <= request.TanggalAkhir
-                      && k.Kode == "K01"
+                      // && k.Kode == "K01" <--- INI DIHAPUS SUPAYA SEMUA KAS MUNCUL
                 orderby v.TanggalVoucher
                 select new VoucherKasJoinDto
                 {
@@ -73,13 +81,32 @@ namespace ABB.Application.VoucherKass.Queries
                     DibayarKepada = v.DibayarKepada,
                     DebetKredit = v.DebetKredit,
                     TotalDalamRupiah = v.TotalDalamRupiah,
-                    Keterangan = k.Keterangan,
+                    KodeCabang = v.KodeCabang,
+                    KodeKas = v.KodeKas,       // Tampilkan Kodenya
+                    NamaKas = k.Keterangan,    // Tampilkan Namanya
                     Saldo = k.Saldo
                 }
             ).ToListAsync(cancellationToken);
 
             if (!vouchers.Any())
-                throw new NullReferenceException("Data Voucher KAS tidak ditemukan.");
+                // Jangan throw error, return HTML kosong/pesan saja biar user gak kaget error page
+                // Tapi kalau requirementmu throw, biarkan saja.
+                throw new NullReferenceException("Data Voucher KAS tidak ditemukan pada periode tersebut.");
+
+            if (!string.IsNullOrEmpty(request.KodeKas))
+                {
+                    vouchers = vouchers
+                        .Where(v => v.KodeKas == request.KodeKas)
+                        .ToList();
+                }
+
+                
+            if (!string.IsNullOrEmpty(request.KodeCabang))
+                {
+                    vouchers = vouchers
+                        .Where(v => v.KodeCabang == request.KodeCabang)
+                        .ToList();
+                }
 
             // Helper format
             Func<DateTime?, string> fmtDate = d => d.HasValue ? d.Value.ToString("dd-MM-yyyy") : "-";
@@ -90,17 +117,17 @@ namespace ABB.Application.VoucherKass.Queries
             int idx = 1;
             foreach (var v in vouchers)
             {
+                // Disini saya tambahkan kolom Kode Kas di tampilan (opsional, sesuaikan HTML header kamu)
                 detailsBuilder.Append($@"
                     <tr>
                         <td class='center'>{idx}</td>
-                        <td>{fmtDate(v.TanggalVoucher)}</td>
+                        <td class='center'>{v.KodeKas}</td> <td>{fmtDate(v.TanggalVoucher)}</td>
                         <td>{v.NoVoucher}</td>
                         <td>{v.DibayarKepada}</td>
                         <td>{v.KeteranganVoucher}</td>
                         <td class='right'>{fmtNum(v.TotalVoucher)}</td>
                         <td class='right'>{fmtNum(v.TotalDalamRupiah)}</td>
                         <td class='right'>{fmtNum(v.Saldo)}</td>
-                        <td>{v.Keterangan}</td>
                     </tr>");
                 idx++;
             }
@@ -112,7 +139,6 @@ namespace ABB.Application.VoucherKass.Queries
 
             string templateHtml = await File.ReadAllTextAsync(templatePath, cancellationToken);
 
-            // Render template
             Template template = Template.Parse(templateHtml);
 
             string resultHtml = template.Render(new

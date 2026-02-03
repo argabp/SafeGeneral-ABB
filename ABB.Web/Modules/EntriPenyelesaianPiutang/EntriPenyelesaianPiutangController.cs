@@ -168,7 +168,29 @@ namespace ABB.Web.Modules.EntriPenyelesaianPiutang
                 new SelectListItem { Text = "Kredit", Value = "K" }
             };
 
-            var COAList = await Mediator.Send(new GetAllCoaQuery());
+
+            var kodeCabangCookie = Request.Cookies["UserCabang"]?.Trim();
+            
+
+            string glDept = null;
+            if (!string.IsNullOrEmpty(kodeCabangCookie) && kodeCabangCookie.Length >= 2)
+            {
+                glDept = kodeCabangCookie.Substring(kodeCabangCookie.Length - 2);
+            }
+            ViewBag.DebugUserCabang = glDept;
+
+            var COAList = await Mediator.Send(new GetAllCoaQuery 
+            { 
+                KodeCabang = glDept 
+            });
+
+            // if (!string.IsNullOrEmpty(glDept))
+            // {
+            //     COAList = COAList
+            //         .Where(x => x.Dept == glDept)   // sesuaikan nama field
+            //         .ToList();
+            // }
+
              ViewBag.COAoptions = COAList.Select(c => new SelectListItem
             {
                 Value = c.Kode.Trim(),
@@ -256,7 +278,13 @@ namespace ABB.Web.Modules.EntriPenyelesaianPiutang
         // Nota Produksi 
         public async Task<IActionResult> PilihNota()
         {
-            var akunlist = await Mediator.Send(new GetAllCoaQuery());
+            var userCabang = Request.Cookies["UserCabang"];
+            string glDept = (!string.IsNullOrEmpty(userCabang) && userCabang.Length >= 2) 
+                ? userCabang.Substring(userCabang.Length - 2) 
+                : userCabang;
+
+           var akunlist = await Mediator.Send(new GetAllCoaQuery { KodeCabang = glDept });
+           
             ViewBag.KodeAkunOptions = akunlist.Select(x => new SelectListItem
             {
                 Value = x.Kode.Trim(), // Pastikan di-trim
@@ -395,6 +423,10 @@ namespace ABB.Web.Modules.EntriPenyelesaianPiutang
 
              public async Task<IActionResult> Lihat(string kodeCabang, string nomorBukti)
         {
+            var userCabang = Request.Cookies["UserCabang"];
+            string glDept = (!string.IsNullOrEmpty(userCabang) && userCabang.Length >= 2) 
+                ? userCabang.Substring(userCabang.Length - 2) 
+                : userCabang;
 
             var databaseName = Request.Cookies["DatabaseValue"];
             var viewModel = new EntriPenyelesaianPiutangViewModel();
@@ -414,7 +446,7 @@ namespace ABB.Web.Modules.EntriPenyelesaianPiutang
                 new SelectListItem { Text = "Bukti", Value = "BM" }
             };
 
-            var akunlist = await Mediator.Send(new GetAllCoaQuery());
+            var akunlist = await Mediator.Send(new GetAllCoaQuery { KodeCabang = glDept });
             viewModel.PenyelesaianHeader.JenisPenyelesaian = jenisPenyelesaian;
             ViewBag.KodeAkunOptions = akunlist.Select(x => new SelectListItem
             {
@@ -436,7 +468,7 @@ namespace ABB.Web.Modules.EntriPenyelesaianPiutang
                 Value = x.kd_mtu.Trim(),
                 Text = $"{x.kd_mtu.Trim()} - {x.nm_mtu.Trim()}"
             }).ToList();
-            var COAList = await Mediator.Send(new GetAllCoaQuery());
+            var COAList = await Mediator.Send(new GetAllCoaQuery { KodeCabang = glDept });
              ViewBag.COAoptions = COAList.Select(c => new SelectListItem
             {
                 Value = c.Kode.Trim(),
@@ -500,6 +532,59 @@ namespace ABB.Web.Modules.EntriPenyelesaianPiutang
             {
                 return Json(new { success = false, message = ex.Message });
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetNextNomorBukti(string kodeCabang, string jenisPenyelesaian, DateTime? tanggalBukti)
+        {
+            // Jika tanggal kosong, jangan generate (kembalikan kosong atau error)
+            if (tanggalBukti == null)
+            {
+                return Json(new { success = false, message = "Tanggal belum dipilih" });
+            }
+
+            var nextNomor = await Mediator.Send(new GetNextNomorBuktiQuery
+            {
+                KodeCabang = kodeCabang,
+                JenisPenyelesaian = jenisPenyelesaian,
+                // Ambil Bulan & Tahun dari tanggal inputan user
+                Bulan = tanggalBukti.Value.Month,
+                Tahun = tanggalBukti.Value.Year % 100
+            });
+
+            return Json(new { success = true, nomorBukti = nextNomor });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Cetak(string kodeCabang, string nomorBukti)
+        {
+            if (string.IsNullOrEmpty(nomorBukti))
+                return BadRequest("Nomor bukti tidak boleh kosong.");
+
+            // 1. Ambil Header
+            var header = await Mediator.Send(new GetHeaderPenyelesaianUtangByIdQuery 
+            { 
+                KodeCabang = kodeCabang, 
+                NomorBukti = nomorBukti 
+            });
+
+            if (header == null)
+                return NotFound($"Bukti dengan nomor {nomorBukti} tidak ditemukan.");
+
+            // 2. Ambil Detail (Gunakan Query yang sudah ada untuk list detail)
+            var details = await Mediator.Send(new GetAllEntriPenyelesaianPiutangQuery 
+            { 
+                NoBukti = nomorBukti 
+            });
+
+            // 3. Masukkan ke ViewModel
+            var viewModel = new EntriPenyelesaianPiutangViewModel
+            {
+                    PenyelesaianHeader = header,
+                    PembayaranItems = Mapper.Map<List<PenyelesaianPiutangItem>>(details)
+            };
+
+            return View(viewModel);
         }
 
 

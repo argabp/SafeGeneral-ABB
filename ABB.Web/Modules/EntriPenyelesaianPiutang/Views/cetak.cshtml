@@ -1,0 +1,147 @@
+@model ABB.Web.Modules.EntriPenyelesaianPiutang.Models.EntriPenyelesaianPiutangViewModel
+@{
+    Layout = null;
+}
+
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Cetak Penyelesaian Utang Piutang</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/paper-css@0.4.1/paper.css" />
+
+    <style>
+        body { font-family: Arial, sans-serif; }
+        article { padding: 10mm; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #000; padding: 6px; text-align: left; font-size: 12px; }
+        .no-border { border: 0 !important; }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .text-left { text-align: left; }
+    </style>
+</head>
+<body class="A4 portrait">
+     <section class="sheet padding-10mm">
+     <article>
+        <table class="no-border" width="100%">
+            <td class="no-border">
+                <h3>
+                    <center>
+                        <B>BUKTI PENYELESAIAN UTANG PIUTANG (@(Model.PenyelesaianHeader.DebetKredit == "D" ? "DEBET" : "KREDIT"))</B>
+                    </center> 
+                </h3>
+            </td>
+        </table>
+
+        <table class="no-border" width="100%" cellpadding="5px">
+            <tr>
+                @* Menggunakan Kode Cabang sebagai identitas kiri atas *@
+                <td class="no-border text-left">@Model.PenyelesaianHeader.KodeCabang</td>
+                <td class="no-border text-right">No. @Model.PenyelesaianHeader.NomorBukti</td>
+            </tr>
+        </table>
+
+
+        <table width="100%" cellpadding="5px">
+            <thead>
+                <tr>
+                    <td colspan="3" class="text-center"><b>KETERANGAN</b></td>
+                    <td class="text-center"><b>JUMLAH</b></td>
+                    <td class="text-center"><b>NO. AKUN</b></td>
+                </tr>
+            </thead>
+
+            <tbody>
+                @* Ganti Dibayarkan Kepada menjadi No Voucher Referensi *@
+                <tr>
+                    <td colspan="5"><b>NO. VOUCHER REFERENSI :</b> @Model.PenyelesaianHeader.KodeVoucherAcc</td>
+                </tr>
+
+                @* Baris Checkbox Pembayaran DIHAPUS sesuai permintaan *@
+
+                <tr tyle="height:60px;">
+                    <td colspan="3">@Model.PenyelesaianHeader.Keterangan</td>
+                    <td class="text-right">@(Model.PenyelesaianHeader.TotalOrg.HasValue ? Model.PenyelesaianHeader.TotalOrg.Value.ToString("N2") : "0.00")</td>
+                    <td class="text-center">@Model.PenyelesaianHeader.KodeAkun</td>
+                </tr>
+
+               @* Tambahkan baris kosong agar tabel tetap tinggi *@
+                @for(int i = 0; i < 8; i++)
+                {
+                    <tr style="height:30px;">
+                        <td colspan="3"></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                }
+
+            <tr style="height:30px;">
+                 <td colspan="3" id="terbilangText"># Terbilang # ... # </td>
+                <td class="text-right">@Model.PenyelesaianHeader.MataUang @(Model.PenyelesaianHeader.TotalOrg.HasValue ? Model.PenyelesaianHeader.TotalOrg.Value.ToString("N2") : "0.00")</td>
+                <td></td>
+            </tr>
+
+            </tbody>
+           
+            <tr>
+                <td><center>Direksi</center></td>
+                <td><center>Keuangan</center></td>
+                <td><center>Akutansi</center></td>
+                <td colspan="2" rowspan="2"><Center>Jakarta, @Model.PenyelesaianHeader.Tanggal?.ToString("dd-MM-yyyy") <br>Penerima <br> <br> <br> <br>(................)</Center></td>
+            </tr>
+            <tr style="height:70px;">
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        
+        </table>
+
+    </article>
+  </section>
+</body>
+</html>
+
+<script>
+    function terbilangJS(nilai) {
+        nilai = Math.floor(Math.abs(nilai)); // Pastikan positif dan bulat
+
+        var angka = ["", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam",
+                     "Tujuh", "Delapan", "Sembilan", "Sepuluh", "Sebelas"];
+
+        function toWords(x) {
+            if (x < 12) return angka[x];
+            else if (x < 20) return toWords(x - 10) + " Belas";
+            else if (x < 100) return toWords(Math.floor(x / 10)) + " Puluh " + toWords(x % 10);
+            else if (x < 200) return "Seratus " + toWords(x - 100);
+            else if (x < 1000) return toWords(Math.floor(x / 100)) + " Ratus " + toWords(x % 100);
+            else if (x < 2000) return "Seribu " + toWords(x - 1000);
+            else if (x < 1000000) return toWords(Math.floor(x / 1000)) + " Ribu " + toWords(x % 1000);
+            else if (x < 1000000000) return toWords(Math.floor(x / 1000000)) + " Juta " + toWords(x % 1000000);
+            else if (x < 1000000000000) return toWords(Math.floor(x / 1000000000)) + " Milyar " + toWords(x % 1000000000);
+            else return x;
+        }
+
+        return toWords(nilai).trim();
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // Ambil TotalOrg dari Model Header
+        var totalVoucher = @((Model.PenyelesaianHeader.TotalOrg ?? 0).ToString(System.Globalization.CultureInfo.InvariantCulture));
+        
+        var hasil = terbilangJS(totalVoucher);
+        if(hasil === "") hasil = "Nol";
+
+        // Ambil Mata Uang (Code)
+        var mataUang = "@Model.PenyelesaianHeader.MataUang";
+        
+        // Logic sederhana untuk nama mata uang jika kode digunakan (opsional)
+        var namaMataUang = mataUang;
+        if(mataUang === "001" || mataUang === "IDR") namaMataUang = "Rupiah";
+        if(mataUang === "002" || mataUang === "USD") namaMataUang = "Dollar";
+
+        document.getElementById("terbilangText").innerText = "# Terbilang #  " + "# " + hasil + " "  + namaMataUang + " #";
+    });
+</script>

@@ -24,13 +24,13 @@
 <nav  aria-label="breadcrumb">
    <ol class="breadcrumb" style="background: white; ">
         <li class="breadcrumb-item"><a href="#">Finance</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Posting Penyelesaian Piutang</li>
+        <li class="breadcrumb-item active" aria-current="page">Posting Penyelesaian Utang Piutang</li>
     </ol>
     </nav>
 <div class="flat-box">
     <div class="row">
         <div class="flat-box-title col-md-10">
-            Posting Penyelesaian Piutang
+            Posting Penyelesaian Utang Piutang
         </div>
 
         <div class="col-md-2">
@@ -50,12 +50,18 @@
                 {
                     columns.Select().Width(50);
                     columns.Bound(col => col.KodeCabang).Width(150).Title("Kode Cabang");
-                    columns.Bound(col => col.JenisPenyelesaian).Width(150).Title("Jenis Penyelesaian");
                     columns.Bound(col => col.NomorBukti).Width(200).Title("No Bukti");
-                    columns.Bound(col => col.DebetKredit).Width(150).Title("Debet/Kredit").ClientTemplate("#= DebetKredit == 'D' ? 'Debet' : (DebetKredit == 'K' ? 'Kredit' : '') #");
-                    columns.Bound(col => col.Tanggal).Format("{0:dd-MM-yyyy}").Width(150).Title("Tanggal");
-                    columns.Bound(col => col.TotalOrg).Format("{0:n2}").Width(150).Title("Total");
+                    columns.Bound(col => col.Tanggal).Format("{0:dd-MM-yyyy}").Width(150).Title("Tanggal Bukti");
                     columns.Bound(col => col.Keterangan).Width(150).Title("Keterangan");
+                    columns.Bound(col => col.TotalOrg).Format("{0:n2}").Width(150).Title("Nilai Bukti");
+                    columns.Bound(col => col.DebetKredit).Width(150).Title("Debet/Kredit").ClientTemplate("#= DebetKredit == 'D' ? 'Debet' : (DebetKredit == 'K' ? 'Kredit' : '') #");
+                    //columns.Bound(col => col.JenisPenyelesaian).Width(150).Title("Jenis Penyelesaian");
+                    
+                    
+                    
+                  
+                  
+                    
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

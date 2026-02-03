@@ -120,7 +120,7 @@ namespace ABB.Web.Modules.VoucherBank
                 ViewBag.KodeAkunOptions = akunlist.Select(x => new SelectListItem
                 {
                     Value = x.NoPerkiraan,
-                    Text = $"{int.Parse(x.NoPerkiraan):N0} - {x.Keterangan}"
+                    Text = $"{x.NoPerkiraan} - {x.Keterangan}"
                 }).ToList();
 
            // kodebank
@@ -148,13 +148,13 @@ namespace ABB.Web.Modules.VoucherBank
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetNextVoucherNumber()
+        public async Task<IActionResult> GetNextVoucherNumber(DateTime tanggalVoucher)
         {
-            var now = DateTime.Now;
+        
             var nextNumber = await Mediator.Send(new GetNextVoucherNumberQuery 
             { 
-                Bulan = now.Month, 
-                Tahun = now.Year % 100 // Ambil 2 digit terakhir tahun
+                Bulan = tanggalVoucher.Month, 
+                Tahun = tanggalVoucher.Year % 100 // Ambil 2 digit terakhir tahun
             });
             
             return Json(new { success = true, nextNumber = nextNumber });

@@ -12,6 +12,8 @@ namespace ABB.Web.Modules.EntriPenyelesaianPiutang.Models
     {
         public int No { get; set; }
         public string FlagPembayaran { get; set; }
+        public string KodeAkun { get; set; }
+        
         public string NoNota { get; set; }
         public string NoBukti { get; set; }
         public string KodeMataUang { get; set; }

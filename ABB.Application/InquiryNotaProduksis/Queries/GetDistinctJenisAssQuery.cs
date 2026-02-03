@@ -10,6 +10,7 @@ namespace ABB.Application.InquiryNotaProduksis.Queries
 {
     public class GetDistinctJenisAssetQuery : IRequest<List<string>>
     {
+        public string KodeCabang { get; set; }
     }
 
     public class GetDistinctJenisAssetQueryHandler : IRequestHandler<GetDistinctJenisAssetQuery, List<string>>
@@ -23,8 +24,15 @@ namespace ABB.Application.InquiryNotaProduksis.Queries
 
         public async Task<List<string>> Handle(GetDistinctJenisAssetQuery request, CancellationToken cancellationToken)
         {
-            // Ambil nilai distinct dari kolom jn_ass di tabel Produksi
-            var result = await _context.Produksi
+            var query = _context.Produksi.AsQueryable();
+
+            // Filter Lokasi dulu sebelum distinct
+            if (!string.IsNullOrEmpty(request.KodeCabang))
+            {
+                query = query.Where(p => p.lok == request.KodeCabang);
+            }
+
+            var result = await query
                 .Where(p => !string.IsNullOrEmpty(p.jn_ass))
                 .Select(p => p.jn_ass)
                 .Distinct()

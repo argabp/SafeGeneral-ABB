@@ -13,6 +13,13 @@ function btnEditKasBank_OnClick(e) {
 
 // Fungsi untuk menyimpan data (dari form Add atau Edit)
 function onSaveKasBank() {
+   var kodeCabangVal = "";
+    var cb = $("#KodeCabang").data("kendoComboBox");
+    if(cb) {
+        kodeCabangVal = cb.value().trim();
+    } else {
+        kodeCabangVal = $("#KodeCabang").val();
+    }
 
     var url = "/KasBank/Save";
     var data = {
@@ -22,7 +29,7 @@ function onSaveKasBank() {
         NoPerkiraan: $("#NoPerkiraan").val(),
         TipeKasBank: $("#TipeKasBank").val(),
         Saldo: $("#Saldo").val(),
-        kodeCabang : $("#KodeCabang").data("kendoComboBox").value().trim()
+        kodeCabang : kodeCabangVal
     };
 
     console.log(data)

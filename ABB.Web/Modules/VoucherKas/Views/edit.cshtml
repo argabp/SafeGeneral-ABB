@@ -67,6 +67,26 @@
         </div>
 
         <div class="row">
+             <div class="form-group col-sm-4">
+                <label asp-for="KodeKas">Kode Kas</label>
+                <div>
+                    <kendo-combobox for="KodeKas"
+                                    style="width: 100%;"
+                                    class="custom-kuning"
+                                    datatextfield="Text"
+                                    datavaluefield="Value"
+                                    bind-to="ViewBag.KodeKasOptions"
+                                    filter="FilterType.Contains"
+                                    placeholder="Pilih kode kas..."
+                                    value="@Model.KodeKas" readonly="true">
+                                    @* Event change ditangani di JS index *@
+                    </kendo-combobox>
+                    <span asp-validation-for="KodeKas" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
             <div class="col-sm-12">
                    <label asp-for="NoVoucher">Nomor Voucher</label>
                     <div>
@@ -77,11 +97,18 @@
         </div>
         <hr>
 
-         <div class="row">
+        <div class="row">
             <div class="form-group col-sm-12">
                 <label>Kode Akun</label>
                 <div>
-                     <kendo-textbox for="KodeAkun" style="width: 100%;" readonly="true"  />
+                     @* Ubah jadi Combobox Readonly biar seragam sama Add *@
+                     <kendo-combobox for="KodeAkun" 
+                                    style="width: 100%;" 
+                                    datatextfield="Text"
+                                    datavaluefield="Value"
+                                    bind-to="ViewBag.KodeAkunOptions"
+                                    readonly="true" 
+                                    enable="false" /> 
                     <span asp-validation-for="KodeAkun" class="text-danger"></span>
                 </div>
             </div>
@@ -90,7 +117,7 @@
 
          <div class="row">
             <div class="form-group col-sm-12">
-                <label>Dibayar Kepada</label>
+                <label id="labelDibayarKepada">Dibayar Kepada</label>
                 <div>
                     <kendo-textbox for="DibayarKepada" style="width: 100%;"/>
                     <span asp-validation-for="DibayarKepada" class="text-danger"></span>
@@ -103,7 +130,7 @@
            <div class="form-group col-sm-6">
                     <label>Tanggal Voucher</label>
                     <div>
-                         <kendo-datepicker for="TanggalVoucher"  class="custom-kuning" style="width: 100%"/>
+                         <kendo-datepicker readonly="true" for="TanggalVoucher"  class="custom-kuning" style="width: 100%"/>
                         <span asp-validation-for="TanggalVoucher" class="text-danger"></span>
                     </div>
             </div>
@@ -119,6 +146,7 @@
                                     bind-to="ViewBag.MataUangOptions"
                                     filter="FilterType.Contains"
                                     placeholder="Pilih mata uang..."
+                                    readonly="true"
                                    > 
                         </kendo-combobox>
                         <span asp-validation-for="KodeMataUang" class="text-danger"></span>

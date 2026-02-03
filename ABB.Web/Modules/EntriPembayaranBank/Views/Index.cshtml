@@ -64,11 +64,12 @@
                                 {
                                     columns.Bound(col => col.KodeCabang).Title("Cabang").Width(200).ClientTemplate("#= KodeCabang # - #= NamaCabang #");
                                     columns.Bound(col => col.NoVoucher).Width(200).Title("No. Voucher");
-                                    columns.Bound(col => col.DebetKredit).Width(150).Title("Debet / Kredit").ClientTemplate("#= DebetKredit == 'D' ? 'Debet' : (DebetKredit == 'K' ? 'Kredit' : '-') #");
-                                    columns.Bound(col => col.DiterimaDari).Width(250).Title("Diterima Dari");
-                                    columns.Bound(col => col.TanggalVoucher).Format("{0:dd-MM-yyyy}").Width(150).Title("Tanggal");
+                                    columns.Bound(col => col.NamaBank).Width(200).Title("Nama Bank");
+                                    columns.Bound(col => col.TanggalVoucher).Format("{0:dd-MM-yyyy}").Width(150).Title("Tanggal Voucher");
                                     columns.Bound(col => col.KeteranganVoucher).Width(300).Title("Keterangan");
-                                    columns.Bound(col => col.TotalVoucher).Format("{0:n2}").Width(180).Title("Total");
+                                    columns.Bound(col => col.DiterimaDari).Width(250).Title("Dibayarkan / Diterima");
+                                    columns.Bound(col => col.TotalVoucher).Format("{0:n2}").Width(180).Title("Nilai Voucher");
+                                    columns.Bound(col => col.DebetKredit).Width(150).Title("Debet / Kredit").ClientTemplate("#= DebetKredit == 'D' ? 'Debet' : (DebetKredit == 'K' ? 'Kredit' : '-') #");
                                     columns.Bound(col => col.FlagPosting).Title("Posting").Width(100)
                                         .ClientTemplate("#= FlagPosting ? '<i class=\"fa fa-check text-success\"></i> Yes' : '<i class=\"fa fa-times text-danger\"></i> No' #");
                                     columns.Command(command =>
@@ -103,11 +104,12 @@
                                 {
                                     columns.Bound(col => col.KodeCabang).Title("Cabang").Width(200).ClientTemplate("#= KodeCabang # - #= NamaCabang #");
                                     columns.Bound(col => col.NoVoucher).Width(200).Title("No. Voucher");
-                                    columns.Bound(col => col.DebetKredit).Width(150).Title("Debet / Kredit").ClientTemplate("#= DebetKredit == 'D' ? 'Debet' : (DebetKredit == 'K' ? 'Kredit' : '-') #");
-                                    columns.Bound(col => col.DiterimaDari).Width(250).Title("Diterima Dari");
-                                    columns.Bound(col => col.TanggalVoucher).Format("{0:dd-MM-yyyy}").Width(150).Title("Tanggal");
+                                    columns.Bound(col => col.NamaBank).Width(200).Title("Nama Bank");
+                                    columns.Bound(col => col.TanggalVoucher).Format("{0:dd-MM-yyyy}").Width(150).Title("Tanggal Voucher");
                                     columns.Bound(col => col.KeteranganVoucher).Width(300).Title("Keterangan");
-                                    columns.Bound(col => col.TotalVoucher).Format("{0:n2}").Width(180).Title("Total");
+                                    columns.Bound(col => col.DiterimaDari).Width(250).Title("Dibayarkan / Diterima");
+                                    columns.Bound(col => col.TotalVoucher).Format("{0:n2}").Width(180).Title("Nilai Voucher");
+                                    columns.Bound(col => col.DebetKredit).Width(150).Title("Debet / Kredit").ClientTemplate("#= DebetKredit == 'D' ? 'Debet' : (DebetKredit == 'K' ? 'Kredit' : '-') #");
                                     columns.Bound(col => col.FlagPosting).Title("Posting").Width(100)
                                         .ClientTemplate("#= FlagPosting ? '<i class=\"fa fa-check text-success\"></i> Yes' : '<i class=\"fa fa-times text-danger\"></i> No' #");
                                     columns.Command(command =>

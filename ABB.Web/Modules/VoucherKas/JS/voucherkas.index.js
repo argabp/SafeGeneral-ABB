@@ -5,6 +5,38 @@ function btnAddVoucherKas_OnClick() {
     openWindow('#VoucherKasWindow', '/VoucherKas/Add', 'Add New Voucher Kas');
 }
 
+function onKodeKasChange(e) {
+        // 'this' mengacu pada widget Kendo ComboBox
+        var kodeKas = this.value(); 
+        console.log("Kode Kas Changed:", kodeKas); // Cek console browser
+
+        if (kodeKas) {
+            $.ajax({
+                url: '/VoucherKas/GetAkunByKas',
+                type: 'GET',
+                data: { kodeKas: kodeKas },
+                success: function (data) {
+                    if (data.success) {
+                        var cbAkun = $("#KodeAkun").data("kendoComboBox");
+                        if (cbAkun) {
+                            cbAkun.value(data.kodeAkun);
+                            cbAkun.trigger("change"); // Trigger change biar validasi jalan (opsional)
+                        }
+                    } else {
+                        console.warn("Gagal mengambil Kode Akun");
+                    }
+                },
+                error: function(err) {
+                    console.error("Error AJAX:", err);
+                }
+            });
+        } else {
+            // Opsional: Kosongkan Kode Akun jika Kode Kas dihapus
+            var cbAkun = $("#KodeAkun").data("kendoComboBox");
+            if (cbAkun) cbAkun.value(""); 
+        }
+    }
+
 $(document).on('click', '#flagPosting-checkbox-ui', function() {
     var icon = $(this).find('i'); // Ambil elemen ikon di dalam tombol
     var hiddenInput = $("#FlagPosting"); // Ambil input tersembunyi
@@ -22,15 +54,40 @@ $(document).on('click', '#flagPosting-checkbox-ui', function() {
 });
 
 function onSaveVoucherKas() {
+    var errors = [];
+    var debetKredit = $("#DebetKredit").data("kendoDropDownList").value();
+    var kodeKas = $("#KodeKas").data("kendoComboBox").value();
+    var tanggalVoucher = $("#TanggalVoucher").data("kendoDatePicker").value();
+    var totalVoucher = $("#TotalVoucher").data("kendoNumericTextBox").value();
+    var kodeMataUang = $("#KodeMataUang").data("kendoComboBox").value();
+    var jenisPembayaran = $("#JenisPembayaran").data("kendoDropDownList").value();
+    
+    if (!debetKredit) errors.push("- Debet/Kredit harus dipilih");
+    if (!kodeKas) errors.push("- Kode Kas harus dipilih");
+    if (!tanggalVoucher) errors.push("- Tanggal Voucher harus diisi");
+    if (!kodeMataUang) errors.push("- Kode Mata Uang harus dipilih");
+    if (totalVoucher === null || totalVoucher <= 0) errors.push("- Total Voucher harus lebih dari 0");
+    if (!jenisPembayaran) errors.push("- Jenis Pembayaran harus dipilih");
+
+    // Jika ada error, tampilkan alert dan BERHENTI (return)
+    if (errors.length > 0) {
+        alert("Mohon lengkapi data berikut:\n" + errors.join("\n"));
+        return; // <--- STOP DISINI, jangan lanjut AJAX
+    }
+
     var comboCabang = $("#KodeCabang").data("kendoComboBox");
      var kodeCabangValue = comboCabang
     ? comboCabang.value().trim()
     : ($("#KodeCabang").val()?.split("-")[0].trim() || "");
     var url = "/VoucherKas/Save";
+
+    
+
     var data = {
         KodeCabang: kodeCabangValue,
         JenisVoucher: $("#JenisVoucher").val(),
         DebetKredit: $("#DebetKredit").data("kendoDropDownList").value(), // Cara aman ambil value dropdown
+        KodeKas: $("#KodeKas").val(), // Cara aman ambil value dropdown
         NoVoucher: $("#NoVoucher").val(),
         KodeAkun: $("#KodeAkun").val(),
         DibayarKepada: $("#DibayarKepada").val(),
@@ -137,15 +194,40 @@ $(document).ready(function () {
         var tanggalVoucher = $("#TanggalVoucher").data("kendoDatePicker");
         var debetKredit = $("#DebetKredit").data("kendoDropDownList");
         var kodeCabang = $("#KodeCabang").data("kendoComboBox");
-
+        // --- TAMBAHAN BARU ---
+        var kodeKasCombo = $("#KodeKas").data("kendoComboBox");
+        // ---------------------
+        
         $("#JenisVoucher").on("change", generateNoVoucher);
 
         if (debetKredit) {
             debetKredit.bind("change", generateNoVoucher);
+            
+            // Pindahkan logic label 'Dibayar Kepada' kesini juga biar rapi
+            debetKredit.bind("change", function(e) {
+                var val = this.value();
+                if (val && val.toUpperCase() === "D") {
+                    $("#labelDibayarKepada").text("Diterima Dari");
+                } else {
+                    $("#labelDibayarKepada").text("Dibayar Kepada");
+                }
+            });
         }
         if (kodeCabang) {
             kodeCabang.bind("change", generateNoVoucher);
         }
+
+        // --- BINDING KODE KAS ---
+        if (kodeKasCombo) {
+            // 1. Panggil Generate No Voucher saat Kas berubah
+            kodeKasCombo.bind("change", generateNoVoucher);
+            
+            // 2. Panggil Logic Get Akun Otomatis
+            kodeKasCombo.bind("change", onKodeKasChangeInternal);
+        }
+        // ------------------------
+
+        
         // if (kodeBank) {
         //     kodeBank.bind("change", generateNoVoucher);
         // }
@@ -158,11 +240,39 @@ $(document).ready(function () {
             totalVoucherInput.bind("change", hitungTotalRupiah);
         }
         if (tanggalVoucher) {
-            // TanggalVoucher sekarang HANYA memicu kalkulator kurs
-            tanggalVoucher.bind("change", hitungTotalRupiah);
+                // UPDATED: Saat tanggal berubah, hitung Rupiah DAN Generate Nomor Voucher baru
+                tanggalVoucher.bind("change", function() {
+                    hitungTotalRupiah();
+                    generateNoVoucher(); // <--- TAMBAHAN PENTING
+                });
+            }
+    }
+    function onKodeKasChangeInternal(e) {
+        var kodeKas = this.value(); 
+        console.log("Kode Kas Changed (Internal):", kodeKas);
+
+        if (kodeKas) {
+            $.ajax({
+                url: '/VoucherKas/GetAkunByKas',
+                type: 'GET',
+                data: { kodeKas: kodeKas },
+                success: function (data) {
+                    if (data.success) {
+                        var cbAkun = $("#KodeAkun").data("kendoComboBox");
+                        if (cbAkun) {
+                            cbAkun.value(data.kodeAkun);
+                            // Trigger change biar kalau ada validasi dia jalan
+                            cbAkun.trigger("change"); 
+                        }
+                    }
+                }
+            });
+        } else {
+            // Kosongkan akun jika kas dihapus
+            var cbAkun = $("#KodeAkun").data("kendoComboBox");
+            if(cbAkun) cbAkun.value("");
         }
     }
-
     // hitung kurs
     function hitungTotalRupiah() {
     
@@ -198,37 +308,52 @@ $(document).ready(function () {
 
     // logika untuk generate voucher
    function generateNoVoucher() {
-    var jenisVoucher = $("#JenisVoucher").val() || "";
-    var debetKredit = $("#DebetKredit").data("kendoDropDownList")?.value() || "";
-    var kodeCabangText = $("#KodeCabang").data("kendoComboBox")?.input.val() || "";
-    var kodeCabang = kodeCabangText.split(" - ")[0].trim(); // ambil hanya kode
-    var kodeKas = $("#KodeKas").val() || "";
-    console.log("Kode Cabang:", kodeCabang);
-    $.ajax({
-        type: "GET",
-        url: "/VoucherKas/GetNextVoucherNumber",
-        success: function (response) {
-            if (response && response.success) {
-                var noUrut = response.nextNumber;
-                var tanggalHariIni = new Date();
+        var jenisVoucher = $("#JenisVoucher").val() || "";
+        var debetKredit = $("#DebetKredit").data("kendoDropDownList")?.value() || "";
+        var kodeCabangText = $("#KodeCabang").data("kendoComboBox")?.input.val() || "";
+        var kodeCabang = kodeCabangText.split(" - ")[0].trim(); 
+        var kodeKas = $("#KodeKas").val() || "";
 
-               var bagian1 = kodeCabang.slice(-2);
-                var bagian3 = "";
+        // 1. AMBIL TANGGAL DARI INPUTAN
+        var kendoDatePicker = $("#TanggalVoucher").data("kendoDatePicker");
+        var tanggalSelected = kendoDatePicker ? kendoDatePicker.value() : null;
 
-                if (jenisVoucher.toUpperCase() === "KAS") bagian3 = "K";
-                if (debetKredit.toUpperCase() === "D") bagian3 += "D";
-                else if (debetKredit.toUpperCase() === "K") bagian3 += "K";
+        // Jika belum pilih tanggal, pakai hari ini sebagai default (atau bisa return jika mau wajib pilih)
+        if (!tanggalSelected) {
+            tanggalSelected = new Date(); 
+        }
 
-                var bulan = ('0' + (tanggalHariIni.getMonth() + 1)).slice(-2);
-                var tahun = tanggalHariIni.getFullYear().toString().slice(-2);
-                var bagian5 = bulan + "/" + tahun;
+        // Format tanggal untuk dikirim ke Controller (yyyy-MM-dd)
+        var formattedDateForAPI = kendo.toString(tanggalSelected, "yyyy-MM-dd");
 
-                if (noUrut && bagian3 && kodeKas && bagian5) {
-                    var noVoucherFinal = `${bagian1}/${noUrut}/${bagian3}/${kodeKas}/${bagian5}`;
-                    $("#NoVoucher").val(noVoucherFinal);
+        console.log("Kode Cabang:", kodeCabang, "Tanggal:", formattedDateForAPI);
+
+        $.ajax({
+            type: "GET",
+            // 2. KIRIM TANGGAL KE CONTROLLER
+            url: "/VoucherKas/GetNextVoucherNumber?tanggalVoucher=" + formattedDateForAPI,
+            success: function (response) {
+                if (response && response.success) {
+                    var noUrut = response.nextNumber;
+
+                    // 3. GUNAKAN TANGGAL SELECTED UNTUK BAGIAN BULAN/TAHUN
+                    var bagian1 = kodeCabang.slice(-2);
+                    var bagian3 = "";
+
+                    if (jenisVoucher.toUpperCase() === "KAS") bagian3 = "K";
+                    if (debetKredit.toUpperCase() === "D") bagian3 += "D";
+                    else if (debetKredit.toUpperCase() === "K") bagian3 += "K";
+
+                    // Ubah logic ini agar pake tanggalSelected
+                    var bulan = ('0' + (tanggalSelected.getMonth() + 1)).slice(-2);
+                    var tahun = tanggalSelected.getFullYear().toString().slice(-2);
+                    var bagian5 = bulan + "/" + tahun;
+
+                    if (noUrut && bagian3 && kodeKas && bagian5) {
+                        var noVoucherFinal = `${bagian1}/${noUrut}/${bagian3}/${kodeKas}/${bagian5}`;
+                        $("#NoVoucher").val(noVoucherFinal);
+                    }
                 }
             }
-        }
-    });
-}
-
+        });
+    }

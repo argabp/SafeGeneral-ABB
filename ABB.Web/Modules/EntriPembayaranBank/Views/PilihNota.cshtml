@@ -150,7 +150,8 @@
         .Width(150);
         
         columns.Bound(c => c.kd_mtu).Title("Kode Mata Uang").Width(100);
-        columns.Bound(c => c.nm_cust2).Title("Nama Tertanggung").Width(250);
+        columns.Bound(c => c.nm_cust).Title("Nama Tertanggung").Width(250);
+        columns.Bound(c => c.nm_cust2).Title("Reasuradur").Width(250);
     })
     .Pageable(pager => pager
         .Refresh(true)

@@ -13,6 +13,7 @@ namespace ABB.Application.VoucherKass.Commands
         public string KodeCabang { get; set; }
         public string JenisVoucher { get; set; }
         public string DebetKredit { get; set; }
+        public string KodeKas { get; set; }
         public string NoVoucher { get; set; }
         public string KodeAkun { get; set; }
         public string DibayarKepada { get; set; }
@@ -63,6 +64,7 @@ namespace ABB.Application.VoucherKass.Commands
                 entity.TotalDalamRupiah = request.TotalDalamRupiah;
                 entity.KeteranganVoucher = request.KeteranganVoucher;
                 entity.FlagPosting = request.FlagPosting;
+                entity.KodeKas = request.KodeKas;
                 entity.TanggalUpdate = DateTime.Now; 
                 entity.KodeUserUpdate = request.KodeUserUpdate;
                 entity.JenisPembayaran = request.JenisPembayaran;

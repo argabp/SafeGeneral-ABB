@@ -82,12 +82,27 @@ namespace ABB.Web.Modules.EntriPembayaranBank
             };
 
             // kode akun
+            var kodeCabangCookie = Request.Cookies["UserCabang"]?.Trim();
+            string glDept = null;
+            if (!string.IsNullOrEmpty(kodeCabangCookie) && kodeCabangCookie.Length >= 2)
+            {
+                glDept = kodeCabangCookie.Substring(kodeCabangCookie.Length - 2);
+            }
+            ViewBag.DebugUserCabang = glDept;
             var akunlist = await Mediator.Send(new GetAllCoaQuery());
-                ViewBag.KodeAkunOptions = akunlist.Select(x => new SelectListItem
-                {
-                    Value = x.Kode,
-                    Text = $"{x.Kode} - {x.Nama}" 
-                }).ToList();
+            if (!string.IsNullOrEmpty(glDept))
+            {
+                akunlist = akunlist
+                    .Where(x => x.Dept == glDept)   // sesuaikan nama field
+                    .ToList();
+            }
+            ViewBag.KodeAkunOptions = akunlist.Select(x => new SelectListItem
+            {
+                Value = x.Kode,
+                Text = $"{x.Kode} - {x.Nama}" 
+            }).ToList();
+
+
 
             ViewBag.DebetKreditOptions = new List<SelectListItem>
             {

@@ -31,34 +31,47 @@ namespace ABB.Application.VoucherKass.Queries
         public async Task<List<VoucherKasDto>> Handle(GetAllVoucherKasQuery request, CancellationToken cancellationToken)
         {
             // Ambil data dasar + join nama cabang
-            var query =
-                from vk in _context.VoucherKas
-                join cb in _context.Cabang
-                    on vk.KodeCabang equals cb.kd_cb into cabangJoin
-                from cb in cabangJoin.DefaultIfEmpty()
-                select new VoucherKasDto
-                {
-                    KodeCabang = vk.KodeCabang,
-                    NamaCabang = cb != null ? cb.nm_cb : null,
-                    JenisVoucher = vk.JenisVoucher,
-                    DebetKredit = vk.DebetKredit,
-                    NoVoucher = vk.NoVoucher,
-                    KodeAkun = vk.KodeAkun,
-                    DibayarKepada = vk.DibayarKepada,
-                    TanggalVoucher = vk.TanggalVoucher,
-                    KodeMataUang = vk.KodeMataUang,
-                    TotalVoucher = vk.TotalVoucher,
-                    TotalDalamRupiah = vk.TotalDalamRupiah,
-                    KeteranganVoucher = vk.KeteranganVoucher,
-                    FlagPosting = vk.FlagPosting ?? false,
-                    TanggalInput = vk.TanggalInput,
-                    TanggalUpdate = vk.TanggalUpdate,
-                    KodeUserInput = vk.KodeUserInput,
-                    KodeUserUpdate = vk.KodeUserUpdate,
-                    JenisPembayaran = vk.JenisPembayaran,
-                    FlagFinal = vk.FlagFinal ?? false
-                };
+           var query =
+            from vk in _context.VoucherKas
+            join cb in _context.Cabang
+                on vk.KodeCabang equals cb.kd_cb into cabangJoin
+            from cb in cabangJoin.DefaultIfEmpty()
 
+            // JOIN ke KasBank berdasarkan NoPerkiraan
+            join kb in _context.KasBank
+                on vk.KodeAkun equals kb.NoPerkiraan into kasBankJoin
+            from kb in kasBankJoin.DefaultIfEmpty()
+
+            select new VoucherKasDto
+            {
+                KodeCabang = vk.KodeCabang,
+                NamaCabang = cb != null ? cb.nm_cb : null,
+
+                JenisVoucher = vk.JenisVoucher,
+                DebetKredit = vk.DebetKredit,
+                NoVoucher = vk.NoVoucher,
+
+                KodeAkun = vk.KodeAkun,
+                NamaKas = kb != null ? kb.Keterangan : null, // 👈 hasil join
+
+                DibayarKepada = vk.DibayarKepada,
+                KodeKas = vk.KodeKas,
+                TanggalVoucher = vk.TanggalVoucher,
+                KodeMataUang = vk.KodeMataUang,
+                TotalVoucher = vk.TotalVoucher,
+                TotalDalamRupiah = vk.TotalDalamRupiah,
+                KeteranganVoucher = vk.KeteranganVoucher,
+
+                FlagPosting = vk.FlagPosting ?? false,
+                FlagFinal = vk.FlagFinal ?? false,
+
+                TanggalInput = vk.TanggalInput,
+                TanggalUpdate = vk.TanggalUpdate,
+                KodeUserInput = vk.KodeUserInput,
+                KodeUserUpdate = vk.KodeUserUpdate,
+
+                JenisPembayaran = vk.JenisPembayaran
+            };
              query = query.Where(vk => vk.FlagFinal == request.FlagFinal);
 
             if (!string.IsNullOrEmpty(request.KodeCabang))

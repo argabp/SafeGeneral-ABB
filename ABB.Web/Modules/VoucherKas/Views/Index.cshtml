@@ -39,30 +39,54 @@
         </div>
     </div>
 
-    <div class="flat-box-content">
+   <div class="flat-box-content">
         <div class="div-box">
              @(Html.Kendo().Grid<VoucherKasDto>()
                 .Name("VoucherKasGrid")
                 .DataSource(dataSource => dataSource.Ajax()
-                    .Read(read => read.Action("GetVoucherKas", "VoucherKas").Data("getSearchFilter")) // Arahkan ke action yang baru dibuat
-                    .Model(model => model.Id(p => p.KodeCabang)) // Primary Key
+                    .Read(read => read.Action("GetVoucherKas", "VoucherKas").Data("getSearchFilter"))
+                    .Model(model => model.Id(p => p.KodeCabang)) 
                 )
                 .Columns(columns =>
                 {
-                   columns.Bound(col => col.KodeCabang)
-                    .Title("Cabang")
-                    .Width(200)
-                    .ClientTemplate("#= KodeCabang # - #= NamaCabang #");
-                    columns.Bound(col => col.TotalVoucher).Format("{0:n2}").Width(150).Title("Total");
-                    columns.Bound(col => col.NoVoucher).Width(200).Title("No. Voucher");
+                    // 1. Cabang
+                    columns.Bound(col => col.KodeCabang)
+                        .Title("Cabang")
+                        .Width(200)
+                        .ClientTemplate("#= KodeCabang # - #= NamaCabang #");
+
+                    // 2. No. Voucher
+                    columns.Bound(col => col.NoVoucher).Width(180).Title("No. Voucher");
+
+                    columns.Bound(col => col.NamaKas).Width(180).Title("Nama Kas");
+
+                    // 3. Tanggal Voucher
+                    columns.Bound(col => col.TanggalVoucher).Format("{0:dd-MM-yyyy}").Width(120).Title("Tanggal Voucher");
+
+                    // 4. Keterangan
+                    columns.Bound(col => col.KeteranganVoucher).Width(250).Title("Keterangan");
+
+                    // 5. Dibayarkan / Diterima (Pastikan properti 'DibayarKepada' ada di DTO)
+                    columns.Bound(col => col.DibayarKepada).Width(200).Title("Dibayarkan / Diterima");
+
+                    // 6. Nilai Voucher (Total)
+                    columns.Bound(col => col.TotalVoucher).Format("{0:n2}").Width(150)
+                        .Title("Nilai Voucher")
+                        .HtmlAttributes(new { style = "text-align:right;" });
+
+                    // 7. Debet/Kredit
                     columns.Bound(col => col.DebetKredit)
-                    .Width(150)
-                    .Title("Debet / Kredit")
-                    .ClientTemplate("#= DebetKredit == 'D' ? 'Debet' : (DebetKredit == 'K' ? 'Kredit' : '') #");
-                    columns.Bound(col => col.TanggalVoucher).Format("{0:dd-MM-yyyy}").Width(150).Title("Tanggal Voucher");
-                    columns.Bound(col => col.KeteranganVoucher).Width(150).Title("Keterangan");
+                        .Width(100)
+                        .Title("D/K")
+                        .ClientTemplate("#= DebetKredit == 'D' ? 'Debet' : (DebetKredit == 'K' ? 'Kredit' : '') #")
+                        .HtmlAttributes(new { style = "text-align:center;" });
+
+                    // 8. Posting
                     columns.Bound(col => col.FlagPosting).Title("Posting").Width(100)
-                    .ClientTemplate("#= FlagPosting ? '<i class=\"fa fa-check text-success\"></i> Yes' : '<i class=\"fa fa-times text-danger\"></i> No' #");
+                        .ClientTemplate("#= FlagPosting ? '<i class=\"fa fa-check text-success\"></i> Yes' : '<i class=\"fa fa-times text-danger\"></i> No' #")
+                        .HtmlAttributes(new { style = "text-align:center;" });
+
+                    // Action
                     columns.Command(command =>
                     {
                          command.Custom("EditVoucherKas")

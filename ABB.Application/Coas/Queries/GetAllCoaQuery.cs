@@ -13,6 +13,7 @@ namespace ABB.Application.Coas.Queries
     public class GetAllCoaQuery : IRequest<List<CoaDto>>
     {
         public string SearchKeyword { get; set; } // ✅ properti pencarian
+        public string KodeCabang { get; set; }
     }
 
     public class GetAllCoaQueryHandler : IRequestHandler<GetAllCoaQuery, List<CoaDto>>
@@ -29,6 +30,13 @@ namespace ABB.Application.Coas.Queries
         public async Task<List<CoaDto>> Handle(GetAllCoaQuery request, CancellationToken cancellationToken)
         {
             var query = _context.Coa.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(request.KodeCabang))
+            {
+                string dept = request.KodeCabang.Trim(); // Bersihkan spasi input
+
+                // Gunakan Trim() pada database field jika tipe datanya CHAR/NCHAR
+                query = query.Where(x => x.gl_dept.Trim() == dept);
+            }
 
             // ✅ Tambahkan filter pencarian
             if (!string.IsNullOrWhiteSpace(request.SearchKeyword))

@@ -571,7 +571,11 @@ function updateGridFooter() {
             totalOrgInput2.bind("change", hitungTotalRupiah2);
         }
         if (tanggalPicker) {
-            tanggalPicker.bind("change", hitungTotalRupiah);
+            // UPDATED: Saat tanggal berubah, hitung Rupiah DAN Generate Nomor Bukti
+            tanggalPicker.bind("change", function() {
+                hitungTotalRupiah();
+                generateNomorBukti(); // <--- TAMBAHAN PENTING
+            });
         }
     }
 
@@ -1146,4 +1150,62 @@ function onDeleteHeader_Click(e) {
             }
         });
     });
+}
+
+function generateNomorBukti() {
+    // 1. Ambil data yang diperlukan
+    var kodeCabangText = $("#PenyelesaianHeader_KodeCabang").data("kendoComboBox")?.input.val() || "";
+    var kodeCabang = kodeCabangText.split(" - ")[0].trim();
+    
+    // Jenis Penyelesaian biasanya hidden atau readonly, ambil valuenya
+    var jenisPenyelesaian = $("#PenyelesaianHeader_JenisPenyelesaian").val() || "BM"; 
+
+    // Ambil tanggal dari Kendo DatePicker
+    var kendoDatePicker = $("#PenyelesaianHeader_Tanggal").data("kendoDatePicker");
+    var tanggalSelected = kendoDatePicker ? kendoDatePicker.value() : null;
+
+    // 2. Validasi: Jika tanggal kosong, kosongkan nomor bukti
+    if (!tanggalSelected) {
+        $("#PenyelesaianHeader_NomorBukti").val(""); 
+        return;
+    }
+
+    // Format tanggal untuk dikirim ke API
+    var formattedDate = kendo.toString(tanggalSelected, "yyyy-MM-dd");
+
+    // 3. Panggil AJAX ke Controller
+    if (kodeCabang && jenisPenyelesaian) {
+        $.ajax({
+            type: "GET",
+            url: `/EntriPenyelesaianPiutang/GetNextNomorBukti?kodeCabang=${kodeCabang}&jenisPenyelesaian=${jenisPenyelesaian}&tanggalBukti=${formattedDate}`,
+            success: function (response) {
+                if (response && response.success) {
+                    // Update field Nomor Bukti
+                    $("#PenyelesaianHeader_NomorBukti").val(response.nomorBukti);
+                } else {
+                    console.warn("Gagal generate nomor bukti:", response.message);
+                }
+            },
+            error: function(err) {
+                console.error("Error generating nomor bukti:", err);
+            }
+        });
+    }
+}
+
+function btnCetakPenyelesaian_OnClick(e) {
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    
+    if (!dataItem) {
+        showMessage("Error", "Data tidak ditemukan.");
+        return;
+    }
+
+    var kodeCabang = dataItem.KodeCabang;
+    var nomorBukti = dataItem.NomorBukti;
+
+    // Buka di tab baru
+    var url = `/EntriPenyelesaianPiutang/Cetak?kodeCabang=${kodeCabang}&nomorBukti=${nomorBukti}`;
+    window.open(url, '_blank');
 }

@@ -58,7 +58,7 @@
                         <label class="col-sm-4 col-form-label">COB</label>
                         <div class="col-sm-8">
                             <input class="form-control form-control-sm"
-                                value=""
+                                value="@Model.InquiryNotaProduksiHeader.kd_ass2"
                                 readonly style="font-size: 12px;" />
                         </div>
                     </div>
@@ -88,7 +88,7 @@
                         <label class="col-sm-4 col-form-label">Tertanggung</label>
                         <div class="col-sm-8">
                             <input class="form-control form-control-sm"
-                                value="@Model.InquiryNotaProduksiHeader.nm_cust2"
+                                value="@Model.InquiryNotaProduksiHeader.nm_cust"
                                 readonly style="font-size: 12px;" />
                         </div>
                     </div>
@@ -107,11 +107,11 @@
                         <div class="col-sm-8 d-flex">
                             <input class="form-control form-control-sm mr-2" 
                                 style="width: 80px; font-size: 12px;" 
-                                value="" 
+                                value="@Model.InquiryNotaProduksiHeader.no_cust2" 
                                 readonly />
                             <input class="form-control form-control-sm flex-fill" 
                                 style="font-size: 12px;" 
-                                value="" 
+                                value="@Model.InquiryNotaProduksiHeader.nm_cust2" 
                                 readonly />
                         </div>
                     </div>
@@ -227,7 +227,7 @@
                     <label class="col-sm-4 col-form-label">Harga Pertanggungan</label>
                     <div class="col-sm-8">
                         <input class="form-control form-control-sm"
-                            value="@Model.InquiryNotaProduksiHeader.hp"
+                            value="@(Model.InquiryNotaProduksiHeader.hp?.ToString("N2") ?? "0.00")"
                             readonly style="font-size: 12px;" />
                     </div>
                 </div>
@@ -283,7 +283,8 @@
                     <label class="col-sm-4 col-form-label">Premi</label>
                     <div class="col-sm-8">
                         <input class="form-control form-control-sm"
-                            value="@Model.InquiryNotaProduksiHeader.premi"
+                            value="@(Model.InquiryNotaProduksiHeader.premi?.ToString("N2") ?? "0.00")"
+
                             readonly style="font-size: 12px;" />
                     </div>
                 </div>
@@ -293,11 +294,11 @@
                     <div class="col-sm-8 d-flex">
                         <input class="form-control form-control-sm mr-2" 
                             style="width: 80px; font-size: 12px;" 
-                            value="@Model.InquiryNotaProduksiHeader.rabat" 
+                            value="@(Model.InquiryNotaProduksiHeader.rabat?.ToString("N2") ?? "0.00")" 
                             readonly />
                         <input class="form-control form-control-sm flex-fill" 
                             style="font-size: 12px;" 
-                            value="@Model.InquiryNotaProduksiHeader.n_rabat" 
+                            value="@(Model.InquiryNotaProduksiHeader.n_rabat?.ToString("N2") ?? "0.00")"
                             readonly />
                     </div>
                 </div>
@@ -306,7 +307,7 @@
                     <label class="col-sm-4 col-form-label">Bruto</label>
                     <div class="col-sm-8">
                         <input class="form-control form-control-sm"
-                            value="@Model.InquiryNotaProduksiHeader.n_bruto"
+                            value="@(Model.InquiryNotaProduksiHeader.n_bruto?.ToString("N2") ?? "0.00")"
                             readonly style="font-size: 12px;" />
                     </div>
                 </div>
@@ -315,7 +316,7 @@
                     <label class="col-sm-4 col-form-label">Polis</label>
                     <div class="col-sm-8">
                         <input class="form-control form-control-sm"
-                            value="@Model.InquiryNotaProduksiHeader.polis"
+                            value="@(Model.InquiryNotaProduksiHeader.polis?.ToString("N2") ?? "0.00")"
                             readonly style="font-size: 12px;" />
                     </div>
                 </div>
@@ -324,7 +325,7 @@
                     <label class="col-sm-4 col-form-label">By Materai</label>
                     <div class="col-sm-8">
                         <input class="form-control form-control-sm"
-                            value="@Model.InquiryNotaProduksiHeader.materai"
+                            value="@(Model.InquiryNotaProduksiHeader.materai?.ToString("N2") ?? "0.00")"
                             readonly style="font-size: 12px;" />
                     </div>
                 </div>
@@ -334,11 +335,11 @@
                     <div class="col-sm-8 d-flex">
                         <input class="form-control form-control-sm mr-2" 
                             style="width: 80px; font-size: 12px;" 
-                            value="@Model.InquiryNotaProduksiHeader.komisi" 
+                            value="@(Model.InquiryNotaProduksiHeader.komisi?.ToString("N2") ?? "0.00")" 
                             readonly />
                         <input class="form-control form-control-sm flex-fill" 
                             style="font-size: 12px;" 
-                            value="@Model.InquiryNotaProduksiHeader.n_komisi" 
+                            value="@(Model.InquiryNotaProduksiHeader.n_komisi?.ToString("N2") ?? "0.00")" 
                             readonly />
                     </div>
                 </div>
@@ -348,11 +349,11 @@
                     <div class="col-sm-8 d-flex">
                         <input class="form-control form-control-sm mr-2" 
                             style="width: 80px; font-size: 12px;" 
-                            value="@Model.InquiryNotaProduksiHeader.h_fee" 
+                            value="@(Model.InquiryNotaProduksiHeader.h_fee?.ToString("N2") ?? "0.00")"
                             readonly />
                         <input class="form-control form-control-sm flex-fill" 
                             style="font-size: 12px;" 
-                            value="@Model.InquiryNotaProduksiHeader.n_hfee" 
+                            value="@(Model.InquiryNotaProduksiHeader.n_hfee?.ToString("N2") ?? "0.00")"
                             readonly />
                     </div>
                 </div>
@@ -361,7 +362,7 @@
                     <label class="col-sm-4 col-form-label">Lain-Lain</label>
                     <div class="col-sm-8">
                         <input class="form-control form-control-sm"
-                            value="@Model.InquiryNotaProduksiHeader.lain"
+                            value="@(Model.InquiryNotaProduksiHeader.lain?.ToString("N2") ?? "0.00")"
                             readonly style="font-size: 12px;" />
                     </div>
                 </div>
@@ -370,7 +371,7 @@
                     <label class="col-sm-4 col-form-label">Klaim</label>
                     <div class="col-sm-8">
                         <input class="form-control form-control-sm"
-                            value="@Model.InquiryNotaProduksiHeader.klaim"
+                            value="@(Model.InquiryNotaProduksiHeader.klaim?.ToString("N2") ?? "0.00")"
                             readonly style="font-size: 12px;" />
                     </div>
                 </div>
@@ -379,7 +380,7 @@
                     <label class="col-sm-4 col-form-label">Netto</label>
                     <div class="col-sm-8">
                         <input class="form-control form-control-sm"
-                            value="@Model.InquiryNotaProduksiHeader.netto"
+                            value="@(Model.InquiryNotaProduksiHeader.netto?.ToString("N2") ?? "0.00")"
                             readonly style="font-size: 12px;" />
                     </div>
                 </div>
@@ -406,7 +407,7 @@
                     <label class="col-sm-3 col-form-label">jumlah</label>
                     <div class="col-sm-6">
                         <input class="form-control form-control-sm"
-                            value="@Model.InquiryNotaProduksiHeader.jumlah"
+                            value="@(Model.InquiryNotaProduksiHeader.jumlah?.ToString("N2") ?? "0.00")"
                             readonly style="font-size: 12px;" />
                     </div>
                 </div>
@@ -490,7 +491,7 @@
                     <label class="col-sm-4 col-form-label">saldo</label>
                     <div class="col-sm-6">
                         <input class="form-control form-control-sm"
-                            value="@Model.InquiryNotaProduksiHeader.saldo"
+                            value="@(Model.InquiryNotaProduksiHeader.saldo?.ToString("N2") ?? "0.00")"
                             readonly style="font-size: 12px;" />
                     </div>
                 </div>

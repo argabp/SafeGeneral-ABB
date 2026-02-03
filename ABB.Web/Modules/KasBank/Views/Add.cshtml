@@ -28,7 +28,6 @@
     <form id="KasBankForm" enctype="multipart/form-data" autocomplete="off">
 
         <div class="form-group col-sm-12">
-            <div class="filter-section">
                 <label class="filter-label" for="KodeCabang">Kode Cabang :</label>
                 @(Html.Kendo().ComboBox()
                     .Name("KodeCabang")
@@ -37,7 +36,7 @@
                     .DataValueField("kd_cb")
                     .Filter("contains")
                     .Suggest(true)
-                    .HtmlAttributes(new { style = "width:250px;" })
+                    .HtmlAttributes(new { style = "width:100px;" })
                     .Template("#: kd_cb # - #: nm_cb #")
                     .DataSource(source => {
                         source.Read(read => {
@@ -49,7 +48,7 @@
                     .Value(ViewBag.UserCabangValue) 
                     .Text(ViewBag.UserCabangText)   
                 )
-            </div>
+           
         </div>
 
 

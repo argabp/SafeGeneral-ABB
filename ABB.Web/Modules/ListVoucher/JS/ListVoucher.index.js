@@ -6,15 +6,31 @@ function getTipeBank() {
     };
 }
 
+function getTipeKas() {
+    return {
+        tipe: "KAS"
+    };
+}
+
 // Fungsi untuk show/hide dropdown Kode Bank
 function onTipeVoucherChange() {
     var tipe = $("#TipeVoucher").data("kendoDropDownList").value();
+    console.log("Tipe Voucher:", tipe);
+
     if (tipe === "BANK") {
         $("#kodeBankSection").show();
-    } else {
+        $("#kodeKasSection").hide();
+    }
+    else if (tipe === "KAS") {
+        $("#kodeKasSection").show();
         $("#kodeBankSection").hide();
     }
+    else {
+        $("#kodeBankSection").hide();
+        $("#kodeKasSection").hide();
+    }
 }
+
 
 // Ini adalah FUNGSI LAMA ANDA (onSearchClick) yang sudah digabungkan
 // dan diganti namanya menjadi onCetakClick
@@ -76,23 +92,44 @@ function onCetakClick() {
     var kodeBank = (tipe === "BANK") ? $("#KodeBank").data("kendoComboBox").value() : "";
     var tglAwal = $("#TanggalAwal").data("kendoDatePicker").value();
     var tglAkhir = $("#TanggalAkhir").data("kendoDatePicker").value();
+    var kodeCabang = $("#KodeCabang").data("kendoComboBox").value().trim();
 
-    var namaBank = "";
     // 2. Validasi
     if (!tglAwal || !tglAkhir) {
         alert("Silakan pilih tanggal awal dan tanggal akhir.");
         return;
     }
-    var combobox = $("#KodeBank").data("kendoComboBox");
-    var dataItem = combobox.dataItem(); // Ambil object data yang sedang dipilih
     
-    if (dataItem) {
-        // Kita ambil field 'Keterangan' dari data aslinya (bukan TampilanLengkap)
-        // Karena di Controller GetKasBankList, 'x.Keterangan' aslinya ada di result query awal
-        // Tapi tunggu, di Controller tadi kita cuma return { Kode, TampilanLengkap } kan?
-        
-        // JADI, KITA HARUS UPDATE CONTROLLER SEDIKIT LAGI (Lihat Poin 4 di bawah)
-        namaBank = dataItem.Keterangan; 
+
+    var kodeBank = "";
+    var namaBank = "";
+    var kodeKas = "";
+    var namaKas = "";
+
+    if (tipe === "BANK") {
+        var cbBank = $("#KodeBank").data("kendoComboBox");
+        var bankItem = cbBank.dataItem();
+
+        if (!bankItem) {
+            alert("Silakan pilih Bank.");
+            return;
+        }
+
+        kodeBank = cbBank.value();
+        namaBank = bankItem.Keterangan; // pastikan field ini ada
+    }
+
+    if (tipe === "KAS") {
+        var cbKas = $("#KodeKas").data("kendoComboBox");
+        var kasItem = cbKas.dataItem();
+
+        if (!kasItem) {
+            alert("Silakan pilih Kas.");
+            return;
+        }
+
+        kodeKas = cbKas.value();
+        namaKas = kasItem.Keterangan;
     }
 
     // 3. Format tanggal
@@ -103,8 +140,11 @@ function onCetakClick() {
         tipe: tipe,
         kodeBank: kodeBank,
         keterangan: namaBank,
+        kodeKas: kodeKas,
+        keteranganKas: namaKas,
         tglAwal: awal,
-        tglAkhir: akhir
+        tglAkhir: akhir,
+        KodeCabang: kodeCabang
     };
     console.log(namaBank)
 

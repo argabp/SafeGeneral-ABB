@@ -21,6 +21,7 @@ namespace ABB.Application.VoucherBanks.Queries
         public string KeteranganBank { get; set; }
         public string DatabaseName { get; set; }
         public string UserLogin { get; set; }
+        public string KodeCabang { get; set; } // filter opsional
     }
 
     public class GetVoucherBankByTanggalRangeQueryHandler 
@@ -75,6 +76,11 @@ namespace ABB.Application.VoucherBanks.Queries
             if (!string.IsNullOrEmpty(request.KodeBank))
             {
                 query = query.Where(v => v.KodeBank == request.KodeBank);
+            }
+
+            if (!string.IsNullOrEmpty(request.KodeCabang))
+            {
+                query = query.Where(v => v.KodeCabang == request.KodeCabang);
             }
 
             // Eksekusi query

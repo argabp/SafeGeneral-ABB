@@ -76,20 +76,40 @@ namespace ABB.Web.Modules.VoucherKas
         }
 
         [HttpGet]
-          public async Task<IActionResult> GetNextVoucherNumber()
+         public async Task<IActionResult> GetNextVoucherNumber(DateTime? tanggalVoucher) 
         {
-            var now = DateTime.Now;
+            // Jika tanggalVoucher null (belum pilih), pakai DateTime.Now
+            var dateToUse = tanggalVoucher ?? DateTime.Now; 
+
             var nextNumber = await Mediator.Send(new GetNextVoucherNumberQuery 
             { 
-                Bulan = now.Month, 
-                Tahun = now.Year % 100 // Ambil 2 digit terakhir tahun
+                // Gunakan dateToUse, JANGAN DateTime.Now
+                Bulan = dateToUse.Month, 
+                Tahun = dateToUse.Year % 100 
             });
             
             return Json(new { success = true, nextNumber = nextNumber });
         }
 
 
-       
+        // TAMBAHKAN ACTION INI UNTUK AJAX
+        [HttpGet]
+        public async Task<IActionResult> GetAkunByKas(string kodeKas)
+        {
+            // Query ini asumsinya sama dengan GetKasBankByIdQuery yang dipakai di VoucherBank
+            var kasData = await Mediator.Send(new GetKasBankByIdQuery 
+            { 
+                Kode = kodeKas 
+            });
+
+            if (kasData != null)
+            {
+                return Json(new { success = true, kodeAkun = kasData.NoPerkiraan });
+            }
+
+            return Json(new { success = false });
+        }
+
          // Action untuk menampilkan form Add
         public async Task<IActionResult> Add()
         {
@@ -137,9 +157,24 @@ namespace ABB.Web.Modules.VoucherKas
                     Text = $"{x.kd_mtu.Trim()} - {x.nm_mtu.Trim()}"
                 }).ToList();
 
+                // --- UPDATE BAGIAN INI (Ganti logic Akun jadi Kas) ---
+            
+                // 1. Ambil List KAS
+                var kasList = await Mediator.Send(new GetAllKasBankQuery { TipeKasBank = "KAS", KodeCabang = userCabang });
+                
+                ViewBag.KodeKasOptions = kasList.Select(x => new SelectListItem
+                {
+                    Value = x.Kode,
+                    Text = $"{x.Kode} - {x.Keterangan}"
+                }).ToList();
+
                 // kodeakun
-                var akunlist = await Mediator.Send(new GetAllKasBankQuery { TipeKasBank = "KAS" , KodeCabang = userCabang});
-                ViewBag.KodeAkun = akunlist.FirstOrDefault()?.NoPerkiraan;
+                var akunlist = await Mediator.Send(new GetAllKasBankQuery { TipeKasBank = "KAS", KodeCabang = userCabang });
+                ViewBag.KodeAkunOptions = akunlist.Select(x => new SelectListItem
+                {
+                    Value = x.NoPerkiraan,
+                    Text = $"{x.NoPerkiraan} - {x.Keterangan}"
+                }).ToList();
                 ViewBag.Kode = akunlist.FirstOrDefault()?.Kode;
 
                 // u/ jenispembayaran
@@ -151,6 +186,8 @@ namespace ABB.Web.Modules.VoucherKas
                     new SelectListItem { Text = "TRANSFER", Value = "TRANS" }
                     
                 };
+
+                
 
             
             // var model = new VoucherKasViewModel();
@@ -215,6 +252,14 @@ namespace ABB.Web.Modules.VoucherKas
                 {
                     Value = x.kd_mtu.Trim(),
                     Text = $"{x.kd_mtu.Trim()} - {x.nm_mtu.Trim()}"
+                }).ToList();
+
+                // 1. Ambil List KAS
+                var kasList = await Mediator.Send(new GetAllKasBankQuery { TipeKasBank = "KAS" });
+                ViewBag.KodeKasOptions = kasList.Select(x => new SelectListItem
+                {
+                    Value = x.Kode,
+                    Text = $"{x.Kode} - {x.Keterangan}"
                 }).ToList();
 
                 // kodeakun

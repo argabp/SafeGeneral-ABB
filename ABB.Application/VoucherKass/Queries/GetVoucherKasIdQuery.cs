@@ -46,6 +46,7 @@ namespace ABB.Application.VoucherKass.Queries
                     JenisVoucher = vb.JenisVoucher,
                     DebetKredit = vb.DebetKredit,
                     KodeAkun = vb.KodeAkun,
+                    KodeKas = vb.KodeKas,
                     DibayarKepada = vb.DibayarKepada,
                     TanggalVoucher = vb.TanggalVoucher,
                     KodeMataUang = vb.KodeMataUang,

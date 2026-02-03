@@ -50,12 +50,15 @@
                 {
                     columns.Select().Width(50);
                     columns.Bound(col => col.KodeCabang).Width(150).Title("Kode Cabang");
-                    columns.Bound(col => col.JenisVoucher).Width(150).Title("Jenis Voucher");
                     columns.Bound(col => col.NoVoucher).Width(200).Title("No. Voucher");
-                    columns.Bound(col => col.DebetKredit).Width(150).Title("Debet/Kredit");
+                    columns.Bound(col => col.NamaBank).Width(180).Title("Nama Bank");
                     columns.Bound(col => col.TanggalVoucher).Format("{0:dd-MM-yyyy}").Width(150).Title("Tanggal Voucher");
-                    columns.Bound(col => col.TotalVoucher).Format("{0:n2}").Width(150).Title("Total");
                     columns.Bound(col => col.KeteranganVoucher).Width(150).Title("Keterangan");
+                    columns.Bound(col => col.DiterimaDari).Width(200).Title("Dibayarkan / Diterima");
+                    columns.Bound(col => col.JenisVoucher).Width(150).Title("Jenis Voucher");
+                    columns.Bound(col => col.TotalVoucher).Format("{0:n2}").Width(150).Title("Nilai Vocher");
+                    columns.Bound(col => col.DebetKredit).Width(150).Title("Debet/Kredit");
+                    
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

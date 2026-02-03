@@ -32,6 +32,7 @@ namespace ABB.Application.VoucherKass.Queries
         public string NamaMataUang { get; set; }
         public string DetailMataUang { get; set; }
         public string NamaCabang { get; set; }
+        
 
         public string KeteranganKasBank { get; set; }
         public decimal? Saldo { get; set; }

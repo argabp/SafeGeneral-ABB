@@ -100,32 +100,73 @@
              @(Html.Kendo().Grid<InquiryNotaProduksiDto>()
                 .Name("InquiryNotaProduksiGrid")
                 .NoRecords(n => n.Template("<div style='padding:5px;'>Data tidak ditemukan</div>"))
-                 .AutoBind(false)  
+                .AutoBind(false)  
                 .DataSource(dataSource => dataSource.Ajax()
                            .Read(read => read.Action("GetInquiryNotaProduksi", "InquiryNotaProduksi").Data("getAllFilters"))
-                            .Model(model => model.Id(p => p.id))
-
+                           .Model(model => model.Id(p => p.id))
+                           .PageSize(20) // Tambahkan PageSize biar rapi
                 )
                 .Columns(columns =>
                 {
-                    columns.Bound(col => col.no_nd).Width(250).Title("No Nota");
-                    columns.Bound(col => col.no_ref).Width(200).Title("No Ref");
-                    columns.Bound(col => col.nm_cust2).Width(200).Title("No Cust");
-                    columns.Bound(col => col.date).Format("{0:dd-MM-yyyy}").Width(150).Title("Tanggal");
+                    // 1. Lokasi (lok)
+                    columns.Bound(col => col.lok).Width(80).Title("Lokasi")
+                           .HtmlAttributes(new { style = "text-align:center" });
+
+                    // 2. Tipe (type)
+                    columns.Bound(col => col.type).Width(80).Title("Tipe")
+                           .HtmlAttributes(new { style = "text-align:center" });
+
+                    // 3. Jenis Asuransi (jn_ass)
+                    columns.Bound(col => col.jn_ass).Width(100).Title("Jenis Ass");
+
+                    // 4. No Referensi (no_ref)
+                    columns.Bound(col => col.no_ref).Width(180).Title("No. Referensi");
+
+                    // 5. No Nota (no_nd)
+                    columns.Bound(col => col.no_nd).Width(180).Title("No. Nota");
+
+                    columns.Bound(col => col.date_input)
+                           .Width(120) // Lebar dikecilkan biar pas
+                           .Title("Tanggal Nota")
+                           .Format("{0:dd-MM-yyyy}") // <--- INI KUNCINYA (Format Aesthetic)
+                           .HtmlAttributes(new { style = "text-align:center" });
+
+                    // 6. No Polis (no_pl)
+                    columns.Bound(col => col.no_pl).Width(250).Title("No. Polis");
+
+                    // 7. Customer (nm_cust)
+                    columns.Bound(col => col.nm_cust).Width(250).Title("Customer");
+
+                    // 8. Customer 2 (nm_cust2)
+                    columns.Bound(col => col.nm_cust2).Width(250).Title("Customer 2");
+
+                    // 9. D/K (d_k) - Rata Tengah
+                    columns.Bound(col => col.d_k).Width(60).Title("D/K")
+                           .HtmlAttributes(new { style = "text-align:center; font-weight:bold;" });
+
+                    // 10. Nilai Nota (netto) - Format Angka & Rata Kanan
+                    columns.Bound(col => col.netto)
+                           .Width(150)
+                           .Title("Nilai Nota")
+                           .Format("{0:n2}") // Format desimal (1,000.00)
+                           .HtmlAttributes(new { style = "text-align:right" });
+
+                    // Action Button (Locked)
                     columns.Command(command =>
                     {
                          command.Custom("LihatInquiryNotaProduksi")
-                           .Text("View")
-                            .IconClass("fa fa-eye")
-                           .Click("btnViewInquiryNota_OnClick");
-                    }).Width(100).Title("Action").Locked(true);
+                           .Text(" ") // Kosongkan text biar cuma icon (opsional)
+                           .IconClass("fa fa-eye")
+                           .Click("btnViewInquiryNota_OnClick")
+                           .HtmlAttributes(new { title = "View Detail" });
+                    }).Width(80).Title("Aksi").Locked(true);
                 })
-               .Pageable(pager => pager.Refresh(true).Info(true).PageSizes(true))
+                .Pageable(pager => pager.Refresh(true).Info(true).PageSizes(new[] { 20, 50, 100 }))
                 .Sortable()
                 .Filterable()
                 .Scrollable()
-                .Height(450)
-                .Resizable(a=>a.Columns(true))
+                .Height(500) // Sedikit ditinggikan
+                .Resizable(a => a.Columns(true))
             )
         </div>
 

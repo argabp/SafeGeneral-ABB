@@ -15,6 +15,7 @@ using DinkToPdf;
 using Microsoft.AspNetCore.Http;
 using MediatR;
 using System.Drawing.Printing;
+using ABB.Application.Cabangs.Queries;
 
 namespace ABB.Web.Modules.ListVoucher
 {
@@ -30,12 +31,63 @@ namespace ABB.Web.Modules.ListVoucher
             _reportGeneratorService = reportGeneratorService;
         }
 
-        public ActionResult Index()
+        public async Task<IActionResult> Index()
         {
             ViewBag.Module = Request.Cookies["Module"];
-            ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
+           
             ViewBag.UserLogin = CurrentUser.UserId;
+
+            var databaseName = Request.Cookies["DatabaseName"];
+            var kodeCabangCookie = Request.Cookies["UserCabang"];
+
+            ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
+             var cabangList = await Mediator.Send(new GetCabangsQuery { DatabaseName = databaseName });
+
+           
+            var userCabang = cabangList
+                .FirstOrDefault(c => string.Equals(c.kd_cb.Trim(), kodeCabangCookie?.Trim(), StringComparison.OrdinalIgnoreCase));
+            
+           
+            string displayCabang = userCabang != null 
+                ? $"{userCabang.kd_cb.Trim()} - {userCabang.nm_cb.Trim()}" 
+                : kodeCabangCookie;
+
+           
+            ViewBag.UserCabangValue = kodeCabangCookie; 
+            ViewBag.UserCabangText = displayCabang;  
+
+
             return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetKodeCabang(string tipe)
+        {
+            var databaseName = Request.Cookies["DatabaseValue"];
+            var kodeCabangCookie = Request.Cookies["UserCabang"];
+
+            if (string.IsNullOrWhiteSpace(kodeCabangCookie))
+                return Json(new List<object>()); // cookie tidak ada → kirim kosong
+
+            var result = await Mediator.Send(new GetCabangsQuery
+            {
+                DatabaseName = databaseName
+            });
+
+            // Filter cabang sesuai cookie user
+            var filtered = result
+                .Where(c => c.kd_cb?.Trim() == kodeCabangCookie.Trim())
+                .Select(c => new
+                {
+                    kd_cb = c.kd_cb.Trim(),
+                    nm_cb = c.nm_cb.Trim()
+                })
+                .ToList(); // <-- WAJIB untuk ComboBox
+
+            // kirim ke View kalau ingin dipakai
+            ViewBag.UserCabang = kodeCabangCookie;
+
+            return Json(filtered);
         }
 
         [HttpGet]
@@ -85,7 +137,12 @@ namespace ABB.Web.Modules.ListVoucher
                         DatabaseName = databaseName,
                         TanggalAwal = tglAwal,
                         TanggalAkhir = tglAkhir,
-                        UserLogin = user
+                        UserLogin = user,
+                        KodeKas = model.kodeKas,
+                        KodeCabang = model.KodeCabang,
+                        
+                        // Masukkan Keterangan yang dikirim dari JS ke Query
+                        KeteranganKas = model.keteranganKas
                     };
                 }
                 else if (model.tipe == "BANK")
@@ -94,7 +151,7 @@ namespace ABB.Web.Modules.ListVoucher
                     {
                         DatabaseName = databaseName,
                         KodeBank = model.kodeBank,
-                        
+                        KodeCabang = model.KodeCabang,
                         // Masukkan Keterangan yang dikirim dari JS ke Query
                         KeteranganBank = model.keterangan, 
                         
@@ -135,10 +192,16 @@ namespace ABB.Web.Modules.ListVoucher
 
     public class ListVoucherFilterDto
     {
-        public string tipe { get; set; }       // "KAS" atau "BANK"
-        public string kodeBank { get; set; }   // Hanya untuk BANK
+        public string tipe { get; set; }
+        public string KodeCabang { get; set; }
+
+        public string kodeBank { get; set; }
         public string keterangan { get; set; }
-        public string tglAwal { get; set; }    // Format "yyyy-MM-dd" atau sesuai input
+
+        public string kodeKas { get; set; }
+        public string keteranganKas { get; set; }
+
+        public string tglAwal { get; set; }
         public string tglAkhir { get; set; }
     }
 }

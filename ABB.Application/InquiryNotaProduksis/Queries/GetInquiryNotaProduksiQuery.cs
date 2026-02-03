@@ -17,6 +17,8 @@ namespace ABB.Application.InquiryNotaProduksis.Queries
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
          public string JenisAsset { get; set; }
+
+         public string KodeCabang { get; set; }
     }
 
     public class InquiryNotaProduksiQueryHandler : IRequestHandler<InquiryNotaProduksiQuery, List<InquiryNotaProduksiDto>>
@@ -39,6 +41,16 @@ namespace ABB.Application.InquiryNotaProduksis.Queries
                 into mataUangJoin
                 from m in mataUangJoin.DefaultIfEmpty() // Gunakan LEFT JOIN
                 select new { Produksi = p, MataUang = m };
+
+                // -----------------------------------------------------------
+                // 🔹 FILTER KODE CABANG (WAJIB)
+                // -----------------------------------------------------------
+                if (!string.IsNullOrEmpty(request.KodeCabang))
+                {
+                    // Filter kolom 'lok' sesuai UserCabang
+                    query = query.Where(x => x.Produksi.lok == request.KodeCabang);
+                }
+                // -----------------------------------------------------------
                 
                 // 🔹 Filter keyword jika ada
                 if (!string.IsNullOrEmpty(request.SearchKeyword))

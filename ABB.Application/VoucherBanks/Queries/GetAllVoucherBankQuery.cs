@@ -35,6 +35,10 @@ namespace ABB.Application.VoucherBanks.Queries
                 join cb in _context.Cabang
                     on vb.KodeCabang equals cb.kd_cb into cabangJoin
                 from cb in cabangJoin.DefaultIfEmpty()
+
+                 join kb in _context.KasBank
+                on vb.KodeAkun equals kb.NoPerkiraan into kasBankJoin
+                from kb in kasBankJoin.DefaultIfEmpty()
                 select new VoucherBankDto
                 {
                     KodeCabang = vb.KodeCabang,
@@ -55,14 +59,15 @@ namespace ABB.Application.VoucherBanks.Queries
                     KodeUserInput = vb.KodeUserInput,
                     KodeUserUpdate = vb.KodeUserUpdate,
                     JenisPembayaran = vb.JenisPembayaran,
-                    FlagFinal = vb.FlagFinal ?? false
+                    FlagFinal = vb.FlagFinal ?? false,
+                    NamaBank = kb != null ? kb.Keterangan : null
                 };
 
             query = query.Where(vb => vb.FlagFinal == request.FlagFinal);
 
             if (!string.IsNullOrEmpty(request.KodeCabang))
             {
-                query = query.Where(vk => vk.KodeCabang == request.KodeCabang);
+                query = query.Where(vb => vb.KodeCabang == request.KodeCabang);
             }
             // FILTER PENCARIAN
             if (!string.IsNullOrEmpty(request.SearchKeyword))

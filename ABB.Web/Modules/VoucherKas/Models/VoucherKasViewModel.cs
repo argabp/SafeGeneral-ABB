@@ -12,6 +12,11 @@ namespace ABB.Web.Modules.VoucherKas.Models
         [Display(Name = "KodeCabang")]
         public string KodeCabang { get; set; }
 
+        // --- TAMBAHKAN INI ---
+        [Display(Name = "Kode Kas")]
+        public string KodeKas { get; set; } 
+        // ---------------------
+
         
         [Display(Name = "JenisVoucher")]
         public string JenisVoucher { get; set; }

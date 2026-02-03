@@ -26,7 +26,6 @@
 
 <div class="window-body" style="background-color: lightgray">
     <form id="VoucherKasForm" enctype="multipart/form-data" autocomplete="off">
-        <input id="KodeKas" style="display: none;" type="hidden" value="@ViewBag.Kode" />
         <div class="row">
             <div class="form-group col-sm-6">
                     <label asp-for="KodeCabang"></label>
@@ -63,7 +62,7 @@
                                         class="custom-kuning"
                                         datatextfield="Text"
                                         datavaluefield="Value"
-                                        bind-to="ViewBag.DebetKreditOptions">
+                                        bind-to="ViewBag.DebetKreditOptions" required>
                         
                     </kendo-dropdownlist>
                     <span asp-validation-for="DebetKredit" class="text-danger"></span>
@@ -71,6 +70,25 @@
             </div>
         </div>
 
+        <div class="row">
+             <div class="form-group col-sm-4">
+                <label asp-for="KodeKas">Kode Kas</label>
+                <div>
+                    <kendo-combobox for="KodeKas"
+                                    style="width: 100%;"
+                                    class="custom-kuning"
+                                    datatextfield="Text"
+                                    datavaluefield="Value"
+                                    bind-to="ViewBag.KodeKasOptions"
+                                    filter="FilterType.Contains"
+                                    placeholder="Pilih kode kas..." required> 
+                                    @* HAPUS events='...' DISINI *@
+                    </kendo-combobox>
+                    <span asp-validation-for="KodeKas" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+       
         <div class="row">
             <div class="col-sm-12">
                     <label asp-for="NoVoucher">Nomor Voucher</label>
@@ -82,11 +100,18 @@
         </div>
         <hr>
 
-        <div class="row">
+       <div class="row">
             <div class="form-group col-sm-12">
                 <label>Kode Akun</label>
                 <div>
-                    <kendo-combobox for="KodeAkun" value="@ViewBag.KodeAkun" style="width: 100%;" readonly="true"  />
+                    @* Ubah jadi Combobox Readonly agar menampilkan Nama Akun, bukan Textbox biasa *@
+                    <kendo-combobox for="KodeAkun" 
+                                    style="width: 100%;" 
+                                    datatextfield="Text"
+                                    datavaluefield="Value"
+                                    bind-to="ViewBag.KodeAkunOptions"
+                                    readonly="true" 
+                                    enable="false" /> 
                     <span asp-validation-for="KodeAkun" class="text-danger"></span>
                 </div>
             </div>
@@ -206,22 +231,8 @@
 </div>
 
 <script>
+    
 
-    $(document).ready(function () {
-
-
-        // Ambil instance dropdownlist dari Kendo
-        var ddl = $("#DebetKredit").data("kendoDropDownList");
-
-        // Daftarkan event change
-        ddl.bind("change", function (e) {
-            var value = this.value();
-            if (value && value.toUpperCase() === "D") {
-                $("#labelDibayarKepada").text("Diterima Dari");
-            } else {
-                $("#labelDibayarKepada").text("Dibayar Kepada");
-            }
-        });
-    });
+   
 
 </script>
