@@ -6082,6 +6082,39 @@
       <None Update="Modules\Reports\Templates\KeteranganPengajuanKlaim.html">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Modules\Reports\Templates\VoucherBank.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Reports\Templates\VoucherKas.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Reports\Templates\LaporanArusKas.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Reports\Templates\LaporanBukuBesar.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Reports\Templates\LaporanBukuBesar117.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Reports\Templates\LaporanJurnalHarian.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Reports\Templates\LaporanJurnalHarian117.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Reports\Templates\LaporanLabaRugi.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Reports\Templates\LaporanNeraca.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Reports\Templates\LaporanOutstanding.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Modules\Reports\Templates\LaporanPelunasan.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
