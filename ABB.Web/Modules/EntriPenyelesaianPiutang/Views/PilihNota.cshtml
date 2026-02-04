@@ -40,7 +40,9 @@
     function getNotaProduksiSearchFilter() {
         return {
             searchKeyword: $("#PilihNotaSearchKeyword").val(),
-            jenisAsset: $("#JenisAsset").val()
+            jenisAsset: $("#JenisAsset").val(),
+            StartDate: $("#StartDate").val(),
+            EndDate: $("#EndDate").val()
         };
     }
 
@@ -64,6 +66,25 @@
 
 
 <div class="p-2">
+<!-- Label Periode -->
+            <label for="StartDate"><b>Periode :</b></label>
+
+            <!-- DatePicker Dari -->
+            @(Html.Kendo().DatePicker()
+                .Name("StartDate")
+                .HtmlAttributes(new { style = "width:150px;" })
+                .Format("dd-MM-yyyy")
+            )
+
+            <span class="date-separator">s/d</span>
+
+            <!-- DatePicker Sampai -->
+            @(Html.Kendo().DatePicker()
+                .Name("EndDate")
+                .HtmlAttributes(new { style = "width:150px;" })
+                .Format("dd-MM-yyyy")
+            )
+
      <!-- Label Jenis Asset -->
         <label for="JenisAsset" style="margin-left:15px;"><b>Jenis Ass :</b></label>
 
@@ -148,7 +169,8 @@
         .Width(150);
         
         columns.Bound(c => c.kd_mtu).Title("Kode Mata Uang").Width(100);
-        columns.Bound(c => c.nm_cust2).Title("Nama Tertanggung").Width(250);
+        columns.Bound(c => c.nm_cust).Title("Nama Tertanggung").Width(250);
+        columns.Bound(c => c.nm_cust2).Title("Reasuradur").Width(250);
     })
     .Pageable(pager => pager.Refresh(true).Info(true).PageSizes(new int[] { 10, 20, 50, 100 }))
     .PersistSelection()

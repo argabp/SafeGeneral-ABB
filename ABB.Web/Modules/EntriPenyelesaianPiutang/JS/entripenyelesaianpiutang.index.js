@@ -691,6 +691,11 @@ function SimpanNota() {
 
     var selectedData = [];
 
+     var isValid = true;
+    var errorMessage = "";
+
+  
+
     grid.select().each(function () {
         var row = $(this);
         var dataItem = grid.dataItem(this);
@@ -702,6 +707,21 @@ function SimpanNota() {
         var akunOtomatis = row.find('.coa-input').val(); 
         var dkOtomatis = row.find('.dk-input').val();
 
+          var saldo = parseFloat(dataItem.saldo) || 0;
+
+        // 🔴 VALIDASI
+        if (totalOrg > saldo) {
+            isValid = false;
+            showMessage(
+                'Error',
+                "Jumlah dibayarkan melebihi saldo!<br><br>" +
+                "<b>No Nota</b> : " + dataItem.no_nd + "<br>" +
+                "<b>Saldo</b> : " + kendo.toString(saldo, "n2") + "<br>" +
+                "<b>Input</b> : " + kendo.toString(totalOrg, "n2")
+            );
+            return false; // STOP LOOP
+        }
+
         selectedData.push({
             NoNota: dataItem.no_nd,
             TotalBayarOrg: Math.floor(totalOrg),
@@ -712,6 +732,10 @@ function SimpanNota() {
             Kurs: parseFloat(totalRpInput.data('kurs')) || 1
         });
     });
+
+     if (!isValid) {
+        return;
+    }
 
     if (selectedData.length === 0) {
         showMessage("Silakan pilih minimal satu nota untuk disimpan.");

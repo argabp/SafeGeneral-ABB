@@ -229,6 +229,67 @@ namespace ABB.Web.Modules.JurnalMemorial104
                 return Json(new { success = false, message = ex.Message });
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Lihat(string kodeCabang, string noVoucher)
+        {
+            var databaseName = Request.Cookies["DatabaseValue"];
+            var viewModel = new JurnalMemorial104ViewModel();
+
+            // Load Master Data (untuk mengisi dropdown value -> text)
+            // Sebenarnya di mode lihat kita bisa pakai textbox biasa, tapi pakai combo readonly juga oke
+            var cabangList = await Mediator.Send(new GetCabangsQuery { DatabaseName = databaseName });
+            var mataUangList = await Mediator.Send(new GetMataUangQuery { DatabaseName = databaseName });
+            var akunList = await Mediator.Send(new GetAllCoaQuery());
+
+            // Load Data Header
+            var headerDto = await Mediator.Send(new GetJurnalMemorial104ByIdQuery { KodeCabang = kodeCabang, NoVoucher = noVoucher });
+            if (headerDto == null) return NotFound();
+            
+            viewModel.JurnalHeader = headerDto;
+
+            // Load Data Detail
+            // Kita tidak perlu load ke viewModel.JurnalItems jika grid me-load via AJAX,
+            // tapi method ini tetap dipanggil untuk konsistensi
+            var detailListDto = await Mediator.Send(new GetDetailJurnalMemorial104Query { NoVoucher = headerDto.NoVoucher });
+            viewModel.JurnalItems = Mapper.Map<List<JurnalMemorial104Item>>(detailListDto);
+
+
+            // --- ViewBag Dropdowns ---
+            ViewBag.KodeCabangOptions = cabangList.Select(c => new SelectListItem
+            {
+                Value = c.kd_cb.Trim(),
+                Text = $"{c.kd_cb.Trim()} - {c.nm_cb.Trim()}"
+            }).ToList();
+
+            ViewBag.MataUangOptions = mataUangList.Select(x => new SelectListItem
+            {
+                Value = x.kd_mtu.Trim(),
+                Text = $"{x.kd_mtu.Trim()} - {x.nm_mtu.Trim()}"
+            }).ToList();
+
+            ViewBag.KodeAkunOptions = akunList.Select(x => new SelectListItem
+            {
+                Value = x.Kode.Trim(),
+                Text = $"{x.Kode.Trim()} - {x.Nama.Trim()}"
+            }).ToList();
+
+            return PartialView("Lihat", viewModel); // Render View 'Lihat.cshtml'
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetNextNoVoucher(string kodeCabang, int bulan, int tahun)
+        {
+            // Pastikan Query ini ada dan namespace-nya sudah di-using
+            var nextNo = await Mediator.Send(new GetNextNoVoucherJurnalQuery 
+            { 
+                KodeCabang = kodeCabang, 
+                Bulan = bulan, 
+                Tahun = tahun 
+            });
+            
+            return Json(new { success = true, noVoucher = nextNo });
+        }
     }
 
     

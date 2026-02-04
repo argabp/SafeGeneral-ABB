@@ -44,7 +44,9 @@
     function getNotaProduksiSearchFilter() {
         return {
             searchKeyword: $("#PilihNotaSearchKeyword").val(), 
-            jenisAsset: $("#JenisAsset").val() 
+            jenisAsset: $("#JenisAsset").val(),
+            StartDate: $("#StartDate").val(),
+            EndDate: $("#EndDate").val()
         };
     }
 
@@ -70,6 +72,26 @@
     <!-- <script src="~/Modules/EntriPembayaranBank/JS/entripembayaranbank.index.js"></script> -->
 
      <div class="p-2">
+
+      <!-- Label Periode -->
+            <label for="StartDate"><b>Periode :</b></label>
+
+            <!-- DatePicker Dari -->
+            @(Html.Kendo().DatePicker()
+                .Name("StartDate")
+                .HtmlAttributes(new { style = "width:150px;" })
+                .Format("dd-MM-yyyy")
+            )
+
+            <span class="date-separator">s/d</span>
+
+            <!-- DatePicker Sampai -->
+            @(Html.Kendo().DatePicker()
+                .Name("EndDate")
+                .HtmlAttributes(new { style = "width:150px;" })
+                .Format("dd-MM-yyyy")
+            )
+
      <label for="JenisAsset" style="margin-left:15px;"><b>Jenis Ass :</b></label>
 
         @(Html.Kendo().ComboBox()

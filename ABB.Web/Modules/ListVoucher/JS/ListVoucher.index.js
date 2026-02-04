@@ -92,7 +92,7 @@ function onCetakClick() {
     var kodeBank = (tipe === "BANK") ? $("#KodeBank").data("kendoComboBox").value() : "";
     var tglAwal = $("#TanggalAwal").data("kendoDatePicker").value();
     var tglAkhir = $("#TanggalAkhir").data("kendoDatePicker").value();
-    var kodeCabang = $("#KodeCabang").data("kendoComboBox").value().trim();
+    // var kodeCabang = $("#KodeCabang").data("kendoComboBox").value().trim();
 
     // 2. Validasi
     if (!tglAwal || !tglAkhir) {
@@ -143,8 +143,8 @@ function onCetakClick() {
         kodeKas: kodeKas,
         keteranganKas: namaKas,
         tglAwal: awal,
-        tglAkhir: akhir,
-        KodeCabang: kodeCabang
+        tglAkhir: akhir
+        // KodeCabang: kodeCabang
     };
     console.log(namaBank)
 

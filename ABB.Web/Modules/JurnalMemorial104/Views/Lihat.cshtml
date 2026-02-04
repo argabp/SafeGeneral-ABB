@@ -1,0 +1,108 @@
+@model ABB.Web.Modules.JurnalMemorial104.Models.JurnalMemorial104ViewModel
+@using Kendo.Mvc.UI
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+<style>
+    /* Style Readonly agar terlihat beda (opsional) */
+    .k-state-disabled, .k-widget[disabled] { opacity: 1 !important; background-color: #eee; }
+    .custom-kuning input { background-color: #fafafa !important; }
+</style>
+
+<div class="window-body">
+    <fieldset>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Kode Cabang</label>
+            <div class="col-sm-4">
+                    <kendo-combobox for="JurnalHeader.KodeCabang"
+                                style="width: 100%;"
+                                datatextfield="Text"
+                                datavaluefield="Value"
+                                bind-to="ViewBag.KodeCabangOptions"
+                                value="@Model.JurnalHeader.KodeCabang"
+                                enable="false"> </kendo-combobox>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">No. Voucher</label>
+            <div class="col-sm-4">
+                <kendo-textbox for="JurnalHeader.NoVoucher" 
+                value="@Model.JurnalHeader.NoVoucher" 
+                style="width: 100%;" 
+                readonly="true" />
+                <input type="hidden" id="NoVoucher_Lihat" value="@Model.JurnalHeader.NoVoucher" />
+            </div>
+        </div>
+        <hr>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Keterangan Voucher</label>
+            <div class="col-sm-10">
+                <kendo-textarea name="JurnalHeader.Keterangan" 
+                value="@Model.JurnalHeader?.Keterangan" 
+                rows="3" 
+                style="width: 100%;" readonly="true">
+                </kendo-textarea>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Tanggal</label>
+            <div class="col-sm-2">
+                <kendo-datepicker for="JurnalHeader.Tanggal" style="width: 100%;" enable="false" />
+            </div>
+
+            <label class="col-sm-2 col-form-label">Tanggal Input</label>
+            <div class="col-sm-2">
+                <kendo-datepicker for="JurnalHeader.TanggalInput" style="width: 100%;" readonly="true" />
+            </div>
+
+            <label class="col-sm-2 col-form-label">Tanggal Update</label>
+            <div class="col-sm-2">
+                <kendo-datepicker for="JurnalHeader.TanggalUpdate" style="width: 100%;" readonly="true" />
+            </div>
+
+        </div>
+        
+        </fieldset>
+
+    <br/>
+    <hr/>
+    <h5>Detail Jurnal</h5>
+
+    <script>
+        function getNoVoucherForGridLihat() {
+            return { 
+                noVoucher: $("#NoVoucher_Lihat").val() 
+            };
+        }
+    </script>
+
+    @(Html.Kendo().Grid<ABB.Web.Modules.JurnalMemorial104.Models.JurnalMemorial104Item>()
+        .Name("DetailJurnalGrid_Lihat") // ID Beda biar gak konflik
+        .DataSource(ds => ds.Ajax()
+            .Read(read => read.Action("GetDetailJurnal", "JurnalMemorial104").Data("getNoVoucherForGridLihat"))
+            .Model(m => m.Id(p => p.No))
+        )
+        .Columns(cols => {
+            cols.Bound(c => c.No).Title("No").Width(60);
+            cols.Bound(c => c.KodeAkun).Title("Akun").Width(150);
+            cols.Bound(c => c.KeteranganDetail).Title("Keterangan").Width(250);
+            cols.Bound(c => c.KodeMataUang).Title("MTU").Width(80);
+            cols.Bound(c => c.NilaiDebet).Format("{0:n2}").Title("Debet").Width(120).HtmlAttributes(new { style = "text-align:right;" });
+            cols.Bound(c => c.NilaiKredit).Format("{0:n2}").Title("Kredit").Width(120).HtmlAttributes(new { style = "text-align:right;" });
+            
+            // TIDAK ADA KOLOM COMMAND (EDIT/DELETE)
+        })
+        .NoRecords(nr => nr.Template("Tidak ada detail jurnal"))
+        .Pageable(pager => pager.Refresh(true))
+        .Sortable()
+        .Scrollable()
+        .Height(300)
+        .Events(e => e.DataBound("updateFooterTotalsLihat"))
+    )
+
+    <div style="margin-top: 10px; padding: 10px; background: #eee; border: 1px solid #ddd; font-weight: bold; display: flex; justify-content: flex-end; gap: 30px;">
+        <span>Total Debet: <span id="lblTotalDebet_Lihat" style="color:blue">0.00</span></span>
+        <span>Total Kredit: <span id="lblTotalKredit_Lihat" style="color:blue">0.00</span></span>
+        <span>Balance: <span id="lblBalance_Lihat" style="color:green">0.00</span></span>
+    </div>
+</div>

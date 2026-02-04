@@ -3,20 +3,60 @@
 <head>
     <meta charset="utf-8" />
     <title>Cetak Laporan Pelunasan</title>
+
     <style>
-        body { font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #000; }
-        .report-header { text-align: center; margin-bottom: 12px; }
-        .report-title { font-size: 16px; font-weight: bold; }
-        .report-sub { text-align: center; font-size: 12px; color: #333; margin-top: 4px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        table th, table td { border: 1px solid #666; padding: 6px 8px; text-align: left; }
-        table th { background: #f2f2f2; font-weight: bold; }
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 11pt;
+            line-height: 1.4;
+            color: #000;
+        }
+
+        .report-header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .report-title {
+            font-size: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .report-sub {
+            font-size: 11pt;
+            font-weight: normal;
+            margin-top: 2px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th {
+            font-size: 10pt;
+            font-weight: bold;
+            text-align: center;
+            border: 1px solid #000;
+            padding: 3px 4px;
+        }
+
+        td {
+            font-size: 9pt;
+            border: 1px solid #000;
+            padding: 2px 4px;
+            vertical-align: top;
+            letter-spacing: 0.5px;
+        }
+
         .right { text-align: right; }
         .center { text-align: center; }
         .no-border { border: none; }
-        .footer { margin-top: 16px; font-size: 11px; color:#333; }
     </style>
 </head>
+
 <body>
     <div class="report-header">
         <div class="report-title">LAPORAN PELUNASAN POS SENDIRI</div>
@@ -27,23 +67,24 @@
     <table>
         <thead>
             <tr>
-                <th style="width:40px;" class="center">No</th>
+                <th style="width:40px;">No</th>
                 <th style="width:120px;">TGL PRODUKSI</th>
-                <th>No.Nota</th>
-                <th style="width:160px;">No.Polis</th>
+                <th>No. NOTA</th>
+                <th style="width:160px;">NO. POLIS</th>
                 <th style="width:160px;">TERTANGGUNG</th>
                 <th style="width:160px;">PEMBAWA POS</th>
-                <th style="width:160px;">AGEN/BROKER</th>
+                <th style="width:160px;">AGEN / BROKER</th>
                 <th style="width:160px;">CEDING</th>
-                <th style="width:160px;">LOK</th>
-                <th style="width:160px;">COB</th>
-                <th style="width:160px;">NO.BUKTI</th>
-                <th style="width:160px;">TGL LUNAS</th>
-                <th style="width:160px;">NILAI LUNAS</th>
+                <th style="width:80px;">LOK</th>
+                <th style="width:80px;">COB</th>
+                <th style="width:120px;">NO. BUKTI</th>
+                <th style="width:120px;">TGL LUNAS</th>
+                <th style="width:120px;">NILAI LUNAS</th>
             </tr>
         </thead>
         <tbody>
-            {{ details }}  </tbody>
+            {{ details }}
+        </tbody>
     </table>
 </body>
 </html>

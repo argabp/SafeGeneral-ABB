@@ -1,8 +1,39 @@
 function btnAddJurnalMamorial104_OnClick() {
     var window = $("#JurnalMemorial104Window").data("kendoWindow");
+     window.one("refresh", function() {
+        attachDetailEvents(); // Pasang event listener
+        clearDetailForm();
+    });
+    
     window.refresh({
         url: "/JurnalMemorial104/Add"
     });
+    window.title("Entri Jurnal Memorial 104");
+    window.center().open();
+}
+
+function btnLihatJurnalMemorial104_OnClick(e) {
+    e.preventDefault();
+    // Ambil data dari grid (cara aman via onclick event)
+    // Ingat: karena pakai client template onclick='...', 'this' bukanlah grid row
+    // Gunakan parameter 'e' (event)
+    
+    // Cari row terdekat dari tombol yang diklik
+    var row = $(e.target).closest("tr");
+    // Ambil grid object
+    var grid = $("#JurnalMemorial104Grid").data("kendoGrid");
+    // Ambil dataItem
+    var dataItem = grid.dataItem(row);
+
+    var window = $("#JurnalMemorial104Window").data("kendoWindow");
+
+    // Kita tidak perlu toggleFormState lagi!
+    // Langsung refresh ke URL yang merender View Lihat.cshtml
+    window.refresh({
+        url: `/JurnalMemorial104/Lihat?kodeCabang=${dataItem.KodeCabang}&noVoucher=${dataItem.NoVoucher}`
+    });
+
+    window.title("Lihat Jurnal Memorial 104");
     window.center().open();
 }
 
@@ -140,19 +171,21 @@ function updateFooterTotals() {
 
 function btnEditJurnalMemorial104_OnClick(e) {
     e.preventDefault();
-    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    var row = $(e.target).closest("tr");
+    var grid = $("#JurnalMemorial104Grid").data("kendoGrid");
+    var dataItem = grid.dataItem(row);
+
     var window = $("#JurnalMemorial104Window").data("kendoWindow");
     
-    // --- TAMBAHKAN INI (Event Refresh) ---
+    // Pasang listener refresh agar form detail berfungsi
     window.one("refresh", function() {
-        attachDetailEvents(); // Pasang event listener
-        // Jangan clear form disini karena ini mode edit header
+        attachDetailEvents(); 
     });
-    // -------------------------------------
 
     window.refresh({
         url: `/JurnalMemorial104/Add?kodeCabang=${dataItem.KodeCabang}&noVoucher=${dataItem.NoVoucher}`
     });
+    window.title("Edit Jurnal Memorial 104");
     window.center().open();
 }
 
@@ -162,7 +195,18 @@ function attachDetailEvents() {
     var debetInput = $("#NilaiDebet").data("kendoNumericTextBox");
     var kreditInput = $("#NilaiKredit").data("kendoNumericTextBox");
     var tanggalHeader = $("#JurnalHeader_Tanggal").data("kendoDatePicker");
+    var cabangCombo = $("#JurnalHeader_KodeCabang").data("kendoComboBox");
 
+    if (tanggalHeader) {
+        tanggalHeader.bind("change", function() {
+            hitungKursDetail(); // Existing
+            generateNomorBukti(); // <-- TAMBAHAN BARU
+        });
+    }
+    
+    if (cabangCombo) {
+        cabangCombo.bind("change", generateNomorBukti);
+    }
     // Pasang Event Listener 'change'
     // Setiap kali user ubah Mata Uang, Angka, atau Tanggal -> Hitung ulang
     if (mataUangCombo) mataUangCombo.bind("change", hitungKursDetail);
@@ -170,7 +214,7 @@ function attachDetailEvents() {
     if (kreditInput) kreditInput.bind("change", hitungKursDetail);
     
     // Opsional: Jika tanggal header berubah, hitung ulang detail yang sedang diinput
-    if (tanggalHeader) tanggalHeader.bind("change", hitungKursDetail);
+    
 }
 
 function hitungKursDetail() {
@@ -360,3 +404,64 @@ function onDeleteHeaderJurnalMemorial104_Click(e) {
 }
 
 
+
+function updateFooterTotalsLihat() {
+    var grid = $("#DetailJurnalGrid_Lihat").data("kendoGrid");
+    
+    // Pastikan grid ada (karena fungsi ini dipanggil event DataBound)
+    if (!grid) return;
+
+    var data = grid.dataSource.data();
+    
+    var totalDebet = 0;
+    var totalKredit = 0;
+
+    for(var i=0; i<data.length; i++) {
+        totalDebet += (data[i].NilaiDebet || 0);
+        totalKredit += (data[i].NilaiKredit || 0);
+    }
+
+    var balance = totalDebet - totalKredit;
+    
+    $("#lblTotalDebet_Lihat").text(kendo.toString(totalDebet, "n2"));
+    $("#lblTotalKredit_Lihat").text(kendo.toString(totalKredit, "n2"));
+    
+    var lblBalance = $("#lblBalance_Lihat");
+    lblBalance.text(kendo.toString(balance, "n2"));
+
+    if (Math.abs(balance) < 0.01) {
+        lblBalance.css("color", "green").text("0.00 (Balance)");
+    } else {
+        lblBalance.css("color", "red");
+    }
+}
+
+function generateNomorBukti() {
+    // 1. Ambil Kode Cabang
+    var kodeCabang = $("#JurnalHeader_KodeCabang").data("kendoComboBox")?.value();
+    
+    // 2. Ambil Tanggal
+    var tanggalPicker = $("#JurnalHeader_Tanggal").data("kendoDatePicker");
+    var tanggalSelected = tanggalPicker ? tanggalPicker.value() : null;
+
+    // Validasi
+    if (!tanggalSelected || !kodeCabang) {
+        return; 
+    }
+
+    // 3. Ambil Bulan & Tahun
+    var bulan = tanggalSelected.getMonth() + 1;
+    var tahun = tanggalSelected.getFullYear();
+
+    // 4. Panggil Controller
+    $.ajax({
+        type: "GET",
+        url: `/JurnalMemorial104/GetNextNoVoucher?kodeCabang=${kodeCabang}&bulan=${bulan}&tahun=${tahun}`,
+        success: function (response) {
+            if (response && response.success) {
+                // Update Textbox No Voucher
+                $("#JurnalHeader_NoVoucher").val(response.noVoucher);
+            }
+        }
+    });
+}

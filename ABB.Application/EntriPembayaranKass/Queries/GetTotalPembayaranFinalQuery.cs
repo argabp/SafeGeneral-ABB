@@ -39,13 +39,13 @@ namespace ABB.Application.EntriPembayaranKass.Queries
         // 3. Ambil data dari tabel temp
         var payments = await _context.EntriPembayaranKas
             .Where(pb => pb.NoVoucher == request.NoVoucher)
-            .Select(pb => new { pb.TotalBayar, pb.DebetKredit })
+            .Select(pb => new { pb.TotalDlmRupiah, pb.DebetKredit })
             .ToListAsync(cancellationToken);
 
         decimal total = 0;
         foreach (var p in payments)
         {
-            var nilai = (decimal)(p.TotalBayar ?? 0); 
+            var nilai = (decimal)(p.TotalDlmRupiah ?? 0); 
             var paymentDK = p.DebetKredit?.Trim();
             
             // 4. Lakukan logika perhitungan (yang sudah benar)

@@ -424,7 +424,9 @@ function updateGridFooter() {
     var selectedData = [];
     var noVoucher = $("#NoVoucher").val();
 
-    // Loop baris yang dipilih (dicentang)
+    var isValid = true;
+    var errorMessage = "";
+
     grid.select().each(function () {
         var row = $(this);
         var dataItem = grid.dataItem(this);
@@ -433,23 +435,38 @@ function updateGridFooter() {
         var totalRp = parseFloat(row.find('.total-rp-input').val()) || 0;
         var totalRpInput = row.find('.total-rp-input');
 
-        // Ambil value dari input elemen (karena sudah otomatis terisi dari SP)
         var akunOtomatis = row.find('.coa-input').val(); 
         var dkOtomatis = row.find('.dk-input').val();
+        var saldo = parseFloat(dataItem.saldo) || 0;
+
+        // 🔴 VALIDASI
+        if (totalOrg > saldo) {
+            isValid = false;
+           showMessage(
+                'Error',
+                "Jumlah dibayarkan melebihi saldo!<br><br>" +
+                "<b>No Nota</b> : " + dataItem.no_nd + "<br>" +
+                "<b>Saldo</b> : " + kendo.toString(saldo, "n2") + "<br>" +
+                "<b>Input</b> : " + kendo.toString(totalOrg, "n2")
+            );
+            return false; // STOP LOOP
+        }
 
         selectedData.push({
             NoNota: dataItem.no_nd,
             TotalBayarOrg: totalOrg,
             TotalBayarRp: totalRp,
-            
-            // [FIX] Ambil dari input element agar sesuai yang tampil di layar
-            DebetKredit: dkOtomatis, 
-            KodeAkun: akunOtomatis,  
-            
-            KodeMataUang: dataItem.kd_mtu, // Ambil dari dataItem (hasil SP)
+            DebetKredit: dkOtomatis,
+            KodeAkun: akunOtomatis,
+            KodeMataUang: dataItem.kd_mtu,
             Kurs: parseFloat(totalRpInput.data('kurs')) || 1
         });
     });
+
+    // ❌ JIKA TIDAK VALID → STOP TOTAL
+    if (!isValid) {
+        return;
+    }
 
     if (selectedData.length === 0) {
         alert("Silakan pilih minimal satu nota untuk disimpan.");
@@ -470,21 +487,15 @@ function updateGridFooter() {
             if (response.Status === "OK") {
                 showMessage('Success','Data berhasil disimpan.');
 
-                // Tutup window & Refresh
                 var pilihNotaWindow = $("#PilihNotaWindow").data("kendoWindow");
                 if (pilihNotaWindow) {
                     pilihNotaWindow.close();
                 }
-                
-                // Bersihkan form utama biar fresh
-                // (Optional: clearPaymentForm() jika diperlukan logika reset tertentu)
-                
-                // Refresh Grid Detail di Window Utama
+
                 var detailGrid = $("#DetailPembayaranGrid").data("kendoGrid");
                 if (detailGrid) {
                     detailGrid.dataSource.read();
                 }
-
             } else {
                 alert("Error: " + (response.Message || "Gagal menyimpan data."));
             }
@@ -494,6 +505,7 @@ function updateGridFooter() {
         }
     });
 }
+
 
 
 function onSearchClick() {

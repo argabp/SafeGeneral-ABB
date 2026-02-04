@@ -50,27 +50,22 @@
             )
             .Columns(columns =>
             {
-                columns.Bound(col => col.KodeCabang).Width(100).Title("Cabang");
+                columns.Bound(col => col.KodeCabang).Width(150).Title("Cabang Vocher");
                 columns.Bound(col => col.NoVoucher).Width(180).Title("No. Voucher");
                 columns.Bound(col => col.Tanggal).Format("{0:dd-MM-yyyy}").Width(120).Title("Tanggal");
-                columns.Bound(col => col.Keterangan).Width(350).Title("Keterangan");
+                columns.Bound(col => col.Keterangan).Width(350).Title("Keterangan Vocher");
                 columns.Bound(col => col.FlagGL).Title("Posting").Width(100)
                     .ClientTemplate("#= FlagGL ? '<i class=\"fa fa-check text-success\"></i> Yes' : '<i class=\"fa fa-times text-danger\"></i> No' #")
                     .HtmlAttributes(new { style = "text-align: center;" });
                 
-                columns.Command(command =>
-                {
-                   command.Custom("EditJurnal")
-                       .Text(" Edit")
-                        .IconClass("fa fa-edit")
-                        .Click("btnEditJurnalMemorial104_OnClick");
-
-                   command.Custom("DeleteJurnal")
-                        .Text(" Hapus")
-                        .IconClass("fa fa-trash")
-                        .Click("onDeleteHeaderJurnalMemorial104_Click");
-                        
-                }).Width(220).Title("Action").Locked(true);
+                columns.Bound("").Title("Action").Width(220).ClientTemplate(
+                    "# if (FlagGL == true) { #" +
+                        "<button class='k-button k-button-icontext k-grid-LihatJurnal' onclick='btnLihatJurnalMemorial104_OnClick(event)'><span class='k-icon k-i-eye'></span> Lihat</button>" +
+                    "# } else { #" +
+                        "<button class='k-button k-button-icontext k-grid-EditJurnal' onclick='btnEditJurnalMemorial104_OnClick(event)'><span class='k-icon k-i-edit'></span> Edit</button> " +
+                        "<button class='k-button k-button-icontext k-grid-DeleteJurnal' onclick='onDeleteHeaderJurnalMemorial104_Click(event)'><span class='k-icon k-i-delete'></span> Hapus</button>" +
+                    "# } #"
+                ).Locked(true);
             })
             .Pageable(pager => pager.Refresh(true).PageSizes(true))
             .Sortable()

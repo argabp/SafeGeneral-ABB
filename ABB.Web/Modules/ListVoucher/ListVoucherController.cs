@@ -37,24 +37,10 @@ namespace ABB.Web.Modules.ListVoucher
            
             ViewBag.UserLogin = CurrentUser.UserId;
 
-            var databaseName = Request.Cookies["DatabaseName"];
+           
             var kodeCabangCookie = Request.Cookies["UserCabang"];
 
-            ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
-             var cabangList = await Mediator.Send(new GetCabangsQuery { DatabaseName = databaseName });
-
-           
-            var userCabang = cabangList
-                .FirstOrDefault(c => string.Equals(c.kd_cb.Trim(), kodeCabangCookie?.Trim(), StringComparison.OrdinalIgnoreCase));
-            
-           
-            string displayCabang = userCabang != null 
-                ? $"{userCabang.kd_cb.Trim()} - {userCabang.nm_cb.Trim()}" 
-                : kodeCabangCookie;
-
-           
-            ViewBag.UserCabangValue = kodeCabangCookie; 
-            ViewBag.UserCabangText = displayCabang;  
+            ViewBag.DatabaseName = Request.Cookies["DatabaseName"]; 
 
 
             return View();
@@ -139,7 +125,7 @@ namespace ABB.Web.Modules.ListVoucher
                         TanggalAkhir = tglAkhir,
                         UserLogin = user,
                         KodeKas = model.kodeKas,
-                        KodeCabang = model.KodeCabang,
+                        // KodeCabang = model.KodeCabang,
                         
                         // Masukkan Keterangan yang dikirim dari JS ke Query
                         KeteranganKas = model.keteranganKas
@@ -151,7 +137,7 @@ namespace ABB.Web.Modules.ListVoucher
                     {
                         DatabaseName = databaseName,
                         KodeBank = model.kodeBank,
-                        KodeCabang = model.KodeCabang,
+                        // KodeCabang = model.KodeCabang,
                         // Masukkan Keterangan yang dikirim dari JS ke Query
                         KeteranganBank = model.keterangan, 
                         
@@ -193,7 +179,7 @@ namespace ABB.Web.Modules.ListVoucher
     public class ListVoucherFilterDto
     {
         public string tipe { get; set; }
-        public string KodeCabang { get; set; }
+        // public string KodeCabang { get; set; }
 
         public string kodeBank { get; set; }
         public string keterangan { get; set; }

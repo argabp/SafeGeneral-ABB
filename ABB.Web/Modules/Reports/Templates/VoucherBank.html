@@ -2,36 +2,78 @@
 <html>
 <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laporan Voucher Bank</title>
+
     <style>
-        body { font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #000; }
-        .report-header { text-align: center; margin-bottom: 10px; }
-        .report-title { font-weight: bold; font-size: 16px; }
-        table { width: 100%; border-collapse: collapse; }
-        table th, table td { border: 1px solid #666; padding: 6px; }
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 11pt;
+            line-height: 1.4;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            font-size: 10pt;
+            font-weight: bold;
+            text-align: center;
+            border: 1px solid #000;
+            padding: 3px 4px;
+        }
+
+        td {
+            font-size: 9pt;
+            border: 1px solid #000;
+            padding: 2px 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .report-header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .report-title {
+            font-size: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .report-subtitle {
+            font-size: 11pt;
+            font-weight: normal;
+        }
+
         .center { text-align: center; }
         .right { text-align: right; }
+        .bold { font-weight: bold; }
     </style>
 </head>
+
 <body>
     <div class="report-header">
-        <div class="report-title"> VOUCHER BANK</div>
-        <div>Periode: {{ tanggal_awal }} s/d {{ tanggal_akhir }}</div>
-        <div>Kode Bank: {{ kode_bank }} - {{keterangan_bank}}</div>
+        <div class="report-title">VOUCHER BANK</div>
+        <div class="report-subtitle">
+            Periode: {{ tanggal_awal }} s/d {{ tanggal_akhir }}
+        </div>
+        <div class="report-subtitle">
+            Kode Bank: {{ kode_bank }} - {{ keterangan_bank }}
+        </div>
     </div>
 
     <table>
         <thead>
             <tr>
                 <th>No</th>
-                <th>Tanggal Voucher</th>
                 <th>No Voucher</th>
-                <th>Diterima Dari</th>
+                <th>Debet</th>
+                <th>Kredit</th>
                 <th>Keterangan</th>
-                <th>Total</th>
-                <th>Kode Bank</th>
-                <th>Jenis</th>
-                <th>Cabang</th>
             </tr>
         </thead>
         <tbody>

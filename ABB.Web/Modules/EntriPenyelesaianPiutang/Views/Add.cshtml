@@ -394,10 +394,10 @@
 </div>
 
 
-<div class="window-footer" data-total-penyelesaian-original="@(Model.PenyelesaianHeader?.TotalOrg ?? 0)" id="TotalBuktiOrg" style=" font-weight: bold;    display: flex;     justify-content: center;     flex-direction: row;     flex-wrap: nowrap;     align-content: center;     align-items: center; ">
+<div class="window-footer" data-total-penyelesaian-original="@(Model.PenyelesaianHeader?.TotalRp ?? 0)" id="TotalBuktiOrg" style=" font-weight: bold;    display: flex;     justify-content: center;     flex-direction: row;     flex-wrap: nowrap;     align-content: center;     align-items: center; ">
     <div style="padding-right: 20px;font-size: 15px;">
             <span>Total Bukti:  </span>
-           <span id="voucherTotal"> @((Model.PenyelesaianHeader?.TotalOrg ?? 0).ToString("N0"))</span>
+           <span id="voucherTotal"> @((Model.PenyelesaianHeader?.TotalRp ?? 0).ToString("N0"))</span>
             
             <span style="margin-left: 20px;">Total Penyelesaian :  </span>
             <span id="pembayaranTotal" style="color: green;">0</span>

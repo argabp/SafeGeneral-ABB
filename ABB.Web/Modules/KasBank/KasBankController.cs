@@ -85,8 +85,7 @@ namespace ABB.Web.Modules.KasBank
         public async Task<IActionResult> Add()
         {
 
-             var databaseName = Request.Cookies["DatabaseValue"]; 
-            var kodeCabangCookie = Request.Cookies["UserCabang"];
+            var databaseName = Request.Cookies["DatabaseValue"]; 
 
             ViewBag.TipeKasBankOptions = new List<SelectListItem>
             {
@@ -94,7 +93,26 @@ namespace ABB.Web.Modules.KasBank
                 new SelectListItem { Text = "Bank", Value = "BANK" }
             };
 
+
+            var kodeCabangCookie = Request.Cookies["UserCabang"]?.Trim();
+            
+
+            string glDept = null;
+            if (!string.IsNullOrEmpty(kodeCabangCookie) && kodeCabangCookie.Length >= 2)
+            {
+                glDept = kodeCabangCookie.Substring(kodeCabangCookie.Length - 2);
+            }
+            ViewBag.DebugUserCabang = glDept;
             var coaList = await Mediator.Send(new GetAllCoaQuery());
+
+            if (!string.IsNullOrEmpty(glDept))
+            {
+                coaList = coaList
+                    .Where(x => x.Dept == glDept)   // sesuaikan nama field
+                    .ToList();
+            }
+
+
             ViewBag.NoPerkiraanOptions = coaList.Select(x => new SelectListItem
             {
                 Value = x.Kode,

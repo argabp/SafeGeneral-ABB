@@ -110,15 +110,26 @@ input.custom-kode {
           <div class="form-group row">
             <label class="col-sm-2 col-form-label">Keterangan Voucher</label>
             <div class="col-sm-10">
-                <kendo-textarea for="KeteranganVoucher"
-                name="KeteranganVoucher"
-                rows="4"
-                textarea-attributes="@(new Dictionary<string, object> { { "readonly", "readonly" } })"
-                style="width:100%; background-color:#fff; border:1px solid #93a7baff;">
-                    @Model.VoucherHeader.KeteranganVoucher 
+                <kendo-textarea
+                    for="KeteranganVoucher"
+                    name="KeteranganVoucher"
+                    rows="4"
+                    readonly="true"
+                    style="
+                        width:100%;
+                        background-color:#e9ecef;
+                        border:1px solid #ced4da;
+                        color:#495057;
+                        font-size:12px;
+                        cursor:not-allowed;
+                    ">
+                    @Model.VoucherHeader.KeteranganVoucher
                 </kendo-textarea>
             </div>
-         </div>
+        </div>
+
+
+
          <div class="form-group row">
           <label class="col-sm-2 col-form-label">Flag Posting</label>
             <div class="col-sm-4 d-flex align-items-center">
@@ -304,10 +315,10 @@ input.custom-kode {
 </div>
 
 
-<div class="window-footer" data-total-voucher-original="@(Model.VoucherHeader.TotalVoucher ?? 0)" style=" font-weight: bold;    display: flex;     justify-content: center;     flex-direction: row;     flex-wrap: nowrap;     align-content: center;     align-items: center; ">
+<div class="window-footer" data-total-voucher-original="@(Model.VoucherHeader.TotalDalamRupiah ?? 0)" style=" font-weight: bold;    display: flex;     justify-content: center;     flex-direction: row;     flex-wrap: nowrap;     align-content: center;     align-items: center; ">
     <div style="padding-right: 20px;font-size: 15px;">
             <span>Total Voucher:  </span>
-            <span id="voucherTotal"> @Model.VoucherHeader.TotalVoucher?.ToString("N0")</span>
+            <span id="voucherTotal"> @Model.VoucherHeader.TotalDalamRupiah?.ToString("N0")</span>
             
             <span style="margin-left: 20px;">Total Keseluruhan Pembayaran:  </span>
             <span id="pembayaranTotal" style="color: green;">0</span>

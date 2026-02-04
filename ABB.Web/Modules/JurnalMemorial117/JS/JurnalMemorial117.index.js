@@ -11,24 +11,86 @@ function btnAddJurnal_OnClick() {
     window.refresh({
         url: "/JurnalMemorial117/Add"
     });
+     window.title("Add Jurnal Memorial 117");
     window.center().open();
+}
+
+function btnLihatJurnal_OnClick(e) {
+    e.preventDefault();
+    // Ambil data dari grid row
+    var row = $(e.target).closest("tr");
+    var grid = $("#JurnalMemorialGrid").data("kendoGrid");
+    var dataItem = grid.dataItem(row);
+
+    var window = $("#JurnalMemorialWindow").data("kendoWindow");
+
+    // Refresh window dengan URL Action 'Lihat'
+    window.refresh({
+        url: `/JurnalMemorial117/Lihat?kodeCabang=${dataItem.KodeCabang}&noVoucher=${dataItem.NoVoucher}`
+    });
+
+    window.title("Lihat Jurnal Memorial 117");
+    window.center().open();
+}
+
+// --- FUNGSI TOTAL FOOTER (KHUSUS LIHAT) ---
+// Ditaruh disini agar global dan tidak error "undefined"
+function updateFooterTotalsLihat() {
+    var grid = $("#DetailJurnalGrid_Lihat").data("kendoGrid");
+    if (!grid) return;
+
+    var data = grid.dataSource.data();
+    
+    var totalDebet = 0;
+    var totalKredit = 0;
+
+    for(var i=0; i<data.length; i++) {
+        totalDebet += (data[i].NilaiDebet || 0);
+        totalKredit += (data[i].NilaiKredit || 0);
+    }
+
+    var balance = totalDebet - totalKredit;
+    
+    $("#lblTotalDebet_Lihat").text(kendo.toString(totalDebet, "n2"));
+    $("#lblTotalKredit_Lihat").text(kendo.toString(totalKredit, "n2"));
+    
+    var lblBalance = $("#lblBalance_Lihat");
+    lblBalance.text(kendo.toString(balance, "n2"));
+
+    if (Math.abs(balance) < 0.01) {
+        lblBalance.css("color", "green").text("0.00 (Balance)");
+    } else {
+        lblBalance.css("color", "red");
+    }
 }
 
 function btnEditJurnal_OnClick(e) {
     e.preventDefault();
-    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+    // ❌ SALAH (Kode Lama): 'this' bukan grid saat pakai onclick manual
+    // var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+    // ✅ BENAR (Perbaikan): Ambil grid secara manual
+    var grid = $("#JurnalMemorialGrid").data("kendoGrid"); // Pastikan ID Grid benar
+    var row = $(e.target).closest("tr");
+    var dataItem = grid.dataItem(row);
+
+    if (!dataItem) {
+        console.error("Data item tidak ditemukan");
+        return;
+    }
+
     var window = $("#JurnalMemorialWindow").data("kendoWindow");
     
-    // --- TAMBAHKAN INI (Event Refresh) ---
     window.one("refresh", function() {
-        attachDetailEvents(); // Pasang event listener
-        // Jangan clear form disini karena ini mode edit header
+        attachDetailEvents(); 
+        // Mode edit: Jangan clear detail form sepenuhnya, tapi biarkan loading dari controller
     });
-    // -------------------------------------
 
     window.refresh({
         url: `/JurnalMemorial117/Add?kodeCabang=${dataItem.KodeCabang}&noVoucher=${dataItem.NoVoucher}`
     });
+    window.title("Edit Jurnal Memorial 117");
     window.center().open();
 }
 
@@ -80,49 +142,52 @@ function onSaveHeader() {
 
 function onDeleteHeader_Click(e) {
     e.preventDefault();
-     var grid = $("#JurnalMemorialGrid").data("kendoGrid");
+
+    var grid = $("#JurnalMemorialGrid").data("kendoGrid");
     var windowKendo = $("#JurnalMemorialWindow").data("kendoWindow");
 
-    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    // ❌ SALAH
+    // var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+    // ✅ BENAR
+    var row = $(e.target).closest("tr");
+    var dataItem = grid.dataItem(row);
+
+    if (!dataItem) {
+        console.error("Data item tidak ditemukan");
+        return;
+    }
 
     showConfirmation(
         'Confirmation',
-        'Are you sure you want to delete?',
+        `Apakah Anda yakin ingin menghapus Jurnal ${dataItem.NoVoucher}?`,
         function () {
-
             var data = {
                 KodeCabang: dataItem.KodeCabang,
                 NoVoucher: dataItem.NoVoucher
             };
 
-            ajaxPost(
-                "/JurnalMemorial117/DeleteHeader",
-                JSON.stringify(data),
-                function (response) {
-
+            // Gunakan $.ajax atau ajaxPost helper kamu
+            $.ajax({
+                type: "POST",
+                url: "/JurnalMemorial117/DeleteHeader",
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                success: function (response) {
                     if (response.success === true || response.Result === "OK") {
-
                         showMessage('Success', 'Data berhasil dihapus');
-
-                        // ✅ Refresh GRID utama
+                        
                         if (grid) {
-                            grid.dataSource.read();
-                            grid.refresh();
+                            grid.dataSource.read(); // Refresh Grid
                         }
-
-                        // ✅ Tutup window
-                        if (windowKendo) {
-                            windowKendo.close();
-                        }
-
                     } else {
-                        showMessage(
-                            'Error',
-                            response.message || response.Message || 'Gagal menghapus data'
-                        );
+                        showMessage('Error', response.message || 'Gagal menghapus data');
                     }
+                },
+                error: function() {
+                    showMessage('Error', 'Terjadi kesalahan server saat menghapus.');
                 }
-            );
+            });
         }
     );
 }
@@ -304,6 +369,17 @@ function attachDetailEvents() {
     var debetInput = $("#NilaiDebet").data("kendoNumericTextBox");
     var kreditInput = $("#NilaiKredit").data("kendoNumericTextBox");
     var tanggalHeader = $("#JurnalHeader_Tanggal").data("kendoDatePicker");
+    var cabangCombo = $("#JurnalHeader_KodeCabang").data("kendoComboBox"); // Tambahkan ini
+    if (tanggalHeader) {
+        tanggalHeader.bind("change", function() {
+            hitungKursDetail();   // Hitung kurs (logika lama)
+            generateNomorBukti(); // Generate No Voucher (logika baru)
+        });
+    }
+
+    if (cabangCombo) {
+        cabangCombo.bind("change", generateNomorBukti);
+    }
 
     // Pasang Event Listener 'change'
     // Setiap kali user ubah Mata Uang, Angka, atau Tanggal -> Hitung ulang
@@ -311,8 +387,7 @@ function attachDetailEvents() {
     if (debetInput) debetInput.bind("change", hitungKursDetail);
     if (kreditInput) kreditInput.bind("change", hitungKursDetail);
     
-    // Opsional: Jika tanggal header berubah, hitung ulang detail yang sedang diinput
-    if (tanggalHeader) tanggalHeader.bind("change", hitungKursDetail);
+   
 }
 
 function hitungKursDetail() {
@@ -365,4 +440,46 @@ function hitungKursDetail() {
             console.error("Gagal mengambil data kurs.");
         }
     });
+}
+
+function generateNomorBukti() {
+    var kodeCabangText = $("#JurnalHeader_KodeCabang").data("kendoComboBox")?.input.val() || "";
+    var kodeCabang = kodeCabangText.split(" - ")[0].trim();
+    
+    // Ambil tanggal dari Kendo DatePicker
+    var kendoDatePicker = $("#JurnalHeader_Tanggal").data("kendoDatePicker");
+    var tanggalSelected = kendoDatePicker ? kendoDatePicker.value() : null;
+
+    if (!tanggalSelected) {
+        $("#JurnalHeader_NoVoucher").val(""); 
+        return;
+    }
+
+    // Format tanggal (yyyy-MM-dd)
+    var formattedDate = kendo.toString(tanggalSelected, "yyyy-MM-dd");
+
+    // Pastikan Controller punya Action GetNextNoVoucherJurnal yang menerima parameter tanggal
+    // Anda mungkin perlu menyesuaikan nama parameter di Controller (misal: bulan, tahun atau tanggalVoucher)
+    // Asumsi Controller menerima: kodeCabang, bulan, tahun
+    
+    var bulan = tanggalSelected.getMonth() + 1;
+    var tahun = tanggalSelected.getFullYear();
+
+    if (kodeCabang) {
+        $.ajax({
+            type: "GET",
+            // Sesuaikan URL ini dengan Controller Anda
+            // Contoh jika controller menerima Bulan & Tahun terpisah:
+            url: `/JurnalMemorial117/GetNextNoVoucher?kodeCabang=${kodeCabang}&bulan=${bulan}&tahun=${tahun}`,
+            
+            // ATAU jika controller menerima TanggalVoucher:
+            // url: `/JurnalMemorial117/GetNextNoVoucher?kodeCabang=${kodeCabang}&tanggalVoucher=${formattedDate}`,
+            
+            success: function (response) {
+                if (response && response.noVoucher) {
+                    $("#JurnalHeader_NoVoucher").val(response.noVoucher);
+                }
+            }
+        });
+    }
 }

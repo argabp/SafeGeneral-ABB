@@ -68,6 +68,7 @@ namespace ABB.Application.EntriPembayaranKass.Queries
                                 // Di SP tadi, kita sudah set: p.curensi AS kd_mtu
                                 kd_mtu = GetValue<string>(reader, "kd_mtu"), 
                                 
+                                nm_cust = GetValue<string>(reader, "nm_cust"),
                                 nm_cust2 = GetValue<string>(reader, "nm_cust2"),
 
                                 // --- LOGIC ATASAN (AUTO FILL) ---

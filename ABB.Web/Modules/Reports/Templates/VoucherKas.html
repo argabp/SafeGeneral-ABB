@@ -3,44 +3,82 @@
 <head>
     <meta charset="utf-8" />
     <title>Cetak Voucher KAS</title>
+
     <style>
-        body { font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #000; }
-        .report-header { text-align: center; margin-bottom: 12px; }
-        .report-title { font-size: 16px; font-weight: bold; }
-        .report-sub { text-align: center; font-size: 12px; color: #333; margin-top: 4px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        table th, table td { border: 1px solid; padding: 6px 8px; text-align: left; }
-        table th { background: #f2f2f2; font-weight: bold; }
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 11pt;
+            line-height: 1.4;
+            color: #000;
+        }
+
+        .report-header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .report-title {
+            font-size: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .report-sub {
+            font-size: 11pt;
+            font-weight: normal;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th {
+            font-size: 10pt;
+            font-weight: bold;
+            text-align: center;
+            border: 1px solid #000;
+            padding: 3px 4px;
+        }
+
+        td {
+            font-size: 9pt;
+            border: 1px solid #000;
+            padding: 2px 4px;
+            vertical-align: top;
+            letter-spacing: 0.5px;
+        }
+
         .right { text-align: right; }
         .center { text-align: center; }
-        .footer { margin-top: 16px; font-size: 11px; color:#333; }
+        .bold { font-weight: bold; }
     </style>
 </head>
+
 <body>
     <div class="report-header">
         <div class="report-title">VOUCHER KAS</div>
-        <div class="report-sub">PERIODE: {{ tanggal_awal }} s/d {{ tanggal_akhir }}</div>
+        <div class="report-sub">
+            PERIODE: {{ tanggal_awal }} s/d {{ tanggal_akhir }}
+        </div>
     </div>
 
     <table>
         <thead>
             <tr>
-                <th class="center" style="width:40px;">No</th>
-                <th style="width:100px;">TGL VOUCHER</th>
-                <th style="width:120px;">NO VOUCHER</th>
-                <th style="width:160px;">DIBAYAR KEPADA</th>
-                <th style="width:200px;">KETERANGAN</th>
-                <th style="width:120px;" class="right">TOTAL VOUCHER</th>
-                <th style="width:120px;" class="right">TOTAL DALAM RUPIAH</th>
-                <th style="width:100px;" class="right">SALDO</th>
-                <th style="width:160px;">KETERANGAN KAS BANK</th>
+                <th>No</th>
+                <th>Tanggal</th>
+                <th>No Voucher</th>
+                <th>Debet</th>
+                <th>Kredit</th>
+                <th>Keterangan</th>
             </tr>
         </thead>
         <tbody>
             {{ details }}
         </tbody>
     </table>
-
-   
 </body>
 </html>

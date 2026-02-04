@@ -94,10 +94,17 @@
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">Keterangan Voucher</label>
         <div class="col-sm-4">
-            <input class="form-control form-control-sm"
-                   value="@Model.VoucherKasHeader.KeteranganVoucher"
-                   readonly style="font-size: 12px;"/>
-        </div>
+        <textarea class="form-control form-control-sm"
+                  rows="4"
+                  readonly
+                  style="
+                      font-size:12px;
+                      background-color:#e9ecef;
+                      border:1px solid #ced4da;
+                      color:#495057;
+                      resize:none;
+                  ">@Model.VoucherKasHeader.KeteranganVoucher</textarea>
+    </div>
     </div>
 
     <div class="form-group row">
@@ -176,10 +183,10 @@
 </div>
 
 
-<div class="window-footer" data-total-voucher-original-final="@(Model.VoucherKasHeader.TotalVoucher ?? 0)" style=" font-weight: bold;    display: flex;     justify-content: center;     flex-direction: row;     flex-wrap: nowrap;     align-content: center;     align-items: center; ">
+<div class="window-footer" data-total-voucher-original-final="@(Model.VoucherKasHeader.TotalDalamRupiah ?? 0)" style=" font-weight: bold;    display: flex;     justify-content: center;     flex-direction: row;     flex-wrap: nowrap;     align-content: center;     align-items: center; ">
     <div style="padding-right: 20px;font-size: 13px;">
             <span>Total Voucher: </span>
-            <span id="voucherTotal">@Model.VoucherKasHeader.TotalVoucher?.ToString("N0")</span>
+            <span id="voucherTotal">@Model.VoucherKasHeader.TotalDalamRupiah?.ToString("N0")</span>
             
             <span style="margin-left: 20px;">Total Keseluruhan Pembayaran: </span>
             <span id="pembayaranTotalFinal" style="color: green;">0</span>

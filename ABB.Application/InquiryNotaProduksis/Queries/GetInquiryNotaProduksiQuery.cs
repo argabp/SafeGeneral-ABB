@@ -90,6 +90,7 @@ namespace ABB.Application.InquiryNotaProduksis.Queries
                     id = x.Produksi.id,
                     no_nd = x.Produksi.no_nd,
                     nm_cust2 = x.Produksi.nm_cust2,
+                    nm_cust = x.Produksi.nm_cust,
                     premi = x.Produksi.premi,
                     no_ref = x.Produksi.no_ref,
                     date = x.Produksi.date,

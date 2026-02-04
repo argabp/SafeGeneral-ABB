@@ -79,6 +79,7 @@ namespace ABB.Application.EntriPembayaranBanks.Queries
                                 kd_mtu = GetValue<string>(reader, "kd_mtu"), 
                                 
                                 nm_cust2 = GetValue<string>(reader, "nm_cust2"),
+                                nm_cust = GetValue<string>(reader, "nm_cust"),
 
                                 // --- LOGIC ATASAN (AUTO FILL) ---
                                 DefaultKodeAkun = GetValue<string>(reader, "DefaultKodeAkun"),

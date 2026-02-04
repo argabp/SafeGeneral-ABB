@@ -235,5 +235,61 @@ namespace ABB.Web.Modules.JurnalMemorial117
             });
             return Json(new { nilai_kurs = kurs });
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Lihat(string kodeCabang, string noVoucher)
+        {
+            var databaseName = Request.Cookies["DatabaseValue"];
+            var viewModel = new JurnalMemorial117ViewModel();
+
+            // Load Master Data (untuk mengisi dropdown value -> text)
+            var cabangList = await Mediator.Send(new GetCabangsQuery { DatabaseName = databaseName });
+            var mataUangList = await Mediator.Send(new GetMataUangQuery { DatabaseName = databaseName });
+            var akunList = await Mediator.Send(new GetAllCoa117Query()); // Pastikan pakai query COA 117
+
+            // Load Data Header
+            var headerDto = await Mediator.Send(new GetJurnalMemorial117ByIdQuery { KodeCabang = kodeCabang, NoVoucher = noVoucher });
+            if (headerDto == null) return NotFound();
+            
+            viewModel.JurnalHeader = headerDto;
+
+            // Load Data Detail (Optional, karena grid load by ajax, tapi bagus untuk memastikan data ada)
+            var detailListDto = await Mediator.Send(new GetDetailJurnalMemorial117Query { NoVoucher = headerDto.NoVoucher });
+            viewModel.JurnalItems = Mapper.Map<List<JurnalMemorial117Item>>(detailListDto);
+
+            // --- ViewBag Dropdowns ---
+            ViewBag.KodeCabangOptions = cabangList.Select(c => new SelectListItem
+            {
+                Value = c.kd_cb.Trim(),
+                Text = $"{c.kd_cb.Trim()} - {c.nm_cb.Trim()}"
+            }).ToList();
+
+            ViewBag.MataUangOptions = mataUangList.Select(x => new SelectListItem
+            {
+                Value = x.kd_mtu.Trim(),
+                Text = $"{x.kd_mtu.Trim()} - {x.nm_mtu.Trim()}"
+            }).ToList();
+
+            ViewBag.KodeAkunOptions = akunList.Select(x => new SelectListItem
+            {
+                Value = x.Kode.Trim(),
+                Text = $"{x.Kode.Trim()} - {x.Nama.Trim()}"
+            }).ToList();
+
+            return PartialView("Lihat", viewModel); // Merender View 'Lihat.cshtml'
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetNextNoVoucher(string kodeCabang, int bulan, int tahun)
+        {
+            var nextNo = await Mediator.Send(new GetNextNoVoucherJurnalQuery 
+            { 
+                KodeCabang = kodeCabang, 
+                Bulan = bulan, 
+                Tahun = tahun 
+            });
+            
+            return Json(new { noVoucher = nextNo });
+        }
     }
 }

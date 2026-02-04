@@ -1,13 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using ABB.Application.Common.Dtos;
-using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
-using ABB.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
@@ -16,7 +12,6 @@ using System.IO;
 
 namespace ABB.Application.VoucherKass.Queries
 {
-    // DTO untuk hasil join VoucherKas + KasBank
     public class VoucherKasJoinDto
     {
         public string NoVoucher { get; set; }
@@ -25,24 +20,19 @@ namespace ABB.Application.VoucherKass.Queries
         public decimal? TotalVoucher { get; set; }
         public string DibayarKepada { get; set; }
         public string DebetKredit { get; set; }
-        public decimal? TotalDalamRupiah { get; set; }
-        
-        // Data dari KasBank
-        public string KodeKas { get; set; }     // Tambahan: Biar tau ini K01 atau K02
-        public string NamaKas { get; set; }     // Keterangan dari tabel KasBank
-        public decimal? Saldo { get; set; }
-        public string KodeCabang { get; set; } 
+
+        public string KodeKas { get; set; }
+        public string NamaKas { get; set; }
     }
 
     public class GetVoucherKasByTanggalRangeQuery : IRequest<string>
     {
+        public string DatabaseName { get; set; }
         public DateTime TanggalAwal { get; set; }
         public DateTime TanggalAkhir { get; set; }
-        public string DatabaseName { get; set; }
-        public string UserLogin { get; set; }
-        public string KodeKas { get; set; } // filter opsional
+        public string KodeKas { get; set; }
         public string KeteranganKas { get; set; }
-        public string KodeCabang { get; set; }
+        public string UserLogin { get; set; }
     }
 
     public class GetVoucherKasByTanggalRangeQueryHandler
@@ -51,27 +41,36 @@ namespace ABB.Application.VoucherKass.Queries
         private readonly IDbContextPstNota _context;
         private readonly IHostEnvironment _environment;
 
-        public GetVoucherKasByTanggalRangeQueryHandler(IDbContextPstNota context, IHostEnvironment environment)
+        public GetVoucherKasByTanggalRangeQueryHandler(
+            IDbContextPstNota context,
+            IHostEnvironment environment)
         {
             _context = context;
             _environment = environment;
         }
 
-        public async Task<string> Handle(GetVoucherKasByTanggalRangeQuery request, CancellationToken cancellationToken)
+        public async Task<string> Handle(
+            GetVoucherKasByTanggalRangeQuery request,
+            CancellationToken cancellationToken)
         {
-            // Ambil data voucher KAS + join KasBank
-            // PERBAIKAN: Join berdasarkan KodeKas yang tersimpan di VoucherKas (v.KodeKas)
-            // agar lebih akurat daripada join by Akun (karena 1 akun bisa dipake >1 kode kas walau jarang)
-            
-            var vouchers = await (
+            // =========================
+            // SALDO AWAL DARI KASBANK
+            // =========================
+            decimal saldoAwal = await _context.KasBank
+                .Where(k => k.Kode == request.KodeKas)
+                .Select(k => k.Saldo ?? 0)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            // =========================
+            // MUTASI VOUCHER KAS
+            // =========================
+            var query =
                 from v in _context.VoucherKas
                 join k in _context.KasBank
-                    on v.KodeKas equals k.Kode // Join langsung by Kode Kas (K01, K02)
+                    on v.KodeKas equals k.Kode
                 where v.TanggalVoucher.HasValue
                       && v.TanggalVoucher.Value >= request.TanggalAwal
                       && v.TanggalVoucher.Value <= request.TanggalAkhir
-                      // && k.Kode == "K01" <--- INI DIHAPUS SUPAYA SEMUA KAS MUNCUL
-                orderby v.TanggalVoucher
                 select new VoucherKasJoinDto
                 {
                     NoVoucher = v.NoVoucher,
@@ -80,76 +79,105 @@ namespace ABB.Application.VoucherKass.Queries
                     TotalVoucher = v.TotalVoucher,
                     DibayarKepada = v.DibayarKepada,
                     DebetKredit = v.DebetKredit,
-                    TotalDalamRupiah = v.TotalDalamRupiah,
-                    KodeCabang = v.KodeCabang,
-                    KodeKas = v.KodeKas,       // Tampilkan Kodenya
-                    NamaKas = k.Keterangan,    // Tampilkan Namanya
-                    Saldo = k.Saldo
-                }
-            ).ToListAsync(cancellationToken);
-
-            if (!vouchers.Any())
-                // Jangan throw error, return HTML kosong/pesan saja biar user gak kaget error page
-                // Tapi kalau requirementmu throw, biarkan saja.
-                throw new NullReferenceException("Data Voucher KAS tidak ditemukan pada periode tersebut.");
+                    KodeKas = v.KodeKas,
+                    NamaKas = k.Keterangan
+                };
 
             if (!string.IsNullOrEmpty(request.KodeKas))
-                {
-                    vouchers = vouchers
-                        .Where(v => v.KodeKas == request.KodeKas)
-                        .ToList();
-                }
+                query = query.Where(x => x.KodeKas == request.KodeKas);
 
-                
-            if (!string.IsNullOrEmpty(request.KodeCabang))
-                {
-                    vouchers = vouchers
-                        .Where(v => v.KodeCabang == request.KodeCabang)
-                        .ToList();
-                }
+            var vouchers = await query
+                .OrderBy(x => x.TanggalVoucher)
+                .ToListAsync(cancellationToken);
 
-            // Helper format
-            Func<DateTime?, string> fmtDate = d => d.HasValue ? d.Value.ToString("dd-MM-yyyy") : "-";
-            Func<decimal?, string> fmtNum = n => n.HasValue ? string.Format("{0:N2}", n.Value) : "0.00";
+            if (!vouchers.Any())
+                throw new Exception("Data Voucher Kas tidak ditemukan.");
 
-            // Bangun detail baris tabel
-            StringBuilder detailsBuilder = new StringBuilder();
-            int idx = 1;
+            // =========================
+            // FORMAT
+            // =========================
+            Func<DateTime?, string> fmtDate =
+                d => d.HasValue ? d.Value.ToString("dd-MM-yyyy") : "-";
+
+            Func<decimal?, string> fmtNum =
+                n => n.HasValue ? string.Format("{0:N2}", n.Value) : "0.00";
+
+            // =========================
+            // TOTAL
+            // =========================
+            decimal totalDebet = vouchers
+                .Where(x => x.DebetKredit == "D")
+                .Sum(x => x.TotalVoucher ?? 0);
+
+            decimal totalKredit = vouchers
+                .Where(x => x.DebetKredit == "K")
+                .Sum(x => x.TotalVoucher ?? 0);
+
+            decimal saldoAkhir = saldoAwal + totalDebet - totalKredit;
+
+            // =========================
+            // BUILD TABLE
+            // =========================
+            StringBuilder sb = new StringBuilder();
+            int no = 1;
+
+            // SALDO AWAL
+            sb.Append($@"
+                <tr class='bold'>
+                    <td colspan='6'>Saldo Awal : {fmtNum(saldoAwal)}</td>
+                </tr>
+            ");
+
             foreach (var v in vouchers)
             {
-                // Disini saya tambahkan kolom Kode Kas di tampilan (opsional, sesuaikan HTML header kamu)
-                detailsBuilder.Append($@"
+                sb.Append($@"
                     <tr>
-                        <td class='center'>{idx}</td>
-                        <td class='center'>{v.KodeKas}</td> <td>{fmtDate(v.TanggalVoucher)}</td>
+                        <td class='center'>{no}</td>
+                        <td>{fmtDate(v.TanggalVoucher)}</td>
                         <td>{v.NoVoucher}</td>
-                        <td>{v.DibayarKepada}</td>
+                        <td class='right'>{(v.DebetKredit == "D" ? fmtNum(v.TotalVoucher) : "")}</td>
+                        <td class='right'>{(v.DebetKredit == "K" ? fmtNum(v.TotalVoucher) : "")}</td>
                         <td>{v.KeteranganVoucher}</td>
-                        <td class='right'>{fmtNum(v.TotalVoucher)}</td>
-                        <td class='right'>{fmtNum(v.TotalDalamRupiah)}</td>
-                        <td class='right'>{fmtNum(v.Saldo)}</td>
-                    </tr>");
-                idx++;
+                    </tr>
+                ");
+                no++;
             }
 
-            // Path template Scriban
-            string templatePath = Path.Combine(_environment.ContentRootPath, "Modules", "Reports", "Templates", "VoucherKas.html");
-            if (!File.Exists(templatePath))
-                throw new FileNotFoundException($"Template VoucherKas.html tidak ditemukan di {templatePath}");
+            // TOTAL
+            sb.Append($@"
+                <tr class='bold'>
+                    <td colspan='3' class='right'>TOTAL</td>
+                    <td class='right'>{fmtNum(totalDebet)}</td>
+                    <td class='right'>{fmtNum(totalKredit)}</td>
+                    <td></td>
+                </tr>
+            ");
 
-            string templateHtml = await File.ReadAllTextAsync(templatePath, cancellationToken);
+            // SALDO AKHIR
+            sb.Append($@"
+                <tr class='bold'>
+                    <td colspan='6'>Saldo Akhir : {fmtNum(saldoAkhir)}</td>
+                </tr>
+            ");
 
-            Template template = Template.Parse(templateHtml);
+            // =========================
+            // RENDER SCRIBAN
+            // =========================
+            string templatePath = Path.Combine(
+                _environment.ContentRootPath,
+                "Modules", "Reports", "Templates", "VoucherKas.html");
 
-            string resultHtml = template.Render(new
+            string htmlTemplate = await File.ReadAllTextAsync(templatePath, cancellationToken);
+            var template = Template.Parse(htmlTemplate);
+
+            return template.Render(new
             {
-                details = detailsBuilder.ToString(),
+                details = sb.ToString(),
                 tanggal_awal = request.TanggalAwal.ToString("dd-MM-yyyy"),
                 tanggal_akhir = request.TanggalAkhir.ToString("dd-MM-yyyy"),
+                kas = request.KeteranganKas,
                 user = request.UserLogin
             });
-
-            return resultHtml;
         }
     }
 }
