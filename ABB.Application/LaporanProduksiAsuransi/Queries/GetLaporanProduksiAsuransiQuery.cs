@@ -210,21 +210,23 @@ namespace ABB.Application.LaporanProduksiAsuransi.Queries
                         sequence++;
 
                         var nilai_ttl_ptg = ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, data.nilai_ttl_ptg);
-                        var nilai_prm = ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, data.nilai_prm);
+                        var nilai_prm = data.kd_mtu == "001" ? string.Empty : ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, data.nilai_prm);
                         var nilai_prm_idr = ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, data.nilai_prm_idr);
-                        var nilai_dis = ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, data.nilai_dis);
+                        var nilai_dis = data.kd_mtu == "001" ? string.Empty : ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, data.nilai_dis);
                         var nilai_dis_idr = ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, data.nilai_dis_idr);
-                        var nilai_kms = ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, data.nilai_kms);
+                        var nilai_kms = data.kd_mtu == "001" ? string.Empty : ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, data.nilai_kms);
                         var nilai_kms_idr = ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, data.nilai_kms_idr);
-                        var nilai_bia_pol = ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, data.nilai_bia_pol);
+                        var nilai_bia_pol = data.kd_mtu == "001" ? string.Empty : ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, data.nilai_bia_pol);
                         var nilai_bia_pol_idr = ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, data.nilai_bia_pol_idr);
-                        var nilai_bia_mat = ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, data.nilai_bia_mat);
+                        var nilai_bia_mat = data.kd_mtu == "001" ? string.Empty : ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, data.nilai_bia_mat);
                         var nilai_bia_mat_idr = ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, data.nilai_bia_mat_idr);
-                        var premi_netto = ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, Convert.ToDecimal(data.nilai_prm) - (Convert.ToDecimal(data.nilai_dis) + Convert.ToDecimal(data.nilai_kms)));
+                        var premi_netto = data.kd_mtu == "001" ? string.Empty : ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, Convert.ToDecimal(data.nilai_prm) - (Convert.ToDecimal(data.nilai_dis) + Convert.ToDecimal(data.nilai_kms)));
                         var premi_netto_idr = ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, Convert.ToDecimal(data.nilai_prm_idr) - (Convert.ToDecimal(data.nilai_dis_idr) + Convert.ToDecimal(data.nilai_kms_idr)));
-                        var total_bia = ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, Convert.ToDecimal(data.nilai_prm) - (Convert.ToDecimal(data.nilai_dis) + Convert.ToDecimal(data.nilai_kms)) + Convert.ToDecimal(data.nilai_bia_pol) + Convert.ToDecimal(data.nilai_bia_mat));
+                        var total_bia = data.kd_mtu == "001" ? string.Empty : ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, Convert.ToDecimal(data.nilai_prm) - (Convert.ToDecimal(data.nilai_dis) + Convert.ToDecimal(data.nilai_kms)) + Convert.ToDecimal(data.nilai_bia_pol) + Convert.ToDecimal(data.nilai_bia_mat));
                         var total_bia_idr = ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, Convert.ToDecimal(data.nilai_prm_idr) - (Convert.ToDecimal(data.nilai_dis_idr) + Convert.ToDecimal(data.nilai_kms_idr)) + Convert.ToDecimal(data.nilai_bia_pol_idr) + Convert.ToDecimal(data.nilai_bia_mat_idr));
 
+                        var kd_symbol_mtu = data.kd_mtu == "001" ? string.Empty : data.kd_symbol_mtu;
+                        
                         stringBuilder.Append(@$"<tr>
                             <td style='border: 1px solid'>{sequence}</td>
                             <td style='border: 1px solid'>{data.no_pol_ttg}<br>{data.no_nota}</td>
@@ -232,7 +234,7 @@ namespace ABB.Application.LaporanProduksiAsuransi.Queries
                             <td style='border: 1px solid'>{data.tgl_mul_ptg_ind} s/d {data.tgl_akh_ptg_ind}<br>{data.tgl_nt?.ToShortDateString()}</td>
                             <td style='border: 1px solid; text-align: right'>{nilai_ttl_ptg}<br><br>{data.no_reg}</td>
                             <td style='border: 1px solid'>{data.kd_cvrg}</td>
-                            <td style='border: 1px solid; text-align: center'>{data.kd_symbol_mtu}<br><br>Rp.</td>
+                            <td style='border: 1px solid; text-align: center'>{kd_symbol_mtu}<br><br>Rp.</td>
                             <td style='border: 1px solid; text-align: right'>{nilai_prm}<br><br>{nilai_prm_idr}</td>
                             <td style='border: 1px solid; text-align: right'>{nilai_dis}<br>{nilai_kms}<br>{nilai_dis_idr}<br>{nilai_kms_idr}</td>
                             <td style='border: 1px solid; text-align: right'>{premi_netto}<br><br>{premi_netto_idr}</td>
@@ -256,18 +258,21 @@ namespace ABB.Application.LaporanProduksiAsuransi.Queries
                     }
 
                     // ✅ Subtotal per kd_mkt
-                    stringBuilder.Append(@$"<tr>
-                        <td colspan='6' style='border-top: 1px solid;'>TOTAL DALAM Original</td>
-                        <td style='border-top: 1px solid; text-align: center'>{innerFirst.kd_symbol_mtu}</td>
-                        <td style='border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, total_nilai_prm)}</td>
-                        <td style='border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, total_nilai_dis)}</td>
-                        <td style='border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, total_premi_netto)}</td>
-                        <td style='border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, total_nilai_bia_pol)}</td>
-                        <td style='border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, total_nilai_bia_mat)}</td>
-                        <td style='border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, total_group)}</td>
-                    </tr>");
+
+                    if (innerFirst.kd_mtu != "001")
+                    {
+                        stringBuilder.Append(@$"<tr>
+                            <td colspan='6' style='border-top: 1px solid;'>TOTAL DALAM Original</td>
+                            <td style='border-top: 1px solid; text-align: center'>{innerFirst.kd_symbol_mtu}</td>
+                            <td style='border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, total_nilai_prm)}</td>
+                            <td style='border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, total_nilai_dis)}</td>
+                            <td style='border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, total_premi_netto)}</td>
+                            <td style='border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, total_nilai_bia_pol)}</td>
+                            <td style='border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, total_nilai_bia_mat)}</td>
+                            <td style='border-top: 1px solid; text-align: right'>{ReportHelper.ConvertToReportFormat(innerFirst.kd_symbol_mtu, total_group)}</td>
+                        </tr>");
                     
-                    stringBuilder.Append(@$"<tr>
+                        stringBuilder.Append(@$"<tr>
                         <td colspan='6' style='border-bottom: 1px solid;'></td>
                         <td style='border-bottom: 1px solid; text-align: center'>{innerFirst.kd_symbol_mtu}</td>
                         <td style='border-bottom: 1px solid; text-align: right'></td>
@@ -277,6 +282,7 @@ namespace ABB.Application.LaporanProduksiAsuransi.Queries
                         <td style='border-bottom: 1px solid; text-align: right'></td>
                         <td style='border-bottom: 1px solid; text-align: right'></td>
                     </tr>");
+                    }
 
                     // ✅ Subtotal per kd_mkt
                     stringBuilder.Append(@$"<tr>

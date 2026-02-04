@@ -260,6 +260,7 @@ namespace ABB.Application.Akseptasis.Commands
                     });
 
                     entity.no_endt = request.no_endt;
+                    entity.desk_deduct = request.desk_deduct;
                     entity.link_file = request.link_file;
                     entity.nomor_pengajuan = request.nomor_pengajuan;
                     entity.no_pol_induk = request.no_pol_induk;

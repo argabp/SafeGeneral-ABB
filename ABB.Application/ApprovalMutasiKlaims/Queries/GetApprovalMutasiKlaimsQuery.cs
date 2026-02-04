@@ -47,7 +47,7 @@ namespace ABB.Application.ApprovalMutasiKlaims.Queries
 					INNER JOIN rf05 scob
 						ON p.kd_cob = scob.kd_cob
 						AND p.kd_scob = scob.kd_scob
-				WHERE cb.kd_cb = @KodeCabang AND p.kd_user_status = @UserId AND p.status IN ('LKP Process', 'LKP Escalated', 'LKP Revised') 
+				WHERE cb.kd_cb = @KodeCabang AND p.kd_user_status = @UserId AND p.flag_closing = 'N' AND p.status IN ('LKP Process', 'LKP Escalated', 'LKP Revised') 
 				  AND (p.user_status like '%'+@SearchKeyword+'%' 
 					OR cb.nm_cb like '%'+@SearchKeyword+'%' 
 					OR cob.nm_cob like '%'+@SearchKeyword+'%' 

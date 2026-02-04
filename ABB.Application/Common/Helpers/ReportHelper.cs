@@ -15,7 +15,7 @@ namespace ABB.Application.Common.Helpers
         
         public static decimal ConvertToDecimalFormat(string value)
         {
-            return Convert.ToDecimal(value.Replace("(", "-").Replace(")", ""));
+            return string.IsNullOrWhiteSpace(value) ? 0 : Convert.ToDecimal(value.Replace("(", "-").Replace(")", ""));
         }
 
         public static string ConvertDateTime(DateTime? value, string format)

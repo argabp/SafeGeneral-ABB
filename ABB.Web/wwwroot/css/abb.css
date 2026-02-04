@@ -1004,6 +1004,13 @@ form .k-textbox, form .k-dropdown, form .k-combobox, form .k-multiselect, form .
     padding: 0;
 }
 
+/* Tablet & Mobile */
+@media (max-width: 992px) {
+    .login-body {
+        height: 45%;
+    }
+}
+
 .login-field {
     height: 70px;
     flex-grow: 0;

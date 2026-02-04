@@ -85,8 +85,9 @@ namespace ABB.Web.Modules.Account
         {
             // real auth state check
             var hasSession = HttpContext.Session.GetString("SessionId") != null;
+            var user = HttpContext.User.Identity?.Name;
 
-            if (hasSession)
+            if (hasSession && !string.IsNullOrEmpty(user))
                 return Redirect("/Home/Index");
 
             if ((bool)(TempData["SuccessChangePassword"] ?? false)) ViewData["ShowSuccessMessage"] = "true";
