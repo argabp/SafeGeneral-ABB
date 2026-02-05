@@ -10,32 +10,80 @@
 }
 
 <style>
-    .filter-section { display: flex; align-items: center; margin-bottom: 15px; }
-    .filter-label { font-weight: bold; width: 140px; min-width: 140px; white-space: nowrap; margin-right: 15px; }
-    .filter-input-group { display: flex; align-items: center; gap: 10px; }
-    .sd-text { font-weight: 600; margin: 0 5px; }
+    body {
+        font-family: "Times New Roman", Times, serif;
+    }
+
+    .filter-container {
+        padding: 10px 15px;
+    }
+
+    .filter-section {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .filter-label {
+        width: 150px;
+        min-width: 150px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .filter-input-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .sd-text {
+        font-weight: 600;
+        margin: 0 6px;
+    }
+
+    .k-textbox[readonly] {
+        background-color: #f2f2f2;
+    }
+
+    .btn-area {
+        margin-top: 10px;
+        padding-left: 150px;
+    }
 </style>
 
 <div class="flat-box filter-box">
     <div class="flat-box-content filter-container">
-        
+
+        <!-- KODE CABANG -->
         <div class="filter-section">
-            <label class="filter-label">Kode Cabang :</label>
-             <input class="k-textbox" value="@ViewBag.UserCabangText" readonly style="width:300px; background-color: #e9ecef;" />
-             <input type="hidden" id="KodeCabang" value="@ViewBag.UserCabangValue" />
+            <label class="filter-label">Kode Cabang</label>
+            <input class="k-textbox"
+                   value="@ViewBag.UserCabangText"
+                   readonly
+                   style="width:300px;" />
+            <input type="hidden" id="KodeCabang" value="@ViewBag.UserCabangValue" />
         </div>
 
+        <!-- PERIODE -->
         <div class="filter-section">
-            <label class="filter-label">Periode :</label>
+            <label class="filter-label">Periode</label>
             <div class="filter-input-group">
-                @(Html.Kendo().DatePicker().Name("tgl1").Format("dd-MM-yyyy").HtmlAttributes(new { style = "width:120px;" }))
+                @(Html.Kendo().DatePicker()
+                    .Name("tgl1")
+                    .Format("dd-MM-yyyy")
+                    .HtmlAttributes(new { style = "width:120px;" }))
                 <span class="sd-text">s/d</span>
-                @(Html.Kendo().DatePicker().Name("tgl2").Format("dd-MM-yyyy").HtmlAttributes(new { style = "width:120px;" }))
+                @(Html.Kendo().DatePicker()
+                    .Name("tgl2")
+                    .Format("dd-MM-yyyy")
+                    .HtmlAttributes(new { style = "width:120px;" }))
             </div>
         </div>
 
+        <!-- KODE AKUN -->
         <div class="filter-section">
-            <label class="filter-label">Kode Akun 104 :</label>
+            <label class="filter-label">Kode Akun 104</label>
             <div class="filter-input-group">
                 @(Html.Kendo().ComboBox()
                     .Name("AkunAwal")
@@ -45,8 +93,13 @@
                     .Filter("contains")
                     .Suggest(true)
                     .HtmlAttributes(new { style = "width:250px;" })
-                    // Arahkan ke Controller LaporanBukuBesar117
-                    .DataSource(source => { source.Read(read => { read.Action("GetCoaList", "LaporanBukuBesar117"); }); })
+                    .DataSource(source =>
+                    {
+                        source.Read(read =>
+                        {
+                            read.Action("GetCoaList", "LaporanBukuBesar117");
+                        });
+                    })
                 )
 
                 <span class="sd-text">s/d</span>
@@ -59,14 +112,25 @@
                     .Filter("contains")
                     .Suggest(true)
                     .HtmlAttributes(new { style = "width:250px;" })
-                    .DataSource(source => { source.Read(read => { read.Action("GetCoaList", "LaporanBukuBesar117"); }); })
+                    .DataSource(source =>
+                    {
+                        source.Read(read =>
+                        {
+                            read.Action("GetCoaList", "LaporanBukuBesar117");
+                        });
+                    })
                 )
             </div>
         </div>
 
-        <div class="filter-section">
-             <button id="btnSearch" class="k-button k-primary" style="border-radius:6px; width:120px;" onclick="generateBukuBesar117()">
-                <span class='k-icon k-i-print'></span> Cetak
+        <!-- BUTTON -->
+        <div class="btn-area">
+            <button id="btnSearch"
+                    class="k-button k-primary"
+                    style="width:120px;"
+                    onclick="generateBukuBesar117()">
+                <span class="k-icon k-i-print"></span>
+                Cetak
             </button>
         </div>
 
@@ -93,8 +157,7 @@
             AkunAwal: akun1,
             AkunAkhir: akun2
         };
-        
-        // Panggil Controller LaporanBukuBesar117
+
         $.ajax({
             url: '/LaporanBukuBesar117/GenerateReport',
             type: 'POST',

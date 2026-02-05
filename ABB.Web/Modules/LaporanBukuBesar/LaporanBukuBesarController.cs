@@ -59,37 +59,56 @@ namespace ABB.Web.Modules.LaporanBukuBesar
         }
 
         // Dropdown Kode Akun
-        [HttpGet]
+       [HttpGet]
         public async Task<IActionResult> GetCoaList(string text)
         {
-            // 1. Siapkan Query ke tabel Coa (104/Umum)
-            // Pastikan _context sudah tidak merah lagi
+            // Ambil kode cabang dari cookie login
+            // var kodeCabang = Request.Cookies["UserCabang"]?.Trim();
+
+            var kodeCabangCookie = Request.Cookies["UserCabang"]?.Trim();
+            
+
+            string glDept = null;
+            if (!string.IsNullOrEmpty(kodeCabangCookie) && kodeCabangCookie.Length >= 2)
+            {
+                glDept = kodeCabangCookie.Substring(kodeCabangCookie.Length - 2);
+            }
+
             var query = _context.Set<Coa>()
                 .AsNoTracking()
                 .AsQueryable();
 
-            // 2. Jika user mengetik sesuatu, filter datanya
+            // Filter berdasarkan kode cabang login
+            if (!string.IsNullOrEmpty(kodeCabangCookie))
+            {
+                query = query.Where(x => x.gl_dept == glDept);
+                // kalau nama kolom beda, ganti:
+                // x.KodeCabang == kodeCabang
+            }
+
+            // Filter dari input user (autocomplete / search)
             if (!string.IsNullOrEmpty(text))
             {
-                query = query.Where(x => 
-                    x.gl_kode.Contains(text) || 
+                query = query.Where(x =>
+                    x.gl_kode.Contains(text) ||
                     x.gl_nama.Contains(text));
             }
 
-            // 3. Ambil 50 data teratas saja agar ringan
+            // Ambil maksimal 50 data
             var list = await query
                 .OrderBy(x => x.gl_kode)
-                .Take(50) 
-                .Select(x => new 
+                .Take(50)
+                .Select(x => new
                 {
                     Kode = x.gl_kode.Trim(),
                     Nama = x.gl_nama.Trim(),
-                    Display = $"{x.gl_kode.Trim()} - {x.gl_nama.Trim()}"
+                    Display = x.gl_kode.Trim() + " - " + x.gl_nama.Trim()
                 })
                 .ToListAsync();
 
             return Json(list);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> GenerateReport([FromBody] LaporanBukuBesarFilterDto model)

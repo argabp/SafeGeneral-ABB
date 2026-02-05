@@ -77,7 +77,17 @@ namespace ABB.Web.Modules.KasBank
         [HttpPost]
         public async Task<ActionResult> GetKasBank([DataSourceRequest] DataSourceRequest request, string searchKeyword)
         {
-            var data = await Mediator.Send(new GetAllKasBankQuery { SearchKeyword = searchKeyword });
+                var kodeCabang = Request.Cookies["UserCabang"];
+
+                if (string.IsNullOrEmpty(kodeCabang))
+                    return Json(await new List<KasBankDto>().ToDataSourceResultAsync(request));
+
+                var data = await Mediator.Send(new GetAllKasBankQuery
+                {
+                    SearchKeyword = searchKeyword,
+                    KodeCabang = kodeCabang   // ✅ FILTER CABANG LOGIN
+                });
+
             return Json(await data.ToDataSourceResultAsync(request));
         }
 

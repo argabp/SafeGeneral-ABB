@@ -54,8 +54,8 @@
                     .DataTextField("Display")
                     .DataValueField("Kode")
                     .Filter(FilterType.Contains) // Filter contains
-                    .MinLength(2) // Baru cari setelah user ketik 2 huruf (Biar gak request pas kosong)
-                    .AutoBind(false) // PENTING: Jangan load data saat page load!
+                  //  .MinLength(2) // Baru cari setelah user ketik 2 huruf (Biar gak request pas kosong)
+                   // .AutoBind(false) // PENTING: Jangan load data saat page load!
                     .Suggest(true)
                     .HtmlAttributes(new { style = "width:250px;" })
                     .DataSource(source => { 
@@ -75,8 +75,8 @@
                     .DataTextField("Display")
                     .DataValueField("Kode")
                     .Filter(FilterType.Contains)
-                    .MinLength(2)
-                    .AutoBind(false) // PENTING
+                   // .MinLength(2)
+                   // .AutoBind(false) // PENTING
                     .Suggest(true)
                     .HtmlAttributes(new { style = "width:250px;" })
                     .DataSource(source => { 

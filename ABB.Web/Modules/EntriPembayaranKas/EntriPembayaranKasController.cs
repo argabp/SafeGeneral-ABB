@@ -243,13 +243,21 @@ namespace ABB.Web.Modules.EntriPembayaranKas
                 return Json(await emptyList.ToDataSourceResultAsync(request));
             }
 
+            var kodeCabangCookie = Request.Cookies["UserCabang"]?.Trim();
+            string glDept = null;
+            if (!string.IsNullOrEmpty(kodeCabangCookie) && kodeCabangCookie.Length >= 2)
+            {
+                glDept = kodeCabangCookie.Substring(kodeCabangCookie.Length - 2);
+            }
+
             // 🔹 Ambil data sesuai filter
             var data = await Mediator.Send(new GetNotaUntukPembayaranQuery()
             {
                 SearchKeyword = searchKeyword,
                 JenisAsset = jenisAsset,
                 StartDate = startDate, 
-                EndDate = endDate
+                EndDate = endDate,
+                glDept = glDept
             });
 
             // ✅ Jika hasil kosong, kirim response dengan indikator “tidak ditemukan”

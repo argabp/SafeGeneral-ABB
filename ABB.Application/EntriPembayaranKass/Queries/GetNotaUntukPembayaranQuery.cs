@@ -19,6 +19,7 @@ namespace ABB.Application.EntriPembayaranKass.Queries
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public string JenisAsset { get; set; }
+        public string glDept { get; set; }
     }
 
     // 2. HANDLER
@@ -52,6 +53,7 @@ namespace ABB.Application.EntriPembayaranKass.Queries
                     AddParameter(command, "@JenisAsset", request.JenisAsset);
                     AddParameter(command, "@StartDate", request.StartDate);
                     AddParameter(command, "@EndDate", request.EndDate);
+                    AddParameter(command, "@Lok", request.glDept);
 
                     using (var reader = await command.ExecuteReaderAsync(cancellationToken))
                     {

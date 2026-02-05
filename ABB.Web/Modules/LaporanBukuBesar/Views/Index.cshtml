@@ -58,8 +58,8 @@
                     .DataTextField("Display")
                     .DataValueField("Kode")
                     .Filter(FilterType.Contains)
-                    .MinLength(2) // Cari setelah 2 karakter
-                    .AutoBind(false) // Jangan load saat awal buka
+                    //.MinLength(2) // Cari setelah 2 karakter
+                    //.AutoBind(false) // Jangan load saat awal buka
                     .Suggest(true)
                     .HtmlAttributes(new { style = "width:250px;" })
                     .DataSource(source => { 
@@ -78,8 +78,8 @@
                     .DataTextField("Display")
                     .DataValueField("Kode")
                     .Filter(FilterType.Contains)
-                    .MinLength(2)
-                    .AutoBind(false)
+                  //  .MinLength(2)
+                   // .AutoBind(false)
                     .Suggest(true)
                     .HtmlAttributes(new { style = "width:250px;" })
                     .DataSource(source => { 

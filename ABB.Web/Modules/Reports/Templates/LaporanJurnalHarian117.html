@@ -3,42 +3,87 @@
 <head>
     <meta charset="utf-8" />
     <title>Cetak Laporan Jurnal Harian</title>
+
     <style>
-        body { font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #000; }
-        .report-header { text-align: center; margin-bottom: 12px; }
-        .report-title { font-size: 16px; font-weight: bold; }
-        .report-sub { text-align: center; font-size: 12px; color: #333; margin-top: 4px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        table th, table td { border: 1px solid #666; padding: 6px 8px; text-align: left; }
-        table th { background: #f2f2f2; font-weight: bold; }
-        .right { text-align: right; }
-        .center { text-align: center; }
-        .no-border { border: none; }
-        .footer { margin-top: 16px; font-size: 11px; color:#333; }
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 12px;
+            color: #000;
+        }
+
+        .report-header {
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .report-title {
+            font-size: 15px;
+            font-weight: normal; /* tidak bold */
+            letter-spacing: 0.5px;
+        }
+
+        .report-sub {
+            font-size: 12px;
+            font-weight: normal;
+            margin-top: 2px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 6px;
+        }
+
+        table th,
+        table td {
+            border: 1px solid #000;
+            padding: 4px 6px;
+            font-weight: normal;
+        }
+
+        table th {
+            text-align: center;
+            font-weight: 600; /* semi-bold seperti pelunasan */
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        .center {
+            text-align: center;
+        }
     </style>
 </head>
+
 <body>
+
+    <!-- HEADER -->
     <div class="report-header">
-          <div class="report-title">JURNAL TRANSAKSI</div>
-          <div class="report-sub">PERIODE : {{ PeriodeAwal }} - {{ PeriodeAkhir }}</div>
+        <div class="report-title">JURNAL TRANSAKSI</div>
+        <div class="report-sub">
+            PERIODE : {{ PeriodeAwal }} s/d {{ PeriodeAkhir }}
+        </div>
     </div>
 
-    <table width="100%" border="0" cellspacing="0" cellpadding="4">
-    <thead>
-        <tr style="font-weight:bold; border-bottom:1px solid black;">
-            <td width="5px">No</td>
-            <td width="5px">Tgl</td>
-            <td width="10px">Perkiraan</td>
-            <td width="5px">Mtu</td>
-            <td width="15px" style="text-align:right">Original</td>
-            <td width="15px" style="text-align:right">Debet (IDR)</td>
-            <td width="15px" style="text-align:right">Kredit (IDR)</td>
-            <td width="30px" >Keterangan</td>
-        </tr>
-    </thead>
-    <tbody>
-        {{ details }}
-    </tbody>
-</table>
+    <!-- TABLE -->
+    <table>
+        <thead>
+            <tr>
+                <th style="width:5%">No</th>
+                <th style="width:8%">Tgl</th>
+                <th style="width:12%">Perkiraan</th>
+                <th style="width:6%">MTU</th>
+                <th style="width:14%">Original</th>
+                <th style="width:14%">Debet (IDR)</th>
+                <th style="width:14%">Kredit (IDR)</th>
+                <th style="width:27%">Keterangan</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ details }}
+        </tbody>
+    </table>
+
 </body>
 </html>

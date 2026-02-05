@@ -307,12 +307,20 @@ namespace ABB.Web.Modules.EntriPenyelesaianPiutang
                 return Json(await emptyList.ToDataSourceResultAsync(request));
             }
 
+            var kodeCabangCookie = Request.Cookies["UserCabang"]?.Trim();
+            string glDept = null;
+            if (!string.IsNullOrEmpty(kodeCabangCookie) && kodeCabangCookie.Length >= 2)
+            {
+                glDept = kodeCabangCookie.Substring(kodeCabangCookie.Length - 2);
+            }
+
             var data = await Mediator.Send(new GetNotaUntukPembayaranQuery()
             {
                 SearchKeyword = searchKeyword,
                 JenisAsset = jenisAsset,
                 StartDate = startDate, // <--- MAPPING
-                EndDate = endDate      // <--- MAPPING
+                EndDate = endDate,     // <--- MAPPING
+                glDept = glDept
             });
 
             return Json(await data.ToDataSourceResultAsync(request));

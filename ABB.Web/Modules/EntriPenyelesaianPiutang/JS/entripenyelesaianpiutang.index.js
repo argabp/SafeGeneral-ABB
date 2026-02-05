@@ -783,9 +783,17 @@ function onSearchClick() {
 }
 
 function getNotaProduksiSearchFilter() {
+    // 1. Ambil component DatePicker
+    var startPicker = $("#StartDate").data("kendoDatePicker");
+    var endPicker = $("#EndDate").data("kendoDatePicker");
+
     return {
         searchKeyword: $("#PilihNotaSearchKeyword").val(),
-        jenisAsset: $("#JenisAsset").data("kendoComboBox").value()
+        jenisAsset: $("#JenisAsset").data("kendoComboBox").value(),
+        
+        // 2. Tambahkan Parameter Tanggal (PENTING)
+        startDate: startPicker ? kendo.toString(startPicker.value(), "yyyy-MM-dd") : null,
+        endDate: endPicker ? kendo.toString(endPicker.value(), "yyyy-MM-dd") : null
     };
 }
 

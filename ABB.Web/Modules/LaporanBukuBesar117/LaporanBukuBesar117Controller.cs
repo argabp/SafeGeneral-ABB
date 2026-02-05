@@ -55,10 +55,27 @@ namespace ABB.Web.Modules.LaporanBukuBesar117
         [HttpGet]
         public async Task<IActionResult> GetCoaList(string text)
         {
+
+            var kodeCabangCookie = Request.Cookies["UserCabang"]?.Trim();
+            
+
+            string glDept = null;
+            if (!string.IsNullOrEmpty(kodeCabangCookie) && kodeCabangCookie.Length >= 2)
+            {
+                glDept = kodeCabangCookie.Substring(kodeCabangCookie.Length - 2);
+            }
             // 1. Siapkan Query
             var query = _context.Set<Coa117>()
                 .AsNoTracking()
                 .AsQueryable();
+
+                // Filter berdasarkan kode cabang login
+            if (!string.IsNullOrEmpty(kodeCabangCookie))
+            {
+                query = query.Where(x => x.gl_dept == glDept);
+                // kalau nama kolom beda, ganti:
+                // x.KodeCabang == kodeCabang
+            }
 
             // 2. Jika ada text pencarian (user mengetik)
             if (!string.IsNullOrEmpty(text))

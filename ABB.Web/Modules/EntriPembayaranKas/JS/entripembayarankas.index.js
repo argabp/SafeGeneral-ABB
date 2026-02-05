@@ -513,12 +513,12 @@ function onSearchClick() {
     $("#PilihNotaGrid").data("kendoGrid").dataSource.read();
 }
 
-function getNotaProduksiSearchFilter() {
-    return {
-        searchKeyword: $("#PilihNotaSearchKeyword").val(),
-        jenisAsset: $("#JenisAsset").data("kendoComboBox").value()
-    };
-}
+// function getNotaProduksiSearchFilter() {
+//     return {
+//         searchKeyword: $("#PilihNotaSearchKeyword").val(),
+//         jenisAsset: $("#JenisAsset").data("kendoComboBox").value()
+//     };
+// }
 
  var totalBayarMap = {};
 

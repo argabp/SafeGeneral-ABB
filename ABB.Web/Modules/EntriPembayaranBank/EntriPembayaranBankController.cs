@@ -206,13 +206,21 @@ namespace ABB.Web.Modules.EntriPembayaranBank
                 return Json(await emptyList.ToDataSourceResultAsync(request));
             }
 
+            var kodeCabangCookie = Request.Cookies["UserCabang"]?.Trim();
+            string glDept = null;
+            if (!string.IsNullOrEmpty(kodeCabangCookie) && kodeCabangCookie.Length >= 2)
+            {
+                glDept = kodeCabangCookie.Substring(kodeCabangCookie.Length - 2);
+            }
+
             // 🔹 Ambil data sesuai filter
             var data = await Mediator.Send(new GetNotaUntukPembayaranQuery()
             {
                 SearchKeyword = searchKeyword,
                 JenisAsset = jenisAsset,
                 StartDate = startDate, // <--- Mapping Tanggal
-                EndDate = endDate      // <--- Mapping Tanggal
+                EndDate = endDate,    // <--- Mapping Tanggal
+                glDept = glDept
             });
 
             return Json(await data.ToDataSourceResultAsync(request));

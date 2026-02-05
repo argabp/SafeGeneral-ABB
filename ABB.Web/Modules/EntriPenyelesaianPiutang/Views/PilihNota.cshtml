@@ -38,13 +38,16 @@
     }
 
     function getNotaProduksiSearchFilter() {
-        return {
-            searchKeyword: $("#PilihNotaSearchKeyword").val(),
-            jenisAsset: $("#JenisAsset").val(),
-            StartDate: $("#StartDate").val(),
-            EndDate: $("#EndDate").val()
-        };
-    }
+    var startPicker = $("#StartDate").data("kendoDatePicker");
+    var endPicker   = $("#EndDate").data("kendoDatePicker");
+
+    return {
+        searchKeyword: $("#PilihNotaSearchKeyword").val(),
+        jenisAsset: $("#JenisAsset").val(),
+        startDate: startPicker ? startPicker.value() : null,
+        endDate: endPicker ? endPicker.value() : null
+    };
+}
 
     function onSearchClick() {
         var grid = $("#PilihNotaGrid").data("kendoGrid");
