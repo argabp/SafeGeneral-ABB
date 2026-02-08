@@ -18,8 +18,9 @@ namespace ABB.Web.Modules.EmailTemplate
     {
         public async Task<IActionResult> Index()
         {
-            ViewBag.UserLogin = CurrentUser.UserId;
             ViewBag.RoleLogin = await CurrentUser.GetRoleName();
+            ViewBag.Module = Request.Cookies["Module"];
+            ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
             
             return View();
