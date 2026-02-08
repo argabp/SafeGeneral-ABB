@@ -88,7 +88,9 @@ namespace ABB.Web.Modules.Account
             var user = HttpContext.User.Identity?.Name;
 
             if (hasSession && !string.IsNullOrEmpty(user))
+            {
                 return Redirect("/Home/Index");
+            }
 
             if ((bool)(TempData["SuccessChangePassword"] ?? false)) ViewData["ShowSuccessMessage"] = "true";
             return View();

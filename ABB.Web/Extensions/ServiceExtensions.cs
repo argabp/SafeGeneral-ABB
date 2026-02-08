@@ -4,6 +4,7 @@ using System.Reflection;
 using ABB.Application.Common.Grids.Interfaces;
 using ABB.Application.Common.Interfaces;
 using ABB.Domain.IdentityModels;
+using ABB.Infrastructure;
 using ABB.Infrastructure.Data;
 using ABB.Infrastructure.Data.Grid;
 using ABB.Infrastructure.Validators;
@@ -99,7 +100,12 @@ namespace ABB.Web.Extensions
         {
             string connectionString = configuration.GetConnectionString("ABBConnection");
             services.AddScoped<IRoleValidator<AppRole>, CustomRoleValidator>();
-            services.AddDbContext<ABBDbContext>(c => c.UseSqlServer(connectionString));
+            services.AddDbContext<ABBDbContext>((sp, options) =>
+            {
+                options.UseSqlServer(connectionString);
+                options.AddInterceptors(
+                    sp.GetRequiredService<TrimStringSaveChangesInterceptor>());
+            });
             services.AddIdentity<AppUser, AppRole>(option => { option.Lockout.AllowedForNewUsers = false; })
                 .AddRoleValidator<CustomRoleValidator>()
                 .AddEntityFrameworkStores<ABBDbContext>()
@@ -107,11 +113,21 @@ namespace ABB.Web.Extensions
             services.AddScoped(typeof(IDbContext), typeof(ABBDbContext));
             
             string connectionStringCSM = configuration.GetConnectionString("ABBConnectionCSM");
-            services.AddDbContext<ABBDbContextCSM>(c => c.UseSqlServer(connectionStringCSM));
+            services.AddDbContext<ABBDbContextCSM>((sp, options) =>
+            {
+                options.UseSqlServer(connectionStringCSM);
+                options.AddInterceptors(
+                    sp.GetRequiredService<TrimStringSaveChangesInterceptor>());
+            });
             services.AddScoped(typeof(IDbContextCSM), typeof(ABBDbContextCSM));
             
             string connectionStringPstNota = configuration.GetConnectionString("ABBConnectionPstNota");
-            services.AddDbContext<ABBDbContextPstNota>(c => c.UseSqlServer(connectionStringPstNota));
+            services.AddDbContext<ABBDbContextPstNota>((sp, options) =>
+            {
+                options.UseSqlServer(connectionStringPstNota);
+                options.AddInterceptors(
+                    sp.GetRequiredService<TrimStringSaveChangesInterceptor>());
+            });
             services.AddScoped(typeof(ABBDbContextPstNota), typeof(ABBDbContextPstNota));
             
             services.AddSingleton<IDbContextFactory, DbContextFactory>();

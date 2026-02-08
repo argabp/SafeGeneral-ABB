@@ -5,11 +5,9 @@ using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Services;
 using ABB.Domain.Models;
 using ABB.Infrastructure;
-using ABB.Infrastructure.Services;
 using ABB.Web.Extensions;
 using ABB.Web.Hubs;
 using ABB.Web.Middleware;
-using ABB.Web.Models;
 using DinkToPdf;
 using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Builder;
@@ -19,7 +17,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
-using Quartz;
 
 namespace ABB.Web
 {
@@ -100,6 +97,7 @@ namespace ABB.Web
                 x.MultipartBodyLengthLimit = int.MaxValue; // if don't set default value is: 128 MB
                 x.MultipartHeadersLengthLimit = int.MaxValue;
             });
+            services.AddScoped<TrimStringSaveChangesInterceptor>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IInitialService initial)

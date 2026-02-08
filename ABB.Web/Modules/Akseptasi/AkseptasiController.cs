@@ -1619,6 +1619,10 @@ namespace ABB.Web.Modules.Akseptasi
                         akseptasiBondingViewModel.kd_rk_surety = "000214";
                         akseptasiBondingViewModel.kd_grp_prc = "P";
                         akseptasiBondingViewModel.IsNewOther = true;
+                        akseptasiBondingViewModel.tgl_kontrak = DateTime.Now;
+                        akseptasiBondingViewModel.tgl_lelang = DateTime.Now;
+                        akseptasiBondingViewModel.tgl_tr = DateTime.Now;
+                        akseptasiBondingViewModel.tgl_terbit = DateTime.Now;
                     
                         return View("~/Modules/Akseptasi/Components/Other/_OtherBonding.cshtml", akseptasiBondingViewModel);
                     }
@@ -1627,6 +1631,7 @@ namespace ABB.Web.Modules.Akseptasi
                     akseptasiBondingViewModel.kd_cb = akseptasiBondingViewModel.kd_cb.Trim();
                     akseptasiBondingViewModel.kd_cob = akseptasiBondingViewModel.kd_cob.Trim();
                     akseptasiBondingViewModel.kd_scob = akseptasiBondingViewModel.kd_scob.Trim();
+                    akseptasiBondingViewModel.kd_rk_prc = akseptasiBondingViewModel.kd_rk_prc?.Trim();
 
                     return View("~/Modules/Akseptasi/Components/Other/_OtherBonding.cshtml", akseptasiBondingViewModel);
                 case "_OtherCargo":

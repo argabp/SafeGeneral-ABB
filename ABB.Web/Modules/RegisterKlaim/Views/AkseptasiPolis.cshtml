@@ -27,12 +27,12 @@
         .Columns(columns =>
         {
             columns.Bound(col => col.Id).Hidden();
-            columns.Bound(col => col.nm_cb).Title("Cabang");
-            columns.Bound(col => col.nm_cob).Title("COB");
-            columns.Bound(col => col.nm_scob).Title("SCOB");
-            columns.Bound(col => col.no_pol_ttg).Title("Nomor Polis").ClientTemplate("#= formatNoPol(no_pol_ttg) #");
-            columns.Bound(col => col.no_rsk).Title("Nomor Resiko");
-            columns.Bound(col => col.no_pol_pas).Title("Nomor Polis Ceding");
+            columns.Bound(col => col.nm_cb).Width(150).Title("Cabang");
+            columns.Bound(col => col.nm_cob).Width(150).Title("COB");
+            columns.Bound(col => col.nm_scob).Width(150).Title("SCOB");
+            columns.Bound(col => col.no_pol_ttg).Width(200).Title("Nomor Polis").ClientTemplate("#= formatNoPol(no_pol_ttg) #");
+            columns.Bound(col => col.no_rsk).Width(150).Title("Nomor Resiko");
+            columns.Bound(col => col.no_pol_pas).Width(200).Title("Nomor Polis Ceding");
             columns.Bound(col => col.nm_ttg).Width(200).Title("Nama Tertanggung");
             columns.Bound(col => col.tgl_mul_ptg).Width(150).Title("Tanggal Mulai").Format("{0: dd-MM-yyyy}");
             columns.Bound(col => col.tgl_akh_ptg).Width(150).Title("Tanggal Akhir").Format("{0: dd-MM-yyyy}");
@@ -40,6 +40,7 @@
             columns.Bound(col => col.ket_oby).Width(200).Title("Keterangan Resiko");
         })
         .Selectable()
+        .AutoBind(false)
         .Pageable(pager => pager
             .Refresh(true)
             .Info(true)

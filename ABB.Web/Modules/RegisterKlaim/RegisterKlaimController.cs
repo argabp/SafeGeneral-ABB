@@ -19,6 +19,7 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using GetCobQuery = ABB.Application.RegisterKlaims.Queries.GetCobQuery;
 
 namespace ABB.Web.Modules.RegisterKlaim
 {

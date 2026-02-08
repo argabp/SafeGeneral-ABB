@@ -4802,6 +4802,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Interceptors\" />
       <Folder Include="Logs" />
       <Folder Include="wwwroot\img\profile-picture" />
     </ItemGroup>

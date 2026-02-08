@@ -20,6 +20,7 @@ namespace ABB.Infrastructure.Data
 
             var options = new DbContextOptionsBuilder<ABBDbContext>()
                 .UseSqlServer(connectionString) // You can replace with UseSqlite, UseNpgsql, etc.
+                .AddInterceptors(new TrimStringSaveChangesInterceptor())
                 .Options;
 
             return new ABBDbContext(options);
