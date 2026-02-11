@@ -145,11 +145,18 @@
 
         <div class="row">
            <div class="form-group col-sm-6">
-                    <label>Tanggal Voucher</label>
-                    <div>
-                         <kendo-datepicker  for="TanggalVoucher"  class="custom-kuning" style="width: 100%"/>
-                        <span asp-validation-for="TanggalVoucher" class="text-danger"></span>
-                    </div>
+                <label>Tanggal Voucher</label>
+                <div>
+                    @* LOGIC BARU: 
+                        Readonly JIKA FlagFinal == true.
+                        (FlagPosting tidak mempengaruhi tanggal lagi)
+                    *@
+                    <kendo-datepicker for="TanggalVoucher" 
+                                    class="custom-kuning" 
+                                    style="width: 100%"
+                                    readonly="@(Model.FlagFinal)" /> 
+                    <span asp-validation-for="TanggalVoucher" class="text-danger"></span>
+                </div>
             </div>
 
             <div class="form-group col-sm-6">
@@ -275,25 +282,38 @@
         <span class="fa fa-save"></span> Save
     </button>
 </div>
-
 <script>
     $(document).ready(function() {
+        // 1. Logika Visual Icon Posting (Tetap)
         var hiddenInput = $("#FlagPosting");
         var icon = $('#flagPosting-checkbox-ui').find('i');
-
-        // Saat form edit dimuat, sesuaikan ikon dengan nilai dari model
+        
+        // Cek status posting buat atur gambar kotak/centang
         if (hiddenInput.val().toLowerCase() === "true") {
             icon.removeClass('fa-square').addClass('fa-check-square');
         } else {
             icon.removeClass('fa-check-square').addClass('fa-square');
         }
-        
-        // PENTING: Update Label Dibayar/Diterima sesuai DebetKredit yang terload
+
+        // 2. Logika Label (Tetap)
         var dkValue = "@Model.DebetKredit";
         if(dkValue && dkValue.toUpperCase() === "D"){
              $("#labelDibayarKepada").text("Diterima Dari");
         } else {
              $("#labelDibayarKepada").text("Dibayar Kepada");
         }
+
+        // --- [PERBAIKAN UTAMA: LOGIC PENGUNCIAN TANGGAL] ---
+        var tglVoucherPicker = $("#TanggalVoucher").data("kendoDatePicker");
+        
+        // Ambil status Final dari Model (bukan dari posting)
+        var isFinal = @(Model.FlagFinal ? "true" : "false"); 
+
+        if (tglVoucherPicker) {
+            // Jika SUDAH FINAL -> Readonly TRUE (Terkunci)
+            // Jika BELUM FINAL -> Readonly FALSE (Bisa Edit)
+            tglVoucherPicker.readonly(isFinal);
+        }
+        // ----------------------------------------------------
     });
 </script>

@@ -352,7 +352,7 @@ function btnCetakPembayaranBank_OnClick(e) {
     var noVoucher = dataItem.NoVoucher;
 
     // buka tab baru (tanpa auto-print)
-    window.open(`/VoucherBank/Cetak?noVoucher=${noVoucher}`, "_blank");
+    window.open(`/EntriPembayaranBank/Cetak?noVoucher=${noVoucher}`, "_blank");
 }
 
 function attachChangeEvents() {
@@ -526,25 +526,38 @@ $(document).on('change keyup', '#PilihNotaGrid .total-org-input', function () {
 
         var totalOrg = parseFloat(input.val()) || 0;
         var kodeMtu = dataItem.kd_mtu;
+        var $inputRp = row.find('.total-rp-input');
 
-        // Ambil tanggal dari form UTAMA (di belakang pop-up)
-        // Pastikan input Tanggal Voucher di Add.cshtml memiliki ID 'TangVoc'
-        var tanggalVoucher = $("#TangVoc").val();
-        var tanggalSaja = tanggalVoucher.split(' ')[0];
-        // Jika mata uang adalah Rupiah (IDR, kode 001), kurs-nya 1
-        if (kodeMtu.trim() === '001') {
-            row.find('.total-rp-input').val(totalOrg.toFixed(2));
-            return; // Hentikan fungsi
+        // [PENTING] Ambil Tanggal Nota (date)
+        var rawDate = dataItem.date;
+        var formattedDate = "";
+        
+        if (rawDate) {
+             var dateObj = kendo.parseDate(rawDate);
+             if(dateObj) formattedDate = kendo.toString(dateObj, "yyyy-MM-dd");
+        } else {
+             // Fallback
+             var tglVoc = $("#TangVoc").val(); 
+             if(tglVoc) {
+                 var parts = tglVoc.split(" ")[0].split("/");
+                 if(parts.length === 3) formattedDate = parts[2] + '-' + parts[1] + '-' + parts[0];
+             }
         }
 
-        // Hanya panggil AJAX jika semua data lengkap
-        if (kodeMtu && tanggalVoucher && totalOrg > 0) {
-            // Format tanggal agar sesuai dengan yang diharapkan Controller (yyyy-MM-dd)
-            var dateParts = tanggalSaja.split('/'); // Hasil: ["20", "09", "2025"]
-            var formattedDate = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0]; // Hasil: "2025-09-20"
+        if (kodeMtu.trim() === '001') {
+            $inputRp.val(totalOrg.toFixed(2));
+            $inputRp.data('kurs', 1);
+            return; 
+        }
 
+        // Cek Cache Kurs dulu biar hemat request
+        var cachedKurs = $inputRp.data('kurs');
+        if (cachedKurs && cachedKurs > 0) {
+            var totalRupiah = totalOrg * cachedKurs;
+            $inputRp.val(totalRupiah.toFixed(2));
+        } 
+        else if (kodeMtu && formattedDate && totalOrg > 0) {
             var url = `/EntriPembayaranBank/GetKurs?kodeMataUang=${kodeMtu}&tanggalVoucher=${formattedDate}`;
-        
             $.ajax({
                 type: "GET",
                 url: url,
@@ -552,16 +565,13 @@ $(document).on('change keyup', '#PilihNotaGrid .total-org-input', function () {
                     if (response && response.nilai_kurs) {
                         var kurs = response.nilai_kurs;
                         var totalRupiah = totalOrg * kurs;
-                        // Isi nilai di baris yang sama
-                        row.find('.total-rp-input').val(totalRupiah.toFixed(2));
-                        row.find('.total-rp-input').data('kurs', kurs);
+                        $inputRp.val(totalRupiah.toFixed(2));
+                        $inputRp.data('kurs', kurs);
                     }
                 }
             });
         } else {
-             // Jika ada data yang kosong, set Total Rupiah menjadi 0
-             row.find('.total-rp-input').val('0.00');
-             row.find('.total-rp-input').data('kurs', 0);
+             $inputRp.val('0.00');
         }
     });
 

@@ -206,6 +206,18 @@ namespace ABB.Web.Modules.InquiryNotaProduksi
             });
         }
 
+            public async Task<IActionResult> GetKeteranganProduksi(
+                    [DataSourceRequest] DataSourceRequest request,
+                    string noNota)
+                {
+                    var data = await Mediator.Send(new GetKeteranganProduksiQuery
+                    {
+                        NoNota = noNota
+                    });
+
+                    return Json(data.ToDataSourceResult(request));
+                }
+
 
     }
 }

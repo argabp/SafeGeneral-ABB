@@ -11,8 +11,11 @@
 
     function onPilihNotaGridDataBound(e) {
         var grid = e.sender;
-        var pager = grid.pager;
+        var items = grid.items(); 
         var totalItems = grid.dataSource.total();
+        var pager = grid.pager;
+
+        // --- Logic Pagination All ---
         if (pager) {
             var pageSizeDropDown = pager.element.find("select[data-role='dropdownlist']").data("kendoDropDownList");
             if (pageSizeDropDown) {
@@ -35,6 +38,75 @@
                 }
             }
         }
+
+        // --- LOGIC BARU: AUTO HITUNG KURS (PIUTANG) ---
+        items.each(function (index, row) {
+            var dataItem = grid.dataItem(row);
+            var $row = $(row);
+            
+            var $inputOrg = $row.find('.total-org-input');
+            var $inputRp = $row.find('.total-rp-input');
+            
+            var saldoOrg = parseFloat(dataItem.saldo) || 0;
+            var kodeMtu = dataItem.kd_mtu; 
+            
+            // 1. AMBIL TANGGAL NOTA (date)
+            // Pastikan DTO InquiryNotaProduksiDto sudah punya properti 'date'
+            var rawDate = dataItem.date; 
+            var formattedDate = "";
+
+            if (rawDate) {
+                var dateObj = kendo.parseDate(rawDate);
+                if(dateObj){
+                    formattedDate = kendo.toString(dateObj, "yyyy-MM-dd");
+                }
+            } 
+            
+            // Fallback: Jika tanggal nota kosong, pakai tanggal header
+            if (!formattedDate) {
+                var tglHeader = $("#PenyelesaianHeader_Tanggal").val(); // Ambil dari input header
+                if(tglHeader) {
+                    // Asumsi format dd/MM/yyyy dari Kendo DatePicker input
+                    var dateHeaderObj = kendo.parseDate(tglHeader);
+                    if(dateHeaderObj) {
+                         formattedDate = kendo.toString(dateHeaderObj, "yyyy-MM-dd");
+                    }
+                }
+            }
+
+            // 2. Set Nilai Default Input (Saldo)
+            if($inputOrg.val() == "" || $inputOrg.val() == 0) {
+                $inputOrg.val(saldoOrg);
+            }
+
+            // 3. Logika Rupiah Otomatis
+            if (kodeMtu && kodeMtu.trim() === '001') {
+                // IDR
+                $inputRp.val(saldoOrg.toFixed(2));
+                $inputRp.data('kurs', 1); 
+            } 
+            else if (kodeMtu && formattedDate && saldoOrg > 0) {
+                // VALAS
+                var url = `/EntriPenyelesaianPiutang/GetKurs?kodeMataUang=${kodeMtu}&tanggalVoucher=${formattedDate}`;
+                
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    success: function (response) {
+                        if (response && response.nilai_kurs) {
+                            var kurs = response.nilai_kurs;
+                            var totalRupiah = saldoOrg * kurs;
+                            
+                            $inputRp.val(totalRupiah.toFixed(2));
+                            $inputRp.data('kurs', kurs);
+                        }
+                    },
+                    error: function() {
+                        console.error("Gagal ambil kurs Piutang untuk nota: " + dataItem.no_nd);
+                    }
+                });
+            }
+        });
     }
 
     function getNotaProduksiSearchFilter() {

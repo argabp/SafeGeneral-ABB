@@ -26,7 +26,7 @@
 <nav  aria-label="breadcrumb">
    <ol class="breadcrumb" style="background: white; ">
         <li class="breadcrumb-item"><a href="#">Finance</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Inquiry Nota Produksi</li>
+        <li class="breadcrumb-item active" aria-current="page">Inquiry Nota</li>
     </ol>
     </nav>
 <div class="flat-box filter-box">
@@ -108,10 +108,6 @@
                 )
                 .Columns(columns =>
                 {
-                     // 1. Lokasi (lok)
-
-                     columns.Bound(col => col.keterangan).Width(100).Title("status")
-                           .HtmlAttributes(new { style = "text-align:center" });
                     
                     // 1. Lokasi (lok)
                     columns.Bound(col => col.lok).Width(80).Title("Lokasi")
@@ -219,7 +215,7 @@
         @(Html.Kendo().Window()
             .Name("InquiryNotaProduksiKeterangannWindow")
             .Title("Inquiry Nota")
-            .Width(500)
+            .Width(800)
             .Modal(true)
             .Visible(false)
             .Draggable(true)

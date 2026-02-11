@@ -82,6 +82,11 @@ namespace ABB.Web.Modules.VoucherKas.Models
         [Display(Name = "No Voucher Sementara")]
         public string NoVoucherSementara { get; set; }
 
+        // --- [TAMBAHKAN INI] ---
+        [Display(Name = "Flag Final")]
+        public bool FlagFinal { get; set; } 
+        // -----------------------
+
         public void Mapping(Profile profile)
         {
             // Aturan untuk mengirim data DARI form KE command (Untuk Save)

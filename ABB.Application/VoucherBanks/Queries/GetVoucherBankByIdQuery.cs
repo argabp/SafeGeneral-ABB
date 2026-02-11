@@ -21,86 +21,100 @@ namespace ABB.Application.VoucherBanks.Queries
     {
         private readonly IDbContextPstNota _context;
         private readonly IMapper _mapper;
-         private readonly UserManager<AppUser> _userManager;
+        private readonly UserManager<AppUser> _userManager;
 
         public GetVoucherBankByIdQueryHandler(IDbContextPstNota context, IMapper mapper, UserManager<AppUser> userManager)
         {
             _context = context;
             _mapper = mapper;
-             _userManager = userManager;
+            _userManager = userManager;
         }
 
         public async Task<VoucherBankDto> Handle(GetVoucherBankByIdQuery request, CancellationToken cancellationToken)
         {
-            // Gunakan LINQ untuk menggabungkan (JOIN) dua tabel
+            // 1. FILTERING DINAMIS (Logic Perbaikan Utama)
+            var queryDasar = _context.VoucherBank.AsNoTracking();
+
+            if (request.Id > 0)
+            {
+                // Kalau ada ID, cari pakai ID (Prioritas)
+                queryDasar = queryDasar.Where(x => x.Id == request.Id);
+            }
+            else
+            {
+                // Kalau ID 0, cari pakai NoVoucher (dengan Trim biar aman)
+                var noVoucherCari = request.NoVoucher != null ? request.NoVoucher.Trim() : "";
+                queryDasar = queryDasar.Where(x => x.NoVoucher == noVoucherCari);
+            }
+
+            // 2. JOIN & PROJECTION
             var result = await (
-                                // 1. SUMBER DATA UTAMA (WAJIB DI PALING ATAS)
-                                from vb in _context.VoucherBank
+                                from vb in queryDasar
                                 
-                                // 2. Join ke Tabel Lain (KasBank & MataUang)
+                                // Gunakan LEFT JOIN ke KasBank (via KodeBank)
                                 join kb in _context.KasBank 
-                                    on vb.KodeBank equals kb.Kode
+                                    on vb.KodeBank equals kb.Kode into kbJoin
+                                from kb in kbJoin.DefaultIfEmpty()
+
+                                // Gunakan LEFT JOIN ke MataUang
                                 join mu in _context.MataUang
-                                    on vb.KodeMataUang equals mu.kd_mtu
-                                where vb.Id == request.Id
+                                    on vb.KodeMataUang equals mu.kd_mtu into muJoin
+                                from mu in muJoin.DefaultIfEmpty()
+
+                                // [PENTING] HAPUS WHERE DI SINI (Karena sudah di queryDasar)
+
                                 select new VoucherBankDto
                                 {
-                                    // Salin semua properti dari VoucherBank (vb)
+                                    Id = vb.Id,
                                     NoVoucher = vb.NoVoucher,
                                     KodeCabang = vb.KodeCabang,
                                     JenisVoucher = vb.JenisVoucher,
                                     DebetKredit = vb.DebetKredit,
                                     KodeAkun = vb.KodeAkun,
-                                    DiterimaDari = vb.DiterimaDari,
+                                    
+                                    DiterimaDari = vb.DiterimaDari, // Sesuai entity bank
+                                    
                                     TanggalVoucher = vb.TanggalVoucher,
                                     KodeMataUang = vb.KodeMataUang,
                                     TotalVoucher = vb.TotalVoucher,
                                     TotalDalamRupiah = vb.TotalDalamRupiah,
                                     KeteranganVoucher = vb.KeteranganVoucher,
-                                    FlagPosting = (bool)vb.FlagPosting,
+                                    FlagPosting = vb.FlagPosting ?? false, // Handle null bool
+                                     FlagFinal = vb.FlagFinal ?? false,
                                     KodeBank = vb.KodeBank,
                                     NoBank = vb.NoBank,
-                                    Id = vb.Id,
+                                    
                                     JenisPembayaran = vb.JenisPembayaran,
                                     TanggalInput = vb.TanggalInput,
                                     TanggalUpdate = vb.TanggalUpdate,
                                     FlagSementara = vb.FlagSementara ?? false, 
                                     NoVoucherSementara = vb.NoVoucherSementara,
                        
-                                    // Ambil ID-nya dulu (Nanti kita ubah jadi Nama di bawah)
                                     KodeUserInput = vb.KodeUserInput,
                                     KodeUserUpdate = vb.KodeUserUpdate,
 
-                                    // Ambil Keterangan dari KasBank (kb) dan isi ke NamaBank
-                                    NamaBank = kb.Keterangan,
-                                    NamaMataUang = mu.symbol,
-                                    DetailMataUang = mu.nm_mtu
+                                    // Handle Null jika data join tidak ditemukan
+                                    NamaBank = kb != null ? kb.Keterangan : null,
+                                    NamaMataUang = mu != null ? mu.symbol : null,
+                                    DetailMataUang = mu != null ? mu.nm_mtu : null
                                 })
                                 .FirstOrDefaultAsync(cancellationToken);
-                                if (result == null) return null;
 
-                                // LANGKAH 2: Ambil Nama User via UserManager (Manual Lookup)
-                                // Ini aman karena UserManager biasanya terkoneksi ke Database Pusat/Identity
-                                
-                                // Cek User Input
-                                if (!string.IsNullOrEmpty(result.KodeUserInput))
-                                {
-                                    var userIn = await _userManager.FindByIdAsync(result.KodeUserInput);
-                                    if (userIn != null) 
-                                    {
-                                        result.KodeUserInput = userIn.UserName; // Ganti ID jadi Nama
-                                    }
-                                }
+            if (result == null) return null;
 
-                                // Cek User Update
-                                if (!string.IsNullOrEmpty(result.KodeUserUpdate))
-                                {
-                                    var userUp = await _userManager.FindByIdAsync(result.KodeUserUpdate);
-                                    if (userUp != null) 
-                                    {
-                                        result.KodeUserUpdate = userUp.UserName; // Ganti ID jadi Nama
-                                    }
-                                }
+            // 3. LOOKUP USERNAME (Tetap Sama)
+            if (!string.IsNullOrEmpty(result.KodeUserInput))
+            {
+                var userIn = await _userManager.FindByIdAsync(result.KodeUserInput);
+                if (userIn != null) result.KodeUserInput = userIn.UserName;
+            }
+
+            if (!string.IsNullOrEmpty(result.KodeUserUpdate))
+            {
+                var userUp = await _userManager.FindByIdAsync(result.KodeUserUpdate);
+                if (userUp != null) result.KodeUserUpdate = userUp.UserName;
+            }
+            
             return result;
         }
     }

@@ -4,45 +4,94 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Kendo.Mvc
 
+<div class="window-body p-3" style="background-color: #f5f5f5">
 
-<div class="window-body" style="background-color: lightgray">
-    <form id="KeteranganForm" enctype="multipart/form-data" autocomplete="off">
-
-       <input type="hidden" id="IdNota" value="@Model.id" />
-        <input type="hidden" id="NoNota"
-            value="@Model.InquiryNotaProduksiHeader?.no_nd" />
-
-
-        <div class="form-group col-sm-12">
-            <label class="col-sm-12">Tanggal</label>
-            <div class="col-sm-12">
-                    <kendo-datepicker for="Tanggal"  style="width: 100%"/>
-                <span asp-validation-for="Tanggal" class="text-danger"></span>
-            </div>
+    <!-- ================= FORM INPUT ================= -->
+    <div class="card mb-3">
+        <div class="card-header bg-primary text-white">
+            <strong>Input Keterangan</strong>
         </div>
 
-        <div class="form-group col-sm-12">
-            <label class="col-sm-12">Keterangan</label>
-            <div class="col-sm-12">
-                 <kendo-textarea for="Keterangan" 
-                                name="Keterangan"  
-                                style="width:100%; background-color:#fff !important; border:1px solid #ced4da;"
-                                rows="4">
-                </kendo-textarea>
-                <span asp-validation-for="Keterangan" class="text-danger"></span>
-            </div>
+        <div class="card-body">
+            <form id="KeteranganForm" enctype="multipart/form-data" autocomplete="off">
+
+                <input type="hidden" id="IdNota" value="@Model.id" />
+                <input type="hidden" id="NoNota"
+                       value="@Model.InquiryNotaProduksiHeader?.no_nd" />
+
+                <!-- Tanggal -->
+                <div class="form-group row mb-3">
+                    <label class="col-sm-2 col-form-label">Tanggal</label>
+                    <div class="col-sm-10">
+                        <kendo-datepicker for="Tanggal" style="width: 100%" />
+                        <span asp-validation-for="Tanggal" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Keterangan -->
+                <div class="form-group row mb-3">
+                    <label class="col-sm-2 col-form-label">Keterangan</label>
+                    <div class="col-sm-10">
+                        <kendo-textarea for="Keterangan"
+                                        name="Keterangan"
+                                        style="width:100%; background-color:#fff !important;"
+                                        rows="4">
+                        </kendo-textarea>
+                        <span asp-validation-for="Keterangan" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Tombol Save -->
+                <div class="text-end">
+                    <button type="button"
+                            onclick="onSaveKeterangan()"
+                            class="btn btn-success">
+                        <span class="fa fa-save"></span> Save
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+
+    <!-- ================= RIWAYAT ================= -->
+    <div class="card">
+        <div class="card-header bg-secondary text-white">
+            <strong>Riwayat Keterangan</strong>
         </div>
 
-            
-        
-    </form>
+        <div class="card-body">
+            @(Html.Kendo().Grid<KeteranganProduksiDto>()
+                .Name("KeteranganProduksiGrid")
+                .AutoBind(true)
+                .DataSource(ds => ds.Ajax()
+                    .Read(read => read
+                        .Action("GetKeteranganProduksi", "InquiryNotaProduksi")
+                        .Data("getNoNota")
+                    )
+                )
+                .Columns(cols =>
+                {
+                    cols.Bound(c => c.Tanggal)
+                        .Title("Tanggal")
+                        .Format("{0:dd-MM-yyyy}")
+                        .Width(150);
+
+                    cols.Bound(c => c.Keterangan)
+                        .Title("Keterangan");
+                })
+                .NoRecords(n => n.Template("Belum ada keterangan"))
+            )
+        </div>
+    </div>
+
 </div>
 
-<div class="window-footer">
-    <button type="button" onclick="onSaveKeterangan()" class="btn btn-success space-right">
-        <span class="fa fa-save"></span> Save
-    </button>
-</div>
-
-
-
+<script>
+    function getNoNota() {
+        return {
+            noNota: $("#NoNota").val()
+        };
+    }
+</script>

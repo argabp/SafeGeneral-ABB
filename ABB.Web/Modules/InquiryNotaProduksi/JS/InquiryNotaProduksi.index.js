@@ -65,7 +65,7 @@ function onSearchClick() {
 function onSaveKeterangan() {
 
     var data = {
-        Id: $("#IdNota").val(),
+        IdNota: $("#IdNota").val(),
         NoNota: $("#NoNota").val(),
         Tanggal: $("#Tanggal").data("kendoDatePicker").value(),
         Keterangan: $("#Keterangan").val()
@@ -79,8 +79,9 @@ function onSaveKeterangan() {
         success: function (response) {
             if (response.success) {
                 showMessage('Success', 'Data berhasil disimpan');
-                closeWindow("#InquiryNotaProduksiKeterangannWindow");
+                // closeWindow("#InquiryNotaProduksiKeterangannWindow");
                 refreshGrid("#InquiryNotaProduksiGrid");
+                $("#KeteranganProduksiGrid").data("kendoGrid").dataSource.read();
             } else {
                 showMessage('Error', response.message);
             }

@@ -38,18 +38,26 @@ function onKodeKasChange(e) {
     }
 
 $(document).on('click', '#flagPosting-checkbox-ui', function() {
-    var icon = $(this).find('i'); // Ambil elemen ikon di dalam tombol
-    var hiddenInput = $("#FlagPosting"); // Ambil input tersembunyi
+   var icon = $(this).find('i'); 
+    var hiddenInput = $("#FlagPosting");
+    
+    // Ambil widget DatePicker
+    var tglVoucherPicker = $("#TanggalVoucher").data("kendoDatePicker"); 
 
     // Cek kondisi saat ini dan ubah
     if (hiddenInput.val() === "true") {
-        // Jika sedang true, ubah ke false
+        // --- PROSES UN-POST (Batal Posting) ---
         hiddenInput.val("false");
-        icon.removeClass('fa-check-square').addClass('fa-square'); // Ganti ikon
+        icon.removeClass('fa-check-square').addClass('fa-square'); // Jadi kotak kosong
+        
+        // HAPUS LOGICA DATEPICKER DISINI
+
     } else {
-        // Jika sedang false atau kosong, ubah ke true
+        // --- PROSES POSTING ---
         hiddenInput.val("true");
-        icon.removeClass('fa-square').addClass('fa-check-square'); // Ganti ikon
+        icon.removeClass('fa-square').addClass('fa-check-square'); // Jadi centang
+        
+        // HAPUS LOGICA DATEPICKER DISINI
     }
 });
 function onSaveVoucherKas() {
@@ -314,13 +322,18 @@ $(document).ready(function () {
     }
     function onKodeKasChangeInternal(e) {
         var kodeKas = this.value(); 
+        var kodeCabang = $("#KodeCabang").data("kendoComboBox").value().trim();
         console.log("Kode Kas Changed (Internal):", kodeKas);
 
         if (kodeKas) {
             $.ajax({
                 url: '/VoucherKas/GetAkunByKas',
                 type: 'GET',
-                data: { kodeKas: kodeKas },
+                data: { 
+                    kodeKas: kodeKas,
+                    KodeCabang : kodeCabang,
+                    Tipe : 'KAS'
+                },
                 success: function (data) {
                     if (data.success) {
                         var cbAkun = $("#KodeAkun").data("kendoComboBox");

@@ -11,6 +11,8 @@ namespace ABB.Application.KasBanks.Queries
     public class GetKasBankByIdQuery : IRequest<KasBankDto>
     {
         public string Kode { get; set; }
+        public string KodeCabang { get; set; }
+        public string Tipe { get; set; }
     }
 
     public class GetKasBankByIdQueryHandler : IRequestHandler<GetKasBankByIdQuery, KasBankDto>
@@ -24,15 +26,19 @@ namespace ABB.Application.KasBanks.Queries
             _mapper = mapper;
         }
 
-        public async Task<KasBankDto> Handle(GetKasBankByIdQuery request, CancellationToken cancellationToken)
-        {
-            var entity = await _context.KasBank
-                .FirstOrDefaultAsync(kb => kb.Kode == request.Kode, cancellationToken);
-            
-            // Konversi dari Entity ke Dto
-            var kasBankDto = _mapper.Map<KasBankDto>(entity);
+       public async Task<KasBankDto> Handle(GetKasBankByIdQuery request, CancellationToken cancellationToken)
+            {
+                var entity = await _context.KasBank
+                    .FirstOrDefaultAsync(kb =>
+                        kb.Kode == request.Kode &&
+                        kb.KodeCabang == request.KodeCabang &&
+                        kb.TipeKasBank == request.Tipe,
+                        cancellationToken);
 
-            return kasBankDto;
-        }
+                if (entity == null)
+                    return null;
+
+                return _mapper.Map<KasBankDto>(entity);
+            }
     }
 }

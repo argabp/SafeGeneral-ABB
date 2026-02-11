@@ -19,6 +19,9 @@ namespace ABB.Infrastructure.Data.Mapping
 
             // [StringLength(3)]
             builder.Property(t => t.Id)
+                .HasColumnName("id");
+
+            builder.Property(t => t.IdNota)
                 .HasColumnName("id_nota");
 
             // [Column("no_rekening")] dan [StringLength(50)]

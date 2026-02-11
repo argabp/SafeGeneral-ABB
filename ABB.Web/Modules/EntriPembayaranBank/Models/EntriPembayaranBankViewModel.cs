@@ -67,6 +67,10 @@ namespace ABB.Web.Modules.EntriPembayaranBank.Models
         [Display(Name = "Kurs")]
         public int? Kurs { get; set; }
 
+         // --- [TAMBAHKAN INI] ---
+        [Display(Name = "Flag Final")]
+        public bool FlagFinal { get; set; } 
+        // -----------------------
 
         // Anda bisa tambahkan properti lain dari abb_pembayaran_bank di sini jika perlu diinput
         // Contoh: public string FlagPembayaran { get; set; }

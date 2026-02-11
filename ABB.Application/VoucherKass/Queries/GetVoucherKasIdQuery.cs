@@ -21,7 +21,6 @@ namespace ABB.Application.VoucherKass.Queries
     {
         private readonly IDbContextPstNota _context;
         private readonly IMapper _mapper;
-        // [TAMBAHAN] Inject UserManager untuk cari nama user
         private readonly UserManager<AppUser> _userManager;
 
         public GetVoucherKasByIdQueryHandler(IDbContextPstNota context, IMapper mapper, UserManager<AppUser> userManager)
@@ -33,35 +32,42 @@ namespace ABB.Application.VoucherKass.Queries
 
         public async Task<VoucherKasDto> Handle(GetVoucherKasByIdQuery request, CancellationToken cancellationToken)
         {
-            // [PERBAIKAN 1] LOGIC FILTER DINAMIS
-            // Kita siapkan dulu query dasarnya
+            // 1. FILTERING AWAL
             var queryDasar = _context.VoucherKas.AsNoTracking();
 
             if (request.Id > 0)
             {
-                // Prioritas 1: Filter pakai ID (Primary Key)
+                // Kalau ada ID, cari pakai ID
                 queryDasar = queryDasar.Where(x => x.Id == request.Id);
             }
             else
             {
-                // Prioritas 2: Filter pakai NoVoucher (Backup)
-                queryDasar = queryDasar.Where(x => x.NoVoucher == request.NoVoucher);
+                // Kalau ID 0, cari pakai NoVoucher (di-Trim biar aman dari spasi)
+                // Pastikan request.NoVoucher tidak null sebelum di-Trim
+                var noVoucherCari = request.NoVoucher != null ? request.NoVoucher.Trim() : "";
+                queryDasar = queryDasar.Where(x => x.NoVoucher == noVoucherCari);
             }
 
-            // [PERBAIKAN 2] JOIN & SELECT
-            // Perhatikan: 'from vb in queryDasar' (bukan _context.VoucherKas lagi)
+            // 2. JOIN & SELECT
             var result = await (
                     from vb in queryDasar 
+                    
+                    // Gunakan LEFT JOIN ke KasBank
                     join kb in _context.KasBank 
-                        on vb.KodeAkun equals kb.NoPerkiraan
+                        on vb.KodeAkun equals kb.NoPerkiraan into kbJoin
+                    from kb in kbJoin.DefaultIfEmpty()
+                    
+                    // Gunakan LEFT JOIN ke MataUang
                     join mu in _context.MataUang
-                        on vb.KodeMataUang equals mu.kd_mtu
-                    where vb.Id == request.Id
+                        on vb.KodeMataUang equals mu.kd_mtu into muJoin
+                    from mu in muJoin.DefaultIfEmpty()
+
+                    // [PENTING] JANGAN ADA WHERE LAGI DI SINI
+                    // Karena queryDasar sudah memfilter data yang benar
+
                     select new VoucherKasDto
                     {
-                        // [PENTING!] Masukkan ID ke DTO
                         Id = vb.Id, 
-
                         NoVoucher = vb.NoVoucher,
                         KodeCabang = vb.KodeCabang,
                         JenisVoucher = vb.JenisVoucher,
@@ -74,7 +80,8 @@ namespace ABB.Application.VoucherKass.Queries
                         TotalVoucher = vb.TotalVoucher,
                         TotalDalamRupiah = vb.TotalDalamRupiah,
                         KeteranganVoucher = vb.KeteranganVoucher,
-                        FlagPosting = (bool)vb.FlagPosting,
+                        FlagPosting = vb.FlagPosting ?? false,
+                        FlagFinal = vb.FlagFinal ?? false,
                         JenisPembayaran = vb.JenisPembayaran,
                         TanggalInput = vb.TanggalInput,
                         TanggalUpdate = vb.TanggalUpdate,
@@ -84,15 +91,16 @@ namespace ABB.Application.VoucherKass.Queries
                         KodeUserInput = vb.KodeUserInput,
                         KodeUserUpdate = vb.KodeUserUpdate,
 
-                        NamaKas = kb.Keterangan,
-                        NamaMataUang = mu.symbol,
-                        DetailMataUang = mu.nm_mtu
+                        // Handle Null kalau Join tidak ketemu
+                        NamaKas = kb != null ? kb.Keterangan : null,
+                        NamaMataUang = mu != null ? mu.symbol : null,
+                        DetailMataUang = mu != null ? mu.nm_mtu : null
                     }
             ).FirstOrDefaultAsync(cancellationToken);
 
             if (result == null) return null;
 
-            // LANGKAH 3: Lookup User Identity (Tetap Sama)
+            // 3. LOOKUP USERNAME
             if (!string.IsNullOrEmpty(result.KodeUserInput))
             {
                 var userIn = await _userManager.FindByIdAsync(result.KodeUserInput);

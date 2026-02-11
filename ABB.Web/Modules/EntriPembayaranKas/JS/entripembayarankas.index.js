@@ -529,51 +529,52 @@ function onSearchClick() {
 
 
 $(document).on('change keyup', '#PilihNotaGrid .total-org-input', function () {
-        var input = $(this);
-        var row = input.closest('tr');
-        var grid = $("#PilihNotaGrid").data("kendoGrid");
-        var dataItem = grid.dataItem(row);
+    var input = $(this);
+    var row = input.closest('tr');
+    var grid = $("#PilihNotaGrid").data("kendoGrid");
+    var dataItem = grid.dataItem(row);
 
-        var totalOrg = parseFloat(input.val()) || 0;
-        var kodeMtu = dataItem.kd_mtu;
-     
+    var totalOrg = parseFloat(input.val()) || 0;
+    var kodeMtu = dataItem.kd_mtu;
+    var $inputRp = row.find('.total-rp-input');
 
-        var tanggalVoucher = $("#TangVoc").val();
-        var tanggalSaja = tanggalVoucher.split(' ')[0];
+    // --- PERBAIKAN: Ambil Tanggal dari Data Item (Bukan Header Voucher) ---
+    var rawDate = dataItem.tgl_prod; // Pastikan nama field sesuai DTO
+    var formattedDate = kendo.toString(kendo.parseDate(rawDate), "yyyy-MM-dd");
+    // ---------------------------------------------------------------------
 
-        if (kodeMtu.trim() === '001') {
-            row.find('.total-rp-input').val(totalOrg.toFixed(2));
-            return; 
-        }
+    if (kodeMtu.trim() === '001') {
+        $inputRp.val(totalOrg.toFixed(2));
+        $inputRp.data('kurs', 1);
+        return; 
+    }
 
-       
-        if (kodeMtu && tanggalVoucher && totalOrg > 0) {
-         var dateParts = tanggalSaja.split('/'); 
-         var formattedDate = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0];
-
-            var url = `/EntriPembayaranKas/GetKurs?kodeMataUang=${kodeMtu}&tanggalVoucher=${formattedDate}`;
-            $.ajax({
-                type: "GET",
-                url: url,
-                success: function (response) {
-                    console.log("4. AJAX berhasil! Respons dari server:", response); // <-- LOG 5
-                    if (response && response.nilai_kurs) {
-                        var kurs = response.nilai_kurs;
-                        var totalRupiah = totalOrg * kurs;
-                        row.find('.total-rp-input').val(totalRupiah.toFixed(2));
-                        row.find('.total-rp-input').data('kurs', kurs);
-                    }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.error("4. AJAX GAGAL!", jqXHR); // <-- LOG 6 (ini akan merah jika error)
+    // Cek jika sudah ada kurs tersimpan (biar gak nembak server terus pas ngetik)
+    var cachedKurs = $inputRp.data('kurs');
+    if (cachedKurs && cachedKurs > 0) {
+        // Hitung lokal pakai kurs yang sudah didapat pas DataBound tadi
+        var totalRupiah = totalOrg * cachedKurs;
+        $inputRp.val(totalRupiah.toFixed(2));
+    } 
+    else if (kodeMtu && formattedDate && totalOrg > 0) {
+        // Kalau belum ada kurs, baru nembak API
+        var url = `/EntriPembayaranKas/GetKurs?kodeMataUang=${kodeMtu}&tanggalVoucher=${formattedDate}`;
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (response) {
+                if (response && response.nilai_kurs) {
+                    var kurs = response.nilai_kurs;
+                    var totalRupiah = totalOrg * kurs;
+                    $inputRp.val(totalRupiah.toFixed(2));
+                    $inputRp.data('kurs', kurs);
                 }
-            });
-        } else {
-             // Jika ada data yang kosong, set Total Rupiah menjadi 0
-             row.find('.total-rp-input').val('0.00');
-             row.find('.total-rp-input').data('kurs', 0);
-        }
-    });
+            }
+        });
+    } else {
+         $inputRp.val('0.00');
+    }
+});
 
 
 

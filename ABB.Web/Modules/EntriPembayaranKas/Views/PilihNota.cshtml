@@ -15,10 +15,11 @@
     // 1. FUNGSI DATABOUND (Style Grid)
     function onPilihNotaGridDataBound(e) {
         var grid = e.sender;
-        
-        // Logic Pagination "All"
-        var pager = grid.pager;
+        var items = grid.items(); 
         var totalItems = grid.dataSource.total();
+        var pager = grid.pager;
+
+        // --- LOGIC PAGINATION ALL (Bawaan Kamu) ---
         if (pager) {
             var pageSizeDropDown = pager.element.find("select[data-role='dropdownlist']").data("kendoDropDownList");
             if (pageSizeDropDown) {
@@ -41,6 +42,78 @@
                 }
             }
         }
+        // -------------------------------------------
+
+        // --- LOGIC BARU: AUTO HITUNG KURS ---
+        items.each(function (index, row) {
+            var dataItem = grid.dataItem(row);
+            var $row = $(row);
+            
+            var $inputOrg = $row.find('.total-org-input');
+            var $inputRp = $row.find('.total-rp-input');
+            
+            var saldoOrg = parseFloat(dataItem.saldo) || 0;
+            var kodeMtu = dataItem.kd_mtu; 
+            
+            // [PERBAIKAN DISINI] Ganti .tgl_prod menjadi .date
+            var rawDate = dataItem.date; 
+            
+            var formattedDate = "";
+
+            if (rawDate) {
+                var dateObj = kendo.parseDate(rawDate);
+                if (dateObj) {
+                    formattedDate = kendo.toString(dateObj, "yyyy-MM-dd");
+                }
+            }
+            
+            // Fallback: Kalau tanggal nota kosong, baru pakai tanggal voucher
+            if (!formattedDate) {
+                var tglVoc = $("#TangVoc").val(); 
+                if(tglVoc) {
+                    var parts = tglVoc.split(" ")[0].split("/"); // dd/MM/yyyy
+                    if(parts.length === 3) {
+                        formattedDate = parts[2] + '-' + parts[1] + '-' + parts[0];
+                    }
+                }
+            }
+
+            // 2. Set Nilai Default Input Original (Saldo)
+            if($inputOrg.val() == "" || $inputOrg.val() == 0) {
+                $inputOrg.val(saldoOrg);
+            }
+
+            // 3. Logika Rupiah Otomatis
+            if (kodeMtu && kodeMtu.trim() === '001') {
+                // IDR
+                $inputRp.val(saldoOrg.toFixed(2));
+                $inputRp.data('kurs', 1); 
+            } 
+            else if (kodeMtu && formattedDate && saldoOrg > 0) {
+                // VALAS -> Panggil API Kurs pakai Tgl Nota (formattedDate)
+                var url = `/EntriPembayaranKas/GetKurs?kodeMataUang=${kodeMtu}&tanggalVoucher=${formattedDate}`;
+                
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    success: function (response) {
+                        if (response && response.nilai_kurs) {
+                            var kurs = response.nilai_kurs;
+                            var totalRupiah = saldoOrg * kurs;
+                            
+                            // Isi nilai Rupiah
+                            $inputRp.val(totalRupiah.toFixed(2));
+                            
+                            // Simpan nilai kurs di data attribute
+                            $inputRp.data('kurs', kurs);
+                        }
+                    },
+                    error: function() {
+                        console.error("Gagal ambil kurs untuk nota: " + dataItem.no_nd);
+                    }
+                });
+            }
+        });
     }
 
     // 2. FUNGSI FILTER (PENTING: JANGAN DI-COMMENT)
@@ -144,6 +217,7 @@
     .Columns(columns =>
     {
         columns.Select().Width(50);
+        
         columns.Bound(c => c.no_nd).Title("Nomor Nota").Width(200);
         columns.Bound(c => c.no_pl).Title("Nomor Polis").Width(200);
         columns.Bound(c => c.saldo).Title("Saldo").Format("{0:n2}").Width(150);
@@ -184,6 +258,7 @@
         columns.Bound(c => c.kd_mtu).Title("Kode Mata Uang").Width(100);
         columns.Bound(c => c.nm_cust).Title("Nama Tertanggung").Width(250);
         columns.Bound(c => c.nm_cust2).Title("Reasuradur").Width(250);
+        columns.Bound(c => c.date).Hidden();
     })
     .Pageable(pager => pager
         .Refresh(true)

@@ -272,15 +272,13 @@ namespace ABB.Web.Modules.VoucherBank
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAkunByBank(string kodeBank)
+        public async Task<IActionResult> GetAkunByBank(string kodeBank, string KodeCabang, string Tipe)
         {
-            // HAPUS BARIS INI KARENA TIDAK DIPERLUKAN
-            // var databaseName = Request.Cookies["DatabaseName"];
-
-            // Panggil query HANYA dengan parameter yang ada (yaitu 'Kode')
             var bankData = await Mediator.Send(new GetKasBankByIdQuery 
             { 
-                Kode = kodeBank 
+                Kode = kodeBank,
+                KodeCabang = KodeCabang,
+                Tipe = Tipe
             });
 
             if (bankData != null)

@@ -397,23 +397,29 @@ function generateNoVoucher() {
 }
 
 function onKodeBankChange() {
-    var kodeBank = $("#KodeBank").data("kendoComboBox").value();
+    var kodeBank = $("#KodeBank").data("kendoComboBox")?.value();
+    var KodeCabang = $("#KodeCabang").data("kendoComboBox")?.value();
+    var Tipe = "BANK";
 
     if (kodeBank) {
-        // Panggil action GetAkunByBank di Controller
         $.ajax({
             type: "GET",
-            url: `/VoucherBank/GetAkunByBank?kodeBank=${kodeBank}`,
-            success: function(response) {
+            url: "/VoucherBank/GetAkunByBank",
+            data: {
+                kodeBank: kodeBank,
+                KodeCabang: KodeCabang,
+                Tipe: Tipe
+            },
+            success: function (response) {
                 if (response && response.success) {
-                    // Jika berhasil, isi nilai KodeAkun
                     $("#KodeAkun").data("kendoComboBox").value(response.kodeAkun);
                 }
+            },
+            error: function (err) {
+                console.log("Error GetAkunByBank:", err);
             }
         });
     }
-    // Panggil juga generator nomor voucher agar ikut ter-update
-    // generateNoVoucher();
 }
 
 function updateDynamicLabels() {

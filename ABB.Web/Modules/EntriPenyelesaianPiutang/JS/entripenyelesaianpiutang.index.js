@@ -798,53 +798,59 @@ function getNotaProduksiSearchFilter() {
 }
 
 $(document).on('change keyup', '#PilihNotaGrid .total-org-input', function () {
-    var input = $(this);
-    var row = input.closest('tr');
-    var grid = $("#PilihNotaGrid").data("kendoGrid");
-    var dataItem = grid.dataItem(row);
+        var input = $(this);
+        var row = input.closest('tr');
+        var grid = $("#PilihNotaGrid").data("kendoGrid");
+        var dataItem = grid.dataItem(row);
 
-    var totalOrg = parseFloat(input.val()) || 0;
-    var kodeMtu = dataItem.kd_mtu;
+        var totalOrg = parseFloat(input.val()) || 0;
+        var kodeMtu = dataItem.kd_mtu;
+        var $inputRp = row.find('.total-rp-input');
 
-    // Ambil tanggal dari form utama (Kendo DatePicker)
-    var tanggalVoucher = $("#PenyelesaianHeader_Tanggal").data("kendoDatePicker").value();
+        // Ambil Tanggal Nota
+        var rawDate = dataItem.date;
+        var formattedDate = "";
+        
+        if (rawDate) {
+             var dateObj = kendo.parseDate(rawDate);
+             if(dateObj) formattedDate = kendo.toString(dateObj, "yyyy-MM-dd");
+        } else {
+             // Fallback ke Header
+             var tglHeader = $("#PenyelesaianHeader_Tanggal").val(); 
+             var dateHeaderObj = kendo.parseDate(tglHeader);
+             if(dateHeaderObj) formattedDate = kendo.toString(dateHeaderObj, "yyyy-MM-dd");
+        }
 
-    // Jika belum diisi, hentikan
-    if (!tanggalVoucher) {
-        row.find('.total-rp-input').val('0.00');
-        return;
-    }
+        if (kodeMtu.trim() === '001') {
+            $inputRp.val(totalOrg.toFixed(2));
+            $inputRp.data('kurs', 1);
+            return; 
+        }
 
-    // Ubah ke format yyyy-MM-dd
-    var formattedDate = kendo.toString(tanggalVoucher, "yyyy-MM-dd");
-
-    // Jika mata uang adalah Rupiah (001), kurs-nya 1
-    if (kodeMtu && kodeMtu.trim() === '001') {
-        row.find('.total-rp-input').val(totalOrg.toFixed(2));
-        return;
-    }
-
-    // Hanya panggil AJAX jika semua data lengkap
-    if (kodeMtu && formattedDate && totalOrg > 0) {
-        var url = `/EntriPenyelesaianPiutang/GetKurs?kodeMataUang=${kodeMtu}&tanggalVoucher=${formattedDate}`;
-
-        $.ajax({
-            type: "GET",
-            url: url,
-            success: function (response) {
-                if (response && response.nilai_kurs) {
-                    var kurs = response.nilai_kurs;
-                    var totalRupiah = totalOrg * kurs;
-                    row.find('.total-rp-input').val(totalRupiah.toFixed(2));
-                    row.find('.total-rp-input').data('kurs', kurs);
+        // Cek cache kurs
+        var cachedKurs = $inputRp.data('kurs');
+        if (cachedKurs && cachedKurs > 0) {
+            var totalRupiah = totalOrg * cachedKurs;
+            $inputRp.val(totalRupiah.toFixed(2));
+        } 
+        else if (kodeMtu && formattedDate && totalOrg > 0) {
+            var url = `/EntriPenyelesaianPiutang/GetKurs?kodeMataUang=${kodeMtu}&tanggalVoucher=${formattedDate}`;
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (response) {
+                    if (response && response.nilai_kurs) {
+                        var kurs = response.nilai_kurs;
+                        var totalRupiah = totalOrg * kurs;
+                        $inputRp.val(totalRupiah.toFixed(2));
+                        $inputRp.data('kurs', kurs);
+                    }
                 }
-            }
-        });
-    } else {
-        row.find('.total-rp-input').val('0.00');
-        row.find('.total-rp-input').data('kurs', 0);
-    }
-});
+            });
+        } else {
+             $inputRp.val('0.00');
+        }
+    });
 
 function onSavePembayaranPiutangFinal() {
     var form = $("#NewPaymentForm");

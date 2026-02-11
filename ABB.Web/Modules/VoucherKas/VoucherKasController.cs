@@ -55,7 +55,8 @@ namespace ABB.Web.Modules.VoucherKas
 
             var data = await Mediator.Send(new GetAllVoucherKasQuery() { 
                 SearchKeyword = searchKeyword ,
-                KodeCabang = kodeCabang
+                KodeCabang = kodeCabang,
+                FlagFinal = false
                 
             });
             return Json(await data.ToDataSourceResultAsync(request));
@@ -96,12 +97,14 @@ namespace ABB.Web.Modules.VoucherKas
 
         // TAMBAHKAN ACTION INI UNTUK AJAX
         [HttpGet]
-        public async Task<IActionResult> GetAkunByKas(string kodeKas)
+        public async Task<IActionResult> GetAkunByKas(string kodeKas, string KodeCabang, string Tipe)
         {
             // Query ini asumsinya sama dengan GetKasBankByIdQuery yang dipakai di VoucherBank
             var kasData = await Mediator.Send(new GetKasBankByIdQuery 
             { 
-                Kode = kodeKas 
+                Kode = kodeKas,
+                KodeCabang = KodeCabang,
+                Tipe = Tipe
             });
 
             if (kasData != null)

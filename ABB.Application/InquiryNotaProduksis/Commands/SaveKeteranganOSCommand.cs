@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 using ABB.Application.Common.Interfaces;
 using ABB.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace ABB.Application.InquiryNotaProduksis.Commands
 {
     public class SaveKeteranganOSCommand : IRequest<bool>
     {
-        public int Id { get; set; }
+        public int IdNota { get; set; }
         public string NoNota { get; set; }
         public DateTime? Tanggal { get; set; }
         public string Keterangan { get; set; }
@@ -27,35 +28,29 @@ namespace ABB.Application.InquiryNotaProduksis.Commands
     }
 
     public async Task<bool> Handle(
-        SaveKeteranganOSCommand request,
-        CancellationToken cancellationToken)
+    SaveKeteranganOSCommand request,
+    CancellationToken cancellationToken)
     {
-        // 🔎 cari berdasarkan ID PRODUKSI
-        var entity = await _context.KeteranganProduksi
-            .SingleOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+        var lastId = await _context.KeteranganProduksi
+            .OrderByDescending(x => x.Id)
+            .Select(x => x.Id)
+            .FirstOrDefaultAsync(cancellationToken);
 
-        if (entity == null)
-        {
-            // ➕ INSERT
-            entity = new KeteranganProduksi
-            {
-                Id = request.Id,                 // ✅ WAJIB (bukan identity)
-                NoNota = request.NoNota,
-                Tanggal = request.Tanggal,
-                Keterangan = request.Keterangan
-            };
+        var newId = lastId + 1;
 
-            _context.KeteranganProduksi.Add(entity);
-        }
-        else
+        var entity = new KeteranganProduksi
         {
-            // 🔁 UPDATE
-            entity.NoNota = request.NoNota;
-            entity.Tanggal = request.Tanggal;
-            entity.Keterangan = request.Keterangan;
-        }
+            Id = newId,
+            IdNota = request.IdNota,   // relasi ke Produksi
+            NoNota = request.NoNota,
+            Tanggal = request.Tanggal,
+            Keterangan = request.Keterangan
+        };
+
+        _context.KeteranganProduksi.Add(entity);
 
         await _context.SaveChangesAsync(cancellationToken);
+
         return true;
     }
 }
