@@ -13,6 +13,7 @@ namespace ABB.Application.VoucherBanks.Queries
         // Parameter yang kita butuhkan untuk mencari
         public int Bulan { get; set; }
         public int Tahun { get; set; }
+        public string KodeCabang { get; set; }
     }
 
     public class GetNextVoucherNumberQueryHandler : IRequestHandler<GetNextVoucherNumberQuery, string>
@@ -26,33 +27,39 @@ namespace ABB.Application.VoucherBanks.Queries
 
         public async Task<string> Handle(GetNextVoucherNumberQuery request, CancellationToken cancellationToken)
         {
-            // Format yang dicari di database, contoh: "....../09/25"
-            var searchTerm = $"/{request.Bulan:D2}/{request.Tahun:D2}";
+            // LOGIC BARU: Cari Voucher di Cabang ini & Periode ini
+            
+            var existingVouchers = await _context.VoucherBank
+                .Where(v => v.KodeCabang == request.KodeCabang 
+                            && v.TanggalVoucher.HasValue
+                            && v.TanggalVoucher.Value.Month == request.Bulan
+                            && v.TanggalVoucher.Value.Year == request.Tahun
+                            && v.NoVoucher != null)
+                .Select(v => v.NoVoucher)
+                .ToListAsync(cancellationToken);
 
-            var lastVoucher = await _context.VoucherBank
-                .Where(v => v.NoVoucher.EndsWith(searchTerm))
-                .OrderByDescending(v => v.NoVoucher)
-                .FirstOrDefaultAsync(cancellationToken);
+            int maxNumber = 0;
 
-            int nextNumber = 1;
-            if (lastVoucher != null)
+            foreach (var noVoucher in existingVouchers)
             {
-                // Ambil bagian nomor urut dari NoVoucher terakhir
-                // Contoh: "10/B01/BD/BD20/09/25" -> ambil "B01"
-                var parts = lastVoucher.NoVoucher.Split('/');
-                if (parts.Length > 1)
+                // Format: 50/BD01/02/2026/001
+                // Ambil bagian paling belakang (Sequence)
+                var parts = noVoucher.Split('/');
+                if (parts.Length > 0)
                 {
-                    // Ambil nomor dari kode bank, contoh B01 -> 1
-                    var lastNumberStr = new string(parts[1].Where(char.IsDigit).ToArray());
-                    if (int.TryParse(lastNumberStr, out int lastNumber))
+                    var lastPart = parts.Last(); // Ambil "001"
+                    if (int.TryParse(lastPart, out int currentSeq))
                     {
-                        nextNumber = lastNumber + 1;
+                        if (currentSeq > maxNumber)
+                        {
+                            maxNumber = currentSeq;
+                        }
                     }
                 }
             }
 
-            // Format menjadi 3 digit dengan angka nol di depan, contoh: 1 -> "001"
-            return nextNumber.ToString("D3");
+            // Return Max + 1 (Format 3 digit)
+            return (maxNumber + 1).ToString("000");
         }
     }
 }

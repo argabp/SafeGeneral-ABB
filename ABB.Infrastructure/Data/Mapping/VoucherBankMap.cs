@@ -8,12 +8,20 @@ namespace ABB.Infrastructure.Data.Mapping
     {
         public void Configure(EntityTypeBuilder<VoucherBank> builder)
         {
-            // Menentukan nama tabel di database
             builder.ToTable("abb_voucher_bank");
+            // Menentukan nama tabel di database
+            // 1. UBAH PRIMARY KEY
+            builder.HasKey(t => t.Id);
+            
+            // 2. MAPPING KOLOM ID
+            builder.Property(t => t.Id)
+                .HasColumnName("id")
+                .ValueGeneratedOnAdd();
 
-            // ---> BAGIAN PALING PENTING <---
-            // Menentukan Primary Key
-            builder.HasKey(t => t.NoVoucher);
+            // 3. UPDATE NO VOUCHER (Hapus IsRequired jika mau support sementara nanti)
+            builder.Property(t => t.NoVoucher)
+                .HasColumnName("no_voucher")
+                .HasMaxLength(50);
 
             // --- Konfigurasi untuk setiap kolom ---
 
@@ -31,11 +39,7 @@ namespace ABB.Infrastructure.Data.Mapping
                 .HasColumnName("debet_kredit")
                 .HasMaxLength(6);
 
-            builder.Property(t => t.NoVoucher)
-                .HasColumnName("no_voucher")
-                .HasMaxLength(50)
-                .IsRequired(); // Wajib diisi
-
+           
             builder.Property(t => t.KodeAkun)
                 .HasColumnName("kode_akun")
                 .HasMaxLength(10);
@@ -101,6 +105,13 @@ namespace ABB.Infrastructure.Data.Mapping
             builder.Property(t => t.TanggalPosting)
             .HasColumnName("tgl_posting")
             .HasColumnType("date");
+
+             builder.Property(t => t.FlagSementara)
+                .HasColumnName("flag_sementara"); // sesuaikan tipe data di db (bit/bool)
+
+            builder.Property(t => t.NoVoucherSementara)
+                .HasColumnName("no_voucher_smt")
+                .HasMaxLength(50);
         }
     }
 }

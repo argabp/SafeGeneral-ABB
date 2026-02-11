@@ -14,6 +14,7 @@ namespace ABB.Application.VoucherBanks.Queries
     public class GetVoucherBankByIdQuery : IRequest<VoucherBankDto>
     {
         public string NoVoucher { get; set; }
+        public long Id { get; set; }
     }
 
     public class GetVoucherBankByIdQueryHandler : IRequestHandler<GetVoucherBankByIdQuery, VoucherBankDto>
@@ -41,7 +42,7 @@ namespace ABB.Application.VoucherBanks.Queries
                                     on vb.KodeBank equals kb.Kode
                                 join mu in _context.MataUang
                                     on vb.KodeMataUang equals mu.kd_mtu
-                                where vb.NoVoucher == request.NoVoucher
+                                where vb.Id == request.Id
                                 select new VoucherBankDto
                                 {
                                     // Salin semua properti dari VoucherBank (vb)
@@ -59,9 +60,13 @@ namespace ABB.Application.VoucherBanks.Queries
                                     FlagPosting = (bool)vb.FlagPosting,
                                     KodeBank = vb.KodeBank,
                                     NoBank = vb.NoBank,
+                                    Id = vb.Id,
                                     JenisPembayaran = vb.JenisPembayaran,
                                     TanggalInput = vb.TanggalInput,
                                     TanggalUpdate = vb.TanggalUpdate,
+                                    FlagSementara = vb.FlagSementara ?? false, 
+                                    NoVoucherSementara = vb.NoVoucherSementara,
+                       
                                     // Ambil ID-nya dulu (Nanti kita ubah jadi Nama di bawah)
                                     KodeUserInput = vb.KodeUserInput,
                                     KodeUserUpdate = vb.KodeUserUpdate,

@@ -92,11 +92,26 @@
             
         </div>
         <div class="row">
-             <div class="form-group col-sm-8">
+            <div class="form-group col-sm-12">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="FlagSementara" name="FlagSementara">
+                    <label class="form-check-label" for="FlagSementara" style="font-weight:bold;">Buat Voucher Sementara</label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+             <div class="col-sm-6">
                 <label asp-for="NoVoucher">Nomor Voucher</label>
                 <div>
                  <kendo-textbox for="NoVoucher"  class="custom-kode" style="width: 100%;" readonly="true"  />
                     <span asp-validation-for="NoVoucher" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <label asp-for="NoVoucherSementara">Nomor Voucher Sementara</label>
+                <div>
+                    <kendo-textbox for="NoVoucherSementara" class="custom-kode" style="width: 100%;" readonly="true" />
+                    <span asp-validation-for="NoVoucherSementara" class="text-danger"></span>
                 </div>
             </div>
         </div>

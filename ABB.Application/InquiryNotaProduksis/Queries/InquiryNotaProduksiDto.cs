@@ -72,6 +72,9 @@ namespace ABB.Application.InquiryNotaProduksis.Queries
         public string DefaultKodeAkun { get; set; }
         public string DefaultDK { get; set; }
 
+        public string keterangan { get; set; }
+        public DateTime? tanggal_keterangan { get; set; }
+
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Produksi, InquiryNotaProduksiDto>();

@@ -26,6 +26,8 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Queries
         public bool FlagFinal { get; set; }
         public string DetailMataUang { get; set; }
 
+        public decimal? TotalBayarRp { get; set; }
+
 
         public void Mapping(Profile profile)
         {

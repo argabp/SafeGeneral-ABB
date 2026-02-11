@@ -352,7 +352,7 @@ function btnCetakPembayaranBank_OnClick(e) {
     var noVoucher = dataItem.NoVoucher;
 
     // buka tab baru (tanpa auto-print)
-    window.open(`Cetak?noVoucher=${noVoucher}`, "_blank");
+    window.open(`/VoucherBank/Cetak?noVoucher=${noVoucher}`, "_blank");
 }
 
 function attachChangeEvents() {

@@ -1,0 +1,48 @@
+@model ABB.Web.Modules.InquiryNotaProduksi.Models.InquiryNotaProduksiViewModel
+@using ABB.Application.InquiryNotaProduksis.Queries
+@using Kendo.Mvc.UI
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="KeteranganForm" enctype="multipart/form-data" autocomplete="off">
+
+       <input type="hidden" id="IdNota" value="@Model.id" />
+        <input type="hidden" id="NoNota"
+            value="@Model.InquiryNotaProduksiHeader?.no_nd" />
+
+
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Tanggal</label>
+            <div class="col-sm-12">
+                    <kendo-datepicker for="Tanggal"  style="width: 100%"/>
+                <span asp-validation-for="Tanggal" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Keterangan</label>
+            <div class="col-sm-12">
+                 <kendo-textarea for="Keterangan" 
+                                name="Keterangan"  
+                                style="width:100%; background-color:#fff !important; border:1px solid #ced4da;"
+                                rows="4">
+                </kendo-textarea>
+                <span asp-validation-for="Keterangan" class="text-danger"></span>
+            </div>
+        </div>
+
+            
+        
+    </form>
+</div>
+
+<div class="window-footer">
+    <button type="button" onclick="onSaveKeterangan()" class="btn btn-success space-right">
+        <span class="fa fa-save"></span> Save
+    </button>
+</div>
+
+
+

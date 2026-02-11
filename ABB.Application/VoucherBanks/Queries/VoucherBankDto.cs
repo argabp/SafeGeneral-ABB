@@ -9,6 +9,7 @@ namespace ABB.Application.VoucherBanks.Queries
 {
     public class VoucherBankDto : IMapFrom<VoucherBankEntity>
     {
+        public long Id { get; set; } // <--- TAMBAHAN
         public string KodeCabang { get; set; }
         public string JenisVoucher { get; set; }
         public string DebetKredit { get; set; }
@@ -41,6 +42,8 @@ namespace ABB.Application.VoucherBanks.Queries
 
         public decimal? Saldo { get; set; }
         public string KeteranganKasBank { get; set; }
+        public bool FlagSementara { get; set; }
+        public string NoVoucherSementara { get; set; }
 
         public void Mapping(Profile profile)
         {

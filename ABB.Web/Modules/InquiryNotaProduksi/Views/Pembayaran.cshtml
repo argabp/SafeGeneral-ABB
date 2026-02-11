@@ -1,0 +1,110 @@
+@model ABB.Web.Modules.InquiryNotaProduksi.Models.InquiryNotaProduksiViewModel
+@using ABB.Application.InquiryNotaProduksis.Queries
+@using Kendo.Mvc.UI
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+<div class="window-body">
+    <h4>Detail Pembayaran</h4>
+
+    <table class="table table-bordered table-striped">
+        <thead style="background:#f5f5f5">
+            <tr>
+                <th style="width:150px;">Tanggal Voucher</th>
+                <th style="width:200px;">No Voucher</th>
+                <th style="width:180px; text-align:right;">Nilai Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @* 🔹 PEMBAYARAN BANK *@
+            @if (Model.PembayaranBankList != null && Model.PembayaranBankList.Any())
+            {
+                foreach (var item in Model.PembayaranBankList)
+                {
+                    <tr>
+                        <td style="text-align:center">
+                            @(item.TanggalVoucher?.ToString("dd-MM-yy"))
+                        </td>
+                        <td>@item.NoVoucher</td>
+                        <td style="text-align:right">
+                                @string.Format(new System.Globalization.CultureInfo("id-ID"), 
+                               "Rp {0:N0}", item.TotalDlmRupiah)
+                        </td>
+                    </tr>
+                }
+            }
+
+            @* 🔹 PEMBAYARAN KAS *@
+            @if (Model.PembayaranKasList != null && Model.PembayaranKasList.Any())
+            {
+                foreach (var item in Model.PembayaranKasList)
+                {
+                    <tr>
+                        <td style="text-align:center">
+                            @(item.TanggalVoucher?.ToString("dd-MM-yy"))
+                        </td>
+                        <td>@item.NoVoucher</td>
+                        <td style="text-align:right">
+                                @string.Format(new System.Globalization.CultureInfo("id-ID"), 
+                               "Rp {0:N0}", item.TotalDlmRupiah)
+                        </td>
+                    </tr>
+                }
+            }
+
+            @* 🔹 PEMBAYARAN PIUTANG *@
+            @if (Model.PembayaranPiutangList != null && Model.PembayaranPiutangList.Any())
+            {
+                foreach (var item in Model.PembayaranPiutangList)
+                {
+                    <tr>
+                        <td style="text-align:center">
+                           @(item.Tanggal?.ToString("dd-MM-yy"))
+                        </td>
+                        <td>@item.NomorBukti</td>
+                        <td style="text-align:right">
+                                @string.Format(new System.Globalization.CultureInfo("id-ID"), 
+                               "Rp {0:N0}", item.TotalBayarRp)
+                        </td>
+                        
+                    </tr>
+                }
+            }
+
+            @* 🔹 JIKA TIDAK ADA DATA *@
+            @if (
+                (Model.PembayaranBankList == null || !Model.PembayaranBankList.Any()) &&
+                (Model.PembayaranKasList == null || !Model.PembayaranKasList.Any()) &&
+                (Model.PembayaranPiutangList == null || !Model.PembayaranPiutangList.Any())
+            )
+            {
+                <tr>
+                    <td colspan="3" style="text-align:center; font-style:italic;">
+                        Tidak ada data pembayaran
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+        <!-- <tfoot style="background:#fafafa; font-weight:bold;">
+            <tr>
+                <td colspan="2" style="text-align:right;">TOTAL</td>
+                <td style="text-align:right;">
+                    @{
+                        decimal total =
+                            (Model.PembayaranBankList?.Sum(x => x.TotalDlmRupiah) ?? 0) +
+                            (Model.PembayaranKasList?.Sum(x => x.TotalDlmRupiah) ?? 0) +
+                            (Model.PembayaranPiutangList?.Sum(x => x.TotalBayarRp) ?? 0);
+                    }
+                    @total
+                </td>
+            </tr> -->
+        </tfoot>
+    </table>
+
+
+</div>
+<div class="window-footer">
+</div>
+
+

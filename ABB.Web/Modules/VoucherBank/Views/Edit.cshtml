@@ -27,7 +27,7 @@
 <div class="window-body" style="background-color: lightgray">
     <form id="VoucherBankForm" enctype="multipart/form-data" autocomplete="off">
         
-        
+         <input type="hidden" asp-for="Id" />
         <div class="row">
             <div class="form-group col-sm-6">
                 <label asp-for="KodeCabang"></label>
@@ -77,6 +77,7 @@
                                     bind-to="ViewBag.KodeBankOptions"
                                     filter="FilterType.Contains"
                                     placeholder="Pilih atau ketik kode bank..."
+                                    value="@Model.KodeBank"
                                     readonly="true"
                                     >
                     </kendo-combobox>
@@ -86,11 +87,29 @@
             
         </div>
         <div class="row">
-             <div class="form-group col-sm-8">
+            <div class="form-group col-sm-12">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="FlagSementara" name="FlagSementara" 
+                           @(Model.FlagSementara ? "checked" : "") >
+                    <label class="form-check-label" for="FlagSementara" style="font-weight:bold;">Voucher Sementara</label>
+                    
+                    <input type="hidden" name="FlagSementara" value="@(Model.FlagSementara ? "true" : "false")" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+             <div class="col-sm-6">
                 <label asp-for="NoVoucher">Nomor Voucher</label>
                 <div>
                  <kendo-textbox for="NoVoucher"  class="custom-kode" style="width: 100%;" readonly="true"   />
                     <span asp-validation-for="NoVoucher" class-="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <label asp-for="NoVoucherSementara">Nomor Voucher Sementara</label>
+                <div>
+                    <kendo-textbox for="NoVoucherSementara" class="custom-kode" style="width: 100%;" readonly="true"  />
+                    <span asp-validation-for="NoVoucherSementara" class="text-danger"></span>
                 </div>
             </div>
         </div>

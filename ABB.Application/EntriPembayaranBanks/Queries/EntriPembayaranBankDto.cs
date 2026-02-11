@@ -28,6 +28,8 @@ namespace ABB.Application.EntriPembayaranBanks.Queries
         public DateTime? TanggalInput { get; set; }
         public DateTime? TanggalUpdate { get; set; }
 
+        public DateTime? TanggalVoucher { get; set; }
+
 
         public decimal TotalBayarCalculated { get; set; }
 

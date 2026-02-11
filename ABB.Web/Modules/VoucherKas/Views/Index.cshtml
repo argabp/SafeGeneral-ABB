@@ -45,7 +45,7 @@
                 .Name("VoucherKasGrid")
                 .DataSource(dataSource => dataSource.Ajax()
                     .Read(read => read.Action("GetVoucherKas", "VoucherKas").Data("getSearchFilter"))
-                    .Model(model => model.Id(p => p.KodeCabang)) 
+                    .Model(model => model.Id(p => p.Id))
                 )
                 .Columns(columns =>
                 {
@@ -56,7 +56,10 @@
                         .ClientTemplate("#= KodeCabang # - #= NamaCabang #");
 
                     // 2. No. Voucher
-                    columns.Bound(col => col.NoVoucher).Width(180).Title("No. Voucher");
+                    columns.Bound(col => col.NoVoucher)
+                        .Width(220) // Lebarin dikit biar muat
+                        .Title("No. Voucher")
+                        .ClientTemplate("#= (NoVoucher == null || NoVoucher == '') ? (NoVoucherSementara || '-') : NoVoucher #");
 
                     columns.Bound(col => col.NamaKas).Width(180).Title("Nama Kas");
 
@@ -97,6 +100,7 @@
                            .Text("Delete")
                             .IconClass("k-icon k-i-delete")
                            .Click("onDeleteVoucherKas"); 
+                        command.Custom("CetakPembayaranKas").Text(" Cetak ").IconClass("fa fa-print").Click("btnCetakPembayaranKas_OnClick");
                     }).Width(200).Title("Action").Locked(true);
                 })
                 .Pageable(pager => pager.Refresh(true).PageSizes(true))

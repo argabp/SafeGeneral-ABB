@@ -24,6 +24,9 @@ namespace ABB.Application.VoucherKass.Commands
         public bool FlagPosting { get; set; }
         public string JenisPembayaran { get; set; }
         public string KodeUserInput { get; set; }
+
+        public bool FlagSementara { get; set; }
+        public string NoVoucherSementara { get; set; }
     }
 
     public class CreateVoucherKasCommandHandler : IRequestHandler<CreateVoucherKasCommand, string>
@@ -73,6 +76,8 @@ namespace ABB.Application.VoucherKass.Commands
                 
                 // Tanggal Input diset di sini (Server Time)
                 TanggalInput = DateTime.Now, 
+                FlagSementara = request.FlagSementara,
+                NoVoucherSementara = request.NoVoucherSementara,
                 
                 JenisPembayaran = request.JenisPembayaran
             };

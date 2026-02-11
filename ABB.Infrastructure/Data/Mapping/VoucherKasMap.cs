@@ -12,7 +12,18 @@ namespace ABB.Infrastructure.Data.Mapping
             builder.ToTable("abb_voucher_kas");
             
             // ditambahin untuk pk
-            builder.HasKey(t => t.NoVoucher);
+            builder.HasKey(t => t.Id);
+
+                // --- 2. KONFIGURASI KOLOM ID ---
+                builder.Property(t => t.Id)
+                    .HasColumnName("id")       // Sesuaikan nama kolom di DB (biasanya lowercase 'id')
+                    .ValueGeneratedOnAdd();    // Menandakan ini Identity / Auto Increment
+
+                // --- 3. KONFIGURASI NO VOUCHER (Bukan PK lagi, tapi Wajib Unik) ---
+                builder.Property(t => t.NoVoucher)
+                    .HasColumnName("no_voucher")
+                    .HasMaxLength(50);
+                   
 
             builder.Property(t => t.KodeCabang)
                 .HasColumnName("kode_cabang")
@@ -28,10 +39,7 @@ namespace ABB.Infrastructure.Data.Mapping
                 .HasColumnName("debet_kredit")
                 .HasMaxLength(5);
 
-            builder.Property(t => t.NoVoucher)
-                .HasColumnName("no_voucher")
-                .HasMaxLength(50)
-                .IsRequired();
+            
 
             builder.Property(t => t.KodeAkun)
                 .HasColumnName("kode_akun")
@@ -91,6 +99,15 @@ namespace ABB.Infrastructure.Data.Mapping
               builder.Property(t => t.KodeKas)
             .HasColumnName("kode_kas")
             .HasMaxLength(5);
+
+
+            // --- TAMBAHAN BARU ---
+            builder.Property(t => t.FlagSementara)
+                .HasColumnName("flag_sementara"); // sesuaikan tipe data di db (bit/bool)
+
+            builder.Property(t => t.NoVoucherSementara)
+                .HasColumnName("no_voucher_smt")
+                .HasMaxLength(50);
         }
     }
 }

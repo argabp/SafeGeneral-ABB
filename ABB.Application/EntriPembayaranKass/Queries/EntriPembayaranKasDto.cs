@@ -29,6 +29,8 @@ namespace ABB.Application.EntriPembayaranKass.Queries
         public DateTime? TanggalInput { get; set; }
         public DateTime? TanggalUpdate { get; set; }
 
+        public DateTime? TanggalVoucher { get; set; }
+
         public void Mapping(Profile profile)
         {
             profile.CreateMap<EntriPembayaranKas, EntriPembayaranKasDto>();

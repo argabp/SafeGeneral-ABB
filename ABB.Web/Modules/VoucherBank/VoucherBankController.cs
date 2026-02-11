@@ -12,6 +12,7 @@ using ABB.Application.Cabangs.Queries;
 using ABB.Application.MataUangs.Queries;
 
 using ABB.Application.KasBanks.Queries;
+using ABB.Application.EntriPembayaranBanks.Queries;
 using ABB.Web.Modules.Base;
 using ABB.Web.Modules.VoucherBank.Models;
 using Kendo.Mvc.Extensions;
@@ -20,6 +21,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using ABB.Web.Modules.EntriPembayaranBank.Models;
 
 
 namespace ABB.Web.Modules.VoucherBank
@@ -89,7 +91,7 @@ namespace ABB.Web.Modules.VoucherBank
                 .FirstOrDefault(c => string.Equals(c.kd_cb.Trim(), kodeCabangCookie?.Trim(), StringComparison.OrdinalIgnoreCase))
                 ?.nm_cb?.Trim();
 
-            ViewBag.DisplayCabang = $"{kodeCabangCookie}-{namaCabang}";
+            ViewBag.DisplayCabang = $"{kodeCabangCookie} - {namaCabang}";
             model.KodeCabang = kodeCabangCookie;
 
             ViewBag.KodeCabangOptions = cabangList.Select(c => new SelectListItem
@@ -148,20 +150,26 @@ namespace ABB.Web.Modules.VoucherBank
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetNextVoucherNumber(DateTime tanggalVoucher)
+        public async Task<IActionResult> GetNextVoucherNumber(DateTime tanggalVoucher, string kodeCabang)
         {
-        
+            // Validasi sederhana
+            if (string.IsNullOrEmpty(kodeCabang))
+            {
+                return Json(new { success = false, message = "Kode Cabang kosong" });
+            }
+
             var nextNumber = await Mediator.Send(new GetNextVoucherNumberQuery 
             { 
                 Bulan = tanggalVoucher.Month, 
-                Tahun = tanggalVoucher.Year % 100 // Ambil 2 digit terakhir tahun
+                Tahun = tanggalVoucher.Year, // (Gunakan full year, nanti handler yg atur logicnya)
+                KodeCabang = kodeCabang      // <--- KIRIM INI
             });
             
             return Json(new { success = true, nextNumber = nextNumber });
         }
 
          // Action untuk menampilkan form Edit (dengan data yang sudah ada)
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(long id)
         {
              // get db untuk relasi
             var databaseName = Request.Cookies["DatabaseValue"];
@@ -218,7 +226,7 @@ namespace ABB.Web.Modules.VoucherBank
                     
                 };
 
-            var dto = await Mediator.Send(new GetVoucherBankByIdQuery { NoVoucher = id });
+            var dto = await Mediator.Send(new GetVoucherBankByIdQuery { Id = id });
             if (dto == null)
             {
                 return NotFound();
@@ -236,21 +244,20 @@ namespace ABB.Web.Modules.VoucherBank
                 return BadRequest(ModelState);
             }
 
-            var existingData = await Mediator.Send(new GetVoucherBankByIdQuery { NoVoucher = model.NoVoucher });
-
-            if (existingData != null) // Jika data sudah ada, jalankan Update
+            if (model.Id > 0) 
             {
+                // UPDATE
                 var command = Mapper.Map<UpdateVoucherBankCommand>(model);
+                command.Id = model.Id; // Pastikan Id ter-set
                 command.KodeUserUpdate = CurrentUser.UserId;
                 await Mediator.Send(command);
-
             }
-            else // Jika data belum ada, jalankan Create
+            else
             {
+                // CREATE
                 var command = Mapper.Map<CreateVoucherBankCommand>(model);
                 command.KodeUserInput = CurrentUser.UserId;
                 await Mediator.Send(command);
-
             }
 
             return Json(new { success = true });
@@ -258,9 +265,9 @@ namespace ABB.Web.Modules.VoucherBank
 
         // Action untuk menghapus data
         [HttpGet]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(long id)
         {
-            await Mediator.Send(new DeleteVoucherBankCommand { NoVoucher = id });
+            await Mediator.Send(new DeleteVoucherBankCommand { Id = id });
             return Json(new { success = true });
         }
 
@@ -283,6 +290,74 @@ namespace ABB.Web.Modules.VoucherBank
 
             return Json(new { success = false });
         }
+
+        [HttpGet]
+                public async Task<IActionResult> Cetak(long id)
+                {
+                    if (id <= 0)
+                        return BadRequest("ID voucher tidak valid.");
+
+                    var voucher = await Mediator.Send(
+                        new GetVoucherBankByIdQuery { Id = id });
+
+                    if (voucher == null)
+                        return NotFound($"Voucher dengan ID {id} tidak ditemukan.");
+
+                    var viewModel = new EntriPembayaranBankViewModel
+                    {
+                        VoucherHeader = voucher
+                    };
+
+                    return View(viewModel);
+                }
+
+            [HttpGet]
+            public async Task<IActionResult> GetNextVoucherSementara(string kodeCabang, string kodeBank, DateTime? tanggalVoucher, string debetKredit)
+            {
+                // Validasi input
+                if (string.IsNullOrEmpty(kodeCabang) || string.IsNullOrEmpty(kodeBank) || tanggalVoucher == null)
+                {
+                    return Json(new { success = false, message = "Data belum lengkap" });
+                }
+
+                var dateToUse = tanggalVoucher.Value;
+
+                // 1. MINTA NOMOR URUT (Global Sequence per Cabang & Periode)
+                var nextSequence = await Mediator.Send(new GetNextVoucherSementaraNumberQuery 
+                { 
+                    KodeCabang = kodeCabang,
+                    Bulan = dateToUse.Month, 
+                    Tahun = dateToUse.Year
+                });
+
+                var sequenceStr = nextSequence.ToString("000"); // Contoh: "002"
+
+                // 2. RAKIT STRING TAMPILAN (FORMAT LENGKAP)
+                // Format: SMT / Cabang / Tipe+Bank / Bulan / Tahun / Urut
+                
+                // A. Cabang (2 digit)
+                var cabangFormat = kodeCabang.Length >= 2 ? kodeCabang.Substring(kodeCabang.Length - 2) : kodeCabang; 
+
+                // B. Tengah (B + D/K + KodeBank)
+                // "B" untuk Bank. "D" Debit, "K" Kredit.
+                string prefixTengah = "B"; 
+                if (!string.IsNullOrEmpty(debetKredit))
+                {
+                    if (debetKredit.ToUpper() == "D") prefixTengah += "D";
+                    else if (debetKredit.ToUpper() == "K") prefixTengah += "K";
+                }
+                prefixTengah += kodeBank; // Contoh jadi: BD01 atau BK01
+
+                // C. Bulan/Tahun
+                var bulan = dateToUse.Month.ToString("00");
+                var tahun = dateToUse.Year.ToString();
+
+                // 3. GABUNGKAN
+                // Hasil: SMT/50/BD01/02/2026/002
+                var noVoucherSmt = $"SMT/{cabangFormat}/{prefixTengah}/{bulan}/{tahun}/{sequenceStr}";
+
+                return Json(new { success = true, noVoucherSmt = noVoucherSmt });
+            }
 
     }
 }

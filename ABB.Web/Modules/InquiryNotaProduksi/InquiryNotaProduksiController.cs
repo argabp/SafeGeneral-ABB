@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ABB.Application.Common;
 using ABB.Application.Common.Dtos;
 using ABB.Application.InquiryNotaProduksis.Queries;
+using ABB.Application.InquiryNotaProduksis.Commands;
 using ABB.Web.Modules.Base;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
@@ -147,5 +148,64 @@ namespace ABB.Web.Modules.InquiryNotaProduksi
 
             return Json(result);
         }
+
+       public async Task<IActionResult> Pembayaran(string no_nd)
+        {
+            if (string.IsNullOrWhiteSpace(no_nd))
+                return BadRequest("No Nota tidak boleh kosong");
+
+            // Ambil data dari Mediator (DTO)
+            var data = await Mediator.Send(
+                new GetInquiryNotaProduksiPembayaranQuery { NoNota = no_nd });
+
+            if (data == null)
+                return NotFound($"Nota {no_nd} tidak ditemukan");
+
+            // Map ke ViewModel
+            var model = new InquiryNotaProduksiViewModel
+            {
+                InquiryNotaProduksiHeader = data.Header,
+                PembayaranBankList = data.PembayaranBank,
+                PembayaranKasList = data.PembayaranKas,
+                PembayaranPiutangList = data.PembayaranPiutang
+            };
+
+            return PartialView(model); // sekarang view menerima tipe yang cocok
+        }
+
+        public async Task<IActionResult> Keterangan(int id)
+        {
+            var header = await Mediator.Send(
+                new GetInquiryNotaProduksiByIdQuery { id = id });
+
+            if (header == null)
+                return NotFound();
+
+            var viewModel = new InquiryNotaProduksiViewModel
+            {
+                id = id,
+                InquiryNotaProduksiHeader = header
+            };
+
+            return PartialView(viewModel);
+        }
+
+
+       [HttpPost]
+        public async Task<IActionResult> SaveKeterangan(
+            [FromBody] SaveKeteranganOSCommand command)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+           var result = await Mediator.Send(command);
+
+            return Json(new
+            {
+                success = result
+            });
+        }
+
+
     }
 }

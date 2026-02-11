@@ -9,6 +9,7 @@ namespace ABB.Application.VoucherBanks.Commands
     public class DeleteVoucherBankCommand : IRequest
     {
         public string NoVoucher { get; set; }
+        public long Id { get; set; }
     }
 
     public class DeleteVoucherBankCommandHandler : IRequestHandler<DeleteVoucherBankCommand>
@@ -23,7 +24,7 @@ namespace ABB.Application.VoucherBanks.Commands
         public async Task<Unit> Handle(DeleteVoucherBankCommand request, CancellationToken cancellationToken)
         {
             var entity = await _context.VoucherBank
-                .FirstOrDefaultAsync(v => v.NoVoucher == request.NoVoucher, cancellationToken);
+                .FirstOrDefaultAsync(v => v.Id == request.Id, cancellationToken);
 
             if (entity != null)
             {

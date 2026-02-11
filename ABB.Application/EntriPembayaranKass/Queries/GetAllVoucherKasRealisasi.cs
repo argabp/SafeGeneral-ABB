@@ -6,29 +6,30 @@ using AutoMapper;
 using MediatR;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using ABB.Application.VoucherKass.Queries;
 
-namespace ABB.Application.VoucherKass.Queries
+namespace ABB.Application.EntriPembayaranKass.Queries
 {
-    public class GetAllVoucherKasQuery : IRequest<List<VoucherKasDto>>
+    public class GetAllVoucherKasRealisasiQuery : IRequest<List<VoucherKasDto>>
     {
         public string SearchKeyword { get; set; }
         public string DatabaseName { get; set; }
         public string KodeCabang { get; set; }
-        public bool? FlagFinal { get; set; }
+        public bool FlagFinal { get; set; }
     }
 
-    public class GetAllVoucherKasQueryHandler : IRequestHandler<GetAllVoucherKasQuery, List<VoucherKasDto>>
+    public class GetAllVoucherKasRealisasiQueryHandler : IRequestHandler<GetAllVoucherKasRealisasiQuery, List<VoucherKasDto>>
     {
         private readonly IDbContextPstNota _context;
         private readonly IMapper _mapper;
 
-        public GetAllVoucherKasQueryHandler(IDbContextPstNota context, IMapper mapper)
+        public GetAllVoucherKasRealisasiQueryHandler(IDbContextPstNota context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
-        public async Task<List<VoucherKasDto>> Handle(GetAllVoucherKasQuery request, CancellationToken cancellationToken)
+        public async Task<List<VoucherKasDto>> Handle(GetAllVoucherKasRealisasiQuery request, CancellationToken cancellationToken)
         {
             // Ambil data dasar + join nama cabang
            var query =
@@ -48,7 +49,6 @@ namespace ABB.Application.VoucherKass.Queries
                 NamaCabang = cb != null ? cb.nm_cb : null,
 
                 JenisVoucher = vk.JenisVoucher,
-                Id = vk.Id,
                 DebetKredit = vk.DebetKredit,
                 NoVoucher = vk.NoVoucher,
 
@@ -65,8 +65,6 @@ namespace ABB.Application.VoucherKass.Queries
 
                 FlagPosting = vk.FlagPosting ?? false,
                 FlagFinal = vk.FlagFinal ?? false,
-                FlagSementara = vk.FlagSementara ?? false,
-                NoVoucherSementara = vk.NoVoucherSementara,
 
                 TanggalInput = vk.TanggalInput,
                 TanggalUpdate = vk.TanggalUpdate,
@@ -75,12 +73,10 @@ namespace ABB.Application.VoucherKass.Queries
 
                 JenisPembayaran = vk.JenisPembayaran
             };
-            //  query = query.Where(vk => vk.FlagFinal == request.FlagFinal);
-            if (request.FlagFinal.HasValue)
-            {
-                query = query.Where(x => x.FlagFinal == request.FlagFinal.Value);
-            }
-            
+
+             query = query.Where(vk => !string.IsNullOrWhiteSpace(vk.NoVoucher));
+             query = query.Where(vk => vk.FlagFinal == request.FlagFinal);
+
             if (!string.IsNullOrEmpty(request.KodeCabang))
             {
                 query = query.Where(vk => vk.KodeCabang == request.KodeCabang);
@@ -92,16 +88,13 @@ namespace ABB.Application.VoucherKass.Queries
                 decimal searchDecimal;
                 bool isDecimal = decimal.TryParse(request.SearchKeyword, out searchDecimal);
 
-                // [PERBAIKAN 3] Handle NULL pada NoVoucher agar tidak error
-                query = query.Where(x =>
-                    (x.KodeCabang ?? "").ToLower().Contains(keyword) ||
-                    (x.NamaCabang ?? "").ToLower().Contains(keyword) ||
-                    (x.JenisVoucher ?? "").ToLower().Contains(keyword) ||
-                    (x.NoVoucher ?? "").ToLower().Contains(keyword) || // <-- AMAN DARI NULL
-                    (x.NoVoucherSementara ?? "").ToLower().Contains(keyword) || // <-- Cari juga No Smt
-                    (x.KodeAkun ?? "").ToLower().Contains(keyword) ||
-                    (x.KeteranganVoucher ?? "").ToLower().Contains(keyword) ||
-                    (isDecimal && x.TotalVoucher.HasValue && x.TotalVoucher.Value == searchDecimal)
+                query = query.Where(kb =>
+                    kb.KodeCabang.ToLower().Contains(keyword) ||
+                    (kb.NamaCabang ?? "").ToLower().Contains(keyword) ||
+                    kb.JenisVoucher.ToLower().Contains(keyword) ||
+                    kb.NoVoucher.ToLower().Contains(keyword) ||
+                    kb.KodeAkun.ToLower().Contains(keyword) ||
+                    (isDecimal && kb.TotalVoucher.HasValue && kb.TotalVoucher.Value == searchDecimal)
                 );
             }
 

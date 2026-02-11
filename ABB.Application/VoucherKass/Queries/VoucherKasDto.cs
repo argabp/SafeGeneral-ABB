@@ -26,6 +26,7 @@ namespace ABB.Application.VoucherKass.Queries
         public string KodeUserUpdate { get; set; }
         public string JenisPembayaran { get; set; }
         public string KodeKas { get; set; }
+        public long Id { get; set; }
 
         // definisi
         public string NamaKas { get; set; }
@@ -36,6 +37,9 @@ namespace ABB.Application.VoucherKass.Queries
 
         public string KeteranganKasBank { get; set; }
         public decimal? Saldo { get; set; }
+
+        public bool FlagSementara { get; set; }
+        public string NoVoucherSementara { get; set; }
 
 
         public void Mapping(Profile profile)

@@ -36,6 +36,7 @@ using Jurnal62Entity = ABB.Domain.Entities.Jurnal62;
 using JenisTransaksiEntity = ABB.Domain.Entities.JenisTransaksi;
 using TemplateLapKeuEntity = ABB.Domain.Entities.TemplateLapKeu;
 using RekapJurnalEntity = ABB.Domain.Entities.RekapJurnal;
+using KeteranganProduksiEntity = ABB.Domain.Entities.KeteranganProduksi;
 
 namespace ABB.Application.Common.Interfaces
 {
@@ -80,6 +81,7 @@ namespace ABB.Application.Common.Interfaces
         DbSet<JenisTransaksiEntity> JenisTransaksi { get; set; }
         DbSet<TemplateLapKeuEntity> TemplateLapKeu { get; set; }
         DbSet<RekapJurnalEntity> RekapJurnal { get; set; }
+        DbSet<KeteranganProduksiEntity> KeteranganProduksi { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

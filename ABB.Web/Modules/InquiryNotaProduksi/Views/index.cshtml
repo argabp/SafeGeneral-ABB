@@ -108,6 +108,11 @@
                 )
                 .Columns(columns =>
                 {
+                     // 1. Lokasi (lok)
+
+                     columns.Bound(col => col.keterangan).Width(100).Title("status")
+                           .HtmlAttributes(new { style = "text-align:center" });
+                    
                     // 1. Lokasi (lok)
                     columns.Bound(col => col.lok).Width(80).Title("Lokasi")
                            .HtmlAttributes(new { style = "text-align:center" });
@@ -141,7 +146,7 @@
                     columns.Bound(col => col.nm_cust2).Width(250).Title("Customer 2");
 
                     // 9. D/K (d_k) - Rata Tengah
-                    columns.Bound(col => col.d_k).Width(60).Title("D/K")
+                    columns.Bound(col => col.d_k).Width(100).Title("D/K")
                            .HtmlAttributes(new { style = "text-align:center; font-weight:bold;" });
 
                     // 10. Nilai Nota (netto) - Format Angka & Rata Kanan
@@ -151,15 +156,38 @@
                            .Format("{0:n2}") // Format desimal (1,000.00)
                            .HtmlAttributes(new { style = "text-align:right" });
 
+                    columns.Bound(col => col.jumlah)
+                        .Width(150)
+                        .Title("Nilai Bayar")
+                        .Format("{0:n2}") // Format desimal (1,000.00)
+                        .HtmlAttributes(new { style = "text-align:right" });
+
+                    columns.Bound(col => col.saldo)
+                        .Width(150)
+                        .Title("Saldo")
+                        .Format("{0:n2}") // Format desimal (1,000.00)
+                        .HtmlAttributes(new { style = "text-align:right" });
+
                     // Action Button (Locked)
                     columns.Command(command =>
                     {
                          command.Custom("LihatInquiryNotaProduksi")
-                           .Text(" ") // Kosongkan text biar cuma icon (opsional)
-                           .IconClass("fa fa-eye")
+                           .Text("Detail") // Kosongkan text biar cuma icon (opsional)
+                         //  .IconClass("fa fa-eye")
                            .Click("btnViewInquiryNota_OnClick")
                            .HtmlAttributes(new { title = "View Detail" });
-                    }).Width(80).Title("Aksi").Locked(true);
+                        command.Custom("PembayaranInquiryNotaProduksi")
+                           .Text("Pembayaran") // Kosongkan text biar cuma icon (opsional)
+                         //  .IconClass("fa fa-eye")
+                           .Click("btnPembayaranInquiryNota_OnClick")
+                           .HtmlAttributes(new { title = "View Detail" });
+
+                        command.Custom("KeteranganInquiryNotaProduksi")
+                           .Text("Keterangan") // Kosongkan text biar cuma icon (opsional)
+                         //  .IconClass("fa fa-eye")
+                           .Click("btnKeteranganInquiryNota_OnClick")
+                           .HtmlAttributes(new { title = "View Detail" });
+                    }).Width(200).Title("Aksi").Locked(true);
                 })
                 .Pageable(pager => pager.Refresh(true).Info(true).PageSizes(new[] { 20, 50, 100 }))
                 .Sortable()
@@ -174,6 +202,24 @@
             .Name("InquiryNotaProduksiWindow")
             .Title("Inquiry Nota")
             .Width(1000)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+        )
+
+        @(Html.Kendo().Window()
+            .Name("InquiryNotaProduksiPembayaranWindow")
+            .Title("Inquiry Nota")
+            .Width(1000)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+        )
+
+        @(Html.Kendo().Window()
+            .Name("InquiryNotaProduksiKeterangannWindow")
+            .Title("Inquiry Nota")
+            .Width(500)
             .Modal(true)
             .Visible(false)
             .Draggable(true)

@@ -48,7 +48,7 @@ namespace ABB.Web.Modules.EntriPembayaranKas
         public async Task<ActionResult> GetEntriPembayaranKas([DataSourceRequest] DataSourceRequest request, string searchKeyword)
         {
              var kodeCabang = Request.Cookies["UserCabang"];
-            var data = await Mediator.Send(new GetAllVoucherKasQuery() { 
+            var data = await Mediator.Send(new GetAllVoucherKasRealisasiQuery() { 
                 SearchKeyword = searchKeyword,
                 KodeCabang = kodeCabang,
                 FlagFinal = false
@@ -60,7 +60,7 @@ namespace ABB.Web.Modules.EntriPembayaranKas
         public async Task<ActionResult> GetEntriPembayaranKasFinal([DataSourceRequest] DataSourceRequest request, string searchKeyword)
         {
              var kodeCabang = Request.Cookies["UserCabang"];
-            var data = await Mediator.Send(new GetAllVoucherKasQuery() { 
+            var data = await Mediator.Send(new GetAllVoucherKasRealisasiQuery() { 
                 SearchKeyword = searchKeyword,
                 KodeCabang = kodeCabang,
                 FlagFinal = true

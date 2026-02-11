@@ -51,15 +51,6 @@
            
         </div>
 
-
-        <div class="form-group col-sm-12">
-            <label class="col-sm-12">Kode</label>
-            <div class="col-sm-12">
-                <kendo-textbox for="Kode" class="custom-kode" style="width: 100%;" />
-                <span asp-validation-for="Kode" class="text-danger"></span>
-            </div>
-        </div>
-
         <div class="form-group col-sm-12">
             <label class="col-sm-12">Keterangan</label>
             <div class="col-sm-12">
@@ -93,15 +84,24 @@
             <label class="col-sm-12">Tipe</label>
             <div class="col-sm-12">
                <kendo-dropdownlist for="TipeKasBank"
-                            style="width: 100%;"
-                            class="custom-kuning"
-                            datatextfield="Text"
-                            datavaluefield="Value"
-                            bind-to="ViewBag.TipeKasBankOptions">
-                </kendo-dropdownlist>
+                class="custom-kuning"
+                style="width:100%"
+                datatextfield="Text"
+                datavaluefield="Value"
+                bind-to="ViewBag.TipeKasBankOptions">
+            </kendo-dropdownlist>
                 <span asp-validation-for="TipeKasBank" class="text-danger"></span>
             </div>
         </div>
+
+        <div class="form-group col-sm-12">
+            <label class="col-sm-12">Kode</label>
+            <div class="col-sm-12">
+                <kendo-textbox for="Kode" class="custom-kode" style="width: 100%;" readonly="true"/>
+                <span asp-validation-for="Kode" class="text-danger"></span>
+            </div>
+        </div>
+
        <div class="form-group col-sm-12">
             <label class="col-sm-12">Saldo Awal</label>
             <div class="col-sm-12">
@@ -117,3 +117,40 @@
         <span class="fa fa-save"></span> Save
     </button>
 </div>
+
+<script>
+    $(document).ready(function () {
+
+        var ddl = $("#TipeKasBank").data("kendoDropDownList");
+
+        if (!ddl) {
+            console.error("Dropdown TipeKasBank tidak ditemukan");
+            return;
+        }
+
+        ddl.bind("change", onTipeKasBankChange);
+    });
+
+    function onTipeKasBankChange(e) {
+        console.log("CHANGE TIPE KAS BANK");
+
+        var tipeKasBank = this.value();
+        var kodeCabang = $("#KodeCabang").val(); // lebih aman
+
+        console.log("Tipe:", tipeKasBank);
+        console.log("Cabang:", kodeCabang);
+
+        if (!tipeKasBank || !kodeCabang) return;
+
+        $.get('/KasBank/GenerateKodeKasBank', {
+            KodeCabang: kodeCabang,
+            TipeKasBank: tipeKasBank
+        }, function (res) {
+            console.log("Result:", res);
+            if (res) {
+                $("#Kode").data("kendoTextBox").value(res);
+            }
+        });
+    }
+</script>
+

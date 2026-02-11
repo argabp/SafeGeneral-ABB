@@ -1,17 +1,18 @@
-using System.Threading;
-using System.Threading.Tasks;
 using ABB.Application.Common.Interfaces;
+using ABB.Application.KasBanks.Queries;
+using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace ABB.Application.KasBanks.Commands
+namespace ABB.Application.KasBanks.Queries
 {
     // =========================
-    // COMMAND
+    // QUERY
     // =========================
-    public class DeleteKasBankCommand : IRequest
+    public class GetKasBankByCompositeKeyQuery : IRequest<KasBankDto>
     {
-        // 🔑 COMPOSITE KEY
         public string KodeCabang { get; set; }
         public string TipeKasBank { get; set; }
         public string Kode { get; set; }
@@ -20,30 +21,33 @@ namespace ABB.Application.KasBanks.Commands
     // =========================
     // HANDLER
     // =========================
-    public class DeleteKasBankCommandHandler 
-        : IRequestHandler<DeleteKasBankCommand>
+    public class GetKasBankByCompositeKeyQueryHandler
+        : IRequestHandler<GetKasBankByCompositeKeyQuery, KasBankDto>
     {
         private readonly IDbContextPstNota _context;
+        private readonly IMapper _mapper;
 
-        public DeleteKasBankCommandHandler(IDbContextPstNota context)
+        public GetKasBankByCompositeKeyQueryHandler(
+            IDbContextPstNota context,
+            IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<Unit> Handle(
-            DeleteKasBankCommand request,
+        public async Task<KasBankDto> Handle(
+            GetKasBankByCompositeKeyQuery request,
             CancellationToken cancellationToken)
         {
-            // VALIDASI DASAR
             if (string.IsNullOrEmpty(request.KodeCabang) ||
                 string.IsNullOrEmpty(request.TipeKasBank) ||
                 string.IsNullOrEmpty(request.Kode))
             {
-                return Unit.Value;
+                return null;
             }
 
-            // 🔎 CARI DATA BERDASARKAN COMPOSITE KEY
             var entity = await _context.KasBank
+                .AsNoTracking()
                 .FirstOrDefaultAsync(x =>
                     x.KodeCabang == request.KodeCabang &&
                     x.TipeKasBank == request.TipeKasBank &&
@@ -51,13 +55,9 @@ namespace ABB.Application.KasBanks.Commands
                     cancellationToken);
 
             if (entity == null)
-                return Unit.Value;
+                return null;
 
-            // ❌ DELETE
-            _context.KasBank.Remove(entity);
-            await _context.SaveChangesAsync(cancellationToken);
-
-            return Unit.Value;
+            return _mapper.Map<KasBankDto>(entity);
         }
     }
 }

@@ -3,22 +3,31 @@ using System.Threading.Tasks;
 using ABB.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using KasBankEntity = ABB.Domain.Entities.KasBank;
 
 namespace ABB.Application.KasBanks.Commands
 {
+    // =========================
+    // COMMAND
+    // =========================
     public class UpdateKasBankCommand : IRequest
     {
-        // Properti yang dibutuhkan untuk update
+        // 🔑 COMPOSITE KEY
+        public string KodeCabang { get; set; }
+        public string TipeKasBank { get; set; }
         public string Kode { get; set; }
+
+        // DATA UPDATE
         public string Keterangan { get; set; }
         public string NoRekening { get; set; }
         public string NoPerkiraan { get; set; }
-        public string TipeKasBank { get; set; }
         public decimal? Saldo { get; set; }
     }
 
-    public class UpdateKasBankCommandHandler : IRequestHandler<UpdateKasBankCommand>
+    // =========================
+    // HANDLER
+    // =========================
+    public class UpdateKasBankCommandHandler 
+        : IRequestHandler<UpdateKasBankCommand>
     {
         private readonly IDbContextPstNota _context;
 
@@ -27,26 +36,38 @@ namespace ABB.Application.KasBanks.Commands
             _context = context;
         }
 
-        public async Task<Unit> Handle(UpdateKasBankCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(
+            UpdateKasBankCommand request, 
+            CancellationToken cancellationToken)
         {
-            // 1. Cari data yang ada di database berdasarkan Kode
-            var entity = await _context.KasBank
-                .FirstOrDefaultAsync(kb => kb.Kode == request.Kode, cancellationToken);
-
-            if (entity != null)
+            // VALIDASI DASAR
+            if (string.IsNullOrEmpty(request.KodeCabang) ||
+                string.IsNullOrEmpty(request.TipeKasBank) ||
+                string.IsNullOrEmpty(request.Kode))
             {
-                // 2. Update propertinya dengan data baru dari request
-                entity.Keterangan = request.Keterangan;
-                entity.NoRekening = request.NoRekening;
-                entity.NoPerkiraan = request.NoPerkiraan;
-                entity.TipeKasBank = request.TipeKasBank;
-                entity.Saldo = request.Saldo;
-
-                // 3. Simpan perubahan
-                await _context.SaveChangesAsync(cancellationToken);
+                return Unit.Value;
             }
 
-            return Unit.Value; // Mengindikasikan proses selesai tanpa mengembalikan data
+            // 🔎 CARI DATA BERDASARKAN COMPOSITE KEY
+            var entity = await _context.KasBank
+                .FirstOrDefaultAsync(x =>
+                    x.KodeCabang == request.KodeCabang &&
+                    x.TipeKasBank == request.TipeKasBank &&
+                    x.Kode == request.Kode,
+                    cancellationToken);
+
+            if (entity == null)
+                return Unit.Value;
+
+            // ✏ UPDATE FIELD
+            entity.Keterangan = request.Keterangan;
+            entity.NoRekening = request.NoRekening;
+            entity.NoPerkiraan = request.NoPerkiraan;
+            entity.Saldo = request.Saldo;
+
+            await _context.SaveChangesAsync(cancellationToken);
+
+            return Unit.Value;
         }
     }
 }

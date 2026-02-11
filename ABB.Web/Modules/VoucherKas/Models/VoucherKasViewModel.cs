@@ -8,7 +8,8 @@ namespace ABB.Web.Modules.VoucherKas.Models
 {
     public class VoucherKasViewModel : IMapFrom<CreateVoucherKasCommand>
     {
-      
+        public long Id { get; set; }
+        
         [Display(Name = "KodeCabang")]
         public string KodeCabang { get; set; }
 
@@ -25,7 +26,6 @@ namespace ABB.Web.Modules.VoucherKas.Models
         [Display(Name = "Debet/Kredit")]
         public string DebetKredit { get; set; }
 
-        [Required(ErrorMessage = "Kode tidak boleh kosong.")]
         [StringLength(50)]
         [Display(Name = "NoVoucher")]
         public string NoVoucher { get; set; }
@@ -76,7 +76,11 @@ namespace ABB.Web.Modules.VoucherKas.Models
         [Display(Name = "Jenis Pembayaran")]
         public string JenisPembayaran { get; set; }
 
-        
+        [Display(Name = "Flag Sementara")]
+        public bool FlagSementara { get; set; }
+
+        [Display(Name = "No Voucher Sementara")]
+        public string NoVoucherSementara { get; set; }
 
         public void Mapping(Profile profile)
         {

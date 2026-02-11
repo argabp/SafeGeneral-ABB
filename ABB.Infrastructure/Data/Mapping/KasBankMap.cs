@@ -12,7 +12,12 @@ namespace ABB.Infrastructure.Data.Mapping
             builder.ToTable("abb_kasbank");
 
             // [Key]
-            builder.HasKey(t => t.Kode);
+           builder.HasKey(t => new 
+            { 
+                t.Kode, 
+                t.KodeCabang, 
+                t.TipeKasBank 
+            });
 
             // [StringLength(3)]
             builder.Property(t => t.Kode)

@@ -8,7 +8,8 @@ namespace ABB.Application.VoucherKass.Commands
 {
     public class DeleteVoucherKasCommand : IRequest
     {
-        public string NoVoucher { get; set; }
+        // GANTI INI: Jangan hapus by NoVoucher, tapi by ID
+        public long Id { get; set; } 
     }
 
     public class DeleteVoucherKasCommandHandler : IRequestHandler<DeleteVoucherKasCommand>
@@ -22,8 +23,9 @@ namespace ABB.Application.VoucherKass.Commands
 
         public async Task<Unit> Handle(DeleteVoucherKasCommand request, CancellationToken cancellationToken)
         {
+            // CARI BERDASARKAN ID
             var entity = await _context.VoucherKas
-                .FirstOrDefaultAsync(v => v.NoVoucher == request.NoVoucher, cancellationToken);
+                .FirstOrDefaultAsync(v => v.Id == request.Id, cancellationToken);
 
             if (entity != null)
             {

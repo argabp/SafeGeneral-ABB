@@ -28,29 +28,42 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Queries
         {
             // 1. Bentuk akhiran (suffix) untuk pencarian yang lebih akurat
             // Format: /BM/10/25
-            string suffix = $"/{request.JenisPenyelesaian}/{request.Bulan:D2}/{request.Tahun:D2}";
+            string kodeCabang = request.KodeCabang?.Trim() ?? "";
+
+            string kodeCabang2Digit = kodeCabang.Length >= 2
+                ? kodeCabang[^2..]
+                : kodeCabang.PadLeft(2, '0');
+            string prefix =
+                $"{kodeCabang2Digit}/" +
+                $"{request.JenisPenyelesaian}/" +
+                $"{request.Bulan:D2}/" +
+                $"{request.Tahun:D2}/";
+
+          //  string suffix = $"/{request.JenisPenyelesaian}/{request.Bulan:D2}/{request.Tahun:D2}";
 
             // 2. Cari nomor bukti terakhir yang cocok dengan akhiran bulan ini
             var lastNomorBukti = await _context.HeaderPenyelesaianUtang
-                .Where(v => v.NomorBukti.EndsWith(suffix))
+                .Where(v => v.NomorBukti.EndsWith(prefix))
                 .OrderByDescending(v => v.NomorBukti) // Mengurutkan berdasarkan string akan bekerja untuk format ini
                 .Select(v => v.NomorBukti) // Ambil string-nya saja
                 .FirstOrDefaultAsync(cancellationToken);
 
             int nextSequence = 1;
-            if (lastNomorBukti != null)
+           if (!string.IsNullOrEmpty(lastNomorBukti))
             {
-                // 3. Ambil bagian PERTAMA (nomor urut), bukan terakhir
-                var lastSequenceStr = lastNomorBukti.Split('/').First();
+                // =========================
+                // 4. Ambil NNN (bagian terakhir)
+                // =========================
+                var lastSequenceStr = lastNomorBukti.Split('/').Last();
+
                 if (int.TryParse(lastSequenceStr, out int lastSequence))
                 {
                     nextSequence = lastSequence + 1;
                 }
             }
-
             // 4. Gabungkan nomor urut baru dengan format yang benar (3 digit)
             // Format hasil: 002/BM/10/25
-            return $"{nextSequence:D3}{suffix}";
+            return $"{prefix}{nextSequence:D3}";
         }
     }
 }

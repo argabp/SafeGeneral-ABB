@@ -12,10 +12,11 @@ namespace ABB.Application.JurnalMemorials104.Queries
     {
         public string KodeCabang { get; set; }
         public int Bulan { get; set; }
-        public int Tahun { get; set; } // Kirim 4 digit (misal: 2025)
+        public int Tahun { get; set; } // 4 digit (misal: 2025)
     }
 
-    public class GetNextNoVoucherJurnalQueryHandler : IRequestHandler<GetNextNoVoucherJurnalQuery, string>
+    public class GetNextNoVoucherJurnalQueryHandler
+        : IRequestHandler<GetNextNoVoucherJurnalQuery, string>
     {
         private readonly IDbContextPstNota _context;
 
@@ -24,25 +25,40 @@ namespace ABB.Application.JurnalMemorials104.Queries
             _context = context;
         }
 
-        public async Task<string> Handle(GetNextNoVoucherJurnalQuery request, CancellationToken cancellationToken)
+        public async Task<string> Handle(
+            GetNextNoVoucherJurnalQuery request,
+            CancellationToken cancellationToken)
         {
-            // 1. Tentukan format suffix: /MM/02/25
-            // MM = Default (sesuai request)
-            // BB = request.Bulan (2 digit)
-            // TT = request.Tahun (ambil 2 digit belakang)
-            string tahunDuaDigit = (request.Tahun % 100).ToString("D2");
+            // =========================
+            // 1. Kode Cabang (Trim + ambil 2 digit terakhir)
+            // =========================
+            string kodeCabang = request.KodeCabang?.Trim() ?? "";
+            string kodeCabang2Digit = kodeCabang.Length >= 2
+                ? kodeCabang[^2..]
+                : kodeCabang.PadLeft(2, '0');
+
+            // =========================
+            // 2. Komponen Voucher
+            // =========================
+            string jenis = "MM";
             string bulanDuaDigit = request.Bulan.ToString("D2");
-            string jenis = "MM"; 
+            string tahunFull = request.Tahun.ToString("D4");
 
-            // Format yang dicari di database: "%/MM/02/25"
-            string searchPattern = $"/{jenis}/{bulanDuaDigit}/{tahunDuaDigit}";
+            // Prefix: CC/MM/BB/YYYY/
+            string prefix =
+                $"{kodeCabang2Digit}/" +
+                $"{jenis}/" +
+                $"{bulanDuaDigit}/" +
+                $"{tahunFull}/";
 
-            // 2. Cari nomor terakhir di database berdasarkan Cabang & Suffix Bulan/Tahun ini
-            // Kita pakai EndsWith untuk memastikan bulan & tahunnya sama (agar reset tiap bulan)
+            // =========================
+            // 3. Ambil voucher terakhir
+            // =========================
             var lastVoucher = await _context.JurnalMemorial104
-                .Where(x => x.KodeCabang == request.KodeCabang && 
-                            x.NoVoucher.EndsWith(searchPattern))
-                .OrderByDescending(x => x.NoVoucher) // Urutkan Z-A untuk dapat yang terbesar
+                .Where(x =>
+                    x.KodeCabang.Trim() == kodeCabang &&
+                    x.NoVoucher.StartsWith(prefix))
+                .OrderByDescending(x => x.NoVoucher)
                 .Select(x => x.NoVoucher)
                 .FirstOrDefaultAsync(cancellationToken);
 
@@ -50,20 +66,19 @@ namespace ABB.Application.JurnalMemorials104.Queries
 
             if (!string.IsNullOrEmpty(lastVoucher))
             {
-                // Contoh lastVoucher: "005/MM/02/25"
-                // Kita split berdasarkan '/' ambil index ke-0
-                var parts = lastVoucher.Split('/');
-                
-                if (parts.Length > 0 && int.TryParse(parts[0], out int currentUrut))
+                // Contoh: 01/MM/02/2025/007
+                var lastUrutStr = lastVoucher.Split('/').Last();
+
+                if (int.TryParse(lastUrutStr, out int lastUrut))
                 {
-                    nextUrut = currentUrut + 1;
+                    nextUrut = lastUrut + 1;
                 }
             }
 
-            // 3. Rakit Nomor Baru: "001" + "/MM/02/25"
-            string newVoucher = $"{nextUrut.ToString("D3")}{searchPattern}";
-
-            return newVoucher;
+            // =========================
+            // 4. Hasil akhir
+            // =========================
+            return $"{prefix}{nextUrut:D3}";
         }
     }
 }

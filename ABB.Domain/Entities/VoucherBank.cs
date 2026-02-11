@@ -4,6 +4,7 @@ namespace ABB.Domain.Entities
 {
     public class VoucherBank
     {
+        public long Id { get; set; }
         public string KodeCabang { get; set; }
         public string JenisVoucher { get; set; }
         public string DebetKredit { get; set; }
@@ -27,5 +28,8 @@ namespace ABB.Domain.Entities
         public string KodeBank { get; set; }
         public string NoBank { get; set; }
          public string JenisPembayaran { get; set; }
+
+         public bool? FlagSementara { get; set; }
+        public string NoVoucherSementara { get; set; }
     }
 }

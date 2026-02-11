@@ -27,35 +27,72 @@ function btnEditVoucherBank_OnClick(e) {
     var window = $("#VoucherBankWindow").data("kendoWindow");
     // MEMASANG "PENDENGAR": Jalankan 'attachChangeEvents' setelah konten window selesai di-refresh
     window.one("refresh", attachChangeEvents); 
-    openWindow('#VoucherBankWindow', `/VoucherBank/Edit?id=${dataItem.NoVoucher.trim()}`, 'Edit Voucher Bank');
+    openWindow('#VoucherBankWindow', `/VoucherBank/Edit?id=${dataItem.Id}`, 'Edit Voucher Bank');
 }
 
 // Fungsi untuk menyimpan data (dari form Add atau Edit)
 function onSaveVoucherBank() {
+    // 1. Ambil Komponen
     var comboCabang = $("#KodeCabang").data("kendoComboBox");
     var kodeCabangValue = comboCabang
-    ? comboCabang.value().trim()
-    : ($("#KodeCabang").val()?.split("-")[0].trim() || "");
+        ? comboCabang.value().trim()
+        : ($("#KodeCabang").val()?.split("-")[0].trim() || "");
+    
     var url = "/VoucherBank/Save";
-   
+
+    // 2. Ambil Status & Nilai Textbox
+    var isSementara = $("#FlagSementara").is(":checked");
+    var noVoucherUtama = $("#NoVoucher").val(); // Pastikan ini terambil
+    var noVoucherSmt = $("#NoVoucherSementara").val();
+
+    // 3. LOGIKA PENENTUAN NO VOUCHER (FINAL)
+    var finalNoVoucher = null;
+
+    if (isSementara) {
+        // --- KASUS SEMENTARA ---
+        // Validasi: No Smt wajib ada
+        if (!noVoucherSmt) {
+            alert("Nomor Voucher Sementara belum terbentuk!");
+            return;
+        }
+        // No Voucher Utama dikosongkan (null) agar tidak bentrok
+        finalNoVoucher = null; 
+    } else {
+        // --- KASUS TETAP (ORIGINAL) ---
+        // Validasi: No Utama wajib ada
+        if (!noVoucherUtama) {
+            alert("Nomor Voucher belum terbentuk!");
+            return;
+        }
+        // Kirim No Voucher Utama
+        finalNoVoucher = noVoucherUtama;
+    }
     var data = {
+        Id: $("#Id").val(),
         KodeCabang: kodeCabangValue,
         JenisVoucher: $("#JenisVoucher").val(),
-        DebetKredit: $("#DebetKredit").data("kendoDropDownList").value(), // Cara aman ambil value dropdown
+        DebetKredit: $("#DebetKredit").data("kendoDropDownList").value(),
         
-        NoVoucher: $("#NoVoucher").val(),
+        // Logic Nomor
+        NoVoucher: finalNoVoucher,
+        FlagSementara: isSementara,
+        NoVoucherSementara: noVoucherSmt, // Selalu kirim SMT sebagai history
+
+        KodeBank: $("#KodeBank").data("kendoComboBox").value().trim(),
+        KodeAkun: $("#KodeAkun").val(), // Ambil dari input/combo
+        NoBank: $("#NoBank").val(),
         
-        KodeAkun: $("#KodeAkun").val(),
         DiterimaDari: $("#DiterimaDari").val(),
-        TanggalVoucher: $("#TanggalVoucher").data("kendoDatePicker").value(), // Cara aman ambil value datepicker
+        TanggalVoucher: kendo.toString($("#TanggalVoucher").data("kendoDatePicker").value(), "yyyy-MM-dd"),
+        
         KodeMataUang: $("#KodeMataUang").val(),
-        TotalVoucher: $("#TotalVoucher").data("kendoNumericTextBox").value(), // Cara aman ambil value numeric
+        TotalVoucher: $("#TotalVoucher").data("kendoNumericTextBox").value(),
         TotalDalamRupiah: $("#TotalDalamRupiah").data("kendoNumericTextBox").value(),
-        KeteranganVoucher: $("#KeteranganVoucher").val(),
-        FlagPosting: $("#FlagPosting").val(), // Asumsi ini textbox biasa
-        KodeBank: $("#KodeBank").val(),
+        
         JenisPembayaran: $("#JenisPembayaran").data("kendoDropDownList").value(),
-        NoBank: $("#NoBank").val()
+        KeteranganVoucher: $("#KeteranganVoucher").val(),
+        
+        FlagPosting: $("#FlagPosting").val() === "true"
     };
     console.log(data)
     showProgress('#VoucherBankWindow');
@@ -104,7 +141,7 @@ function onDeleteVoucherBank(e) {
             showProgressOnGrid('#VoucherBankGrid');
 
             // Kirim request hapus ke Controller
-            ajaxGet(`/VoucherBank/Delete?id=${dataItem.NoVoucher.trim()}`,
+            ajaxGet(`/VoucherBank/Delete?id=${dataItem.Id}`,
                 function (response) {
                     if (response.success) {
                         showMessage('Success', 'Data berhasil dihapus.');
@@ -147,19 +184,55 @@ function btnAddVoucherBank_OnClick() {
     openWindow('#VoucherBankWindow', '/VoucherBank/Add', 'Add New Voucher Bank');
 }
 
-// Fungsi untuk membuka window Edit Data
-function btnEditVoucherBank_OnClick(e) {
-    e.preventDefault();
-    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-    var window = $("#VoucherBankWindow").data("kendoWindow");
-    window.one("refresh", attachChangeEvents); 
-    openWindow('#VoucherBankWindow', `/VoucherBank/Edit?id=${dataItem.NoVoucher.trim()}`, 'Edit Voucher Bank');
-}
+
 
 // Fungsi gabungan untuk event 'change' pada tanggal
 function onTanggalVoucherChange() {
     hitungTotalRupiah();
     generateNoVoucher();
+}
+
+function checkVoucherGeneration() {
+    var isSementara = $("#FlagSementara").is(":checked");
+    var txtSmt = $("#NoVoucherSementara");
+    var txtUtama = $("#NoVoucher");
+
+    if (isSementara) {
+        // --- MODE: SEMENTARA (Checked) ---
+        
+        // Cek apakah ada nilai original (saat edit)?
+        var originalSmt = txtSmt.data("original-value");
+        
+        // Kalau ada nilai lama, kembalikan. Kalau kosong, generate baru.
+        if (originalSmt) {
+            txtSmt.val(originalSmt);
+        } else {
+            // Cek biar gak generate berulang kalau udah ada isinya
+            if(!txtSmt.val()){
+                 generateNoVoucherSementara();
+            }
+        }
+        
+        // Kosongkan field Utama (Visual only) -> Karena belum jadi voucher tetap
+        txtUtama.val(""); 
+
+    } else {
+        // --- MODE: TETAP / ORIGINAL (Unchecked) ---
+        
+        generateNoVoucher(); 
+        
+        // [PERBAIKAN PENTING DI SINI]
+        // Jangan hapus No Voucher Sementara jika ini adalah data hasil EDIT (punya original value)
+        // Biarkan saja dia tertulis di situ sebagai histori.
+        
+        var originalSmt = txtSmt.data("original-value");
+        if (originalSmt) {
+            txtSmt.val(originalSmt); // Pastikan nilainya tetap ada
+        } else {
+            // Kalau data baru (Add), boleh dikosongkan biar bersih
+            txtSmt.val(""); 
+        }
+    }
 }
 
 // Fungsi untuk memasang "kabel" event
@@ -181,26 +254,49 @@ function attachChangeEvents() {
     var totalVoucher = $("#TotalVoucher").data("kendoNumericTextBox");
     var tanggalVoucher = $("#TanggalVoucher").data("kendoDatePicker");
 
+    // 1. EVENT: Checkbox Flag Sementara
+        var txtSmt = $("#NoVoucherSementara");
+            // Simpan nilai awal ke dalam memori elemen (data attribute)
+            if (txtSmt.val()) {
+                txtSmt.data("original-value", txtSmt.val());
+            }
+        // 1. EVENT: Checkbox Flag Sementara
+        $("#FlagSementara").on("change", function() {
+            checkVoucherGeneration(); 
+        });
 
     if (tanggalVoucher) tanggalVoucher.bind("change", generateNoVoucher);
     // --- Pasang pendengar ke fungsi yang sesuai ---
 
     // Pemicu untuk generator nomor voucher
     jenisVoucher.on("change", generateNoVoucher);
-    if (kodeCabang) kodeCabang.bind("change", generateNoVoucher);
+    if (kodeCabang) kodeCabang.bind("change", checkVoucherGeneration);
+    jenisVoucher.on("change", checkVoucherGeneration);
     
     // Pemicu untuk kalkulator kurs
     if (mataUang) mataUang.bind("change", hitungTotalRupiah);
     if (totalVoucher) totalVoucher.bind("change", hitungTotalRupiah);
-    if (tanggalVoucher) tanggalVoucher.bind("change", hitungTotalRupiah);
+    if (tanggalVoucher) {
+                tanggalVoucher.bind("change", function() {
+                    hitungTotalRupiah();
+                    checkVoucherGeneration(); // Generate Nomor sesuai checkbox
+                });
+            }
     
     // Pemicu gabungan saat Kode Bank berubah
     if (kodeBank) {
-        kodeBank.bind("change", onKodeBankChange); 
+        kodeBank.bind("change", function() {
+            onKodeBankChange(); 
+            // Jangan panggil generateNoVoucher() langsung!
+            checkVoucherGeneration(); 
+        });
     }
     // Pemicu gabungan saat Debet/Kredit berubah
     if (debetKredit) {
-        debetKredit.bind("change", onDebetKreditChange);
+        debetKredit.bind("change", function() {
+            onDebetKreditChange(); // Label update
+            checkVoucherGeneration(); // Cek mau generate yg mana
+        });
     }
     updateDynamicLabels();
 }
@@ -244,56 +340,55 @@ function generateNoVoucher() {
     // Ambil nilai dari komponen form
     var jenisVoucher = $("#JenisVoucher").val() || "";
     var debetKredit = $("#DebetKredit").data("kendoDropDownList") ? $("#DebetKredit").data("kendoDropDownList").value() : "";
-    var kodeCabang = $("#KodeCabang").data("kendoComboBox") ? $("#KodeCabang").data("kendoComboBox").value() : "";
+     var kodeCabangText = $("#KodeCabang").data("kendoComboBox")?.input.val() || "";
+        var kodeCabang = kodeCabangText.split(" - ")[0].trim(); 
     var kodeBank = $("#KodeBank").data("kendoComboBox") ? $("#KodeBank").data("kendoComboBox").value() : "";
     var tanggalVoucher = $("#TanggalVoucher").data("kendoDatePicker");
     var tanggal = tanggalVoucher ? tanggalVoucher.value() : null;
 
 
      if (!tanggal) {
-        $("#NoVoucher").val("");
-        return;
+        tanggal = new Date(); 
     }
+    console.log("Kode Cabang:", kodeCabang);
+    if (!kodeCabang) return;
 
+    // harusnya bekerja di prod yaa
+    var formattedDateForAPI = kendo.toString(tanggal, "yyyy-MM-dd");
     // Panggil AJAX untuk mendapatkan nomor urut berikutnya dari server
     $.ajax({
         type: "GET",
         url: "/VoucherBank/GetNextVoucherNumber",
         data: {
-           tanggalVoucher: kendo.toString(tanggal, "yyyy-MM-dd")
+           tanggalVoucher: kendo.toString(tanggal, "yyyy-MM-dd"),
+           kodeCabang: kodeCabang // [PENTING] Filter Global per Cabang
         },
         success: function (response) {
             if (response && response.success) {
-                var noUrut = response.nextNumber; // Nomor urut dari server
+                var noUrut = response.nextNumber;
 
-                // --- LOGIKA BARU SESUAI PERMINTAAN ---
+                // --- RAKIT STRING ---
+                // Format: 50/BD01/02/2026/001
                 
-                // 1. Ambil HANYA ANGKA dari Kode Cabang
-                var bagian1 = "";
-                if (kodeCabang) {
-                    bagian1 = kodeCabang.replace(/[^0-9]/g, ''); // Hapus semua yang bukan angka
-                }
-
-                // 2. Nomor Urut dari server
-                var bagian2 = noUrut;
+                // 1. Cabang (2 digit belakang)
+                var bagian1 = kodeCabang.slice(-2);
                 
-                // 3. Jenis Voucher (Bank/Kas + Debit/Kredit)
-                var bagian3 = "";
-                if (jenisVoucher.toUpperCase() === "BANK") bagian3 = "B";
-                if (debetKredit.toUpperCase() === "D") bagian3 += "D";
-                else if (debetKredit.toUpperCase() === "K") bagian3 += "K";
+                // 2. Prefix (B + D/K + KodeBank)
+                var prefixTipe = "B"; 
+                if (debetKredit.toUpperCase() === "D") prefixTipe += "D";
+                else if (debetKredit.toUpperCase() === "K") prefixTipe += "K";
+                var bagian2 = prefixTipe + kodeBank;
                 
-                // 4. Kode Bank
-                var bagian4 = kodeBank;
-                
-                // 5. Bulan dan Tahun hari ini
+                // 3. Periode
                 var bulan = ('0' + (tanggal.getMonth() + 1)).slice(-2);
-                var tahun = tanggal.getFullYear().toString().slice(-2);
-                var bagian5 = `${bulan}/${tahun}`;
+                var tahun = tanggal.getFullYear().toString();
+                var bagian3 = `${bulan}/${tahun}`;
+                
+                // 4. Urut
+                var bagian4 = noUrut;
 
-                // Gabungkan jika semua bagian penting sudah terisi
-                if (bagian1 && bagian2 && bagian3 && bagian4 && bagian5) {
-                    var noVoucherFinal = `${bagian1}/${bagian2}/${bagian3}/${bagian4}/${bagian5}`;
+                if (bagian1 && bagian2 && bagian3 && bagian4) {
+                     var noVoucherFinal = `${bagian1}/${bagian2}/${bagian3}/${bagian4}`;
                     $("#NoVoucher").val(noVoucherFinal);
                 }
             }
@@ -318,7 +413,7 @@ function onKodeBankChange() {
         });
     }
     // Panggil juga generator nomor voucher agar ikut ter-update
-    generateNoVoucher();
+    // generateNoVoucher();
 }
 
 function updateDynamicLabels() {
@@ -334,7 +429,49 @@ function updateDynamicLabels() {
         labelJenisPembayaran.text("Jenis Penerimaan");
     }
 }
+
+function btnCetakPembayaranBank_OnClick(e) {
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    var noVoucher = dataItem.NoVoucher;
+
+    // buka tab baru (tanpa auto-print)
+    window.open(`Cetak?id=${dataItem.Id}`, "_blank");
+}
+
 function onDebetKreditChange() {
-    generateNoVoucher();
     updateDynamicLabels();
+}
+function generateNoVoucherSementara() {
+    var kodeCabangText = $("#KodeCabang").data("kendoComboBox")?.input.val() || "";
+    var kodeCabang = kodeCabangText.split(" - ")[0].trim(); 
+    console.log(kodeCabang)
+    var kodeBank = $("#KodeBank").data("kendoComboBox")?.value() || "";
+    var debetKredit = $("#DebetKredit").data("kendoDropDownList")?.value() || "";
+
+    var kendoDatePicker = $("#TanggalVoucher").data("kendoDatePicker");
+    var tanggalSelected = kendoDatePicker ? kendoDatePicker.value() : null;
+     if (!tanggalSelected) {
+            tanggalSelected = new Date(); 
+        }
+    var formattedDate = kendo.toString(tanggalSelected, "yyyy-MM-dd");
+
+    // Hanya generate jika data pendukung lengkap
+    if (kodeCabang && kodeBank && debetKredit) {
+        $.ajax({
+            type: "GET",
+            url: "/VoucherBank/GetNextVoucherSementara",
+            data: {
+                kodeCabang: kodeCabang,
+                kodeBank: kodeBank,
+                tanggalVoucher: formattedDate,
+                debetKredit: debetKredit 
+            },
+            success: function (response) {
+                if (response.success) {
+                    $("#NoVoucherSementara").val(response.noVoucherSmt);
+                }
+            }
+        });
+    }
 }

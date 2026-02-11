@@ -100,7 +100,7 @@ namespace ABB.Web.Modules.EntriPenyelesaianPiutang
                     KodeCabang = userCabang,
                     JenisPenyelesaian = jenisPenyelesaian,
                     Bulan = now.Month,
-                    Tahun = now.Year % 100
+                    Tahun = now.Year
                 });
 
                 // Isi ViewModel dengan nilai default

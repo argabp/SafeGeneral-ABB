@@ -173,34 +173,69 @@ namespace ABB.Web.Modules.KasBank
             return PartialView(model);
         }
 
-        [HttpPost]
+       [HttpPost]
         public async Task<IActionResult> Save([FromBody] KasBankViewModel model)
         {
             if (!ModelState.IsValid)
-            {
-                // Jika validasi gagal, kembalikan error 400 dengan detail
                 return BadRequest(ModelState);
-            }
 
-            var existingData = await Mediator.Send(new GetKasBankByIdQuery { Kode = model.Kode });
+            // 🔥 CEK BERDASARKAN COMPOSITE KEY
+            var existingData = await Mediator.Send(
+                new GetKasBankByCompositeKeyQuery
+                {
+                    KodeCabang = model.KodeCabang,
+                    Kode = model.Kode,
+                    TipeKasBank = model.TipeKasBank
+                });
+
             if (existingData != null)
             {
-                await Mediator.Send(Mapper.Map<UpdateKasBankCommand>(model));
+                // UPDATE
+                await Mediator.Send(
+                    Mapper.Map<UpdateKasBankCommand>(model));
             }
             else
             {
-                await Mediator.Send(Mapper.Map<CreateKasBankCommand>(model));
+                // CREATE
+                await Mediator.Send(
+                    Mapper.Map<CreateKasBankCommand>(model));
             }
+
             return Json(new { success = true });
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Delete(string id)
+       [HttpPost]
+        public async Task<IActionResult> Delete([FromBody] DeleteKasBankCommand command)
         {
-            await Mediator.Send(new DeleteKasBankCommand { Kode = id });
+            if (string.IsNullOrEmpty(command.Kode)
+                || string.IsNullOrEmpty(command.KodeCabang)
+                || string.IsNullOrEmpty(command.TipeKasBank))
+            {
+                return BadRequest(new { success = false, message = "Parameter tidak lengkap" });
+            }
+
+            await Mediator.Send(command);
+
             return Json(new { success = true });
         }
-        
+
+
+       
+
+        [HttpGet]
+            public async Task<IActionResult> GenerateKodeKasBank(
+                string KodeCabang,
+                string TipeKasBank)
+            {
+                var result = await Mediator.Send(new GetNextKodeKasBankQuery
+                {
+                    KodeCabang = KodeCabang,
+                    TipeKasBank = TipeKasBank
+                });
+
+                return Json(result);
+            }
+
         
     }
 }

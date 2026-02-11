@@ -40,7 +40,19 @@ namespace ABB.Application.InquiryNotaProduksis.Queries
                 join m in _context.MataUang on normalizedCurensi equals m.symbol.Trim()
                 into mataUangJoin
                 from m in mataUangJoin.DefaultIfEmpty() // Gunakan LEFT JOIN
-                select new { Produksi = p, MataUang = m };
+
+                join k in _context.KeteranganProduksi
+                    on p.id equals k.Id
+                    into keteranganJoin
+                from k in keteranganJoin.DefaultIfEmpty()   // LEFT JOIN
+
+                select new
+                {
+                    Produksi = p,
+                    MataUang = m,
+                    Keterangan = k
+                };
+
 
                 // -----------------------------------------------------------
                 // 🔹 FILTER KODE CABANG (WAJIB)
@@ -146,7 +158,9 @@ namespace ABB.Application.InquiryNotaProduksis.Queries
                     no_nd2 = x.Produksi.no_nd2,
 
                     // 🎯 INI YANG PALING PENTING: Ambil dari MataUang (x.MataUang)
-                    kd_mtu = (x.MataUang == null ? null : x.MataUang.kd_mtu)
+                    kd_mtu = (x.MataUang == null ? null : x.MataUang.kd_mtu),
+                    keterangan = x.Keterangan != null ? x.Keterangan.Keterangan : null,
+                    tanggal_keterangan = x.Keterangan != null ? x.Keterangan.Tanggal : (DateTime?)null
                 })
                 .ToListAsync(cancellationToken);
             }

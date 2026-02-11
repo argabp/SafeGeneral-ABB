@@ -8,10 +8,9 @@ using VoucherBankEntity = ABB.Domain.Entities.VoucherBank;
 
 namespace ABB.Application.VoucherBanks.Commands
 {
-    // Ini adalah "Surat Perintah" untuk membuat data baru
-    public class CreateVoucherBankCommand : IRequest<string>
+    // [PERBAIKAN 1] Ubah IRequest<string> menjadi IRequest<long>
+    public class CreateVoucherBankCommand : IRequest<long>
     {
-        // Semua properti ini akan diisi dari ViewModel
         public string KodeCabang { get; set; }
         public string JenisVoucher { get; set; }
         public string DebetKredit { get; set; }
@@ -28,10 +27,13 @@ namespace ABB.Application.VoucherBanks.Commands
         public string NoBank { get; set; }
         public string KodeUserInput { get; set; }
         public string JenisPembayaran { get; set; }
+
+        public bool FlagSementara { get; set; }
+        public string NoVoucherSementara { get; set; }
     }
 
-    // Ini adalah "Petugas Pelaksana" untuk perintah di atas
-    public class CreateVoucherBankCommandHandler : IRequestHandler<CreateVoucherBankCommand, string>
+    // [PERBAIKAN 2] Ubah IRequestHandler<..., string> menjadi IRequestHandler<..., long>
+    public class CreateVoucherBankCommandHandler : IRequestHandler<CreateVoucherBankCommand, long>
     {
         private readonly IDbContextPstNota _context;
 
@@ -40,7 +42,8 @@ namespace ABB.Application.VoucherBanks.Commands
             _context = context;
         }
 
-        public async Task<string> Handle(CreateVoucherBankCommand request, CancellationToken cancellationToken)
+        // [PERBAIKAN 3] Ubah Task<string> menjadi Task<long>
+        public async Task<long> Handle(CreateVoucherBankCommand request, CancellationToken cancellationToken)
         {
             DateTime? tglVoucherFix = request.TanggalVoucher;
 
@@ -51,35 +54,32 @@ namespace ABB.Application.VoucherBanks.Commands
 
             var entity = new VoucherBankEntity
             {
-                // Memetakan semua data dari 'request' ke 'entity' baru
                 KodeCabang = request.KodeCabang,
                 JenisVoucher = request.JenisVoucher,
                 DebetKredit = request.DebetKredit,
                 NoVoucher = request.NoVoucher,
                 KodeAkun = request.KodeAkun,
                 DiterimaDari = request.DiterimaDari,
-                
-                // Gunakan variabel yang sudah diperbaiki
                 TanggalVoucher = tglVoucherFix,
-                
                 KodeMataUang = request.KodeMataUang,
                 TotalVoucher = request.TotalVoucher,
                 TotalDalamRupiah = request.TotalDalamRupiah,
                 KeteranganVoucher = request.KeteranganVoucher,
                 FlagPosting = request.FlagPosting,
-                KodeBank = request.KodeBank,
+                KodeBank = request.KodeBank?.Trim(),
                 KodeUserInput = request.KodeUserInput,
                 JenisPembayaran = request.JenisPembayaran,
                 NoBank = request.NoBank,
-                
-                // Otomatis mengisi tanggal input saat ini (Server Time)
-                TanggalInput = DateTime.Now 
+                TanggalInput = DateTime.Now ,
+                FlagSementara = request.FlagSementara,
+                NoVoucherSementara = request.NoVoucherSementara,
             };
 
             _context.VoucherBank.Add(entity);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return entity.NoVoucher; // Mengembalikan Primary Key
+            // [PERBAIKAN 4] Gunakan 'Id' (Huruf Besar) sesuai Entity
+            return entity.Id; 
         }
     }
 }

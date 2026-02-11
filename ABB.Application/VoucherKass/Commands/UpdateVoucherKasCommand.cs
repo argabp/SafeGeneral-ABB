@@ -7,14 +7,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ABB.Application.VoucherKass.Commands
 {
-    // Ini adalah "Surat Perintah" untuk memperbarui data
     public class UpdateVoucherKasCommand : IRequest
     {
+        // Pastikan ID ada disini (sudah benar punya kamu)
+        public long Id { get; set; } 
+
         public string KodeCabang { get; set; }
         public string JenisVoucher { get; set; }
         public string DebetKredit { get; set; }
         public string KodeKas { get; set; }
-        public string NoVoucher { get; set; }
+        public string NoVoucher { get; set; } // Ini data target (baru)
         public string KodeAkun { get; set; }
         public string DibayarKepada { get; set; }
         public string KodeMataUang { get; set; }
@@ -25,9 +27,10 @@ namespace ABB.Application.VoucherKass.Commands
         public DateTime? TanggalVoucher { get; set; }
         public string KodeUserUpdate { get; set; }
         public string JenisPembayaran { get; set; }
+        public bool FlagSementara { get; set; }
+        public string NoVoucherSementara { get; set; }
     }
 
-    // Ini adalah "Petugas Pelaksana" untuk perintah di atas
     public class UpdateVoucherKasCommandHandler : IRequestHandler<UpdateVoucherKasCommand>
     {
         private readonly IDbContextPstNota _context;
@@ -39,20 +42,25 @@ namespace ABB.Application.VoucherKass.Commands
 
         public async Task<Unit> Handle(UpdateVoucherKasCommand request, CancellationToken cancellationToken)
         {
-
             DateTime? tglVoucherFix = request.TanggalVoucher;
-
             if (request.TanggalVoucher.HasValue)
             {
                 tglVoucherFix = request.TanggalVoucher.Value.ToLocalTime().Date;
             }
-            // 1. Cari data yang ada di database berdasarkan Primary Key (NoVoucher)
-            var entity = await _context.VoucherKas
-                .FirstOrDefaultAsync(v => v.NoVoucher == request.NoVoucher, cancellationToken);
 
-            // 2. Jika data ditemukan, update propertinya
+            // --- PERBAIKAN DISINI ---
+            // 1. Cari data berdasarkan ID (Bukan NoVoucher)
+            // Karena ID tidak pernah berubah, sedangkan NoVoucher bisa berubah
+            var entity = await _context.VoucherKas
+                .FirstOrDefaultAsync(v => v.Id == request.Id, cancellationToken);
+
             if (entity != null)
             {
+                // 2. UPDATE NO VOUCHER DISINI
+                // Timpa NoVoucher lama dengan yang baru (dari request)
+                entity.NoVoucher = request.NoVoucher; 
+
+                // Update field lainnya
                 entity.KodeCabang = request.KodeCabang;
                 entity.JenisVoucher = request.JenisVoucher;
                 entity.DebetKredit = request.DebetKredit;
@@ -68,11 +76,13 @@ namespace ABB.Application.VoucherKass.Commands
                 entity.TanggalUpdate = DateTime.Now; 
                 entity.KodeUserUpdate = request.KodeUserUpdate;
                 entity.JenisPembayaran = request.JenisPembayaran;
-                // 3. Simpan perubahan ke database
+                entity.FlagSementara = request.FlagSementara;
+                entity.NoVoucherSementara = request.NoVoucherSementara;
+
                 await _context.SaveChangesAsync(cancellationToken);
             }
 
-            return Unit.Value; // Mengindikasikan proses selesai
+            return Unit.Value;
         }
     }
 }

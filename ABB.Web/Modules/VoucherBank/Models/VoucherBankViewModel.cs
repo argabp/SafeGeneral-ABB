@@ -9,6 +9,9 @@ namespace ABB.Web.Modules.VoucherBank.Models
 {
     public class VoucherBankViewModel : IMapFrom<CreateVoucherBankCommand>
     {
+        public long Id { get; set; } // <--- TAMBAHAN
+
+   
         [Required]
         [StringLength(4)]
         [Display(Name = "Kode Cabang")]
@@ -26,7 +29,6 @@ namespace ABB.Web.Modules.VoucherBank.Models
         [Display(Name = "Debet/Kredit")]
         public string DebetKredit { get; set; }
         
-        [Required]
         [StringLength(50)]
         [Display(Name = "No. Voucher")]
         public string NoVoucher { get; set; }
@@ -85,6 +87,12 @@ namespace ABB.Web.Modules.VoucherBank.Models
         
         public string NamaUserInput { get; set; }
         public string NamaUserUpdate { get; set; }
+
+        [Display(Name = "Flag Sementara")]
+        public bool FlagSementara { get; set; }
+
+        [Display(Name = "No Voucher Sementara")]
+        public string NoVoucherSementara { get; set; }
 
         // Konfigurasi AutoMapper
         public void Mapping(Profile profile)

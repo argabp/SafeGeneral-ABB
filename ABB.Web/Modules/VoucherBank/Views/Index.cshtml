@@ -37,7 +37,7 @@
                 .Name("VoucherBankGrid")
                 .DataSource(dataSource => dataSource.Ajax()
                     .Read(read => read.Action("GetVoucherBank", "VoucherBank").Data("getSearchFilter"))
-                    .Model(model => model.Id(p => p.NoVoucher)) 
+                    .Model(model => model.Id(p => p.Id)) 
                 )
                 .Columns(columns =>
                 {
@@ -46,7 +46,10 @@
                         .ClientTemplate("#= KodeCabang # - #= NamaCabang #");
 
                     // 2. No. Voucher
-                    columns.Bound(col => col.NoVoucher).Width(180).Title("No. Voucher");
+                    columns.Bound(col => col.NoVoucher)
+                        .Width(220)
+                        .Title("No. Voucher")
+                        .ClientTemplate("#= (NoVoucher == null || NoVoucher == '') ? (NoVoucherSementara || '-') : NoVoucher #");
 
                     columns.Bound(col => col.NamaBank).Width(180).Title("Nama Bank");
 
@@ -85,6 +88,7 @@
                             .Text("Delete")
                             .IconClass("k-icon k-i-delete")
                             .Click("onDeleteVoucherBank");
+                        command.Custom("CetakPembayaranBank").Text(" Cetak ").IconClass("fa fa-print").Click("btnCetakPembayaranBank_OnClick");
                     }).Width(200).Title("Action").Locked(true);
                 })
                 .Pageable(pager => pager.Refresh(true).Info(true).PageSizes(true))

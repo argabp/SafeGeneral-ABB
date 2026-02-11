@@ -4,7 +4,6 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Kendo.Mvc
 
-
 <style>
     .custom-kode .k-input,
     .custom-kode .k-input,
@@ -21,12 +20,12 @@
     .custom-kuning input {
         background-color: rgb(255, 255, 225) !important;
     }
-
-
 </style>
 
 <div class="window-body" style="background-color: lightgray">
     <form id="VoucherKasForm" enctype="multipart/form-data" autocomplete="off">
+
+       <input type="hidden" asp-for="Id" />
        <div class="row">
             <div class="form-group col-sm-6">
                     <label asp-for="KodeCabang"></label>
@@ -79,7 +78,6 @@
                                     filter="FilterType.Contains"
                                     placeholder="Pilih kode kas..."
                                     value="@Model.KodeKas" readonly="true">
-                                    @* Event change ditangani di JS index *@
                     </kendo-combobox>
                     <span asp-validation-for="KodeKas" class="text-danger"></span>
                 </div>
@@ -87,12 +85,32 @@
         </div>
 
         <div class="row">
-            <div class="col-sm-12">
+            <div class="form-group col-sm-12">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="FlagSementara" name="FlagSementara" 
+                           @(Model.FlagSementara ? "checked" : "") >
+                    <label class="form-check-label" for="FlagSementara" style="font-weight:bold;">Voucher Sementara</label>
+                    
+                    <input type="hidden" name="FlagSementara" value="@(Model.FlagSementara ? "true" : "false")" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
                    <label asp-for="NoVoucher">Nomor Voucher</label>
                     <div>
                         <kendo-textbox for="NoVoucher" class="custom-kode" style="width: 100%;" readonly="true"/>
                         <span asp-validation-for="NoVoucher" class="text-danger"></span>
                     </div>
+            </div>
+            
+            <div class="col-sm-6">
+                <label asp-for="NoVoucherSementara">Nomor Voucher Sementara</label>
+                <div>
+                    <kendo-textbox for="NoVoucherSementara" class="custom-kode" style="width: 100%;" readonly="true"  />
+                    <span asp-validation-for="NoVoucherSementara" class="text-danger"></span>
+                </div>
             </div>
         </div>
         <hr>
@@ -101,7 +119,6 @@
             <div class="form-group col-sm-12">
                 <label>Kode Akun</label>
                 <div>
-                     @* Ubah jadi Combobox Readonly biar seragam sama Add *@
                      <kendo-combobox for="KodeAkun" 
                                     style="width: 100%;" 
                                     datatextfield="Text"
@@ -130,7 +147,7 @@
            <div class="form-group col-sm-6">
                     <label>Tanggal Voucher</label>
                     <div>
-                         <kendo-datepicker readonly="true" for="TanggalVoucher"  class="custom-kuning" style="width: 100%"/>
+                         <kendo-datepicker  for="TanggalVoucher"  class="custom-kuning" style="width: 100%"/>
                         <span asp-validation-for="TanggalVoucher" class="text-danger"></span>
                     </div>
             </div>
@@ -269,6 +286,14 @@
             icon.removeClass('fa-square').addClass('fa-check-square');
         } else {
             icon.removeClass('fa-check-square').addClass('fa-square');
+        }
+        
+        // PENTING: Update Label Dibayar/Diterima sesuai DebetKredit yang terload
+        var dkValue = "@Model.DebetKredit";
+        if(dkValue && dkValue.toUpperCase() === "D"){
+             $("#labelDibayarKepada").text("Diterima Dari");
+        } else {
+             $("#labelDibayarKepada").text("Dibayar Kepada");
         }
     });
 </script>

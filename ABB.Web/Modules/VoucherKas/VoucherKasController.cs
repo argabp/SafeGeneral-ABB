@@ -13,8 +13,11 @@ using ABB.Application.MataUangs.Queries;
 // tambahan untuk kode akun
 using ABB.Application.KasBanks.Queries;
 
+using ABB.Application.EntriPembayaranKass.Queries;
+
 using ABB.Web.Modules.Base;
 using ABB.Web.Modules.VoucherKas.Models;
+using ABB.Web.Modules.EntriPembayaranKas.Models;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
@@ -76,21 +79,20 @@ namespace ABB.Web.Modules.VoucherKas
         }
 
         [HttpGet]
-         public async Task<IActionResult> GetNextVoucherNumber(DateTime? tanggalVoucher) 
+        public async Task<IActionResult> GetNextVoucherNumber(DateTime? tanggalVoucher, string kodeCabang) 
         {
-            // Jika tanggalVoucher null (belum pilih), pakai DateTime.Now
             var dateToUse = tanggalVoucher ?? DateTime.Now; 
 
             var nextNumber = await Mediator.Send(new GetNextVoucherNumberQuery 
             { 
-                // Gunakan dateToUse, JANGAN DateTime.Now
                 Bulan = dateToUse.Month, 
-                Tahun = dateToUse.Year % 100 
+                Tahun = dateToUse.Year,
+                KodeCabang = kodeCabang
+                // Parameter lain tidak perlu dikirim ke Query
             });
             
             return Json(new { success = true, nextNumber = nextNumber });
         }
-
 
         // TAMBAHKAN ACTION INI UNTUK AJAX
         [HttpGet]
@@ -199,31 +201,32 @@ namespace ABB.Web.Modules.VoucherKas
         {
             if (!ModelState.IsValid)
             {
-                // Jika validasi gagal, kembalikan error 400 dengan detail
                 return BadRequest(ModelState);
             }
 
-            var existingData = await Mediator.Send(new GetVoucherKasByIdQuery { NoVoucher = model.NoVoucher });
-            if (existingData != null)
+            // LOGIC BARU: Cek berdasarkan ID
+            // Jika ID > 0 artinya data sudah ada di DB (Update)
+            // Jika ID == 0 artinya data baru (Insert)
+            if (model.Id > 0) 
             {
-                  var command = Mapper.Map<UpdateVoucherKasCommand>(model);
+                // UPDATE
+                var command = Mapper.Map<UpdateVoucherKasCommand>(model);
                 command.KodeUserUpdate = CurrentUser.UserId;
                 await Mediator.Send(command);
-                
-
             }
             else
             {
+                // CREATE
                 var command = Mapper.Map<CreateVoucherKasCommand>(model);
                 command.KodeUserInput = CurrentUser.UserId;
-                 await Mediator.Send(command);
-
+                await Mediator.Send(command);
             }
+
             return Json(new { success = true });
         }
 
          // Action untuk menampilkan form Edit (dengan data yang sudah ada)
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(long id)
         {
 
              var databaseName = Request.Cookies["DatabaseValue"];
@@ -280,7 +283,8 @@ namespace ABB.Web.Modules.VoucherKas
                     
                 };
 
-                var dto = await Mediator.Send(new GetVoucherKasByIdQuery { NoVoucher = id });
+                var dto = await Mediator.Send(new GetVoucherKasByIdQuery { Id = id }); 
+            
                 if (dto == null)
                 {
                     return NotFound();
@@ -291,10 +295,81 @@ namespace ABB.Web.Modules.VoucherKas
 
         // Action untuk menghapus data
         [HttpGet]
-        public async Task<IActionResult> Delete(string id)
+       public async Task<IActionResult> Delete(long id) // <-- Ganti string jadi long
         {
-            await Mediator.Send(new DeleteVoucherKasCommand { NoVoucher = id });
+            // Kirim ID ke Command
+            await Mediator.Send(new DeleteVoucherKasCommand { Id = id });
             return Json(new { success = true });
+        }
+
+       [HttpGet]
+        public async Task<IActionResult> GetNextVoucherSementara(string kodeCabang, string kodeKas, DateTime? tanggalVoucher, string debetKredit)
+        {
+            // Validasi input
+            if (string.IsNullOrEmpty(kodeCabang) || string.IsNullOrEmpty(kodeKas) || tanggalVoucher == null)
+            {
+                return Json(new { success = false, message = "Data belum lengkap" });
+            }
+
+            var dateToUse = tanggalVoucher.Value;
+
+            // 1. MINTA NOMOR URUT (Global Sequence)
+            // Kita cuma kirim Cabang, Bulan, Tahun. 
+            // Query akan mengabaikan apakah itu KK01 atau KD01.
+            var nextSequence = await Mediator.Send(new GetNextVoucherSementaraNumberQuery 
+            { 
+                KodeCabang = kodeCabang,
+                Bulan = dateToUse.Month, 
+                Tahun = dateToUse.Year
+            });
+
+            var sequenceStr = nextSequence.ToString("000"); // Contoh: "002"
+
+            // 2. RAKIT STRING TAMPILAN (FORMAT LENGKAP)
+            // Format: SMT / Cabang / Tipe+Kas / Bulan / Tahun / Urut
+            
+            // A. Cabang (2 digit)
+            var cabangFormat = kodeCabang.Length >= 2 ? kodeCabang.Substring(kodeCabang.Length - 2) : kodeCabang; 
+
+            // B. Tengah (K + D/K + KodeKas) -> Contoh: KD01 atau KK01
+            // Logic ini sama persis dengan Voucher Original
+            string prefixTengah = "K"; 
+            if (!string.IsNullOrEmpty(debetKredit))
+            {
+                if (debetKredit.ToUpper() == "D") prefixTengah += "D";
+                else if (debetKredit.ToUpper() == "K") prefixTengah += "K";
+            }
+            prefixTengah += kodeKas;
+
+            // C. Bulan/Tahun
+            var bulan = dateToUse.Month.ToString("00");
+            var tahun = dateToUse.Year.ToString();
+
+            // 3. GABUNGKAN
+            // Hasil: SMT/50/KD01/02/2026/002
+            var noVoucherSmt = $"SMT/{cabangFormat}/{prefixTengah}/{bulan}/{tahun}/{sequenceStr}";
+
+            return Json(new { success = true, noVoucherSmt = noVoucherSmt });
+        }
+
+      [HttpGet]
+        public async Task<IActionResult> Cetak(long id)
+        {
+            if (id <= 0)
+                return BadRequest("ID voucher tidak valid.");
+
+            var voucher = await Mediator.Send(
+                new GetVoucherKasByIdQuery { Id = id });
+
+            if (voucher == null)
+                return NotFound($"Voucher dengan ID {id} tidak ditemukan.");
+
+            var viewModel = new EntriPembayaranKasViewModel
+            {
+                VoucherKasHeader = voucher
+            };
+
+            return View(viewModel);
         }
 
     }

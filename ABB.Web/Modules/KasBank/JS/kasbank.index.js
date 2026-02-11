@@ -73,29 +73,48 @@ function onSaveKasBank() {
 // Fungsi untuk menghapus data
 function onDeleteKasBank(e) {
     e.preventDefault();
+
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
 
-    // Tampilkan dialog konfirmasi
-    showConfirmation('Konfirmasi Hapus', `Apakah Anda yakin ingin menghapus data dengan kode ${dataItem.Kode}?`,
+    // 🔒 pastikan data ada
+    if (!dataItem) return;
+
+    showConfirmation(
+        'Konfirmasi Hapus',
+        `Apakah Anda yakin ingin menghapus data ?`,
         function () {
+
             showProgressOnGrid('#KasBankGrid');
 
-            // Kirim request hapus ke Controller
-            ajaxGet(`/KasBank/Delete?id=${dataItem.Kode.trim()}`,
+            // 🔑 kirim composite key
+            var param = {
+                KodeCabang: dataItem.KodeCabang,
+                TipeKasBank: dataItem.TipeKasBank,
+                Kode: dataItem.Kode
+            };
+
+            ajaxPost(
+                '/KasBank/Delete',
+                JSON.stringify(param),
                 function (response) {
-                    if (response.success) {
+
+                    if (response && response.success) {
                         showMessage('Success', 'Data berhasil dihapus.');
+                        refreshGrid("#KasBankGrid");
                     } else {
-                        showMessage('Error', 'Gagal menghapus data.');
+                        showMessage('Error', response?.message || 'Gagal menghapus data.');
                     }
-                    
-                    refreshGrid("#KasBankGrid");
+
                     closeProgressOnGrid('#KasBankGrid');
                 }
             );
         }
     );
 }
+
+
+
+
 $(document).ready(function () {
     $("#SearchKeyword").on("keyup", function() {
         $("#KasBankGrid").data("kendoGrid").dataSource.read();
