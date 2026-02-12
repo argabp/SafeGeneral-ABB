@@ -54,6 +54,11 @@
             
             var saldoOrg = parseFloat(dataItem.saldo) || 0;
             var kodeMtu = dataItem.kd_mtu; 
+
+            // --- [LOGIKA ATASAN: JIKA MINUS KALI -1] ---
+            if (saldoOrg < 0) {
+                saldoOrg = saldoOrg * -1;
+            }
             
             // [PERBAIKAN DISINI] Ganti .tgl_prod menjadi .date
             var rawDate = dataItem.date; 
@@ -223,12 +228,8 @@
         columns.Bound(c => c.saldo).Title("Saldo").Format("{0:n2}").Width(150);
         
         // --- [PERUBAHAN 2: Auto Fill Saldo] ---
-        columns.Template(
-            "<input type='number' class='k-textbox total-org-input' " + 
-            "value='#= saldo #' " + // <--- AMBIL NILAI SALDO
-            "style='width: 100%;' />")
-        .Title("Jumlah Dibayarkan")
-        .Width(150);
+        columns.Template("<input type='number' class='k-textbox total-org-input' value='#= saldo < 0 ? saldo * -1 : saldo #' style='width: 100%;' />")
+            .Title("Jumlah Dibayarkan").Width(150);
 
         // --- [PERUBAHAN 3: Auto Select D/K] ---
         columns.Template(

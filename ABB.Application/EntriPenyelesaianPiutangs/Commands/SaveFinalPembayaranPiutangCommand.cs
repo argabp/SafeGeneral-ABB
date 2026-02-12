@@ -45,7 +45,7 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
 
             foreach (var temp in tempList)
             {
-                var final = new ABB.Domain.Entities.EntriPenyelesaianPiutang
+                _context.EntriPenyelesaianPiutang.Add(new ABB.Domain.Entities.EntriPenyelesaianPiutang
                 {
                     NoBukti = temp.NoBukti,
                     No = temp.No,
@@ -56,22 +56,20 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
                     KodeMataUang = temp.KodeMataUang,
                     TotalBayarOrg = temp.TotalBayarOrg,
                     TotalBayarRp = temp.TotalBayarRp
-                   
-                    // FlagPosting = "N"
-                };
-
-                _context.EntriPenyelesaianPiutang.Add(final);
+                });
             }
 
-            // _context.EntriPenyelesaianPiutangTemp.RemoveRange(tempList);
+            // 1. Simpan ke tabel fisik
+            await _context.SaveChangesAsync(cancellationToken);
 
-            // var affectedRows = await _context.SaveChangesAsync(cancellationToken);
+            // 2. Jalankan SP Update Saldo
+            await _context.Database.ExecuteSqlRawAsync(
+                "EXEC sp_postpenyelesaianpiutangfinal @p0", 
+                new[] { request.NoBukti }, 
+                cancellationToken
+            );
 
-           
-
-            // Kembalikan jumlah data detail yang berhasil dipindah
-            // return tempList.Count;
-            return  await _context.SaveChangesAsync(cancellationToken);;
+            return tempList.Count;
         }
     }
 }

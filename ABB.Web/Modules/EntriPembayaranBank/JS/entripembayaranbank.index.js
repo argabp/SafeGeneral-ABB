@@ -442,17 +442,17 @@ function SimpanNota() {
         var saldo = parseFloat(dataItem.saldo) || 0;
 
         // 🔴 VALIDASI
-        if (totalOrg > saldo) {
-            isValid = false;
-           showMessage(
-                'Error',
-                "Jumlah dibayarkan melebihi saldo!<br><br>" +
-                "<b>No Nota</b> : " + dataItem.no_nd + "<br>" +
-                "<b>Saldo</b> : " + kendo.toString(saldo, "n2") + "<br>" +
-                "<b>Input</b> : " + kendo.toString(totalOrg, "n2")
-            );
-            return false; // STOP LOOP
-        }
+        // if (totalOrg > saldo) {
+        //     isValid = false;
+        //    showMessage(
+        //         'Error',
+        //         "Jumlah dibayarkan melebihi saldo!<br><br>" +
+        //         "<b>No Nota</b> : " + dataItem.no_nd + "<br>" +
+        //         "<b>Saldo</b> : " + kendo.toString(saldo, "n2") + "<br>" +
+        //         "<b>Input</b> : " + kendo.toString(totalOrg, "n2")
+        //     );
+        //     return false; // STOP LOOP
+        // }
 
         selectedData.push({
             NoNota: dataItem.no_nd,

@@ -39,8 +39,10 @@ namespace ABB.Application.VoucherKass.Queries
 
             // JOIN ke KasBank berdasarkan NoPerkiraan
             join kb in _context.KasBank
-                on vk.KodeAkun equals kb.NoPerkiraan into kasBankJoin
-            from kb in kasBankJoin.DefaultIfEmpty()
+                    on new { vk.KodeAkun, vk.KodeCabang } 
+                    equals new { KodeAkun = kb.NoPerkiraan, kb.KodeCabang } 
+                    into kasBankJoin
+                from kb in kasBankJoin.DefaultIfEmpty()
 
             select new VoucherKasDto
             {

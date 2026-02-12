@@ -17,6 +17,7 @@
             var totalItems = grid.dataSource.total();
             var pager = grid.pager;
 
+
             // --- Logic Pagination All ---
             if (pager) {
                 var pageSizeDropDown = pager.element.find("select[data-role='dropdownlist']").data("kendoDropDownList");
@@ -51,6 +52,9 @@
                 
                 var saldoOrg = parseFloat(dataItem.saldo) || 0;
                 var kodeMtu = dataItem.kd_mtu; 
+                if (saldoOrg < 0) {
+                    saldoOrg = saldoOrg * -1;
+                }
                 
                 // 1. AMBIL TANGGAL NOTA/PRODUKSI
                 // Pastikan nama property 'tgl_prod' sesuai dengan DTO kamu
@@ -212,9 +216,9 @@
         columns.Bound(c => c.saldo).Title("Saldo").Format("{0:n2}").Width(150);
         
         // --- [AUTO FILL SALDO] ---
-        columns.Template(
+       columns.Template(
             "<input type='number' class='k-textbox total-org-input' " + 
-            "value='#= saldo #' " + 
+            "value='#= saldo < 0 ? saldo * -1 : saldo #' " + // <--- INI KUNCINYA
             "style='width: 100%;' />")
         .Title("Jumlah Dibayarkan")
         .Width(150);

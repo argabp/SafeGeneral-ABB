@@ -40,18 +40,19 @@
         }
 
         // --- LOGIC BARU: AUTO HITUNG KURS (PIUTANG) ---
-        items.each(function (index, row) {
+       items.each(function (index, row) {
             var dataItem = grid.dataItem(row);
             var $row = $(row);
             
             var $inputOrg = $row.find('.total-org-input');
             var $inputRp = $row.find('.total-rp-input');
             
-            var saldoOrg = parseFloat(dataItem.saldo) || 0;
-            var kodeMtu = dataItem.kd_mtu; 
+            var saldoOriginal = parseFloat(dataItem.saldo) || 0;
             
-            // 1. AMBIL TANGGAL NOTA (date)
-            // Pastikan DTO InquiryNotaProduksiDto sudah punya properti 'date'
+            // --- [KUNCI 1: Ubah Tampilan Jadi Positif untuk User] ---
+            var tampilanSaldo = Math.abs(saldoOriginal); 
+
+            var kodeMtu = dataItem.kd_mtu; 
             var rawDate = dataItem.date; 
             var formattedDate = "";
 
@@ -62,11 +63,9 @@
                 }
             } 
             
-            // Fallback: Jika tanggal nota kosong, pakai tanggal header
             if (!formattedDate) {
-                var tglHeader = $("#PenyelesaianHeader_Tanggal").val(); // Ambil dari input header
+                var tglHeader = $("#PenyelesaianHeader_Tanggal").val(); 
                 if(tglHeader) {
-                    // Asumsi format dd/MM/yyyy dari Kendo DatePicker input
                     var dateHeaderObj = kendo.parseDate(tglHeader);
                     if(dateHeaderObj) {
                          formattedDate = kendo.toString(dateHeaderObj, "yyyy-MM-dd");
@@ -74,19 +73,17 @@
                 }
             }
 
-            // 2. Set Nilai Default Input (Saldo)
+            // Set Nilai Default Input (Gunakan nilai positif)
             if($inputOrg.val() == "" || $inputOrg.val() == 0) {
-                $inputOrg.val(saldoOrg);
+                $inputOrg.val(tampilanSaldo);
             }
 
-            // 3. Logika Rupiah Otomatis
+            // Logika Rupiah Otomatis
             if (kodeMtu && kodeMtu.trim() === '001') {
-                // IDR
-                $inputRp.val(saldoOrg.toFixed(2));
+                $inputRp.val(tampilanSaldo.toFixed(2));
                 $inputRp.data('kurs', 1); 
             } 
-            else if (kodeMtu && formattedDate && saldoOrg > 0) {
-                // VALAS
+            else if (kodeMtu && formattedDate && tampilanSaldo > 0) {
                 var url = `/EntriPenyelesaianPiutang/GetKurs?kodeMataUang=${kodeMtu}&tanggalVoucher=${formattedDate}`;
                 
                 $.ajax({
@@ -95,14 +92,11 @@
                     success: function (response) {
                         if (response && response.nilai_kurs) {
                             var kurs = response.nilai_kurs;
-                            var totalRupiah = saldoOrg * kurs;
+                            var totalRupiah = tampilanSaldo * kurs;
                             
                             $inputRp.val(totalRupiah.toFixed(2));
                             $inputRp.data('kurs', kurs);
                         }
-                    },
-                    error: function() {
-                        console.error("Gagal ambil kurs Piutang untuk nota: " + dataItem.no_nd);
                     }
                 });
             }
@@ -214,7 +208,7 @@
         // --- [AUTO FILL SALDO] ---
         columns.Template(
             "<input type='number' class='k-textbox total-org-input' " + 
-            "value='#= saldo #' " + 
+            "value='#= Math.abs(saldo) #' " + 
             "style='width: 100%;' />")
         .Title("Jumlah Dibayarkan")
         .Width(150);

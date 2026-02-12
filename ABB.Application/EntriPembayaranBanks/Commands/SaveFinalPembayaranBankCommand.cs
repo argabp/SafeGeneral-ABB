@@ -32,7 +32,7 @@ namespace ABB.Application.EntriPembayaranBanks.Commands
                 throw new Exception("Tidak ada data di tabel TEMP untuk voucher ini.");
 
             var voucherHeader = await _context.VoucherBank
-            .FirstOrDefaultAsync(v => v.NoVoucher == request.NoVoucher, cancellationToken);
+                .FirstOrDefaultAsync(v => v.NoVoucher == request.NoVoucher, cancellationToken);
 
             if (voucherHeader == null)
                 throw new Exception("Voucher Induk tidak ditemukan.");
@@ -42,7 +42,7 @@ namespace ABB.Application.EntriPembayaranBanks.Commands
 
             foreach (var temp in tempList)
             {
-                var final = new ABB.Domain.Entities.EntriPembayaranBank
+                _context.EntriPembayaranBank.Add(new ABB.Domain.Entities.EntriPembayaranBank
                 {
                     NoVoucher = temp.NoVoucher,
                     No = temp.No,
@@ -54,18 +54,20 @@ namespace ABB.Application.EntriPembayaranBanks.Commands
                     TotalBayar = temp.TotalBayar,
                     TotalDlmRupiah = temp.TotalDlmRupiah,
                     Kurs = temp.Kurs,
-                   
                     // FlagPosting = "N"
-                };
-
-                _context.EntriPembayaranBank.Add(final);
+                });
             }
 
-            // _context.EntriPembayaranBankTemp.RemoveRange(tempList);
+            // Simpan data ke tabel fisik dulu
+            await _context.SaveChangesAsync(cancellationToken);
 
-            var affectedRows = await _context.SaveChangesAsync(cancellationToken);
+            // Panggil SP Update Saldo
+            await _context.Database.ExecuteSqlRawAsync(
+                "EXEC sp_postpembayaranbankfinal @p0", 
+                new[] { request.NoVoucher }, 
+                cancellationToken
+            );
 
-            // Kembalikan jumlah data detail yang berhasil dipindah
             return tempList.Count;
         }
     }

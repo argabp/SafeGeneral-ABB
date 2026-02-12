@@ -39,30 +39,31 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
 
         public async Task<Unit> Handle(UpdateFinalPenyelesaianPiutangCommand request, CancellationToken cancellationToken)
         {
-            // Cari entity berdasarkan No + NoVoucher
             var entity = await _context.EntriPenyelesaianPiutang
                 .FirstOrDefaultAsync(e => e.No == request.No && e.NoBukti == request.NoBukti, cancellationToken);
 
-            if (entity == null)
-            {
-                // Kalau tidak ketemu, langsung keluar (atau bisa lempar exception sesuai kebutuhan)
-                return Unit.Value;
-            }
+            if (entity == null) return Unit.Value;
 
-            // Update field
+            // Update field sesuai request
             entity.FlagPembayaran = request.FlagPembayaran;
-            entity.NoNota = request.NoNota;
+            entity.NoNota = request.NoNota; // Di sini no nota yang baru diinput user
             entity.KodeAkun = request.KodeAkun;
             entity.KodeMataUang = request.KodeMataUang;
             entity.TotalBayarOrg = request.TotalBayarOrg;
             entity.DebetKredit = request.DebetKredit;
             entity.TotalBayarRp = request.TotalBayarRp;
-               entity.TanggalUpdate = DateTime.Now;
+            entity.TanggalUpdate = DateTime.Now;
             entity.KodeUserUpdate = request.KodeUserUpdate;
-            // entity.Kurs = request.Kurs;
-            
-            _context.EntriPenyelesaianPiutang.Update(entity);
+
             await _context.SaveChangesAsync(cancellationToken);
+
+            // Panggil SP Hitung Ulang untuk Nota ini (Self-Healing)
+            // SP ini akan menghitung total semua pembayaran untuk NoNota ini
+            await _context.Database.ExecuteSqlRawAsync(
+                "EXEC sp_updatefinalpiutang @p0", 
+                new[] { request.NoNota }, 
+                cancellationToken
+            );
 
             return Unit.Value;
         }

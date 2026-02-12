@@ -24,26 +24,37 @@ namespace ABB.Application.EntriPembayaranKass.Commands
 
         public async Task<int> Handle(ProsesUlangPembayaranKasCommand request, CancellationToken cancellationToken)
         {
-
             var voucherHeader = await _context.VoucherKas
-            .FirstOrDefaultAsync(v => v.NoVoucher == request.NoVoucher, cancellationToken);
+                .FirstOrDefaultAsync(v => v.NoVoucher == request.NoVoucher, cancellationToken);
 
             if (voucherHeader == null)
                 throw new Exception("Voucher Induk tidak ditemukan.");
-                
+
+            // 1. PANGGIL SP UNTUK BALIKIN SALDO (REVERSE)
+            // Kita panggil SP SEBELUM datanya dihapus dari tabel EntriPembayaranKas
+            await _context.Database.ExecuteSqlRawAsync(
+                "EXEC sp_prosesulangpembayarankas @p0", 
+                new[] { request.NoVoucher }, 
+                cancellationToken
+            );
+
+            // 2. Update status header jadi Un-Final
             voucherHeader.FlagFinal = false;
             _context.VoucherKas.Update(voucherHeader);
 
-          
-          var existingFinal = await _context.EntriPembayaranKas
+            // 3. Ambil dan Hapus data Final
+            var existingFinal = await _context.EntriPembayaranKas
                 .Where(x => x.NoVoucher == request.NoVoucher)
                 .ToListAsync(cancellationToken);
 
-            _context.EntriPembayaranKas.RemoveRange(existingFinal);
+            if (existingFinal.Any())
+            {
+                _context.EntriPembayaranKas.RemoveRange(existingFinal);
+            }
 
-            var affectedRows = await _context.SaveChangesAsync(cancellationToken);
+            // 4. Simpan perubahan ke DB
+            await _context.SaveChangesAsync(cancellationToken);
 
-            // Kembalikan jumlah data detail yang berhasil dipindah
             return existingFinal.Count;
         }
     }

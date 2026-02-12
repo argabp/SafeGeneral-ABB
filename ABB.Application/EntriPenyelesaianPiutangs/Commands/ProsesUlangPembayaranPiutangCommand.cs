@@ -22,28 +22,35 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
             _context = context;
         }
 
-        public async Task<int> Handle(ProsesUlangPembayaranPiutangCommand request, CancellationToken cancellationToken)
+       public async Task<int> Handle(ProsesUlangPembayaranPiutangCommand request, CancellationToken cancellationToken)
         {
-
             var voucherHeader = await _context.HeaderPenyelesaianUtang
-            .FirstOrDefaultAsync(v => v.NomorBukti == request.NoBukti, cancellationToken);
+                .FirstOrDefaultAsync(v => v.NomorBukti == request.NoBukti, cancellationToken);
 
-            if (voucherHeader == null)
-                throw new Exception("Voucher Induk tidak ditemukan.");
-                
+            if (voucherHeader == null) throw new Exception("Voucher Induk tidak ditemukan.");
+
+            // 1. Panggil SP Reverse Saldo SEBELUM data dihapus
+            await _context.Database.ExecuteSqlRawAsync(
+                "EXEC sp_prosesulangpenyelesaianpiutang @p0", 
+                new[] { request.NoBukti }, 
+                cancellationToken
+            );
+
             voucherHeader.FlagFinal = false;
             _context.HeaderPenyelesaianUtang.Update(voucherHeader);
 
-          
-          var existingFinal = await _context.EntriPenyelesaianPiutang
+            var existingFinal = await _context.EntriPenyelesaianPiutang
                 .Where(x => x.NoBukti == request.NoBukti)
                 .ToListAsync(cancellationToken);
 
-            _context.EntriPenyelesaianPiutang.RemoveRange(existingFinal);
+            if (existingFinal.Any())
+            {
+                _context.EntriPenyelesaianPiutang.RemoveRange(existingFinal);
+            }
 
-            var affectedRows = await _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
 
-            // Kembalikan jumlah data detail yang berhasil dipindah
+            // RETURN INT (Jumlah yang dihapus), biar gak error CS0029 lagi
             return existingFinal.Count;
         }
     }
