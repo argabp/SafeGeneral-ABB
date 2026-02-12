@@ -41,6 +41,8 @@ namespace ABB.Application.VoucherKass.Queries
         public bool FlagSementara { get; set; }
         public string NoVoucherSementara { get; set; }
 
+        public string kt { get; set; }
+
 
         public void Mapping(Profile profile)
         {

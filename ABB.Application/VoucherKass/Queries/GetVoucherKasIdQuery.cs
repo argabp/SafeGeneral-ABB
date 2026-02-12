@@ -62,6 +62,10 @@ namespace ABB.Application.VoucherKass.Queries
                         on vb.KodeMataUang equals mu.kd_mtu into muJoin
                     from mu in muJoin.DefaultIfEmpty()
 
+                    join cb in _context.Cabang
+                        on vb.KodeCabang equals cb.kd_cb into cbJoin
+                    from cb in cbJoin.DefaultIfEmpty()
+
                     // [PENTING] JANGAN ADA WHERE LAGI DI SINI
                     // Karena queryDasar sudah memfilter data yang benar
 
@@ -94,7 +98,9 @@ namespace ABB.Application.VoucherKass.Queries
                         // Handle Null kalau Join tidak ketemu
                         NamaKas = kb != null ? kb.Keterangan : null,
                         NamaMataUang = mu != null ? mu.symbol : null,
-                        DetailMataUang = mu != null ? mu.nm_mtu : null
+                        DetailMataUang = mu != null ? mu.nm_mtu : null,
+
+                        kt = cb != null ? cb.kt : null
                     }
             ).FirstOrDefaultAsync(cancellationToken);
 

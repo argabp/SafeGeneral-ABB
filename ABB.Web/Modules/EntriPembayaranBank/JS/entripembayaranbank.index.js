@@ -774,46 +774,32 @@ function btnLihatPembayaranBank_OnClick(e) {
       //  }
     }
 
-    function hitungTotalRupiahFinal() {
-    
+   function hitungTotalRupiahFinal() {
         var kodeMtu = $("#KodeMataUang_Lihat").data("kendoComboBox").value();
-        var tanggal = $("#TangVocFinal").val();
-        var totalVoucher = $("#TotalBayar_Lihat").val();
-        console.log("total voucher: ",totalVoucher)
+        var tanggalRaw = $("#TangVocFinal").val();
+        var totalVoucher = $("#TotalBayar_Lihat").data("kendoNumericTextBox").value();
         var kursInput = $("#Kurs_Lihat");
 
-        if (kodeMtu && tanggal && totalVoucher) {
-            
-             var parts = tanggal.split(" ")[0].split("/"); 
-           
-            var day = parts[0];
-            var month = parts[1];
-            var year = parts[2];
+        if (kodeMtu && tanggalRaw && totalVoucher) {
+            var dateObj = kendo.parseDate(tanggalRaw);
+            if (!dateObj) return;
 
-            var formattedDate = `${year}-${month}-${day}`;
-            console.log("Format: ", formattedDate);
+            var formattedDate = kendo.toString(dateObj, "yyyy-MM-dd");
             var url = `/EntriPembayaranBank/GetKurs?kodeMataUang=${kodeMtu}&tanggalVoucher=${formattedDate}`;
         
             $.ajax({
                 type: "GET",
                 url: url,
                 success: function (response) {
-                    console.log("4. AJAX berhasil! Respons dari server:", response); // <-- LOG 5
                     if (response && response.nilai_kurs) {
                         var kurs = response.nilai_kurs;
                         kursInput.val(kurs);
-                        console.log("ini kurs", kurs)
+                        
                         var totalRupiah = totalVoucher * kurs;
-                        console.log("naha Nan: ",totalRupiah)
                         $("#TotalDlmRupiah_Lihat").data("kendoNumericTextBox").value(totalRupiah);
                     }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.error("4. AJAX GAGAL!", jqXHR); // <-- LOG 6 (ini akan merah jika error)
                 }
             });
-        } else {
-            console.log("3. Salah satu data kosong, kalkulasi dibatalkan.");
         }
     }
 

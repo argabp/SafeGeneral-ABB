@@ -61,6 +61,10 @@ namespace ABB.Application.VoucherBanks.Queries
                                     on vb.KodeMataUang equals mu.kd_mtu into muJoin
                                 from mu in muJoin.DefaultIfEmpty()
 
+                                join cb in _context.Cabang
+                                    on vb.KodeCabang equals cb.kd_cb into cbJoin
+                                from cb in cbJoin.DefaultIfEmpty()
+
                                 // [PENTING] HAPUS WHERE DI SINI (Karena sudah di queryDasar)
 
                                 select new VoucherBankDto
@@ -96,7 +100,9 @@ namespace ABB.Application.VoucherBanks.Queries
                                     // Handle Null jika data join tidak ditemukan
                                     NamaBank = kb != null ? kb.Keterangan : null,
                                     NamaMataUang = mu != null ? mu.symbol : null,
-                                    DetailMataUang = mu != null ? mu.nm_mtu : null
+                                    DetailMataUang = mu != null ? mu.nm_mtu : null,
+
+                                     kt = cb != null ? cb.kt : null
                                 })
                                 .FirstOrDefaultAsync(cancellationToken);
 

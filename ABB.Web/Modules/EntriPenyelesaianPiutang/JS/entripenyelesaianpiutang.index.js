@@ -580,25 +580,24 @@ function updateGridFooter() {
     }
 
    function hitungTotalRupiah() {
-        // Ambil nilai dari komponen di form HEADER
         var kodeMtu = $("#PenyelesaianHeader_MataUang").data("kendoComboBox").value();
-        var tanggal = $("#PenyelesaianHeader_Tanggal").data("kendoDatePicker").value();
+        var tanggalValue = $("#PenyelesaianHeader_Tanggal").data("kendoDatePicker").value();
         var totalOrg = $("#PenyelesaianHeader_TotalOrg").data("kendoNumericTextBox").value();
 
         var $footer = $("#voucherTotal").closest(".window-footer");
         $("#voucherTotal").text(kendo.toString(totalOrg, "n0"));
         $footer.attr("data-total-penyelesaian-original", totalOrg).data("total-penyelesaian-original", totalOrg);
         
-        // Jika mata uang adalah Rupiah (IDR, kode 001), kurs-nya 1
         if (kodeMtu === '001') {
             $("#PenyelesaianHeader_TotalRp").data("kendoNumericTextBox").value(totalOrg);
-            return; // Hentikan fungsi
+            return;
         }
 
-        if (kodeMtu && tanggal && totalOrg) {
-            // Format tanggal agar sesuai dengan yang diharapkan Controller (yyyy-MM-dd)
-            var formattedDate = kendo.toString(tanggal, "yyyy-MM-dd");
+        if (kodeMtu && tanggalValue && totalOrg) {
+            // PERBAIKAN: Gunakan kendo.toString langsung dari object Date milik Kendo
+            var formattedDate = kendo.toString(tanggalValue, "yyyy-MM-dd");
             
+            console.log("Fetching Kurs Header (Piutang) for:", formattedDate);
             var url = `/EntriPenyelesaianPiutang/GetKurs?kodeMataUang=${kodeMtu}&tanggalVoucher=${formattedDate}`;
         
             $.ajax({
@@ -610,7 +609,6 @@ function updateGridFooter() {
                         var totalRupiah = totalOrg * kurs;
                         $("#PenyelesaianHeader_TotalRp").data("kendoNumericTextBox").value(totalRupiah);
                     } else {
-                        // Jika kurs tidak ditemukan, kosongkan total rupiah
                         $("#PenyelesaianHeader_TotalRp").data("kendoNumericTextBox").value(null);
                     }
                 }
@@ -618,21 +616,20 @@ function updateGridFooter() {
         }
     }
    function hitungTotalRupiah2() {
-        // Ambil nilai dari komponen di form HEADER
         var kodeMtu = $("#KodeMataUang").data("kendoComboBox").value();
-        var tanggal = $("#PenyelesaianHeader_Tanggal").data("kendoDatePicker").value();
+        // PERBAIKAN: Ambil object Date langsung dari widget Kendo DatePicker
+        var tanggalValue = $("#PenyelesaianHeader_Tanggal").data("kendoDatePicker").value();
         var totalOrg = $("#TotalBayarOrg").data("kendoNumericTextBox").value();
 
-        // Jika mata uang adalah Rupiah (IDR, kode 001), kurs-nya 1
         if (kodeMtu === '001') {
             $("#TotalBayarRp").data("kendoNumericTextBox").value(totalOrg);
-            return; // Hentikan fungsi
+            return;
         }
 
-        if (kodeMtu && tanggal && totalOrg) {
-            // Format tanggal agar sesuai dengan yang diharapkan Controller (yyyy-MM-dd)
-            var formattedDate = kendo.toString(tanggal, "yyyy-MM-dd");
+        if (kodeMtu && tanggalValue && totalOrg) {
+            var formattedDate = kendo.toString(tanggalValue, "yyyy-MM-dd");
             
+            console.log("Fetching Kurs Detail (Piutang) for:", formattedDate);
             var url = `/EntriPenyelesaianPiutang/GetKurs?kodeMataUang=${kodeMtu}&tanggalVoucher=${formattedDate}`;
         
             $.ajax({
@@ -644,7 +641,6 @@ function updateGridFooter() {
                         var totalRupiah = totalOrg * kurs;
                         $("#TotalBayarRp").data("kendoNumericTextBox").value(totalRupiah);
                     } else {
-                        // Jika kurs tidak ditemukan, kosongkan total rupiah
                         $("#TotalBayarRp").data("kendoNumericTextBox").value(null);
                     }
                 }
