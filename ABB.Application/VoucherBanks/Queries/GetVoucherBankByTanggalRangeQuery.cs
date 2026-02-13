@@ -20,6 +20,8 @@ namespace ABB.Application.VoucherBanks.Queries
         public string KeteranganBank { get; set; }
         public string DatabaseName { get; set; }
         public string UserLogin { get; set; }
+
+        public string KodeCabang { get; set; }
     }
 
     public class GetVoucherBankByTanggalRangeQueryHandler
@@ -53,7 +55,7 @@ namespace ABB.Application.VoucherBanks.Queries
             // AMBIL SALDO AWAL DARI KASBANK
             // =========================
             decimal saldoAwal = await _context.KasBank
-                .Where(k => k.Kode == request.KodeBank)
+                .Where(k => k.Kode == request.KodeBank && k.KodeCabang == request.KodeCabang)
                 .Select(k => k.Saldo ?? 0)
                 .FirstOrDefaultAsync(cancellationToken);
 
@@ -64,6 +66,7 @@ namespace ABB.Application.VoucherBanks.Queries
                         where v.TanggalVoucher.HasValue
                               && v.TanggalVoucher.Value >= request.TanggalAwal
                               && v.TanggalVoucher.Value <= request.TanggalAkhir
+                              && v.KodeCabang == request.KodeCabang
                         select new
                         {
                             v.NoVoucher,

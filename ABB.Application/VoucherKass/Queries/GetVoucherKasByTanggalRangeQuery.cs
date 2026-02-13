@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Scriban;
 using System.IO;
+using System.Collections.Generic;
 
 namespace ABB.Application.VoucherKass.Queries
 {
@@ -20,7 +21,6 @@ namespace ABB.Application.VoucherKass.Queries
         public decimal? TotalVoucher { get; set; }
         public string DibayarKepada { get; set; }
         public string DebetKredit { get; set; }
-
         public string KodeKas { get; set; }
         public string NamaKas { get; set; }
     }
@@ -33,6 +33,7 @@ namespace ABB.Application.VoucherKass.Queries
         public string KodeKas { get; set; }
         public string KeteranganKas { get; set; }
         public string UserLogin { get; set; }
+        public string KodeCabang { get; set; }
     }
 
     public class GetVoucherKasByTanggalRangeQueryHandler
@@ -54,47 +55,49 @@ namespace ABB.Application.VoucherKass.Queries
             CancellationToken cancellationToken)
         {
             // =========================
-            // SALDO AWAL DARI KASBANK
+            // AMBIL SALDO AWAL
             // =========================
             decimal saldoAwal = await _context.KasBank
-                .Where(k => k.Kode == request.KodeKas)
+                .Where(k => k.Kode == request.KodeKas && k.KodeCabang == request.KodeCabang)
                 .Select(k => k.Saldo ?? 0)
                 .FirstOrDefaultAsync(cancellationToken);
 
             // =========================
-            // MUTASI VOUCHER KAS
+            // QUERY MUTASI VOUCHER KAS (Perbaikan: Tanpa Join agar tidak looping)
             // =========================
-            var query =
-                from v in _context.VoucherKas
-                join k in _context.KasBank
-                    on v.KodeKas equals k.Kode
-                where v.TanggalVoucher.HasValue
+            var queryBase = _context.VoucherKas
+                .Where(v => v.TanggalVoucher.HasValue
                       && v.TanggalVoucher.Value >= request.TanggalAwal
                       && v.TanggalVoucher.Value <= request.TanggalAkhir
-                select new VoucherKasJoinDto
-                {
-                    NoVoucher = v.NoVoucher,
-                    TanggalVoucher = v.TanggalVoucher,
-                    KeteranganVoucher = v.KeteranganVoucher,
-                    TotalVoucher = v.TotalVoucher,
-                    DibayarKepada = v.DibayarKepada,
-                    DebetKredit = v.DebetKredit,
-                    KodeKas = v.KodeKas,
-                    NamaKas = k.Keterangan
-                };
+                      && v.KodeCabang == request.KodeCabang);
 
             if (!string.IsNullOrEmpty(request.KodeKas))
-                query = query.Where(x => x.KodeKas == request.KodeKas);
+            {
+                queryBase = queryBase.Where(x => x.KodeKas == request.KodeKas);
+            }
 
-            var vouchers = await query
+            var voucherData = await queryBase
                 .OrderBy(x => x.TanggalVoucher)
                 .ToListAsync(cancellationToken);
 
-            if (!vouchers.Any())
+            if (!voucherData.Any())
                 throw new Exception("Data Voucher Kas tidak ditemukan.");
 
+            // Mapping ke DTO tanpa join manual
+            var vouchers = voucherData.Select(v => new VoucherKasJoinDto
+            {
+                NoVoucher = v.NoVoucher,
+                TanggalVoucher = v.TanggalVoucher,
+                KeteranganVoucher = v.KeteranganVoucher,
+                TotalVoucher = v.TotalVoucher,
+                DibayarKepada = v.DibayarKepada,
+                DebetKredit = v.DebetKredit,
+                KodeKas = v.KodeKas,
+                NamaKas = request.KeteranganKas // Ambil dari parameter request
+            }).ToList();
+
             // =========================
-            // FORMAT
+            // FORMAT HELPERS
             // =========================
             Func<DateTime?, string> fmtDate =
                 d => d.HasValue ? d.Value.ToString("dd-MM-yyyy") : "-";
@@ -103,7 +106,7 @@ namespace ABB.Application.VoucherKass.Queries
                 n => n.HasValue ? string.Format("{0:N2}", n.Value) : "0.00";
 
             // =========================
-            // TOTAL
+            // KALKULASI TOTAL & SALDO
             // =========================
             decimal totalDebet = vouchers
                 .Where(x => x.DebetKredit == "D")
@@ -116,49 +119,45 @@ namespace ABB.Application.VoucherKass.Queries
             decimal saldoAkhir = saldoAwal + totalDebet - totalKredit;
 
             // =========================
-            // BUILD TABLE
+            // BUILD HTML TABLE (Details)
             // =========================
             StringBuilder sb = new StringBuilder();
             int no = 1;
 
-            // SALDO AWAL
+            // Baris Saldo Awal
             sb.Append($@"
                 <tr class='bold'>
-                    <td colspan='6'>Saldo Awal : {fmtNum(saldoAwal)}</td>
-                </tr>
-            ");
+                    <td colspan='6' style='background-color: #f9f9f9;'>Saldo Awal : {fmtNum(saldoAwal)}</td>
+                </tr>");
 
             foreach (var v in vouchers)
             {
                 sb.Append($@"
                     <tr>
-                        <td class='center'>{no}</td>
-                        <td>{fmtDate(v.TanggalVoucher)}</td>
-                        <td>{v.NoVoucher}</td>
-                        <td class='right'>{(v.DebetKredit == "D" ? fmtNum(v.TotalVoucher) : "")}</td>
-                        <td class='right'>{(v.DebetKredit == "K" ? fmtNum(v.TotalVoucher) : "")}</td>
+                        <td class='center' style='width: 40px;'>{no}</td>
+                        <td style='width: 90px;'>{fmtDate(v.TanggalVoucher)}</td>
+                        <td style='width: 150px;'>{v.NoVoucher}</td>
+                        <td class='right' style='width: 120px;'>{(v.DebetKredit == "D" ? fmtNum(v.TotalVoucher) : "")}</td>
+                        <td class='right' style='width: 120px;'>{(v.DebetKredit == "K" ? fmtNum(v.TotalVoucher) : "")}</td>
                         <td>{v.KeteranganVoucher}</td>
-                    </tr>
-                ");
+                    </tr>");
                 no++;
             }
 
-            // TOTAL
+            // Baris Total
             sb.Append($@"
                 <tr class='bold'>
-                    <td colspan='3' class='right'>TOTAL</td>
+                    <td colspan='3' class='right'>TOTAL MUTASI</td>
                     <td class='right'>{fmtNum(totalDebet)}</td>
                     <td class='right'>{fmtNum(totalKredit)}</td>
                     <td></td>
-                </tr>
-            ");
+                </tr>");
 
-            // SALDO AKHIR
+            // Baris Saldo Akhir
             sb.Append($@"
                 <tr class='bold'>
-                    <td colspan='6'>Saldo Akhir : {fmtNum(saldoAkhir)}</td>
-                </tr>
-            ");
+                    <td colspan='6' style='background-color: #f2f2f2;'>Saldo Akhir : {fmtNum(saldoAkhir)}</td>
+                </tr>");
 
             // =========================
             // RENDER SCRIBAN
@@ -166,6 +165,9 @@ namespace ABB.Application.VoucherKass.Queries
             string templatePath = Path.Combine(
                 _environment.ContentRootPath,
                 "Modules", "Reports", "Templates", "VoucherKas.html");
+
+            if (!File.Exists(templatePath))
+                throw new FileNotFoundException($"Template laporan tidak ditemukan di {templatePath}");
 
             string htmlTemplate = await File.ReadAllTextAsync(templatePath, cancellationToken);
             var template = Template.Parse(htmlTemplate);
@@ -175,7 +177,7 @@ namespace ABB.Application.VoucherKass.Queries
                 details = sb.ToString(),
                 tanggal_awal = request.TanggalAwal.ToString("dd-MM-yyyy"),
                 tanggal_akhir = request.TanggalAkhir.ToString("dd-MM-yyyy"),
-                kas = request.KeteranganKas,
+                kas = request.KeteranganKas ?? "-",
                 user = request.UserLogin
             });
         }

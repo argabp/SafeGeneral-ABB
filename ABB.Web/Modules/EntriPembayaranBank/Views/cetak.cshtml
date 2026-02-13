@@ -16,7 +16,7 @@
     <style>
         body { font-family: Arial, sans-serif; }
         article { padding: 10mm; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 5px; }
         th, td { border: 1px solid #000; padding: 6px; text-align: left; font-size: 12px; }
         .no-border { border: 0 !important; }
         .text-center { text-align: center; }
@@ -25,7 +25,7 @@
     </style>
 </head>
 <body class="A4 portrait">
-    <section class="sheet padding-10mm">
+    <section class="sheet padding-5mm">
     <article>
         <table class="no-border" width="100%">
             <tr>
@@ -134,6 +134,6 @@
         var totalVoucher = @((Model.VoucherHeader.TotalVoucher ?? 0).ToString().Replace(",", "."));
         var hasil = terbilangJS(totalVoucher);
         var mataUang = "@Model.VoucherHeader.DetailMataUang";
-        document.getElementById("terbilangText").innerText = "# Terbilang #  " + "# " + hasil + " # "  + mataUang ;
+        document.getElementById("terbilangText").innerText = "# Terbilang #  " + "# " + hasil + " # "  + mataUang  + " # " ;
     });
 </script>

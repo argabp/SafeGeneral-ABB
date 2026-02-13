@@ -30,6 +30,10 @@ namespace ABB.Web.Modules.ListVoucher
             _mediator = mediator;
             _reportGeneratorService = reportGeneratorService;
         }
+        private string GetCleanCabangCookie() 
+        {
+            return Request.Cookies["UserCabang"]?.Replace("%20", " ").Trim() ?? "";
+        }
 
         public async Task<IActionResult> Index()
         {
@@ -50,7 +54,7 @@ namespace ABB.Web.Modules.ListVoucher
         public async Task<IActionResult> GetKodeCabang(string tipe)
         {
             var databaseName = Request.Cookies["DatabaseValue"];
-            var kodeCabangCookie = Request.Cookies["UserCabang"];
+            var kodeCabangCookie = GetCleanCabangCookie();
 
             if (string.IsNullOrWhiteSpace(kodeCabangCookie))
                 return Json(new List<object>()); // cookie tidak ada → kirim kosong
@@ -80,7 +84,7 @@ namespace ABB.Web.Modules.ListVoucher
             public async Task<IActionResult> GetKasBankList(string tipe)
             {
                 var databaseName = Request.Cookies["DatabaseValue"];
-
+                var kodeCabangCookie = GetCleanCabangCookie();
                 var result = await _mediator.Send(new GetAllKasBankQuery
                 {
                     TipeKasBank = tipe,
@@ -89,7 +93,9 @@ namespace ABB.Web.Modules.ListVoucher
 
                 // --- PERBAIKAN DISINI ---
                 // Kita format datanya sebelum dikirim ke JSON
-                var dataFormatted = result.Select(x => new 
+                var dataFormatted = result
+                .Where(x => x.KodeCabang == kodeCabangCookie) 
+                .Select(x => new 
                 {
                     Kode = x.Kode,
                     Keterangan = x.Keterangan,
@@ -107,6 +113,7 @@ namespace ABB.Web.Modules.ListVoucher
             {
                 var databaseName = Request.Cookies["DatabaseValue"];
                 var user = CurrentUser.UserId;
+                var kodeCabangCookie = GetCleanCabangCookie();
 
                 // Convert string ke DateTime
                 if (!DateTime.TryParse(model.tglAwal, out DateTime tglAwal))
@@ -125,6 +132,7 @@ namespace ABB.Web.Modules.ListVoucher
                         TanggalAkhir = tglAkhir,
                         UserLogin = user,
                         KodeKas = model.kodeKas,
+                        KodeCabang = kodeCabangCookie,
                         // KodeCabang = model.KodeCabang,
                         
                         // Masukkan Keterangan yang dikirim dari JS ke Query
@@ -143,6 +151,7 @@ namespace ABB.Web.Modules.ListVoucher
                         
                         TanggalAwal = tglAwal,
                         TanggalAkhir = tglAkhir,
+                        KodeCabang = kodeCabangCookie,
                         UserLogin = user
                     };
                 }
