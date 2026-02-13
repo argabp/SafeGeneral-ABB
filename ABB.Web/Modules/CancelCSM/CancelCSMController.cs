@@ -18,16 +18,17 @@ namespace ABB.Web.Modules.CancelCSM
         private readonly ProgressBarDto _progressBarDto;
 
         public CancelCSMController(ProgressBarDto progressBarDto)
-        {
-            ViewBag.Module = Request.Cookies["Module"];
-            ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
-            ViewBag.UserLogin = CurrentUser.UserId;
-            
+        {            
             _progressBarDto = progressBarDto;
         }
         
         public IActionResult Index()
         {
+
+            ViewBag.Module = Request.Cookies["Module"];
+            ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
+            ViewBag.UserLogin = CurrentUser.UserId;
+
             _progressBarDto.ResetProgress();
             var model = new ProsesCSMViewModel();
 
