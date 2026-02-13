@@ -382,13 +382,12 @@ function attachChangeEvents() {
          var kursInput = $("#Kurs");
         if (kodeMtu && tanggal && totalVoucher) {
             
-             var parts = tanggal.split(" ")[0].split("/"); 
-           
-            var day = parts[0];
-            var month = parts[1];
-            var year = parts[2];
+            // Parsing tanggal menggunakan Kendo
+            var dateObj = kendo.parseDate(tanggal);
+            
+            if (!dateObj) return;
 
-            var formattedDate = `${year}-${month}-${day}`;
+            var formattedDate = kendo.toString(dateObj, "yyyy-MM-dd");
             console.log("Format: ", formattedDate);
             var url = `/EntriPembayaranKas/GetKurs?kodeMataUang=${kodeMtu}&tanggalVoucher=${formattedDate}`;
         
