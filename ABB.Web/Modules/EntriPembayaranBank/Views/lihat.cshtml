@@ -7,7 +7,7 @@
 <div class="window-body">
 <input type="hidden" id="VoucherDKFinal" value="@Model.VoucherHeader.DebetKredit" />
 <input type="hidden" id="NoVoucherFinal" value="@Model.VoucherHeader.NoVoucher" />
-<input type="hidden" id= "TangVocFinal" value="@Model.VoucherHeader.TanggalVoucher" style="font-size: 12px;"/>
+<input type="hidden" id="TangVocFinal" value="@Model.VoucherHeader.TanggalVoucher?.ToString("yyyy-MM-dd")" />
     <fieldset>
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">Kode Cabang</label>
@@ -205,17 +205,20 @@
 </div>
 
 
-<div class="window-footer" data-total-voucher-original-final="@(Model.VoucherHeader.TotalDalamRupiah ?? 0)" style=" font-weight: bold;    display: flex;     justify-content: center;     flex-direction: row;     flex-wrap: nowrap;     align-content: center;     align-items: center; ">
-    <div style="padding-right: 20px;font-size: 13px;">
-            <span>Total Voucher: </span>
-            <span id="voucherTotal">@Model.VoucherHeader.TotalDalamRupiah?.ToString("N0")</span>
-            
-            <span style="margin-left: 20px;">Total Keseluruhan Pembayaran: </span>
-            <span id="pembayaranTotalFinal" style="color: green;">0</span>
+<div class="window-footer" 
+     data-total-voucher-original-final="@(Model.VoucherHeader.TotalDalamRupiah.HasValue ? Model.VoucherHeader.TotalDalamRupiah.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) : "0")" 
+     style="font-weight: bold; display: flex; justify-content: center; align-items: center;">
+     
+    <div style="padding-right: 20px; font-size: 13px;">
+        <span>Total Voucher: </span>
+        <span id="voucherTotal">@Model.VoucherHeader.TotalDalamRupiah?.ToString("N2")</span>
+        
+        <span style="margin-left: 20px;">Total Keseluruhan Pembayaran: </span>
+        <span id="pembayaranTotalFinal" style="color: green;">0.00</span>
 
-              <span style="margin-left: 20px;">Total Sisa Keseluruhan Pembayaran:  </span>
-            <span id="sisapembayaranTotalFinal" style="color: green;">0</span>
-        </div>
+        <span style="margin-left: 20px;">Total Sisa Keseluruhan Pembayaran:  </span>
+        <span id="sisapembayaranTotalFinal" style="color: green;">0.00</span>
+    </div>
 </div>
 
 

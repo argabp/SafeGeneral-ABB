@@ -15,8 +15,8 @@ namespace ABB.Application.PostingPenyelesaianPiutang.Queries
     {
         public bool FlagPosting { get; set; }   // true = sudah posting, false = belum posting
         public string SearchKeyword { get; set; }
-            public string DatabaseName { get; set; }   
-      
+        public string DatabaseName { get; set; }   
+        public string KodeCabang { get; set; }
     }
 
    public class GetAllPenyelesaianPiutangByFlagQueryHandler : IRequestHandler<GetAllPenyelesaianPiutangByFlagQuery, List<HeaderPenyelesaianUtangDto>>
@@ -37,7 +37,10 @@ namespace ABB.Application.PostingPenyelesaianPiutang.Queries
             var query = _context.HeaderPenyelesaianUtang // 💡 Gunakan DbSet yang benar
                 .Where(h => h.FlagPosting == request.FlagPosting)  // filter berdasarkan flag
                 .AsQueryable();
-
+            if (!string.IsNullOrEmpty(request.KodeCabang))
+            {
+                query = query.Where(x => x.KodeCabang == request.KodeCabang);
+            }
             // Jika ada kata kunci pencarian, filter lagi
             if (!string.IsNullOrEmpty(request.SearchKeyword))
             {

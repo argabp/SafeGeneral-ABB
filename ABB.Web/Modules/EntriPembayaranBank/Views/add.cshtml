@@ -29,7 +29,7 @@ input.custom-kode {
 
 <div class="window-body">
 <input type="hidden" id="VoucherDK" value="@Model.VoucherHeader.DebetKredit" />
-<input type="hidden" id= "TangVoc" value="@Model.VoucherHeader.TanggalVoucher" style="font-size: 12px;"/>
+<input type="hidden" id="TangVoc" value="@Model.VoucherHeader.TanggalVoucher?.ToString("yyyy-MM-dd")" />
     <fieldset>
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Kode Cabang</label>
@@ -228,11 +228,12 @@ input.custom-kode {
            
             <div class="form-group col-sm-3 detail-payment-field">
                 <label asp-for="TotalBayar"></label>
-                <kendo-numerictextbox for="TotalBayar" class="custom-kuning" format="n0" style="width:100%;" />
+                <kendo-numerictextbox for="TotalBayar" class="custom-kuning" format="n2" decimals="2" 
+                                    step="0.01"  style="width:100%;" />
             </div>
             <div class="form-group col-sm-3 detail-payment-field">
                 <label asp-for="TotalDlmRupiah"></label>
-                <kendo-numerictextbox for="TotalDlmRupiah" format="n0" style="width:100%;" readonly="true"/>
+                <kendo-numerictextbox for="TotalDlmRupiah" format="n2" decimals="2"  style="width:100%;" readonly="true"/>
             </div>
             <div class="form-group col-sm-2 detail-payment-field">
                  <label asp-for="DebetKredit"></label>
@@ -305,8 +306,8 @@ input.custom-kode {
             cols.Bound(c => c.NoNota4).Title("Nomor Nota").Width(180);
             cols.Bound(c => c.KodeAkun).Title("Kode Akun").Width(180);
             cols.Bound(c => c.KodeMataUang).Title("Kode Mata Uang").Width(180);
-            cols.Bound(c => c.TotalBayar).Format("{0:n0}").Width(180);
-            cols.Bound(c => c.TotalDlmRupiah).Format("{0:n0}").Width(180);
+            cols.Bound(c => c.TotalBayar).Format("{0:n2}").Width(180);
+            cols.Bound(c => c.TotalDlmRupiah).Format("{0:n2}").Width(180);
             cols.Bound(c => c.DebetKredit).Title("D/K").Width(180);
             cols.Command(command => {
             command.Custom("EditDetail").Text("Edit").Click("onEditPembayaran");
@@ -324,21 +325,26 @@ input.custom-kode {
 
 <div style="display: flex;gap: 15px;justify-content: flex-end;margin-right:20px">
     <button type="button" id="btn-cancel-edit" class="btn btn-secondary" style="display: none; margin-right: 10px;">Cancel</button>
-    <button type="button" id="btn-save-pembayaran-final" onclick="onSavePembayaranBankFinal()" class="btn btn-success">Final Pembayaran</button>
+    <!-- <button type="button" id="btn-save-pembayaran-final" onclick="onSavePembayaranBankFinal()" class="btn btn-success">Final Pembayaran</button> -->
 </div>
 
 
-<div class="window-footer" data-total-voucher-original="@(Model.VoucherHeader.TotalDalamRupiah ?? 0)" style=" font-weight: bold;    display: flex;     justify-content: center;     flex-direction: row;     flex-wrap: nowrap;     align-content: center;     align-items: center; ">
-    <div style="padding-right: 20px;font-size: 15px;">
-            <span>Total Voucher:  </span>
-            <span id="voucherTotal"> @Model.VoucherHeader.TotalDalamRupiah?.ToString("N0")</span>
-            
-            <span style="margin-left: 20px;">Total Keseluruhan Pembayaran:  </span>
-            <span id="pembayaranTotal" style="color: green;">0</span>
+<div class="window-footer" 
+     data-total-voucher-original="@(Model.VoucherHeader.TotalDalamRupiah.HasValue ? Model.VoucherHeader.TotalDalamRupiah.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) : "0")" 
+     style="font-weight: bold; display: flex; justify-content: center; align-items: center;">
+    
+    <div style="padding-right: 20px; font-size: 13px;">
+        <span>Total Voucher:  </span>
+        <span id="voucherTotal">@Model.VoucherHeader.TotalDalamRupiah?.ToString("N2")</span>
+        
+        <span style="margin-left: 20px;">Total Keseluruhan Pembayaran:  </span>
+        <span id="pembayaranTotal" style="color: green;">0.00</span>
 
-            <span style="margin-left: 20px;">Total Sisa Keseluruhan Pembayaran:  </span>
-            <span id="sisapembayaranTotal" style="color: green;">0</span>
-        </div>
+        <span style="margin-left: 20px;">Total Sisa Keseluruhan Pembayaran:  </span>
+        <span id="sisapembayaranTotal" style="color: green;">0.00</span>
+    </div>
+    
+    <button type="button" id="btn-save-pembayaran-final" onclick="onSavePembayaranBankFinal()" class="btn btn-success">Final Pembayaran</button>
 </div>
 
 

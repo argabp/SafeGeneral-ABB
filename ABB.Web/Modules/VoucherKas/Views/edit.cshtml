@@ -197,22 +197,33 @@
          </div>
 
         <div class="row">
-           <div class="form-group col-sm-6">
-                    <label>Total Voucher</label>
-                    <div>
-                         <kendo-numerictextbox  for="TotalVoucher"  class="custom-kuning" style="width: 100%"/>
-                        <span asp-validation-for="TotalVoucher" class="text-danger"></span>
-                    </div>
+   <div class="form-group col-sm-6">
+            <label>Total Voucher</label>
+            <div>
+                 @* Tambahkan decimals, format, dan step *@
+                 <kendo-numerictextbox for="TotalVoucher"  
+                                       class="custom-kuning" 
+                                       style="width: 100%"
+                                       format="n2"
+                                       decimals="2"
+                                       step="0.01" />
+                <span asp-validation-for="TotalVoucher" class="text-danger"></span>
             </div>
+    </div>
 
-            <div class="form-group col-sm-6">
-                    <label>Total Dalam Rupiah</label>
-                    <div>
-                        <kendo-numerictextbox  for="TotalDalamRupiah" style="width: 100%" readonly="true"/>
-                        <span asp-validation-for="TotalDalamRupiah" class="text-danger"></span>
-                    </div>
+    <div class="form-group col-sm-6">
+            <label>Total Dalam Rupiah</label>
+            <div>
+                @* Tambahkan decimals dan format *@
+                <kendo-numerictextbox for="TotalDalamRupiah" 
+                                      style="width: 100%" 
+                                      readonly="true"
+                                      format="n2"
+                                      decimals="2" />
+                <span asp-validation-for="TotalDalamRupiah" class="text-danger"></span>
             </div>
-        </div>
+    </div>
+</div>
 
          <div class="row">
            <div class="form-group col-sm-12">
@@ -284,6 +295,19 @@
 </div>
 <script>
     $(document).ready(function() {
+        var totalVoucher = $("#TotalVoucher").data("kendoNumericTextBox");
+        if (totalVoucher) {
+            // Mengambil nilai asli dari model (misal 12.54) dan memasukannya ulang
+            var rawVal = @(Model.TotalVoucher.HasValue ? Model.TotalVoucher.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) : "0");
+            totalVoucher.value(rawVal);
+        }
+
+        var totalRp = $("#TotalDalamRupiah").data("kendoNumericTextBox");
+        if (totalRp) {
+            var rawValRp = @(Model.TotalDalamRupiah.HasValue ? Model.TotalDalamRupiah.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) : "0");
+            totalRp.value(rawValRp);
+        }
+
         // 1. Logika Visual Icon Posting (Tetap)
         var hiddenInput = $("#FlagPosting");
         var icon = $('#flagPosting-checkbox-ui').find('i');

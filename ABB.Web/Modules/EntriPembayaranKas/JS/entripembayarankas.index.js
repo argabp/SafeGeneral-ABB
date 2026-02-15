@@ -243,52 +243,52 @@ function onNotaProduksiSelect(e) {
 function updateGridFooter() {
     var grid = $("#DetailPembayaranGrid").data("kendoGrid");
     if (!grid) return;
-     var voucherDK = $("#VoucherDK").val();
-
+    var voucherDK = $("#VoucherDK").val();
     var dataForGrid = getNoVoucherForDetailGrid(); 
     
     if (dataForGrid && dataForGrid.noVoucher) {
         var noVoucher = dataForGrid.noVoucher;
         
-        // Panggil endpoint untuk mendapatkan total terbaru dari tabel TEMP
         $.ajax({
             type: "GET",
             url: `/EntriPembayaranKas/GetTotalPembayaran?noVoucher=${noVoucher}&voucherDK=${voucherDK}`,
             success: function (response) {
-                var totalPembayaran = response.totalPembayaran || 0;
-                var $pembayaranTotalSpan = $("#pembayaranTotal");
-                 var $sisaPembayaranSpan = $("#sisapembayaranTotal");
-                // Ambil total voucher asli dari header
-                var $footer = $pembayaranTotalSpan.closest(".window-footer");
-                var totalVoucherAsli = parseFloat($footer.data("total-voucher-original")) || 0;
+                // Total Pembayaran dari JSON (biasanya sudah titik, jadi aman)
+                var totalPembayaran = parseFloat(response.totalPembayaran) || 0;
                 
-                 var sisaPembayaran = totalVoucherAsli - totalPembayaran;
+                var $pembayaranTotalSpan = $("#pembayaranTotal");
+                var $sisaPembayaranSpan = $("#sisapembayaranTotal");
+                var $footer = $pembayaranTotalSpan.closest(".window-footer");
+                
+                // Ambil Total Voucher dari HTML (Sekarang sudah pakai titik berkat InvariantCulture)
+                var rawTotalVoucher = $footer.data("total-voucher-original");
+                var totalVoucherAsli = parseFloat(rawTotalVoucher) || 0;
+                
+                // Debugging (Cek di Console Browser kalau masih penasaran)
+                console.log("Total Voucher Asli:", totalVoucherAsli); 
+                console.log("Total Pembayaran:", totalPembayaran);
 
-                // Update teks total pembayaran
-                $pembayaranTotalSpan.text(kendo.toString(totalPembayaran, "n0"));
-                $sisaPembayaranSpan.text(kendo.toString(sisaPembayaran, "n0"));
+                // Hitung sisa dengan presisi integer (dikali 100)
+                // Math.round mengatasi floating point error seperti .9900000001
+                var sisaPembayaran = (Math.round(totalVoucherAsli * 100) - Math.round(totalPembayaran * 100)) / 100;
 
-                // Ambil referensi ke tombol Final Pembayaran
-                var $btnFinal = $("#btn-save-pembayaran-final"); // <-- Beri ID ini pada tombol Anda
+                // Update UI
+                $pembayaranTotalSpan.text(kendo.toString(totalPembayaran, "n2"));
+                $sisaPembayaranSpan.text(kendo.toString(sisaPembayaran, "n2"));
 
-                // --- INI LOGIKA BARUNYA ---
-                // Kita pakai toleransi 1 untuk mengatasi masalah pembulatan desimal
-                if (Math.abs(totalPembayaran - totalVoucherAsli) < 1) {
-                    // 1. JIKA BALANCE
-                    $pembayaranTotalSpan.css("color", "green"); // Warna hijau
-                    $btnFinal.prop("disabled", false); // AKTIFKAN tombol
-                    $btnFinal.removeClass("k-disabled");
+                var $btnFinal = $("#btn-save-pembayaran-final");
+
+                // Logika Tombol Final
+                if (Math.abs(sisaPembayaran) < 0.01) { 
+                    $pembayaranTotalSpan.css("color", "green");
+                    $sisaPembayaranSpan.css("color", "green");
+                    // Paksa 0.00 jika sisa sangat kecil (misal 0.0000001)
+                    $sisaPembayaranSpan.text("0.00"); 
+                    $btnFinal.prop("disabled", false).removeClass("k-disabled");
                 } else {
-                    // 2. JIKA TIDAK BALANCE
-                    $pembayaranTotalSpan.css("color", "red"); // Warna merah
-                    $btnFinal.prop("disabled", true); // NONAKTIFKAN tombol
-                    $btnFinal.addClass("k-disabled");
-                }
-                 if (Math.abs(sisaPembayaran) < 1) { // Ganti logika ke sisaPembayaran
-                    $sisaPembayaranSpan.css("color", "green"); // <-- Tambahkan ini
-                   
-                } else {
-                    $sisaPembayaranSpan.css("color", "red"); // <-- Tambahkan ini
+                    $pembayaranTotalSpan.css("color", "red");
+                    $sisaPembayaranSpan.css("color", "red");
+                    $btnFinal.prop("disabled", true).addClass("k-disabled");
                 }
             }
         });
@@ -315,22 +315,29 @@ function updateGridFooter() {
 
     function hitungTotalRupiah() {
         var kodeMtu = $("#KodeMataUang").data("kendoComboBox").value();
-        var tanggalRaw = $("#TangVoc").val(); // Mengambil nilai dari hidden input
+        var tanggalRaw = $("#TangVoc").val(); // Sekarang nilainya pasti yyyy-MM-dd
         var totalVoucher = $("#TotalBayar").data("kendoNumericTextBox").value();
         var kursInput = $("#Kurs");
 
         if (kodeMtu && tanggalRaw && totalVoucher) {
-            // PERBAIKAN: Gunakan kendo.parseDate untuk memproses string tanggal
-            var dateObj = kendo.parseDate(tanggalRaw);
+            // PERBAIKAN: Beri tahu Kendo format pastinya (yyyy-MM-dd)
+            var dateObj = kendo.parseDate(tanggalRaw, "yyyy-MM-dd");
             
             if (!dateObj) {
-                console.error("Format tanggal tidak valid:", tanggalRaw);
+                // Jika masih gagal, kita coba cara kasar (string manipulation)
+                if (tanggalRaw.includes("-")) {
+                    var p = tanggalRaw.split("-");
+                    dateObj = new Date(p[0], p[1] - 1, p[2]);
+                }
+            }
+
+            if (!dateObj) {
+                console.error("Format tanggal tetap tidak bisa dibaca:", tanggalRaw);
                 return;
             }
 
-            // Format ke yyyy-MM-dd (Contoh: 2026-02-28)
+            // Format standar untuk API
             var formattedDate = kendo.toString(dateObj, "yyyy-MM-dd");
-            
             console.log("Tanggal yang dikirim ke API Kurs:", formattedDate);
             
             var url = `/EntriPembayaranKas/GetKurs?kodeMataUang=${kodeMtu}&tanggalVoucher=${formattedDate}`;
@@ -342,7 +349,6 @@ function updateGridFooter() {
                     if (response && response.nilai_kurs) {
                         var kurs = response.nilai_kurs;
                         kursInput.val(kurs);
-                        
                         var totalRupiah = totalVoucher * kurs;
                         $("#TotalDlmRupiah").data("kendoNumericTextBox").value(totalRupiah);
                     }
@@ -373,17 +379,29 @@ function updateGridFooter() {
 
     function hitungTotalRupiahFinal() {
         var kodeMtu = $("#KodeMataUang_Lihat").data("kendoComboBox").value();
-        var tanggalRaw = $("#TangVocFinal").val();
+        var tanggalRaw = $("#TangVocFinal").val(); // Mengambil dari hidden input yyyy-MM-dd
         var totalVoucher = $("#TotalBayar_Lihat").data("kendoNumericTextBox").value();
         var kursInput = $("#Kurs_Lihat");
 
         if (kodeMtu && tanggalRaw && totalVoucher) {
-            // Parsing tanggal menggunakan Kendo
-            var dateObj = kendo.parseDate(tanggalRaw);
+            // PERBAIKAN: Beri tahu Kendo format pastinya (yyyy-MM-dd)
+            var dateObj = kendo.parseDate(tanggalRaw, "yyyy-MM-dd");
             
-            if (!dateObj) return;
+            // Proteksi manual jika parsing gagal
+            if (!dateObj && tanggalRaw.includes("-")) {
+                var parts = tanggalRaw.split("-");
+                dateObj = new Date(parts[0], parts[1] - 1, parts[2]);
+            }
+
+            if (!dateObj) {
+                console.error("Format tanggal Lihat Kas tidak valid:", tanggalRaw);
+                return;
+            }
 
             var formattedDate = kendo.toString(dateObj, "yyyy-MM-dd");
+            console.log("Tanggal Lihat Kas dikirim ke API Kurs:", formattedDate);
+            
+            // URL endpoint modul Kas
             var url = `/EntriPembayaranKas/GetKurs?kodeMataUang=${kodeMtu}&tanggalVoucher=${formattedDate}`;
         
             $.ajax({
@@ -397,6 +415,9 @@ function updateGridFooter() {
                         var totalRupiah = totalVoucher * kurs;
                         $("#TotalDlmRupiah_Lihat").data("kendoNumericTextBox").value(totalRupiah);
                     }
+                },
+                error: function (jqXHR) {
+                    console.error("AJAX GetKurs Lihat Kas Gagal!", jqXHR);
                 }
             });
         }
@@ -524,27 +545,39 @@ $(document).on('change keyup', '#PilihNotaGrid .total-org-input', function () {
     var kodeMtu = dataItem.kd_mtu;
     var $inputRp = row.find('.total-rp-input');
 
-    // --- PERBAIKAN: Ambil Tanggal dari Data Item (Bukan Header Voucher) ---
-    var rawDate = dataItem.tgl_prod; // Pastikan nama field sesuai DTO
-    var formattedDate = kendo.toString(kendo.parseDate(rawDate), "yyyy-MM-dd");
-    // ---------------------------------------------------------------------
+    // --- [PERBAIKAN 1: Parsing Tanggal yang Aman] ---
+    var rawDate = dataItem.tgl_prod || dataItem.date; 
+    var dateObj = kendo.parseDate(rawDate); // Mencoba parse dari data grid
+    
+    var formattedDate = "";
+    if (dateObj) {
+        formattedDate = kendo.toString(dateObj, "yyyy-MM-dd");
+    } else {
+        // Fallback: Jika tanggal di grid aneh/kosong, pakai TangVoc yang sudah pasti yyyy-MM-dd
+        var tangVocRaw = $("#TangVoc").val();
+        var fallbackDate = kendo.parseDate(tangVocRaw, "yyyy-MM-dd");
+        if (fallbackDate) {
+            formattedDate = kendo.toString(fallbackDate, "yyyy-MM-dd");
+        }
+    }
+    // ------------------------------------------------
 
-    if (kodeMtu.trim() === '001') {
+    if (kodeMtu && kodeMtu.trim() === '001') {
         $inputRp.val(totalOrg.toFixed(2));
         $inputRp.data('kurs', 1);
         return; 
     }
 
-    // Cek jika sudah ada kurs tersimpan (biar gak nembak server terus pas ngetik)
     var cachedKurs = $inputRp.data('kurs');
     if (cachedKurs && cachedKurs > 0) {
-        // Hitung lokal pakai kurs yang sudah didapat pas DataBound tadi
         var totalRupiah = totalOrg * cachedKurs;
         $inputRp.val(totalRupiah.toFixed(2));
     } 
     else if (kodeMtu && formattedDate && totalOrg > 0) {
-        // Kalau belum ada kurs, baru nembak API
+        // --- [PERBAIKAN 2: Pastikan URL Dinamis sesuai modul jika perlu] ---
+        // Jika ini di modul Bank, ganti Kas menjadi Bank
         var url = `/EntriPembayaranKas/GetKurs?kodeMataUang=${kodeMtu}&tanggalVoucher=${formattedDate}`;
+        
         $.ajax({
             type: "GET",
             url: url,
@@ -555,6 +588,9 @@ $(document).on('change keyup', '#PilihNotaGrid .total-org-input', function () {
                     $inputRp.val(totalRupiah.toFixed(2));
                     $inputRp.data('kurs', kurs);
                 }
+            },
+            error: function() {
+                console.error("Gagal mengambil kurs untuk nota: " + dataItem.no_nd);
             }
         });
     } else {
@@ -668,54 +704,44 @@ function btnLihatPembayaranKas_OnClick(e) {
 
 
   function updateGridFooterLihat(e) {
-
-        // Ambil semua data yang tampil di grid
         var grid = $("#DetailPembayaranLihatGrid").data("kendoGrid");
-         var dataForGrid = getNoVoucherFinalForDetailGrid(); 
         var voucherDK = $("#VoucherDKFinal").val();
+        var dataForGrid = getNoVoucherFinalForDetailGrid(); 
 
         if (dataForGrid && dataForGrid.noVoucher) {
             var noVoucher = dataForGrid.noVoucher;
             
-            // Panggil endpoint untuk mendapatkan total terbaru dari tabel TEMP
             $.ajax({
                 type: "GET",
+                // Pastikan URL-nya benar ke method Final
                 url: `/EntriPembayaranKas/GetTotalPembayaranFinal?noVoucher=${noVoucher}&voucherDK=${voucherDK}`,
                 success: function (response) {
-                    var totalPembayaran = response.totalPembayaran || 0;
+                    // 1. Ambil Total Pembayaran (Paksa float 2 desimal)
+                    var totalPembayaran = parseFloat(parseFloat(response.totalPembayaran).toFixed(2)) || 0;
+                    
                     var $pembayaranTotalSpan = $("#pembayaranTotalFinal");
                     var $sisaPembayaranSpan = $("#sisapembayaranTotalFinal");
-                    // Ambil total voucher asli dari header
                     var $footer = $pembayaranTotalSpan.closest(".window-footer");
-                    var totalVoucherAsli = parseFloat($footer.data("total-voucher-original-final")) || 0;
                     
-                    var sisaPembayaran = totalVoucherAsli - totalPembayaran;
-
-                    // Update teks total pembayaran
-                    $pembayaranTotalSpan.text(kendo.toString(totalPembayaran, "n0"));
-                    $sisaPembayaranSpan.text(kendo.toString(sisaPembayaran, "n0"));
-
-                    // Ambil referensi ke tombol Final Pembayaran
-                    var $btnFinal = $("#btn-save-pembayaran-final"); // <-- Beri ID ini pada tombol Anda
-
-                    // --- INI LOGIKA BARUNYA ---
-                    // Kita pakai toleransi 1 untuk mengatasi masalah pembulatan desimal
-                    if (Math.abs(totalPembayaran - totalVoucherAsli) < 1) {
-                        // 1. JIKA BALANCE
-                        $pembayaranTotalSpan.css("color", "green"); // Warna hijau
-                        $btnFinal.prop("disabled", false); // AKTIFKAN tombol
-                        $btnFinal.removeClass("k-disabled");
-                    } else {
-                        // 2. JIKA TIDAK BALANCE
-                        $pembayaranTotalSpan.css("color", "red"); // Warna merah
-                        $btnFinal.prop("disabled", true); // NONAKTIFKAN tombol
-                        $btnFinal.addClass("k-disabled");
-                    }
-                    if (Math.abs(sisaPembayaran) < 1) { // Ganti logika ke sisaPembayaran
-                        $sisaPembayaranSpan.css("color", "green"); // <-- Tambahkan ini
+                    // 2. Ambil Total Voucher Asli dari HTML (Sekarang sudah format titik)
+                    var rawTotalVoucher = $footer.data("total-voucher-original-final");
+                    var totalVoucherAsli = parseFloat(rawTotalVoucher) || 0;
                     
+                    // 3. Hitung sisa dengan presisi integer (dikali 100)
+                    var sisaPembayaran = (Math.round(totalVoucherAsli * 100) - Math.round(totalPembayaran * 100)) / 100;
+
+                    // 4. Update Teks UI
+                    $pembayaranTotalSpan.text(kendo.toString(totalPembayaran, "n2"));
+                    $sisaPembayaranSpan.text(kendo.toString(sisaPembayaran, "n2"));
+
+                    // 5. Indikator Warna
+                    if (Math.abs(sisaPembayaran) <= 0.01) { 
+                        $pembayaranTotalSpan.css("color", "green");
+                        $sisaPembayaranSpan.css("color", "green");
+                        $sisaPembayaranSpan.text("0.00");
                     } else {
-                        $sisaPembayaranSpan.css("color", "red"); // <-- Tambahkan ini
+                        $pembayaranTotalSpan.css("color", "red");
+                        $sisaPembayaranSpan.css("color", "red");
                     }
                 }
             });

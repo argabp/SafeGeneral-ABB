@@ -95,19 +95,19 @@ function onSaveHeaderAndProceed() {
                 $("#SudahFinalGrid").data("kendoGrid").dataSource.read();
            
                 // --- PERBAIKAN DI SINI ---
-                var $footer = $(".window-footer");
+                // var $footer = $(".window-footer");
                 
-                // 1. Ambil nilai TotalOrg LANGSUNG DARI INPUT KENDO
-                var totalOrgInput = $("#PenyelesaianHeader_TotalOrg").data("kendoNumericTextBox");
-                var totalOrgValue = totalOrgInput ? totalOrgInput.value() : 0;
+                // // 1. Ambil nilai TotalOrg LANGSUNG DARI INPUT KENDO
+                // var totalOrgInput = $("#PenyelesaianHeader_TotalRp").data("kendoNumericTextBox");
+                // var totalOrgValue = totalOrgInput ? totalOrgInput.value() : 0;
                 
-                // 2. Update span #voucherTotal dengan nilai baru
-                $("#voucherTotal").text(kendo.toString(totalOrgValue, "n0"));
+                // // 2. Update span #voucherTotal dengan nilai baru
+                // $("#voucherTotal").text(kendo.toString(totalOrgValue, "n2"));
                 
-                // 3. Update data-attribute di footer dengan nilai baru
-                $footer
-                .attr("data-total-penyelesaian-original", totalOrgValue)
-                .data("total-penyelesaian-original", totalOrgValue);
+                // // 3. Update data-attribute di footer dengan nilai baru
+                // $footer
+                // .attr("data-total-penyelesaian-original", totalOrgValue)
+                // .data("total-penyelesaian-original", totalOrgValue);
                     
                 // JANGAN tampilkan swal di sini, biarkan pemanggil (onSavePembayaran) yang urus
             } else {
@@ -482,68 +482,113 @@ function clearFinalPaymentForm() {
 
 // fungsi total pembayaran
 function updateGridFooter() {
-    console.log("Trigger updateGridFooter...");
-
-    var grid = $("#TempDetailPembayaranGrid").data("kendoGrid"); // Pastikan ID Grid benar
+    var grid = $("#TempDetailPembayaranGrid").data("kendoGrid"); 
     if (!grid) return;
 
-    // Ambil NoBukti langsung dari input, karena getNoBuktiForDetailGrid mungkin mengembalikan object wrapper
     var noBukti = $("#PenyelesaianHeader_NomorBukti").val();
-    
-    // Ambil DebetKredit Header untuk filter perhitungan di server (jika diperlukan)
     var piutangDK = $("#PenyelesaianHeader_DebetKredit").data("kendoDropDownList").value();
 
-    // Validasi: Jika NoBukti kosong, reset footer dan keluar
     if (!noBukti) {
-        console.log("NoBukti kosong, reset footer.");
-        $("#pembayaranTotal").text("0");
-        $("#sisapembayaranTotal").text("0");
+        $("#pembayaranTotal").text("0.00");
+        $("#sisapembayaranTotal").text("0.00");
         return;
     }
 
-    console.log("Fetching total for NoBukti:", noBukti, "DK:", piutangDK);
-
     $.ajax({
         type: "GET",
-        // Pastikan parameter URL cocok dengan Controller (no_bukti vs NoBukti)
         url: `/EntriPenyelesaianPiutang/GetTotalPembayaran?no_bukti=${noBukti}&PiutangDK=${piutangDK}`,
         success: function (response) {
-            console.log("Total Response:", response);
-
-            var totalPembayaran = response.totalPembayaran || 0;
+            // 1. Ambil Total Pembayaran (Paksa float 2 desimal)
+            var totalPembayaran = parseFloat(response.totalPembayaran) || 0;
+            
             var $pembayaranTotalSpan = $("#pembayaranTotal");
             var $sisaPembayaranSpan = $("#sisapembayaranTotal");
             var $btnFinal = $("#btn-save-pembayaran-final");
-            $("#BelumFinalGrid").data("kendoGrid").dataSource.read();
-             $("#SudahFinalGrid").data("kendoGrid").dataSource.read();
-            // Ambil total header terbaru
-            // PENTING: Ambil dari .data() yang sudah di-update di onSaveHeaderAndProceed
+            
+            // 2. Ambil Total Header dari HTML (Format titik US)
             var $footer = $(".window-footer");
-            var totalHeader = parseFloat($footer.data("total-penyelesaian-original")) || 0;
+            var totalHeaderRaw = $footer.data("total-penyelesaian-original");
+            var totalHeader = parseFloat(totalHeaderRaw) || 0;
+            console.log(totalHeader)
+            console.log(totalPembayaran)
+            // 3. LOGIKA SAKTI (Hitung Sisa)
+            // Menggunakan Math.round * 100 untuk menghindari floating point error
+            var sisaPembayaran = (Math.round(totalHeader * 100) - Math.round(totalPembayaran * 100)) / 100;
+            console.log(sisaPembayaran)
+            // 4. Update UI Text (Format N2)
+            $pembayaranTotalSpan.text(kendo.toString(totalPembayaran, "n2"));
+            $sisaPembayaranSpan.text(kendo.toString(sisaPembayaran, "n2"));
 
-            // Hitung Sisa
-            var sisaPembayaran = totalHeader - totalPembayaran;
-
-            // Update UI Text
-            $pembayaranTotalSpan.text(kendo.toString(totalPembayaran, "n0"));
-            $sisaPembayaranSpan.text(kendo.toString(sisaPembayaran, "n0"));
-
-            // Logic Warna & Tombol Final
-            // Toleransi perbedaan desimal kecil
-            if (Math.abs(sisaPembayaran) < 1) {
-                // BALANCE (Sisa 0)
+            // 5. Cek Balance (Toleransi diperketat jadi 0.01)
+            // Jika selisih absolut <= 0.01, anggap balance
+            if (Math.abs(sisaPembayaran) < 0.01) {
+                // BALANCE
                 $pembayaranTotalSpan.css("color", "green");
                 $sisaPembayaranSpan.css("color", "green");
+                
+                // Paksa tampil 0.00 biar rapi (user gak bingung liat -0.00)
+                $sisaPembayaranSpan.text("0.00"); 
+                
                 $btnFinal.prop("disabled", false).removeClass("k-disabled");
             } else {
-                // TIDAK BALANCE
+                // TIDAK BALANCE (Merah)
                 $pembayaranTotalSpan.css("color", "red");
                 $sisaPembayaranSpan.css("color", "red");
                 $btnFinal.prop("disabled", true).addClass("k-disabled");
             }
-        },
-        error: function(err) {
-            console.error("Gagal update footer:", err);
+        }
+    });
+}
+function updateGridFooterLihat() {
+    var grid = $("#DetailPembayaranGrid").data("kendoGrid");
+    if (!grid) return;
+
+    // Ambil ID Header yang ada suffix _Lihat
+    var noBukti = $("#PenyelesaianHeader_NomorBukti_Lihat").val();
+    var piutangDK = $("#PenyelesaianHeader_DebetKredit_Lihat").data("kendoDropDownList").value();
+
+    if (!noBukti) {
+        $("#pembayaranTotal_Lihat").text("0.00");
+        $("#sisapembayaranTotal_Lihat").text("0.00");
+        return;
+    }
+
+    // Panggil Endpoint GetTotal (Gunakan endpoint yang sama atau khusus Final jika ada)
+    // Asumsi: Logic GetTotalPembayaran di controller sudah benar membaca tabel yang sesuai
+    $.ajax({
+        type: "GET",
+        url: `/EntriPenyelesaianPiutang/GetTotalPembayaran?no_bukti=${noBukti}&PiutangDK=${piutangDK}`,
+        success: function (response) {
+            // 1. Ambil Total Pembayaran (Paksa 2 Desimal)
+            var totalPembayaran = parseFloat(parseFloat(response.totalPembayaran).toFixed(2)) || 0;
+            
+            var $pembayaranTotalSpan = $("#pembayaranTotal_Lihat");
+            var $sisaPembayaranSpan = $("#sisapembayaranTotal_Lihat");
+            
+            // 2. Ambil Total Header dari HTML Footer Lihat
+            var $footer = $("#TotalBuktiOrg_Lihat");
+            var totalHeaderRaw = $footer.data("total-penyelesaian-original-final");
+            var totalHeader = parseFloat(totalHeaderRaw) || 0;
+
+            // 3. Hitung Sisa (Logic Math.round * 100)
+            var sisaPembayaran = (Math.round(totalHeader * 100) - Math.round(totalPembayaran * 100)) / 100;
+
+            // 4. Update UI (Format N2)
+            $pembayaranTotalSpan.text(kendo.toString(totalPembayaran, "n2"));
+            $sisaPembayaranSpan.text(kendo.toString(sisaPembayaran, "n2"));
+
+            // 5. Warna Status
+            if (Math.abs(sisaPembayaran) <= 0.01) {
+                $pembayaranTotalSpan.css("color", "green");
+                $sisaPembayaranSpan.css("color", "green");
+                $sisaPembayaranSpan.text("0.00");
+                // Enable tombol final jika diperlukan
+                $("#btn-save-pembayaran-final").prop("disabled", false).removeClass("k-disabled");
+            } else {
+                $pembayaranTotalSpan.css("color", "red");
+                $sisaPembayaranSpan.css("color", "red");
+                $("#btn-save-pembayaran-final").prop("disabled", true).addClass("k-disabled");
+            }
         }
     });
 }
@@ -584,9 +629,9 @@ function updateGridFooter() {
         var tanggalValue = $("#PenyelesaianHeader_Tanggal").data("kendoDatePicker").value();
         var totalOrg = $("#PenyelesaianHeader_TotalOrg").data("kendoNumericTextBox").value();
 
-        var $footer = $("#voucherTotal").closest(".window-footer");
-        $("#voucherTotal").text(kendo.toString(totalOrg, "n0"));
-        $footer.attr("data-total-penyelesaian-original", totalOrg).data("total-penyelesaian-original", totalOrg);
+        // var $footer = $("#voucherTotal").closest(".window-footer");
+        // $("#voucherTotal").text(kendo.toString(totalOrg, "n2"));
+        // $footer.attr("data-total-penyelesaian-original", totalOrg).data("total-penyelesaian-original", totalOrg);
         
         if (kodeMtu === '001') {
             $("#PenyelesaianHeader_TotalRp").data("kendoNumericTextBox").value(totalOrg);
@@ -720,7 +765,7 @@ function SimpanNota() {
 
         selectedData.push({
             NoNota: dataItem.no_nd,
-            TotalBayarOrg: Math.floor(totalOrg),
+            TotalBayarOrg: parseFloat(totalOrg.toFixed(2)),
             TotalBayarRp: totalRp,
             DebetKredit: dkOtomatis,
             KodeAkun: akunOtomatis,
@@ -1090,20 +1135,20 @@ function onSaveFinalHeaderAndProceed() {
                 $("#BelumFinalGrid").data("kendoGrid").dataSource.read();
                 $("#SudahFinalGrid").data("kendoGrid").dataSource.read();
            
-                // --- PERBAIKAN DI SINI ---
-                var $footer = $(".window-footer");
+                // // --- PERBAIKAN DI SINI ---
+                // var $footer = $(".window-footer");
                 
-                // 1. Ambil nilai TotalOrg LANGSUNG DARI INPUT KENDO
-                var totalOrgInput = $("#PenyelesaianHeader_TotalOrg_Lihat").data("kendoNumericTextBox");
-                var totalOrgValue = totalOrgInput ? totalOrgInput.value() : 0;
+                // // 1. Ambil nilai TotalOrg LANGSUNG DARI INPUT KENDO
+                // var totalOrgInput = $("#PenyelesaianHeader_TotalOrg_Lihat").data("kendoNumericTextBox");
+                // var totalOrgValue = totalOrgInput ? totalOrgInput.value() : 0;
                 
-                // 2. Update span #voucherTotal dengan nilai baru
-                $("#voucherTotal").text(kendo.toString(totalOrgValue, "n0"));
+                // // 2. Update span #voucherTotal dengan nilai baru
+                // // $("#voucherTotal").text(kendo.toString(totalValue, "nw"));
                 
-                // 3. Update data-attribute di footer dengan nilai baru
-                $footer
-                .attr("data-total-penyelesaian-original-final", totalOrgValue)
-                .data("total-penyelesaian-original-final", totalOrgValue);
+                // // 3. Update data-attribute di footer dengan nilai baru
+                // $footer
+                // .attr("data-total-penyelesaian-original-final", totalOrgValue)
+                // .data("total-penyelesaian-original-final", totalOrgValue);
                     
                 // JANGAN tampilkan swal di sini, biarkan pemanggil (onSavePembayaran) yang urus
             } else {

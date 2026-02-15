@@ -557,7 +557,7 @@ namespace ABB.Web.Modules.EntriPenyelesaianPiutang
                 JenisPenyelesaian = jenisPenyelesaian,
                 // Ambil Bulan & Tahun dari tanggal inputan user
                 Bulan = tanggalBukti.Value.Month,
-                Tahun = tanggalBukti.Value.Year % 100
+                Tahun = tanggalBukti.Value.Year
             });
 
             return Json(new { success = true, nomorBukti = nextNomor });

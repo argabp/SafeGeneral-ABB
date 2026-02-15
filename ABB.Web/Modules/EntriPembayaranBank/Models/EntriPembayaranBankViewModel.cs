@@ -14,7 +14,7 @@ namespace ABB.Web.Modules.EntriPembayaranBank.Models
         public int No { get; set; }
         public DateTime? TglBayar { get; set; }
         public string KodeAkun { get; set; }
-        public int? TotalBayar { get; set; }
+        public decimal? TotalBayar { get; set; }
         public string DebetKredit { get; set; }
         public string KeteranganVoucher { get; set; } // Asumsi keterangan per baris
     }
@@ -53,7 +53,7 @@ namespace ABB.Web.Modules.EntriPembayaranBank.Models
         public string DebetKredit { get; set; }
         
         [Display(Name = "Total Bayar")]
-        public int? TotalBayar { get; set; }
+        public decimal? TotalBayar { get; set; }
 
         [Display(Name = "Kode Mata Uang")]
         public string KodeMataUang { get; set; }

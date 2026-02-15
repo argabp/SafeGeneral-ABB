@@ -15,7 +15,7 @@ namespace ABB.Application.EntriPembayaranBanks.Commands
    public class PembayaranBankNotaItem
     {
         public string NoNota { get; set; }
-        public int TotalBayarOrg { get; set; }
+        public decimal TotalBayarOrg { get; set; }
         public decimal TotalBayarRp { get; set; }
         public string DebetKredit { get; set; }
         public string KodeMataUang { get; set; }
