@@ -10,5 +10,8 @@ namespace ABB.Application.Common.Grids.Interfaces
             GridConfig config,
             object parameters,
             string databaseName);
+
+        Task<GridResponse<T>> QueryAsyncCSM<T>(GridRequest request, GridConfig config, 
+        object parameters);
     }
 }

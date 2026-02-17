@@ -4,8 +4,10 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.Akseptasis.Queries
 {
@@ -23,37 +25,43 @@ namespace ABB.Application.Akseptasis.Queries
     public class GetAkseptasiOtherPADataQueryHandler : IRequestHandler<GetAkseptasiOtherPADataQuery, List<string>>
     {
         private readonly IDbConnectionFactory _connectionFactory;
+        private readonly ILogger<GetAkseptasiOtherPADataQueryHandler> _logger;
 
-        public GetAkseptasiOtherPADataQueryHandler(IDbConnectionFactory connectionFactory)
+        public GetAkseptasiOtherPADataQueryHandler(IDbConnectionFactory connectionFactory,
+            ILogger<GetAkseptasiOtherPADataQueryHandler> logger)
         {
             _connectionFactory = connectionFactory;
+            _logger = logger;
         }
 
         public async Task<List<string>> Handle(GetAkseptasiOtherPADataQuery request, CancellationToken cancellationToken)
         {
-            _connectionFactory.CreateDbConnection(request.DatabaseName);
-            var results = (await _connectionFactory.QueryProc<string>("spe_kp02e_04", 
-                new { request.jk_wkt, request.tgl_lahir, request.tgl_real, request.kd_cb, request.kd_jns_kr, request.kd_grp_kr })).ToList();
-            
-            for (int i = 0; i < results.Count; i++)
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
             {
-                var parts = results[i].Split(',');
-
-                if (parts.Length == 3 && parts[2] == "DT" && !string.IsNullOrWhiteSpace(parts[1]))
+                _connectionFactory.CreateDbConnection(request.DatabaseName);
+                var results = (await _connectionFactory.QueryProc<string>("spe_kp02e_04", 
+                    new { request.jk_wkt, request.tgl_lahir, request.tgl_real, request.kd_cb, request.kd_jns_kr, request.kd_grp_kr })).ToList();
+                
+                for (int i = 0; i < results.Count; i++)
                 {
-                    if (DateTime.TryParseExact(parts[1], "yyyy/MM/dd",
-                            CultureInfo.InvariantCulture,
-                            DateTimeStyles.None,
-                            out DateTime dt))
+                    var parts = results[i].Split(',');
+
+                    if (parts.Length == 3 && parts[2] == "DT" && !string.IsNullOrWhiteSpace(parts[1]))
                     {
-                        parts[1] = dt.ToString("dd/MM/yyyy");
+                        if (DateTime.TryParseExact(parts[1], "yyyy/MM/dd",
+                                CultureInfo.InvariantCulture,
+                                DateTimeStyles.None,
+                                out DateTime dt))
+                        {
+                            parts[1] = dt.ToString("dd/MM/yyyy");
+                        }
+
+                        results[i] = string.Join(",", parts);
                     }
-
-                    results[i] = string.Join(",", parts);
                 }
-            }
 
-            return results;
+                return results;
+            }, _logger);
         }
     }
 }

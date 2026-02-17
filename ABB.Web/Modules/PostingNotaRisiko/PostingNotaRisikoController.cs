@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ABB.Application.Common.Dtos;
 using ABB.Application.HasilCSM.Queries;
 using ABB.Application.PostingNotaRisiko.Commands;
 using ABB.Web.Modules.Base;
@@ -25,20 +26,20 @@ namespace ABB.Web.Modules.PostingNotaRisiko
 
         public JsonResult GetTipeTransaksi()
         {
-            var result = new List<TipeTransaksi>()
+            var result = new List<DropdownOptionDto>()
             {
-                new TipeTransaksi() { Text = "A1", Value = "A1" },
-                new TipeTransaksi() { Text = "A2", Value = "A2" },
-                new TipeTransaksi() { Text = "A3", Value = "A3" },
-                new TipeTransaksi() { Text = "B1", Value = "B1" },
-                new TipeTransaksi() { Text = "B2", Value = "B2" },
-                new TipeTransaksi() { Text = "C1", Value = "C1" },
-                new TipeTransaksi() { Text = "C2", Value = "C2" },
-                new TipeTransaksi() { Text = "K1", Value = "K1" },
-                new TipeTransaksi() { Text = "K2", Value = "K2" },
-                new TipeTransaksi() { Text = "K3", Value = "K3" },
-                new TipeTransaksi() { Text = "K4", Value = "K4" },
-                new TipeTransaksi() { Text = "K5", Value = "K5" }
+                new DropdownOptionDto() { Text = "A1", Value = "A1" },
+                new DropdownOptionDto() { Text = "A2", Value = "A2" },
+                new DropdownOptionDto() { Text = "A3", Value = "A3" },
+                new DropdownOptionDto() { Text = "B1", Value = "B1" },
+                new DropdownOptionDto() { Text = "B2", Value = "B2" },
+                new DropdownOptionDto() { Text = "C1", Value = "C1" },
+                new DropdownOptionDto() { Text = "C2", Value = "C2" },
+                new DropdownOptionDto() { Text = "K1", Value = "K1" },
+                new DropdownOptionDto() { Text = "K2", Value = "K2" },
+                new DropdownOptionDto() { Text = "K3", Value = "K3" },
+                new DropdownOptionDto() { Text = "K4", Value = "K4" },
+                new DropdownOptionDto() { Text = "K5", Value = "K5" }
             };
 
             return Json(result);

@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Interfaces;
+using ABB.Application.ProsesCSM.Queries;
 using ABB.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -15,9 +16,7 @@ namespace ABB.Application.ProsesCSM.Commands
     {
         public string Type { get; set; }
         
-        public List<long> Id { get; set; }
-
-        public string TipeTransaksi { get; set; }
+        public List<ProsesCSMDto> Datas { get; set; }
 
         public string KodeMetode { get; set; }
     }
@@ -41,28 +40,37 @@ namespace ABB.Application.ProsesCSM.Commands
         public async Task<Unit> Handle(ProsesGMMCommand request, CancellationToken cancellationToken)
         {
             try
-            {
-                List<ViewSourceData> viewSourceDatas;
+            {                
+                List<ProsesCSMDto> viewSourceDatas;
 
                 if (request.Type == "All")
                     viewSourceDatas = _context.ViewSourceData.Where(w =>
-                        request.KodeMetode == w.KodeMetode).ToList();
+                        request.KodeMetode == w.KodeMetode).Select(s => new ProsesCSMDto()
+                        {
+                            Id = s.Id,
+                            PeriodeProses = s.PeriodeProses
+                        }).ToList();
                 else
-                    viewSourceDatas = _context.ViewSourceData.Where(w => request.Id.Contains(w.Id)).ToList();
+                {
+                    viewSourceDatas = request.Datas;
+                }
                 
                 var totalData = viewSourceDatas.Count;
             
                 _progressBarDto.Total = totalData;
                 _progressBarDto.Remaining = 0;
             
-                for (int sequence = 0; sequence < totalData; sequence++)
+                var sequence = 0;
+
+                foreach (var data in viewSourceDatas)
                 {
-                    _progressBarDto.Remaining = sequence + 1;
+                    sequence++;
+                    _progressBarDto.Remaining = sequence;
 
                     await _db.QueryProc("spp_CalculationGMM3",
                         new
                         {
-                            idNotaRisiko = viewSourceDatas[sequence].Id, PeriodeProses = viewSourceDatas[sequence].PeriodeProses.Date
+                            idNotaRisiko = data.Id, PeriodeProses = data.PeriodeProses.Date
                         });   
                 }
             }

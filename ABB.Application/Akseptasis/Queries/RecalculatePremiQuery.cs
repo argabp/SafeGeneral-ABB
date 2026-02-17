@@ -2,9 +2,10 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
-using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.Akseptasis.Queries
 {
@@ -24,24 +25,28 @@ namespace ABB.Application.Akseptasis.Queries
     public class RecalculatePremiQueryHandler : IRequestHandler<RecalculatePremiQuery, string>
     {
         private readonly IDbConnectionFactory _connectionFactory;
-        private readonly IMapper _mapper;
+        private readonly ILogger<RecalculatePremiQueryHandler> _logger;
 
-        public RecalculatePremiQueryHandler(IDbConnectionFactory connectionFactory, IMapper mapper)
+        public RecalculatePremiQueryHandler(IDbConnectionFactory connectionFactory,
+            ILogger<RecalculatePremiQueryHandler> logger)
         {
             _connectionFactory = connectionFactory;
-            _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<string> Handle(RecalculatePremiQuery request, CancellationToken cancellationToken)
         {
-            _connectionFactory.CreateDbConnection(request.DatabaseName);
-            var results = (await _connectionFactory.QueryProc<(string, string, string)>("spp_uw02e_02", new
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
             {
-                request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn,
-                request.no_aks, request.no_updt
-            })).FirstOrDefault();
+                _connectionFactory.CreateDbConnection(request.DatabaseName);
+                var results = (await _connectionFactory.QueryProc<(string, string, string)>("spp_uw02e_02", new
+                {
+                    request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn,
+                    request.no_aks, request.no_updt
+                })).FirstOrDefault();
 
-            return results.Item2;
+                return results.Item2;
+            }, _logger);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -32,7 +33,7 @@ namespace ABB.Application.TertanggungPrincipals.Commands
         public async Task<Unit> Handle(DeleteDetailTertanggungPrincipalCommand request,
             CancellationToken cancellationToken)
         {
-            try
+            await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
             {
                 var dbContext = _contextFactory.CreateDbContext(request.DatabaseName);
                 var detailRekanan = dbContext.DetailRekanan.FirstOrDefault(w => w.kd_cb == request.kd_cb
@@ -42,11 +43,7 @@ namespace ABB.Application.TertanggungPrincipals.Commands
                     dbContext.DetailRekanan.Remove(detailRekanan);
 
                 await dbContext.SaveChangesAsync(cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
-            }
+            }, _logger);
 
             return Unit.Value;
         }

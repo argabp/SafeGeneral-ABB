@@ -41,7 +41,8 @@ namespace ABB.Application.Obligees.Commands
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                _logger.LogError(ex, ex.InnerException == null ? ex.Message : ex.InnerException.Message);
+                throw ex.InnerException ?? ex;
             }
 
             return Unit.Value;

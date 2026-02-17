@@ -1,8 +1,10 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.Akseptasis.Queries
 {
@@ -22,20 +24,27 @@ namespace ABB.Application.Akseptasis.Queries
     {
         private readonly IDbConnectionFactory _connectionFactory;
 
-        public GenerateOtherPAPremiQueryHandler(IDbConnectionFactory connectionFactory)
+        private readonly ILogger<GenerateOtherPAPremiQueryHandler> _logger;
+
+        public GenerateOtherPAPremiQueryHandler(IDbConnectionFactory connectionFactory,
+            ILogger<GenerateOtherPAPremiQueryHandler> logger)
         {
             _connectionFactory = connectionFactory;
+            _logger = logger;
         }
 
         public async Task<string> Handle(GenerateOtherPAPremiQuery request, CancellationToken cancellationToken)
         {
-            _connectionFactory.CreateDbConnection(request.DatabaseName);
-            return (await _connectionFactory.QueryProc<string>("spe_kp02e_05", 
-                new
-                {
-                    request.stn_rate, kd_rms = request.kd_grp_kr, request.flag,
-                    request.nilai_harga_ptg, request.pst_rate, request.no
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
+            {
+                _connectionFactory.CreateDbConnection(request.DatabaseName);
+                return (await _connectionFactory.QueryProc<string>("spe_kp02e_05", 
+                    new
+                    {
+                        request.stn_rate, kd_rms = request.kd_grp_kr, request.flag,
+                        request.nilai_harga_ptg, request.pst_rate, request.no
                 })).FirstOrDefault();
+            }, _logger);
         }
     }
 }

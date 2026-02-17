@@ -2,9 +2,11 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.Akseptasis.Queries
 {
@@ -20,15 +22,22 @@ namespace ABB.Application.Akseptasis.Queries
     {
         private readonly IDbConnectionFactory _connectionFactory;
 
-        public GenerateKodeAkseptasiQueryHandler(IDbConnectionFactory connectionFactory)
+        private readonly ILogger<GenerateKodeAkseptasiQueryHandler> _logger;
+
+        public GenerateKodeAkseptasiQueryHandler(IDbConnectionFactory connectionFactory,
+            ILogger<GenerateKodeAkseptasiQueryHandler> logger)
         {
             _connectionFactory = connectionFactory;
+            _logger = logger;
         }
 
         public async Task<List<string>> Handle(GenerateKodeAkseptasiQuery request, CancellationToken cancellationToken)
         {
-            _connectionFactory.CreateDbConnection(request.DatabaseName);
-            return (await _connectionFactory.QueryProc<string>("spe_uw02e_34", new { request.st_pas, request.kd_grp_sb_bis, request.kd_rk_sb_bis })).ToList();
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
+            {
+                _connectionFactory.CreateDbConnection(request.DatabaseName);
+                return (await _connectionFactory.QueryProc<string>("spe_uw02e_34", new { request.st_pas, request.kd_grp_sb_bis, request.kd_rk_sb_bis })).ToList();
+            }, _logger);
         }
     }
 }

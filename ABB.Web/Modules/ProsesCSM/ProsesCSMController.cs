@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ABB.Application.Common.Dtos;
+using ABB.Application.Common.Grids.Models;
 using ABB.Application.ProsesCSM.Commands;
 using ABB.Application.ProsesCSM.Queries;
 using ABB.Web.Modules.Base;
@@ -36,20 +37,20 @@ namespace ABB.Web.Modules.ProsesCSM
 
         public JsonResult GetTipeTransaksi()
         {
-            var result = new List<TipeTransaksi>()
+            var result = new List<DropdownOptionDto>()
             {
-                new TipeTransaksi() { Text = "A1", Value = "A1" },
-                new TipeTransaksi() { Text = "A2", Value = "A2" },
-                new TipeTransaksi() { Text = "A3", Value = "A3" },
-                new TipeTransaksi() { Text = "B1", Value = "B1" },
-                new TipeTransaksi() { Text = "B2", Value = "B2" },
-                new TipeTransaksi() { Text = "C1", Value = "C1" },
-                new TipeTransaksi() { Text = "C2", Value = "C2" },
-                new TipeTransaksi() { Text = "K1", Value = "K1" },
-                new TipeTransaksi() { Text = "K2", Value = "K2" },
-                new TipeTransaksi() { Text = "K3", Value = "K3" },
-                new TipeTransaksi() { Text = "K4", Value = "K4" },
-                new TipeTransaksi() { Text = "K5", Value = "K5" }
+                new DropdownOptionDto() { Text = "A1", Value = "A1" },
+                new DropdownOptionDto() { Text = "A2", Value = "A2" },
+                new DropdownOptionDto() { Text = "A3", Value = "A3" },
+                new DropdownOptionDto() { Text = "B1", Value = "B1" },
+                new DropdownOptionDto() { Text = "B2", Value = "B2" },
+                new DropdownOptionDto() { Text = "C1", Value = "C1" },
+                new DropdownOptionDto() { Text = "C2", Value = "C2" },
+                new DropdownOptionDto() { Text = "K1", Value = "K1" },
+                new DropdownOptionDto() { Text = "K2", Value = "K2" },
+                new DropdownOptionDto() { Text = "K3", Value = "K3" },
+                new DropdownOptionDto() { Text = "K4", Value = "K4" },
+                new DropdownOptionDto() { Text = "K5", Value = "K5" }
             };
 
             return Json(result);
@@ -57,19 +58,24 @@ namespace ABB.Web.Modules.ProsesCSM
 
         public JsonResult GetKodeMetode()
         {
-            var result = new List<KodeMetode>()
+            var result = new List<DropdownOptionDto>()
             {
-                new KodeMetode() { Text = "PAA", Value = "1" },
-                new KodeMetode() { Text = "GMM", Value = "2" }
+                new DropdownOptionDto() { Text = "PAA", Value = "1" },
+                new DropdownOptionDto() { Text = "GMM", Value = "2" }
             };
 
             return Json(result);
         }
         
-        public async Task<ActionResult> GetViewSourceData([DataSourceRequest] DataSourceRequest request, ProsesCSMViewModel model)
+        public async Task<ActionResult> GetViewSourceData(GridRequest grid, ProsesCSMViewModel model)
         {
-            var ds = await Mediator.Send(new GetViewSourceDataQuery() { KodeMetode = model.KodeMetode});
-            return Json(ds.AsQueryable().ToDataSourceResult(request));
+            var result = await Mediator.Send(new GetViewSourceDataQuery()
+            {
+                KodeMetode = model.KodeMetode,
+                Grid = grid
+            });
+
+            return Json(result);
         }
 
         [HttpPost]
@@ -78,9 +84,17 @@ namespace ABB.Web.Modules.ProsesCSM
             try
             {
                 if(model.KodeMetode == "1")
-                    await Mediator.Send(new ProsesPAACommand() { Id = model.Id, KodeMetode = model.KodeMetode, TipeTransaksi = model.TipeTransaksi, Type = "Manual"});
+                    await Mediator.Send(new ProsesPAACommand() { 
+                        Datas = model.Datas,
+                        Type = "Manual",
+                        KodeMetode = model.KodeMetode
+                    });
                 else
-                    await Mediator.Send(new ProsesGMMCommand() { Id = model.Id, KodeMetode = model.KodeMetode, TipeTransaksi = model.TipeTransaksi, Type = "Manual" });
+                    await Mediator.Send(new ProsesGMMCommand() { 
+                        Datas = model.Datas,
+                        Type = "Manual",
+                        KodeMetode = model.KodeMetode
+                    });
                 
                 return Json(new { Result = "OK", Message = "Success Process Data" });
             }
@@ -97,9 +111,17 @@ namespace ABB.Web.Modules.ProsesCSM
             try
             {
                 if(model.KodeMetode == "1")
-                    await Mediator.Send(new ProsesPAACommand() { Id = model.Id, KodeMetode = model.KodeMetode, TipeTransaksi = model.TipeTransaksi, Type = "All"});
+                    await Mediator.Send(new ProsesPAACommand() {
+                        Datas = model.Datas,
+                        KodeMetode = model.KodeMetode,
+                        Type = "All"
+                    });
                 else
-                    await Mediator.Send(new ProsesGMMCommand() { Id = model.Id, KodeMetode = model.KodeMetode, TipeTransaksi = model.TipeTransaksi, Type = "All" });
+                    await Mediator.Send(new ProsesGMMCommand() {
+                        Datas = model.Datas,
+                        KodeMetode = model.KodeMetode,
+                        Type = "All"
+                    });
 
                 return Json(new { Result = "OK", Message = "Success Process All Data" });
             }

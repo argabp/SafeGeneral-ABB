@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -33,25 +34,19 @@ namespace ABB.Application.AkseptasiProduks.Commands
 
         public async Task<Unit> Handle(EditAkseptasiProdukCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
-                var dbContext = _contextFactory.CreateDbContext(request.DatabaseName);
-                var akseptasiProduk = dbContext.AkseptasiProduk.FirstOrDefault(w =>
-                    w.kd_cob == request.kd_cob && w.kd_scob == request.kd_scob);
+            await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
+             {
+                 var dbContext = _contextFactory.CreateDbContext(request.DatabaseName);
+                 var akseptasiProduk = dbContext.AkseptasiProduk.FirstOrDefault(w =>
+                     w.kd_cob == request.kd_cob && w.kd_scob == request.kd_scob);
 
-                if (akseptasiProduk != null)
-                {
-                    akseptasiProduk.Desc_AkseptasiProduk = request.Desc_AkseptasiProduk;
+                 if (akseptasiProduk != null)
+                 {
+                     akseptasiProduk.Desc_AkseptasiProduk = request.Desc_AkseptasiProduk;
                     
-                    await dbContext.SaveChangesAsync(cancellationToken);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.InnerException == null ? ex.Message : ex.InnerException.Message);
-                throw ex;
-            }
+                     await dbContext.SaveChangesAsync(cancellationToken);
+                 }
+             }, _logger);
 
             return Unit.Value;
         }

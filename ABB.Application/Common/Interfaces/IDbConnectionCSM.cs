@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Dapper;
 
 namespace ABB.Application.Common.Interfaces
 {
@@ -18,5 +19,6 @@ namespace ABB.Application.Common.Interfaces
         Task<IEnumerable<T>> Query<T>(string query, object param = null);
         Task<dynamic> QueryFirst(string query, object param = null);
         Task<T> QueryFirst<T>(string query, object param = null);
+        Task<SqlMapper.GridReader> QueryMultipleAsync(string query, object param = null);
     }
 }

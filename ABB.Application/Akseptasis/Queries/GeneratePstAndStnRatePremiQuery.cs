@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.Akseptasis.Queries
 {
@@ -27,21 +29,28 @@ namespace ABB.Application.Akseptasis.Queries
     {
         private readonly IDbConnectionFactory _connectionFactory;
 
-        public GeneratePstAndStnRatePremiQueryHandler(IDbConnectionFactory connectionFactory)
+        private readonly ILogger<GeneratePstAndStnRatePremiQueryHandler> _logger;
+
+        public GeneratePstAndStnRatePremiQueryHandler(IDbConnectionFactory connectionFactory,
+            ILogger<GeneratePstAndStnRatePremiQueryHandler> logger)
         {
             _connectionFactory = connectionFactory;
+            _logger = logger;
         }
 
         public async Task<List<string>> Handle(GeneratePstAndStnRatePremiQuery request, CancellationToken cancellationToken)
         {
-            _connectionFactory.CreateDbConnection(request.DatabaseName);
-            return (await _connectionFactory.QueryProc<string>("spe_uw09e02_01", 
-                new
-                {
-                    request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn,
-                    request.no_aks, request.no_updt, request.no_rsk, request.kd_endt, 
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
+            {
+                _connectionFactory.CreateDbConnection(request.DatabaseName);
+                return (await _connectionFactory.QueryProc<string>("spe_uw09e02_01", 
+                    new
+                    {
+                        request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn,
+                        request.no_aks, request.no_updt, request.no_rsk, request.kd_endt, 
                     request.flag_pkk, request.kd_cvrg
                 })).ToList();
+            }, _logger);
         }
     }
 }

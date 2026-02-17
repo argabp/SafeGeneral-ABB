@@ -82,45 +82,52 @@
         </div>
         
         @(Html.Kendo().Grid<ViewSourceData>()
-                    .Name("ViewSourceDataGrid")
-                    .DataSource(dataSource => dataSource.Ajax()
-                    .Read(read => read.Action("GetViewSourceData", "ProsesCSM").Data("dataViewSourceData"))
-                        .Model(w => w.Id(e => e.Id))
-                        .ServerOperation(false)
+            .Name("ViewSourceDataGrid")
+            .Columns(columns =>
+            {
+                columns.Select().Width(50);
+                columns.Bound(col => col.PeriodeProses).Title("Periode Proses").Format("{0:dd MMM yyyy}");
+                columns.Bound(col => col.Id).Width(100).Title("Id");
+                columns.Bound(col => col.JenisTransaksi).Title("Jenis Transaksi");
+                columns.Bound(col => col.TipeTransaksi).Title("Tipe Transaksi");
+                columns.Bound(col => col.NoReferensi).Title("No. Referensi 1");
+                columns.Bound(col => col.NoReferensi2).Title("No. Referensi 2");
+                columns.Bound(col => col.NamaReferensi).Title("Nama Referensi");
+                columns.Bound(col => col.PeriodeAwal).Title("Periode Awal").Format("{0:dd MMM yyyy}");
+                columns.Bound(col => col.PeriodeAkhir).Title("Periode Akhir").Format("{0:dd MMM yyyy}");
+                columns.Bound(col => col.JktWaktuHari).Title("JKT Waktu Hari");
+                columns.Bound(col => col.Mtu).Title("MTU");
+                columns.Bound(col => col.Premi).Title("Premi");
+                columns.Bound(col => col.Disc).Title("Disc");
+                columns.Bound(col => col.Komisi).Title("Komisi");
+                columns.Bound(col => col.BiaAkusisi).Title("Bia Akuisisi");
+                columns.Bound(col => col.Netto).Title("Netto");
+                columns.Bound(col => col.FlagProses).Title("FlagProcess");
+            })
+            .Pageable(pager => pager
+                .Refresh(true)
+                .Info(true)
+                .PageSizes(true)
             )
-                    .Columns(columns =>
-                    {
-                        columns.Select().Width(50);
-                        columns.Bound(col => col.PeriodeProses).Title("Periode Proses").Format("{0:dd MMM yyyy}");
-                        columns.Bound(col => col.Id).Width(100).Title("Id");
-                        columns.Bound(col => col.JenisTransaksi).Title("Jenis Transaksi");
-                        columns.Bound(col => col.TipeTransaksi).Title("Tipe Transaksi");
-                        columns.Bound(col => col.NoReferensi).Title("No. Referensi 1");
-                        columns.Bound(col => col.NoReferensi2).Title("No. Referensi 2");
-                        columns.Bound(col => col.NamaReferensi).Title("Nama Referensi");
-                        columns.Bound(col => col.PeriodeAwal).Title("Periode Awal").Format("{0:dd MMM yyyy}");
-                        columns.Bound(col => col.PeriodeAkhir).Title("Periode Akhir").Format("{0:dd MMM yyyy}");
-                        columns.Bound(col => col.JktWaktuHari).Title("JKT Waktu Hari");
-                        columns.Bound(col => col.Mtu).Title("MTU");
-                        columns.Bound(col => col.Premi).Title("Premi");
-                        columns.Bound(col => col.Disc).Title("Disc");
-                        columns.Bound(col => col.Komisi).Title("Komisi");
-                        columns.Bound(col => col.BiaAkusisi).Title("Bia Akuisisi");
-                        columns.Bound(col => col.Netto).Title("Netto");
-                        columns.Bound(col => col.FlagProses).Title("FlagProcess");
-                    })
-                    .Pageable(pager => pager
-                        .Refresh(true)
-                        .Info(true)
-                        .PageSizes(true)
+            .AutoBind(false)
+            .Sortable()
+            .Filterable()
+            .Scrollable()
+            .Height(380)
+            .PersistSelection(true)
+            .Resizable(a => a.Columns(true))
+            .Events(ev => ev
+                .DataBound("gridAutoFit")
+                .Change("onChangeGridViewSourceData")
             )
-                    .Sortable()
-                    .Filterable()
-                    .Scrollable()
-                    .Height(380)
-                    .PersistSelection()
-                    .Resizable(a=>a.Columns(true))
-                    .Events(ev => ev.DataBound("gridAutoFit")))
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .PageSize(25)
+                .ServerOperation(true)
+                .Model(model => model.Id(e => e.Id))
+                .Read(read => read.Action("GetViewSourceData", "ProsesCSM").Data("dataViewSourceData"))
+            )
+        )
     </div>
 </div>
 

@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.CancelCSM.Configs;
+using ABB.Application.Common.Grids.Interfaces;
+using ABB.Application.Common.Grids.Models;
 using ABB.Application.Common.Interfaces;
 using ABB.Application.Common.Services;
 using ABB.Domain.Entities;
@@ -9,38 +12,36 @@ using MediatR;
 
 namespace ABB.Application.CancelCSM.Queries
 {
-    public class GetViewSourceDataCancelQuery : IRequest<List<ViewSourceDataCancel>>
+    public class GetViewSourceDataCancelQuery : IRequest<GridResponse<ViewSourceDataCancel>>
     {
+        public GridRequest Grid { get; set; }
         public string KodeMetode { get; set; }
     }
 
-    public class GetViewSourceDataCancelQueryHandler : IRequestHandler<GetViewSourceDataCancelQuery, List<ViewSourceDataCancel>>
+    public class GetViewSourceDataCancelQueryHandler : IRequestHandler<GetViewSourceDataCancelQuery, GridResponse<ViewSourceDataCancel>>
     {
         private readonly IDbContextCSM _dbContextCsm;
+        private readonly IGridQueryEngine _gridEngine;
 
-        public GetViewSourceDataCancelQueryHandler(IDbContextCSM dbContextCsm)
+        public GetViewSourceDataCancelQueryHandler(IDbContextCSM dbContextCsm, IGridQueryEngine gridEngine)
         {
             _dbContextCsm = dbContextCsm;
+            _gridEngine = gridEngine;
         }
 
-        public async Task<List<ViewSourceDataCancel>> Handle(GetViewSourceDataCancelQuery request,
+        public async Task<GridResponse<ViewSourceDataCancel>> Handle(GetViewSourceDataCancelQuery request,
             CancellationToken cancellationToken)
         {
-            await Task.Delay(0, cancellationToken);
+            var config = CancelCSMGridConfig.Create();
 
-            List<ViewSourceDataCancel> viewSourceDatas;
-                
-            if(string.IsNullOrWhiteSpace(request.KodeMetode))
-                viewSourceDatas = 
-                    _dbContextCsm.ViewSourceDataCancel
-                        .Where(w => w.KodeMetode == request.KodeMetode).ToList();
-            else if(string.IsNullOrWhiteSpace(request.KodeMetode))
-                viewSourceDatas = _dbContextCsm.ViewSourceDataCancel.ToList();
-            else
-                viewSourceDatas = _dbContextCsm.ViewSourceDataCancel
-                    .Where(w => w.KodeMetode == request.KodeMetode).ToList();
-
-            return viewSourceDatas;
+            return await _gridEngine.QueryAsyncCSM<ViewSourceDataCancel>(
+                request.Grid,
+                config,
+                new
+                {
+                    request.KodeMetode
+                }
+            );
         }
     }
 }

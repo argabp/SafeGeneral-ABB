@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.Akseptasis.Queries
 {
@@ -32,16 +34,21 @@ namespace ABB.Application.Akseptasis.Queries
     public class GetAkseptasiObyeksQueryHandler : IRequestHandler<GetAkseptasiObyeksQuery, List<AkseptasiObyekDto>>
     {
         private readonly IDbConnectionFactory _connectionFactory;
+        private readonly ILogger<GetAkseptasiObyeksQueryHandler> _logger;
 
-        public GetAkseptasiObyeksQueryHandler(IDbConnectionFactory connectionFactory)
+        public GetAkseptasiObyeksQueryHandler(IDbConnectionFactory connectionFactory,
+            ILogger<GetAkseptasiObyeksQueryHandler> logger)
         {
             _connectionFactory = connectionFactory;
+            _logger = logger;
         }
 
         public async Task<List<AkseptasiObyekDto>> Handle(GetAkseptasiObyeksQuery request, CancellationToken cancellationToken)
         {
-            _connectionFactory.CreateDbConnection(request.DatabaseName);
-            return (await _connectionFactory.Query<AkseptasiObyekDto>(@"SELECT p.*
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
+            {
+                _connectionFactory.CreateDbConnection(request.DatabaseName);
+                return (await _connectionFactory.Query<AkseptasiObyekDto>(@"SELECT p.*
 				FROM uw06a01 p
 				WHERE p.kd_cb = @KodeCabang AND 
 				      p.kd_cob = @kd_cob AND 
@@ -56,6 +63,7 @@ namespace ABB.Application.Akseptasis.Queries
 		            request.no_aks, request.no_updt, request.no_rsk,
 		            request.kd_endt
 	            })).ToList();
+            }, _logger);
         }
     }
 }

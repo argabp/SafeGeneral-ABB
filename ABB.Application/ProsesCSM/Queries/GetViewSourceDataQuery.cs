@@ -2,47 +2,47 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Grids.Interfaces;
+using ABB.Application.Common.Grids.Models;
 using ABB.Application.Common.Interfaces;
 using ABB.Application.Common.Services;
+using ABB.Application.ProsesCSM.Configs;
 using ABB.Domain.Entities;
 using MediatR;
 
 namespace ABB.Application.ProsesCSM.Queries
 {
-    public class GetViewSourceDataQuery : IRequest<List<ViewSourceData>>
+    public class GetViewSourceDataQuery : IRequest<GridResponse<ViewSourceData>>
     {
-        // public string TipeTransaksi { get; set; }
+        public GridRequest Grid { get; set; }
 
         public string KodeMetode { get; set; }
     }
 
-    public class GetViewSourceDataQueryHandler : IRequestHandler<GetViewSourceDataQuery, List<ViewSourceData>>
+    public class GetViewSourceDataQueryHandler : IRequestHandler<GetViewSourceDataQuery, GridResponse<ViewSourceData>>
     {
         private readonly IDbContextCSM _dbContextCsm;
+        private readonly IGridQueryEngine _gridEngine;
 
-        public GetViewSourceDataQueryHandler(IDbContextCSM dbContextCsm)
+        public GetViewSourceDataQueryHandler(IDbContextCSM dbContextCsm, IGridQueryEngine gridEngine)
         {
             _dbContextCsm = dbContextCsm;
+            _gridEngine = gridEngine;
         }
 
-        public async Task<List<ViewSourceData>> Handle(GetViewSourceDataQuery request,
+        public async Task<GridResponse<ViewSourceData>> Handle(GetViewSourceDataQuery request,
             CancellationToken cancellationToken)
         {
-            await Task.Delay(0, cancellationToken);
+            var config = ProsesCSMGridConfig.Create();
 
-            List<ViewSourceData> viewSourceDatas;
-                
-            if(string.IsNullOrWhiteSpace(request.KodeMetode))
-                viewSourceDatas = 
-                    _dbContextCsm.ViewSourceData
-                        .Where(w => w.KodeMetode == request.KodeMetode).ToList();
-            else if(string.IsNullOrWhiteSpace(request.KodeMetode))
-                viewSourceDatas = _dbContextCsm.ViewSourceData.ToList();
-            else
-                viewSourceDatas = _dbContextCsm.ViewSourceData
-                .Where(w => w.KodeMetode == request.KodeMetode).ToList();
-
-            return viewSourceDatas;
+            return await _gridEngine.QueryAsyncCSM<ViewSourceData>(
+                request.Grid,
+                config,
+                new
+                {
+                    request.KodeMetode
+                }
+            );
         }
     }
 }

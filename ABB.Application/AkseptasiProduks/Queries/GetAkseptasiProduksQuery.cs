@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -29,7 +30,7 @@ namespace ABB.Application.AkseptasiProduks.Queries
         public async Task<List<AkseptasiProdukDto>> Handle(GetAkseptasiProduksQuery request,
             CancellationToken cancellationToken)
         {
-            try
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
                 var results = (await _connectionFactory.Query<AkseptasiProdukDto>(@"SELECT p.*, cob.nm_cob, scob.nm_scob
@@ -51,12 +52,7 @@ namespace ABB.Application.AkseptasiProduks.Queries
                 }
 
                 return results;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                throw;
-            }
+            }, _logger);
         }
     }
 }

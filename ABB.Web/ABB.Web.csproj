@@ -5,7 +5,6 @@
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <UserSecretsId>aspnet-ABB.Web-F133BCEE-C9A0-4E02-A3A9-A0423E23F60C</UserSecretsId>
     </PropertyGroup>
-
     <ItemGroup>
       <_ContentIncludedByDefault Remove="wwwroot\css\site.css" />
       <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css" />
@@ -4809,6 +4808,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\ABB.Infrastructure\ABB.Infrastructure.csproj" />
+      <ProjectReference Include="..\ABB.Application\ABB.Application.csproj" />
     </ItemGroup>
 
     <ItemGroup>

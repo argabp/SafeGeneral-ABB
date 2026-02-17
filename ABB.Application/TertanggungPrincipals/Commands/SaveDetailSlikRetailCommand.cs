@@ -3,6 +3,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using ABB.Domain.Entities;
 using AutoMapper;
@@ -84,7 +85,7 @@ namespace ABB.Application.TertanggungPrincipals.Commands
 
         public async Task<Unit> Handle(SaveDetailSlikRetailCommand request, CancellationToken cancellationToken)
         {
-            try
+            await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
             {
                 var dbContext = _contextFactory.CreateDbContext(request.DatabaseName);
 
@@ -124,23 +125,7 @@ namespace ABB.Application.TertanggungPrincipals.Commands
                     _mapper.Map(request, detailSlik);
 
                 await dbContext.SaveChangesAsync(cancellationToken);
-            }
-            catch (DbUpdateException ex)
-            {
-                if (ex.InnerException is SqlException sqlEx)
-                {
-                    foreach (SqlError err in sqlEx.Errors)
-                    {
-                        _logger.LogError($"SQL ERROR {err.Number}: {err.Message}");
-                    }
-                }
-                throw ex.InnerException ?? ex;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.InnerException == null ? ex.Message : ex.InnerException.Message);
-                throw ex.InnerException ?? ex;
-            }
+            }, _logger);
 
             return Unit.Value;
         }

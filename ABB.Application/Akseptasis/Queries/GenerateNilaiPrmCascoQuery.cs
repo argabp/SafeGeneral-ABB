@@ -1,8 +1,10 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.Akseptasis.Queries
 {
@@ -20,16 +22,23 @@ namespace ABB.Application.Akseptasis.Queries
     {
         private readonly IDbConnectionFactory _connectionFactory;
 
-        public GenerateNilaiPrmCascoQueryHandler(IDbConnectionFactory connectionFactory)
+        private readonly ILogger<GenerateNilaiPrmCascoQueryHandler> _logger;
+
+        public GenerateNilaiPrmCascoQueryHandler(IDbConnectionFactory connectionFactory,
+            ILogger<GenerateNilaiPrmCascoQueryHandler> logger)
         {
             _connectionFactory = connectionFactory;
+            _logger = logger;
         }
 
         public async Task<string> Handle(GenerateNilaiPrmCascoQuery request, CancellationToken cancellationToken)
         {
-            _connectionFactory.CreateDbConnection(request.DatabaseName);
-            return (await _connectionFactory.QueryProc<string>("spe_uw02e_23", 
-                new { request.kd_guna, request.nilai_casco, request.pst_rate_prm, request.stn_rate_prm, request.nilai_tjh })).FirstOrDefault();
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
+            {
+                _connectionFactory.CreateDbConnection(request.DatabaseName);
+                return (await _connectionFactory.QueryProc<string>("spe_uw02e_23", 
+                    new { request.kd_guna, request.nilai_casco, request.pst_rate_prm, request.stn_rate_prm, request.nilai_tjh })).FirstOrDefault();
+            }, _logger);
         }
     }
 }

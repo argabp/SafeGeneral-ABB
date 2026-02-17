@@ -2,8 +2,10 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using ABB.Application.Common.Exceptions;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.Akseptasis.Commands
 {
@@ -33,26 +35,33 @@ namespace ABB.Application.Akseptasis.Commands
     {
         private readonly IDbContextFactory _contextFactory;
 
-        public DeleteAkseptasiCoverageCommandHandler(IDbContextFactory contextFactory)
+        private readonly ILogger<DeleteAkseptasiCoverageCommandHandler> _logger;
+
+        public DeleteAkseptasiCoverageCommandHandler(IDbContextFactory contextFactory,
+            ILogger<DeleteAkseptasiCoverageCommandHandler> logger)
         {
             _contextFactory = contextFactory;
+            _logger = logger;
         }
 
         public async Task<Unit> Handle(DeleteAkseptasiCoverageCommand request, CancellationToken cancellationToken)
         {
-            var dbContext = _contextFactory.CreateDbContext(request.DatabaseName);
-            var entity = await dbContext.AkseptasiCoverage.FindAsync(request.kd_cb, 
-                request.kd_cob, request.kd_scob, request.kd_thn, request.no_aks, request.no_updt,
-                request.no_rsk, request.kd_endt, request.kd_cvrg);
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
+            {
+                var dbContext = _contextFactory.CreateDbContext(request.DatabaseName);
+                var entity = await dbContext.AkseptasiCoverage.FindAsync(request.kd_cb, 
+                    request.kd_cob, request.kd_scob, request.kd_thn, request.no_aks, request.no_updt,
+                    request.no_rsk, request.kd_endt, request.kd_cvrg);
 
-            if (entity == null)
-                throw new NotFoundException();
+                if (entity == null)
+                    throw new NotFoundException();
 
-            dbContext.AkseptasiCoverage.Remove(entity);
+                dbContext.AkseptasiCoverage.Remove(entity);
 
-            await dbContext.SaveChangesAsync(cancellationToken);
-            
-            return Unit.Value;
+                await dbContext.SaveChangesAsync(cancellationToken);
+                
+                return Unit.Value;
+            }, _logger);
         }
     }
 }

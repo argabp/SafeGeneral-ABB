@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.Akseptasis.Queries
 {
@@ -32,46 +34,36 @@ namespace ABB.Application.Akseptasis.Queries
     public class GetAkseptasiCoveragesQueryHandler : IRequestHandler<GetAkseptasiCoveragesQuery, List<AkseptasiCoverageDto>>
     {
         private readonly IDbConnectionFactory _connectionFactory;
+        private readonly ILogger<GetAkseptasiCoveragesQueryHandler> _logger;
 
-        public GetAkseptasiCoveragesQueryHandler(IDbConnectionFactory connectionFactory)
+        public GetAkseptasiCoveragesQueryHandler(IDbConnectionFactory connectionFactory,
+            ILogger<GetAkseptasiCoveragesQueryHandler> logger)
         {
             _connectionFactory = connectionFactory;
+            _logger = logger;
         }
 
         public async Task<List<AkseptasiCoverageDto>> Handle(GetAkseptasiCoveragesQuery request, CancellationToken cancellationToken)
         {
-            _connectionFactory.CreateDbConnection(request.DatabaseName);
-            return (await _connectionFactory.Query<AkseptasiCoverageDto>(@"SELECT p.*
-				FROM uw05a p
-				WHERE p.kd_cb = @KodeCabang AND 
-				      p.kd_cob = @kd_cob AND 
-				      p.kd_scob = @kd_scob AND 
-				      p.kd_thn = @kd_thn AND 
-				      p.no_aks = @no_aks AND 
-				      p.no_updt = @no_updt AND
-				      p.no_rsk = @no_rsk AND
-				      p.kd_endt = @kd_endt", 
-	            new { request.SearchKeyword, request.KodeCabang, 
-		            request.kd_cob, request.kd_scob, request.kd_thn,
-		            request.no_aks, request.no_updt, request.no_rsk,
-		            request.kd_endt
-	            })).ToList();
-    //         return (await _connectionFactory.Query<AkseptasiResikoDto>(@"SELECT p.*, cb.nm_cb, cob.nm_cob, scob.nm_scob
-				// FROM uw04a p
-				// 	INNER JOIN rf01 cb
-				// 		ON p.kd_cb = cb.kd_cb
-				// 	INNER JOIN rf04 cob
-				// 		ON p.kd_cob = cob.kd_cob
-				// 	INNER JOIN rf05 scob
-				// 		ON p.kd_scob = scob.kd_scob
-				// WHERE cb.kd_cb = @KodeCabang AND (p.no_aks like '%'+@SearchKeyword+'%' 
-				// 	OR p.no_pol_pas like '%'+@SearchKeyword+'%' 
-				// 	OR p.st_pas like '%'+@SearchKeyword+'%' 
-				// 	OR cb.nm_cb like '%'+@SearchKeyword+'%' 
-				// 	OR cob.nm_cob like '%'+@SearchKeyword+'%' 
-				// 	OR scob.nm_scob like '%'+@SearchKeyword+'%' 
-				// 	OR p.nm_ttg like '%'+@SearchKeyword+'%' 
-				// 	OR @SearchKeyword = '' OR @SearchKeyword IS NULL)", new { request.SearchKeyword, request.KodeCabang })).ToList();
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
+			{
+				_connectionFactory.CreateDbConnection(request.DatabaseName);
+				return (await _connectionFactory.Query<AkseptasiCoverageDto>(@"SELECT p.*
+					FROM uw05a p
+					WHERE p.kd_cb = @KodeCabang AND 
+						p.kd_cob = @kd_cob AND 
+						p.kd_scob = @kd_scob AND 
+						p.kd_thn = @kd_thn AND 
+						p.no_aks = @no_aks AND 
+						p.no_updt = @no_updt AND
+						p.no_rsk = @no_rsk AND
+						p.kd_endt = @kd_endt", 
+					new { request.SearchKeyword, request.KodeCabang, 
+						request.kd_cob, request.kd_scob, request.kd_thn,
+						request.no_aks, request.no_updt, request.no_rsk,
+						request.kd_endt
+					})).ToList();
+			}, _logger);
         }
     }
 }

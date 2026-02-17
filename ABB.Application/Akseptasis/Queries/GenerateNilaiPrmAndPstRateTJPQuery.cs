@@ -2,8 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.Akseptasis.Queries
 {
@@ -20,16 +22,23 @@ namespace ABB.Application.Akseptasis.Queries
     {
         private readonly IDbConnectionFactory _connectionFactory;
 
-        public GenerateNilaiPrmAndPstRateTJPQueryHandler(IDbConnectionFactory connectionFactory)
+        private readonly ILogger<GenerateNilaiPrmAndPstRateTJPQueryHandler> _logger;
+
+        public GenerateNilaiPrmAndPstRateTJPQueryHandler(IDbConnectionFactory connectionFactory,
+            ILogger<GenerateNilaiPrmAndPstRateTJPQueryHandler> logger)
         {
             _connectionFactory = connectionFactory;
+            _logger = logger;
         }
 
         public async Task<List<string>> Handle(GenerateNilaiPrmAndPstRateTJPQuery request, CancellationToken cancellationToken)
         {
-            _connectionFactory.CreateDbConnection(request.DatabaseName);
-            return (await _connectionFactory.QueryProc<string>("spe_uw09e01_08", 
-                new { request.kd_jns_kend, request.kd_wilayah, request.kd_jns_ptg, nilai_tjh = request.nilai_tjp })).ToList();
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
+            {
+                _connectionFactory.CreateDbConnection(request.DatabaseName);
+                return (await _connectionFactory.QueryProc<string>("spe_uw09e01_08", 
+                    new { request.kd_jns_kend, request.kd_wilayah, request.kd_jns_ptg, nilai_tjh = request.nilai_tjp })).ToList();
+            }, _logger);
         }
     }
 }

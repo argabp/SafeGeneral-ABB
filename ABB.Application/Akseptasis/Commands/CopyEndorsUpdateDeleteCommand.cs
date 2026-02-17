@@ -1,7 +1,9 @@
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.Akseptasis.Commands
 {
@@ -23,24 +25,30 @@ namespace ABB.Application.Akseptasis.Commands
     {
         private readonly IDbConnectionFactory _connectionFactory;
 
-        public CopyEndorsUpdateDeleteCommandHandler(IDbConnectionFactory connectionFactory)
+        private readonly ILogger<CopyEndorsUpdateDeleteCommandHandler> _logger;
+
+        public CopyEndorsUpdateDeleteCommandHandler(IDbConnectionFactory connectionFactory,
+            ILogger<CopyEndorsUpdateDeleteCommandHandler> logger)
         {
             _connectionFactory = connectionFactory;
+            _logger = logger;
         }
 
         public async Task<Unit> Handle(CopyEndorsUpdateDeleteCommand request, CancellationToken cancellationToken)
         {
-            _connectionFactory.CreateDbConnection(request.DatabaseName);
-            await _connectionFactory.QueryProc("spe_uw02e_18",
-                new
-                {
-                    request.kd_cb, request.kd_cob, request.kd_scob,
-                    request.kd_thn, request.no_aks, request.no_updt,
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
+            {
+                _connectionFactory.CreateDbConnection(request.DatabaseName);
+                await _connectionFactory.QueryProc("spe_uw02e_18",
+                    new
+                    {
+                        request.kd_cb, request.kd_cob, request.kd_scob,
+                        request.kd_thn, request.no_aks, request.no_updt,
                     request.no_rsk, request.kd_endt, request.flag_endt
                 });
 
-            return Unit.Value;
-
+                return Unit.Value;
+            }, _logger);
         }
     }
 }

@@ -1,8 +1,10 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.Akseptasis.Queries
 {
@@ -18,16 +20,23 @@ namespace ABB.Application.Akseptasis.Queries
     {
         private readonly IDbConnectionFactory _connectionFactory;
 
-        public GenerateNilaiPrmTRSQueryHandler(IDbConnectionFactory connectionFactory)
+        private readonly ILogger<GenerateNilaiPrmTRSQueryHandler> _logger;
+
+        public GenerateNilaiPrmTRSQueryHandler(IDbConnectionFactory connectionFactory,
+            ILogger<GenerateNilaiPrmTRSQueryHandler> logger)
         {
             _connectionFactory = connectionFactory;
+            _logger = logger;
         }
 
         public async Task<string> Handle(GenerateNilaiPrmTRSQuery request, CancellationToken cancellationToken)
         {
-            _connectionFactory.CreateDbConnection(request.DatabaseName);
-            return (await _connectionFactory.QueryProc<string>("spe_uw02e_94", 
-                new { request.nilai_casco, request.pst_rate_trs, request.stn_rate_trs })).FirstOrDefault();
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
+            {
+                _connectionFactory.CreateDbConnection(request.DatabaseName);
+                return (await _connectionFactory.QueryProc<string>("spe_uw02e_94", 
+                    new { request.nilai_casco, request.pst_rate_trs, request.stn_rate_trs })).FirstOrDefault();
+            }, _logger);
         }
     }
 }

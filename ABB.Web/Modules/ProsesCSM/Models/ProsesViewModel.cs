@@ -1,12 +1,11 @@
 using System.Collections.Generic;
+using ABB.Application.ProsesCSM.Queries;
 
 namespace ABB.Web.Modules.ProsesCSM.Models
 {
     public class ProsesViewModel
     {
-        public List<long> Id { get; set; }
-
-        public string TipeTransaksi { get; set; }
+        public List<ProsesCSMDto> Datas { get; set; }
         
         public string KodeMetode { get; set; }
     }

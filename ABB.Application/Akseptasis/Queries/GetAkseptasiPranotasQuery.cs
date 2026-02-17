@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.Akseptasis.Queries
 {
@@ -28,15 +30,18 @@ namespace ABB.Application.Akseptasis.Queries
     public class GetAkseptasiPranotasQueryHandler : IRequestHandler<GetAkseptasiPranotasQuery, List<AkseptasiPranotaDto>>
     {
         private readonly IDbConnectionFactory _connectionFactory;
+        private readonly ILogger<GetAkseptasiPranotasQueryHandler> _logger;
 
-        public GetAkseptasiPranotasQueryHandler(IDbConnectionFactory connectionFactory)
+        public GetAkseptasiPranotasQueryHandler(IDbConnectionFactory connectionFactory,
+            ILogger<GetAkseptasiPranotasQueryHandler> logger)
         {
             _connectionFactory = connectionFactory;
+            _logger = logger;
         }
 
         public async Task<List<AkseptasiPranotaDto>> Handle(GetAkseptasiPranotasQuery request, CancellationToken cancellationToken)
         {
-            try
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
                 var results = (await _connectionFactory.Query<AkseptasiPranotaDto>(@"SELECT p.*, r.nm_mtu 
@@ -62,12 +67,7 @@ namespace ABB.Application.Akseptasis.Queries
                 }
 
                 return results;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            }, _logger);
             
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.CancelCSM.Queries;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Interfaces;
 using ABB.Domain.Entities;
@@ -11,26 +12,24 @@ using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.CancelCSM.Commands
 {
-    public class ProsesGMMCommand : IRequest
+    public class CancelGMMCommand : IRequest
     {
         public string Type { get; set; }
         
-        public List<long> Id { get; set; }
-
-        public string? TipeTransaksi { get; set; }
+        public List<CancelCSMDto> Datas { get; set; }
 
         public string KodeMetode { get; set; }
     }
     
-    public class ProsesGMMCommandHandler : IRequestHandler<ProsesGMMCommand>
+    public class CancelGMMCommandHandler : IRequestHandler<CancelGMMCommand>
     {
         private readonly IDbConnectionCSM _db;
         private readonly IDbContextCSM _context;
         private readonly ProgressBarDto _progressBarDto;
-        private readonly ILogger<ProsesGMMCommandHandler> _logger;
+        private readonly ILogger<CancelGMMCommandHandler> _logger;
 
-        public ProsesGMMCommandHandler(IDbConnectionCSM db, IDbContextCSM context, ProgressBarDto progressBarDto,
-            ILogger<ProsesGMMCommandHandler> logger)
+        public CancelGMMCommandHandler(IDbConnectionCSM db, IDbContextCSM context, ProgressBarDto progressBarDto,
+            ILogger<CancelGMMCommandHandler> logger)
         {
             _db = db;
             _context = context;
@@ -38,31 +37,40 @@ namespace ABB.Application.CancelCSM.Commands
             _logger = logger;
         }
     
-        public async Task<Unit> Handle(ProsesGMMCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(CancelGMMCommand request, CancellationToken cancellationToken)
         {
             try
             {
-                List<ViewSourceDataCancel> viewSourceDatas;
+                List<CancelCSMDto> viewSourceDatas;
 
                 if (request.Type == "All")
                     viewSourceDatas = _context.ViewSourceDataCancel.Where(w =>
-                        request.KodeMetode == w.KodeMetode).ToList();
+                        request.KodeMetode == w.KodeMetode).Select(s => new CancelCSMDto()
+                        {
+                            Id = s.Id,
+                            PeriodeProses = s.PeriodeProses
+                        }).ToList();
                 else
-                    viewSourceDatas = _context.ViewSourceDataCancel.Where(w => request.Id.Contains(w.Id)).ToList();
-                
+                {
+                    viewSourceDatas = request.Datas;
+                }
+
                 var totalData = viewSourceDatas.Count;
             
                 _progressBarDto.Total = totalData;
                 _progressBarDto.Remaining = 0;
             
-                for (int sequence = 0; sequence < totalData; sequence++)
+                var sequence = 0;
+
+                foreach (var data in viewSourceDatas)
                 {
-                    _progressBarDto.Remaining = sequence + 1;
+                    sequence++;
+                    _progressBarDto.Remaining = sequence;
 
                     await _db.QueryProc("spp_CancelationGMM",
                         new
                         {
-                            idNotaRisiko = viewSourceDatas[sequence].Id, PeriodeProses = viewSourceDatas[sequence].PeriodeProses.Date
+                            idNotaRisiko = data.Id, PeriodeProses = data.PeriodeProses.Date
                         });   
                 }
             }

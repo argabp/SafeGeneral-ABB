@@ -1,9 +1,11 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.Akseptasis.Queries
 {
@@ -33,25 +35,31 @@ namespace ABB.Application.Akseptasis.Queries
     {
         private readonly IDbContextFactory _contextFactory;
         private readonly IMapper _mapper;
+        private readonly ILogger<GetAkseptasiObyekQueryHandler> _logger;
 
-        public GetAkseptasiObyekQueryHandler(IDbContextFactory contextFactory, IMapper mapper)
+        public GetAkseptasiObyekQueryHandler(IDbContextFactory contextFactory, IMapper mapper,
+            ILogger<GetAkseptasiObyekQueryHandler> logger)
         {
             _contextFactory = contextFactory;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<AkseptasiObyekDto> Handle(GetAkseptasiObyekQuery request, CancellationToken cancellationToken)
         {
-            var dbContext = _contextFactory.CreateDbContext(request.DatabaseName);
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
+            {
+                var dbContext = _contextFactory.CreateDbContext(request.DatabaseName);
                 
-            var akseptasiResiko = await dbContext.AkseptasiObyek.FindAsync(request.kd_cb, 
-                request.kd_cob, request.kd_scob, request.kd_thn, request.no_aks, request.no_updt, 
-                request.no_rsk, request.kd_endt, request.no_oby);
-                                         
-            if (akseptasiResiko == null)
-                throw new NullReferenceException();
+                var akseptasiResiko = await dbContext.AkseptasiObyek.FindAsync(request.kd_cb, 
+                    request.kd_cob, request.kd_scob, request.kd_thn, request.no_aks, request.no_updt, 
+                    request.no_rsk, request.kd_endt, request.no_oby);
+                                            
+                if (akseptasiResiko == null)
+                    throw new NullReferenceException();
 
-            return _mapper.Map<AkseptasiObyekDto>(akseptasiResiko);
+                return _mapper.Map<AkseptasiObyekDto>(akseptasiResiko);
+            }, _logger);
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using ABB.Domain.Entities;
 using MediatR;
@@ -32,19 +33,14 @@ namespace ABB.Application.TertanggungPrincipals.Queries
         public async Task<DetailSlik> Handle(GetDetailSlikQuery request,
             CancellationToken cancellationToken)
         {
-            try
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
             {
                 await Task.Delay(0, cancellationToken);
 
                 var dbContext = _contextFactory.CreateDbContext(request.DatabaseName);
                 return dbContext.DetailSlik.FirstOrDefault(w =>
                     w.kd_cb == request.kd_cb.Trim() && w.kd_grp_rk == request.kd_grp_rk.Trim() && w.kd_rk == request.kd_rk);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                throw;
-            }
+            }, _logger);
         }
     }
 }

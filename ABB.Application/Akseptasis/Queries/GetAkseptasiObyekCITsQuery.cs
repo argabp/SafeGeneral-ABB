@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.Akseptasis.Queries
 {
@@ -32,16 +34,21 @@ namespace ABB.Application.Akseptasis.Queries
     public class GetAkseptasiObyekCITsQueryHandler : IRequestHandler<GetAkseptasiObyekCITsQuery, List<AkseptasiObyekCITDto>>
     {
         private readonly IDbConnectionFactory _connectionFactory;
+        private readonly ILogger<GetAkseptasiObyekCITsQueryHandler> _logger;
 
-        public GetAkseptasiObyekCITsQueryHandler(IDbConnectionFactory connectionFactory)
+        public GetAkseptasiObyekCITsQueryHandler(IDbConnectionFactory connectionFactory,
+            ILogger<GetAkseptasiObyekCITsQueryHandler> logger)
         {
             _connectionFactory = connectionFactory;
+            _logger = logger;
         }
 
         public async Task<List<AkseptasiObyekCITDto>> Handle(GetAkseptasiObyekCITsQuery request, CancellationToken cancellationToken)
         {
-            _connectionFactory.CreateDbConnection(request.DatabaseName);
-            return (await _connectionFactory.Query<AkseptasiObyekCITDto>(@"SELECT p.*, r.nm_lok nm_asal 
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
+            {
+                _connectionFactory.CreateDbConnection(request.DatabaseName);
+                return (await _connectionFactory.Query<AkseptasiObyekCITDto>(@"SELECT p.*, r.nm_lok nm_asal 
 				FROM uw06a02 p
 				    INNER JOIN rf19 r
 						ON r.kd_lok = p.kd_lok_asal
@@ -58,6 +65,7 @@ namespace ABB.Application.Akseptasis.Queries
                     request.no_aks, request.no_updt, request.no_rsk,
                     request.kd_endt
                 })).ToList();
+            }, _logger);
         }
     }
 }

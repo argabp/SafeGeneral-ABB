@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.Akseptasis.Queries
 {
@@ -30,22 +32,27 @@ namespace ABB.Application.Akseptasis.Queries
     public class GenerateDataOtherPAQueryHandler : IRequestHandler<GenerateDataOtherPAQuery, List<string>>
     {
         private readonly IDbConnectionFactory _connectionFactory;
-
-        public GenerateDataOtherPAQueryHandler(IDbConnectionFactory connectionFactory)
+        private readonly ILogger<GenerateDataOtherPAQueryHandler> _logger;
+        public GenerateDataOtherPAQueryHandler(IDbConnectionFactory connectionFactory, 
+            ILogger<GenerateDataOtherPAQueryHandler> logger)
         {
             _connectionFactory = connectionFactory;
+            _logger = logger;
         }
 
         public async Task<List<string>> Handle(GenerateDataOtherPAQuery request, CancellationToken cancellationToken)
         {
-            _connectionFactory.CreateDbConnection(request.DatabaseName);
-            return (await _connectionFactory.QueryProc<string>("spe_kp02e_07_srm", new
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
             {
-                kd_cb_pol = request.no_pol_ttg, request.kd_jns_kr, request.kd_grp_kr, request.jk_wkt,
-                request.usia_deb, nilai_jup = request.nilai_harga_ptg, request.flag_std, request.pst_rate_std,
-                request.flag_bjr, request.pst_rate_bjr, request.flag_gb, request.pst_rate_gb,
-                request.flag_tl, request.pst_rate_tl, 
-            })).ToList();
+                _connectionFactory.CreateDbConnection(request.DatabaseName);
+                return (await _connectionFactory.QueryProc<string>("spe_kp02e_07_srm", new
+                {
+                    kd_cb_pol = request.no_pol_ttg, request.kd_jns_kr, request.kd_grp_kr, request.jk_wkt,
+                    request.usia_deb, nilai_jup = request.nilai_harga_ptg, request.flag_std, request.pst_rate_std,
+                    request.flag_bjr, request.pst_rate_bjr, request.flag_gb, request.pst_rate_gb,
+                    request.flag_tl, request.pst_rate_tl, 
+                })).ToList();
+            }, _logger);
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ABB.Application.Common.Dtos;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -35,19 +36,14 @@ namespace ABB.Application.Akseptasis.Queries
         public async Task<List<DropdownOptionDto>> Handle(GetKodeKelurahanQuery request,
             CancellationToken cancellationToken)
         {
-            try
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
                 return (await _connectionFactory.Query<DropdownOptionDto>("SELECT RTRIM(LTRIM(kd_kel)) Value, nm_kel Text " +
                                                                           "FROM rf07_03 WHERE kd_prop = @kd_prop AND " +
                                                                           "kd_kab = @kd_kab AND kd_kec = @kd_kec", 
                     new { request.kd_prop, request.kd_kab, request.kd_kec })).ToList();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                throw;
-            }
+            }, _logger);
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -36,7 +37,7 @@ namespace ABB.Application.Akseptasis.Queries
         public async Task<List<string>> Handle(GetKodeOkupasiDetailQuery request,
             CancellationToken cancellationToken)
         {
-            try
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
                 return (await _connectionFactory.QueryProc<string>("spe_uw02e_51", new
@@ -44,12 +45,7 @@ namespace ABB.Application.Akseptasis.Queries
                     key = string.Empty, request.kd_zona, request.kd_kls_konstr,
                     request.kd_okup, request.kd_scob
                 })).ToList();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                throw;
-            }
+            }, _logger);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿@using ABB.Domain.Entities
 @using Kendo.Mvc.UI
-@model ABB.Web.Modules.ProsesCSM.Models.ProsesCSMViewModel
+@model ABB.Web.Modules.CancelCSM.Models.CancelCSMViewModel
 @using Microsoft.Extensions.Configuration
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Kendo.Mvc
@@ -86,7 +86,7 @@
                     .DataSource(dataSource => dataSource.Ajax()
                     .Read(read => read.Action("GetViewSourceData", "CancelCSM").Data("dataViewSourceDataCancel"))
                         .Model(w => w.Id(e => e.Id))
-                        .ServerOperation(false)
+                        .ServerOperation(true).PageSize(25)
             )
                     .Columns(columns =>
                     {
@@ -120,7 +120,8 @@
                     .Height(380)
                     .PersistSelection()
                     .Resizable(a=>a.Columns(true))
-                    .Events(ev => ev.DataBound("gridAutoFit")))
+                    .Events(ev => ev.DataBound("gridAutoFit")
+                        .Change("onChangeGridViewSourceData")))
     </div>
 </div>
 

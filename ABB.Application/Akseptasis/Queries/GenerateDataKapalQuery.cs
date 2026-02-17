@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.Akseptasis.Queries
 {
@@ -17,16 +19,22 @@ namespace ABB.Application.Akseptasis.Queries
     public class GenerateDataKapalQueryHandler : IRequestHandler<GenerateDataKapalQuery, List<string>>
     {
         private readonly IDbConnectionFactory _connectionFactory;
-
-        public GenerateDataKapalQueryHandler(IDbConnectionFactory connectionFactory)
+        private readonly ILogger<GenerateDataKapalQueryHandler> _logger;
+        
+        public GenerateDataKapalQueryHandler(IDbConnectionFactory connectionFactory,
+            ILogger<GenerateDataKapalQueryHandler> logger)
         {
             _connectionFactory = connectionFactory;
+            _logger = logger;
         }
 
         public async Task<List<string>> Handle(GenerateDataKapalQuery request, CancellationToken cancellationToken)
         {
-            _connectionFactory.CreateDbConnection(request.DatabaseName);
-            return (await _connectionFactory.QueryProc<string>("spe_uw02e_03b", new { request.kd_kapal })).ToList();
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
+            {
+                _connectionFactory.CreateDbConnection(request.DatabaseName);
+                return (await _connectionFactory.QueryProc<string>("spe_uw02e_03b", new { request.kd_kapal })).ToList();
+            }, _logger);
         }
     }
 }

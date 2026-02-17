@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using ABB.Application.Rekanans.Queries;
 using MediatR;
@@ -35,7 +36,7 @@ namespace ABB.Application.TertanggungPrincipals.Queries
         public async Task<List<RekananDto>> Handle(GetTertanggungPrincipalsQuery request,
             CancellationToken cancellationToken)
         {
-            try
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
             {
                 _connectionFactory.CreateDbConnection(request.DatabaseName);
                 var rekanans = (await _connectionFactory.Query<RekananDto>(@"SELECT r.kd_cb + r.kd_grp_rk + r.kd_rk AS Id,
@@ -62,12 +63,7 @@ namespace ABB.Application.TertanggungPrincipals.Queries
                     rekanan.nm_sic = rekanan.flag_sic == "R" ? "Retail" : "Corporate";
 
                 return rekanans;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                throw;
-            }
+            }, _logger);
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using ABB.Domain.Entities;
 using AutoMapper;
@@ -66,7 +67,7 @@ namespace ABB.Application.Akseptasis.Commands
 
         public async Task<Unit> Handle(SaveAkseptasiObyekCommand request, CancellationToken cancellationToken)
         {
-            try
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
             {
                 var dbContext = _contextFactory.CreateDbContext(request.DatabaseName);
                 
@@ -111,12 +112,7 @@ namespace ABB.Application.Akseptasis.Commands
                 });
                     
                 return Unit.Value;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e.InnerException == null ? e.Message : e.InnerException.Message);
-                throw e.InnerException ?? e;
-            }
+            }, _logger);
         }
     }
 }

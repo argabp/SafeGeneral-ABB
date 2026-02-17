@@ -2,8 +2,10 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.Akseptasis.Commands
 {
@@ -24,22 +26,29 @@ namespace ABB.Application.Akseptasis.Commands
     {
         private readonly IDbConnectionFactory _connectionFactory;
 
-        public CheckPranotaCommandHandler(IDbConnectionFactory connectionFactory)
+        private readonly ILogger<CheckPranotaCommandHandler> _logger;
+
+        public CheckPranotaCommandHandler(IDbConnectionFactory connectionFactory,
+            ILogger<CheckPranotaCommandHandler> logger)
         {
             _connectionFactory = connectionFactory;
+            _logger = logger;
         }
 
         public async Task<(string, string)> Handle(CheckPranotaCommand request, CancellationToken cancellationToken)
         {
-            _connectionFactory.CreateDbConnection(request.DatabaseName);
-            var result = (await _connectionFactory.QueryProc<(string, string)>("spe_uw02e_08",
-                new
-                {
-                    request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn,
-                    request.no_aks, request.no_updt
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
+            {
+                _connectionFactory.CreateDbConnection(request.DatabaseName);
+                var result = (await _connectionFactory.QueryProc<(string, string)>("spe_uw02e_08",
+                    new
+                    {
+                        request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn,
+                        request.no_aks, request.no_updt
                 })).FirstOrDefault();
 
-            return result;
+                return result;
+            }, _logger);
         }
     }
 }

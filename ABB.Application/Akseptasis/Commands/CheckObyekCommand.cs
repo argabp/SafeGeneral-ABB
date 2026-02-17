@@ -1,8 +1,10 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.Akseptasis.Commands
 {
@@ -18,21 +20,28 @@ namespace ABB.Application.Akseptasis.Commands
     {
         private readonly IDbConnectionFactory _connectionFactory;
 
-        public CheckObyekCommandHandler(IDbConnectionFactory connectionFactory)
+        private readonly ILogger<CheckObyekCommandHandler> _logger;
+
+        public CheckObyekCommandHandler(IDbConnectionFactory connectionFactory,
+            ILogger<CheckObyekCommandHandler> logger)
         {
             _connectionFactory = connectionFactory;
+            _logger = logger;
         }
 
         public async Task<(string, string)> Handle(CheckObyekCommand request, CancellationToken cancellationToken)
         {
-            _connectionFactory.CreateDbConnection(request.DatabaseName);
-            var result = (await _connectionFactory.QueryProc<(string, string)>("spe_uw02e_53",
-                new
-                {
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
+            {
+                _connectionFactory.CreateDbConnection(request.DatabaseName);
+                var result = (await _connectionFactory.QueryProc<(string, string)>("spe_uw02e_53",
+                    new
+                    {
                     request.kd_cob, request.kd_scob, request.pst_share
                 })).First();
 
-            return result;
+                return result;
+            }, _logger);
         }
     }
 }
