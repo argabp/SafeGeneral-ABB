@@ -129,14 +129,22 @@
                 </div>
             </div>
              <div class="form-group row">
-                <label class="col-sm-2 col-form-label" asp-for="PenyelesaianHeader.TotalOrg">Total </label>
+               <label class="col-sm-2 col-form-label" asp-for="PenyelesaianHeader.TotalOrg">Total </label>
                 <div class="col-sm-2">
-                    <kendo-numerictextbox for="PenyelesaianHeader.TotalOrg" format="n2" class="custom-kuning" style="width: 50%;" />
+                    <kendo-numerictextbox for="PenyelesaianHeader.TotalOrg" 
+                                        format="n2" 
+                                        decimals="2" 
+                                        step="0.01" 
+                                        class="custom-kuning" 
+                                        style="width: 100%;" />
                 </div>
                   <label class="col-sm-2 col-form-label" asp-for="PenyelesaianHeader.TotalRp">(Dalam Rupiah)</label>
-              
                 <div class=" col-sm-2">
-                    <kendo-numerictextbox for="PenyelesaianHeader.TotalRp"readonly="true" format="n2" style="width: 50%;" />
+                    <kendo-numerictextbox for="PenyelesaianHeader.TotalRp" 
+                                        readonly="true" 
+                                        format="n2" 
+                                        decimals="2" 
+                                        style="width: 100%;" />
                 </div>
                 <div class=" col-sm-1">
                     <kendo-dropdownlist  for="PenyelesaianHeader.DebetKredit"
@@ -279,7 +287,7 @@
             <div class="form-group col-sm-2 detail-payment-field">
                
                     <label asp-for="TotalBayarOrg">Total Original</label>
-                    <kendo-numerictextbox for="TotalBayarOrg" format="n0" class="custom-kuning" style="width:100%;" />
+                    <kendo-numerictextbox for="TotalBayarOrg" format="n2" decimals="2" class="custom-kuning" style="width:100%;" />
                
             </div>
 
@@ -287,7 +295,7 @@
             <div class="form-group col-sm-2 detail-payment-field">
                 
                     <label asp-for="TotalBayarRp">Total Dalam Rupiah</label>
-                    <kendo-numerictextbox for="TotalBayarRp" format="n0" style="width:100%;" readonly="true" />
+                    <kendo-numerictextbox for="TotalBayarRp" format="n2" decimals="2" style="width:100%;" readonly="true" />
                
             </div>
 
@@ -324,33 +332,58 @@
          
     }
 
-  $(document).ready(function () {
+ $(document).ready(function () {
         // Ambil instance dropdownlist dari Kendo
         var ddl = $("#FlagPembayaran").data("kendoDropDownList");
 
-        // Daftarkan event change
-       ddl.bind("change", function (e) {
-            var value = this.value();
-            if (value && value.toUpperCase() === "AKUN") {
-                $("#akunField").show();
-                $("#notaField").hide();
-                $(".detail-payment-field").show();
-                $("#btn-save-pembayaran").show(); // <-- BARU
-            } else if (value && value.toUpperCase() === "NOTA") {
-                $("#notaField").show();
-                $("#akunField").hide();
-                $(".detail-payment-field").hide();
-                $("#btn-save-pembayaran").hide(); // <-- BARU
-            } else {
-                $("#notaField").hide();
-                $("#akunField").hide();
-                $(".detail-payment-field").hide();
-                $("#btn-save-pembayaran").hide(); // <-- BARU
-            }
-        });
+        // Event change dropdown
+        if (ddl) {
+            ddl.bind("change", function (e) {
+                var value = this.value();
+                if (value && value.toUpperCase() === "AKUN") {
+                    $("#akunField").show();
+                    $("#notaField").hide();
+                    $(".detail-payment-field").show();
+                    $("#btn-save-pembayaran").show();
+                } else if (value && value.toUpperCase() === "NOTA") {
+                    $("#notaField").show();
+                    $("#akunField").hide();
+                    $(".detail-payment-field").hide();
+                    $("#btn-save-pembayaran").hide();
+                } else {
+                    $("#notaField").hide();
+                    $("#akunField").hide();
+                    $(".detail-payment-field").hide();
+                    $("#btn-save-pembayaran").hide();
+                }
+            });
+            ddl.trigger("change");
+        }
 
-        // Panggil event 'change' sekali saat form dimuat untuk mengatur tampilan awal
-        ddl.trigger("change");
+        // --- PERBAIKAN UTAMA: SELECTOR ID MENGGUNAKAN UNDERSCORE (_) ---
+        
+        // 1. Fix Total Org Header
+        // ID yang digenerate asp-for="PenyelesaianHeader.TotalOrg" adalah "PenyelesaianHeader_TotalOrg"
+        var totalOrgInput = $("#PenyelesaianHeader_TotalOrg").data("kendoNumericTextBox");
+        if (totalOrgInput) {
+            // Ambil nilai raw dari Model, ubah ke string format titik (misal: "100.34")
+            var valOrg = "@(Model.PenyelesaianHeader?.TotalOrg.HasValue == true ? Model.PenyelesaianHeader.TotalOrg.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) : "")";
+            if (valOrg) {
+                totalOrgInput.value(parseFloat(valOrg)); // Paksa set value
+            }
+        }
+
+        // 2. Fix Total Rp Header
+        var totalRpInput = $("#PenyelesaianHeader_TotalRp").data("kendoNumericTextBox");
+        if (totalRpInput) {
+            var valRp = "@(Model.PenyelesaianHeader?.TotalRp.HasValue == true ? Model.PenyelesaianHeader.TotalRp.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) : "")";
+            if (valRp) {
+                totalRpInput.value(parseFloat(valRp));
+            }
+        }
+        
+        // Trigger hitung ulang agar Footer sinkron saat pertama load
+        hitungTotalRupiah();
     });
 
     
@@ -369,8 +402,8 @@
             cols.Bound(c => c.NoNota).Title("Nomor Nota").Width(150);
             cols.Bound(c => c.KodeAkun).Title("Kode Akun").Width(150);
             cols.Bound(c => c.KodeMataUang).Title("Kode Mata Uang").Width(150);
-            cols.Bound(c => c.TotalBayarOrg).Format("{0:n0}").Width(150);
-            cols.Bound(c => c.TotalBayarRp).Format("{0:n0}").Width(150);
+            cols.Bound(c => c.TotalBayarOrg).Format("{0:n2}").Width(150);
+            cols.Bound(c => c.TotalBayarRp).Format("{0:n2}").Width(150);
             cols.Bound(c => c.DebetKredit).Title("D/K") .ClientTemplate("#= DebetKredit == 'D' ? 'Debet' : (DebetKredit == 'K' ? 'Kredit' : '') #").Width(150);
             cols.Command(command => {
             command.Custom("EditDetail").Text("Edit").Click("onEditPembayaran");
@@ -394,17 +427,21 @@
 </div>
 
 
-<div class="window-footer" data-total-penyelesaian-original="@(Model.PenyelesaianHeader?.TotalRp ?? 0)" id="TotalBuktiOrg" style=" font-weight: bold;    display: flex;     justify-content: center;     flex-direction: row;     flex-wrap: nowrap;     align-content: center;     align-items: center; ">
-    <div style="padding-right: 20px;font-size: 15px;">
-            <span>Total Bukti:  </span>
-           <span id="voucherTotal"> @((Model.PenyelesaianHeader?.TotalRp ?? 0).ToString("N0"))</span>
-            
-            <span style="margin-left: 20px;">Total Penyelesaian :  </span>
-            <span id="pembayaranTotal" style="color: green;">0</span>
+<div class="window-footer" 
+     data-total-penyelesaian-original="@(Model.PenyelesaianHeader?.TotalRp.HasValue == true ? Model.PenyelesaianHeader.TotalRp.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) : "0")" 
+     id="TotalBuktiOrg" 
+     style="font-weight: bold; display: flex; justify-content: center; flex-direction: row; align-items: center;">
+    
+    <div style="padding-right: 20px; font-size: 15px;">
+        <span>Total Bukti: </span>
+        <span id="voucherTotal">@((Model.PenyelesaianHeader?.TotalRp ?? 0).ToString("N2"))</span>
+        
+        <span style="margin-left: 20px;">Total Penyelesaian : </span>
+        <span id="pembayaranTotal" style="color: green;">0.00</span>
 
-            <span style="margin-left: 20px;">Total Sisa Penyelesaian :  </span>
-            <span id="sisapembayaranTotal" style="color: green;">0</span>
-        </div>
+        <span style="margin-left: 20px;">Total Sisa Penyelesaian : </span>
+        <span id="sisapembayaranTotal" style="color: green;">0.00</span>
+    </div>
 </div>
 
 

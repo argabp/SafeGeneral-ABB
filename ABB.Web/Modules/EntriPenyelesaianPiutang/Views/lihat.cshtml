@@ -130,12 +130,19 @@
              <div class="form-group row">
                 <label class="col-sm-2 col-form-label" asp-for="PenyelesaianHeader.TotalOrg">Total </label>
                 <div class="col-sm-2">
-                    <kendo-numerictextbox name="PenyelesaianHeader.TotalOrg_Lihat" value="@((double?)Model.PenyelesaianHeader?.TotalOrg)" format="n2" class="custom-kuning" style="width: 50%;" />
+                    <kendo-numerictextbox name="PenyelesaianHeader.TotalOrg_Lihat" 
+                                          value="@((double?)Model.PenyelesaianHeader?.TotalOrg)" 
+                                          format="n2" decimals="2" 
+                                          class="custom-kuning" style="width: 50%;" />
                 </div>
                   <label class="col-sm-2 col-form-label" asp-for="PenyelesaianHeader.TotalRp">(Dalam Rupiah)</label>
               
-                <div class=" col-sm-2">
-                    <kendo-numerictextbox name="PenyelesaianHeader.TotalRp_Lihat" value="@((double?)Model.PenyelesaianHeader?.TotalRp)" readonly="true" format="n2" style="width: 50%;" />
+               <div class=" col-sm-2">
+                    <kendo-numerictextbox name="PenyelesaianHeader.TotalRp_Lihat" 
+                                          value="@((double?)Model.PenyelesaianHeader?.TotalRp)" 
+                                          readonly="true" 
+                                          format="n2" decimals="2" 
+                                          style="width: 50%;" />
                 </div>
                 <div class=" col-sm-1">
                     <kendo-dropdownlist  name="PenyelesaianHeader.DebetKredit_Lihat"
@@ -303,8 +310,8 @@
         </div>
     </form>
     <div style="display: flex;gap: 10px;justify-content: flex-end;">
-        <button type="button" id="btn-cancel-edit-final" class="btn btn-secondary" style="display: none;" onclick="clearFinalPaymentForm()">Cancel</button>
-        <button type="button" id="btn-save-pembayaran-final" onclick="onFinalSavePembayaran()" class="btn btn-primary">Simpan Pembayaran</button>
+        <!-- <button type="button" id="btn-cancel-edit-final" class="btn btn-secondary" style="display: none;" onclick="clearFinalPaymentForm()">Cancel</button>
+        <button type="button" id="btn-save-pembayaran-final" onclick="onFinalSavePembayaran()" class="btn btn-primary">Simpan Pembayaran</button> -->
     </div>
     
     <script>
@@ -362,8 +369,8 @@
             cols.Bound(c => c.NoNota).Title("Nomor Nota").Width(150);
             cols.Bound(c => c.KodeAkun).Title("Kode Akun").Width(150);
             cols.Bound(c => c.KodeMataUang).Title("Kode Mata Uang").Width(150);
-            cols.Bound(c => c.TotalBayarOrg).Format("{0:n0}").Width(150);
-            cols.Bound(c => c.TotalBayarRp).Format("{0:n0}").Width(150);
+            cols.Bound(c => c.TotalBayarOrg).Format("{0:n2}").Width(150);
+            cols.Bound(c => c.TotalBayarRp).Format("{0:n2}").Width(150);
             cols.Bound(c => c.DebetKredit).Title("D/K") .ClientTemplate("#= DebetKredit == 'D' ? 'Debet' : (DebetKredit == 'K' ? 'Kredit' : '') #").Width(150);
             cols.Command(command => {
             command.Custom("EditDetail").Text("Edit").Click("onEditFinalPembayaran");
@@ -375,7 +382,7 @@
                 .Filterable()
                 .Scrollable()
                 .Resizable(a=>a.Columns(true))
-                .Events(ev => ev.DataBound("updateGridFooter"))
+                .Events(ev => ev.DataBound("updateGridFooterLihat"))
     )
 
     
@@ -383,17 +390,21 @@
 
 
 
-<div class="window-footer" data-total-penyelesaian-original-final="@(Model.PenyelesaianHeader?.TotalRp ?? 0)" id="TotalBuktiOrg_Lihat" style=" font-weight: bold;    display: flex;     justify-content: center;     flex-direction: row;     flex-wrap: nowrap;     align-content: center;     align-items: center; ">
-    <div style="padding-right: 20px;font-size: 15px;">
-            <span>Total Bukti:  </span>
-            <span id="voucherTotal_Lihat"> @Model.PenyelesaianHeader?.TotalRp?.ToString("N0")</span>
-            
-            <span style="margin-left: 20px;">Total Penyelesaian :  </span>
-            <span id="pembayaranTotal_Lihat" style="color: green;">0</span>
+<div class="window-footer" 
+     data-total-penyelesaian-original-final="@(Model.PenyelesaianHeader?.TotalRp.HasValue == true ? Model.PenyelesaianHeader.TotalRp.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) : "0")" 
+     id="TotalBuktiOrg_Lihat" 
+     style="font-weight: bold; display: flex; justify-content: center; flex-direction: row; align-items: center;">
+    
+    <div style="padding-right: 20px; font-size: 15px;">
+        <span>Total Bukti: </span>
+        <span id="voucherTotal_Lihat">@((Model.PenyelesaianHeader?.TotalRp ?? 0).ToString("N2"))</span>
+        
+        <span style="margin-left: 20px;">Total Penyelesaian : </span>
+        <span id="pembayaranTotal_Lihat" style="color: green;">0.00</span>
 
-            <span style="margin-left: 20px;">Total Sisa Penyelesaian :  </span>
-            <span id="sisapembayaranTotal_Lihat" style="color: green;">0</span>
-        </div>
+        <span style="margin-left: 20px;">Total Sisa Penyelesaian : </span>
+        <span id="sisapembayaranTotal_Lihat" style="color: green;">0.00</span>
+    </div>
 </div>
 
 

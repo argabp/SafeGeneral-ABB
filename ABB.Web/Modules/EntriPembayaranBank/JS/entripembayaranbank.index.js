@@ -292,54 +292,46 @@ function clearPaymentForm() {
 function updateGridFooter() {
     var grid = $("#DetailPembayaranGrid").data("kendoGrid");
     if (!grid) return;
-     var voucherDK = $("#VoucherDK").val();
-    // Ambil noVoucher dari data grid
+    var voucherDK = $("#VoucherDK").val();
     var dataForGrid = getNoVoucherForDetailGrid(); 
     
     if (dataForGrid && dataForGrid.noVoucher) {
         var noVoucher = dataForGrid.noVoucher;
         
-        // Panggil endpoint untuk mendapatkan total terbaru dari tabel TEMP
         $.ajax({
             type: "GET",
             url: `/EntriPembayaranBank/GetTotalPembayaran?noVoucher=${noVoucher}&voucherDK=${voucherDK}`,
             success: function (response) {
-                var totalPembayaran = response.totalPembayaran || 0;
+                // 1. Ambil Total Pembayaran (Paksa float 2 desimal)
+                var totalPembayaran = parseFloat(parseFloat(response.totalPembayaran).toFixed(2)) || 0;
+                
                 var $pembayaranTotalSpan = $("#pembayaranTotal");
                 var $sisaPembayaranSpan = $("#sisapembayaranTotal");
-
-                // Ambil total voucher asli dari header
                 var $footer = $pembayaranTotalSpan.closest(".window-footer");
-                var totalVoucherAsli = parseFloat($footer.data("total-voucher-original")) || 0;
-
-                var sisaPembayaran = totalVoucherAsli - totalPembayaran;
-
-                // Update teks total pembayaran
-                $pembayaranTotalSpan.text(kendo.toString(totalPembayaran, "n0"));
                 
-                $sisaPembayaranSpan.text(kendo.toString(sisaPembayaran, "n0"));
+                // 2. Ambil Total Voucher Asli (Sekarang sudah aman format titik)
+                var rawTotalVoucher = $footer.data("total-voucher-original");
+                var totalVoucherAsli = parseFloat(rawTotalVoucher) || 0;
 
-                // Ambil referensi ke tombol Final Pembayaran
-                var $btnFinal = $("#btn-save-pembayaran-final"); // <-- Beri ID ini pada tombol Anda
+                // 3. LOGIKA SAKTI: Kali 100 -> Bulatkan -> Bagi 100
+                var sisaPembayaran = (Math.round(totalVoucherAsli * 100) - Math.round(totalPembayaran * 100)) / 100;
 
-                // --- INI LOGIKA BARUNYA ---
-                // Kita pakai toleransi 1 untuk mengatasi masalah pembulatan desimal
-                if (Math.abs(totalPembayaran - totalVoucherAsli) < 1) {
-                    // 1. JIKA BALANCE
-                    $pembayaranTotalSpan.css("color", "green"); // Warna hijau
-                    $btnFinal.prop("disabled", false); // AKTIFKAN tombol
-                    $btnFinal.removeClass("k-disabled");
+                // 4. Update UI
+                $pembayaranTotalSpan.text(kendo.toString(totalPembayaran, "n2"));
+                $sisaPembayaranSpan.text(kendo.toString(sisaPembayaran, "n2"));
+
+                var $btnFinal = $("#btn-save-pembayaran-final");
+
+                // 5. Cek Balance dengan Toleransi
+                if (Math.abs(sisaPembayaran) <= 0.01) { 
+                    $pembayaranTotalSpan.css("color", "green");
+                    $sisaPembayaranSpan.css("color", "green");
+                    $sisaPembayaranSpan.text("0.00"); // Kosmetik biar rapi
+                    $btnFinal.prop("disabled", false).removeClass("k-disabled");
                 } else {
-                    // 2. JIKA TIDAK BALANCE
-                    $pembayaranTotalSpan.css("color", "red"); // Warna merah
-                    $btnFinal.prop("disabled", true); // NONAKTIFKAN tombol
-                    $btnFinal.addClass("k-disabled");
-                }
-                if (Math.abs(sisaPembayaran) < 1) { // Ganti logika ke sisaPembayaran
-                    $sisaPembayaranSpan.css("color", "green"); // <-- Tambahkan ini
-                   
-                } else {
-                    $sisaPembayaranSpan.css("color", "red"); // <-- Tambahkan ini
+                    $pembayaranTotalSpan.css("color", "red");
+                    $sisaPembayaranSpan.css("color", "red");
+                    $btnFinal.prop("disabled", true).addClass("k-disabled");
                 }
             }
         });
@@ -377,7 +369,7 @@ function attachChangeEvents() {
     
         var kodeMtu = $("#KodeMataUang").data("kendoComboBox").value();
         var tanggal = $("#TangVoc").val();
-        var totalVoucher = $("#TotalBayar").val();
+        var totalVoucher = $("#TotalBayar").data("kendoNumericTextBox").value();
         console.log("total voucher: ",totalVoucher)
          var kursInput = $("#Kurs");
         if (kodeMtu && tanggal && totalVoucher) {
@@ -455,7 +447,7 @@ function SimpanNota() {
 
         selectedData.push({
             NoNota: dataItem.no_nd,
-            TotalBayarOrg: Math.floor(totalOrg),
+            TotalBayarOrg: totalOrg,
             TotalBayarRp: totalRp,
             
             DebetKredit: dkOtomatis, // Pakai nilai dari UI
@@ -704,51 +696,43 @@ function btnLihatPembayaranBank_OnClick(e) {
   function updateGridFooterLihat(e) {
         // Ambil semua data yang tampil di grid
         var grid = $("#DetailPembayaranLihatGrid").data("kendoGrid");
-         var dataForGrid = getNoVoucherFinalForDetailGrid(); 
+        var dataForGrid = getNoVoucherFinalForDetailGrid(); 
         var voucherDK = $("#VoucherDKFinal").val();
 
-        if (dataForGrid && dataForGrid.noVoucher) {
+         if (dataForGrid && dataForGrid.noVoucher) {
             var noVoucher = dataForGrid.noVoucher;
             
-            // Panggil endpoint untuk mendapatkan total terbaru dari tabel TEMP
             $.ajax({
                 type: "GET",
                 url: `/EntriPembayaranBank/GetTotalPembayaranFinal?noVoucher=${noVoucher}&voucherDK=${voucherDK}`,
                 success: function (response) {
-                    var totalPembayaran = response.totalPembayaran || 0;
+                    // 1. Ambil Total Pembayaran (Paksa float 2 desimal)
+                    var totalPembayaran = parseFloat(parseFloat(response.totalPembayaran).toFixed(2)) || 0;
+                    
                     var $pembayaranTotalSpan = $("#pembayaranTotalFinal");
                     var $sisaPembayaranSpan = $("#sisapembayaranTotalFinal");
-                    // Ambil total voucher asli dari header
                     var $footer = $pembayaranTotalSpan.closest(".window-footer");
-                    var totalVoucherAsli = parseFloat($footer.data("total-voucher-original-final")) || 0;
                     
-                    var sisaPembayaran = totalVoucherAsli - totalPembayaran;
+                    // 2. Ambil Total Voucher Asli (Sekarang sudah aman format titik)
+                    var rawTotalVoucher = $footer.data("total-voucher-original-final");
+                    var totalVoucherAsli = parseFloat(rawTotalVoucher) || 0;
 
-                    // Update teks total pembayaran
-                    $pembayaranTotalSpan.text(kendo.toString(totalPembayaran, "n0"));
-                    $sisaPembayaranSpan.text(kendo.toString(sisaPembayaran, "n0"));
+                    // 3. LOGIKA SAKTI: Kali 100 -> Bulatkan -> Bagi 100
+                    var sisaPembayaran = (Math.round(totalVoucherAsli * 100) - Math.round(totalPembayaran * 100)) / 100;
 
-                    // Ambil referensi ke tombol Final Pembayaran
-                    var $btnFinal = $("#btn-save-pembayaran-final"); // <-- Beri ID ini pada tombol Anda
+                    // 4. Update UI
+                    $pembayaranTotalSpan.text(kendo.toString(totalPembayaran, "n2"));
+                    $sisaPembayaranSpan.text(kendo.toString(sisaPembayaran, "n2"));
 
-                    // --- INI LOGIKA BARUNYA ---
-                    // Kita pakai toleransi 1 untuk mengatasi masalah pembulatan desimal
-                    if (Math.abs(totalPembayaran - totalVoucherAsli) < 1) {
-                        // 1. JIKA BALANCE
-                        $pembayaranTotalSpan.css("color", "green"); // Warna hijau
-                        $btnFinal.prop("disabled", false); // AKTIFKAN tombol
-                        $btnFinal.removeClass("k-disabled");
-                    } else {
-                        // 2. JIKA TIDAK BALANCE
-                        $pembayaranTotalSpan.css("color", "red"); // Warna merah
-                        $btnFinal.prop("disabled", true); // NONAKTIFKAN tombol
-                        $btnFinal.addClass("k-disabled");
-                    }
-                    if (Math.abs(sisaPembayaran) < 1) { // Ganti logika ke sisaPembayaran
-                        $sisaPembayaranSpan.css("color", "green"); // <-- Tambahkan ini
                     
+                    // 5. Cek Balance dengan Toleransi
+                    if (Math.abs(sisaPembayaran) <= 0.01) { 
+                        $pembayaranTotalSpan.css("color", "green");
+                        $sisaPembayaranSpan.css("color", "green");
+                        $sisaPembayaranSpan.text("0.00"); // Kosmetik biar rapi
                     } else {
-                        $sisaPembayaranSpan.css("color", "red"); // <-- Tambahkan ini
+                        $pembayaranTotalSpan.css("color", "red");
+                        $sisaPembayaranSpan.css("color", "red");
                     }
                 }
             });

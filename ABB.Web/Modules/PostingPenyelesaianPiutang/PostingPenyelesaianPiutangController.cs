@@ -31,10 +31,12 @@ namespace ABB.Web.Modules.PostingPenyelesaianPiutang
         // 🎯 DIPERBAIKI: Tambahkan parameter untuk menerima filter dari Kendo Grid
         public async Task<ActionResult> GetPostingPenyelesaianPiutang([DataSourceRequest] DataSourceRequest request)
         {
+            var kodeCabang = Request.Cookies["UserCabang"];
             // 🎯 DIPERBAIKI: Panggil Query yang benar
             var data = await Mediator.Send(new GetAllPenyelesaianPiutangByFlagQuery
             {
-                DatabaseName = Request.Cookies["DatabaseName"]
+                DatabaseName = Request.Cookies["DatabaseName"],
+                KodeCabang = kodeCabang
             });
 
             return Json(await data.ToDataSourceResultAsync(request));

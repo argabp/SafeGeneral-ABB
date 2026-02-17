@@ -21,7 +21,7 @@ namespace ABB.Infrastructure.Data.Mapping
             builder.Property(t => t.FlagPembayaran).HasColumnName("flag_pembayaran").HasMaxLength(10);
             builder.Property(t => t.NoNota4).HasColumnName("no_nota").HasMaxLength(100);
             builder.Property(t => t.KodeMataUang).HasColumnName("kode_mata_uang").HasMaxLength(5);
-            builder.Property(t => t.TotalBayar).HasColumnName("total_bayar");
+            builder.Property(t => t.TotalBayar).HasColumnName("total_bayar").HasPrecision(18, 2); 
             builder.Property(t => t.UserBayar).HasColumnName("user_bayar").HasMaxLength(25);
             builder.Property(t => t.DebetKredit).HasColumnName("debet_kredit").HasMaxLength(10);
              builder.Property(t => t.Kurs).HasColumnName("kurs");

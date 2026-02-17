@@ -293,5 +293,21 @@
         } else {
             icon.removeClass('fa-check-square').addClass('fa-square');
         }
+
+        // --- PERBAIKAN DESIMAL (BARU) ---
+        // Paksa Kendo NumericTextBox untuk memproses ulang nilai desimal dari model
+        
+        var totalVoucher = $("#TotalVoucher").data("kendoNumericTextBox");
+        if (totalVoucher) {
+            // Menggunakan InvariantCulture agar outputnya selalu pakai titik (Contoh: 12.54)
+            var rawVal = @(Model.TotalVoucher.HasValue ? Model.TotalVoucher.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) : "0");
+            totalVoucher.value(rawVal);
+        }
+
+        var totalRp = $("#TotalDalamRupiah").data("kendoNumericTextBox");
+        if (totalRp) {
+            var rawValRp = @(Model.TotalDalamRupiah.HasValue ? Model.TotalDalamRupiah.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) : "0");
+            totalRp.value(rawValRp);
+        }
     });
 </script>

@@ -42,10 +42,10 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Queries
           //  string suffix = $"/{request.JenisPenyelesaian}/{request.Bulan:D2}/{request.Tahun:D2}";
 
             // 2. Cari nomor bukti terakhir yang cocok dengan akhiran bulan ini
-            var lastNomorBukti = await _context.HeaderPenyelesaianUtang
-                .Where(v => v.NomorBukti.EndsWith(prefix))
-                .OrderByDescending(v => v.NomorBukti) // Mengurutkan berdasarkan string akan bekerja untuk format ini
-                .Select(v => v.NomorBukti) // Ambil string-nya saja
+           var lastNomorBukti = await _context.HeaderPenyelesaianUtang
+                .Where(v => v.NomorBukti.StartsWith(prefix))
+                .OrderByDescending(v => v.NomorBukti)
+                .Select(v => v.NomorBukti)
                 .FirstOrDefaultAsync(cancellationToken);
 
             int nextSequence = 1;
