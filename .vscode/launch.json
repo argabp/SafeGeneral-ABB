@@ -1,0 +1,22 @@
+{
+    "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+    },
+    "configurations": [
+        {
+            "name": "Debug ABB.Web",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build", 
+            "program": "${workspaceFolder}/ABB.Web/bin/Debug/ABB.Web.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/ABB.Web",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            }
+        }
+    
+    ]
+}
