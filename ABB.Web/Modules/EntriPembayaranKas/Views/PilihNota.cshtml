@@ -61,7 +61,7 @@
             }
             
             // [PERBAIKAN DISINI] Ganti .tgl_prod menjadi .date
-            var rawDate = dataItem.date; 
+            var rawDate = dataItem.tgl_prod; 
             
             var formattedDate = "";
 
@@ -76,9 +76,9 @@
             if (!formattedDate) {
                 var tglVoc = $("#TangVoc").val(); 
                 if(tglVoc) {
-                    var parts = tglVoc.split(" ")[0].split("/"); // dd/MM/yyyy
-                    if(parts.length === 3) {
-                        formattedDate = parts[2] + '-' + parts[1] + '-' + parts[0];
+                    var dateVocObj = kendo.parseDate(tglVoc);
+                    if(dateVocObj) {
+                        formattedDate = kendo.toString(dateVocObj, "yyyy-MM-dd");
                     }
                 }
             }

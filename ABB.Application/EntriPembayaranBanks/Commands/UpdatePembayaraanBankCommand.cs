@@ -18,7 +18,7 @@ namespace ABB.Application.EntriPembayaranBanks.Commands
         public decimal? TotalBayar { get; set; }
         public string DebetKredit { get; set; }
          public decimal? TotalDlmRupiah { get; set; }
-           public int? Kurs { get; set; }
+           public decimal? Kurs { get; set; }
          public decimal? NilaiKurs { get; set; }
 
              public string KodeUserInput { get; set; }

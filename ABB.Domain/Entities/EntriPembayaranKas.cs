@@ -18,7 +18,7 @@ namespace ABB.Domain.Entities
         public string UserBayar { get; set; }
         public string DebetKredit { get; set; }
         public decimal? TotalDlmRupiah { get; set; }
-         public int? Kurs { get; set; }
+         public decimal? Kurs { get; set; }
 
           // tambahan sebagai audit
          public string KodeUserInput { get; set; }

@@ -39,11 +39,19 @@ namespace ABB.Application.EntriPembayaranKass.Queries
             from cb in cabangJoin.DefaultIfEmpty()
 
             // JOIN ke KasBank berdasarkan NoPerkiraan
-
-            join kb in _context.KasBank
-                    on new { vk.KodeAkun, vk.KodeCabang } 
-                    equals new { KodeAkun = kb.NoPerkiraan, kb.KodeCabang } 
-                    into kasBankJoin
+                join kb in _context.KasBank
+                        on new { 
+                                KodeAkun = vk.KodeAkun.Trim(),
+                                KodeCabang = vk.KodeCabang.Trim(),
+                                KodeKas = vk.KodeKas.Trim() 
+                                }
+                        equals new 
+                        { 
+                            KodeAkun = kb.NoPerkiraan.Trim(),
+                            KodeCabang = kb.KodeCabang.Trim(),
+                            KodeKas = kb.Kode.Trim()
+                        }
+                        into kasBankJoin
                 from kb in kasBankJoin.DefaultIfEmpty()
 
             select new VoucherKasDto

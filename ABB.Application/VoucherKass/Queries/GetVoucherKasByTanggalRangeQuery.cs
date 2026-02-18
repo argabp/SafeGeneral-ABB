@@ -54,11 +54,22 @@ namespace ABB.Application.VoucherKass.Queries
             GetVoucherKasByTanggalRangeQuery request,
             CancellationToken cancellationToken)
         {
+
+            var kodeAkun = await _context.KasBank
+                .Where(k => k.Kode == request.KodeKas 
+                        && k.KodeCabang == request.KodeCabang)
+                .Select(k => k.NoPerkiraan)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            if (string.IsNullOrEmpty(kodeAkun))
+                throw new Exception("Kode Akun tidak ditemukan pada data Kas.");
+
+
             // =========================
             // AMBIL SALDO AWAL
             // =========================
             decimal saldoAwal = await _context.KasBank
-                .Where(k => k.Kode == request.KodeKas && k.KodeCabang == request.KodeCabang)
+                .Where(k => k.Kode == request.KodeKas && k.KodeCabang == request.KodeCabang && k.NoPerkiraan == kodeAkun)
                 .Select(k => k.Saldo ?? 0)
                 .FirstOrDefaultAsync(cancellationToken);
 
