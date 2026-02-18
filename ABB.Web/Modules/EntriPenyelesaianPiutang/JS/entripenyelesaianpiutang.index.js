@@ -54,9 +54,8 @@ function onSaveHeaderAndProceed() {
 
     // 2. Validasi Header Sederhana
     // (Anda bisa tambahkan field lain jika wajib)
-    if (!tanggal || !mataUang || (totalOrg === null || totalOrg <= 0) || !kodeAkun) {
-        showMessage('warning', 'Harap lengkapi data Header (Tanggal, Mata Uang, Total, Kode Akun) sebelum menyimpan.');
-        // Mengembalikan promise yang sudah gagal agar .done() tidak berjalan
+  if (!tanggal || !mataUang || totalOrg === null || totalOrg < 0 || !kodeAkun) {
+        showMessage('warning', 'Harap lengkapi data Header (Tanggal, Mata Uang, Total minimal 0, Kode Akun) sebelum menyimpan.');
         return $.Deferred().reject({ error: "Header form is incomplete." }).promise();
     }
 
@@ -94,21 +93,20 @@ function onSaveHeaderAndProceed() {
                 $("#BelumFinalGrid").data("kendoGrid").dataSource.read();
                 $("#SudahFinalGrid").data("kendoGrid").dataSource.read();
            
-                // --- PERBAIKAN DI SINI ---
-                // var $footer = $(".window-footer");
+                var $footer = $(".window-footer");
                 
-                // // 1. Ambil nilai TotalOrg LANGSUNG DARI INPUT KENDO
-                // var totalOrgInput = $("#PenyelesaianHeader_TotalRp").data("kendoNumericTextBox");
-                // var totalOrgValue = totalOrgInput ? totalOrgInput.value() : 0;
+                // Ambil nilai Rupiah terbaru dari input
+                var currentTotalRp = $("#PenyelesaianHeader_TotalRp").data("kendoNumericTextBox").value() || 0;
                 
-                // // 2. Update span #voucherTotal dengan nilai baru
-                // $("#voucherTotal").text(kendo.toString(totalOrgValue, "n2"));
+                // 1. Update Teks "Total Bukti" di Footer
+                $("#voucherTotal").text(kendo.toString(currentTotalRp, "n2"));
                 
-                // // 3. Update data-attribute di footer dengan nilai baru
-                // $footer
-                // .attr("data-total-penyelesaian-original", totalOrgValue)
-                // .data("total-penyelesaian-original", totalOrgValue);
-                    
+                // 2. Update Data-Attribute agar updateGridFooter() pakai angka terbaru
+                $footer.data("total-penyelesaian-original", currentTotalRp);
+                $footer.attr("data-total-penyelesaian-original", currentTotalRp);
+                if (typeof updateGridFooter === "function") {
+                    updateGridFooter();
+                }
                 // JANGAN tampilkan swal di sini, biarkan pemanggil (onSavePembayaran) yang urus
             } else {
                  // Error akan ditangani oleh .fail()
@@ -191,9 +189,9 @@ function onSavePembayaran() {
         return; // Stop
     }
     
-    if (totalBayarOrg === null || totalBayarOrg <= 0) {
-        showMessage('warning', 'Total Original harus diisi dan lebih besar dari 0.');
-        return; // Stop
+    if (totalBayarOrg === null || totalBayarOrg < 0) {
+        showMessage('warning', 'Total Original harus diisi (minimal 0).');
+        return; 
     }
     
     if (!debetKredit) {
@@ -289,6 +287,7 @@ function onSavePembayaran() {
 
 // edit pembayaran
 function onEditPembayaran(e) {
+     $("#btn-cancel-edit2").show();
     e.preventDefault();
     $("#btn-save-pembayaran").show();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
@@ -335,7 +334,7 @@ function onEditPembayaran(e) {
         $("#No").val(dataItem.No);
     }
       
-    $("#btn-cancel-edit").show();
+   
     // Nonaktifkan juga tombol select nota
    
 }
@@ -442,8 +441,9 @@ function clearPaymentForm() {
     if (flagPembayaran) flagPembayaran.readonly(false);
     
     // Sembunyikan tombol Cancel
+    $("#NewPaymentForm").show();
+    $("#btn-cancel-edit2").hide();
     $("#btn-cancel-edit").hide();
-     $("#NewPaymentForm").show();
 }
 
 function clearFinalPaymentForm() {
@@ -1021,7 +1021,6 @@ function onFinalSavePembayaran() {
         // 2. Validasi Detail
         if (!flagPembayaran) { showMessage('warning', 'Silakan pilih Flag Pembayaran.'); return; }
         if (!kodeMataUang) { showMessage('warning', 'Silakan pilih Kode Mata Uang.'); return; }
-        if (totalBayarOrg === null || totalBayarOrg <= 0) { showMessage('warning', 'Total Original harus diisi > 0.'); return; }
         if (!debetKredit) { showMessage('warning', 'Silakan pilih Debet/Kredit.'); return; }
 
         if (flagPembayaran.toUpperCase() === "AKUN") {
@@ -1030,6 +1029,10 @@ function onFinalSavePembayaran() {
         } else if (flagPembayaran.toUpperCase() === "NOTA") {
             NoNotaValue = $("#NoNota_Lihat").val().trim();
             if (!NoNotaValue) { showMessage('warning', 'Silakan pilih Nomor Nota.'); return; }
+        }
+        if (totalBayarOrg === null || totalBayarOrg < 0) { 
+            showMessage('warning', 'Total Original harus diisi (minimal 0).'); 
+            return; 
         }
 
         // 3. Eksekusi Simpan Header dulu -> lanjut Simpan Detail
@@ -1094,11 +1097,11 @@ function onSaveFinalHeaderAndProceed() {
 
     // 2. Validasi Header Sederhana
     // (Anda bisa tambahkan field lain jika wajib)
-    if (!tanggal || !mataUang || (totalOrg === null || totalOrg <= 0) || !kodeAkun) {
-        showMessage('warning', 'Harap lengkapi data Header (Tanggal, Mata Uang, Total, Kode Akun) sebelum menyimpan.');
-        // Mengembalikan promise yang sudah gagal agar .done() tidak berjalan
+   if (!tanggal || !mataUang || (totalOrg === null || totalOrg < 0) || !kodeAkun) {
+        showMessage('warning', 'Harap lengkapi data Header (Tanggal, Mata Uang, Total minimal 0, Kode Akun) sebelum menyimpan.');
         return $.Deferred().reject({ error: "Header form is incomplete." }).promise();
     }
+
     var JenisP = "BM"
 
     var headerData = {
