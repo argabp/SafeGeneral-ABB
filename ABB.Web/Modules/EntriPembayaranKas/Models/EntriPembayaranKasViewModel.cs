@@ -44,7 +44,7 @@ namespace ABB.Web.Modules.EntriPembayaranKas.Models
         public decimal? TotalDlmRupiah { get; set; }
 
          [Display(Name = "Kurs")]
-        public int? Kurs { get; set; }
+        public decimal? Kurs { get; set; }
         // Konfigurasi AutoMapper
         public void Mapping(Profile profile)
         {

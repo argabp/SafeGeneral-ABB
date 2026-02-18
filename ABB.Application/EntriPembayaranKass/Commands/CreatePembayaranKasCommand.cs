@@ -18,7 +18,7 @@ namespace ABB.Application.EntriPembayaranKass.Commands
         public string DebetKredit { get; set; }
         public string NoNota4 { get; set; }
         public string KodeMataUang { get; set; }
-         public int? Kurs { get; set; }
+         public decimal? Kurs { get; set; }
         public decimal? TotalDlmRupiah { get; set; }
 
          public string KodeUserInput { get; set; }

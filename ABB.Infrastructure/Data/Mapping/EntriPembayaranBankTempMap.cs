@@ -26,7 +26,7 @@ namespace ABB.Infrastructure.Data.Mapping
             builder.Property(t => t.DebetKredit).HasColumnName("debet_kredit");
             builder.Property(t => t.UserBayar).HasColumnName("user_bayar").HasMaxLength(25);
              builder.Property(t => t.TotalDlmRupiah).HasColumnName("total_dalam_rupiah").HasPrecision(18,2);
-            builder.Property(t => t.Kurs).HasColumnName("kurs");
+            builder.Property(t => t.Kurs).HasColumnName("kurs").HasPrecision(18,2);
             builder.Property(t => t.NilaiKurs).HasColumnName("nilai_kurs").HasPrecision(18,2);
 
              // tambahan sebagai audit

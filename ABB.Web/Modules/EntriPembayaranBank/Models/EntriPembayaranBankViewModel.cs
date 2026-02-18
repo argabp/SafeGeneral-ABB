@@ -65,7 +65,7 @@ namespace ABB.Web.Modules.EntriPembayaranBank.Models
         public decimal? NilaiKurs { get; set; }
 
         [Display(Name = "Kurs")]
-        public int? Kurs { get; set; }
+        public decimal? Kurs { get; set; }
 
          // --- [TAMBAHKAN INI] ---
         [Display(Name = "Flag Final")]

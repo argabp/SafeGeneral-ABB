@@ -42,6 +42,14 @@ namespace ABB.Application.VoucherBanks.Queries
             GetVoucherBankByTanggalRangeQuery request,
             CancellationToken cancellationToken)
         {
+
+            var kodeAkun = await _context.KasBank
+            .Where(k => k.Kode == request.KodeBank
+                    && k.KodeCabang == request.KodeCabang )
+            .Select(k => k.NoPerkiraan)
+            .FirstOrDefaultAsync(cancellationToken);
+
+
             // =========================
             // VALIDASI TANGGAL
             // =========================
@@ -55,7 +63,7 @@ namespace ABB.Application.VoucherBanks.Queries
             // AMBIL SALDO AWAL DARI KASBANK
             // =========================
             decimal saldoAwal = await _context.KasBank
-                .Where(k => k.Kode == request.KodeBank && k.KodeCabang == request.KodeCabang)
+                .Where(k => k.Kode == request.KodeBank && k.KodeCabang == request.KodeCabang && k.NoPerkiraan == kodeAkun)
                 .Select(k => k.Saldo ?? 0)
                 .FirstOrDefaultAsync(cancellationToken);
 

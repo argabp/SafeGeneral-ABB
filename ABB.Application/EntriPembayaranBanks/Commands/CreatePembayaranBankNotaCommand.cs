@@ -19,7 +19,7 @@ namespace ABB.Application.EntriPembayaranBanks.Commands
         public decimal TotalBayarRp { get; set; }
         public string DebetKredit { get; set; }
         public string KodeMataUang { get; set; }
-        public int? Kurs { get; set; }
+        public decimal? Kurs { get; set; }
         public string KodeAkun { get; set; }
     }
 
@@ -61,17 +61,20 @@ namespace ABB.Application.EntriPembayaranBanks.Commands
 
             foreach (var nota in request.Data) // Loop melalui List<NotaToSave>
             {
+                if (nota == null) continue;
+
                 lastNo++;
+             
                 var entity = new EntriPembayaranBankTemp
                 {
                    NoVoucher = request.NoVoucher,
                     No = lastNo,
-                    NoNota4 = nota.NoNota,
+                    NoNota4 = nota.NoNota ?? "",
                     DebetKredit = nota.DebetKredit,
                     KodeMataUang = nota.KodeMataUang,
                     TotalBayar = nota.TotalBayarOrg,
                     TotalDlmRupiah = nota.TotalBayarRp,
-                    KodeAkun = nota.KodeAkun,
+                    KodeAkun = nota.KodeAkun ?? "",
                     FlagPembayaran = request.FlagPembayaran,
                     TanggalInput = DateTime.Now, 
                     KodeUserInput = request.KodeUserInput,

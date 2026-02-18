@@ -70,7 +70,7 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Commands
                     KodeMataUang = nota.KodeMataUang,
                     TotalBayarOrg = nota.TotalBayarOrg,
                     TotalBayarRp = nota.TotalBayarRp,
-                    KodeAkun = nota.KodeAkun,
+                    KodeAkun = nota.KodeAkun ?? "",
                     FlagPembayaran = request.FlagPembayaran,
 
                      TanggalInput = DateTime.Now, 

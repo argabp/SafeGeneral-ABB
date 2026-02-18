@@ -19,7 +19,7 @@ namespace ABB.Application.EntriPembayaranKass.Commands
         public decimal TotalBayarRp { get; set; }
         public string DebetKredit { get; set; }
         public string KodeMataUang { get; set; }
-         public int? Kurs { get; set; }
+         public decimal? Kurs { get; set; }
 
        
     }
@@ -76,7 +76,7 @@ namespace ABB.Application.EntriPembayaranKass.Commands
                     NoVoucher = request.NoVoucher,
                     No = lastNo,
                     NoNota4 = item.NoNota,
-                    KodeAkun = item.KodeAkun,
+                    KodeAkun = item.KodeAkun ?? "",
                     DebetKredit = item.DebetKredit,
                     KodeMataUang = item.KodeMataUang,
                     TotalBayar = item.TotalBayarOrg,

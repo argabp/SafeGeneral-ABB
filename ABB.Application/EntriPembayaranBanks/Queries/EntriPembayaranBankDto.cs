@@ -20,7 +20,7 @@ namespace ABB.Application.EntriPembayaranBanks.Queries
         public string DebetKredit { get; set; }
         public string UserBayar { get; set; }
         public decimal? TotalDlmRupiah { get; set; }
-        public int? Kurs { get; set; }
+        public decimal? Kurs { get; set; }
 
         public string KodeUserInput { get; set; }
         public string KodeUserUpdate { get; set; }
