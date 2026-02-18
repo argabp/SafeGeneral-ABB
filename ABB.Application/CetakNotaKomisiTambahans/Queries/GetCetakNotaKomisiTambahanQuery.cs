@@ -95,7 +95,7 @@ namespace ABB.Application.CetakNotaKomisiTambahans.Queries
             }
 
             string text_koperasi = data.pst_lain != 0 ? "Jasa Koperasi" : "";
-            var koperasi = data.nilai_lain.Value > 0
+            var koperasi = (data.nilai_lain ?? 0) > 0
                 ? $@"
             <tr>
                 <td>{text_koperasi}</td>
