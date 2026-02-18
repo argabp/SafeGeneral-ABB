@@ -37,11 +37,21 @@ namespace ABB.Application.EntriPembayaranBanks.Queries
                     on vb.KodeCabang equals cb.kd_cb into cabangJoin
                 from cb in cabangJoin.DefaultIfEmpty()
 
-                join kb in _context.KasBank
-                    on new { vb.KodeAkun, vb.KodeCabang } 
-                    equals new { KodeAkun = kb.NoPerkiraan, kb.KodeCabang } 
-                    into kasBankJoin
+                 join kb in _context.KasBank
+                        on new { 
+                                KodeAkun = vb.KodeAkun.Trim(),
+                                KodeCabang = vb.KodeCabang.Trim(),
+                                KodeBank = vb.KodeBank.Trim() 
+                        }
+                        equals new 
+                        { 
+                            KodeAkun = kb.NoPerkiraan.Trim(),
+                            KodeCabang = kb.KodeCabang.Trim(),
+                            KodeBank = kb.Kode.Trim()
+                        }
+                        into kasBankJoin
                 from kb in kasBankJoin.DefaultIfEmpty()
+
                 select new VoucherBankDto
                 {
                     KodeCabang = vb.KodeCabang,
