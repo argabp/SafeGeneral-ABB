@@ -37,6 +37,7 @@ using JenisTransaksiEntity = ABB.Domain.Entities.JenisTransaksi;
 using TemplateLapKeuEntity = ABB.Domain.Entities.TemplateLapKeu;
 using RekapJurnalEntity = ABB.Domain.Entities.RekapJurnal;
 using KeteranganProduksiEntity = ABB.Domain.Entities.KeteranganProduksi;
+using LabaRugiKursEntity = ABB.Domain.Entities.LabaRugiKurs;
 
 namespace ABB.Application.Common.Interfaces
 {
@@ -82,6 +83,7 @@ namespace ABB.Application.Common.Interfaces
         DbSet<TemplateLapKeuEntity> TemplateLapKeu { get; set; }
         DbSet<RekapJurnalEntity> RekapJurnal { get; set; }
         DbSet<KeteranganProduksiEntity> KeteranganProduksi { get; set; }
+        DbSet<LabaRugiKursEntity> LabaRugiKurs { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

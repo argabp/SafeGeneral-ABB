@@ -595,6 +595,43 @@ namespace ABB.Web.Modules.EntriPenyelesaianPiutang
             return View(viewModel);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> InsertLabaRugiKurs([FromBody] EntriPenyelesaianPiutangViewModel model)
+        {
+            try 
+            {
+                // 1. Ambil & Cut Kode Cabang dari Cookie (Misal: JK50 -> 50)
+                var userCabang = Request.Cookies["UserCabang"] ?? "";
+                string glDeptStr = (userCabang.Length >= 2) ? userCabang.Substring(userCabang.Length - 2) : userCabang;
+
+                // 2. Cari Kode Akun di abb_kodeakun_valas via Mediator
+                var akunValas = await Mediator.Send(new GetLabaRugiKursQuery { gl_dept = glDeptStr });
+
+                if (string.IsNullOrEmpty(akunValas))
+                    return Json(new { success = false, message = $"Setting Akun Valas cabang {glDeptStr} belum ditemukan." });
+
+                // 3. Siapkan Command untuk Insert Detail (Flag AKUN)
+                var command = new CreatePenyelesaianPiutangCommand
+                {
+                    NoBukti = model.NoBukti,
+                    KodeAkun = akunValas.Trim(),
+                    TotalBayarOrg = 0, // Original selalu 0
+                    TotalBayarRp = model.TotalBayarRp, // Selisih Rupiah dari JS
+                    DebetKredit = model.DebetKredit,   // D/K Penyeimbang dari JS
+                    FlagPembayaran = "AKUN",
+                    KodeMataUang = "001", // Penyesuaian selalu IDR
+                    // Kurs = 1,
+                    KodeUserInput = CurrentUser.UserId
+                };
+
+                await Mediator.Send(command);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
 
 
     }

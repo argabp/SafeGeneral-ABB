@@ -277,6 +277,8 @@ function updateGridFooter() {
                 $sisaPembayaranSpan.text(kendo.toString(sisaPembayaran, "n2"));
 
                 var $btnFinal = $("#btn-save-pembayaran-final");
+                 var $btnInsertKurs = $("#btn-insert-kurs");
+                 var $labelbtnInsertKurs = $("#label-btn-insert-kurs");
 
                 // Logika Tombol Final
                 if (Math.abs(sisaPembayaran) < 0.01) { 
@@ -285,10 +287,14 @@ function updateGridFooter() {
                     // Paksa 0.00 jika sisa sangat kecil (misal 0.0000001)
                     $sisaPembayaranSpan.text("0.00"); 
                     $btnFinal.prop("disabled", false).removeClass("k-disabled");
+                    $btnInsertKurs.hide();
+                    $labelbtnInsertKurs.hide();
                 } else {
                     $pembayaranTotalSpan.css("color", "red");
                     $sisaPembayaranSpan.css("color", "red");
                     $btnFinal.prop("disabled", true).addClass("k-disabled");
+                    $btnInsertKurs.show();
+                    $labelbtnInsertKurs.show();
                 }
             }
         });
@@ -899,4 +905,55 @@ function btnProsesPembayaranKas_OnClick(e) {
             );
         }
     );
+}
+
+function onInsertLabaRugiKurs() {
+    var voucherDK = $("#VoucherDK").val(); // D/K Header Voucher
+    var noVoucher = $("#NoVoucher").val();
+    
+    var totalHeader = parseFloat($(".window-footer").data("total-voucher-original")) || 0;
+    var totalDetail = parseFloat($("#pembayaranTotal").text().replace(/,/g, '')) || 0;
+    
+    // Selisih Rupiah
+    var sisa = (Math.round(totalHeader * 100) - Math.round(totalDetail * 100)) / 100;
+
+    if (Math.abs(sisa) <= 0.01) return;
+
+    var targetDK = "";
+    
+    // LOGIKA PENENTU D/K (Menyeimbangkan Jurnal)
+    if (voucherDK === "D") {
+        // Header Debet, maka Normal Detail adalah Kredit.
+        // Sisa > 0 (Header kegedean) -> Tambah Kredit
+        // Sisa < 0 (Detail kegedean) -> Tambah Debet
+        targetDK = (sisa > 0) ? "K" : "D";
+    } else {
+        // Header Kredit, maka Normal Detail adalah Debet.
+        // Sisa > 0 (Header kegedean) -> Tambah Debet
+        // Sisa < 0 (Detail kegedean) -> Tambah Kredit
+        targetDK = (sisa > 0) ? "D" : "K";
+    }
+
+    var payload = {
+        NoVoucher: noVoucher,
+        TotalDlmRupiah: Math.abs(sisa), 
+        DebetKredit: targetDK
+    };
+
+    showConfirmation("Konfirmasi", "Sistem akan memasukkan baris penyesuaian selisih kurs sebesar Rp " + kendo.toString(Math.abs(sisa), "n2") + ". Lanjutkan?", function() {
+        $.ajax({
+            type: "POST",
+            url: "/EntriPembayaranKas/InsertLabaRugiKurs",
+            contentType: "application/json",
+            data: JSON.stringify(payload),
+            success: function (res) {
+                if (res.success) {
+                    showMessage('success', 'Berhasil menambahkan selisih kurs.');
+                    $("#DetailPembayaranGrid").data("kendoGrid").dataSource.read(); // Refresh Grid
+                } else {
+                    showMessage('error', res.message);
+                }
+            }
+        });
+    });
 }

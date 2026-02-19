@@ -417,6 +417,44 @@ namespace ABB.Web.Modules.EntriPembayaranBank
             await Mediator.Send(new ProsesUlangPembayaranBankCommand { NoVoucher = id });
             return Json(new { success = true });
         }
+        
+        [HttpPost]
+        public async Task<IActionResult> InsertLabaRugiKurs([FromBody] EntriPembayaranBankViewModel model)
+        {
+            try 
+            {
+                // 1. Ambil & Cut Kode Cabang (JK50 -> 50)
+                var userCabang = Request.Cookies["UserCabang"] ?? "";
+                string glDept = (userCabang.Length >= 2) ? userCabang.Substring(userCabang.Length - 2) : userCabang;
+
+                // 2. Panggil Query via Mediator (Rapi & Bersih!)
+                var akunValas = await Mediator.Send(new GetLabaRugiKursQuery { gl_dept = glDept });
+
+                if (string.IsNullOrEmpty(akunValas))
+                    return Json(new { success = false, message = $"Setting Akun Valas cabang {glDept} tidak ditemukan." });
+
+                // 3. Panggil Command Create untuk insert item "AKUN"
+                var command = new CreatePembayaranBankCommand
+                {
+                    NoVoucher = model.NoVoucher,
+                    KodeAkun = akunValas.Trim(),
+                    TotalBayar = 0, 
+                    TotalDlmRupiah = model.TotalDlmRupiah,
+                    DebetKredit = model.DebetKredit,
+                    FlagPembayaran = "AKUN",
+                    KodeMataUang = "001",
+                    Kurs = 1,
+                    KodeUserInput = CurrentUser.UserId
+                };
+
+                await Mediator.Send(command);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
 
     }
 }

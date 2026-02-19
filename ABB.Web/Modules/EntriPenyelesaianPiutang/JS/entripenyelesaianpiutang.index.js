@@ -519,6 +519,10 @@ function updateGridFooter() {
             $pembayaranTotalSpan.text(kendo.toString(totalPembayaran, "n2"));
             $sisaPembayaranSpan.text(kendo.toString(sisaPembayaran, "n2"));
 
+
+            var $btnInsertKurs = $("#btn-insert-kurs");
+            var $labelbtnInsertKurs = $("#label-btn-insert-kurs");
+
             // 5. Cek Balance (Toleransi diperketat jadi 0.01)
             // Jika selisih absolut <= 0.01, anggap balance
             if (Math.abs(sisaPembayaran) < 0.01) {
@@ -530,11 +534,15 @@ function updateGridFooter() {
                 $sisaPembayaranSpan.text("0.00"); 
                 
                 $btnFinal.prop("disabled", false).removeClass("k-disabled");
+                $btnInsertKurs.hide();
+                    $labelbtnInsertKurs.hide();
             } else {
                 // TIDAK BALANCE (Merah)
                 $pembayaranTotalSpan.css("color", "red");
                 $sisaPembayaranSpan.css("color", "red");
                 $btnFinal.prop("disabled", true).addClass("k-disabled");
+                $btnInsertKurs.show();
+                    $labelbtnInsertKurs.show();
             }
         }
     });
@@ -1290,4 +1298,53 @@ function btnCetakPenyelesaian_OnClick(e) {
     // Buka di tab baru
     var url = `/EntriPenyelesaianPiutang/Cetak?kodeCabang=${kodeCabang}&nomorBukti=${nomorBukti}`;
     window.open(url, '_blank');
+}
+
+function onInsertLabaRugiKurs() {
+    // Ambil D/K dari Header
+    var headerDK = $("#PenyelesaianHeader_DebetKredit").data("kendoDropDownList").value();
+    var noBukti = $("#PenyelesaianHeader_NomorBukti").val();
+    
+    var totalHeader = parseFloat($(".window-footer").data("total-penyelesaian-original")) || 0;
+    var totalDetail = parseFloat($("#pembayaranTotal").text().replace(/,/g, '')) || 0;
+    
+    // sisa = Header - Detail
+    var sisa = (Math.round(totalHeader * 100) - Math.round(totalDetail * 100)) / 100;
+
+    if (Math.abs(sisa) <= 0.01) return;
+
+    var targetDK = "";
+    
+    // LOGIKA PENYEIMBANG (Sama dengan Bank/Kas)
+    if (headerDK === "D") {
+        // Header Debit, maka detail normalnya Kredit.
+        // Jika sisa > 0 (Header lebih besar), kita butuh Kredit tambahan di detail.
+        targetDK = (sisa > 0) ? "K" : "D";
+    } else {
+        // Header Kredit, maka detail normalnya Debit.
+        targetDK = (sisa > 0) ? "D" : "K";
+    }
+
+    var payload = {
+        NoBukti: noBukti,
+        TotalBayarRp: Math.abs(sisa), 
+        DebetKredit: targetDK
+    };
+
+    showConfirmation("Konfirmasi", "Sistem akan memasukkan baris penyesuaian selisih kurs sebesar Rp " + kendo.toString(Math.abs(sisa), "n2") + ". Lanjutkan?", function() {
+        $.ajax({
+            type: "POST",
+            url: "/EntriPenyelesaianPiutang/InsertLabaRugiKurs",
+            contentType: "application/json",
+            data: JSON.stringify(payload),
+            success: function (res) {
+                if (res.success) {
+                    showMessage('success', 'Selisih kurs berhasil ditambahkan ke akun Valas.');
+                    $("#TempDetailPembayaranGrid").data("kendoGrid").dataSource.read();
+                } else {
+                    showMessage('error', res.message);
+                }
+            }
+        });
+    });
 }

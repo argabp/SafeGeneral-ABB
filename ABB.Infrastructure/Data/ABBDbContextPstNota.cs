@@ -41,6 +41,7 @@ using SpLaporanJurnalHarianResult = ABB.Domain.Entities.SpLaporanJurnalHarianRes
 using TemplateLapKeuEntity = ABB.Domain.Entities.TemplateLapKeu;
 using RekapJurnalEntity = ABB.Domain.Entities.RekapJurnal;
 using KeteranganProduksiEntity = ABB.Domain.Entities.KeteranganProduksi;
+using LabaRugiKursEntity = ABB.Domain.Entities.LabaRugiKurs;
 
 namespace ABB.Infrastructure.Data
 {
@@ -90,6 +91,7 @@ namespace ABB.Infrastructure.Data
         public DbSet<TemplateLapKeuEntity> TemplateLapKeu { get; set; }
         public DbSet<RekapJurnalEntity> RekapJurnal { get; set; }
         public DbSet<KeteranganProduksiEntity> KeteranganProduksi { get; set; }
+        public DbSet<LabaRugiKursEntity> LabaRugiKurs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -126,6 +128,7 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new TemplateLapKeuMap());
             builder.ApplyConfiguration(new RekapJurnalMap());
             builder.ApplyConfiguration(new KeteranganProduksiMap());
+            builder.ApplyConfiguration(new LabaRugiKursMap());
 
             builder.Entity<BukuBesarSpDto>(entity =>
             {

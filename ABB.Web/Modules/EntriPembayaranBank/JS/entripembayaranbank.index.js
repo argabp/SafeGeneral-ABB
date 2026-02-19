@@ -321,18 +321,26 @@ function updateGridFooter() {
                 $sisaPembayaranSpan.text(kendo.toString(sisaPembayaran, "n2"));
 
                 var $btnFinal = $("#btn-save-pembayaran-final");
-
+                
+                 var $btnInsertKurs = $("#btn-insert-kurs");
+                 var $labelbtnInsertKurs = $("#label-btn-insert-kurs");
                 // 5. Cek Balance dengan Toleransi
                 if (Math.abs(sisaPembayaran) <= 0.01) { 
                     $pembayaranTotalSpan.css("color", "green");
                     $sisaPembayaranSpan.css("color", "green");
                     $sisaPembayaranSpan.text("0.00"); // Kosmetik biar rapi
                     $btnFinal.prop("disabled", false).removeClass("k-disabled");
+                    $btnInsertKurs.hide();
+                    $labelbtnInsertKurs.hide();
                 } else {
                     $pembayaranTotalSpan.css("color", "red");
                     $sisaPembayaranSpan.css("color", "red");
                     $btnFinal.prop("disabled", true).addClass("k-disabled");
+                    $btnInsertKurs.show();
+                    $labelbtnInsertKurs.show();
                 }
+
+                
             }
         });
     }
@@ -937,5 +945,56 @@ function btnProsesPembayaranBank_OnClick(e) {
     );
 }
 
+function onInsertLabaRugiKurs() {
+    var voucherDK = $("#VoucherDK").val(); // D atau K (Header)
+    var noVoucher = $("#NoVoucher").val();
     
+    // Ambil nilai sisa dari teks footer
+    // Kita ambil nilai sisa real dari perhitungan sebelumnya
+    var totalVoucherAsli = parseFloat($(".window-footer").data("total-voucher-original")) || 0;
+    var totalPembayaran = parseFloat($("#pembayaranTotal").text().replace(/,/g, '')) || 0;
+    
+    var selisihRupiah = (Math.round(totalVoucherAsli * 100) - Math.round(totalPembayaran * 100)) / 100;
+
+    if (Math.abs(selisihRupiah) === 0) return;
+
+    // LOGIKA PENENTUAN DEBET/KREDIT (Offsetting)
+    // Jika Voucher Debet (Uang Masuk), maka Detail harus Kredit. 
+    // Jika selisih positif (Voucher > Detail), tambahkan Kredit.
+    // Jika selisih negatif (Voucher < Detail), tambahkan Debet.
+    var targetDK = "";
+    if (selisihRupiah > 0) {
+        targetDK = (voucherDK === "D") ? "K" : "D";
+    } else {
+        targetDK = (voucherDK === "D") ? "D" : "K";
+    }
+
+    var data = {
+        NoVoucher: noVoucher,
+        TotalBayar: 0, // Original selalu 0
+        TotalDlmRupiah: Math.abs(selisihRupiah), // Nilai selisihnya
+        DebetKredit: targetDK,
+        FlagPembayaran: "AKUN",
+        KodeMataUang: $("#voucherMataUang").val() || "001", // Default IDR
+        Kurs: 1,
+        IsLabaRugiKurs: true // Flag tambahan untuk controller
+    };
+
+    showConfirmation("Konfirmasi", "Sistem akan memasukkan baris penyesuaian selisih kurs sebesar " + kendo.toString(Math.abs(selisihRupiah), "n2") + ". Lanjutkan?", function() {
+        $.ajax({
+            type: "POST",
+            url: "/EntriPembayaranBank/InsertLabaRugiKurs",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function (res) {
+                if (res.success) {
+                    showMessage('success', 'Selisih kurs berhasil dimasukkan.');
+                    $("#DetailPembayaranGrid").data("kendoGrid").dataSource.read();
+                } else {
+                    showMessage('error', res.message);
+                }
+            }
+        });
+    });
+}
 
