@@ -69,7 +69,7 @@ namespace ABB.Application.VoucherKass.Queries
             // AMBIL SALDO AWAL
             // =========================
             decimal saldoAwal = await _context.KasBank
-                .Where(k => k.Kode == request.KodeKas && k.KodeCabang == request.KodeCabang && k.NoPerkiraan == kodeAkun)
+                .Where(k => k.Kode == request.KodeKas && k.KodeCabang == request.KodeCabang && k.TipeKasBank == "KAS")
                 .Select(k => k.Saldo ?? 0)
                 .FirstOrDefaultAsync(cancellationToken);
 
