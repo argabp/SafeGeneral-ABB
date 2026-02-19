@@ -29,10 +29,12 @@ namespace ABB.Web.Modules.CancelPostingVoucherBank
          [HttpPost] // Action untuk Kendo Grid biasanya POST
         public async Task<ActionResult> GetCancelPostingVoucherBank([DataSourceRequest] DataSourceRequest request)
         {
+        var kodeCabang = Request.Cookies["UserCabang"];
            var ds = await Mediator.Send(new GetAllVoucherBankByFlagCancelQuery
             {
                 DatabaseName = Request.Cookies["DatabaseName"],
-                FlagPosting = true
+                FlagPosting = true,
+                KodeCabang = kodeCabang
             });
             return Json(ds.ToDataSourceResult(request));
         }

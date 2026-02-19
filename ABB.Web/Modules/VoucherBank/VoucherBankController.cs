@@ -130,7 +130,7 @@ namespace ABB.Web.Modules.VoucherBank
             ViewBag.KodeBankOptions = bankList.Select(x => new SelectListItem
             {
                 Value = x.Kode,
-                Text = $"{x.Kode} - {x.Keterangan}" // Format: KODE - NAMA BANK
+                Text = $"{x.Kode} - {x.Keterangan} - {x.NoRekening}" // Format: KODE - NAMA BANK
             }).ToList();
             // -------------------------
             // u/ jenispembayaran
@@ -213,7 +213,7 @@ namespace ABB.Web.Modules.VoucherBank
             ViewBag.KodeBankOptions = bankList.Select(x => new SelectListItem
             {
                 Value = x.Kode,
-                Text = $"{x.Kode} - {x.Keterangan}" // Format: KODE - NAMA BANK
+                  Text = $"{x.Kode} - {x.Keterangan} - {x.NoRekening}" // Format: KODE - NAMA BANK
             }).ToList();
 
             // u/ jenispembayaran

@@ -149,28 +149,52 @@ namespace ABB.Web.Modules.KasBank
             return PartialView(model);
         }
 
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(string kodeCabang, string kode, string tipeKasBank)
         {
+            // 1. Siapkan Options (Sama seperti Add)
             ViewBag.TipeKasBankOptions = new List<SelectListItem>
             {
                 new SelectListItem { Text = "Kas", Value = "KAS" },
                 new SelectListItem { Text = "Bank", Value = "BANK" }
             };
-            
+
+            // 2. Ambil GlDept dari cookie untuk filter COA (biar konsisten dengan Add)
+            var kodeCabangCookie = Request.Cookies["UserCabang"]?.Trim();
+            string glDept = null;
+            if (!string.IsNullOrEmpty(kodeCabangCookie) && kodeCabangCookie.Length >= 2)
+            {
+                glDept = kodeCabangCookie.Substring(kodeCabangCookie.Length - 2);
+            }
+
             var coaList = await Mediator.Send(new GetAllCoaQuery());
+            if (!string.IsNullOrEmpty(glDept))
+            {
+                coaList = coaList.Where(x => x.Dept == glDept).ToList();
+            }
+
             ViewBag.NoPerkiraanOptions = coaList.Select(x => new SelectListItem
             {
-                Value = x.Kode,
-                Text = $"{x.Kode} - {x.Nama}" 
+                Value = x.Kode.Trim(),
+                Text = $"{x.Kode.Trim()} - {x.Nama.Trim()}" 
             }).ToList();
 
-            var kasBankDto = await Mediator.Send(new GetKasBankByIdQuery { Kode = id });
+            // 3. Ambil data menggunakan Composite Key
+            // Gunakan Query yang sama dengan yang ada di action Save
+            var kasBankDto = await Mediator.Send(new GetKasBankByCompositeKeyQuery 
+            { 
+                KodeCabang = kodeCabang,
+                Kode = kode,
+                TipeKasBank = tipeKasBank
+            });
+
             if (kasBankDto == null)
             {
-                return NotFound();
+                // Beri feedback kalau data tidak ada, jangan cuma NotFound
+                return Content("<div class='alert alert-danger'>Data tidak ditemukan. Pastikan parameter lengkap.</div>");
             }
+
             var model = Mapper.Map<KasBankViewModel>(kasBankDto);
-            return PartialView(model);
+            return PartialView("Add", model); // Biasanya Edit pakai view yang sama dengan Add
         }
 
        [HttpPost]

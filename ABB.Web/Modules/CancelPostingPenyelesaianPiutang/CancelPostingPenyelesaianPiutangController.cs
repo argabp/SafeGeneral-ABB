@@ -29,10 +29,12 @@ namespace ABB.Web.Modules.CancelPostingPenyelesaianPiutang
          [HttpPost] // Action untuk Kendo Grid biasanya POST
         public async Task<ActionResult> GetCancelPostingPenyelesaianPiutang([DataSourceRequest] DataSourceRequest request)
         {
+             var kodeCabang = Request.Cookies["UserCabang"];
            var ds = await Mediator.Send(new GetAllPostingPenyelesaianPiutangQueryByFlagCancel
             {
                 DatabaseName = Request.Cookies["DatabaseName"],
-                FlagPosting = true
+                FlagPosting = true,
+                KodeCabang = kodeCabang
             });
             return Json(ds.ToDataSourceResult(request));
         }

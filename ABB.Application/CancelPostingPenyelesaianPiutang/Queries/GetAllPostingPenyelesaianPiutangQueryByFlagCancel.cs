@@ -18,6 +18,8 @@ namespace ABB.Application.CancelPostingPenyelesaianPiutang.Queries
         public bool FlagPosting { get; set; }   // true = sudah posting, false = belum posting
         public string SearchKeyword { get; set; }
          public string DatabaseName { get; set; }   
+
+         public string KodeCabang { get; set; } 
     }
 
     public class GetAllPenyelesaianPiutangByFlagCancelQueryHandler : IRequestHandler<GetAllPostingPenyelesaianPiutangQueryByFlagCancel, List<HeaderPenyelesaianUtangDto>>
@@ -54,6 +56,11 @@ namespace ABB.Application.CancelPostingPenyelesaianPiutang.Queries
                 );
             }
 
+
+            if (!string.IsNullOrEmpty(request.KodeCabang))
+            {
+                query = query.Where(v => v.KodeCabang == request.KodeCabang);
+            }
             // Proyeksikan ke DTO
             var headerPiutangList = await query
                 .ProjectTo<HeaderPenyelesaianUtangDto>(_mapper.ConfigurationProvider)

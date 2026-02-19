@@ -4,11 +4,22 @@ function btnAddKasBank_OnClick() {
 }
 
 // Fungsi untuk membuka window Edit Data
+// Fungsi untuk membuka window Edit Data
 function btnEditKasBank_OnClick(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-    // Parameter 'id' harus cocok dengan yang ada di Controller (public IActionResult Edit(string id))
-    openWindow('#KasBankWindow', `/KasBank/Edit?id=${dataItem.Kode.trim()}`, 'Edit Kas Bank');
+    
+    if (!dataItem) return;
+
+    // Ambil 3 kunci utamanya
+    var kodeCabang = dataItem.KodeCabang.trim();
+    var kode = dataItem.Kode.trim();
+    var tipeKasBank = dataItem.TipeKasBank.trim();
+
+    // Kirim ketiganya lewat URL
+    var url = `/KasBank/Edit?kodeCabang=${kodeCabang}&kode=${kode}&tipeKasBank=${tipeKasBank}`;
+    
+    openWindow('#KasBankWindow', url, 'Edit Kas Bank');
 }
 
 // Fungsi untuk menyimpan data (dari form Add atau Edit)
