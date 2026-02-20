@@ -67,7 +67,7 @@ namespace ABB.Infrastructure.Data.Mapping
 
             builder.Property(t => t.KeteranganVoucher)
                 .HasColumnName("keterangan_voucher")
-                .HasMaxLength(100);
+                .HasMaxLength(500);
 
             builder.Property(t => t.FlagPosting)
                 .HasColumnName("flag_posting")
