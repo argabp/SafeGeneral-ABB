@@ -35,7 +35,7 @@
 
         <table class="no-border" width="100%" cellpadding="5px">
             <tr>
-                <td class="no-border text-left" width="70%">@Model.VoucherHeader.NamaBank</td>
+                <td class="no-border text-left" width="70%">@Model.VoucherHeader.NamaBank - @Model.VoucherHeader.NoRekening</td>
                 <!-- <td class="no-border text-center">@Model.VoucherHeader.NoBank</td> -->
                 <td class="no-border text-left" width="30%">No. @Model.VoucherHeader.NoVoucher</td>
             </tr>
@@ -71,7 +71,7 @@
 
                 <tr tyle="height:60px;">
                     <td colspan="3">@Model.VoucherHeader.KeteranganVoucher</td>
-                    <td>@(Model.VoucherHeader.TotalVoucher.HasValue ? Model.VoucherHeader.TotalVoucher.Value.ToString("N2") : "0.00")</td>
+                    <td class="text-right">@(Model.VoucherHeader.TotalVoucher.HasValue ? Model.VoucherHeader.TotalVoucher.Value.ToString("N2") : "0.00")</td>
                     <td>@Model.VoucherHeader.KodeAkun</td>
                 </tr>
 
@@ -139,6 +139,6 @@
         var totalVoucher = @((Model.VoucherHeader.TotalVoucher ?? 0).ToString().Replace(",", "."));
         var hasil = terbilangJS(totalVoucher);
         var mataUang = "@Model.VoucherHeader.DetailMataUang";
-        document.getElementById("terbilangText").innerText = "# Terbilang #  " + "# " + hasil + " # "  + mataUang  + " # " ;
+        document.getElementById("terbilangText").innerText = "# Terbilang   " + hasil + " " + mataUang  + " # " ;
     });
 </script>

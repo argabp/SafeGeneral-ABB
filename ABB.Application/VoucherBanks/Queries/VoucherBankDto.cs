@@ -44,6 +44,7 @@ namespace ABB.Application.VoucherBanks.Queries
         public string KeteranganKasBank { get; set; }
         public bool FlagSementara { get; set; }
         public string NoVoucherSementara { get; set; }
+        public string NoRekening { get; set; }
 
         public string kt { get; set; }
 

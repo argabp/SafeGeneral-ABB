@@ -52,8 +52,14 @@ namespace ABB.Application.VoucherBanks.Queries
                                 from vb in queryDasar
                                 
                                 // Gunakan LEFT JOIN ke KasBank (via KodeBank)
-                                join kb in _context.KasBank 
-                                    on vb.KodeBank equals kb.Kode into kbJoin
+                                // join kb in _context.KasBank 
+                                //     on vb.KodeBank equals kb.Kode into kbJoin
+                                // from kb in kbJoin.DefaultIfEmpty()
+
+                                join kb in _context.KasBank
+                                    on new { vb.KodeAkun, vb.KodeCabang } 
+                                    equals new { KodeAkun = kb.NoPerkiraan, kb.KodeCabang } 
+                                    into kbJoin
                                 from kb in kbJoin.DefaultIfEmpty()
 
                                 // Gunakan LEFT JOIN ke MataUang
@@ -64,6 +70,8 @@ namespace ABB.Application.VoucherBanks.Queries
                                 join cb in _context.Cabang
                                     on vb.KodeCabang equals cb.kd_cb into cbJoin
                                 from cb in cbJoin.DefaultIfEmpty()
+
+                                
 
                                 // [PENTING] HAPUS WHERE DI SINI (Karena sudah di queryDasar)
 
@@ -99,6 +107,7 @@ namespace ABB.Application.VoucherBanks.Queries
 
                                     // Handle Null jika data join tidak ditemukan
                                     NamaBank = kb != null ? kb.Keterangan : null,
+                                    NoRekening = kb != null ? kb.NoRekening : null,
                                     NamaMataUang = mu != null ? mu.symbol : null,
                                     DetailMataUang = mu != null ? mu.nm_mtu : null,
 
