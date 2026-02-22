@@ -82,20 +82,25 @@ namespace ABB.Web.Modules.EntriPembayaranBank
             };
 
             // kode akun
-            var kodeCabangCookie = Request.Cookies["UserCabang"]?.Trim();
+           var kodeCabangCookie = Request.Cookies["UserCabang"]?.Trim();
+            
+
             string glDept = null;
+
             if (!string.IsNullOrEmpty(kodeCabangCookie) && kodeCabangCookie.Length >= 2)
             {
                 glDept = kodeCabangCookie.Substring(kodeCabangCookie.Length - 2);
             }
+
             ViewBag.DebugUserCabang = glDept;
-            var akunlist = await Mediator.Send(new GetAllCoaQuery());
-            if (!string.IsNullOrEmpty(glDept))
+            ViewBag.DebugUserCabang = $"'{glDept}'";
+
+            var akunlist = await Mediator.Send(new GetAllCoaQuery
             {
-                akunlist = akunlist
-                    .Where(x => x.Dept == glDept)   // sesuaikan nama field
-                    .ToList();
-            }
+                KodeCabang = glDept
+            });
+
+            
             ViewBag.KodeAkunOptions = akunlist.Select(x => new SelectListItem
             {
                 Value = x.Kode,

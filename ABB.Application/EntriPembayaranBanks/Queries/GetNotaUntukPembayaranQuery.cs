@@ -75,10 +75,8 @@ namespace ABB.Application.EntriPembayaranBanks.Queries
                                 no_nd = GetValue<string>(reader, "no_nd"),
                                 no_pl = GetValue<string>(reader, "no_pl"),
                                 saldo = GetValue<decimal?>(reader, "saldo"),
-                                curensi = GetValue<string>(reader, "curensi"),
-                                
-                                // Di SP tadi, kita sudah set: ISNULL(m.kd_mtu, '') AS kd_mtu
-                                kd_mtu = GetValue<string>(reader, "kd_mtu"), 
+                                curensi = GetValue<string>(reader, "curensi")?.Trim(),
+                                kd_mtu = GetValue<string>(reader, "kd_mtu")?.Trim(),
                                 
                                 nm_cust2 = GetValue<string>(reader, "nm_cust2"),
                                 nm_cust = GetValue<string>(reader, "nm_cust"),

@@ -12,7 +12,7 @@ namespace ABB.Application.Coas.Queries
 {
     public class GetAllCoaQuery : IRequest<List<CoaDto>>
     {
-        public string SearchKeyword { get; set; } // ✅ properti pencarian
+        public string SearchKeyword { get; set; }
         public string KodeCabang { get; set; }
     }
 
@@ -30,18 +30,37 @@ namespace ABB.Application.Coas.Queries
         public async Task<List<CoaDto>> Handle(GetAllCoaQuery request, CancellationToken cancellationToken)
         {
             var query = _context.Coa.AsQueryable();
+
             if (!string.IsNullOrWhiteSpace(request.KodeCabang))
             {
-                string dept = request.KodeCabang.Trim(); // Bersihkan spasi input
+                string dept = request.KodeCabang.Trim();
 
-                // Gunakan Trim() pada database field jika tipe datanya CHAR/NCHAR
-                query = query.Where(x => x.gl_dept.Trim() == dept);
+                var deptQuery = _context.Coa
+                    .Where(x => x.gl_dept.Trim() == dept);
+
+                if (dept == "10")
+                {
+                    var rangeQuery = _context.Coa
+                        .Where(x => 
+                            x.gl_kode.Trim().CompareTo("16011100") >= 0 &&
+                            x.gl_kode.Trim().CompareTo("16070100") <= 0);
+
+                    query = deptQuery.Union(rangeQuery);
+                }
+                else
+                {
+                    var additionalQuery = _context.Coa
+                        .Where(x => x.gl_kode.Trim() == "16010100");
+
+                    query = deptQuery.Union(additionalQuery);
+                }
             }
 
-            // ✅ Tambahkan filter pencarian
+            // Filter pencarian
             if (!string.IsNullOrWhiteSpace(request.SearchKeyword))
             {
                 string keyword = request.SearchKeyword.ToLower();
+
                 query = query.Where(x =>
                     x.gl_kode.ToLower().Contains(keyword) ||
                     x.gl_nama.ToLower().Contains(keyword) ||
@@ -49,7 +68,6 @@ namespace ABB.Application.Coas.Queries
                     x.gl_type.ToLower().Contains(keyword));
             }
 
-            // ✅ Project ke DTO menggunakan AutoMapper
             return await query
                 .ProjectTo<CoaDto>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
