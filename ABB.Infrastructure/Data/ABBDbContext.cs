@@ -154,6 +154,8 @@ namespace ABB.Infrastructure.Data
         public DbSet<ApprovalKlaimDetail> ApprovalKlaimDetail { get; set; }
         public DbSet<LimitKlaim> LimitKlaim { get; set; }
         public DbSet<LimitKlaimDetil> LimitKlaimDetail { get; set; }
+        public DbSet<KlaimAlokasiReasuransi> KlaimAlokasiReasuransi { get; set; }
+        public DbSet<KlaimAlokasiReasuransiXL> KlaimAlokasiReasuransiXL { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -301,6 +303,8 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new ApprovalKlaimDetailMap());
             builder.ApplyConfiguration(new LimitKlaimMap());
             builder.ApplyConfiguration(new LimitKlaimDetilMap());
+            builder.ApplyConfiguration(new KlaimAlokasiReasuransiMap());
+            builder.ApplyConfiguration(new KlaimAlokasiReasuransiXLMap());
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

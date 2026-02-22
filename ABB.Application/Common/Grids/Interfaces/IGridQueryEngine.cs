@@ -13,5 +13,8 @@ namespace ABB.Application.Common.Grids.Interfaces
 
         Task<GridResponse<T>> QueryAsyncCSM<T>(GridRequest request, GridConfig config, 
         object parameters);
+
+        Task<GridResponse<T>> QueryAsyncPST<T>(GridRequest request, GridConfig config, 
+        object parameters);
     }
 }

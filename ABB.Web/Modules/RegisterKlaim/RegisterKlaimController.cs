@@ -71,7 +71,6 @@ namespace ABB.Web.Modules.RegisterKlaim
             return Json(result);
         }
         
-        
         [HttpPost]
         public async Task<IActionResult> GetAkseptasiPolis(GridRequest grid,
             string kd_cb,

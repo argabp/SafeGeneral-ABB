@@ -1,10 +1,10 @@
 using System;
 
-namespace ABB.Application.ReopenMutasiKlaims.Queries
+namespace ABB.Application.KlaimAlokasiReasuransis.Queries
 {
-    public class ReopenMutasiKlaimDto
+    public class MutasiKlaimDto
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         
         public string nm_cb { get; set; }
 
@@ -37,5 +37,13 @@ namespace ABB.Application.ReopenMutasiKlaims.Queries
         public string? no_pol_lama { get; set; }
 
         public DateTime? tgl_closing { get; set; }
+
+        public DateTime? tgl_reas { get; set; }
+
+        public decimal nilai_ttl_kl { get; set; }
+
+        public decimal nilai_total_klaim { get; set; }
+
+        public decimal sisa_alokasi { get; set; }
     }
 }

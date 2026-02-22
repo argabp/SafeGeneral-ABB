@@ -4,7 +4,7 @@ using Dapper;
 
 namespace ABB.Application.Common.Interfaces
 {
-    public interface IDbConnectionPstNota
+    public interface IDbConnectionPst
     {
         Task ExecuteNonQueryProc(string query, object param = null);
         Task<object> ExecuteScalarProc(string query, object param = null);

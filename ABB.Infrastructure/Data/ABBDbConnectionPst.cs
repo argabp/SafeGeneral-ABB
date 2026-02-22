@@ -11,11 +11,11 @@ using Microsoft.Extensions.Configuration;
 
 namespace ABB.Infrastructure.Data
 {
-    public class ABBDbConnectionPstNota : IDbConnectionPstNota, IDisposable
+    public class ABBDbConnectionPst : IDbConnectionPst, IDisposable
     {
-        public ABBDbConnectionPstNota(IConfiguration configuration)
+        public ABBDbConnectionPst(IConfiguration configuration)
         {
-            var connectionString = configuration.GetConnectionString("ABBConnectionPstNota");
+            var connectionString = configuration.GetConnectionString("ABBConnectionPst");
             var connection = new SqlConnection(connectionString);
             Connection = connection;
         }

@@ -4801,7 +4801,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Interceptors\" />
       <Folder Include="Logs" />
       <Folder Include="wwwroot\img\profile-picture" />
     </ItemGroup>
@@ -4850,18 +4849,21 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Compile Remove="Interceptors\**" />
       <Compile Remove="wwwroot\WebCore\plugins\kendo\**" />
       <Compile Remove="Modules\Approval\Components\**" />
       <Compile Remove="obj\**" />
     </ItemGroup>
 
     <ItemGroup>
+      <EmbeddedResource Remove="Interceptors\**" />
       <EmbeddedResource Remove="wwwroot\WebCore\plugins\kendo\**" />
       <EmbeddedResource Remove="Modules\Approval\Components\**" />
       <EmbeddedResource Remove="obj\**" />
     </ItemGroup>
 
     <ItemGroup>
+      <None Remove="Interceptors\**" />
       <None Remove="wwwroot\WebCore\plugins\kendo\**" />
       <None Update="Modules\Account\JS\account.login.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -6119,6 +6121,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Content Remove="Interceptors\**" />
       <Content Remove="wwwroot\WebCore\plugins\kendo\**" />
       <Content Update="web.config">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>

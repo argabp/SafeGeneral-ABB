@@ -6,7 +6,7 @@ using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Interfaces;
 using MediatR;
 
-namespace ABB.Application.Alokasis.Queries
+namespace ABB.Application.Common.Queries
 {
     public class GetJenisSorQuery : IRequest<List<DropdownOptionDto>>
     {

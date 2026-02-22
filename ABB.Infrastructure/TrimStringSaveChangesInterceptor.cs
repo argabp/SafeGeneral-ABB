@@ -35,29 +35,29 @@ namespace ABB.Infrastructure
                 if (entry.State is not (EntityState.Added or EntityState.Modified))
                     continue;
 
-                var keyNames = entry.Metadata
-                    .FindPrimaryKey()?
-                    .Properties
-                    .Select(p => p.Name)
-                    .ToHashSet();
-
                 foreach (var property in entry.Properties)
                 {
+                    // 1. Only target strings
                     if (property.Metadata.ClrType != typeof(string))
                         continue;
 
-                    if (property.Metadata.IsKey())
+                    // 2. Skip Keys and Foreign Keys
+                    if (property.Metadata.IsKey() || property.Metadata.IsForeignKey())
                         continue;
 
-                    if (property.Metadata.IsForeignKey())
-                        continue;
-
-                    if (property.Metadata.GetColumnType()?.StartsWith("char") == true)
-                        continue;
-
+                    // 3. Get the value safely
                     var value = property.CurrentValue as string;
+
+                    // 4. The Fix: Only trim if the value is NOT null
+                    // This ensures null remains null.
                     if (value != null)
-                        property.CurrentValue = value.Trim();
+                    {
+                        var trimmedValue = value.Trim();
+                        
+                        // Optional: If you want to convert "   " to null instead of "", 
+                        // use string.IsNullOrEmpty(trimmedValue) ? null : trimmedValue;
+                        property.CurrentValue = trimmedValue;
+                    }
                 }
             }
         }

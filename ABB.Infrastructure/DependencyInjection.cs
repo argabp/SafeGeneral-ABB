@@ -15,6 +15,7 @@ namespace ABB.Infrastructure
             services.AddScoped(typeof(IDbConnection), typeof(ABBDbConnection));
             services.AddScoped(typeof(IDbConnectionCSM), typeof(ABBDbConnectionCSM));
             services.AddScoped(typeof(IDbConnectionPstNota), typeof(ABBDbConnectionPstNota));
+            services.AddScoped(typeof(IDbConnectionPst), typeof(ABBDbConnectionPst));
             services.AddSingleton(typeof(ILog), typeof(Logger));
 
 

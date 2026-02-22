@@ -1,0 +1,109 @@
+﻿@model ABB.Web.Modules.KlaimAlokasiReasuransi.Models.KlaimAlokasiReasuransiViewModel
+@using Kendo.Mvc.UI
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/KlaimAlokasiReasuransi/JS/klaimAlokasiReasuransi.sol.js"></script>
+
+@{
+    var nomor_register = Model.kd_cb.Trim() + "." + Model.kd_cob.Trim() +
+                          Model.kd_scob.Trim() + "." + Model.kd_thn.Trim() + "." + Model.no_kl.Trim();
+}
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="KlaimAlokasiReasuransiForm" enctype="multipart/form-data" autocomplete="off">
+        @Html.HiddenFor(h => h.kd_cb)
+        @Html.HiddenFor(h => h.kd_cob)
+        @Html.HiddenFor(h => h.kd_scob)
+        @Html.HiddenFor(h => h.kd_thn)
+        @Html.HiddenFor(h => h.no_kl)
+        @Html.HiddenFor(h => h.no_mts)
+        @Html.HiddenFor(h => h.kd_grp_sor)
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-4">Nomor Register Klaim</label>
+                <div class="col-sm-8">
+                    <kendo-textbox name="temp_nomor_register" value="@nomor_register" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-4">Jenis Sor</label>
+                <div class="col-sm-8">
+                    <kendo-dropdownlist for="kd_jns_sor" style="width: 100%" on-change="OnKodeJenisSorChange" option-label="Pilih Jenis Sor"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetJenisSor", "KlaimAlokasiReasuransi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-8">
+                <label class="col-sm-6">Rekanan</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_rk_sor" style="width: 100%"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetRekananSor", "KlaimAlokasiReasuransi")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_rk_sor" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-4">Share (%)</label>
+                <div class="col-sm-8">
+                    <kendo-numerictextbox decimals="2" max="100" spinners="false" for="pst_share" style="width: 100%;"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-4">Nilai Klaim</label>
+                <div class="col-sm-8">
+                    <kendo-numerictextbox decimals="2" spinners="false" for="nilai_kl" style="width: 100%;"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <div class="row col-sm-6">
+                    <input type="hidden" id="tempFlag_nota" value="@Model.flag_nota">
+                    <label class="col-sm-6">Flag Nota</label>
+                    <div class="col-sm-6 center">
+                        <label>
+                            <input type="checkbox" class="k-checkbox" id="flag_nota"/>
+                        </label>
+                        <span asp-validation-for="flag_nota" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row col-sm-6">
+                    <input type="hidden" id="tempFlag_cash_call" value="@Model.flag_cash_call">
+                    <label class="col-sm-6">Flag Cash Call</label>
+                    <div class="col-sm-6 center">
+                        <label>
+                            <input type="checkbox" class="k-checkbox" id="flag_cash_call"/>
+                        </label>
+                        <span asp-validation-for="flag_cash_call" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="window-footer">
+        <button type="button" id="btn-save-klaimAlokasiReasuransi" class="btn btn-success space-right">
+            <span class="fa fa-save"></span> Save
+        </button>
+    </div>
+</div>

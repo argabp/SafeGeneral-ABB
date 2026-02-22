@@ -129,6 +129,8 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new RekapJurnalMap());
             builder.ApplyConfiguration(new KeteranganProduksiMap());
             builder.ApplyConfiguration(new LabaRugiKursMap());
+            builder.ApplyConfiguration(new RekapJurnalMap());
+            builder.ApplyConfiguration(new KeteranganProduksiMap());
 
             builder.Entity<BukuBesarSpDto>(entity =>
             {

@@ -130,6 +130,12 @@ namespace ABB.Web.Extensions
             });
             services.AddScoped(typeof(ABBDbContextPstNota), typeof(ABBDbContextPstNota));
             
+            // Register IDbContextPstNota interface
+            services.AddDbContext<ABBDbContextPst>(options =>
+            options.UseSqlServer(
+                configuration.GetConnectionString("ABBConnectionPst")));
+            services.AddScoped<IDbContextPst>(provider => provider.GetService<ABBDbContextPst>());
+
             services.AddSingleton<IDbContextFactory, DbContextFactory>();
             services.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
             services.AddScoped<IGridQueryEngine, SqlGridQueryEngine>();
