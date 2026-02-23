@@ -66,7 +66,7 @@
 
                 <tr tyle="height:60px;">
                     <td colspan="3">@Model.VoucherHeader.KeteranganVoucher</td>
-                    <td class="text-right">@(Model.VoucherHeader.TotalVoucher.HasValue ? Model.VoucherHeader.TotalVoucher.Value.ToString("N2") : "0.00")</td>
+                    <td class="text-right">@Model.VoucherHeader.NamaMataUang @(Model.VoucherHeader.TotalVoucher.HasValue ? Model.VoucherHeader.TotalVoucher.Value.ToString("N2") : "0.00")</td>
                     <td>@Model.VoucherHeader.KodeAkun</td>
                 </tr>
 

@@ -209,7 +209,8 @@ namespace ABB.Web.Modules.VoucherBank
                 }).ToList();
                 
              // kodebank
-            var bankList = await Mediator.Send(new GetAllKasBankQuery { TipeKasBank = "BANK" });
+            var kodeCabangCookie = Request.Cookies["UserCabang"];
+            var bankList = await Mediator.Send(new GetAllKasBankQuery { TipeKasBank = "BANK" , KodeCabang = kodeCabangCookie});
             ViewBag.KodeBankOptions = bankList.Select(x => new SelectListItem
             {
                 Value = x.Kode,
