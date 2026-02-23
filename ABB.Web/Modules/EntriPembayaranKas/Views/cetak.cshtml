@@ -62,22 +62,37 @@
                         No :
                     </td>
                 </tr>
+                
+        @{
+                                var keterangans = (Model.VoucherKasHeader.KeteranganVoucher ?? "")
+                                    .Replace("\r", "")
+                                    .Split('\n');
+                                bool firstRow = true;
+                            }
 
-                <tr tyle="height:60px;">
-                    <td colspan="3">@Model.VoucherKasHeader.KeteranganVoucher</td>
-                    <td class="text-right">@Model.VoucherKasHeader.NamaMataUang @(Model.VoucherKasHeader.TotalVoucher.HasValue ? Model.VoucherKasHeader.TotalVoucher.Value.ToString("N2") : "0.00")</td>
-                    <td>@Model.VoucherKasHeader.KodeAkun</td>
-                </tr>
+                            @foreach (var ket in keterangans)
+                            {
+                                <tr style="height:30px;">
+                                    <td colspan="3">@ket</td>
 
-               @* Tambahkan baris kosong agar tabel tetap tinggi *@
-                @for(int i = 0; i < (8 - i); i++)
-                {
-                    <tr style="height:30px;">
-                        <td colspan="3"></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                }
+                                    @if (firstRow)
+                                    {
+                                        <td class="text-right">
+                                            @Model.VoucherKasHeader.NamaMataUang
+                                            @(Model.VoucherKasHeader.TotalVoucher.HasValue
+                                                ? Model.VoucherKasHeader.TotalVoucher.Value.ToString("N2")
+                                                : "0.00")
+                                        </td>
+                                        <td>@Model.VoucherKasHeader.KodeAkun</td>
+                                        firstRow = false;
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                        <td></td>
+                                    }
+                                </tr>
+                            }
 
             <tr style="height:30px;">
                  <td colspan="3" id="terbilangText">#Terbilang # ... # </td>

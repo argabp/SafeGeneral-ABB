@@ -64,21 +64,40 @@
                     </td>
                 </tr>
 
-                <tr tyle="height:60px;">
-                    <td colspan="3">@Model.VoucherHeader.KeteranganVoucher</td>
-                    <td class="text-right">@Model.VoucherHeader.NamaMataUang @(Model.VoucherHeader.TotalVoucher.HasValue ? Model.VoucherHeader.TotalVoucher.Value.ToString("N2") : "0.00")</td>
-                    <td>@Model.VoucherHeader.KodeAkun</td>
-                </tr>
+                 @{
+                    var keterangans = (Model.VoucherHeader.KeteranganVoucher ?? "")
+                        .Replace("\r", "")
+                        .Split('\n')
+                        .ToList();
 
-               @* Tambahkan baris kosong agar tabel tetap tinggi *@
-                @for(int i = 0; i < (8 - i); i++)
+                    bool firstRow = true;
+                }
+
+                @foreach (var ket in keterangans)
                 {
                     <tr style="height:30px;">
-                        <td colspan="3"></td>
-                        <td></td>
-                        <td></td>
+                        <td colspan="3">@ket</td>
+
+                        @if (firstRow)
+                        {
+                            <td class="text-right">
+                                @Model.VoucherHeader.NamaMataUang
+                                @(Model.VoucherHeader.TotalVoucher.HasValue
+                                    ? Model.VoucherHeader.TotalVoucher.Value.ToString("N2")
+                                    : "0.00")
+                            </td>
+                            <td>@Model.VoucherHeader.KodeAkun</td>
+                            firstRow = false;
+                        }
+                        else
+                        {
+                            <td></td>
+                            <td></td>
+                        }
                     </tr>
                 }
+
+             
 
                 <tr style="height:30px;">
                     <td colspan="3" id="terbilangText">#Terbilang # ... # </td>
