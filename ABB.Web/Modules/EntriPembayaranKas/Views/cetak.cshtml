@@ -65,7 +65,7 @@
 
                 <tr tyle="height:60px;">
                     <td colspan="3">@Model.VoucherKasHeader.KeteranganVoucher</td>
-                    <td>@(Model.VoucherKasHeader.TotalVoucher.HasValue ? Model.VoucherKasHeader.TotalVoucher.Value.ToString("N2") : "0.00")</td>
+                    <td class="text-right">@(Model.VoucherKasHeader.TotalVoucher.HasValue ? Model.VoucherKasHeader.TotalVoucher.Value.ToString("N2") : "0.00")</td>
                     <td>@Model.VoucherKasHeader.KodeAkun</td>
                 </tr>
 
@@ -81,7 +81,7 @@
 
             <tr style="height:30px;">
                  <td colspan="3" id="terbilangText">#Terbilang # ... # </td>
-                <td>@Model.VoucherKasHeader.NamaMataUang @(Model.VoucherKasHeader.TotalVoucher.HasValue ? Model.VoucherKasHeader.TotalVoucher.Value.ToString("N2") : "0.00")</td>
+                <td class="text-right">@Model.VoucherKasHeader.NamaMataUang @(Model.VoucherKasHeader.TotalVoucher.HasValue ? Model.VoucherKasHeader.TotalVoucher.Value.ToString("N2") : "0.00")</td>
                 <td></td>
             </tr>
 
@@ -144,7 +144,7 @@
         var totalVoucher = @((Model.VoucherKasHeader.TotalVoucher ?? 0).ToString().Replace(",", "."));
         var hasil = terbilangJS(totalVoucher);
         var mataUang = "@Model.VoucherKasHeader.DetailMataUang";
-        document.getElementById("terbilangText").innerText = "# Terbilang #  " + "# " + hasil + " # "  + mataUang + " # " ;
+         document.getElementById("terbilangText").innerText = "# Terbilang   " + hasil + " " + mataUang  + " # " ;
     });
 </script>
 
