@@ -54,7 +54,7 @@ namespace ABB.Web.Modules.VoucherBank.Models
         [Display(Name = "Total Dalam Rupiah")]
         public decimal? TotalDalamRupiah { get; set; }
 
-        [StringLength(100)]
+        [StringLength(500)]
         [Display(Name = "Keterangan")]
         public string KeteranganVoucher { get; set; }
 
