@@ -196,6 +196,7 @@
         .DataSource(ds => ds.Ajax()
             .Read(read => read.Action("GetDetailJurnal", "JurnalMemorial117").Data("getNoVoucherForGrid"))
             .Model(m => m.Id(p => p.No))
+            .ServerOperation(false)
             .Aggregates(agg =>
                 {
                     agg.Add(p => p.NilaiDebet).Sum();
@@ -219,7 +220,7 @@
         .Pageable(pager => pager.Refresh(true))
         .Sortable()
         .Scrollable()
-        .Height(300)
+        .Resizable(a=>a.Columns(true))
         .Events(e => e.DataBound("updateFooterTotals"))
     )
 

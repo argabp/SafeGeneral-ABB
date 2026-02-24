@@ -39,10 +39,14 @@ function updateFooterTotalsLihat() {
     var grid = $("#DetailJurnalGrid_Lihat").data("kendoGrid");
     if (!grid) return;
 
-    var aggregates = grid.dataSource.aggregates();
+    var data = grid.dataSource.data();
+    var totalDebet = 0;
+    var totalKredit = 0;
 
-    var totalDebet = aggregates.NilaiDebet ? aggregates.NilaiDebet.sum || 0 : 0;
-    var totalKredit = aggregates.NilaiKredit ? aggregates.NilaiKredit.sum || 0 : 0;
+    for (var i = 0; i < data.length; i++) {
+        totalDebet += data[i].NilaiDebet || 0;
+        totalKredit += data[i].NilaiKredit || 0;
+    }
 
     var balance = totalDebet - totalKredit;
 
@@ -332,10 +336,17 @@ function clearDetailForm() {
 
 function updateFooterTotals() {
     var grid = $("#DetailJurnalGrid").data("kendoGrid");
-    var aggregates = grid.dataSource.aggregates();
+    if (!grid) return;
 
-    var totalDebet = aggregates.NilaiDebet ? aggregates.NilaiDebet.sum || 0 : 0;
-    var totalKredit = aggregates.NilaiKredit ? aggregates.NilaiKredit.sum || 0 : 0;
+    var data = grid.dataSource.data(); // Ambil seluruh data di memori
+    var totalDebet = 0;
+    var totalKredit = 0;
+
+    // Loop manual untuk akurasi maksimal
+    for (var i = 0; i < data.length; i++) {
+        totalDebet += data[i].NilaiDebet || 0;
+        totalKredit += data[i].NilaiKredit || 0;
+    }
 
     var balance = totalDebet - totalKredit;
 
@@ -345,6 +356,7 @@ function updateFooterTotals() {
     var lblBalance = $("#lblBalance");
     lblBalance.text(kendo.toString(balance, "n2"));
 
+    // Toleransi 0.01 untuk pembulatan akuntansi
     if (Math.abs(balance) < 0.01) {
         lblBalance.css("color", "green").text("0.00 (Balance)");
     } else {

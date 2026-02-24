@@ -196,6 +196,7 @@
         .Name("DetailJurnalGrid")
         .DataSource(ds => ds.Ajax()
             .Read(read => read.Action("GetDetailJurnal", "JurnalMemorial104").Data("getNoVoucherForGrid"))
+            .ServerOperation(false)
             .Model(m => m.Id(p => p.No))
             .Aggregates(agg =>
                 {
@@ -220,7 +221,7 @@
         .Pageable(pager => pager.Refresh(true))
         .Sortable()
         .Scrollable()
-        .Height(300)
+        .Resizable(a=>a.Columns(true))
         .Events(e => e.DataBound("updateFooterTotals"))
     )
 

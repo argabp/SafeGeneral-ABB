@@ -144,23 +144,36 @@ function onSaveDetail() {
 
 function updateFooterTotals() {
     var grid = $("#DetailJurnalGrid").data("kendoGrid");
-    var aggregates = grid.dataSource.aggregates();
+    if (!grid) return;
 
-    var totalDebet = aggregates.NilaiDebet ? aggregates.NilaiDebet.sum || 0 : 0;
-    var totalKredit = aggregates.NilaiKredit ? aggregates.NilaiKredit.sum || 0 : 0;
+    var dataSource = grid.dataSource;
+    var data = dataSource.data(); // Mengambil seluruh baris data di memori
+    
+    var totalDebet = 0;
+    var totalKredit = 0;
+
+    // Hitung manual dari seluruh data (lintas halaman)
+    for (var i = 0; i < data.length; i++) {
+        totalDebet += data[i].NilaiDebet || 0;
+        totalKredit += data[i].NilaiKredit || 0;
+    }
 
     var balance = totalDebet - totalKredit;
 
+    // Update Label dengan format ribuan yang cantik
     $("#lblTotalDebet").text(kendo.toString(totalDebet, "n2"));
     $("#lblTotalKredit").text(kendo.toString(totalKredit, "n2"));
 
     var lblBalance = $("#lblBalance");
     lblBalance.text(kendo.toString(balance, "n2"));
 
+    // Toleransi pembulatan standar akuntansi (0.01)
     if (Math.abs(balance) < 0.01) {
         lblBalance.css("color", "green").text("0.00 (Balance)");
     } else {
         lblBalance.css("color", "red");
+        // Opsional: Jika selisih besar, kasih warning ke user
+        console.warn("Jurnal tidak balance sebesar: " + balance);
     }
 }
 
@@ -403,14 +416,19 @@ function onDeleteHeaderJurnalMemorial104_Click(e) {
 
 
 
+// --- FIX UNTUK 104 (Ganti versi aggregates ke versi Looping) ---
 function updateFooterTotalsLihat() {
     var grid = $("#DetailJurnalGrid_Lihat").data("kendoGrid");
     if (!grid) return;
 
-    var aggregates = grid.dataSource.aggregates();
+    var data = grid.dataSource.data(); // Ambil semua data di memori
+    var totalDebet = 0;
+    var totalKredit = 0;
 
-    var totalDebet = aggregates.NilaiDebet ? aggregates.NilaiDebet.sum || 0 : 0;
-    var totalKredit = aggregates.NilaiKredit ? aggregates.NilaiKredit.sum || 0 : 0;
+    for (var i = 0; i < data.length; i++) {
+        totalDebet += data[i].NilaiDebet || 0;
+        totalKredit += data[i].NilaiKredit || 0;
+    }
 
     var balance = totalDebet - totalKredit;
 
