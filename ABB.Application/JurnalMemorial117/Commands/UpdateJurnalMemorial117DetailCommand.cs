@@ -19,7 +19,10 @@ namespace ABB.Application.JurnalMemorial117.Commands
         public string KodeMataUang { get; set; }
         public decimal? NilaiDebet { get; set; }
         public decimal? NilaiKredit { get; set; }
+         public decimal? NilaiDebetRp { get; set; }
+          public decimal? NilaiKreditRp { get; set; }
         public string KodeUserUpdate { get; set; }
+        
 
         // HAPUS FUNCTION Mapping() DARI SINI.
         // Mapping sudah diatur di file ViewModel (di project Web), itu sudah cukup.
@@ -46,7 +49,8 @@ namespace ABB.Application.JurnalMemorial117.Commands
             entity.KodeMataUang = request.KodeMataUang;
             entity.NilaiDebet = request.NilaiDebet;
             entity.NilaiKredit = request.NilaiKredit;
-            
+             entity.NilaiDebetRp = request.NilaiDebetRp;
+             entity.NilaiKreditRp = request.NilaiKreditRp;
             entity.KodeUserUpdate = request.KodeUserUpdate;
             entity.TanggalUserUpdate = DateTime.Now;
 

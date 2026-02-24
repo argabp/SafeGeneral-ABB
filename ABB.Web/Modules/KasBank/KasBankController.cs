@@ -99,6 +99,7 @@ namespace ABB.Web.Modules.KasBank
 
             ViewBag.TipeKasBankOptions = new List<SelectListItem>
             {
+                new SelectListItem { Text = "Pilih..", Value = "" },
                 new SelectListItem { Text = "Kas", Value = "KAS" },
                 new SelectListItem { Text = "Bank", Value = "BANK" }
             };

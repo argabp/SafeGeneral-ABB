@@ -209,7 +209,9 @@
             cols.Bound(c => c.Keterangan).Title("Keterangan").Width(150);
             cols.Bound(c => c.KodeMataUang).Title("MTU").Width(80);
             cols.Bound(c => c.NilaiDebet).Format("{0:n2}").Title("Debet").Width(120).HtmlAttributes(new { style = "text-align:right;" });
+            cols.Bound(c => c.NilaiDebetRp).Format("{0:n2}").Title("Debet Rp").Width(120).HtmlAttributes(new { style = "text-align:right;" });
             cols.Bound(c => c.NilaiKredit).Format("{0:n2}").Title("Kredit").Width(120).HtmlAttributes(new { style = "text-align:right;" });
+            cols.Bound(c => c.NilaiKreditRp).Format("{0:n2}").Title("Kredit Rp").Width(120).HtmlAttributes(new { style = "text-align:right;" });
             
             cols.Command(command => {
                 command.Custom("EditDetail").Text(" ").IconClass("fa fa-edit").Click("onEditDetail");

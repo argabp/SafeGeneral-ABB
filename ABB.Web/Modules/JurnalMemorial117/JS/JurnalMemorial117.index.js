@@ -44,8 +44,8 @@ function updateFooterTotalsLihat() {
     var totalKredit = 0;
 
     for (var i = 0; i < data.length; i++) {
-        totalDebet += data[i].NilaiDebet || 0;
-        totalKredit += data[i].NilaiKredit || 0;
+        totalDebet += data[i].NilaiDebetRp || 0;
+        totalKredit += data[i].NilaiKreditRp || 0;
     }
 
     var balance = totalDebet - totalKredit;
@@ -60,6 +60,7 @@ function updateFooterTotalsLihat() {
         lblBalance.css("color", "green").text("0.00 (Balance)");
     } else {
         lblBalance.css("color", "red");
+         console.warn("Jurnal tidak balance sebesar: " + balance);
     }
 }
 
@@ -266,7 +267,7 @@ function onEditDetail(e) {
     // --- TAMBAHAN: Isi field Rp juga ---
     $("#NilaiDebetRp").data("kendoNumericTextBox").value(dataItem.NilaiDebetRp);
     $("#NilaiKreditRp").data("kendoNumericTextBox").value(dataItem.NilaiKreditRp);
-    
+    $("#KeteranganDetail").val(dataItem.KeteranganDetail);
     // Pastikan event listener aktif (jaga-jaga)
     attachDetailEvents(); 
 
@@ -344,8 +345,8 @@ function updateFooterTotals() {
 
     // Loop manual untuk akurasi maksimal
     for (var i = 0; i < data.length; i++) {
-        totalDebet += data[i].NilaiDebet || 0;
-        totalKredit += data[i].NilaiKredit || 0;
+        totalDebet += data[i].NilaiDebetRp || 0;
+        totalKredit += data[i].NilaiKreditRp || 0;
     }
 
     var balance = totalDebet - totalKredit;
@@ -361,6 +362,7 @@ function updateFooterTotals() {
         lblBalance.css("color", "green").text("0.00 (Balance)");
     } else {
         lblBalance.css("color", "red");
+         console.warn("Jurnal tidak balance sebesar: " + balance);
     }
 }
 
