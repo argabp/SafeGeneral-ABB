@@ -69,11 +69,17 @@
                     </td>
                 </tr>
 
-                @{
+               @{
+                    // JURUS ANTI BARIS KOSONG:
                     var keterangans = (Model.VoucherHeader.KeteranganVoucher ?? "")
                         .Replace("\r", "")
                         .Split('\n')
+                        .Select(s => s.Trim()) // Buang spasi di ujung-ujung tiap baris
+                        .Where(s => !string.IsNullOrEmpty(s)) // Buang baris yang beneran kosong
                         .ToList();
+
+                    // Safety net: Kalau keterangan beneran kosong, kasih 1 baris dummy biar angka & akun tetep muncul
+                    if (!keterangans.Any()) { keterangans.Add(""); }
 
                     bool firstRow = true;
                 }

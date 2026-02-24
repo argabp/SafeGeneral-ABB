@@ -431,45 +431,46 @@ function hitungKursDetail() {
         }
     });
 }
-
 function generateNomorBukti() {
-    var kodeCabangText = $("#JurnalHeader_KodeCabang").data("kendoComboBox")?.input.val() || "";
-    var kodeCabang = kodeCabangText.split(" - ")[0].trim();
+    // 1. Ambil Kode Cabang
+    var kodeCabang = $("#JurnalHeader_KodeCabang").data("kendoComboBox")?.value();
     
-    // Ambil tanggal dari Kendo DatePicker
+    // 2. Ambil Tanggal dari Kendo DatePicker
     var kendoDatePicker = $("#JurnalHeader_Tanggal").data("kendoDatePicker");
     var tanggalSelected = kendoDatePicker ? kendoDatePicker.value() : null;
 
-    if (!tanggalSelected) {
-        $("#JurnalHeader_NoVoucher").val(""); 
+    if (!tanggalSelected || !kodeCabang) {
         return;
     }
 
-    // Format tanggal (yyyy-MM-dd)
-    var formattedDate = kendo.toString(tanggalSelected, "yyyy-MM-dd");
+    var bulanBaru = tanggalSelected.getMonth() + 1;
+    var tahunBaru = tanggalSelected.getFullYear();
 
-    // Pastikan Controller punya Action GetNextNoVoucherJurnal yang menerima parameter tanggal
-    // Anda mungkin perlu menyesuaikan nama parameter di Controller (misal: bulan, tahun atau tanggalVoucher)
-    // Asumsi Controller menerima: kodeCabang, bulan, tahun
-    
-    var bulan = tanggalSelected.getMonth() + 1;
-    var tahun = tanggalSelected.getFullYear();
-
-    if (kodeCabang) {
-        $.ajax({
-            type: "GET",
-            // Sesuaikan URL ini dengan Controller Anda
-            // Contoh jika controller menerima Bulan & Tahun terpisah:
-            url: `/JurnalMemorial117/GetNextNoVoucher?kodeCabang=${kodeCabang}&bulan=${bulan}&tahun=${tahun}`,
+    // --- LOGIKA SAKTI EDIT MODE ---
+    if (originalVoucher.isEdit) {
+        // Cek apakah Cabang, Bulan, dan Tahun masih sama dengan data awal (Database)
+        if (kodeCabang === originalVoucher.kodeCabang && 
+            bulanBaru === originalVoucher.bulan && 
+            tahunBaru === originalVoucher.tahun) {
             
-            // ATAU jika controller menerima TanggalVoucher:
-            // url: `/JurnalMemorial117/GetNextNoVoucher?kodeCabang=${kodeCabang}&tanggalVoucher=${formattedDate}`,
-            
-            success: function (response) {
-                if (response && response.noVoucher) {
-                    $("#JurnalHeader_NoVoucher").val(response.noVoucher);
-                }
-            }
-        });
+            // Balikkan ke No Voucher asli, jangan minta nomor baru ke server
+            $("#JurnalHeader_NoVoucher").val(originalVoucher.noVoucher);
+            console.log("Edit Mode: Periode sama, No Voucher dipertahankan.");
+            return; 
+        }
     }
+
+    // 3. Jika Mode ADD atau user beneran pindah periode/cabang saat EDIT
+    $.ajax({
+        type: "GET",
+        url: `/JurnalMemorial117/GetNextNoVoucher?kodeCabang=${kodeCabang}&bulan=${bulanBaru}&tahun=${tahunBaru}`,
+        success: function (response) {
+            if (response && response.noVoucher) {
+                $("#JurnalHeader_NoVoucher").val(response.noVoucher);
+            }
+        },
+        error: function() {
+            console.error("Gagal mendapatkan nomor urut voucher.");
+        }
+    });
 }

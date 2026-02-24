@@ -26,6 +26,10 @@ namespace ABB.Application.EntriPenyelesaianPiutangs.Queries
         public bool FlagFinal { get; set; }
         public string DetailMataUang { get; set; }
 
+        public string NamaMataUang { get; set; }
+
+        public string kt { get; set; }
+
         public decimal? TotalBayarRp { get; set; }
 
 

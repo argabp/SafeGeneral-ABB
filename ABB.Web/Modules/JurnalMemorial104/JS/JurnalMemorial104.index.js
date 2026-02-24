@@ -428,31 +428,41 @@ function updateFooterTotalsLihat() {
 }
 
 function generateNomorBukti() {
-    // 1. Ambil Kode Cabang
-    var kodeCabang = $("#JurnalHeader_KodeCabang").data("kendoComboBox")?.value();
-    
-    // 2. Ambil Tanggal
+    // 1. Ambil inputan user sekarang
+    var kodeCabangInput = $("#JurnalHeader_KodeCabang").data("kendoComboBox")?.value();
     var tanggalPicker = $("#JurnalHeader_Tanggal").data("kendoDatePicker");
     var tanggalSelected = tanggalPicker ? tanggalPicker.value() : null;
 
-    // Validasi
-    if (!tanggalSelected || !kodeCabang) {
-        return; 
+    if (!tanggalSelected || !kodeCabangInput) return; 
+
+    var bulanBaru = tanggalSelected.getMonth() + 1;
+    var tahunBaru = tanggalSelected.getFullYear();
+
+    // 2. LOGIKA SAKTI EDIT MODE
+    if (originalVoucher.isEdit) {
+        // Cek: Apakah Cabang, Bulan, dan Tahun masih sama dengan data awal?
+        if (kodeCabangInput === originalVoucher.kodeCabang && 
+            bulanBaru === originalVoucher.bulan && 
+            tahunBaru === originalVoucher.tahun) {
+            
+            // Kalau semua sama, balikin ke No Voucher aslinya (...001)
+            $("#JurnalHeader_NoVoucher").val(originalVoucher.noVoucher);
+            console.log("Edit Mode: Data periode sama, No Voucher tetap: " + originalVoucher.noVoucher);
+            return; // STOP! Jangan lanjut ke AJAX
+        }
     }
 
-    // 3. Ambil Bulan & Tahun
-    var bulan = tanggalSelected.getMonth() + 1;
-    var tahun = tanggalSelected.getFullYear();
-
-    // 4. Panggil Controller
+    // 3. Kalau Add Mode ATAU user beneran pindah bulan/cabang, baru cari nomor baru
     $.ajax({
         type: "GET",
-        url: `/JurnalMemorial104/GetNextNoVoucher?kodeCabang=${kodeCabang}&bulan=${bulan}&tahun=${tahun}`,
+        url: `/JurnalMemorial104/GetNextNoVoucher?kodeCabang=${kodeCabangInput}&bulan=${bulanBaru}&tahun=${tahunBaru}`,
         success: function (response) {
             if (response && response.success) {
-                // Update Textbox No Voucher
                 $("#JurnalHeader_NoVoucher").val(response.noVoucher);
             }
+        },
+        error: function() {
+            console.error("Gagal mendapatkan nomor urut baru.");
         }
     });
 }

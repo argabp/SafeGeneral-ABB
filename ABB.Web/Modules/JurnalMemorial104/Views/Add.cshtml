@@ -232,11 +232,27 @@
 </div>
 
 <script>
+    var originalVoucher = {
+        isEdit: @(isEditMode ? "true" : "false"),
+        noVoucher: "@(Model.JurnalHeader?.NoVoucher ?? "")",
+        kodeCabang: "@(Model.JurnalHeader?.KodeCabang ?? "")",
+        
+        // Perbaikan di sini: .ToString() dan "null" (sama-sama string)
+        bulan: @(Model.JurnalHeader?.Tanggal != null ? Model.JurnalHeader.Tanggal.Value.Month.ToString() : "null"),
+        tahun: @(Model.JurnalHeader?.Tanggal != null ? Model.JurnalHeader.Tanggal.Value.Year.ToString() : "null")
+    };
+
     $(document).ready(function() {
         // Jika mode edit (NoVoucher ada), tampilkan form detail
         var noVoucher = $("#JurnalHeader_NoVoucher").val();
         if (noVoucher) {
             $("#JurnalDetailForm").show();
+        }
+
+        var tglAwal = $("#JurnalHeader_Tanggal").data("kendoDatePicker").value();
+        if (tglAwal && !originalVoucher.bulan) {
+            originalVoucher.bulan = tglAwal.getMonth() + 1;
+            originalVoucher.tahun = tglAwal.getFullYear();
         }
     });
 </script>

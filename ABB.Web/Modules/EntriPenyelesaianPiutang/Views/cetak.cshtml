@@ -61,61 +61,48 @@
 
                 @* Baris Checkbox Pembayaran DIHAPUS sesuai permintaan *@
 
-               @{
-                        var keterangans = (Model.PenyelesaianHeader.Keterangan ?? "")
-                            .Replace("\r", "")
-                            .Split('\n')
-                            .ToList();
+              @{
+                    // FILTER ANTI BARIS KOSONG
+                    var keterangans = (Model.PenyelesaianHeader.Keterangan ?? "")
+                        .Replace("\r", "")
+                        .Split('\n')
+                        .Select(s => s.Trim())
+                        .Where(s => !string.IsNullOrEmpty(s))
+                        .ToList();
 
-                        bool firstRow = true;
-                    }
+                    // Jaga-jaga kalau keterangan kosong total
+                    if (!keterangans.Any()) { keterangans.Add(""); }
 
-                    @foreach (var ket in keterangans)
-                    {
-                        <tr style="height:30px;">
-                            <td colspan="3">@ket</td>
+                    bool firstRow = true;
+                }
 
-                            @if (firstRow)
-                            {
-                                <td class="text-right">
-                                    @Model.PenyelesaianHeader.MataUang
-                                    @(Model.PenyelesaianHeader.TotalOrg.HasValue
-                                        ? Model.PenyelesaianHeader.TotalOrg.Value.ToString("N2")
-                                        : "0.00")
-                                </td>
-                                <td class="text-center">@Model.PenyelesaianHeader.KodeAkun</td>
-                                firstRow = false;
-                            }
-                            else
-                            {
-                                <td></td>
-                                <td></td>
-                            }
-                        </tr>
-                    }
+                @foreach (var ket in keterangans)
+                {
+                    <tr style="height:30px;">
+                        <td colspan="3">@ket</td>
 
-                    @* Tambahkan baris kosong agar total minimal 8 baris *@
-                    @{
-                        int minRows = 8;
-                        int currentRows = keterangans.Count;
-                        int emptyRows = minRows - currentRows;
-                    }
-
-                    @if (emptyRows > 0)
-                    {
-                        for (int i = 0; i < emptyRows; i++)
+                        @if (firstRow)
                         {
-                            <tr style="height:30px;">
-                                <td colspan="3"></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
+                            <td class="text-right">
+                                @Model.PenyelesaianHeader.NamaMataUang
+                                @(Model.PenyelesaianHeader.TotalOrg.HasValue
+                                    ? Model.PenyelesaianHeader.TotalOrg.Value.ToString("N2")
+                                    : "0.00")
+                            </td>
+                            <td class="text-center">@Model.PenyelesaianHeader.KodeAkun</td>
+                            firstRow = false;
                         }
-                    }
+                        else
+                        {
+                            <td></td>
+                            <td></td>
+                        }
+                    </tr>
+                }
 
             <tr style="height:30px;">
                  <td colspan="3" id="terbilangText"># Terbilang # ... # </td>
-                <td class="text-right">@Model.PenyelesaianHeader.MataUang @(Model.PenyelesaianHeader.TotalOrg.HasValue ? Model.PenyelesaianHeader.TotalOrg.Value.ToString("N2") : "0.00")</td>
+                <td class="text-right"><b>@Model.PenyelesaianHeader.NamaMataUang @(Model.PenyelesaianHeader.TotalOrg.HasValue ? Model.PenyelesaianHeader.TotalOrg.Value.ToString("N2") : "0.00")</b></td>
                 <td></td>
             </tr>
 
@@ -125,7 +112,7 @@
                 <td><center>Direksi</center></td>
                 <td><center>Keuangan</center></td>
                 <td><center>Akutansi</center></td>
-                <td colspan="2" rowspan="2"><Center>Jakarta, @Model.PenyelesaianHeader.Tanggal?.ToString("dd-MM-yyyy") <br>Penerima <br> <br> <br> <br>(................)</Center></td>
+                <td colspan="2" rowspan="2"><Center>@Model.PenyelesaianHeader.kt, @Model.PenyelesaianHeader.Tanggal?.ToString("dd-MM-yyyy") <br>Penerima <br> <br> <br> <br>(................)</Center></td>
             </tr>
             <tr style="height:70px;">
                 <td></td>
@@ -164,20 +151,13 @@
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-        // Ambil TotalOrg dari Model Header
         var totalVoucher = @((Model.PenyelesaianHeader.TotalOrg ?? 0).ToString(System.Globalization.CultureInfo.InvariantCulture));
-        
         var hasil = terbilangJS(totalVoucher);
         if(hasil === "") hasil = "Nol";
 
-        // Ambil Mata Uang (Code)
-        var mataUang = "@Model.PenyelesaianHeader.MataUang";
+        // PAKAI DETAIL MATA UANG (Nama Panjang: Rupiah / US Dollar)
+        var namaMataUangPanjang = "@Model.PenyelesaianHeader.DetailMataUang";
         
-        // Logic sederhana untuk nama mata uang jika kode digunakan (opsional)
-        var namaMataUang = mataUang;
-        if(mataUang === "001" || mataUang === "IDR") namaMataUang = "Rupiah";
-        if(mataUang === "002" || mataUang === "USD") namaMataUang = "Dollar";
-
-        document.getElementById("terbilangText").innerText = "# Terbilang " + hasil + " "  + namaMataUang + " #";
+        document.getElementById("terbilangText").innerText = "# Terbilang " + hasil + " " + namaMataUangPanjang + " #";
     });
 </script>

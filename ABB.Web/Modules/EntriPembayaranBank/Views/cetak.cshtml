@@ -64,11 +64,17 @@
                     </td>
                 </tr>
 
-                 @{
+                @{
+                    // JURUS ANTI BARIS KOSONG:
                     var keterangans = (Model.VoucherHeader.KeteranganVoucher ?? "")
                         .Replace("\r", "")
                         .Split('\n')
+                        .Select(s => s.Trim()) // Buang spasi di ujung tiap baris
+                        .Where(s => !string.IsNullOrEmpty(s)) // Buang baris yang benar-benar kosong
                         .ToList();
+
+                    // Safety net: jika kosong, beri 1 baris supaya grid tidak hancur
+                    if (!keterangans.Any()) { keterangans.Add(""); }
 
                     bool firstRow = true;
                 }

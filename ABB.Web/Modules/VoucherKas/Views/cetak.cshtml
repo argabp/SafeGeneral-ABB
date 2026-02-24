@@ -68,41 +68,49 @@
                 </tr>
 
                 @{
-                        var keterangans = (Model.VoucherKasHeader.KeteranganVoucher ?? "")
-                            .Replace("\r", "")
-                            .Split('\n');
-                        bool firstRow = true;
-                    }
+                    // FILTER SAKTI ANTI BARIS KOSONG
+                    var keterangans = (Model.VoucherKasHeader.KeteranganVoucher ?? "")
+                        .Replace("\r", "")
+                        .Split('\n')
+                        .Select(s => s.Trim())
+                        .Where(s => !string.IsNullOrEmpty(s))
+                        .ToList();
 
-                    @foreach (var ket in keterangans)
-                    {
-                        <tr style="height:30px;">
-                            <td colspan="3">@ket</td>
+                    // Jaga-jaga kalau keterangan kosong total
+                    if (!keterangans.Any()) { keterangans.Add(""); }
 
-                            @if (firstRow)
-                            {
-                                <td class="text-right">
-                                    @Model.VoucherKasHeader.NamaMataUang
-                                    @(Model.VoucherKasHeader.TotalVoucher.HasValue
-                                        ? Model.VoucherKasHeader.TotalVoucher.Value.ToString("N2")
-                                        : "0.00")
-                                </td>
-                                <td>@Model.VoucherKasHeader.KodeAkun</td>
-                                firstRow = false;
-                            }
-                            else
-                            {
-                                <td></td>
-                                <td></td>
-                            }
-                        </tr>
-                    }
+                    bool firstRow = true;
+                }
+
+                @foreach (var ket in keterangans)
+                {
+                    <tr style="height:30px;">
+                        <td colspan="3">@ket</td>
+
+                        @if (firstRow)
+                        {
+                            <td class="text-right">
+                                @Model.VoucherKasHeader.NamaMataUang
+                                @(Model.VoucherKasHeader.TotalVoucher.HasValue
+                                    ? Model.VoucherKasHeader.TotalVoucher.Value.ToString("N2")
+                                    : "0.00")
+                            </td>
+                            <td>@Model.VoucherKasHeader.KodeAkun</td>
+                            firstRow = false;
+                        }
+                        else
+                        {
+                            <td></td>
+                            <td></td>
+                        }
+                    </tr>
+                }
 
             
 
             <tr style="height:30px;">
                  <td colspan="3" id="terbilangText">#Terbilang # ... # </td>
-                <td class="text-right">@Model.VoucherKasHeader.NamaMataUang @(Model.VoucherKasHeader.TotalVoucher.HasValue ? Model.VoucherKasHeader.TotalVoucher.Value.ToString("N2") : "0.00")</td>
+                <td class="text-right"><b>@Model.VoucherKasHeader.NamaMataUang @(Model.VoucherKasHeader.TotalVoucher.HasValue ? Model.VoucherKasHeader.TotalVoucher.Value.ToString("N2") : "0.00")</b></td>
                 <td></td>
             </tr>
 
