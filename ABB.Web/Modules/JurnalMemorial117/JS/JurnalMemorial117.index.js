@@ -39,21 +39,16 @@ function updateFooterTotalsLihat() {
     var grid = $("#DetailJurnalGrid_Lihat").data("kendoGrid");
     if (!grid) return;
 
-    var data = grid.dataSource.data();
-    
-    var totalDebet = 0;
-    var totalKredit = 0;
+    var aggregates = grid.dataSource.aggregates();
 
-    for(var i=0; i<data.length; i++) {
-        totalDebet += (data[i].NilaiDebet || 0);
-        totalKredit += (data[i].NilaiKredit || 0);
-    }
+    var totalDebet = aggregates.NilaiDebet ? aggregates.NilaiDebet.sum || 0 : 0;
+    var totalKredit = aggregates.NilaiKredit ? aggregates.NilaiKredit.sum || 0 : 0;
 
     var balance = totalDebet - totalKredit;
-    
+
     $("#lblTotalDebet_Lihat").text(kendo.toString(totalDebet, "n2"));
     $("#lblTotalKredit_Lihat").text(kendo.toString(totalKredit, "n2"));
-    
+
     var lblBalance = $("#lblBalance_Lihat");
     lblBalance.text(kendo.toString(balance, "n2"));
 
@@ -337,21 +332,16 @@ function clearDetailForm() {
 
 function updateFooterTotals() {
     var grid = $("#DetailJurnalGrid").data("kendoGrid");
-    var data = grid.dataSource.data();
-    
-    var totalDebet = 0;
-    var totalKredit = 0;
+    var aggregates = grid.dataSource.aggregates();
 
-    for(var i=0; i<data.length; i++) {
-        totalDebet += (data[i].NilaiDebet || 0);
-        totalKredit += (data[i].NilaiKredit || 0);
-    }
+    var totalDebet = aggregates.NilaiDebet ? aggregates.NilaiDebet.sum || 0 : 0;
+    var totalKredit = aggregates.NilaiKredit ? aggregates.NilaiKredit.sum || 0 : 0;
 
     var balance = totalDebet - totalKredit;
-    
+
     $("#lblTotalDebet").text(kendo.toString(totalDebet, "n2"));
     $("#lblTotalKredit").text(kendo.toString(totalKredit, "n2"));
-    
+
     var lblBalance = $("#lblBalance");
     lblBalance.text(kendo.toString(balance, "n2"));
 

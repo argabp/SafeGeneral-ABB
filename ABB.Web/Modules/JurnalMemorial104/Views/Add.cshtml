@@ -197,6 +197,11 @@
         .DataSource(ds => ds.Ajax()
             .Read(read => read.Action("GetDetailJurnal", "JurnalMemorial104").Data("getNoVoucherForGrid"))
             .Model(m => m.Id(p => p.No))
+            .Aggregates(agg =>
+                {
+                    agg.Add(p => p.NilaiDebet).Sum();
+                    agg.Add(p => p.NilaiKredit).Sum();
+                })
         )
         .Columns(cols => {
             cols.Bound(c => c.No).Title("No").Width(60);
