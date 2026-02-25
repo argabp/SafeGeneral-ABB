@@ -36,7 +36,7 @@ namespace ABB.Web.Modules.VoucherKas.Models
         [Display(Name = "DibayarKepada")]
         public string DibayarKepada { get; set; }
 
-        [Required(ErrorMessage = "Tanggal tidak boleh kosong.")]
+       
         [Display(Name = "TanggalVoucher")]
         public DateTime? TanggalVoucher { get; set; }
 
@@ -52,7 +52,7 @@ namespace ABB.Web.Modules.VoucherKas.Models
         
         public string KeteranganVoucher { get; set; }
 
-        [Required(ErrorMessage = "Total tidak boleh kosong.")]
+        
         [Display(Name = "TotalDalamRupiah")]
         public decimal? TotalDalamRupiah { get; set; }
 

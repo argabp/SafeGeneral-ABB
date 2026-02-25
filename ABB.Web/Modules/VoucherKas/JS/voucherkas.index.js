@@ -79,7 +79,6 @@ function onSaveVoucherKas() {
     // --- 2. VALIDASI DASAR ---
     if (!debetKredit) errors.push("- Debet/Kredit harus dipilih");
     if (!kodeKas) errors.push("- Kode Kas harus dipilih");
-    if (!tanggalVoucher) errors.push("- Tanggal Voucher harus diisi");
     if (!kodeMataUang) errors.push("- Kode Mata Uang harus dipilih");
     if (totalVoucher === null || totalVoucher <= 0) errors.push("- Total Voucher harus lebih dari 0");
     if (!jenisPembayaran) errors.push("- Jenis Pembayaran harus dipilih");
