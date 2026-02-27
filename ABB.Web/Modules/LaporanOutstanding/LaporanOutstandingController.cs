@@ -29,18 +29,21 @@ namespace ABB.Web.Modules.LaporanOutstanding
             // _viewRenderService = viewRenderService; // Injeksi
         }
 
-
-
-        public async Task<IActionResult> Index()
+        private string GetCleanCabangCookie() 
         {
-            
-            var databaseName = Request.Cookies["DatabaseValue"]; 
-            var kodeCabangCookie = Request.Cookies["UserCabang"];
+            return Request.Cookies["UserCabang"]?.Replace("%20", " ").Trim() ?? "";
+        }
 
-           if (string.IsNullOrEmpty(databaseName) || string.IsNullOrEmpty(kodeCabangCookie))
+       public async Task<IActionResult> Index()
+        {
+            var databaseName = Request.Cookies["DatabaseValue"]; 
+            
+            // --- 2. GUNAKAN FUNGSI PEMBERSIH DI SINI ---
+            var kodeCabangCookie = GetCleanCabangCookie();
+
+            if (string.IsNullOrEmpty(databaseName) || string.IsNullOrEmpty(kodeCabangCookie))
             {
                 await HttpContext.SignOutAsync("Identity.Application");
-
                 return RedirectToAction("Login", "Account");
             }
 
@@ -48,17 +51,23 @@ namespace ABB.Web.Modules.LaporanOutstanding
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
 
-            var cabangList = await Mediator.Send(new GetCabangsQuery { DatabaseName = databaseName });
+            // --- 3. TAMBAHKAN LOGIKA PS10 DI SINI ---
+            bool isPusat = false;
+            if (!string.IsNullOrEmpty(kodeCabangCookie))
+            {
+                isPusat = (kodeCabangCookie.Trim().ToUpper() == "PS10");
+            }
+            ViewBag.IsPusat = isPusat;
+            // ----------------------------------------
 
+            var cabangList = await Mediator.Send(new GetCabangsQuery { DatabaseName = databaseName });
            
             var userCabang = cabangList
                 .FirstOrDefault(c => string.Equals(c.kd_cb.Trim(), kodeCabangCookie?.Trim(), StringComparison.OrdinalIgnoreCase));
             
-           
             string displayCabang = userCabang != null 
                 ? $"{userCabang.kd_cb.Trim()} - {userCabang.nm_cb.Trim()}" 
                 : kodeCabangCookie;
-
            
             ViewBag.UserCabangValue = kodeCabangCookie; 
             ViewBag.UserCabangText = displayCabang;     
@@ -70,28 +79,34 @@ namespace ABB.Web.Modules.LaporanOutstanding
         public async Task<IActionResult> GetKodeCabang(string tipe)
         {
             var databaseName = Request.Cookies["DatabaseValue"];
-            var kodeCabangCookie = Request.Cookies["UserCabang"];
+            
+            // --- 4. GUNAKAN FUNGSI PEMBERSIH DI SINI ---
+            var kodeCabangCookie = GetCleanCabangCookie();
+
+            // --- 5. LOGIKA PS10 ---
+            bool isPusat = false;
+            if (!string.IsNullOrEmpty(kodeCabangCookie))
+            {
+                isPusat = (kodeCabangCookie.Trim().ToUpper() == "PS10");
+            }
 
             if (string.IsNullOrWhiteSpace(kodeCabangCookie))
-                return Json(new List<object>()); // cookie tidak ada → kirim kosong
+                return Json(new List<object>()); 
 
             var result = await Mediator.Send(new GetCabangsQuery
             {
                 DatabaseName = databaseName
             });
 
-            // Filter cabang sesuai cookie user
+            // --- 6. FILTER PAKAI isPusat || ---
             var filtered = result
-                .Where(c => c.kd_cb?.Trim() == kodeCabangCookie.Trim())
+                .Where(c => isPusat || c.kd_cb?.Trim().ToUpper() == kodeCabangCookie.ToUpper())
                 .Select(c => new
                 {
                     kd_cb = c.kd_cb.Trim(),
                     nm_cb = c.nm_cb.Trim()
                 })
-                .ToList(); // <-- WAJIB untuk ComboBox
-
-            // kirim ke View kalau ingin dipakai
-            ViewBag.UserCabang = kodeCabangCookie;
+                .ToList(); 
 
             return Json(filtered);
         }

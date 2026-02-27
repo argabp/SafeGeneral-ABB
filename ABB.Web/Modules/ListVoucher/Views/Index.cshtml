@@ -6,6 +6,7 @@
 @{
     Layout = "~/Modules/Shared/_Layout.cshtml";
     ViewData["Title"] = "List Voucher";
+    bool isOrangPusat = ViewBag.IsPusat ?? false;
 }
 
 @* Ganti JS ke file JS yang baru jika Anda membuatnya, atau biarkan *@
@@ -32,28 +33,33 @@
 
     <div class="flat-box-content">
 
-        @* <div class="filter-section">
-            <label class="filter-label" for="KodeCabang">Lokasi :</label>
-            @(Html.Kendo().ComboBox()
-                .Name("KodeCabang")
-                .Placeholder("Pilih Cabang ...")
-                .DataTextField("nm_cb")
-                .DataValueField("kd_cb")
-                .Filter("contains")
-                .Suggest(true)
-                .HtmlAttributes(new { style = "width:300px;" })
-                .Template("#: kd_cb # - #: nm_cb #")
-                .DataSource(source => {
-                    source.Read(read => {
-                        read.Action("GetKodeCabang", "ListVoucher");
-                    });
-                })
-                .AutoBind(true)
-                .Enable(false)
-                .Value(ViewBag.UserCabangValue) 
-                .Text(ViewBag.UserCabangText)   
-            )
-        </div> *@
+         <div class="form-group row">
+            <label class="col-sm-2 col-form-label" for="KodeCabang">Lokasi</label>
+            <div class="col-sm-4">
+                @(Html.Kendo().ComboBox()
+                    .Name("KodeCabang")
+                    .Placeholder("Pilih Cabang ...")
+                    .DataTextField("nm_cb")
+                    .DataValueField("kd_cb")
+                    .Filter("contains")
+                    .Suggest(true)
+                    .HtmlAttributes(new { style = "width: 100%;" })
+                    .Template("#: kd_cb # - #: nm_cb #")
+                    .DataSource(source =>
+                    {
+                        source.Read(read =>
+                        {
+                            read.Action("GetKodeCabang", "ListVoucher");
+                        });
+                    })
+                    .Enable(isOrangPusat) 
+                    .AutoBind(true)
+                    .Value((string)ViewBag.UserCabangValue)
+                    .Text((string)ViewBag.UserCabangText)
+                    .Events(e => e.Change("onCabangChange"))
+                )
+            </div>
+        </div>
 
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Tipe Voucher</label>

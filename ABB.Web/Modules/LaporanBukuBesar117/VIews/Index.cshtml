@@ -7,6 +7,7 @@
 @{
     Layout = "~/Modules/Shared/_Layout.cshtml";
     ViewData["Title"] = "Laporan Buku Besar 117";
+    bool isOrangPusat = ViewBag.IsPusat == true;
 }
 <script src="~/Modules/LaporanBukuBesar117/JS/LaporanBukuBesar117.index.js"></script>
 
@@ -30,10 +31,28 @@
        </div>
     <div class="flat-box-content filter-container">
         
-        <div class="filter-section">
+       <div class="filter-section">
             <label class="filter-label">Kode Cabang :</label>
-             <input class="k-textbox" value="@ViewBag.UserCabangText" readonly style="width:300px; background-color: #e9ecef;" />
-             <input type="hidden" id="KodeCabang" value="@ViewBag.UserCabangValue" />
+            @(Html.Kendo().ComboBox()
+                .Name("KodeCabang")
+                .Placeholder("Pilih Cabang ...")
+                .DataTextField("nm_cb")
+                .DataValueField("kd_cb")
+                .Filter("contains")
+                .Suggest(true)
+                .HtmlAttributes(new { style = "width:300px;" })
+                .Template("#: kd_cb # - #: nm_cb #")
+                .DataSource(source => {
+                    source.Read(read => {
+                        read.Action("GetKodeCabang", "LaporanBukuBesar117");
+                    });
+                })
+                .AutoBind(true)
+                .Enable(isOrangPusat) 
+                .Value((string)ViewBag.UserCabangValue) 
+                .Text((string)ViewBag.UserCabangText)
+                .Events(e => e.Change("onCabangChange")) // <-- Tambahkan Event ini
+            )
         </div>
 
         <div class="filter-section">
@@ -58,12 +77,12 @@
                    // .AutoBind(false) // PENTING: Jangan load data saat page load!
                     .Suggest(true)
                     .HtmlAttributes(new { style = "width:250px;" })
-                    .DataSource(source => { 
+                   .DataSource(source => { 
                         source.Read(read => { 
-                            read.Action("GetCoaList", "LaporanBukuBesar117"); 
-                            // Kendo otomatis kirim parameter bernama 'text' saat user ngetik
+                            // --- 4. TAMBAHKAN .Data() ---
+                            read.Action("GetCoaList", "LaporanBukuBesar117").Data("getKodeCabangParam"); 
                         })
-                        .ServerFiltering(true); // PENTING: Filter dilakukan di Controller, bukan di Browser
+                        .ServerFiltering(true);
                     })
                 )
 
@@ -100,8 +119,28 @@
 
 
 <script>
+function getKodeCabangParam() {
+    // Ambil value dari Kendo ComboBox
+    var cbCabang = $("#KodeCabang").data("kendoComboBox");
+    return {
+        kodeCabangDropdown: cbCabang ? cbCabang.value() : ""
+    };
+}
+function onCabangChange() {
+    var cbAwal = $("#AkunAwal").data("kendoComboBox");
+    var cbAkhir = $("#AkunAkhir").data("kendoComboBox");
+
+    if (cbAwal) {
+        cbAwal.value("");
+        cbAwal.dataSource.read();
+    }
+    if (cbAkhir) {
+        cbAkhir.value("");
+        cbAkhir.dataSource.read();
+    }
+}
 function generateBukuBesar117() {
-        var kodeCabang = $("#KodeCabang").val();
+        var kodeCabang = $("#KodeCabang").data("kendoComboBox").value();
         var tgl1 = kendo.toString($("#tgl1").data("kendoDatePicker").value(), "yyyy-MM-dd");
         var tgl2 = kendo.toString($("#tgl2").data("kendoDatePicker").value(), "yyyy-MM-dd");
         var akun1 = $("#AkunAwal").data("kendoComboBox").value();

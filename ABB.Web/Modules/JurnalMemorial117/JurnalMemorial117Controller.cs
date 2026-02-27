@@ -291,5 +291,88 @@ namespace ABB.Web.Modules.JurnalMemorial117
             
             return Json(new { noVoucher = nextNo });
         }
+
+        // --- TAMBAHKAN CLASS REQUEST INI ---
+        public class CopyJurnal117Request
+        {
+            public string KodeCabang { get; set; }
+            public string NoVoucherLama { get; set; }
+            public DateTime TanggalBaru { get; set; }
+        }
+
+        // --- TAMBAHKAN ACTION INI DI DALAM CONTROLLER ---
+        [HttpPost]
+        public async Task<IActionResult> CopyJurnal([FromBody] CopyJurnal117Request request)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(request.NoVoucherLama) || string.IsNullOrEmpty(request.KodeCabang))
+                    return Json(new { success = false, message = "Data sumber tidak valid." });
+
+                // 1. Ambil Header Lama
+                var headerLama = await Mediator.Send(new GetJurnalMemorial117ByIdQuery 
+                { 
+                    KodeCabang = request.KodeCabang, 
+                    NoVoucher = request.NoVoucherLama 
+                });
+
+                if (headerLama == null)
+                    return Json(new { success = false, message = "Voucher lama tidak ditemukan." });
+
+                // 2. Ambil Detail Lama
+                var detailLama = await Mediator.Send(new GetDetailJurnalMemorial117Query 
+                { 
+                    NoVoucher = request.NoVoucherLama 
+                });
+
+                // 3. Generate Nomor Voucher Baru sesuai Tanggal Baru
+                var nextNoVoucher = await Mediator.Send(new GetNextNoVoucherJurnalQuery 
+                { 
+                    KodeCabang = request.KodeCabang,
+                    Bulan = request.TanggalBaru.Month,
+                    Tahun = request.TanggalBaru.Year
+                });
+
+                // 4. MAPPING MANUAL HEADER BARU (Biar tidak error AutoMapper)
+                var createHeaderCommand = new CreateJurnalMemorial117HeaderCommand
+                {
+                    KodeCabang = request.KodeCabang,
+                    NoVoucher = nextNoVoucher,
+                    Tanggal = request.TanggalBaru,
+                    Keterangan = headerLama.Keterangan, // Copy keterangan
+                    KodeUserInput = CurrentUser.UserId
+                };
+                await Mediator.Send(createHeaderCommand);
+
+                // 5. MAPPING MANUAL DETAIL BARU (Looping)
+                if (detailLama != null && detailLama.Any())
+                {
+                    foreach (var item in detailLama)
+                    {
+                        var createDetailCommand = new CreateJurnalMemorial117DetailCommand
+                        {
+                            NoVoucher = nextNoVoucher, // Pasangkan dengan voucher baru
+                            KodeAkun = item.KodeAkun,
+                            Keterangan = item.Keterangan, // Perhatikan: di 117 namanya Keterangan (bukan KeteranganDetail)
+                            KodeMataUang = item.KodeMataUang,
+                            NilaiDebet = item.NilaiDebet,
+                            NilaiKredit = item.NilaiKredit,
+                            NilaiDebetRp = item.NilaiDebetRp,
+                            NilaiKreditRp = item.NilaiKreditRp,
+                            KodeUserInput = CurrentUser.UserId
+                        };
+                        
+                        await Mediator.Send(createDetailCommand);
+                    }
+                }
+
+                return Json(new { success = true, noVoucherBaru = nextNoVoucher });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error: " + ex.Message });
+            }
+        }
+
     }
 }

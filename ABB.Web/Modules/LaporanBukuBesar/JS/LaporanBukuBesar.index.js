@@ -60,3 +60,26 @@ function onSearchClick() {
         }
     });
 }
+
+
+// Mengirim kode cabang yang terpilih ke Controller GetCoaList
+function getKodeCabangParam() {
+    return {
+        kodeCabangDropdown: $("#KodeCabang").val()
+    };
+}
+
+// Me-refresh isi combobox AkunAwal & AkunAkhir setiap kali Cabang diubah
+function onCabangChange() {
+    var cbAwal = $("#AkunAwal").data("kendoComboBox");
+    var cbAkhir = $("#AkunAkhir").data("kendoComboBox");
+
+    if (cbAwal) {
+        cbAwal.value("");
+        cbAwal.dataSource.read();
+    }
+    if (cbAkhir) {
+        cbAkhir.value("");
+        cbAkhir.dataSource.read();
+    }
+}

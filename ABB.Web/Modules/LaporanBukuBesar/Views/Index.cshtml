@@ -9,6 +9,7 @@
 @{
     Layout = "~/Modules/Shared/_Layout.cshtml";
     ViewData["Title"] = "Laporan Buku Besar";
+    bool isOrangPusat = ViewBag.IsPusat == true;
 }
 
 <script src="~/Modules/LaporanBukuBesar/JS/LaporanBukuBesar.index.js"></script>
@@ -34,10 +35,28 @@
        </div>
     <div class="flat-box-content filter-container">
         
-        <div class="filter-section">
+       <div class="filter-section">
             <label class="filter-label">Kode Cabang :</label>
-            <input class="k-textbox" value="@ViewBag.UserCabangText" readonly style="width:300px; background-color: #e9ecef;" />
-             <input type="hidden" id="KodeCabang" value="@ViewBag.UserCabangValue" />
+            @(Html.Kendo().ComboBox()
+                .Name("KodeCabang")
+                .Placeholder("Pilih Cabang ...")
+                .DataTextField("nm_cb")
+                .DataValueField("kd_cb")
+                .Filter("contains")
+                .Suggest(true)
+                .HtmlAttributes(new { style = "width:300px;" })
+                .Template("#: kd_cb # - #: nm_cb #")
+                .DataSource(source => {
+                    source.Read(read => {
+                        read.Action("GetKodeCabang", "LaporanBukuBesar");
+                    });
+                })
+                .AutoBind(true)
+                .Enable(isOrangPusat) 
+                .Value((string)ViewBag.UserCabangValue) 
+                .Text((string)ViewBag.UserCabangText)
+                .Events(e => e.Change("onCabangChange")) // <-- Tambahkan Event JS
+            )
         </div>
 
         <div class="filter-section">
@@ -64,9 +83,10 @@
                     .HtmlAttributes(new { style = "width:250px;" })
                     .DataSource(source => { 
                         source.Read(read => { 
-                            read.Action("GetCoaList", "LaporanBukuBesar"); 
+                            // Tambahkan .Data() untuk mengirim cabang terpilih ke controller
+                            read.Action("GetCoaList", "LaporanBukuBesar").Data("getKodeCabangParam"); 
                         })
-                        .ServerFiltering(true); // Aktifkan filter di server
+                        .ServerFiltering(true);
                     })
                 )
 
@@ -82,9 +102,10 @@
                    // .AutoBind(false)
                     .Suggest(true)
                     .HtmlAttributes(new { style = "width:250px;" })
-                    .DataSource(source => { 
+                   .DataSource(source => { 
                         source.Read(read => { 
-                            read.Action("GetCoaList", "LaporanBukuBesar"); 
+                            // Tambahkan .Data() juga di sini
+                            read.Action("GetCoaList", "LaporanBukuBesar").Data("getKodeCabangParam"); 
                         })
                         .ServerFiltering(true);
                     })

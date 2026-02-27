@@ -290,6 +290,99 @@ namespace ABB.Web.Modules.JurnalMemorial104
             
             return Json(new { success = true, noVoucher = nextNo });
         }
+
+
+        // --- TAMBAHKAN CLASS REQUEST INI DI BAGIAN BAWAH ATAU ATAS CONTROLLER ---
+        public class CopyJurnalRequest
+        {
+            public string KodeCabang { get; set; }
+            public string NoVoucherLama { get; set; }
+            public DateTime TanggalBaru { get; set; }
+        }
+
+        // --- TAMBAHKAN ACTION INI DI DALAM KELAS JurnalMemorial104Controller ---
+        [HttpPost]
+        public async Task<IActionResult> CopyJurnal([FromBody] CopyJurnalRequest request)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(request.NoVoucherLama) || string.IsNullOrEmpty(request.KodeCabang))
+                    return Json(new { success = false, message = "Data sumber tidak valid." });
+
+                // 1. Ambil Header Lama
+                var headerLama = await Mediator.Send(new GetJurnalMemorial104ByIdQuery 
+                { 
+                    KodeCabang = request.KodeCabang, 
+                    NoVoucher = request.NoVoucherLama 
+                });
+
+                if (headerLama == null)
+                    return Json(new { success = false, message = "Voucher lama tidak ditemukan." });
+
+                // 2. Ambil Detail Lama
+                var detailLama = await Mediator.Send(new GetDetailJurnalMemorial104Query 
+                { 
+                    NoVoucher = request.NoVoucherLama 
+                });
+
+                // 3. Generate Nomor Voucher Baru sesuai Tanggal Baru
+                var nextNoVoucher = await Mediator.Send(new GetNextNoVoucherJurnalQuery 
+                { 
+                    KodeCabang = request.KodeCabang,
+                    Bulan = request.TanggalBaru.Month,
+                    Tahun = request.TanggalBaru.Year
+                });
+
+                // 4. Siapkan & Simpan Header Baru
+                headerLama.NoVoucher = nextNoVoucher;
+                headerLama.Tanggal = request.TanggalBaru;
+                headerLama.TanggalInput = DateTime.Now;
+                headerLama.TanggalUpdate = null; // Reset update
+                headerLama.FlagGL = false; // Flag posting direset jadi belum diposting
+
+                var createHeaderCommand = Mapper.Map<CreateJurnalMemorial104HeaderCommand>(headerLama);
+                createHeaderCommand.KodeUserInput = CurrentUser.UserId; // User yang copy
+                await Mediator.Send(createHeaderCommand);
+
+                // 5. Siapkan & Simpan Detail Baru (Looping)
+                if (detailLama != null && detailLama.Any())
+                {
+                    foreach (var item in detailLama)
+                    {
+                        // MAPPING MANUAL: Pindahkan data lama ke Command Baru satu per satu
+                        // Ini menghindari error AutoMapper "Missing type map"
+                        var createDetailCommand = new CreateJurnalMemorial104DetailCommand
+                        {
+                            NoVoucher = nextNoVoucher, // Gunakan No Voucher yang baru di-generate
+                            
+                            // Copy data transaksi dari item lama
+                            KodeAkun = item.KodeAkun,
+                            NoNota = item.NoNota,
+                            KodeMataUang = item.KodeMataUang,
+                            NilaiDebet = item.NilaiDebet,
+                            NilaiKredit = item.NilaiKredit,
+                            NilaiDebetRp = item.NilaiDebetRp,
+                            NilaiKreditRp = item.NilaiKreditRp,
+                            
+                            // Penting: Pastikan properti ini namanya sesuai dengan di DTO kamu. 
+                            // Kalau di DTO namanya cuma "Keterangan", ganti jadi item.Keterangan
+                            KeteranganDetail = item.KeteranganDetail, 
+                            
+                            KodeUserInput = CurrentUser.UserId
+                        };
+                        
+                        // Tembak ke database
+                        await Mediator.Send(createDetailCommand);
+                    }
+                }
+
+                return Json(new { success = true, noVoucherBaru = nextNoVoucher });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error: " + ex.Message });
+            }
+        }
     }
 
     

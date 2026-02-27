@@ -28,7 +28,10 @@ namespace ABB.Web.Modules.LaporanPelunasan
             // _viewRenderService = viewRenderService; // Injeksi
         }
 
-
+        private string GetCleanCabangCookie() 
+        {
+            return Request.Cookies["UserCabang"]?.Replace("%20", " ").Trim() ?? "";
+        }
 
         public async Task<IActionResult> Index() // Ubah jadi async Task
         {
@@ -36,21 +39,26 @@ namespace ABB.Web.Modules.LaporanPelunasan
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
 
+            var kodeCabangCookie = GetCleanCabangCookie();  
             // 1. Ambil Cookie
             var databaseName = Request.Cookies["DatabaseValue"]; // Pastikan pake DatabaseValue buat query
-            var kodeCabangCookie = Request.Cookies["UserCabang"];
 
-            // 2. Ambil Data Cabang via Mediator
-            var cabangList = await Mediator.Send(new GetCabangsQuery { DatabaseName = databaseName });
 
-            // 3. Cari Cabang user dan Format Text-nya
-            var userCabang = cabangList
-                .FirstOrDefault(c => string.Equals(c.kd_cb.Trim(), kodeCabangCookie?.Trim(), StringComparison.OrdinalIgnoreCase));
+           // Cek PS10 (Anti Gagal: potong spasi & huruf besar semua)
+            bool isPusat = false;
+            if (!string.IsNullOrEmpty(kodeCabangCookie))
+            {
+                isPusat = (kodeCabangCookie.Trim().ToUpper() == "PS10");
+            }
             
-            // Format: "BD21 - BANDUNG" (atau kode saja jika tidak ketemu)
+            ViewBag.IsPusat = isPusat;
+
+            var cabangList = await Mediator.Send(new GetCabangsQuery { DatabaseName = databaseName });
+            var userCabang = cabangList.FirstOrDefault(c => string.Equals(c.kd_cb.Trim(), kodeCabangCookie?.Trim(), StringComparison.OrdinalIgnoreCase));
+
             string displayCabang = userCabang != null 
-                ? $"{userCabang.kd_cb.Trim()} - {userCabang.nm_cb.Trim()}" 
-                : kodeCabangCookie;
+            ? $"{userCabang.kd_cb.Trim()} - {userCabang.nm_cb.Trim()}" 
+            : kodeCabangCookie;
 
             // 4. Kirim ke View
             ViewBag.UserCabangValue = kodeCabangCookie; // Untuk .Value()
@@ -60,11 +68,17 @@ namespace ABB.Web.Modules.LaporanPelunasan
         }
 
 
-     [HttpGet]
+    [HttpGet]
         public async Task<IActionResult> GetKodeCabang()
         {
             var databaseName = Request.Cookies["DatabaseValue"];
-            var kodeCabangCookie = Request.Cookies["UserCabang"];
+            var kodeCabangCookie = GetCleanCabangCookie();
+
+            bool isPusat = false;
+            if (!string.IsNullOrEmpty(kodeCabangCookie))
+            {
+                isPusat = (kodeCabangCookie.Trim().ToUpper() == "PS10");
+            }
 
             if (string.IsNullOrWhiteSpace(kodeCabangCookie))
                 return Json(new List<object>()); // cookie tidak ada → kirim kosong
@@ -74,18 +88,17 @@ namespace ABB.Web.Modules.LaporanPelunasan
                 DatabaseName = databaseName
             });
 
-            // Filter cabang sesuai cookie user
+            // --- INI PERBAIKANNYA: Pake logika isPusat ---
+            // Kalau isPusat (PS10), keluarin SEMUA cabang.
+            // Kalau bukan PS10, filter sesuai cookie doang.
             var filtered = result
-                .Where(c => c.kd_cb?.Trim() == kodeCabangCookie.Trim())
+                .Where(c => isPusat || c.kd_cb?.Trim().ToUpper() == kodeCabangCookie.ToUpper())
                 .Select(c => new
                 {
                     kd_cb = c.kd_cb.Trim(),
                     nm_cb = c.nm_cb.Trim()
                 })
-                .ToList(); // <-- WAJIB untuk ComboBox
-
-            // kirim ke View kalau ingin dipakai
-            ViewBag.UserCabang = kodeCabangCookie;
+                .ToList();
 
             return Json(filtered);
         }

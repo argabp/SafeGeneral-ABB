@@ -10,6 +10,7 @@
 @{
     Layout = "~/Modules/Shared/_Layout.cshtml";
     ViewData["Title"] = "Laporan Pelunasan";
+    bool isOrangPusat = ViewBag.IsPusat ?? false;
 }
 
 <script src="~/Modules/LaporanPelunasan/JS/LaporanPelunasan.index.js"></script>
@@ -70,12 +71,12 @@
                         read.Action("GetKodeCabang", "LaporanPelunasan");
                     });
                 })
+                .Enable(isOrangPusat) 
                 .AutoBind(true)
-                .Enable(false)
+               
+                .Value((string)ViewBag.UserCabangValue)
+                .Text((string)ViewBag.UserCabangText)
                 
-                // --- PERBAIKAN DISINI ---
-                .Value(ViewBag.UserCabangValue) // Set Value (Kodenya saja)
-                .Text(ViewBag.UserCabangText)   // Set Text Tampilan (Kode - Nama)
             )
         </div>
 

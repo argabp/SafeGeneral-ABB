@@ -36,15 +36,29 @@ namespace ABB.Web.Modules.LaporanBukuBesar
             _context = context; // Sekarang 'context' dikenali dari parameter di atas
         }
 
-        public async Task<IActionResult> Index()
+        private string GetCleanCabangCookie() 
+        {
+            return Request.Cookies["UserCabang"]?.Replace("%20", " ").Trim() ?? "";
+        }
+
+       public async Task<IActionResult> Index()
         {
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             var databaseName = Request.Cookies["DatabaseValue"]; 
             ViewBag.UserLogin = CurrentUser.UserId;
-            var kodeCabangCookie = Request.Cookies["UserCabang"];
+            
+            // --- 2. PAKAI FUNGSI PEMBERSIH ---
+            var kodeCabangCookie = GetCleanCabangCookie();
 
-            // Load Cabang Info
+            // --- 3. LOGIKA PS10 ---
+            bool isPusat = false;
+            if (!string.IsNullOrEmpty(kodeCabangCookie))
+            {
+                isPusat = (kodeCabangCookie.Trim().ToUpper() == "PS10");
+            }
+            ViewBag.IsPusat = isPusat;
+
             var cabangList = await Mediator.Send(new GetCabangsQuery { DatabaseName = databaseName });
             var userCabang = cabangList.FirstOrDefault(c => string.Equals(c.kd_cb.Trim(), kodeCabangCookie?.Trim(), StringComparison.OrdinalIgnoreCase));
             
@@ -58,56 +72,80 @@ namespace ABB.Web.Modules.LaporanBukuBesar
             return View();
         }
 
-        // Dropdown Kode Akun
-       [HttpGet]
-        public async Task<IActionResult> GetCoaList(string text)
+        // --- 4. TAMBAHKAN FUNGSI PENGAMBIL CABANG ---
+        [HttpGet]
+        public async Task<IActionResult> GetKodeCabang()
         {
-            // Ambil kode cabang dari cookie login
-            // var kodeCabang = Request.Cookies["UserCabang"]?.Trim();
+            var databaseName = Request.Cookies["DatabaseValue"];
+            var kodeCabangCookie = GetCleanCabangCookie();
 
-            var kodeCabangCookie = Request.Cookies["UserCabang"]?.Trim();
-            
-
-            string glDept = null;
-            if (!string.IsNullOrEmpty(kodeCabangCookie) && kodeCabangCookie.Length >= 2)
-            {
-                glDept = kodeCabangCookie.Substring(kodeCabangCookie.Length - 2);
-            }
-
-            var query = _context.Set<Coa>()
-                .AsNoTracking()
-                .AsQueryable();
-
-            // Filter berdasarkan kode cabang login
+            bool isPusat = false;
             if (!string.IsNullOrEmpty(kodeCabangCookie))
             {
-                query = query.Where(x => x.gl_dept == glDept);
-                // kalau nama kolom beda, ganti:
-                // x.KodeCabang == kodeCabang
+                isPusat = (kodeCabangCookie.Trim().ToUpper() == "PS10");
             }
 
-            // Filter dari input user (autocomplete / search)
-            if (!string.IsNullOrEmpty(text))
-            {
-                query = query.Where(x =>
-                    x.gl_kode.Contains(text) ||
-                    x.gl_nama.Contains(text));
-            }
+            if (string.IsNullOrWhiteSpace(kodeCabangCookie))
+                return Json(new List<object>()); 
 
-            // Ambil maksimal 50 data
-            var list = await query
-                .OrderBy(x => x.gl_kode)
-                .Take(50)
-                .Select(x => new
+            var result = await Mediator.Send(new GetCabangsQuery { DatabaseName = databaseName });
+
+            var filtered = result
+                .Where(c => isPusat || c.kd_cb?.Trim().ToUpper() == kodeCabangCookie.ToUpper())
+                .Select(c => new
                 {
-                    Kode = x.gl_kode.Trim(),
-                    Nama = x.gl_nama.Trim(),
-                    Display = x.gl_kode.Trim() + " - " + x.gl_nama.Trim()
+                    kd_cb = c.kd_cb.Trim(),
+                    nm_cb = c.nm_cb.Trim()
                 })
-                .ToListAsync();
+                .ToList(); 
 
-            return Json(list);
+            return Json(filtered);
         }
+
+        // Dropdown Kode Akun
+        [HttpGet]
+            public async Task<IActionResult> GetCoaList(string text, string kodeCabangDropdown)
+            {
+                var kodeCabangCookie = GetCleanCabangCookie();
+                
+                // Gunakan cabang dropdown jika ada, jika tidak pakai cookie
+                var targetCabang = !string.IsNullOrEmpty(kodeCabangDropdown) ? kodeCabangDropdown : kodeCabangCookie;
+
+                string glDept = null;
+                if (!string.IsNullOrEmpty(targetCabang) && targetCabang.Length >= 2)
+                {
+                    glDept = targetCabang.Substring(targetCabang.Length - 2);
+                }
+
+                var query = _context.Set<Coa>()
+                    .AsNoTracking()
+                    .AsQueryable();
+
+                if (!string.IsNullOrEmpty(targetCabang))
+                {
+                    query = query.Where(x => x.gl_dept == glDept);
+                }
+
+                if (!string.IsNullOrEmpty(text))
+                {
+                    query = query.Where(x =>
+                        x.gl_kode.Contains(text) ||
+                        x.gl_nama.Contains(text));
+                }
+
+                var list = await query
+                    .OrderBy(x => x.gl_kode)
+                    .Take(50)
+                    .Select(x => new
+                    {
+                        Kode = x.gl_kode.Trim(),
+                        Nama = x.gl_nama.Trim(),
+                        Display = x.gl_kode.Trim() + " - " + x.gl_nama.Trim()
+                    })
+                    .ToListAsync();
+
+                return Json(list);
+            }
 
 
         [HttpPost]

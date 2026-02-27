@@ -30,13 +30,28 @@ namespace ABB.Web.Modules.LaporanBukuBesar117
             _context = context;
         }
 
+        private string GetCleanCabangCookie() 
+        {
+            return Request.Cookies["UserCabang"]?.Replace("%20", " ").Trim() ?? "";
+        }
+
         public async Task<IActionResult> Index()
         {
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             var databaseName = Request.Cookies["DatabaseValue"]; 
             ViewBag.UserLogin = CurrentUser.UserId;
-            var kodeCabangCookie = Request.Cookies["UserCabang"];
+            
+            // --- 2. PAKAI PEMBERSIH COOKIE ---
+            var kodeCabangCookie = GetCleanCabangCookie();
+
+            // --- 3. LOGIKA PS10 ---
+            bool isPusat = false;
+            if (!string.IsNullOrEmpty(kodeCabangCookie))
+            {
+                isPusat = (kodeCabangCookie.Trim().ToUpper() == "PS10");
+            }
+            ViewBag.IsPusat = isPusat;
 
             var cabangList = await Mediator.Send(new GetCabangsQuery { DatabaseName = databaseName });
             var userCabang = cabangList.FirstOrDefault(c => string.Equals(c.kd_cb.Trim(), kodeCabangCookie?.Trim(), StringComparison.OrdinalIgnoreCase));
@@ -51,43 +66,68 @@ namespace ABB.Web.Modules.LaporanBukuBesar117
             return View();
         }
 
-        // Dropdown Kode Akun (KHUSUS COA 104)
+        // --- 4. FUNGSI GET KODE CABANG BARU ---
         [HttpGet]
-        public async Task<IActionResult> GetCoaList(string text)
+        public async Task<IActionResult> GetKodeCabang()
         {
+            var databaseName = Request.Cookies["DatabaseValue"];
+            var kodeCabangCookie = GetCleanCabangCookie();
 
-            var kodeCabangCookie = Request.Cookies["UserCabang"]?.Trim();
+            bool isPusat = false;
+            if (!string.IsNullOrEmpty(kodeCabangCookie))
+            {
+                isPusat = (kodeCabangCookie.Trim().ToUpper() == "PS10");
+            }
+
+            if (string.IsNullOrWhiteSpace(kodeCabangCookie))
+                return Json(new List<object>()); 
+
+            var result = await Mediator.Send(new GetCabangsQuery { DatabaseName = databaseName });
+
+            var filtered = result
+                .Where(c => isPusat || c.kd_cb?.Trim().ToUpper() == kodeCabangCookie.ToUpper())
+                .Select(c => new
+                {
+                    kd_cb = c.kd_cb.Trim(),
+                    nm_cb = c.nm_cb.Trim()
+                })
+                .ToList(); 
+
+            return Json(filtered);
+        }
+
+        // Dropdown Kode Akun (KHUSUS COA 104)
+        // --- 5. UBAH FUNGSI INI AGAR NERIMA PARAMETER CABANG DROPDOWN ---
+        [HttpGet]
+        public async Task<IActionResult> GetCoaList(string text, string kodeCabangDropdown)
+        {
+            var kodeCabangCookie = GetCleanCabangCookie();
             
+            // Pakai cabang dari dropdown jika ada
+            var targetCabang = !string.IsNullOrEmpty(kodeCabangDropdown) ? kodeCabangDropdown : kodeCabangCookie;
 
             string glDept = null;
-            if (!string.IsNullOrEmpty(kodeCabangCookie) && kodeCabangCookie.Length >= 2)
+            if (!string.IsNullOrEmpty(targetCabang) && targetCabang.Length >= 2)
             {
-                glDept = kodeCabangCookie.Substring(kodeCabangCookie.Length - 2);
+                glDept = targetCabang.Substring(targetCabang.Length - 2);
             }
-            // 1. Siapkan Query
+
             var query = _context.Set<Coa117>()
                 .AsNoTracking()
                 .AsQueryable();
 
-                // Filter berdasarkan kode cabang login
-            if (!string.IsNullOrEmpty(kodeCabangCookie))
+            if (!string.IsNullOrEmpty(targetCabang))
             {
                 query = query.Where(x => x.gl_dept == glDept);
-                // kalau nama kolom beda, ganti:
-                // x.KodeCabang == kodeCabang
             }
 
-            // 2. Jika ada text pencarian (user mengetik)
             if (!string.IsNullOrEmpty(text))
             {
-                // Cari berdasarkan Kode ATAU Nama
                 query = query.Where(x => 
                     x.gl_kode.Contains(text) || 
                     x.gl_nama.Contains(text));
             }
 
-            // 3. Ambil data secukupnya saja (misal 50 teratas)
-            // Ini kuncinya biar TIDAK BERAT
             var list = await query
                 .OrderBy(x => x.gl_kode)
                 .Take(50) 

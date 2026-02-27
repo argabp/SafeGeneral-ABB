@@ -1,14 +1,18 @@
 // Fungsi untuk mengirim Tipe="BANK" ke dataSource KodeBank
   
+// Fungsi mengirim tipe Bank ke controller
 function getTipeBank() {
     return {
-        tipe: "BANK"
+        tipe: "BANK",
+        kodeCabangDropdown: $("#KodeCabang").val() // Kirim cabang yang sedang dipilih
     };
 }
 
+// Fungsi mengirim tipe Kas ke controller
 function getTipeKas() {
     return {
-        tipe: "KAS"
+        tipe: "KAS",
+        kodeCabangDropdown: $("#KodeCabang").val() // Kirim cabang yang sedang dipilih
     };
 }
 
@@ -28,6 +32,22 @@ function onTipeVoucherChange() {
     else {
         $("#kodeBankSection").hide();
         $("#kodeKasSection").hide();
+    }
+}
+
+function onCabangChange() {
+    // Refresh combobox Bank dan Kas
+    var comboBank = $("#KodeBank").data("kendoComboBox");
+    var comboKas = $("#KodeKas").data("kendoComboBox");
+
+    if (comboBank) {
+        comboBank.value(""); // Kosongkan pilihan saat ini
+        comboBank.dataSource.read(); // Tarik ulang dari server
+    }
+
+    if (comboKas) {
+        comboKas.value("");
+        comboKas.dataSource.read();
     }
 }
 

@@ -43,13 +43,6 @@ namespace ABB.Application.VoucherBanks.Queries
             CancellationToken cancellationToken)
         {
 
-            var kodeAkun = await _context.KasBank
-            .Where(k => k.Kode == request.KodeBank
-                    && k.KodeCabang == request.KodeCabang )
-            .Select(k => k.NoPerkiraan)
-            .FirstOrDefaultAsync(cancellationToken);
-
-
             // =========================
             // VALIDASI TANGGAL
             // =========================
@@ -62,10 +55,48 @@ namespace ABB.Application.VoucherBanks.Queries
             // =========================
             // AMBIL SALDO AWAL DARI KASBANK
             // =========================
-            decimal saldoAwal = await _context.KasBank
+            var KodeAkun = await _context.KasBank
                 .Where(k => k.Kode == request.KodeBank && k.KodeCabang == request.KodeCabang && k.TipeKasBank == "BANK")
-                .Select(k => k.Saldo ?? 0)
+                .Select(k => k.NoPerkiraan)
                 .FirstOrDefaultAsync(cancellationToken);
+
+
+                // =========================
+                // AMBIL SALDO AWAL DARI ABBREKAP
+                // =========================
+                int tahun;
+                int bulan;
+                int tahunAwalSistem = 2026;
+                if (request.TanggalAwal.Year == tahunAwalSistem && request.TanggalAwal.Month == 1)
+                {
+                    tahun = tahunAwalSistem;
+                    bulan = 0;
+                }
+                else
+                {
+                    var periodeSebelumnya = request.TanggalAwal.AddMonths(-1);
+                    tahun = periodeSebelumnya.Year;
+                    bulan = periodeSebelumnya.Month;
+                }
+
+                var rekap = await _context.RekapJurnal
+                    .Where(r =>
+                        r.thn == tahun &&
+                        r.bln == bulan &&
+                        r.gl_akun == KodeAkun)
+                    .ToListAsync(cancellationToken);
+
+               decimal totalDebetAwal = rekap
+                    .Where(r => r.gl_dk == "D")
+                    .Sum(r => (decimal)r.gl_nilai_idr);
+
+                decimal totalKreditAwal = rekap
+                    .Where(r => r.gl_dk == "K")
+                    .Sum(r => (decimal)r.gl_nilai_idr);
+
+                decimal saldoAwal = totalDebetAwal - totalKreditAwal;
+
+        
 
             // =========================
             // QUERY MUTASI VOUCHER BANK

@@ -57,12 +57,14 @@
                     .ClientTemplate("#= FlagPosting ? '<i class=\"fa fa-check text-success\"></i> Yes' : '<i class=\"fa fa-times text-danger\"></i> No' #")
                     .HtmlAttributes(new { style = "text-align: center;" });
                 
-               columns.Bound("").Title("Action").Width(220).ClientTemplate(
+                columns.Bound("").Title("Action").Width(300).ClientTemplate(
                     "# if (FlagPosting == true) { #" + 
-                        "<button class='k-button k-button-icontext k-grid-LihatJurnal' onclick='btnLihatJurnal_OnClick(event)'><span class='k-icon k-i-eye'></span> Lihat</button>" +
+                        "<button class='k-button k-button-icontext k-grid-LihatJurnal' onclick='btnLihatJurnal_OnClick(event)'><span class='k-icon k-i-eye'></span> Lihat</button> " +
+                        "<button class='k-button k-button-icontext' onclick='btnCopyJurnal_OnClick(event)'><span class='k-icon k-i-copy'></span> Copy</button>" +
                     "# } else { #" +
                         "<button class='k-button k-button-icontext k-grid-EditJurnal' onclick='btnEditJurnal_OnClick(event)'><span class='k-icon k-i-edit'></span> Edit</button> " +
-                        "<button class='k-button k-button-icontext k-grid-DeleteJurnal' onclick='onDeleteHeader_Click(event)'><span class='k-icon k-i-delete'></span> Hapus</button>" +
+                        "<button class='k-button k-button-icontext k-grid-DeleteJurnal' onclick='onDeleteHeader_Click(event)'><span class='k-icon k-i-delete'></span> Hapus</button> " +
+                        "<button class='k-button k-button-icontext' onclick='btnCopyJurnal_OnClick(event)'><span class='k-icon k-i-copy'></span> Copy</button>" +
                     "# } #"
                 ).Locked(true);
             })
@@ -84,6 +86,30 @@
     .Visible(false)
     .Draggable(true)
     .Actions(actions => actions.Close())
+)
+
+@(Html.Kendo().Window()
+    .Name("CopyJurnalWindow")
+    .Title("Copy Jurnal - Pilih Tanggal Baru")
+    .Width(400)
+    .Modal(true)
+    .Visible(false)
+    .Draggable(true)
+    .Content(@<text>
+        <div style="padding: 15px; text-align: center;">
+            <p style="margin-bottom: 10px;">Pilih tanggal untuk Voucher Baru:</p>
+            @(Html.Kendo().DatePicker()
+                .Name("CopyTanggalBaru")
+                .Value(DateTime.Now)
+                .Format("dd-MM-yyyy")
+                .HtmlAttributes(new { style = "width: 100%; margin-bottom: 20px;" })
+            )
+            <div style="text-align: right;">
+                <button class="k-button" onclick="closeCopyWindow()"><i class="fa fa-times"></i> Batal</button>
+                <button class="k-button k-primary" onclick="prosesCopyJurnal()"><i class="fa fa-save"></i> Proses Copy</button>
+            </div>
+        </div>
+    </text>)
 )
 
 <script>

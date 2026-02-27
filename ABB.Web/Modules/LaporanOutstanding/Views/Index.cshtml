@@ -10,6 +10,7 @@
 @{
     Layout = "~/Modules/Shared/_Layout.cshtml";
     ViewData["Title"] = "Laporan Outstanding";
+    bool isOrangPusat = ViewBag.IsPusat == true;
 }
 
 <script src="~/Modules/LaporanOutstanding/JS/LaporanOutstanding.index.js"></script>
@@ -70,10 +71,10 @@
                         read.Action("GetKodeCabang", "LaporanOutstanding");
                     });
                 })
+                .Enable(isOrangPusat)
                 .AutoBind(true)
-                .Enable(false)
-                .Value(ViewBag.UserCabangValue) 
-                .Text(ViewBag.UserCabangText)   
+                .Value((string)ViewBag.UserCabangValue)
+                .Text((string)ViewBag.UserCabangText) 
             )
         </div>
 

@@ -123,11 +123,11 @@ namespace ABB.Application.LaporanBukuBesars.Queries
                     <tr>
                         <td style='font-weight:bold;'>{kodeAkun}</td>
                         <td style='font-weight:bold;'>{namaAkun}</td>
-                        <td class='center'>-</td>
-                        <td>-</td>
-                        <td>Saldo Awal</td>
-                        <td class='right'>0.00</td>
-                        <td class='right'>0.00</td>
+                        <td class='center'></td>
+                        <td></td>
+                        <td></td>
+                        <td class='right'></td>
+                        <td class='right'></td>
                     </tr>");
                 }
 

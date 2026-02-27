@@ -488,3 +488,76 @@ function generateNomorBukti() {
         }
     });
 }
+
+
+// Variabel sementara untuk copy
+var tempCopyData = {};
+
+function btnCopyJurnal_OnClick(e) {
+    e.preventDefault();
+    
+    // Ambil data baris yang diklik
+    var grid = $("#JurnalMemorialGrid").data("kendoGrid");
+    var row = $(e.target).closest("tr");
+    var dataItem = grid.dataItem(row);
+
+    // Simpan ke memori sementara
+    tempCopyData = {
+        KodeCabang: dataItem.KodeCabang,
+        NoVoucherLama: dataItem.NoVoucher
+    };
+
+    // Set default DatePicker ke hari ini
+    var datePicker = $("#CopyTanggalBaru").data("kendoDatePicker");
+    if(datePicker) datePicker.value(new Date());
+
+    // Buka Popup Kendo Window
+    var win = $("#CopyJurnalWindow").data("kendoWindow");
+    win.center().open();
+}
+
+function closeCopyWindow() {
+    $("#CopyJurnalWindow").data("kendoWindow").close();
+}
+
+function prosesCopyJurnal() {
+    var datePicker = $("#CopyTanggalBaru").data("kendoDatePicker");
+    var newDate = datePicker.value();
+
+    if (!newDate) {
+        showMessage('Warning', 'Tanggal baru harus diisi.');
+        return;
+    }
+
+    // Format tanggal
+    var tglBaru = kendo.toString(newDate, "yyyy-MM-dd");
+
+    var payload = {
+        KodeCabang: tempCopyData.KodeCabang,
+        NoVoucherLama: tempCopyData.NoVoucherLama,
+        TanggalBaru: tglBaru
+    };
+
+    // Tutup popup
+    closeCopyWindow();
+
+    // Tembak AJAX
+    $.ajax({
+        type: "POST",
+        url: "/JurnalMemorial117/CopyJurnal",
+        contentType: "application/json",
+        data: JSON.stringify(payload),
+        success: function (response) {
+            if (response.success) {
+                showMessage('Success', 'Jurnal berhasil di-copy! No Voucher Baru: ' + response.noVoucherBaru);
+                // Refresh Grid Utama
+                $("#JurnalMemorialGrid").data("kendoGrid").dataSource.read();
+            } else {
+                showMessage('Error', response.message || 'Gagal melakukan copy jurnal.');
+            }
+        },
+        error: function () {
+            showMessage('Error', 'Terjadi kesalahan pada server saat mengcopy jurnal.');
+        }
+    });
+}

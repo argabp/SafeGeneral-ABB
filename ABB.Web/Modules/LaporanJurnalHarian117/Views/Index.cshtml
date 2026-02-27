@@ -9,6 +9,7 @@
 @{
     Layout = "~/Modules/Shared/_Layout.cshtml";
     ViewData["Title"] = "Laporan Jurnal Harian 117";
+    bool isOrangPusat = ViewBag.IsPusat == true;
 }
 
 <script src="~/Modules/LaporanJurnalHarian117/JS/LaporanJurnalHarian117.index.js"></script>
@@ -75,10 +76,10 @@
                         read.Action("GetKodeCabang", "LaporanJurnalHarian");
                     });
                 })
-                .AutoBind(true)
-                .Enable(false)
-                .Value(ViewBag.UserCabangValue) 
-                .Text(ViewBag.UserCabangText)   
+                  .AutoBind(true)
+                .Enable(isOrangPusat)
+                .Value((string)ViewBag.UserCabangValue) 
+                .Text((string)ViewBag.UserCabangText)  
             )
         </div>
 

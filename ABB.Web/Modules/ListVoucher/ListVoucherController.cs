@@ -38,14 +38,33 @@ namespace ABB.Web.Modules.ListVoucher
         public async Task<IActionResult> Index()
         {
             ViewBag.Module = Request.Cookies["Module"];
-           
             ViewBag.UserLogin = CurrentUser.UserId;
-
-           
-            var kodeCabangCookie = Request.Cookies["UserCabang"];
+            
+            // --- INI BARU BENAR PAKAI FUNGSI PEMBERSIH ---
+            var kodeCabangCookie = GetCleanCabangCookie(); 
+            // ---------------------------------------------
 
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"]; 
+            var databaseName = Request.Cookies["DatabaseValue"]; 
 
+            // Cek PS10 (Anti Gagal: potong spasi & huruf besar semua)
+            bool isPusat = false;
+            if (!string.IsNullOrEmpty(kodeCabangCookie))
+            {
+                isPusat = (kodeCabangCookie.Trim().ToUpper() == "PS10");
+            }
+            
+            ViewBag.IsPusat = isPusat;
+
+            var cabangList = await Mediator.Send(new GetCabangsQuery { DatabaseName = databaseName });
+            var userCabang = cabangList.FirstOrDefault(c => string.Equals(c.kd_cb.Trim(), kodeCabangCookie?.Trim(), StringComparison.OrdinalIgnoreCase));
+
+            string displayCabang = userCabang != null 
+            ? $"{userCabang.kd_cb.Trim()} - {userCabang.nm_cb.Trim()}" 
+            : kodeCabangCookie;
+
+            ViewBag.UserCabangValue = kodeCabangCookie; 
+            ViewBag.UserCabangText = displayCabang;
 
             return View();
         }
@@ -55,6 +74,13 @@ namespace ABB.Web.Modules.ListVoucher
         {
             var databaseName = Request.Cookies["DatabaseValue"];
             var kodeCabangCookie = GetCleanCabangCookie();
+
+            // Cek PS10 (Anti Gagal)
+            bool isPusat = false;
+            if (!string.IsNullOrEmpty(kodeCabangCookie))
+            {
+                isPusat = (kodeCabangCookie.Trim().ToUpper() == "PS10");
+            }
 
             if (string.IsNullOrWhiteSpace(kodeCabangCookie))
                 return Json(new List<object>()); // cookie tidak ada → kirim kosong
@@ -66,7 +92,7 @@ namespace ABB.Web.Modules.ListVoucher
 
             // Filter cabang sesuai cookie user
             var filtered = result
-                .Where(c => c.kd_cb?.Trim() == kodeCabangCookie.Trim())
+               .Where(c => isPusat || c.kd_cb?.Trim().ToUpper() == kodeCabangCookie.ToUpper())
                 .Select(c => new
                 {
                     kd_cb = c.kd_cb.Trim(),
@@ -74,37 +100,38 @@ namespace ABB.Web.Modules.ListVoucher
                 })
                 .ToList(); // <-- WAJIB untuk ComboBox
 
-            // kirim ke View kalau ingin dipakai
-            ViewBag.UserCabang = kodeCabangCookie;
-
+                
             return Json(filtered);
         }
 
         [HttpGet]
-            public async Task<IActionResult> GetKasBankList(string tipe)
-            {
-                var databaseName = Request.Cookies["DatabaseValue"];
-                var kodeCabangCookie = GetCleanCabangCookie();
-                var result = await _mediator.Send(new GetAllKasBankQuery
-                {
-                    TipeKasBank = tipe,
-                    SearchKeyword = null
-                });
+        public async Task<IActionResult> GetKasBankList(string tipe, string kodeCabangDropdown) // <--- Tambah parameter ini
+        {
+            var databaseName = Request.Cookies["DatabaseValue"];
+            var kodeCabangCookie = GetCleanCabangCookie();
+            
+            // LOGIKA PENTING:
+            // Kalau dropdown dikirim (saat PS10 pilih cabang), pakai cabang dropdown.
+            // Kalau kosong, pakai cabang bawaan cookie.
+            var targetCabang = !string.IsNullOrEmpty(kodeCabangDropdown) ? kodeCabangDropdown : kodeCabangCookie;
 
-                // --- PERBAIKAN DISINI ---
-                // Kita format datanya sebelum dikirim ke JSON
-                var dataFormatted = result
-                .Where(x => x.KodeCabang == kodeCabangCookie) 
+            var result = await _mediator.Send(new GetAllKasBankQuery
+            {
+                TipeKasBank = tipe,
+                SearchKeyword = null
+            });
+
+            var dataFormatted = result
+                .Where(x => x.KodeCabang == targetCabang) // <--- Filter pakai targetCabang, bukan cookie lagi
                 .Select(x => new 
                 {
                     Kode = x.Kode,
                     Keterangan = x.Keterangan,
-                    // Gabungkan Kode dan Keterangan jadi satu string
                     TampilanLengkap = $"{x.Kode} - {x.Keterangan}" 
                 });
 
-                return Json(dataFormatted);
-            }
+            return Json(dataFormatted);
+        }
 
         [HttpPost]
         public async Task<IActionResult> GenerateReport([FromBody] ListVoucherFilterDto model)
