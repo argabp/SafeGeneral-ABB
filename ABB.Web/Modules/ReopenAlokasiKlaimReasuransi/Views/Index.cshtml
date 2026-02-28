@@ -1,0 +1,85 @@
+﻿@using ABB.Application.ReopenAlokasiKlaimReasuransis.Queries
+@using Kendo.Mvc.TagHelpers
+@using Kendo.Mvc.UI
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Reopen Alokasi Klaim Reasuransi";
+}
+<script src="~/Modules/ReopenAlokasiKlaimReasuransi/JS/reopenAlokasiKlaimReasuransi.index.js"></script>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-8">
+            Reopen Spreading of Loss (SOL)
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<ReopenAlokasiKlaimReasuransiDto>()
+                .Name("ReopenAlokasiKlaimReasuransiGrid")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetReopenAlokasiKlaimReasuransis", "ReopenAlokasiKlaimReasuransi").Data("searchFilterReopenAlokasiKlaimReasuransi"))
+                    .Model(model => model.Id(p => p.Id))
+                )
+                .Columns(columns =>
+                {
+                    columns.Command(command =>
+                    {
+                        command.Custom("Reopen")
+                            .Text("Reopen")
+                            .IconClass("fa fa-envelope-open-text")
+                            .HtmlAttributes(new { title = "Reopen" })
+                            .Click("OnClickReopenAlokasiKlaimReasuransi");
+                    }).Width(200).Title("Action");
+                    columns.Bound(col => col.Id).Hidden();
+                    columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
+                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
+                    columns.Bound(col => col.nm_scob).Width(150).Title("Nama Sub COB");
+                    columns.Bound(col => col.no_pol_lama).Title("Nomor Polis").ClientTemplate("#= formatNoPol(no_pol_lama) #");
+                    columns.Bound(col => col.nomor_register).Title("Nomor Berkas");
+                    columns.Bound(col => col.no_mts).Width(150).Title("Nomor Mutasi");
+                    columns.Bound(col => col.nm_tipe_mts).Width(150).Title("Tipe Mutasi");
+                    columns.Bound(col => col.nm_ttg).Width(200).Title("Nama Tertanggung");
+                    columns.Bound(col => col.tgl_mts).Width(150).Title("Tanggal Mutasi").Format("{0: dd-MM-yyyy}");
+                    columns.Bound(col => col.tgl_closing).Width(150).Title("Tanggal Closing").Format("{0: dd-MM-yyyy}");
+                    columns.Bound(col => col.tgl_reas).Width(150).Title("Tanggal Closing").Format("{0: dd-MM-yyyy}");
+                    columns.Bound(col => col.nilai_ttl_kl).Width(150).Title("Nilai Klaim").Format("{0:n2}");
+                    columns.Bound(col => col.nilai_total_klaim).Width(150).Title("Nilai Klaim Koas").Format("{0:n2}");
+                    columns.Bound(col => col.sisa_alokasi).Width(150).Title("Sisa Alokasi").Format("{0:n2}");
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a => a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit"))
+
+                )
+        </div>
+
+        @(Html.Kendo().Window()
+                    .Name("ReopenAlokasiKlaimReasuransiWindow")
+                    .Title("Reopen Alokasi Klaim Reasuransi Page")
+                    .Width(800)
+                    .Modal(true)
+                    .Visible(false)
+                    .Draggable(true)
+            )
+    </div>
+</div>

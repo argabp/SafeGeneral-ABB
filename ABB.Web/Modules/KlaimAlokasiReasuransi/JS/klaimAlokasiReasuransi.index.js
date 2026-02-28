@@ -1,9 +1,6 @@
 ﻿$(document).ready(function () {
     searchKeyword_OnKeyUp();
 });
-var mutasiKlaim;
-
-var processData;
 
 function searchFilterMutasiKlaim(e) {
     const gridReq = buildGridRequest(e, "SearchKeyword");
