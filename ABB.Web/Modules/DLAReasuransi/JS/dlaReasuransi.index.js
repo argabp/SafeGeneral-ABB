@@ -26,9 +26,3 @@ function onEditDLAReasuransi(e) {
     console.log('dataItem', dataItem);
     openDLAReasuransiWindow(`/DLAReasuransi/Edit?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}&no_mts=${dataItem.no_mts}&no_dla=${dataItem.no_dla}`, 'Edit DLA Reasuransi');
 }
-
-function dataKodePasDropDown(){
-    return {
-        kd_grp_pas: $("#kd_grp_pas").val().trim()
-    }
-}

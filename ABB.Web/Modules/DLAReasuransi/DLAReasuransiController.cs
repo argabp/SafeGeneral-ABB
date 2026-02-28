@@ -77,26 +77,22 @@ namespace ABB.Web.Modules.DLAReasuransi
         
         public async Task<JsonResult> GetCabang()
         {
-            var result = await Mediator.Send(new GetMasterCabangQuery());
+            var result = await Mediator.Send(new GetCabangPSTQuery());
 
             return Json(result);
         }
 
-        public async Task<JsonResult> GetCOB(string kd_cb)
+        public async Task<JsonResult> GetCOB()
         {
-            var cobs = await Mediator.Send(new GetCobByKodeCabangQuery()
-            {
-                kd_cb = kd_cb
-            });
+            var cobs = await Mediator.Send(new GetCobByKodeCabangPSTQuery());
              
             return Json(cobs);
         }
 
-        public async Task<JsonResult> GetSCOB(string kd_cb, string kd_cob)
+        public async Task<JsonResult> GetSCOB(string kd_cob)
         {
-            var result = await Mediator.Send(new GetSCOBByKodeCabangQuery()
+            var result = await Mediator.Send(new GetSCOBByKodeCabangPSTQuery()
             {
-                kd_cb = kd_cb,
                 kd_cob = kd_cob
             });
 

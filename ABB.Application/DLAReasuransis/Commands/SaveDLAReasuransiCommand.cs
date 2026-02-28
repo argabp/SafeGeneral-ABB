@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using AutoMapper;
 using MediatR;
@@ -46,7 +47,7 @@ namespace ABB.Application.DLAReasuransis.Commands
 
         public async Task<Unit> Handle(SaveDLAReasuransiCommand request, CancellationToken cancellationToken)
         {
-            try
+            await ExceptionHelper.ExecuteWithLoggingAsync(async () => 
             {
                 var dlaReasuransi = _contextPst.DLAReasuransi.Find(request.kd_cb, request.kd_cob, request.kd_scob,
                     request.kd_thn, request.no_kl, request.no_mts, request.no_dla);
@@ -54,12 +55,7 @@ namespace ABB.Application.DLAReasuransis.Commands
                 dlaReasuransi.ket_dla = request.ket_dla;
 
                 await _contextPst.SaveChangesAsync(cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.InnerException == null ? ex.Message : ex.InnerException.Message);
-                throw ex;
-            }
+            }, _logger);
 
             return Unit.Value;
         }

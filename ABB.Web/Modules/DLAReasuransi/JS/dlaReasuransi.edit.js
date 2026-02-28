@@ -43,15 +43,8 @@ function OnKodePasChange(e){
     });
 }
 
-function dataKodeCOBDropDown(){
-    return {
-        kd_cb: $("#temp_kd_cb").val().trim()
-    }
-}
-
 function dataKodeSCOBDropDown(){
     return {
-        kd_cb: $("#temp_kd_cb").val().trim(),
         kd_cob: $("#temp_kd_cob").val().trim()
     }
 }
@@ -59,13 +52,17 @@ function dataKodeSCOBDropDown(){
 function OnKodeCabangChange(e){
     var value = e.sender._cascadedValue;
     $("#temp_kd_cb").val(value);
-    var kd_cob = $("#kd_cob").data("kendoDropDownList");
-    kd_cob.dataSource.read({kd_cb: value});
 }
 
 function OnKodeCOBChange(e){
     var value = e.sender._cascadedValue;
     $("#temp_kd_cob").val(value);
     var kd_scob = $("#kd_scob").data("kendoDropDownList");
-    kd_scob.dataSource.read({kd_cb: $("#temp_kd_cb").val().trim(), kd_cob : e.sender._cascadedValue});
+    kd_scob.dataSource.read({kd_cob : e.sender._cascadedValue});
+}
+
+function dataKodePasDropDown(){
+    return {
+        kd_grp_pas: $("#kd_grp_pas").val().trim()
+    }
 }

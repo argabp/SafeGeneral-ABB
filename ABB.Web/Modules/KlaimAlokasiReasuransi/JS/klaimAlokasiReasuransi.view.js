@@ -23,8 +23,6 @@ function OnKodeCOBChange(e){
     $("#temp_kd_cob").val(value);
     var kd_scob = $("#kd_scob").data("kendoDropDownList");
     kd_scob.dataSource.read({kd_cob : e.sender._cascadedValue});
-    var kd_scob = $("#kd_scob").data("kendoDropDownList");
-    kd_scob.dataSource.read({kd_cob : e.sender._cascadedValue});
     var nomor_register = $("#kd_cb").val().trim() + "." + value.trim() + $("#kd_scob").val().trim() + "." + $("#kd_thn").val().trim() + "." + $("#no_kl").val().trim();
     $("#temp_nomor_register").val(nomor_register);
 }

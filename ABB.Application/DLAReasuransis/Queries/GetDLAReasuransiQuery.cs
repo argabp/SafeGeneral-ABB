@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using ABB.Domain.Entities;
 using MediatR;
@@ -41,20 +42,13 @@ namespace ABB.Application.DLAReasuransis.Queries
         public async Task<DLAReasuransi> Handle(GetDLAReasuransiQuery request,
             CancellationToken cancellationToken)
         {
-            await Task.Delay(0, cancellationToken);
-            
-            try
-            {
-                var dLAReasuransi = _dbContextPst.DLAReasuransi.Find(request.kd_cb, request.kd_cob, request.kd_scob,
-                    request.kd_thn, request.no_kl, request.no_mts, request.no_dla);
+            return await ExceptionHelper.ExecuteWithLoggingAsync(() =>
+                {
+                    var dLAReasuransi = _dbContextPst.DLAReasuransi.Find(request.kd_cb, request.kd_cob, request.kd_scob,
+                        request.kd_thn, request.no_kl, request.no_mts, request.no_dla);
 
-                return dLAReasuransi;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                throw;
-            }
+                    return Task.FromResult(dLAReasuransi);
+                }, _logger);
         }
     }
 }

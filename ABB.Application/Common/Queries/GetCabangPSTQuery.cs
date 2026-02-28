@@ -10,22 +10,22 @@ using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.Common.Queries
 {
-    public class GetMasterCabangQuery : IRequest<List<DropdownOptionDto>>
+    public class GetCabangPSTQuery : IRequest<List<DropdownOptionDto>>
     {
     }
 
-    public class GetMasterCabangQueryHandler : IRequestHandler<GetMasterCabangQuery, List<DropdownOptionDto>>
+    public class GetCabangPSTQueryHandler : IRequestHandler<GetCabangPSTQuery, List<DropdownOptionDto>>
     {
-        private readonly IDbConnection _connection;
-        private readonly ILogger<GetMasterCabangQueryHandler> _logger;
+        private readonly IDbConnectionPst _connection;
+        private readonly ILogger<GetCabangPSTQueryHandler> _logger;
 
-        public GetMasterCabangQueryHandler(IDbConnection connection, ILogger<GetMasterCabangQueryHandler> logger)
+        public GetCabangPSTQueryHandler(IDbConnectionPst connection, ILogger<GetCabangPSTQueryHandler> logger)
         {
             _connection = connection;
             _logger = logger;
         }
 
-        public async Task<List<DropdownOptionDto>> Handle(GetMasterCabangQuery request,
+        public async Task<List<DropdownOptionDto>> Handle(GetCabangPSTQuery request,
             CancellationToken cancellationToken)
         {
             try
