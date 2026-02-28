@@ -10,8 +10,6 @@ namespace ABB.Application.ReopenAlokasiKlaimReasuransis.Queries
     public class GetReopenAlokasiKlaimReasuransisQuery : IRequest<GridResponse<ReopenAlokasiKlaimReasuransiDto>>
     {
         public GridRequest Grid { get; set; }
-
-        public string SearchKeyword { get; set; }
     }
 
     public class GetReopenAlokasiKlaimReasuransisQueryHandler : IRequestHandler<GetReopenAlokasiKlaimReasuransisQuery, GridResponse<ReopenAlokasiKlaimReasuransiDto>>
@@ -34,7 +32,6 @@ namespace ABB.Application.ReopenAlokasiKlaimReasuransis.Queries
                 config,
                 new
                 {
-                    request.SearchKeyword
                 }
             );
         }

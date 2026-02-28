@@ -1,0 +1,34 @@
+﻿$(document).ready(function () {
+    searchKeyword_OnKeyUp();
+});
+
+function searchFilterDLAReasuransi(e) {
+    const gridReq = buildGridRequest(e, "SearchKeyword");
+
+    return {
+        grid: gridReq
+    };
+}
+
+function searchKeyword_OnKeyUp() {
+    $('#SearchKeyword').keyup(function () {
+        refreshGrid("#DLAReasuransiGrid");
+    });
+}
+
+function openDLAReasuransiWindow(url, title) {
+    openWindow('#DLAReasuransiWindow', url, title);
+}
+
+function onEditDLAReasuransi(e) {
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    console.log('dataItem', dataItem);
+    openDLAReasuransiWindow(`/DLAReasuransi/Edit?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}&no_mts=${dataItem.no_mts}&no_dla=${dataItem.no_dla}`, 'Edit DLA Reasuransi');
+}
+
+function dataKodePasDropDown(){
+    return {
+        kd_grp_pas: $("#kd_grp_pas").val().trim()
+    }
+}

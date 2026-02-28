@@ -1,7 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using ABB.Domain.Entities;
-using ABB.Domain.IdentityModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
@@ -13,6 +12,7 @@ namespace ABB.Application.Common.Interfaces
         DbSet<T> Set<T>() where T : class;
         DbSet<KlaimAlokasiReasuransi> KlaimAlokasiReasuransi { get; set; }
         DbSet<KlaimAlokasiReasuransiXL> KlaimAlokasiReasuransiXL { get; set; }
+        DbSet<DLAReasuransi> DLAReasuransi { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

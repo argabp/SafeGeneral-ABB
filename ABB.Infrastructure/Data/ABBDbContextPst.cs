@@ -21,12 +21,14 @@ namespace ABB.Infrastructure.Data
         public DatabaseFacade DatabaseContext { get; set; }
         public DbSet<KlaimAlokasiReasuransi> KlaimAlokasiReasuransi { get; set; }
         public DbSet<KlaimAlokasiReasuransiXL> KlaimAlokasiReasuransiXL { get; set; }
+        public DbSet<DLAReasuransi> DLAReasuransi { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
             builder.ApplyConfiguration(new KlaimAlokasiReasuransiMap());
             builder.ApplyConfiguration(new KlaimAlokasiReasuransiXLMap());
+            builder.ApplyConfiguration(new DLAReasuransiMap());
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

@@ -120,22 +120,27 @@ namespace ABB.Infrastructure.Data.Grid
             // ---- paging ----
             int start = ((request.Page - 1) * request.PageSize) + 1;
             int end = request.Page * request.PageSize;
+
+            if (where.ToString().Trim() == "WHERE")
+            {
+                where.Clear();
+            }
         
             var sql = $@"
-            ;WITH Q AS (
-            SELECT
-            ROW_NUMBER() OVER (ORDER BY {sortCol} {sortDir}) AS rn,
-            *
+                ;WITH Q AS (
+                SELECT
+                ROW_NUMBER() OVER (ORDER BY {sortCol} {sortDir}) AS rn,
+                *
+                {config.FromSql}
+                {where}
+                )
+                SELECT * FROM Q WHERE rn BETWEEN {start} AND {end};
+
+
+            SELECT COUNT(1)
             {config.FromSql}
-            {where}
-            )
-            SELECT * FROM Q WHERE rn BETWEEN {start} AND {end};
-
-
-        SELECT COUNT(1)
-        {config.FromSql}
-        {where};
-        ";
+            {where};
+            ";
         
             _db.CreateDbConnection(databaseName);
             using var multi = await _db.QueryMultipleAsync(sql, parameters);
@@ -196,22 +201,27 @@ namespace ABB.Infrastructure.Data.Grid
             // ---- paging ----
             int start = ((request.Page - 1) * request.PageSize) + 1;
             int end = request.Page * request.PageSize;
+
+            if (where.ToString().Trim() == "WHERE")
+            {
+                where.Clear();
+            }
         
             var sql = $@"
-            ;WITH Q AS (
-            SELECT
-            ROW_NUMBER() OVER (ORDER BY {sortCol} {sortDir}) AS rn,
-            *
+                ;WITH Q AS (
+                SELECT
+                ROW_NUMBER() OVER (ORDER BY {sortCol} {sortDir}) AS rn,
+                *
+                {config.FromSql}
+                {where}
+                )
+                SELECT * FROM Q WHERE rn BETWEEN {start} AND {end};
+
+
+            SELECT COUNT(1)
             {config.FromSql}
-            {where}
-            )
-            SELECT * FROM Q WHERE rn BETWEEN {start} AND {end};
-
-
-        SELECT COUNT(1)
-        {config.FromSql}
-        {where};
-        ";
+            {where};
+            ";
         
             using var multi = await _dbConnectionCSM.QueryMultipleAsync(sql, parameters);
         
@@ -271,7 +281,12 @@ namespace ABB.Infrastructure.Data.Grid
             // ---- paging ----
             int start = ((request.Page - 1) * request.PageSize) + 1;
             int end = request.Page * request.PageSize;
-        
+
+            if (where.ToString().Trim() == "WHERE")
+            {
+                where.Clear();
+            }
+            
             var sql = $@"
                 ;WITH Q AS (
                 SELECT
