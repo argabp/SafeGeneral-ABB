@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using ABB.Application.Common.Helpers;
@@ -7,9 +6,9 @@ using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace ABB.Application.DLAReasuransis.Commands
+namespace ABB.Application.PLAReasuransis.Commands
 {
-    public class SaveDLAReasuransiCommand : IRequest
+    public class SavePLAReasuransiCommand : IRequest
     {
         public string kd_cb { get; set; }
 
@@ -23,35 +22,35 @@ namespace ABB.Application.DLAReasuransis.Commands
 
         public short no_mts { get; set; }
 
-        public short no_dla { get; set; }
+        public short no_pla { get; set; }
 
         public string kd_grp_pas { get; set; }
 
         public string kd_rk_pas { get; set; }
 
-        public string? ket_dla { get; set; }
+        public string? ket_pla { get; set; }
     }
 
-    public class SaveDLAReasuransiCommandHandler : IRequestHandler<SaveDLAReasuransiCommand>
+    public class SavePLAReasuransiCommandHandler : IRequestHandler<SavePLAReasuransiCommand>
     {
         private readonly IDbContextPst _contextPst;
-        private readonly ILogger<SaveDLAReasuransiCommandHandler> _logger;
+        private readonly ILogger<SavePLAReasuransiCommandHandler> _logger;
 
-        public SaveDLAReasuransiCommandHandler(IDbContextPst contextPst,
-            ILogger<SaveDLAReasuransiCommandHandler> logger, IMapper mapper)
+        public SavePLAReasuransiCommandHandler(IDbContextPst contextPst,
+            ILogger<SavePLAReasuransiCommandHandler> logger, IMapper mapper)
         {;
             _contextPst = contextPst;
             _logger = logger;
         }
 
-        public async Task<Unit> Handle(SaveDLAReasuransiCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(SavePLAReasuransiCommand request, CancellationToken cancellationToken)
         {
             await ExceptionHelper.ExecuteWithLoggingAsync(async () => 
             {
-                var dlaReasuransi = _contextPst.DLAReasuransi.Find(request.kd_cb, request.kd_cob, request.kd_scob,
-                    request.kd_thn, request.no_kl, request.no_mts, request.no_dla);
+                var plaReasuransi = _contextPst.PLAReasuransi.Find(request.kd_cb, request.kd_cob, request.kd_scob,
+                    request.kd_thn, request.no_kl, request.no_mts, request.no_pla);
 
-                dlaReasuransi.ket_dla = request.ket_dla;
+                plaReasuransi.ket_pla = request.ket_pla;
 
                 await _contextPst.SaveChangesAsync(cancellationToken);
             }, _logger);

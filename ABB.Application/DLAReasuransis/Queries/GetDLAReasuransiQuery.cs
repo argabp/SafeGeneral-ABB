@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.DLAReasuransis.Queries
 {
-    
     public class GetDLAReasuransiQuery : IRequest<DLAReasuransi>
     {
         public string kd_cb { get; set; }

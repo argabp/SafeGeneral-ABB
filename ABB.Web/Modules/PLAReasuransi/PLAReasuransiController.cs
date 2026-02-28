@@ -3,15 +3,15 @@ using System.Threading.Tasks;
 using ABB.Application.Common;
 using ABB.Application.Common.Grids.Models;
 using ABB.Application.Common.Queries;
-using ABB.Application.DLAReasuransis.Commands;
-using ABB.Application.DLAReasuransis.Queries;
+using ABB.Application.PLAReasuransis.Commands;
+using ABB.Application.PLAReasuransis.Queries;
 using ABB.Web.Modules.Base;
-using ABB.Web.Modules.DLAReasuransi.Models;
+using ABB.Web.Modules.PLAReasuransi.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ABB.Web.Modules.DLAReasuransi
+namespace ABB.Web.Modules.PLAReasuransi
 {
-    public class DLAReasuransiController : AuthorizedBaseController
+    public class PLAReasuransiController : AuthorizedBaseController
     {
         public async Task<IActionResult> Index()
         {
@@ -22,9 +22,9 @@ namespace ABB.Web.Modules.DLAReasuransi
             return View();
         }
         
-        public async Task<ActionResult> GetDLAReasuransis(GridRequest grid)
+        public async Task<ActionResult> GetPLAReasuransis(GridRequest grid)
         {
-            var result = await Mediator.Send(new GetDLAReasuransisQuery()
+            var result = await Mediator.Send(new GetPLAReasuransisQuery()
             {
                 Grid = grid
             });
@@ -33,9 +33,9 @@ namespace ABB.Web.Modules.DLAReasuransi
         }
         
         public async Task<IActionResult> Edit(string kd_cb, string kd_cob, string kd_scob,
-            string kd_thn, string no_kl, Int16 no_mts, Int16 no_dla)
+            string kd_thn, string no_kl, Int16 no_mts, Int16 no_pla)
         {
-            var command = new GetDLAReasuransiQuery()
+            var command = new GetPLAReasuransiQuery()
             {
                 kd_cb = kd_cb,
                 kd_cob = kd_cob,
@@ -43,7 +43,7 @@ namespace ABB.Web.Modules.DLAReasuransi
                 kd_thn = kd_thn,
                 no_kl = no_kl,
                 no_mts = no_mts,
-                no_dla = no_dla
+                no_pla = no_pla
             };
             
             var result = await Mediator.Send(command);
@@ -54,15 +54,15 @@ namespace ABB.Web.Modules.DLAReasuransi
             result.kd_grp_pas = result.kd_grp_pas.Trim();
             result.kd_rk_pas = result.kd_rk_pas.Trim();
             
-            return View(Mapper.Map<DLAReasuransiViewModel>(result));
+            return View(Mapper.Map<PLAReasuransiViewModel>(result));
         }
         
         [HttpPost]
-        public async Task<IActionResult> SaveDLAReasuransi([FromBody] DLAReasuransiViewModel model)
+        public async Task<IActionResult> SavePLAReasuransi([FromBody] PLAReasuransiViewModel model)
         {
             try
             {
-                var command = Mapper.Map<SaveDLAReasuransiCommand>(model);
+                var command = Mapper.Map<SavePLAReasuransiCommand>(model);
                 
                 var entity = await Mediator.Send(command);
                 return Json(new { Result = "OK", Message = Constant.DataDisimpan, Model = entity});
