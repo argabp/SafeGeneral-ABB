@@ -1,4 +1,4 @@
-﻿@using ABB.Application.CancelPostingNotaKlaimReasuransis.Queries
+﻿@using ABB.Application.PostingNotaKlaimReasuransis.Queries
 @using Kendo.Mvc.UI
 @using Microsoft.Extensions.Configuration
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
@@ -8,9 +8,9 @@
 
 @{
     Layout = "~/Modules/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Cancel Posting Nota Klaim Reasuransi";
+    ViewData["Title"] = "Posting Nota Klaim Reasuransi";
 }
-<script src="~/Modules/CancelPostingNotaKlaimReasuransi/JS/cancelPostingNotaKlaimReasuransi.js"></script>
+<script src="~/Modules/PostingNotaKlaimReasuransi/JS/postingNotaKlaimReasuransi.js"></script>
 
 <style>
     .div-box{
@@ -20,7 +20,7 @@
 <div class="flat-box">
     <div class="row">
         <div class="flat-box-title col-md-6">
-            Cancel Posting Nota Klaim Reasuransi
+            Posting Nota Klaim Reasuransi
         </div>
 
         <div class="col-md-4">
@@ -28,7 +28,7 @@
         </div>
 
         <div class="col-md-2">
-            <button class="flat-btn-primary" onclick="postingNotaKlaimReasuransi()">Cancel Posting</button>
+            <button class="flat-btn-primary" onclick="postingNotaKlaimReasuransi()">Posting</button>
         </div>
 
         @* <div class="col-md-2"> *@
@@ -38,10 +38,10 @@
 
     <div class="flat-box-content">
         <div class="div-box">
-            @(Html.Kendo().Grid<CancelPostingNotaKlaimReasuransiDto>()
-                .Name("CancelPostingNotaKlaimReasuransiGrid")
+            @(Html.Kendo().Grid<PostingNotaKlaimReasuransiDto>()
+                .Name("PostingNotaKlaimReasuransiGrid")
                 .DataSource(dataSource => dataSource.Ajax()
-                    .Read(read => read.Action("GetCancelPostingNotaKlaimReasuransis", "CancelPostingNotaKlaimReasuransi").Data("searchFilterCancelPostingNotaKlaimReasuransi"))
+                    .Read(read => read.Action("GetPostingNotaKlaimReasuransis", "PostingNotaKlaimReasuransi").Data("searchFilterPostingNotaKlaimReasuransi"))
                     .Model(model => model.Id(p => p.Id))
                 )
                 .Columns(columns =>
@@ -64,7 +64,7 @@
                 .Scrollable()
                 .Height(450)
                 .Resizable(a=>a.Columns(true))
-                .Events(ev => ev.DataBound("gridAutoFit").Change("onChangeGridCancelPostingNotaKlaimReasuransi"))
+                .Events(ev => ev.DataBound("gridAutoFit").Change("onChangeGridPostingNotaKlaimReasuransi"))
         
                 )    
         </div>
