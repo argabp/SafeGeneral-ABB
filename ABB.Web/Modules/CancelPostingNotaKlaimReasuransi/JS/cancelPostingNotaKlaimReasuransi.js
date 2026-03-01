@@ -33,6 +33,7 @@ function onChangeGridCancelPostingNotaKlaimReasuransi(e) {
         if (isSelected && index === -1) {
             // If selected and not in our list, add it
             selectedRowsData.push({
+                Id: item.Id,
                 kd_cb: item.kd_cb,
                 kd_cob: item.kd_cob,
                 kd_scob: item.kd_scob,

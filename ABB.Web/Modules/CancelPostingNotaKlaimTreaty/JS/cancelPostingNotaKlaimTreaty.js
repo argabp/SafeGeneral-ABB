@@ -6,11 +6,11 @@ var selectedRowsData = [];
 
 function searchKeyword_OnKeyUp() {
     $('#SearchKeyword').keyup(function () {
-        refreshGrid("#PostingNotaKlaimReasuransiGrid");
+        refreshGrid("#CancelPostingNotaKlaimTreatyGrid");
     });
 }
 
-function searchFilterPostingNotaKlaimReasuransi(e) {
+function searchFilterCancelPostingNotaKlaimTreaty(e) {
     const gridReq = buildGridRequest(e, "SearchKeyword");
 
     return {
@@ -18,7 +18,7 @@ function searchFilterPostingNotaKlaimReasuransi(e) {
     };
 }
 
-function onChangeGridPostingNotaKlaimReasuransi(e) {
+function onChangeGridCancelPostingNotaKlaimTreaty(e) {
     var grid = e.sender;
     var selectedIds = grid.selectedKeyNames();
 
@@ -27,19 +27,21 @@ function onChangeGridPostingNotaKlaimReasuransi(e) {
     var currentData = grid.dataSource.view();
 
     currentData.forEach(item => {
-        var index = selectedRowsData.findIndex(x => x.Id == item.Id);
-        var isSelected = selectedIds.includes(item.Id.toString());
+        var index = selectedRowsData.findIndex(x => x.nomor_nota == item.nomor_nota);
+        var isSelected = selectedIds.includes(item.nomor_nota.toString());
 
         if (isSelected && index === -1) {
             // If selected and not in our list, add it
             selectedRowsData.push({
-                Id: item.Id,
+                nomor_nota: item.nomor_nota,
                 kd_cb: item.kd_cb,
-                kd_cob: item.kd_cob,
-                kd_scob: item.kd_scob,
+                jns_tr: item.jns_tr,
+                jns_nt_msk: item.jns_nt_msk,
                 kd_thn: item.kd_thn,
-                no_kl: item.no_kl,
-                no_mts: item.no_mts,
+                kd_bln: item.kd_bln,
+                no_nt_msk: item.no_nt_msk,
+                jns_nt_kel: item.jns_nt_kel,
+                no_nt_kel: item.no_nt_kel
             });
         } else if (!isSelected && index !== -1) {
             // If deselected and in our list, remove it
@@ -48,25 +50,25 @@ function onChangeGridPostingNotaKlaimReasuransi(e) {
     });
 }
 
-function postingNotaKlaimReasuransi(){
-    showConfirmation('Confirmation', `Are you sure you want to posting?`,
+function cancelPostingNotaKlaimTreaty(){
+    showConfirmation('Confirmation', `Are you sure you want to cancel?`,
         function () {
-            showProgressOnGrid('#PostingNotaKlaimReasuransiGrid');
+            showProgressOnGrid('#CancelPostingNotaKlaimTreatyGrid');
 
-            ajaxPost("/PostingNotaKlaimReasuransi/Posting", JSON.stringify(selectedRowsData),
+            ajaxPost("/CancelPostingNotaKlaimTreaty/Cancel", JSON.stringify(selectedRowsData),
                 function (response) {
                     if(response.Status === "OK"){
-                        showMessage("Success", "Posting Sukses")
+                        showMessage("Success", "Cancel Sukses")
                     } else {
                         showMessage('Error', response.Message);
                     }
-                    var grid = $("#PostingNotaKlaimReasuransiGrid").data("kendoGrid");
+                    var grid = $("#CancelPostingNotaKlaimTreatyGrid").data("kendoGrid");
                     if (grid) {
                         grid.clearSelection();
                     }
                     selectedRowsData = [];
-                    refreshGrid('#PostingNotaKlaimReasuransiGrid');
-                    closeProgressOnGrid('#PostingNotaKlaimReasuransiGrid');
+                    refreshGrid('#CancelPostingNotaKlaimTreatyGrid');
+                    closeProgressOnGrid('#CancelPostingNotaKlaimTreatyGrid');
                 },
             );
         }
@@ -76,22 +78,22 @@ function postingNotaKlaimReasuransi(){
 function postingAccounting(){
     showConfirmation('Confirmation', `Are you sure you want to posting?`,
         function () {
-            showProgressOnGrid('#PostingNotaKlaimReasuransiGrid');
+            showProgressOnGrid('#CancelPostingNotaKlaimTreatyGrid');
 
-            ajaxPost("/PostingNotaKlaimReasuransi/Posting", JSON.stringify(selectedRowsData),
+            ajaxPost("/CancelPostingNotaKlaimTreaty/Posting", JSON.stringify(selectedRowsData),
                 function (response) {
                     if(response.Status === "OK"){
                         showMessage("Success", "Posting Accounting Sukses")
                     } else {
                         showMessage('Error', response.Message);
                     }
-                    var grid = $("#PostingNotaKlaimReasuransiGrid").data("kendoGrid");
+                    var grid = $("#CancelPostingNotaKlaimTreatyGrid").data("kendoGrid");
                     if (grid) {
                         grid.clearSelection();
                     }
                     selectedRowsData = [];
-                    refreshGrid('#PostingNotaKlaimReasuransiGrid');
-                    closeProgressOnGrid('#PostingNotaKlaimReasuransiGrid');
+                    refreshGrid('#CancelPostingNotaKlaimTreatyGrid');
+                    closeProgressOnGrid('#CancelPostingNotaKlaimTreatyGrid');
                 },
             );
         }

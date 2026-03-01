@@ -29,7 +29,7 @@ namespace ABB.Application.PostingNotaKlaimReasuransis.Configs
                             ) src
                             ",
 
-                BaseWhere = @"",
+                BaseWhere = @"(src.flag_cancel = 'N' AND src.flag_posting = 'N')",
 
                 ColumnMap = new Dictionary<string, string>
                 {
