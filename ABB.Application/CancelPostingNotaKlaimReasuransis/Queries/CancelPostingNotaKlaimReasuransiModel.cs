@@ -1,8 +1,6 @@
-using System;
-
-namespace ABB.Application.CancelPostingMutasiKlaims.Queries
+namespace ABB.Application.CancelPostingNotaKlaimReasuransis.Queries
 {
-    public class CancelPostingMutasiKlaimModel
+    public class CancelPostingNotaKlaimReasuransiModel
     {
         public string kd_cb { get; set; }
 
@@ -14,6 +12,6 @@ namespace ABB.Application.CancelPostingMutasiKlaims.Queries
 
         public string no_kl { get; set; }
 
-        public Int16 no_mts { get; set; }
+        public short no_mts { get; set; }
     }
 }

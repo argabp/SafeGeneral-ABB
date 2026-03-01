@@ -68,7 +68,11 @@ function proses(){
                     }
                     else
                         showMessage('Error', response.Message);
-                    
+                    var grid = $("#ViewSourceDataGrid").data("kendoGrid");
+                    if (grid) {
+                        grid.clearSelection();
+                    }
+                    selectedRowsData = [];
                     $("#ViewSourceDataGrid").getKendoGrid().dataSource.read();
                     ajaxGet("/ProsesCSM/GetProgressDone");
                     closeProgressOnGrid('#ViewSourceDataGrid');
@@ -94,7 +98,11 @@ function prosesAll(){
                     }
                     else
                         showMessage('Error', response.Message);
-                    
+                    var grid = $("#ViewSourceDataGrid").data("kendoGrid");
+                    if (grid) {
+                        grid.clearSelection();
+                    }
+                    selectedRowsData = [];
                     $("#ViewSourceDataGrid").getKendoGrid().dataSource.read();
                     ajaxGet("/ProsesCSM/GetProgressDone");
                     closeProgressOnGrid('#ViewSourceDataGrid');
