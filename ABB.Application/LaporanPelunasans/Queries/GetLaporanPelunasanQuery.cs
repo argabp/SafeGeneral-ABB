@@ -20,7 +20,13 @@ using ABB.Application.Cabangs.Queries;
 
 namespace ABB.Application.LaporanPelunasans.Queries
 {
-    public class GetLaporanPelunasanQuery : IRequest<string> // <--- UBAH DI SINI
+    public class LaporanPelunasanResponse
+    {
+        public string HtmlString { get; set; }
+        public List<InquiryNotaProduksiDto> RawData { get; set; }
+    }
+
+    public class GetLaporanPelunasanQuery : IRequest<LaporanPelunasanResponse> 
     {
         public string DatabaseName { get; set; }
         public string KodeCabang { get; set; }
@@ -32,7 +38,7 @@ namespace ABB.Application.LaporanPelunasans.Queries
         public string UserLogin { get; set; }
     }
 
-    public class GetLaporanPelunasanQueryHandler : IRequestHandler<GetLaporanPelunasanQuery, string> // <--- UBAH DI SINI
+    public class GetLaporanPelunasanQueryHandler : IRequestHandler<GetLaporanPelunasanQuery, LaporanPelunasanResponse>
     {
         private readonly IDbContextPstNota _context;
         private readonly IMapper _mapper;
@@ -45,7 +51,7 @@ namespace ABB.Application.LaporanPelunasans.Queries
             _environment = environment; // <--- Injeksi
         }
 
-        public async Task<string> Handle(GetLaporanPelunasanQuery request, CancellationToken cancellationToken)
+       public async Task<LaporanPelunasanResponse> Handle(GetLaporanPelunasanQuery request, CancellationToken cancellationToken)
         {
          var db = _context.Set<Produksi>().Where(x => x.saldo == 0);
 
@@ -161,7 +167,11 @@ namespace ABB.Application.LaporanPelunasans.Queries
                 periode = $"{request.BulanAwal} s/d {request.BulanAkhir} - {request.Tahun}"
             });
 
-            return resultTemplate;
+            return new LaporanPelunasanResponse
+            {
+                HtmlString = resultTemplate,
+                RawData = dataLaporan
+            };
         }
     }
 }

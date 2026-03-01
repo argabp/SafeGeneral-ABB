@@ -186,9 +186,16 @@
         <div class="filter-section">
             @(Html.Kendo().Button()
                 .Name("btnSearch")
-                .Content("<span class='k-icon k-i-search'></span> Cari")
-                .HtmlAttributes(new { @class = "k-primary", style = "border-radius:6px; width:120px;" })
+                .Content("<span class='k-icon k-i-search'></span>  Cari (PDF)")
+                .HtmlAttributes(new { @class = "k-primary", style = "border-radius:6px; width:130px; margin-right:5px;" })
                 .Events(e => e.Click("onSearchClick"))
+            )
+
+            @(Html.Kendo().Button()
+                .Name("btnExcel")
+                .Content("<span class='k-icon k-i-search'></span>  Cari (Excel)")
+                .HtmlAttributes(new { @class = "k-button k-outline", style = "border-radius:6px; width:130px; background-color: #217346; color: white; border-color: #217346;" })
+                .Events(e => e.Click("onExcelClick"))
             )
         </div>
 

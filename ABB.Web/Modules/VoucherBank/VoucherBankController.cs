@@ -149,8 +149,8 @@ namespace ABB.Web.Modules.VoucherBank
             return PartialView(model);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetNextVoucherNumber(DateTime tanggalVoucher, string kodeCabang)
+       [HttpGet]
+        public async Task<IActionResult> GetNextVoucherNumber(DateTime tanggalVoucher, string kodeCabang, string kodeBank, string debetKredit)
         {
             // Validasi sederhana
             if (string.IsNullOrEmpty(kodeCabang))
@@ -161,8 +161,12 @@ namespace ABB.Web.Modules.VoucherBank
             var nextNumber = await Mediator.Send(new GetNextVoucherNumberQuery 
             { 
                 Bulan = tanggalVoucher.Month, 
-                Tahun = tanggalVoucher.Year, // (Gunakan full year, nanti handler yg atur logicnya)
-                KodeCabang = kodeCabang      // <--- KIRIM INI
+                Tahun = tanggalVoucher.Year,
+                KodeCabang = kodeCabang,
+                
+                // Lempar data baru ke Query
+                kodeBank = kodeBank,
+                DebetKredit = debetKredit 
             });
             
             return Json(new { success = true, nextNumber = nextNumber });
@@ -326,7 +330,9 @@ namespace ABB.Web.Modules.VoucherBank
                 { 
                     KodeCabang = kodeCabang,
                     Bulan = dateToUse.Month, 
-                    Tahun = dateToUse.Year
+                    Tahun = dateToUse.Year,
+                    kodeBank = kodeBank,         // <-- WAJIB DITAMBAH
+                    debetKredit = debetKredit
                 });
 
                 var sequenceStr = nextSequence.ToString("000"); // Contoh: "002"

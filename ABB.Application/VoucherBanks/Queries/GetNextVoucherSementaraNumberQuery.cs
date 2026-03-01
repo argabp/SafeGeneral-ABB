@@ -14,6 +14,8 @@ namespace ABB.Application.VoucherBanks.Queries
         public string KodeCabang { get; set; }
         public int Bulan { get; set; }
         public int Tahun { get; set; }
+        public string kodeBank { get; set; }
+        public string debetKredit { get; set; }
     }
 
     // 2. HANDLER (Logika Pencarian Database)
@@ -28,53 +30,67 @@ namespace ABB.Application.VoucherBanks.Queries
 
         public async Task<int> Handle(GetNextVoucherSementaraNumberQuery request, CancellationToken cancellationToken)
         {
-            // A. RAKIT POLA PENCARIAN
-            // Format DB: SMT/Cabang/...../Bulan/Tahun/Urut
-            
-            // Ambil 2 digit cabang (misal "50")
-            var cabangFmt = request.KodeCabang.Length >= 2 
-                            ? request.KodeCabang.Substring(request.KodeCabang.Length - 2) 
-                            : request.KodeCabang;
+            var cabangFmt = request.KodeCabang.Length >= 2
+                ? request.KodeCabang.Substring(request.KodeCabang.Length - 2)
+                : request.KodeCabang;
 
             var bulanFmt = request.Bulan.ToString("00");
             var tahunFmt = request.Tahun.ToString();
 
-            // Pola dasar: Harus diawali "SMT/50/" dan mengandung "/02/2026/"
+            // Setup pola dasar pencarian: "SMT/50/" dan "/03/2026/"
             string prefixAwal = $"SMT/{cabangFmt}/";
             string suffixPeriode = $"/{bulanFmt}/{tahunFmt}/";
 
-            // B. AMBIL DATA DARI DB
-            var candidates = await _context.VoucherBank
-                .Where(x => x.NoVoucherSementara != null 
+            // 1. QUERY DASAR (Filter Cabang, Bulan, Tahun - Aturan Lama)
+            var query = _context.VoucherBank
+                .Where(x => x.NoVoucherSementara != null
                             && x.NoVoucherSementara.StartsWith(prefixAwal)
-                            && x.NoVoucherSementara.Contains(suffixPeriode))
+                            && x.NoVoucherSementara.Contains(suffixPeriode));
+
+            // 2. PERKONDISIAN UNTUK MARET 2026 KE ATAS (TERMASUK TAHUN DEPAN)
+            if (request.Tahun > 2026 || (request.Tahun == 2026 && request.Bulan >= 3))
+            {
+                // --- LOGIKA BARU PEMISAH DEBET / KREDIT UNTUK BANK ---
+                if (!string.IsNullOrEmpty(request.debetKredit) && !string.IsNullOrEmpty(request.kodeBank))
+                {
+                    // Tentukan Prefix (Contoh: "B" + "D" + "01" = "BD01")
+                    string prefixTipe = "B";
+                    if (request.debetKredit.ToUpper() == "D") prefixTipe += "D";
+                    else if (request.debetKredit.ToUpper() == "K") prefixTipe += "K";
+
+                    string prefixTengah = prefixTipe + request.kodeBank; // Hasil: "BD01" atau "BK01"
+
+                    // Suruh sistem HANYA mencari Voucher SMT yang mengandung "/BD01/" atau "/BK01/"
+                    query = query.Where(x => x.NoVoucherSementara.Contains("/" + prefixTengah + "/"));
+                }
+            }
+
+            // 3. EKSEKUSI PENCARIAN KE DATABASE
+            var candidates = await query
                 .Select(x => x.NoVoucherSementara)
                 .ToListAsync(cancellationToken);
 
-            // C. CARI NOMOR TERTINGGI
             int maxNumber = 0;
 
+            // 4. MENCARI NOMOR URUT TERBESAR
             foreach (var noSmt in candidates)
             {
-                // Contoh: SMT/50/BD01/02/2026/001
-                // Split berdasarkan '/'
                 var parts = noSmt.Split('/');
-                
-                // Urutan ada di paling belakang
+
                 if (parts.Length > 0)
                 {
-                    var lastPart = parts.Last(); // Ambil "001"
+                    var lastPart = parts.Last(); // Ambil bagian paling ujung (misal "001")
+
                     if (int.TryParse(lastPart, out int currentSeq))
                     {
                         if (currentSeq > maxNumber)
-                        {
                             maxNumber = currentSeq;
-                        }
                     }
                 }
             }
 
-            return maxNumber + 1; // Return Max + 1
+            return maxNumber + 1; // Langsung kembalikan integer (Controller yg ubah jadi "000")
         }
+
     }
 }

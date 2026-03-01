@@ -4835,6 +4835,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="ClosedXML" Version="0.97.0" />
       <PackageReference Include="DinkToPdf" Version="1.0.8" />
       <PackageReference Include="FluentValidation.AspNetCore" Version="10.1.0" />
       <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.12" />

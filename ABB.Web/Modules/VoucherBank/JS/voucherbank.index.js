@@ -336,55 +336,61 @@ function hitungTotalRupiah() {
 }
 
 // logika untuk generate voucher
+// logika untuk generate voucher
 function generateNoVoucher() {
-    // Ambil nilai dari komponen form
-    var jenisVoucher = $("#JenisVoucher").val() || "";
+    // 1. Ambil nilai dari komponen form
     var debetKredit = $("#DebetKredit").data("kendoDropDownList") ? $("#DebetKredit").data("kendoDropDownList").value() : "";
-     var kodeCabangText = $("#KodeCabang").data("kendoComboBox")?.input.val() || "";
-        var kodeCabang = kodeCabangText.split(" - ")[0].trim(); 
+    
+    var kodeCabangText = $("#KodeCabang").data("kendoComboBox")?.input.val() || "";
+    var kodeCabang = kodeCabangText.split(" - ")[0].trim(); 
+    
     var kodeBank = $("#KodeBank").data("kendoComboBox") ? $("#KodeBank").data("kendoComboBox").value() : "";
+    
     var tanggalVoucher = $("#TanggalVoucher").data("kendoDatePicker");
     var tanggal = tanggalVoucher ? tanggalVoucher.value() : null;
 
-
-     if (!tanggal) {
+    if (!tanggal) {
         tanggal = new Date(); 
     }
-    console.log("Kode Cabang:", kodeCabang);
+    
+    // Validasi dasar
     if (!kodeCabang) return;
 
-    // harusnya bekerja di prod yaa
     var formattedDateForAPI = kendo.toString(tanggal, "yyyy-MM-dd");
-    // Panggil AJAX untuk mendapatkan nomor urut berikutnya dari server
+
+    // 2. Panggil AJAX ke Controller
     $.ajax({
         type: "GET",
         url: "/VoucherBank/GetNextVoucherNumber",
         data: {
-           tanggalVoucher: kendo.toString(tanggal, "yyyy-MM-dd"),
-           kodeCabang: kodeCabang // [PENTING] Filter Global per Cabang
+           tanggalVoucher: formattedDateForAPI,
+           kodeCabang: kodeCabang, 
+           kodeBank: kodeBank,         // <-- TAMBAHAN BARU
+           debetKredit: debetKredit    // <-- TAMBAHAN BARU (Biar Backend bisa cek D/K di bulan Maret ke atas)
         },
         success: function (response) {
             if (response && response.success) {
                 var noUrut = response.nextNumber;
 
-                // --- RAKIT STRING ---
+                // --- RAKIT STRING VISUAL DI LAYAR ---
                 // Format: 50/BD01/02/2026/001
                 
-                // 1. Cabang (2 digit belakang)
+                // A. Cabang (2 digit belakang)
                 var bagian1 = kodeCabang.slice(-2);
                 
-                // 2. Prefix (B + D/K + KodeBank)
+                // B. Prefix (B + D/K + KodeBank)
                 var prefixTipe = "B"; 
                 if (debetKredit.toUpperCase() === "D") prefixTipe += "D";
                 else if (debetKredit.toUpperCase() === "K") prefixTipe += "K";
+                
                 var bagian2 = prefixTipe + kodeBank;
                 
-                // 3. Periode
+                // C. Periode (Bulan/Tahun)
                 var bulan = ('0' + (tanggal.getMonth() + 1)).slice(-2);
                 var tahun = tanggal.getFullYear().toString();
                 var bagian3 = `${bulan}/${tahun}`;
                 
-                // 4. Urut
+                // D. Urut (Hasil dari Backend)
                 var bagian4 = noUrut;
 
                 if (bagian1 && bagian2 && bagian3 && bagian4) {
@@ -392,6 +398,9 @@ function generateNoVoucher() {
                     $("#NoVoucher").val(noVoucherFinal);
                 }
             }
+        },
+        error: function() {
+            console.error("Gagal men-generate nomor voucher.");
         }
     });
 }

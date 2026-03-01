@@ -426,21 +426,21 @@ $(document).ready(function () {
         var debetKredit = $("#DebetKredit").data("kendoDropDownList")?.value() || "";
         var kodeCabangText = $("#KodeCabang").data("kendoComboBox")?.input.val() || "";
         var kodeCabang = kodeCabangText.split(" - ")[0].trim(); 
-        var kodeKas = $("#KodeKas").val() || "";
+        
+        // Ambil value Kas dengan aman (bisa dari combo box atau input biasa)
+        var cbKas = $("#KodeKas").data("kendoComboBox");
+        var kodeKas = cbKas ? cbKas.value() : ($("#KodeKas").val() || "");
 
         // 1. AMBIL TANGGAL DARI INPUTAN
         var kendoDatePicker = $("#TanggalVoucher").data("kendoDatePicker");
         var tanggalSelected = kendoDatePicker ? kendoDatePicker.value() : null;
 
-        // Jika belum pilih tanggal, pakai hari ini sebagai default (atau bisa return jika mau wajib pilih)
         if (!tanggalSelected) {
             tanggalSelected = new Date(); 
         }
 
-        // Format tanggal untuk dikirim ke Controller (yyyy-MM-dd)
         var formattedDateForAPI = kendo.toString(tanggalSelected, "yyyy-MM-dd");
 
-        console.log("Kode Cabang:", kodeCabang, "Tanggal:", formattedDateForAPI);
         if (!kodeCabang) return;
 
        $.ajax({
@@ -448,35 +448,29 @@ $(document).ready(function () {
             url: "/VoucherKas/GetNextVoucherNumber",
             data: { 
                 tanggalVoucher: formattedDateForAPI,
-                kodeCabang: kodeCabang
-                // Tidak perlu kirim DebetKredit/Kas buat filter angka urut
+                kodeCabang: kodeCabang,
+                kodeKas: kodeKas,
+                
+                // --- TAMBAHAN BARU: KIRIM DEBET KREDIT ---
+                debetKredit: debetKredit
             },
             success: function (response) {
                 if (response && response.success) {
-                    var noUrut = response.nextNumber; // Dapat "002"
+                    var noUrut = response.nextNumber; 
 
                     // --- RAKIT STRING TAMPILAN ---
-                    // Format Request: Cabang/Tipe+KodeKas/Bulan/Tahun/NoUrut
-                    
-                    // 1. Cabang (Ambil 2 digit belakang, misal "50")
                     var bagian1 = kodeCabang.slice(-2); 
                     
-                    // 2. Tipe (K + D/K + KodeKas)
-                    // Logic: Huruf pertama 'K', huruf kedua D/K, lalu KodeKas
                     var prefixTipe = "K"; 
                     if (debetKredit.toUpperCase() === "D") prefixTipe += "D";
                     else if (debetKredit.toUpperCase() === "K") prefixTipe += "K";
                     
-                    // Gabung jadi "KD01" atau "KK01"
                     var bagian2 = prefixTipe + kodeKas;
 
-                    // 3. Bulan/Tahun
                     var bulan = ('0' + (tanggalSelected.getMonth() + 1)).slice(-2);
                     var tahun = tanggalSelected.getFullYear().toString();
                     var bagian3 = bulan + "/" + tahun;
 
-                    // 4. Final String
-                    // Contoh: 50/KD01/02/2026/002
                     var noVoucherFinal = `${bagian1}/${bagian2}/${bagian3}/${noUrut}`;
                     
                     $("#NoVoucher").val(noVoucherFinal);

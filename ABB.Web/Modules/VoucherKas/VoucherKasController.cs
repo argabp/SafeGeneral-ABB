@@ -80,7 +80,7 @@ namespace ABB.Web.Modules.VoucherKas
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetNextVoucherNumber(DateTime? tanggalVoucher, string kodeCabang) 
+        public async Task<IActionResult> GetNextVoucherNumber(DateTime? tanggalVoucher, string kodeCabang, string kodeKas, string debetKredit) 
         {
             var dateToUse = tanggalVoucher ?? DateTime.Now; 
 
@@ -88,7 +88,10 @@ namespace ABB.Web.Modules.VoucherKas
             { 
                 Bulan = dateToUse.Month, 
                 Tahun = dateToUse.Year,
-                KodeCabang = kodeCabang
+                KodeCabang = kodeCabang,
+                kodeKas = kodeKas,
+                // --- LEMPAR DATA BARU KE QUERY ---
+                DebetKredit = debetKredit
                 // Parameter lain tidak perlu dikirim ke Query
             });
             
@@ -323,7 +326,9 @@ namespace ABB.Web.Modules.VoucherKas
             { 
                 KodeCabang = kodeCabang,
                 Bulan = dateToUse.Month, 
-                Tahun = dateToUse.Year
+                Tahun = dateToUse.Year,
+                kodeKas = kodeKas,
+                debetKredit = debetKredit
             });
 
             var sequenceStr = nextSequence.ToString("000"); // Contoh: "002"
