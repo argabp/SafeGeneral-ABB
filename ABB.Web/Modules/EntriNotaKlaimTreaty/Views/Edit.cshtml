@@ -1,0 +1,148 @@
+﻿@using ABB.Application.EntriNotas.Queries
+@using ABB.Domain.Entities
+@using ABB.Web.Modules.EntriNota.Models
+@using Kendo.Mvc.TagHelpers
+@using Kendo.Mvc.UI
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model ABB.Web.Modules.EntriNotaKlaimTreaty.Models.EntriNotaKlaimTreatyViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@{
+    var nomor_nota = Model.kd_cb.Trim() + " . " + Model.jns_tr.Trim() + " . " + Model.kd_thn.Trim() + " . " + 
+                     Model.kd_bln.Trim() + " . " + Model.no_nt_msk.Trim()+ " / " + Model.jns_nt_kel.Trim() + " . " + 
+                     Model.no_nt_kel.Trim();
+}
+
+<script src="~/Modules/EntriNotaKlaimTreaty/JS/entriNotaKlaimTreaty.edit.js"></script>
+
+@Html.AntiForgeryToken()
+<form id="EntriNotaKlaimTreatyForm" enctype="multipart/form-data">
+    <div class="window-body" style="background-color: lightgray">
+        @Html.HiddenFor(m => m.kd_cb)
+        @Html.HiddenFor(m => m.jns_tr)
+        @Html.HiddenFor(m => m.jns_nt_msk)
+        @Html.HiddenFor(m => m.kd_thn)
+        @Html.HiddenFor(m => m.kd_bln)
+        @Html.HiddenFor(m => m.no_nt_msk)
+        @Html.HiddenFor(m => m.jns_nt_kel)
+        @Html.HiddenFor(m => m.no_nt_kel)
+
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Nota</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="temp_nomor_nota" value="@nomor_nota" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode COB</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_cob" style="width: 100%" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetCOB", "EntriNotaKlaimTreaty")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Mata Uang</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_mtu" style="width: 100%" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetMataUang", "EntriNotaKlaimTreaty")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Persh. Ass.</label>
+                <div class="col-sm-6">
+                    <input type="hidden" id="temp_kd_grp_pas" value="@Model.kd_grp_pas">
+                    <kendo-dropdownlist for="kd_grp_pas" style="width: 100%" option-label="Pilih Kode Persh"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodePersh", "EntriNotaKlaimTreaty")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_grp_pas" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <div class="col-sm-6">
+                    <input type="hidden" id="temp_kd_rk_pas" value="@Model.kd_rk_pas">
+                    <kendo-dropdownlist for="kd_rk_pas" style="width: 100%"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeRekananPersh", "EntriNotaKlaimTreaty")" data="dataKodePershDropDown"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_rk_pas" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-9">
+                <label class="col-sm-4">Keterangan Nota</label>
+                <div class="col-sm-8">
+                    <kendo-textarea name="ket_nt" rows="2" style="width: 100%; background-color: white">@Model.ket_nt</kendo-textarea>
+                    <span asp-validation-for="ket_nt" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nilai Nota</label>
+                <div class="col-sm-3">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_nt" readonly="true" style="width: 100%; background-color: #FFFFE1"/>
+                    <span asp-validation-for="nilai_nt" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Flag Cancel</label>
+                <input type="hidden" id="tempFlag_cancel" value="@Model.flag_cancel">
+                <div class="col-sm-6">
+                    <label>
+                        <input type="checkbox" disabled class="k-checkbox" id="flag_cancel"/> Cancel
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Tanggal Nota</label>
+                <div class="col-sm-6">
+                    <kendo-datepicker for="tgl_nt" readonly="true" style="width: 100%"/>
+                    <span asp-validation-for="tgl_nt" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Flag Posting</label>
+                <input type="hidden" id="tempFlag_posting" value="@Model.flag_posting">
+                <div class="col-sm-6">
+                    <label>
+                        <input type="checkbox" disabled class="k-checkbox" id="flag_posting"/> Posting
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="window-footer">
+        <button type="button" id="btn-save-entriNotaKlaimTreaty" class="btn btn-primary space-right">Save</button>
+    </div>
+</form>

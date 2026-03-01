@@ -1,0 +1,89 @@
+﻿@using ABB.Application.EntriNotaKlaimTreaties.Queries
+@using Kendo.Mvc.UI
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Nota Klaim";
+}
+<script src="~/Modules/EntriNotaKlaimTreaty/JS/entriNotaKlaimTreaty.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-8">
+            Entri Nota Klaim Treaty
+        </div>
+
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<EntriNotaKlaimTreatyDto>()
+                .Name("EntriNotaKlaimTreatyGrid")
+                .Editable(editable => editable.Mode(GridEditMode.InLine))
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetEntriNotaKlaimTreaties", "EntriNotaKlaimTreaty").Data("searchFilterEntriNotaKlaimTreaty"))
+                    .Model(model => model.Id(p => p.nomor_nota))
+                )
+                .Columns(columns =>
+                {
+                    columns.Command(command =>
+                    {
+                        command.Custom("EditNota")
+                            .Text("Edit")
+                            .IconClass("k-icon k-i-edit")
+                            .HtmlAttributes(new { title="Edit"})
+                            .Click("onEditEntriNotaKlaimTreaty");
+                        command.Custom("ViewNota")
+                            .Text("View")
+                            .IconClass("fa fa-eye")
+                            .HtmlAttributes(new { title = "View" })
+                            .Click("onViewEntriNotaKlaimTreaty");
+                    }).Width(200).Title("Action").Locked(true);
+                    columns.Bound(col => col.nomor_nota).Width(200).Title("Nomor Nota");
+                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
+                    columns.Bound(col => col.nm_mtu).Width(150).Title("Nama Mata Uang");
+                    columns.Bound(col => col.nm_rk).Width(150).Title("Nama Tertanggung");
+                    columns.Bound(col => col.ket_nt).Width(200).Title("Keterangan Nota");
+                    columns.Bound(col => col.nilai_nt).Width(150).Title("Nilai Nota").Format("{0:n2}");
+                    columns.Bound(col => col.tgl_nt).Title("Tanggal Nota").Format("{0: dd-MM-yyyy}");
+                    columns.Bound(col => col.flag_posting).Width(150).Title("Flag Posting");
+                    columns.Bound(col => col.flag_cancel).Width(150).Title("Flag Cancel");
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("onEntriNotaKlaimTreatyDataBound"))
+                ) 
+        </div>
+        
+        @(Html.Kendo().Window()
+            .Name("EntriNotaKlaimTreatyWindow")
+            .Title("Entri Nota")
+            .Width(1200)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+    </div>
+</div>

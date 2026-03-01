@@ -133,14 +133,14 @@ namespace ABB.Web.Modules.KlaimAlokasiReasuransi
 
         public async Task<JsonResult> GetCOB()
         {
-            var cobs = await Mediator.Send(new GetCobByKodeCabangPSTQuery());
+            var cobs = await Mediator.Send(new GetCobPSTQuery());
             
             return Json(cobs);
         }
 
         public async Task<JsonResult> GetSCOB(string kd_cob)
         {
-            var result = await Mediator.Send(new GetSCOBByKodeCabangPSTQuery()
+            var result = await Mediator.Send(new GetSCOBPSTQuery()
             {
                 kd_cob = kd_cob
             });

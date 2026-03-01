@@ -23,6 +23,7 @@ namespace ABB.Infrastructure.Data
         public DbSet<KlaimAlokasiReasuransiXL> KlaimAlokasiReasuransiXL { get; set; }
         public DbSet<DLAReasuransi> DLAReasuransi { get; set; }
         public DbSet<PLAReasuransi> PLAReasuransi { get; set; }
+        public DbSet<NotaKlaimTreaty> NotaKlaimTreaty { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -31,6 +32,7 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new KlaimAlokasiReasuransiXLMap());
             builder.ApplyConfiguration(new DLAReasuransiMap());
             builder.ApplyConfiguration(new PLAReasuransiMap());
+            builder.ApplyConfiguration(new NotaKlaimTreatyMap());
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

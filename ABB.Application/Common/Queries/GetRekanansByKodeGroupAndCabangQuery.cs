@@ -1,15 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Interfaces;
-using ABB.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Timer = System.Timers.Timer;
 
 namespace ABB.Application.Common.Queries
 {
