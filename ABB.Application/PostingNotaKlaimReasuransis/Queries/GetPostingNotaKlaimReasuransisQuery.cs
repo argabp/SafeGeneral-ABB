@@ -27,7 +27,7 @@ namespace ABB.Application.PostingNotaKlaimReasuransis.Queries
         }
 
         public async Task<GridResponse<PostingNotaKlaimReasuransiDto>> Handle(GetPostingNotaKlaimReasuransisQuery request,
-            CancellationToken lationToken)
+            CancellationToken cancellationToken)
         {
             var config = PostingNotaKlaimReasuransiConfig.Create();
             

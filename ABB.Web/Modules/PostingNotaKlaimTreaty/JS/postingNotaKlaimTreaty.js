@@ -6,11 +6,11 @@ var selectedRowsData = [];
 
 function searchKeyword_OnKeyUp() {
     $('#SearchKeyword').keyup(function () {
-        refreshGrid("#CancelPostingNotaKlaimTreatyGrid");
+        refreshGrid("#PostingNotaKlaimTreatyGrid");
     });
 }
 
-function searchFilterCancelPostingNotaKlaimTreaty(e) {
+function searchFilterPostingNotaKlaimTreaty(e) {
     const gridReq = buildGridRequest(e, "SearchKeyword");
 
     return {
@@ -18,7 +18,7 @@ function searchFilterCancelPostingNotaKlaimTreaty(e) {
     };
 }
 
-function onChangeGridCancelPostingNotaKlaimTreaty(e) {
+function onChangeGridPostingNotaKlaimTreaty(e) {
     var grid = e.sender;
     var selectedIds = grid.selectedKeyNames();
 
@@ -50,25 +50,25 @@ function onChangeGridCancelPostingNotaKlaimTreaty(e) {
     });
 }
 
-function cancelPostingNotaKlaimTreaty(){
-    showConfirmation('Confirmation', `Are you sure you want to cancel?`,
+function postingNotaKlaimTreaty(){
+    showConfirmation('Confirmation', `Are you sure you want to posting?`,
         function () {
-            showProgressOnGrid('#CancelPostingNotaKlaimTreatyGrid');
+            showProgressOnGrid('#PostingNotaKlaimTreatyGrid');
 
-            ajaxPost("/CancelPostingNotaKlaimTreaty/Cancel", JSON.stringify(selectedRowsData),
+            ajaxPost("/PostingNotaKlaimTreaty/Posting", JSON.stringify(selectedRowsData),
                 function (response) {
                     if(response.Status === "OK"){
-                        showMessage("Success", "Cancel Sukses")
+                        showMessage("Success", "Posting Sukses")
                     } else {
                         showMessage('Error', response.Message);
                     }
-                    var grid = $("#CancelPostingNotaKlaimTreatyGrid").data("kendoGrid");
+                    var grid = $("#PostingNotaKlaimTreatyGrid").data("kendoGrid");
                     if (grid) {
                         grid.clearSelection();
                     }
                     selectedRowsData = [];
-                    refreshGrid('#CancelPostingNotaKlaimTreatyGrid');
-                    closeProgressOnGrid('#CancelPostingNotaKlaimTreatyGrid');
+                    refreshGrid('#PostingNotaKlaimTreatyGrid');
+                    closeProgressOnGrid('#PostingNotaKlaimTreatyGrid');
                 },
             );
         }

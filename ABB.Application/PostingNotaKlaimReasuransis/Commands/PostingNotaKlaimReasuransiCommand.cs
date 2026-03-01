@@ -30,7 +30,7 @@ namespace ABB.Application.PostingNotaKlaimReasuransis.Commands
             _logger = logger;
         }
 
-        public async Task<Unit> Handle(PostingNotaKlaimReasuransiCommand request, CancellationToken lationToken)
+        public async Task<Unit> Handle(PostingNotaKlaimReasuransiCommand request, CancellationToken cancellationToken)
         {
             return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
             {
