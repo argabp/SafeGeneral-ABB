@@ -1,0 +1,44 @@
+﻿@using Microsoft.Extensions.Configuration
+@model ABB.Web.Modules.CancelProsesNotaKlaimTreaty.Models.CancelProsesNotaKlaimTreatyViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@using Kendo.Mvc.UI
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Cancel Proses Nota Klaim Treaty";
+}
+<script src="~/Modules/CancelProsesNotaKlaimTreaty/JS/cancelProsesNotaKlaimTreaty.index.js"></script>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Cancel Proses Nota Klaim Treaty
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <form id="CancelProsesNotaKlaimTreatyForm" enctype="multipart/form-data" autocomplete="off">
+            <div>
+                <div class="row form-group">
+                    <div class="row col-sm-6">
+                        <label class="col-sm-3" style="align-content: center;">Tanggal proses</label>
+                        <div class="col-sm-5">
+                            <kendo-datepicker for="tgl_proses" start="CalendarView.Year" 
+                                              depth="CalendarView.Year" 
+                                              format="MMMM yyyy"></kendo-datepicker>
+                        </div>
+                        <div class="col-sm-4">
+                            <button type="button" id="btn-cancel" class="btn btn-primary" style="width: 100%; padding: 7px 20px 7px 20px">
+                                <span>Cancel Proses</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

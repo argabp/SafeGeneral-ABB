@@ -6,7 +6,6 @@ using ABB.Application.HasilCSM.Queries;
 using ABB.Application.PostingNotaRisiko.Commands;
 using ABB.Web.Modules.Base;
 using ABB.Web.Modules.PostingNotaRisiko.Models;
-using ABB.Web.Modules.ProsesCSM.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ABB.Web.Modules.PostingNotaRisiko
