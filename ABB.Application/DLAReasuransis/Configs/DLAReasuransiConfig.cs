@@ -37,8 +37,9 @@ namespace ABB.Application.DLAReasuransis.Configs
                     ["nm_cb"]       = "src.nm_cb",
                     ["nm_cob"]      = "src.nm_cob",
                     ["nm_scob"]     = "src.nm_scob",
-                    ["nm_grp_pas"] = "src.nm_grp_pas",
-                    ["nm_rk_pas"] = "src.nm_rk_pas"
+                    ["nomor_register"] = "src.nomor_register",
+                    ["no_mts"] = "src.no_mts",
+                    ["no_dla"] = "src.no_dla"
                 },
                 
                 SearchableColumns = new List<string>
@@ -46,11 +47,9 @@ namespace ABB.Application.DLAReasuransis.Configs
                     "src.nm_cb",
                     "src.nm_cob",
                     "src.nm_scob",
-                    "src.no_pol_ttg",
-                    "src.no_pol_pas",
-                    "src.nm_ttg",
-                    "src.no_rsk",
-                    "src.ket_oby"
+                    "src.nomor_register",
+                    "src.no_mts",
+                    "src.no_dla"
                 }
             };
         }
