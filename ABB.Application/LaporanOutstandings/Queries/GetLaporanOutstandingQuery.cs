@@ -22,7 +22,14 @@ using ABB.Domain.Entities;
 
 namespace ABB.Application.LaporanOutstandings.Queries
 {
-  public class GetLaporanOutstandingQuery : IRequest<string>
+
+    public class LaporanOutstandingResponse
+    {
+        public string HtmlString { get; set; }
+        public List<InquiryNotaProduksiDto> RawData { get; set; }
+    }
+
+  public class GetLaporanOutstandingQuery : IRequest<LaporanOutstandingResponse>
     {
         public string DatabaseName { get; set; }
         public string KodeCabang { get; set; }
@@ -41,7 +48,7 @@ namespace ABB.Application.LaporanOutstandings.Queries
     }
 
 
-    public class GetLaporanOutstandingQueryHandler : IRequestHandler<GetLaporanOutstandingQuery, string>
+   public class GetLaporanOutstandingQueryHandler : IRequestHandler<GetLaporanOutstandingQuery, LaporanOutstandingResponse>
     {
         private readonly IDbContextPstNota _context;
         private readonly IMapper _mapper;
@@ -54,7 +61,7 @@ namespace ABB.Application.LaporanOutstandings.Queries
             _environment = environment;
         }
 
-      public async Task<string> Handle(GetLaporanOutstandingQuery request, CancellationToken cancellationToken)
+      public async Task<LaporanOutstandingResponse> Handle(GetLaporanOutstandingQuery request, CancellationToken cancellationToken)
         {
             // --- 1. QUERY MASTER PRODUKSI ---
             DateTime tglProdAwal = DateTime.Parse(request.TglProduksiAwal);
@@ -316,7 +323,14 @@ namespace ABB.Application.LaporanOutstandings.Queries
             scriptObj.Import(modelData, renamer: member => member.Name);
             context.PushGlobal(scriptObj);
             
-            return template.Render(context);
+            // return template.Render(context);
+            var htmlResult = template.Render(context);
+
+            return new LaporanOutstandingResponse
+            {
+                HtmlString = htmlResult,
+                RawData = dataLaporan
+            };
         }
     }
 

@@ -20,7 +20,13 @@ using ABB.Application.Coas117.Queries;
 
 namespace ABB.Application.LaporanJurnalHarian117s117.Queries
 {
-    public class GetLaporanJurnalHarian117Query : IRequest<string>
+    public class LaporanJurnalHarian117Response
+    {
+        public string HtmlString { get; set; }
+        public List<ABB.Domain.Entities.SpLaporanJurnalHarian117Result> RawData { get; set; }
+    }
+
+    public class GetLaporanJurnalHarian117Query : IRequest<LaporanJurnalHarian117Response>
     {
         public string DatabaseName { get; set; }
         public string KodeCabang { get; set; }
@@ -31,7 +37,7 @@ namespace ABB.Application.LaporanJurnalHarian117s117.Queries
     }
 
     public class GetLaporanJurnalHarian117QueryHandler 
-        : IRequestHandler<GetLaporanJurnalHarian117Query, string>
+        : IRequestHandler<GetLaporanJurnalHarian117Query, LaporanJurnalHarian117Response>
     {
         private readonly IDbContextPstNota _context;
         private readonly IMapper _mapper;
@@ -47,7 +53,7 @@ namespace ABB.Application.LaporanJurnalHarian117s117.Queries
             _environment = environment;
         }
 
-        public async Task<string> Handle(
+        public async Task<LaporanJurnalHarian117Response> Handle(
             GetLaporanJurnalHarian117Query request,
             CancellationToken cancellationToken)
         {
@@ -232,7 +238,13 @@ namespace ABB.Application.LaporanJurnalHarian117s117.Queries
             script.Import(model, renamer: m => m.Name);
             ctx.PushGlobal(script);
 
-            return template.Render(ctx);
+            var resultTemplate = template.Render(ctx);
+
+            return new LaporanJurnalHarian117Response
+            {
+                HtmlString = resultTemplate,
+                RawData = rawData
+            };
         }
     }
 }

@@ -20,7 +20,14 @@ using ABB.Application.Coas.Queries;
 
 namespace ABB.Application.LaporanJurnalHarians.Queries
 {
-    public class GetLaporanJurnalHarianQuery : IRequest<string>
+    // 1. Tambah Class Response
+    public class LaporanJurnalHarianResponse
+    {
+        public string HtmlString { get; set; }
+        public List<ABB.Domain.Entities.SpLaporanJurnalHarianResult> RawData { get; set; }
+    }
+
+    public class GetLaporanJurnalHarianQuery : IRequest<LaporanJurnalHarianResponse>
     {
         public string DatabaseName { get; set; }
         public string KodeCabang { get; set; }
@@ -30,8 +37,8 @@ namespace ABB.Application.LaporanJurnalHarians.Queries
         public string UserLogin { get; set; }
     }
 
-    public class GetLaporanJurnalHarianQueryHandler 
-        : IRequestHandler<GetLaporanJurnalHarianQuery, string>
+   public class GetLaporanJurnalHarianQueryHandler 
+        : IRequestHandler<GetLaporanJurnalHarianQuery, LaporanJurnalHarianResponse>
     {
         private readonly IDbContextPstNota _context;
         private readonly IMapper _mapper;
@@ -47,7 +54,7 @@ namespace ABB.Application.LaporanJurnalHarians.Queries
             _environment = environment;
         }
 
-        public async Task<string> Handle(
+        public async Task<LaporanJurnalHarianResponse> Handle(
             GetLaporanJurnalHarianQuery request,
             CancellationToken cancellationToken)
         {
@@ -232,7 +239,13 @@ namespace ABB.Application.LaporanJurnalHarians.Queries
             script.Import(model, renamer: m => m.Name);
             ctx.PushGlobal(script);
 
-            return template.Render(ctx);
+            var resultTemplate = template.Render(ctx); // Misal ini hasil rendernya
+
+            return new LaporanJurnalHarianResponse
+            {
+                HtmlString = resultTemplate,
+                RawData = rawData
+            };
         }
     }
 }

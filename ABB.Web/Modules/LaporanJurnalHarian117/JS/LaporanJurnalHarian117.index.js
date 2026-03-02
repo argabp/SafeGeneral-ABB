@@ -42,3 +42,53 @@ function onSearchClick() {
         }
     });
 }
+
+function onExcelClick() {
+    var dateObj_tgl1 = $("#tgl1").data("kendoDatePicker").value();
+    var dateObj_tgl2 = $("#tgl2").data("kendoDatePicker").value();
+   
+    var tgl1 = kendo.toString(dateObj_tgl1, "yyyy-MM-dd");
+    var tgl2 = kendo.toString(dateObj_tgl2, "yyyy-MM-dd");
+   
+    var kodeCabang = $("#KodeCabang").data("kendoComboBox").value().trim();
+    var comboJenis = $("#JenisTransaksi").data("kendoComboBox");
+    var jenisTransaksi = comboJenis.value() ? comboJenis.value().trim() : "";
+
+    if (!kodeCabang || !dateObj_tgl1 || !dateObj_tgl2) {
+        alert("Silakan lengkapi filter Cabang dan Periode terlebih dahulu.");
+        return;
+    }
+
+    var formData = {
+        KodeCabang: kodeCabang,
+        PeriodeAwal: tgl1,
+        PeriodeAkhir: tgl2,
+        JenisTransaksi: jenisTransaksi
+    };
+
+    // Loading state pada tombol
+    var btn = $("#btnExcel").data("kendoButton");
+    btn.enable(false);
+
+    $.ajax({
+        url: '/LaporanJurnalHarian117/GenerateExcel',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function (res) {
+            btn.enable(true);
+            if (res.Status === "OK") {
+                var link = document.createElement('a');
+                link.href = "data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64," + res.FileData;
+                link.download = res.FileName || "LaporanJurnalHarian117.xlsx";
+                link.click();
+            } else {
+                alert("Gagal: " + res.Message);
+            }
+        },
+        error: function () {
+            btn.enable(true);
+            alert("Terjadi kesalahan saat generate Excel.");
+        }
+    });
+}

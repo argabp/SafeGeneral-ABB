@@ -13,7 +13,8 @@ using DinkToPdf;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-
+using ClosedXML.Excel;
+using System.IO;
 
 namespace ABB.Web.Modules.LaporanOutstanding
 {
@@ -152,14 +153,15 @@ namespace ABB.Web.Modules.LaporanOutstanding
                     UserLogin = user
                 };
 
-                var reportTemplate = await Mediator.Send(query);
+                var response = await Mediator.Send(query);
 
-                if (reportTemplate == null || !reportTemplate.Any())
+                // Cek RawData (bukan Any() dari string lagi)
+                if (response == null || response.RawData == null || !response.RawData.Any())
                     throw new Exception("Data tidak ditemukan.");
 
                 _reportGeneratorService.GenerateReport(
                     "LaporanOutstanding.pdf",
-                    reportTemplate,
+                    response.HtmlString,
                     user,
                     Orientation.Landscape,
                     5, 5, 5, 5,
@@ -173,11 +175,269 @@ namespace ABB.Web.Modules.LaporanOutstanding
                 return Ok(new { Status = "ERROR", Message = ex.InnerException?.Message ?? ex.Message });
             }
         }
+
+         [HttpPost]
+        public async Task<IActionResult> GenerateExcel([FromBody] LaporanOutstandingFilterDto model)
+        {
+            try
+            {
+                var databaseName = Request.Cookies["DatabaseValue"];
+                var user = CurrentUser.UserId;
+
+                if (string.IsNullOrWhiteSpace(user))
+                    throw new Exception("User ID tidak ditemukan.");
+
+                // Sesuaikan QUERY dengan data yang datang dari JS
+                var query = new GetLaporanOutstandingQuery
+                {
+                    DatabaseName = databaseName,
+                    KodeCabang = model.KodeCabang,
+                    TglProduksiAwal = model.TglProduksiAwal,
+                    TglProduksiAkhir = model.TglProduksiAkhir,
+                    TglPelunasan = model.TglPelunasan,
+                    JenisLaporan = model.JenisLaporan,
+                    JenisTransaksi = model.JenisTransaksi,
+                    SelectedCodes = model.SelectedCodes,
+                    UserLogin = user
+                };
+
+                var response = await Mediator.Send(query);
+                
+                var data = response.RawData;
+
+                if (data == null || !data.Any())
+                    throw new Exception("Data tidak ditemukan.");
+
+                using (var workbook = new XLWorkbook())
+                {
+                    var worksheet = workbook.Worksheets.Add("Laporan Outstanding");
+
+                    string displayLabel = "DETAIL (KESELURUHAN)"; 
+                    switch (model.JenisLaporan)
+                    {
+                        case "Pos": displayLabel = "PEMBAWA POS"; break;
+                        case "Broker": displayLabel = "AGEN/BROKER"; break;
+                        case "COB": displayLabel = "COB"; break;
+                        case "Tertanggung": displayLabel = "TERTANGGUNG"; break;
+                        case "Detail": default: displayLabel = "DETAIL (KESELURUHAN)"; break;
+                    }
+
+                    worksheet.Cell(1, 1).Value = $"{displayLabel}";
+                    worksheet.Range("A1:T1").Merge(); 
+                    worksheet.Cell(1, 1).Style.Font.Bold = true;
+                    worksheet.Cell(1, 1).Style.Font.FontSize = 14;
+                    worksheet.Cell(1, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                  // Baris 2: Posisi
+                    worksheet.Cell(2, 1).Value = $"POSISI : {DateTime.Now:dd-MM-yyyy}";
+                    worksheet.Range("A2:T2").Merge();
+                    worksheet.Cell(2, 1).Style.Font.Bold = true;
+                    worksheet.Cell(2, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                    // Baris 3: Lokasi
+                    worksheet.Cell(3, 1).Value = $"LOKASI : {model.KodeCabang} - {model.NamaCabang}";
+                    worksheet.Range("A3:T3").Merge();
+                    worksheet.Cell(3, 1).Style.Font.Bold = true;
+                    worksheet.Cell(3, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                    // Geser baris berikutnya
+                    worksheet.Cell(4, 1).Value = $"PRODUKSI : {model.TglProduksiAwal} s/d {model.TglProduksiAkhir}";
+                    worksheet.Range("A4:T4").Merge();
+                    worksheet.Cell(4, 1).Style.Font.Bold = true;
+                    worksheet.Cell(4, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                    worksheet.Cell(5, 1).Value = $"PELUNASAN S/D : {model.TglPelunasan}";
+                    worksheet.Range("A5:T5").Merge();
+                    worksheet.Cell(5, 1).Style.Font.Bold = true;
+                    worksheet.Cell(5, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                    //judul table
+                    int startRow = 7; 
+
+                    worksheet.Cell(startRow, 1).Value = "No";
+                    worksheet.Cell(startRow, 2).Value = "NO NOTA";
+                    worksheet.Cell(startRow, 3).Value = "No.POLIS";
+                    worksheet.Cell(startRow, 4).Value = "TERTANGGUNG";
+                    worksheet.Cell(startRow, 5).Value = "PEMBAWA POS";
+                    worksheet.Cell(startRow, 6).Value = "AGEN";
+                    worksheet.Cell(startRow, 7).Value = "BROKER";
+                    worksheet.Cell(startRow, 8).Value = "NO POLIS LEADER";
+                    worksheet.Cell(startRow, 9).Value = "CEDING";
+                    worksheet.Cell(startRow, 10).Value = "LOKASI";
+                    worksheet.Cell(startRow, 11).Value = "COB";
+                    worksheet.Cell(startRow, 12).Value = "TGL NOTA";
+                    worksheet.Cell(startRow, 13).Value = "JATUH TEMPO";
+                    worksheet.Cell(startRow, 14).Value = "CURRENCY";
+                    worksheet.Cell(startRow, 15).Value = "KURS";
+                    worksheet.Cell(startRow, 16).Value = "UMUR";
+                    worksheet.Cell(startRow, 17).Value = "RANGE";
+                    worksheet.Cell(startRow, 18).Value = "NILAI NOTA (IDR)";
+                    worksheet.Cell(startRow, 19).Value = "NILAI BAYAR (IDR)";
+                    worksheet.Cell(startRow, 20).Value = "NILAI OS(IDR)";
+
+                    var headerRange = worksheet.Range($"A{startRow}:T{startRow}");
+                    headerRange.Style.Font.Bold = true;
+                    headerRange.Style.Fill.BackgroundColor = XLColor.LightGray;
+                    headerRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                    int row = startRow + 1;
+                   
+
+                    Func<DateTime?, string> fmtDate = d => d.HasValue ? d.Value.ToString("dd-MM-yyyy") : "";
+                    Func<decimal?, decimal> fmtDec = d => d ?? 0;
+
+                    // ===== GROUPING =====
+                    IEnumerable<IGrouping<string, InquiryNotaProduksiDto>> groupedData;
+
+                    if (model.JenisLaporan == "Detail" || string.IsNullOrEmpty(model.JenisLaporan))
+                    {
+                        groupedData = data.GroupBy(x => "DETAIL");
+                    }
+                    else
+                    {
+                        switch (model.JenisLaporan)
+                        {
+                            case "COB":
+                                groupedData = data.GroupBy(x => x.jn_ass ?? "LAINNYA");
+                                break;
+                            case "Tertanggung":
+                                groupedData = data.GroupBy(x => x.nm_cust2 ?? "TANPA NAMA");
+                                break;
+                            case "Pos":
+                                groupedData = data.GroupBy(x => x.nm_pos ?? "TANPA POS");
+                                break;
+                            case "Broker":
+                                groupedData = data.GroupBy(x => x.nm_brok ?? "DIRECT");
+                                break;
+                            default:
+                                groupedData = data.GroupBy(x => "DETAIL");
+                                break;
+                        }
+                    }
+
+                    decimal grandNota = 0;
+                    decimal grandBayar = 0;
+
+                    foreach (var group in groupedData)
+                    {
+                         int no = 1;
+                        // ===== JUDUL GROUP =====
+                        if (model.JenisLaporan != "Detail")
+                        {
+                            worksheet.Cell(row, 1).Value = $"{displayLabel} : {group.Key}";
+                            worksheet.Range(row, 1, row, 20).Merge();
+                            worksheet.Cell(row, 1).Style.Font.Bold = true;
+                            worksheet.Cell(row, 1).Style.Fill.BackgroundColor = XLColor.FromHtml("#E6F7FF");
+                            row++;
+                        }
+
+                        decimal subNota = 0;
+                        decimal subBayar = 0;
+
+                        foreach (var item in group)
+                        {
+                            int umur = 0;
+                            if (item.date.HasValue && item.tgl_jth_tempo.HasValue)
+                            {
+                                umur = (item.tgl_jth_tempo.Value - item.date.Value).Days;
+                                if (umur < 0) umur = 0;
+                            }
+
+                            decimal nNota = fmtDec(item.saldo);
+                            decimal nBayar = fmtDec(item.jumlah);
+                            decimal nOs = nNota - nBayar;
+
+                            worksheet.Cell(row, 1).Value = no++;
+                            worksheet.Cell(row, 2).Value = item.no_nd;
+                            worksheet.Cell(row, 3).Value = item.no_pl;
+                            worksheet.Cell(row, 4).Value = item.nm_cust2;
+                            worksheet.Cell(row, 5).Value = item.nm_pos;
+                            worksheet.Cell(row, 6).Value = item.nm_brok;
+                            worksheet.Cell(row, 7).Value = item.nm_brok;
+                            worksheet.Cell(row, 8).Value = "";
+                            worksheet.Cell(row, 9).Value = "";
+                            worksheet.Cell(row, 10).Value = item.lok;
+                            worksheet.Cell(row, 11).Value = item.jn_ass;
+                            worksheet.Cell(row, 12).Value = fmtDate(item.date);
+                            worksheet.Cell(row, 13).Value = fmtDate(item.tgl_jth_tempo);
+                            worksheet.Cell(row, 14).Value = item.curensi;
+                            worksheet.Cell(row, 15).Value = item.kurs;
+                            worksheet.Cell(row, 16).Value = umur;
+                            worksheet.Cell(row, 17).Value = ""; // range kalau mau ditambah aging
+                            worksheet.Cell(row, 18).Value = nNota;
+                            worksheet.Cell(row, 19).Value = nBayar;
+                            worksheet.Cell(row, 20).Value = nOs;
+
+                            worksheet.Range(row, 18, row, 20).Style.NumberFormat.Format = "#,##0.00";
+
+                            subNota += nNota;
+                            subBayar += nBayar;
+
+                            row++;
+                        }
+
+                        decimal subOs = subNota - subBayar;
+
+                            // ===== SUBTOTAL =====
+                            worksheet.Cell(row, 1).Value = "TOTAL :";
+                            worksheet.Range(row, 1, row, 17).Merge();
+                            worksheet.Cell(row, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                            worksheet.Cell(row, 1).Style.Font.Bold = true;
+
+                            worksheet.Cell(row, 18).Value = subNota;
+                            worksheet.Cell(row, 19).Value = subBayar;
+                            worksheet.Cell(row, 20).Value = subOs;
+
+                            worksheet.Range(row, 18, row, 20).Style.NumberFormat.Format = "#,##0.00";
+                            worksheet.Range(row, 1, row, 20).Style.Font.Bold = true;
+                            worksheet.Range(row, 1, row, 20).Style.Fill.BackgroundColor = XLColor.LightGray;
+
+                            grandNota += subNota;
+                            grandBayar += subBayar;
+
+                            row++;
+                    }
+
+                        // ===== GRAND TOTAL =====
+                        decimal grandOs = grandNota - grandBayar;
+
+                        worksheet.Cell(row, 1).Value = "GRAND TOTAL :";
+                        worksheet.Range(row, 1, row, 17).Merge();
+                        worksheet.Cell(row, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                        worksheet.Cell(row, 1).Style.Font.Bold = true;
+
+                        worksheet.Cell(row, 18).Value = grandNota;
+                        worksheet.Cell(row, 19).Value = grandBayar;
+                        worksheet.Cell(row, 20).Value = grandOs;
+
+                        worksheet.Range(row, 18, row, 20).Style.NumberFormat.Format = "#,##0.00";
+                        worksheet.Range(row, 1, row, 20).Style.Font.Bold = true;
+                        worksheet.Range(row, 1, row, 20).Style.Fill.BackgroundColor = XLColor.Yellow;
+                        
+                        worksheet.Columns().AdjustToContents();
+
+                        using (var stream = new MemoryStream())
+                        {
+                            workbook.SaveAs(stream);
+                            var content = stream.ToArray();
+                            var base64Str = Convert.ToBase64String(content);
+
+                            return Ok(new { Status = "OK", FileName = "Laporan_Outstanding.xlsx", FileData = base64Str });
+                        }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { Status = "ERROR", Message = ex.InnerException?.Message ?? ex.Message });
+            }
+        }
     }
 
     public class LaporanOutstandingFilterDto
     {
         public string KodeCabang { get; set; }
+        public string NamaCabang { get; set; }
         public string TglProduksiAwal { get; set; }
         public string TglProduksiAkhir { get; set; }
         public string TglPelunasan { get; set; }

@@ -17,6 +17,8 @@ using ABB.Application.Common.Interfaces;
 using ABB.Application.Common.Services;
 using DinkToPdf;
 using ABB.Application.JenisTransaksis.Queries;
+using ClosedXML.Excel;
+using System.IO;
 
 
 namespace ABB.Web.Modules.LaporanJurnalHarian117
@@ -113,43 +115,133 @@ namespace ABB.Web.Modules.LaporanJurnalHarian117
         {
             try
             {
-                var databaseName = Request.Cookies["DatabaseValue"];
-                var user = CurrentUser.UserId;
-
-                if (string.IsNullOrWhiteSpace(user))
-                    throw new Exception("User ID tidak ditemukan.");
-
-                // Sesuaikan QUERY dengan data yang datang dari JS
                 var query = new GetLaporanJurnalHarian117Query
                 {
-                    DatabaseName = databaseName,
+                    DatabaseName = Request.Cookies["DatabaseValue"],
                     KodeCabang = model.KodeCabang,
                     PeriodeAwal = model.PeriodeAwal,
                     PeriodeAkhir = model.PeriodeAkhir,
                     JenisTransaksi = model.JenisTransaksi,
-                    UserLogin = user
-                };
+                    UserLogin = CurrentUser.UserId
+                };  
+                var response = await Mediator.Send(query);
 
-                var reportTemplate = await Mediator.Send(query);
-
-                if (reportTemplate == null || !reportTemplate.Any())
+                if (response.RawData == null || !response.RawData.Any())
                     throw new Exception("Data tidak ditemukan.");
 
                 _reportGeneratorService.GenerateReport(
                     "LaporanJurnalHarian117.pdf",
-                    reportTemplate,
-                    user,
-                    Orientation.Landscape,
-                    5, 5, 5, 5,
-                    PaperKind.Legal
+                    response.HtmlString, // Pakai properti HtmlString
+                    CurrentUser.UserId,
+                    Orientation.Landscape, 5, 5, 5, 5, PaperKind.Legal
                 );
+                return Ok(new { Status = "OK", Data = CurrentUser.UserId });
+            }
+            catch (Exception ex) { return Ok(new { Status = "ERROR", Message = ex.Message }); }
+        }
 
-                return Ok(new { Status = "OK", Data = user });
-            }
-            catch (Exception ex)
+        [HttpPost]
+        public async Task<IActionResult> GenerateExcel([FromBody] LaporanJurnalHarian117FilterDto model)
+        {
+            try
             {
-                return Ok(new { Status = "ERROR", Message = ex.InnerException?.Message ?? ex.Message });
+                var query = new GetLaporanJurnalHarian117Query
+                {
+                    DatabaseName = Request.Cookies["DatabaseValue"],
+                    KodeCabang = model.KodeCabang,
+                    PeriodeAwal = model.PeriodeAwal,
+                    PeriodeAkhir = model.PeriodeAkhir,
+                    JenisTransaksi = model.JenisTransaksi,
+                    UserLogin = CurrentUser.UserId
+                };
+                var response = await Mediator.Send(query);
+
+                using (var workbook = new XLWorkbook())
+                {
+                    var worksheet = workbook.Worksheets.Add("Jurnal Harian 117");
+
+                    // --- KOP SURAT MERGE TENGAH ---
+                    worksheet.Cell(1, 1).Value = "LAPORAN JURNAL HARIAN 117";
+                    worksheet.Range("A1:H1").Merge().Style.Font.SetBold().Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                    worksheet.Cell(2, 1).Value = $"PERIODE : {model.PeriodeAwal} s/d {model.PeriodeAkhir}";
+                    worksheet.Range("A2:H2").Merge().Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+
+                    // --- SETUP KOLOM LEBAR ---
+                    worksheet.Column(1).Width = 5;  worksheet.Column(2).Width = 12;
+                    worksheet.Column(3).Width = 15; worksheet.Column(4).Width = 8;
+                    worksheet.Column(5).Width = 18; worksheet.Column(6).Width = 18;
+                    worksheet.Column(7).Width = 18; worksheet.Column(8).Width = 40;
+                    worksheet.Column(8).Style.Alignment.WrapText = true;
+
+                    // --- HEADER TABEL ---
+                    int currentRow = 4;
+                    var headers = new[] { "No", "Tanggal", "Akun", "Mtu", "Nilai Org", "Debet (IDR)", "Kredit (IDR)", "Keterangan" };
+                    for (int i = 0; i < headers.Length; i++) worksheet.Cell(currentRow, i + 1).Value = headers[i];
+                    worksheet.Range(currentRow, 1, currentRow, 8).Style.Font.Bold = true;
+                    worksheet.Range(currentRow, 1, currentRow, 8).Style.Fill.BackgroundColor = XLColor.LightGray;
+
+                    currentRow++;
+
+                    // --- LOOPING DATA DENGAN GROUPING ---
+                    var groupedData = response.RawData.GroupBy(x => x.GlBukti);
+                    foreach (var group in groupedData)
+                    {
+                        // Group Header (No Jurnal)
+                        var rowHeader = worksheet.Range(currentRow, 1, currentRow, 8);
+                        rowHeader.Merge().Value = $"No. Jurnal : {group.Key}";
+                        rowHeader.Style.Font.Bold = true;
+                        rowHeader.Style.Fill.BackgroundColor = XLColor.FromHtml("#F2F2F2");
+                        rowHeader.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                        currentRow++;
+
+                        decimal subD = 0, subK = 0;
+                        int idx = 1;
+                        foreach (var item in group)
+                        {
+                            worksheet.Cell(currentRow, 1).Value = idx++;
+                            worksheet.Cell(currentRow, 2).Value = item.GlTanggal?.ToString("dd/MM");
+                            worksheet.Cell(currentRow, 3).Value = item.GlAkun ?? "-";
+                            worksheet.Cell(currentRow, 4).Value = item.GlMtu ?? "-";
+                            worksheet.Cell(currentRow, 5).Value = item.GlNilaiOrg ?? 0;
+                            
+                            decimal d = item.GlDk == "D" ? (item.GlNilaiIdr ?? 0) : 0;
+                            decimal k = item.GlDk == "K" ? (item.GlNilaiIdr ?? 0) : 0;
+                            
+                            worksheet.Cell(currentRow, 6).Value = d;
+                            worksheet.Cell(currentRow, 7).Value = k;
+                            worksheet.Cell(currentRow, 8).Value = item.GlKet ?? "-";
+
+                            // Borders per row
+                            worksheet.Range(currentRow, 1, currentRow, 8).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                            worksheet.Range(currentRow, 1, currentRow, 8).Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                            worksheet.Range(currentRow, 5, currentRow, 7).Style.NumberFormat.Format = "#,##0.00";
+
+                            subD += d; subK += k;
+                            currentRow++;
+                        }
+
+                        // Subtotal
+                        var rowSub = worksheet.Range(currentRow, 1, currentRow, 8);
+                        worksheet.Cell(currentRow, 5).Value = "Sub Total :";
+                        worksheet.Cell(currentRow, 6).Value = subD;
+                        worksheet.Cell(currentRow, 7).Value = subK;
+                        rowSub.Style.Font.Bold = true;
+                        rowSub.Style.Fill.BackgroundColor = XLColor.FromHtml("#E3F2FD");
+                        rowSub.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                        rowSub.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                        worksheet.Range(currentRow, 6, currentRow, 7).Style.NumberFormat.Format = "#,##0.00";
+
+                        currentRow += 2;
+                    }
+
+                    using (var stream = new MemoryStream())
+                    {
+                        workbook.SaveAs(stream);
+                        return Ok(new { Status = "OK", FileName = "JurnalHarian117.xlsx", FileData = Convert.ToBase64String(stream.ToArray()) });
+                    }
+                }
             }
+            catch (Exception ex) { return Ok(new { Status = "ERROR", Message = ex.Message }); }
         }
 
         [HttpGet]
