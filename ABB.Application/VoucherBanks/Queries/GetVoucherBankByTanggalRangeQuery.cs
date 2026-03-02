@@ -9,10 +9,21 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Scriban;
 using System.IO;
+using System.Collections.Generic;
 
 namespace ABB.Application.VoucherBanks.Queries
 {
-    public class GetVoucherBankByTanggalRangeQuery : IRequest<string>
+
+    public class LaporanVoucherBankResponse
+    {
+        public string HtmlString { get; set; }
+        public List<VoucherBankDto> RawData { get; set; }
+        public decimal SaldoAwal { get; set; }
+        public decimal TotalDebet { get; set; }
+        public decimal TotalKredit { get; set; }
+        public decimal SaldoAkhir { get; set; }
+    }
+    public class GetVoucherBankByTanggalRangeQuery : IRequest<LaporanVoucherBankResponse>
     {
         public DateTime TanggalAwal { get; set; }
         public DateTime TanggalAkhir { get; set; }
@@ -25,7 +36,7 @@ namespace ABB.Application.VoucherBanks.Queries
     }
 
     public class GetVoucherBankByTanggalRangeQueryHandler
-        : IRequestHandler<GetVoucherBankByTanggalRangeQuery, string>
+        : IRequestHandler<GetVoucherBankByTanggalRangeQuery, LaporanVoucherBankResponse>
     {
         private readonly IDbContextPstNota _context;
         private readonly IHostEnvironment _environment;
@@ -38,7 +49,7 @@ namespace ABB.Application.VoucherBanks.Queries
             _environment = environment;
         }
 
-        public async Task<string> Handle(
+        public async Task<LaporanVoucherBankResponse> Handle(
             GetVoucherBankByTanggalRangeQuery request,
             CancellationToken cancellationToken)
         {
@@ -125,7 +136,21 @@ namespace ABB.Application.VoucherBanks.Queries
                 .OrderBy(x => x.TanggalVoucher)
                 .ToListAsync(cancellationToken);
 
-            if (!result.Any())
+                var rawList = new List<VoucherBankDto>();
+
+                foreach (var v in result)
+                {
+                    rawList.Add(new VoucherBankDto
+                    {
+                        NoVoucher = v.NoVoucher,
+                        TanggalVoucher = v.TanggalVoucher,
+                        KeteranganVoucher = v.KeteranganVoucher,
+                        TotalVoucher = v.TotalVoucher,
+                        DebetKredit = v.DebetKredit
+                    });
+                }
+
+            if (!rawList.Any())
                 throw new Exception("Data voucher bank tidak ditemukan.");
 
             // =========================
@@ -137,21 +162,19 @@ namespace ABB.Application.VoucherBanks.Queries
             // =========================
             // TOTAL DEBET & KREDIT
             // =========================
-            decimal totalDebet = result
+           decimal totalDebet = rawList
                 .Where(x => x.DebetKredit == "D")
                 .Sum(x => x.TotalVoucher ?? 0);
 
-            decimal totalKredit = result
+            decimal totalKredit = rawList
                 .Where(x => x.DebetKredit == "K")
                 .Sum(x => x.TotalVoucher ?? 0);
-
             decimal saldoAkhir = saldoAwal + totalDebet - totalKredit;
 
             // =========================
             // BUILD HTML TABLE
             // =========================
             StringBuilder sb = new StringBuilder();
-            int no = 1;
 
             // SALDO AWAL
             sb.Append($@"
@@ -160,18 +183,23 @@ namespace ABB.Application.VoucherBanks.Queries
                 </tr>
             ");
 
-            foreach (var v in result)
+            int nomor = 1;
+            foreach (var v in rawList)
             {
                 sb.Append($@"
                     <tr>
-                        <td class='center'>{no}</td>
+                        <td class='center'>{nomor++}</td>
                         <td>{v.NoVoucher}</td>
-                        <td class='right'>{(v.DebetKredit == "D" ? fmtNum(v.TotalVoucher) : "")}</td>
-                        <td class='right'>{(v.DebetKredit == "K" ? fmtNum(v.TotalVoucher) : "")}</td>
+                        <td class='right'>
+                            {(v.DebetKredit == "D" ? fmtNum(v.TotalVoucher ?? 0) : "")}
+                        </td>
+                        <td class='right'>
+                            {(v.DebetKredit == "K" ? fmtNum(v.TotalVoucher ?? 0) : "")}
+                        </td>
                         <td>{(string.IsNullOrWhiteSpace(v.KeteranganVoucher) ? "-" : v.KeteranganVoucher)}</td>
                     </tr>
                 ");
-                no++;
+               
             }
 
             // TOTAL
@@ -214,7 +242,15 @@ namespace ABB.Application.VoucherBanks.Queries
                 keterangan_bank = request.KeteranganBank ?? "-"
             });
 
-            return rendered;
+           return new LaporanVoucherBankResponse
+            {
+                HtmlString = rendered,
+                RawData = rawList,
+                SaldoAwal = saldoAwal,
+                TotalDebet = totalDebet,
+                TotalKredit = totalKredit,
+                SaldoAkhir = saldoAkhir
+            };
         }
     }
 }

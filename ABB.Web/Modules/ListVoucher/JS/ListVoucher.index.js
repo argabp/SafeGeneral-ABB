@@ -112,7 +112,10 @@ function onCetakClick() {
     var kodeBank = (tipe === "BANK") ? $("#KodeBank").data("kendoComboBox").value() : "";
     var tglAwal = $("#TanggalAwal").data("kendoDatePicker").value();
     var tglAkhir = $("#TanggalAkhir").data("kendoDatePicker").value();
+    var kodeCabang = $("#KodeCabang").data("kendoComboBox").value();
     // var kodeCabang = $("#KodeCabang").data("kendoComboBox").value().trim();
+    var comboCabang = $("#KodeCabang").data("kendoComboBox");
+    var namaCabangLengkap = comboCabang.text().trim();
 
     // 2. Validasi
     if (!tglAwal || !tglAkhir) {
@@ -163,8 +166,9 @@ function onCetakClick() {
         kodeKas: kodeKas,
         keteranganKas: namaKas,
         tglAwal: awal,
-        tglAkhir: akhir
-        // KodeCabang: kodeCabang
+        tglAkhir: akhir,
+        KodeCabang: kodeCabang,
+        namaCabangLengkap: namaCabangLengkap
     };
     console.log(namaBank)
 
@@ -184,6 +188,97 @@ function onCetakClick() {
             alert("Terjadi kesalahan saat membuat List.");
         }
     });
+}
+
+
+function onExcelClick() {
+    // 1. Ambil SEMUA nilai filter
+    var tipe = $("#TipeVoucher").data("kendoDropDownList").value();
+    var kodeBank = (tipe === "BANK") ? $("#KodeBank").data("kendoComboBox").value() : "";
+    var tglAwal = $("#TanggalAwal").data("kendoDatePicker").value();
+    var tglAkhir = $("#TanggalAkhir").data("kendoDatePicker").value();
+    var kodeCabang = $("#KodeCabang").data("kendoComboBox").value();
+    var comboCabang = $("#KodeCabang").data("kendoComboBox");
+    var namaCabangLengkap = comboCabang.text().trim();
+    // var kodeCabang = $("#KodeCabang").data("kendoComboBox").value().trim();
+
+    // 2. Validasi
+    if (!tglAwal || !tglAkhir) {
+        alert("Silakan pilih tanggal awal dan tanggal akhir.");
+        return;
+    }
+    
+
+    var kodeBank = "";
+    var namaBank = "";
+    var kodeKas = "";
+    var namaKas = "";
+
+    if (tipe === "BANK") {
+        var cbBank = $("#KodeBank").data("kendoComboBox");
+        var bankItem = cbBank.dataItem();
+
+        if (!bankItem) {
+            alert("Silakan pilih Bank.");
+            return;
+        }
+
+        kodeBank = cbBank.value();
+        namaBank = bankItem.Keterangan; // pastikan field ini ada
+    }
+
+    if (tipe === "KAS") {
+        var cbKas = $("#KodeKas").data("kendoComboBox");
+        var kasItem = cbKas.dataItem();
+
+        if (!kasItem) {
+            alert("Silakan pilih Kas.");
+            return;
+        }
+
+        kodeKas = cbKas.value();
+        namaKas = kasItem.Keterangan;
+    }
+
+        // 3. Format tanggal
+        var awal = kendo.toString(tglAwal, "yyyy-MM-dd");
+        var akhir = kendo.toString(tglAkhir, "yyyy-MM-dd");
+
+        var formData = {
+            tipe: tipe,
+            kodeBank: kodeBank,
+            keterangan: namaBank,
+            kodeKas: kodeKas,
+            keteranganKas: namaKas,
+            tglAwal: awal,
+            tglAkhir: akhir,
+            KodeCabang: kodeCabang,
+            namaCabangLengkap:namaCabangLengkap
+        };
+        console.log(formData);
+        var btn = $("#btnExcel").data("kendoButton");
+        btn.enable(false);
+
+        $.ajax({
+            url: '/ListVoucher/GenerateExcel',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function (response) {
+                 btn.enable(true);
+                if (response.Status === "OK") {
+                    var link = document.createElement('a');
+                    link.href = "data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64," + response.FileData;
+                    link.download = response.FileName;
+                    link.click();
+                } else {
+                    alert("Gagal membuat List: " + response.Message);
+                }
+            },
+            error: function () {
+                alert("Terjadi kesalahan saat membuat List.");
+            }
+        });
 }
 
 // Panggil sekali saat load dan pasang event listener

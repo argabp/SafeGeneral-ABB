@@ -108,10 +108,21 @@
             </div>
         </div>
 
+       
         <div class="filter-section">
-             <button id="btnSearch" class="k-button k-primary" style="border-radius:6px; width:120px;" onclick="generateBukuBesar117()">
-                <span class='k-icon k-i-search'></span> Cari
-            </button>
+            @(Html.Kendo().Button()
+                .Name("btnSearch")
+                .Content(" Lihat (PDF)")
+                .HtmlAttributes(new { @class = "k-primary", style = "border-radius:6px; width:130px; margin-right:5px;" })
+                .Events(e => e.Click("generateBukuBesar117"))
+            )
+
+            @(Html.Kendo().Button()
+                .Name("btnExcel")
+                .Content("Lihat (Excel)")
+                .HtmlAttributes(new { @class = "k-button k-outline", style = "border-radius:6px; width:130px; background-color: #217346; color: white; border-color: #217346;" })
+                .Events(e => e.Click("generateExcel117"))
+            )
         </div>
 
     </div>
@@ -177,4 +188,38 @@ function generateBukuBesar117() {
             }
         });
     }
+
+    function getKodeCabangParam() {
+    var cb = $("#KodeCabang").data("kendoComboBox");
+    // Gunakan activeElement untuk nangkep apa yang lagi diketik
+    var activeText = $(document.activeElement).val(); 
+    return {
+        kodeCabangDropdown: cb ? cb.value() : "",
+        text: activeText
+    };
+}
+
+function generateExcel117() {
+    var payload = {
+        KodeCabang: $("#KodeCabang").data("kendoComboBox").value(),
+        PeriodeAwal: kendo.toString($("#tgl1").data("kendoDatePicker").value(), "yyyy-MM-dd"),
+        PeriodeAkhir: kendo.toString($("#tgl2").data("kendoDatePicker").value(), "yyyy-MM-dd"),
+        AkunAwal: $("#AkunAwal").data("kendoComboBox").value(),
+        AkunAkhir: $("#AkunAkhir").data("kendoComboBox").value()
+    };
+    $.ajax({
+        url: '/LaporanBukuBesar117/GenerateExcel',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(payload),
+        success: function (res) {
+            if (res.Status === "OK") {
+                var link = document.createElement('a');
+                link.href = "data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64," + res.FileData;
+                link.download = res.FileName;
+                link.click();
+            }
+        }
+    });
+}
 </script>

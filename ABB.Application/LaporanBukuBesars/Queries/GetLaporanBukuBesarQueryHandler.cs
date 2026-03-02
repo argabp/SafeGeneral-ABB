@@ -16,7 +16,13 @@ using ABB.Domain.Entities;
 
 namespace ABB.Application.LaporanBukuBesars.Queries
 {
-    public class GetLaporanBukuBesarQuery : IRequest<string>
+    public class LaporanBukuBesarResponse
+    {
+        public string HtmlString { get; set; }
+        public List<ABB.Domain.Entities.BukuBesarSpDto> RawData { get; set; }
+    }
+
+    public class GetLaporanBukuBesarQuery : IRequest<LaporanBukuBesarResponse>
     {
         public string DatabaseName { get; set; }
         public string KodeCabang { get; set; }
@@ -27,7 +33,7 @@ namespace ABB.Application.LaporanBukuBesars.Queries
         public string UserLogin { get; set; }
     }
 
-    public class GetLaporanBukuBesarQueryHandler : IRequestHandler<GetLaporanBukuBesarQuery, string>
+    public class GetLaporanBukuBesarQueryHandler : IRequestHandler<GetLaporanBukuBesarQuery, LaporanBukuBesarResponse>
     {
         private readonly IDbContextPstNota _context;
         private readonly IHostEnvironment _environment;
@@ -38,7 +44,7 @@ namespace ABB.Application.LaporanBukuBesars.Queries
             _environment = environment;
         }
 
-        public async Task<string> Handle(GetLaporanBukuBesarQuery request, CancellationToken cancellationToken)
+        public async Task<LaporanBukuBesarResponse> Handle(GetLaporanBukuBesarQuery request, CancellationToken cancellationToken)
         {
             // 1. Parsing Periode
             DateTime tglAwal = DateTime.Parse(request.PeriodeAwal).Date;
@@ -188,6 +194,24 @@ namespace ABB.Application.LaporanBukuBesars.Queries
             string templateHtml = await File.ReadAllTextAsync(templatePath);
             var template = Template.Parse(templateHtml);
 
+            var tableWrapper = $@"
+                <table class='table-report'>
+                    <thead>
+                        <tr>
+                            <th width='10%'>Kode Akun</th>
+                            <th width='20%'>Nama Akun</th>
+                            <th width='10%'>Tanggal</th>
+                            <th width='15%'>No. Bukti</th>
+                            <th width='25%'>Keterangan</th>
+                            <th width='10%'>Debet</th>
+                            <th width='10%'>Kredit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {sb.ToString()}
+                    </tbody>
+                </table>";
+
             var model = new
             {
                 details = sb.ToString(),
@@ -201,7 +225,13 @@ namespace ABB.Application.LaporanBukuBesars.Queries
             script.Import(model, renamer: m => m.Name); 
             ctx.PushGlobal(script);
 
-            return await template.RenderAsync(ctx);
+            var renderedHtml = await template.RenderAsync(ctx);
+
+            return new LaporanBukuBesarResponse
+            {
+                HtmlString = renderedHtml, // Sekarang isinya sudah HTML Utuh yang cantik
+                RawData = rawData
+            };
         }
     }
 }

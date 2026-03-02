@@ -13,6 +13,15 @@ using System.Collections.Generic;
 
 namespace ABB.Application.VoucherKass.Queries
 {
+    public class LaporanVoucherKasResponse
+    {
+        public string HtmlString { get; set; }
+        public List<VoucherKasJoinDto> RawData { get; set; }
+        public decimal SaldoAwal { get; set; }
+        public decimal TotalDebet { get; set; }
+        public decimal TotalKredit { get; set; }
+        public decimal SaldoAkhir { get; set; }
+    }
     public class VoucherKasJoinDto
     {
         public string NoVoucher { get; set; }
@@ -25,7 +34,7 @@ namespace ABB.Application.VoucherKass.Queries
         public string NamaKas { get; set; }
     }
 
-    public class GetVoucherKasByTanggalRangeQuery : IRequest<string>
+    public class GetVoucherKasByTanggalRangeQuery : IRequest<LaporanVoucherKasResponse>
     {
         public string DatabaseName { get; set; }
         public DateTime TanggalAwal { get; set; }
@@ -37,7 +46,7 @@ namespace ABB.Application.VoucherKass.Queries
     }
 
     public class GetVoucherKasByTanggalRangeQueryHandler
-        : IRequestHandler<GetVoucherKasByTanggalRangeQuery, string>
+        : IRequestHandler<GetVoucherKasByTanggalRangeQuery, LaporanVoucherKasResponse>
     {
         private readonly IDbContextPstNota _context;
         private readonly IHostEnvironment _environment;
@@ -50,7 +59,7 @@ namespace ABB.Application.VoucherKass.Queries
             _environment = environment;
         }
 
-        public async Task<string> Handle(
+        public async Task<LaporanVoucherKasResponse> Handle(
             GetVoucherKasByTanggalRangeQuery request,
             CancellationToken cancellationToken)
         {
@@ -183,7 +192,7 @@ namespace ABB.Application.VoucherKass.Queries
             string htmlTemplate = await File.ReadAllTextAsync(templatePath, cancellationToken);
             var template = Template.Parse(htmlTemplate);
 
-            return template.Render(new
+          string rendered = template.Render(new
             {
                 details = sb.ToString(),
                 tanggal_awal = request.TanggalAwal.ToString("dd-MM-yyyy"),
@@ -191,6 +200,16 @@ namespace ABB.Application.VoucherKass.Queries
                 kas = request.KeteranganKas ?? "-",
                 user = request.UserLogin
             });
+
+            return new LaporanVoucherKasResponse
+            {
+                HtmlString = rendered,
+                RawData = vouchers,
+                SaldoAwal = saldoAwal,
+                TotalDebet = totalDebet,
+                TotalKredit = totalKredit,
+                SaldoAkhir = saldoAkhir
+            };
         }
     }
 }

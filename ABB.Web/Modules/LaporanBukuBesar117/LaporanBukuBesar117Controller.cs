@@ -15,6 +15,8 @@ using ABB.Application.Common.Interfaces;
 using ABB.Application.Common.Services;
 using DinkToPdf;
 using ABB.Domain.Entities; 
+using ClosedXML.Excel;
+using System.IO;
 
 
 namespace ABB.Web.Modules.LaporanBukuBesar117
@@ -161,16 +163,16 @@ namespace ABB.Web.Modules.LaporanBukuBesar117
                     UserLogin = user
                 };
 
-                var reportTemplate = await Mediator.Send(query);
+                // [PERBAIKAN 1]: Gunakan nama variabel 'result' agar sinkron dengan pemanggilan di bawah
+                var result = await Mediator.Send(query);
 
-                if (string.IsNullOrEmpty(reportTemplate))
+                // [PERBAIKAN 2]: Cek validitas object result
+                if (result == null || result.RawData == null || !result.RawData.Any())
                     throw new Exception("Data tidak ditemukan.");
 
-                // Kita pakai template PDF yang sama (LaporanBukuBesar.pdf) karena formatnya sama
-                // Cuma beda isinya saja
                 _reportGeneratorService.GenerateReport(
                     "LaporanBukuBesar117.pdf",
-                    reportTemplate,
+                    result.HtmlString, // [PERBAIKAN 3]: Sekarang variabel 'result' sudah dikenali
                     user,
                     Orientation.Landscape,
                     5, 5, 5, 5,
@@ -185,7 +187,164 @@ namespace ABB.Web.Modules.LaporanBukuBesar117
             }
         }
 
-        
+        [HttpPost]
+        public async Task<IActionResult> GenerateExcel([FromBody] LaporanBukuBesar117FilterDto model)
+        {
+            try
+            {
+                var databaseName = Request.Cookies["DatabaseValue"];
+                var user = CurrentUser.UserId;
+
+                // 1. Ambil data dari MediatR (Query Handler)
+                var response = await Mediator.Send(new GetLaporanBukuBesar117Query
+                {
+                    DatabaseName = databaseName,
+                    KodeCabang = model.KodeCabang,
+                    PeriodeAwal = model.PeriodeAwal,
+                    PeriodeAkhir = model.PeriodeAkhir,
+                    AkunAwal = model.AkunAwal,
+                    AkunAkhir = model.AkunAkhir,
+                    UserLogin = user
+                });
+
+                using (var workbook = new XLWorkbook())
+                {
+                    var worksheet = workbook.Worksheets.Add("Buku Besar 117");
+
+                    // --- 2. KOP LAPORAN (Merge & Center) ---
+                    worksheet.Cell(1, 1).Value = "LAPORAN BUKU BESAR 117";
+                    worksheet.Range("A1:G1").Merge().Style.Font.SetBold().Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                    worksheet.Cell(2, 1).Value = $"PERIODE : {model.PeriodeAwal} s/d {model.PeriodeAkhir}";
+                    worksheet.Range("A2:G2").Merge().Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+
+                    // --- 3. HEADER TABEL UTAMA ---
+                    int currentRow = 4;
+                    var headers = new[] { "No Akun", "Nama Perkiraan", "Tanggal", "No Bukti", "Keterangan", "Debet (Rp)", "Kredit (Rp)" };
+                    for (int i = 0; i < headers.Length; i++)
+                    {
+                        var cell = worksheet.Cell(currentRow, i + 1);
+                        cell.Value = headers[i];
+                        cell.Style.Font.Bold = true;
+                        cell.Style.Fill.BackgroundColor = XLColor.LightGray;
+                        cell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                        cell.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    }
+                    currentRow++;
+
+                    // Setup Lebar Kolom
+                    worksheet.Column(1).Width = 15; // No Akun
+                    worksheet.Column(2).Width = 20; // Nama
+                    worksheet.Column(3).Width = 12; // Tgl
+                    worksheet.Column(4).Width = 18; // Bukti
+                    worksheet.Column(5).Width = 40; // Keterangan (WrapText)
+                    worksheet.Column(6).Width = 18; // Debet
+                    worksheet.Column(7).Width = 18; // Kredit
+                    worksheet.Column(5).Style.Alignment.WrapText = true;
+
+                    // --- 4. ISI DATA BERDASARKAN GROUPING ---
+                    var groupedData = response.RawData.GroupBy(x => x.KodeAkun);
+
+                    foreach (var group in groupedData)
+                    {
+                        var headerInfo = group.First();
+                        decimal saldoAwal = headerInfo.SaldoAwal ?? 0;
+                        decimal totalDebetBulanIni = 0;
+                        decimal totalKreditBulanIni = 0;
+
+                        // Data Transaksi (Sesuai Logic PDF: RowType == 1)
+                        var transaksiList = group.Where(x => x.RowType == 1).OrderBy(x => x.Tanggal).ThenBy(x => x.NoBukti).ToList();
+                        bool isFirstRow = true;
+
+                        if (transaksiList.Any())
+                        {
+                            foreach (var item in transaksiList)
+                            {
+                                if (isFirstRow) {
+                                    worksheet.Cell(currentRow, 1).Value = headerInfo.KodeAkun;
+                                    worksheet.Cell(currentRow, 2).Value = headerInfo.NamaAkun;
+                                    worksheet.Range(currentRow, 1, currentRow, 2).Style.Font.Bold = true;
+                                    // Garis pemisah antar akun (Border Atas Tebal)
+                                    worksheet.Range(currentRow, 1, currentRow, 7).Style.Border.TopBorder = XLBorderStyleValues.Medium;
+                                }
+
+                                worksheet.Cell(currentRow, 3).Value = item.Tanggal;
+                                worksheet.Cell(currentRow, 4).Value = item.NoBukti;
+                                worksheet.Cell(currentRow, 5).Value = item.Keterangan ?? "-";
+                                worksheet.Cell(currentRow, 6).Value = item.Debet ?? 0;
+                                worksheet.Cell(currentRow, 7).Value = item.Kredit ?? 0;
+
+                                // Borders per baris
+                                worksheet.Range(currentRow, 1, currentRow, 7).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+
+                                totalDebetBulanIni += item.Debet ?? 0;
+                                totalKreditBulanIni += item.Kredit ?? 0;
+                                isFirstRow = false;
+                                currentRow++;
+                            }
+                        }
+                        else if (saldoAwal != 0) // Case: Gak ada transaksi tapi ada saldo awal
+                        {
+                            worksheet.Cell(currentRow, 1).Value = headerInfo.KodeAkun;
+                            worksheet.Cell(currentRow, 2).Value = headerInfo.NamaAkun;
+                            worksheet.Range(currentRow, 1, currentRow, 7).Style.Border.TopBorder = XLBorderStyleValues.Medium;
+                            currentRow++;
+                        }
+
+                        // --- 5. FOOTER PER AKUN (IDENTIK PDF) ---
+                        decimal selisihBulanBerjalan = totalDebetBulanIni - totalKreditBulanIni;
+                        decimal saldoAkhir = saldoAwal + selisihBulanBerjalan;
+
+                        // Format Angka (Kolom F & G)
+                        worksheet.Range(currentRow, 6, currentRow + 3, 7).Style.NumberFormat.Format = "#,##0.00";
+
+                        // Baris: JUMLAH
+                        worksheet.Cell(currentRow, 5).Value = "*** J u m l a h";
+                        worksheet.Cell(currentRow, 5).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                        worksheet.Cell(currentRow, 6).Value = totalDebetBulanIni;
+                        worksheet.Cell(currentRow, 7).Value = totalKreditBulanIni;
+                        worksheet.Range(currentRow, 6, currentRow, 7).Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                        currentRow++;
+
+                        // Baris: SALDO LALU
+                        worksheet.Cell(currentRow, 5).Value = "*** Saldo s/d Bulan Lalu";
+                        worksheet.Cell(currentRow, 6).Value = saldoAwal >= 0 ? saldoAwal : 0;
+                        worksheet.Cell(currentRow, 7).Value = saldoAwal < 0 ? Math.Abs(saldoAwal) : 0;
+                        currentRow++;
+
+                        // Baris: SELISIH
+                        worksheet.Cell(currentRow, 5).Value = "*** Selisih Bulan Berjalan";
+                        worksheet.Cell(currentRow, 6).Value = selisihBulanBerjalan >= 0 ? selisihBulanBerjalan : 0;
+                        worksheet.Cell(currentRow, 7).Value = selisihBulanBerjalan < 0 ? Math.Abs(selisihBulanBerjalan) : 0;
+                        currentRow++;
+
+                        // Baris: SALDO INI (BOLD)
+                        worksheet.Cell(currentRow, 5).Value = "*** Saldo s/d Bulan Ini";
+                        worksheet.Cell(currentRow, 5).Style.Font.Bold = true;
+                        worksheet.Cell(currentRow, 6).Value = saldoAkhir >= 0 ? saldoAkhir : 0;
+                        worksheet.Cell(currentRow, 7).Value = saldoAkhir < 0 ? Math.Abs(saldoAkhir) : 0;
+                        worksheet.Range(currentRow, 6, currentRow, 7).Style.Font.Bold = true;
+
+                        currentRow += 2; // Kasih spasi antar akun biar gak berhimpitan
+                    }
+
+                    // --- 6. EXPORT KE STREAM ---
+                    using (var stream = new MemoryStream())
+                    {
+                        workbook.SaveAs(stream);
+                        var content = stream.ToArray();
+                        return Ok(new { 
+                            Status = "OK", 
+                            FileName = $"BukuBesar117_{DateTime.Now:yyyyMMddHHmmss}.xlsx", 
+                            FileData = Convert.ToBase64String(content) 
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { Status = "ERROR", Message = ex.Message });
+            }
+        }
     }
 
     public class LaporanBukuBesar117FilterDto

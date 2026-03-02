@@ -16,7 +16,13 @@ using ABB.Domain.Entities;
 
 namespace ABB.Application.LaporanBukuBesars117.Queries
 {
-    public class GetLaporanBukuBesar117Query : IRequest<string>
+    public class LaporanBukuBesar117Response
+    {
+        public string HtmlString { get; set; }
+        public List<ABB.Domain.Entities.BukuBesarSp117Dto> RawData { get; set; }
+    }
+
+    public class GetLaporanBukuBesar117Query : IRequest<LaporanBukuBesar117Response>
     {
         public string DatabaseName { get; set; }
         public string KodeCabang { get; set; }
@@ -27,7 +33,7 @@ namespace ABB.Application.LaporanBukuBesars117.Queries
         public string UserLogin { get; set; }
     }
 
-    public class GetLaporanBukuBesar117QueryHandler : IRequestHandler<GetLaporanBukuBesar117Query, string>
+    public class GetLaporanBukuBesar117QueryHandler : IRequestHandler<GetLaporanBukuBesar117Query, LaporanBukuBesar117Response>
     {
         private readonly IDbContextPstNota _context;
         private readonly IHostEnvironment _environment;
@@ -38,7 +44,7 @@ namespace ABB.Application.LaporanBukuBesars117.Queries
             _environment = environment;
         }
 
-        public async Task<string> Handle(GetLaporanBukuBesar117Query request, CancellationToken cancellationToken)
+        public async Task<LaporanBukuBesar117Response> Handle(GetLaporanBukuBesar117Query request, CancellationToken cancellationToken)
         {
             // 1. Parsing Periode
             DateTime tglAwal = DateTime.Parse(request.PeriodeAwal).Date;
@@ -63,6 +69,7 @@ namespace ABB.Application.LaporanBukuBesars117.Queries
 
             // 4. Build HTML
             StringBuilder sb = new StringBuilder();
+            
 
             foreach (var group in groupedData)
             {
@@ -164,6 +171,7 @@ namespace ABB.Application.LaporanBukuBesars117.Queries
 
             string templateHtml = await File.ReadAllTextAsync(templatePath);
             var template = Template.Parse(templateHtml);
+            
 
             var model = new
             {
@@ -178,7 +186,12 @@ namespace ABB.Application.LaporanBukuBesars117.Queries
             script.Import(model, renamer: m => m.Name); 
             ctx.PushGlobal(script);
 
-            return await template.RenderAsync(ctx);
+            var renderedHtml = await template.RenderAsync(ctx);
+
+            return new LaporanBukuBesar117Response {
+                HtmlString = renderedHtml,
+                RawData = rawData
+            };
         }
     }
 }
