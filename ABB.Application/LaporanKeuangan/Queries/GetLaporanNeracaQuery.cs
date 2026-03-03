@@ -15,14 +15,32 @@ using Microsoft.Extensions.Hosting;
 
 namespace ABB.Application.LaporanKeuangan.Queries
 {
-    public class GetLaporanNeracaQuery : IRequest<string>
+    public class LaporanKeuanganResponse
+    {
+        public string HtmlString { get; set; }
+        public List<LaporanExcelRow> ExcelData { get; set; }
+    }
+
+    public class LaporanExcelRow
+    {
+        public string TipeBaris { get; set; }
+        public int Level { get; set; }
+        public string Deskripsi { get; set; }
+        public decimal? NilaiIni { get; set; }
+        public decimal? NilaiLalu { get; set; }
+        public bool IsHeaderKolom { get; set; }
+        public string HeaderTahunIni { get; set; }
+        public string HeaderTahunLalu { get; set; }
+    }
+    
+    public class GetLaporanNeracaQuery : IRequest<LaporanKeuanganResponse>
     {
         public string JenisPeriode { get; set; } 
         public int Bulan { get; set; } 
         public int Tahun { get; set; } 
     }
 
-    public class GetLaporanNeracaQueryHandler : IRequestHandler<GetLaporanNeracaQuery, string>
+    public class GetLaporanNeracaQueryHandler : IRequestHandler<GetLaporanNeracaQuery, LaporanKeuanganResponse>
     {
         private readonly IDbContextPstNota _context;
         private readonly IHostEnvironment _environment;
@@ -33,7 +51,7 @@ namespace ABB.Application.LaporanKeuangan.Queries
             _environment = environment;
         }
 
-        public async Task<string> Handle(GetLaporanNeracaQuery request, CancellationToken cancellationToken)
+        public async Task<LaporanKeuanganResponse> Handle(GetLaporanNeracaQuery request, CancellationToken cancellationToken)
         {
             // 1. TENTUKAN RANGE WAKTU
             int thnIni = request.Tahun;
@@ -80,6 +98,7 @@ namespace ABB.Application.LaporanKeuangan.Queries
             var mapTipeBaris = templates.ToDictionary(x => x.Urutan, x => x.TipeBaris);
 
             // 3. RAKIT HTML
+            // 3. RAKIT HTML
             StringBuilder sb = new StringBuilder();
 
             int romanCounter = 0;       // Level 2 (I, II)
@@ -87,8 +106,10 @@ namespace ABB.Application.LaporanKeuangan.Queries
             int subDetailCounter = 0;   // Level 4 (a, b, c)
 
             // --- LOGIKA BARU: KAMUS HASIL ---
-            // Key: No Urut (int), Value: (NilaiTahunIni, NilaiTahunLalu)
             var hasilPerBaris = new Dictionary<int, (decimal Ini, decimal Lalu)>();
+
+            // --- [PENTING]: DEKLARASI EXCEL DATA DI SINI ---
+            var excelData = new List<LaporanExcelRow>(); 
 
             foreach (var item in templates)
             {
@@ -102,21 +123,14 @@ namespace ABB.Application.LaporanKeuangan.Queries
                 
                 if (item.TipeBaris == "DETAIL")
                 {
-                    // DETAIL: HITUNG DARI DATABASE (Via Kode Akun)
                     if (!string.IsNullOrEmpty(item.Rumus))
                     {
                         var akunList = item.Rumus.Split(',', StringSplitOptions.RemoveEmptyEntries);
                         foreach (var akun in akunList)
                         {
                             var clean = akun.Trim();
-                            
-                            nilaiIni += dataSaldoIni
-                                .Where(x => x.KodeAkun != null && x.KodeAkun.StartsWith(clean))
-                                .Sum(x => x.Total);
-
-                            nilaiLalu += dataSaldoLalu
-                                .Where(x => x.KodeAkun != null && x.KodeAkun.StartsWith(clean))
-                                .Sum(x => x.Total);
+                            nilaiIni += dataSaldoIni.Where(x => x.KodeAkun != null && x.KodeAkun.StartsWith(clean)).Sum(x => x.Total);
+                            nilaiLalu += dataSaldoLalu.Where(x => x.KodeAkun != null && x.KodeAkun.StartsWith(clean)).Sum(x => x.Total);
                         }
                     }
                 }
@@ -124,22 +138,14 @@ namespace ABB.Application.LaporanKeuangan.Queries
                 {
                     if (!string.IsNullOrEmpty(item.Rumus))
                     {
-                        // SKENARIO 1: RANGE (Ada tanda strip "-") -> Contoh: "5-8"
                         if (item.Rumus.Contains("-"))
                         {
                             var parts = item.Rumus.Split('-');
-                            if (parts.Length == 2 && 
-                                int.TryParse(parts[0], out int startUrutan) && 
-                                int.TryParse(parts[1], out int endUrutan))
+                            if (parts.Length == 2 && int.TryParse(parts[0], out int startUrutan) && int.TryParse(parts[1], out int endUrutan))
                             {
-                                // Loop dari Start sampai End
                                 for (int i = startUrutan; i <= endUrutan; i++)
                                 {
-                                    // CEK 1: Apakah datanya ada di hasil perhitungan?
-                                    // CEK 2: Apakah baris ke-i itu TIPE-nya "DETAIL"?
-                                    if (hasilPerBaris.ContainsKey(i) && 
-                                        mapTipeBaris.ContainsKey(i) && 
-                                        mapTipeBaris[i] == "DETAIL") // <--- KONDISI TAMBAHAN
+                                    if (hasilPerBaris.ContainsKey(i) && mapTipeBaris.ContainsKey(i) && mapTipeBaris[i] == "DETAIL") 
                                     {
                                         var hasilTarget = hasilPerBaris[i];
                                         nilaiIni += hasilTarget.Ini;
@@ -148,7 +154,6 @@ namespace ABB.Application.LaporanKeuangan.Queries
                                 }
                             }
                         }
-                        // SKENARIO 2: PILIHAN MANUAL (Koma) -> Contoh: "10,20" (Grand Total)
                         else 
                         {
                             var urutanList = item.Rumus.Split(',', StringSplitOptions.RemoveEmptyEntries);
@@ -168,7 +173,6 @@ namespace ABB.Application.LaporanKeuangan.Queries
                     }
                 }
 
-                // PENTING: SIMPAN HASIL BARIS INI KE KAMUS
                 if (item.Urutan > 0) 
                 {
                     hasilPerBaris[item.Urutan] = (nilaiIni, nilaiLalu);
@@ -178,21 +182,19 @@ namespace ABB.Application.LaporanKeuangan.Queries
                 // LOGIKA FORMAT & PENOMORAN (VISUAL)
                 // ==========================================
 
-                // Format Angka
                 string strIni = "";
                 string strLalu = "";
 
-                // Tampilkan angka HANYA jika DETAIL atau TOTAL
                 if (item.TipeBaris == "DETAIL" || item.TipeBaris == "TOTAL")
                 {
                     strIni = nilaiIni.ToString("#,##0.00");
                     strLalu = nilaiLalu.ToString("#,##0.00");
                 }
 
-                // --- SPASI / BLANK ---
                 if (item.TipeBaris == "SPASI" || item.TipeBaris == "BLANK")
                 {
                     sb.Append("<tr><td colspan='3' style='height:15px'>&nbsp;</td></tr>");
+                    excelData.Add(new LaporanExcelRow { TipeBaris = item.TipeBaris }); // Sekarang excelData dikenali
                 }
                 else
                 {
@@ -204,48 +206,44 @@ namespace ABB.Application.LaporanKeuangan.Queries
                         if(currentLevel == 1) cssClass += " grand-total"; 
                     }
 
-                    // --------------------------------------------------------
-                    // UPDATE LOGIKA PENOMORAN NERACA (Biar support Level 4 & 5)
-                    // --------------------------------------------------------
                     string deskripsiFinal = item.Deskripsi; 
                     
                     if (item.TipeBaris == "HEADING")
                     {
                         if (currentLevel == 1)
                         {
-                            romanCounter = 0; 
-                            detailCounter = 0;
-                            subDetailCounter = 0; // Reset
+                            romanCounter = 0; detailCounter = 0; subDetailCounter = 0;
                         }
                         else 
                         {
-                            romanCounter++;
-                            // detailCounter = 0;    // Reset anak
-                            subDetailCounter = 0; // Reset cucu
+                            romanCounter++; subDetailCounter = 0;
                             deskripsiFinal = $"{ToRoman(romanCounter)}. {item.Deskripsi}";
                         }
                     }
                     else if (item.TipeBaris == "DETAIL" || (item.TipeBaris == "TOTAL" && currentLevel > 1))
                     {
-                        // KASUS 1: Level 5 (POIN STRIP)
-                        if (currentLevel == 5)
-                        {
-                            deskripsiFinal = $"- {item.Deskripsi}";
-                        }
-                        // KASUS 2: Level 4 (Sub-Detail Huruf a, b, c)
-                        else if (currentLevel == 4)
-                        {
-                            subDetailCounter++;
-                            deskripsiFinal = $"{ToAlpha(subDetailCounter)}. {item.Deskripsi}";
-                        }
-                        // KASUS 3: Level 3 & Total (Angka 1, 2, 3)
-                        else 
-                        {
-                            detailCounter++;
-                            subDetailCounter = 0; // Reset level 4 kalau induknya ganti
-                            deskripsiFinal = $"{detailCounter}. {item.Deskripsi}";
-                        }
+                        if (currentLevel == 5) deskripsiFinal = $"- {item.Deskripsi}";
+                        else if (currentLevel == 4) { subDetailCounter++; deskripsiFinal = $"{ToAlpha(subDetailCounter)}. {item.Deskripsi}"; }
+                        else { detailCounter++; subDetailCounter = 0; deskripsiFinal = $"{detailCounter}. {item.Deskripsi}"; }
                     }
+
+                    // --- INSERT DATA KE OBJECT EXCEL ---
+                    var rowExcel = new LaporanExcelRow {
+                        TipeBaris = item.TipeBaris,
+                        Level = currentLevel,
+                        Deskripsi = deskripsiFinal,
+                        NilaiIni = (item.TipeBaris == "DETAIL" || item.TipeBaris == "TOTAL") ? nilaiIni : (decimal?)null,
+                        NilaiLalu = (item.TipeBaris == "DETAIL" || item.TipeBaris == "TOTAL") ? nilaiLalu : (decimal?)null
+                    };
+
+                    if (item.TipeBaris == "HEADING" && currentLevel == 1) {
+                        rowExcel.Deskripsi = string.Join("  ", item.Deskripsi.Trim().ToCharArray());
+                        rowExcel.IsHeaderKolom = true;
+                        rowExcel.HeaderTahunIni = request.Tahun.ToString();
+                        rowExcel.HeaderTahunLalu = (request.Tahun - 1).ToString();
+                    }
+                    excelData.Add(rowExcel);
+                    // -----------------------------------
 
                     sb.Append("<tr>");
 
@@ -253,7 +251,6 @@ namespace ABB.Application.LaporanKeuangan.Queries
                     {
                         if (currentLevel == 1)
                         {
-                            // HEADER ASET + TAHUN
                             string spaced = string.Join("  ", item.Deskripsi.Trim().ToCharArray());
                             sb.Append($"<td class='lvl-1'>{spaced}</td>");
                             sb.Append($"<td class='lvl-1' style='text-align:center;'>{request.Tahun}</td>");
@@ -322,7 +319,11 @@ namespace ABB.Application.LaporanKeuangan.Queries
             scriptObj.Import(modelData, renamer: member => member.Name);
             context.PushGlobal(scriptObj);
             
-            return template.Render(context);
+            return new LaporanKeuanganResponse 
+            {
+                HtmlString = template.Render(context),
+                ExcelData = excelData
+            };
         }
 
         private string ToRoman(int number)

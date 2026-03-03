@@ -46,12 +46,14 @@ function getAllFilters() {
     var startDatePicker = $("#StartDate").data("kendoDatePicker");
     var endDatePicker = $("#EndDate").data("kendoDatePicker");
     var jenisAssetCombo = $("#JenisAsset").data("kendoComboBox");
+    var KodeCabang = $("#KodeCabang").data("kendoComboBox");
 
     return {
         searchKeyword: $("#SearchKeyword").val(),
         startDate: startDatePicker && startDatePicker.value() ? kendo.toString(startDatePicker.value(), "yyyy-MM-dd") : null,
         endDate: endDatePicker && endDatePicker.value() ? kendo.toString(endDatePicker.value(), "yyyy-MM-dd") : null,
-        jenisAsset: jenisAssetCombo && jenisAssetCombo.value() ? jenisAssetCombo.value() : null
+        jenisAsset: jenisAssetCombo && jenisAssetCombo.value() ? jenisAssetCombo.value() : null,
+        KodeCabang: KodeCabang && KodeCabang.value() ? KodeCabang.value() : null
     };
 }
 
@@ -85,6 +87,28 @@ function onSaveKeterangan() {
             } else {
                 showMessage('Error', response.message);
             }
+        }
+    });
+}
+
+function onExcelClick() {
+
+    var filters = getAllFilters();
+
+    $.ajax({
+        type: "POST",
+        url: "/InquiryNotaProduksi/ExportExcel",
+        data: filters,
+        xhrFields: {
+            responseType: 'blob'
+        },
+        success: function (data) {
+
+            var blob = new Blob([data], { type: "application/octet-stream" });
+            var link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = "InquiryNota.xlsx";
+            link.click();
         }
     });
 }

@@ -240,30 +240,33 @@ namespace ABB.Web.Modules.ListVoucher
                     decimal totalDebet = 0;
                     decimal totalKredit = 0;
                     decimal saldoAkhir = 0;
+                    string namabank = "";
+                    string namakas = "";
 
                     if (model.tipe == "KAS")
-                    {
-                        var response = await _mediator.Send(
-                            new GetVoucherKasByTanggalRangeQuery
-                            {
-                                DatabaseName = databaseName,
-                                TanggalAwal = tglAwal,
-                                TanggalAkhir = tglAkhir,
-                                UserLogin = user,
-                                KodeKas = model.kodeKas,
-                                KodeCabang = targetCabang
-                            });
+                        {
+                            var response = await _mediator.Send(
+                                new GetVoucherKasByTanggalRangeQuery
+                                {
+                                    DatabaseName = databaseName,
+                                    TanggalAwal = tglAwal,
+                                    TanggalAkhir = tglAkhir,
+                                    UserLogin = user,
+                                    KodeKas = model.kodeKas,
+                                    KodeCabang = targetCabang
+                                });
 
-                        if (response == null || response.RawData == null)
-                            throw new Exception("Data tidak ditemukan.");
+                            if (response == null || response.RawData == null)
+                                throw new Exception("Data tidak ditemukan.");
 
-                        data = response.RawData.Cast<dynamic>().ToList();
+                            data = response.RawData.Cast<dynamic>().ToList();
 
-                        saldoAwal = response.SaldoAwal;
-                        totalDebet = response.TotalDebet;
-                        totalKredit = response.TotalKredit;
-                        saldoAkhir = response.SaldoAkhir;
-                    }
+                            saldoAwal = response.SaldoAwal;
+                            totalDebet = response.TotalDebet;
+                            totalKredit = response.TotalKredit;
+                            saldoAkhir = response.SaldoAkhir;
+                            namakas = response.NmKas;   // ✅ ini yang benar
+                        }
                     else if (model.tipe == "BANK")
                     {
                         var response = await _mediator.Send(
@@ -286,6 +289,7 @@ namespace ABB.Web.Modules.ListVoucher
                         totalDebet = response.TotalDebet;
                         totalKredit = response.TotalKredit;
                         saldoAkhir = response.SaldoAkhir;
+                        namabank = response.NamaBank;
                     }
                     else
                     {
@@ -311,11 +315,21 @@ namespace ABB.Web.Modules.ListVoucher
                             worksheet.Cell(2, 1).Style.Font.Bold = true;
                             worksheet.Cell(2, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center; // <--- CENTER TEXT
 
+                            if (model.tipe == "KAS")
+                            {
+                                worksheet.Cell(3, 1).Value = $"KODE KAS {model.kodeKas} - {namakas} ";
+                                worksheet.Range("A3:F3").Merge(); // <--- BIKIN MERGE KE TENGAH
+                                worksheet.Cell(3, 1).Style.Font.Bold = true;
+                                worksheet.Cell(3, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                            }else if (model.tipe == "BANK"){
+                                worksheet.Cell(3, 1).Value = $"KODE BANK {model.kodeBank} - {namabank} ";
+                                worksheet.Range("A3:F3").Merge(); // <--- BIKIN MERGE KE TENGAH
+                                worksheet.Cell(3, 1).Style.Font.Bold = true;
+                                worksheet.Cell(3, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                            }
+                
                             // Baris 3: Periode
-                            worksheet.Cell(3, 1).Value = $"KODE CABANG {model.KodeCabang} - {model.namaCabangLengkap} ";
-                            worksheet.Range("A3:F3").Merge(); // <--- BIKIN MERGE KE TENGAH
-                            worksheet.Cell(3, 1).Style.Font.Bold = true;
-                            worksheet.Cell(3, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center; // <--- CENTER TEXT
+                            // <--- CENTER TEXT
 
                             int startRow = 5; 
 

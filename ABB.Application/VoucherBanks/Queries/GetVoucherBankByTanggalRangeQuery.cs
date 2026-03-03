@@ -22,6 +22,7 @@ namespace ABB.Application.VoucherBanks.Queries
         public decimal TotalDebet { get; set; }
         public decimal TotalKredit { get; set; }
         public decimal SaldoAkhir { get; set; }
+         public string NamaBank { get; set; }
     }
     public class GetVoucherBankByTanggalRangeQuery : IRequest<LaporanVoucherBankResponse>
     {
@@ -66,10 +67,17 @@ namespace ABB.Application.VoucherBanks.Queries
             // =========================
             // AMBIL SALDO AWAL DARI KASBANK
             // =========================
-            var KodeAkun = await _context.KasBank
+            var kasBank  = await _context.KasBank
                 .Where(k => k.Kode == request.KodeBank && k.KodeCabang == request.KodeCabang && k.TipeKasBank == "BANK")
-                .Select(k => k.NoPerkiraan)
+                .Select( k => new
+                    {
+                        k.NoPerkiraan,
+                        k.Keterangan // ganti sesuai nama kolom aslinya
+                    })
                 .FirstOrDefaultAsync(cancellationToken);
+
+                var KodeAkun = kasBank.NoPerkiraan;
+                var NamaBank = kasBank.Keterangan;
 
 
                 // =========================
@@ -122,7 +130,7 @@ namespace ABB.Application.VoucherBanks.Queries
                             v.NoVoucher,
                             v.TanggalVoucher,
                             v.KeteranganVoucher,
-                            v.TotalVoucher,
+                            v.TotalDalamRupiah,
                             v.DebetKredit,
                             v.KodeBank
                         };
@@ -145,7 +153,7 @@ namespace ABB.Application.VoucherBanks.Queries
                         NoVoucher = v.NoVoucher,
                         TanggalVoucher = v.TanggalVoucher,
                         KeteranganVoucher = v.KeteranganVoucher,
-                        TotalVoucher = v.TotalVoucher,
+                        TotalVoucher = v.TotalDalamRupiah,
                         DebetKredit = v.DebetKredit
                     });
                 }
@@ -179,7 +187,7 @@ namespace ABB.Application.VoucherBanks.Queries
             // SALDO AWAL
             sb.Append($@"
                 <tr class='bold'>
-                    <td colspan='5'>Saldo Awal : {fmtNum(saldoAwal)}</td>
+                    <td colspan='6'>Saldo Awal : {fmtNum(saldoAwal)}</td>
                 </tr>
             ");
 
@@ -189,6 +197,11 @@ namespace ABB.Application.VoucherBanks.Queries
                 sb.Append($@"
                     <tr>
                         <td class='center'>{nomor++}</td>
+                        <td class='center'>
+                            {(v.TanggalVoucher.HasValue 
+                                ? v.TanggalVoucher.Value.ToString("dd-MM-yy") 
+                                : "-")}
+                        </td>
                         <td>{v.NoVoucher}</td>
                         <td class='right'>
                             {(v.DebetKredit == "D" ? fmtNum(v.TotalVoucher ?? 0) : "")}
@@ -205,7 +218,7 @@ namespace ABB.Application.VoucherBanks.Queries
             // TOTAL
             sb.Append($@"
                 <tr class='bold'>
-                    <td colspan='2' class='right'>TOTAL</td>
+                    <td colspan='3' class='right'>TOTAL</td>
                     <td class='right'>{fmtNum(totalDebet)}</td>
                     <td class='right'>{fmtNum(totalKredit)}</td>
                     <td></td>
@@ -215,7 +228,7 @@ namespace ABB.Application.VoucherBanks.Queries
             // SALDO AKHIR
             sb.Append($@"
                 <tr class='bold'>
-                    <td colspan='5'>Saldo Akhir : {fmtNum(saldoAkhir)}</td>
+                    <td colspan='6'>Saldo Akhir : {fmtNum(saldoAkhir)}</td>
                 </tr>
             ");
 
@@ -239,6 +252,7 @@ namespace ABB.Application.VoucherBanks.Queries
                 tanggal_awal = request.TanggalAwal.ToString("dd-MM-yyyy"),
                 tanggal_akhir = request.TanggalAkhir.ToString("dd-MM-yyyy"),
                 kode_bank = request.KodeBank ?? "-",
+                nama_bank = NamaBank ?? "-",
                 keterangan_bank = request.KeteranganBank ?? "-"
             });
 
@@ -249,7 +263,8 @@ namespace ABB.Application.VoucherBanks.Queries
                 SaldoAwal = saldoAwal,
                 TotalDebet = totalDebet,
                 TotalKredit = totalKredit,
-                SaldoAkhir = saldoAkhir
+                SaldoAkhir = saldoAkhir,
+                NamaBank = NamaBank
             };
         }
     }

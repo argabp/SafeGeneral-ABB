@@ -26,6 +26,23 @@
     .btn-generate:hover{
         color: grey;
     }
+
+    .custom-btn {
+        height: 40px;
+        border-radius: 6px;
+        font-weight: 500;
+    }
+
+    .btn-generate {
+        background-color: #007bff;
+        color: white;
+        border: 1px solid #007bff;
+    }
+
+    .btn-generate:hover {
+        background-color: #0069d9;
+        border-color: #0062cc;
+    }
 </style>
 
 <nav aria-label="breadcrumb">
@@ -73,12 +90,27 @@
                 </div>
             </div>
 
-            <div class="col-md-3" style="display:flex;align-items: center;">
-                <button class="btn btn-block btn-generate" onclick="onGenerateClick()">
-                    <i class="fa fa-print"></i> Generate PDF
-                </button>
-            </div>
+          
         </div>
+
+          <div class="col-md-3 d-flex gap-2 align-items-stretch">
+
+                <button class="btn btn-generate flex-fill custom-btn"
+                        onclick="onGenerateClick()">
+                     Lihat (PDF)
+                </button>
+
+                @(Html.Kendo().Button()
+                    .Name("btnExcel")
+                    .Content("Lihat (Excel)")
+                    .HtmlAttributes(new {
+                        @class = "k-button flex-fill custom-btn",
+                        style = "background-color:#217346;color:white;border-color:#217346;margin-left:20px"
+                    })
+                    .Events(e => e.Click("onExcelClick"))
+                )
+
+            </div>
     </div>
 </div>
 
@@ -139,6 +171,61 @@
                     var url = "/Reports/" + userId + "/" + fileName;
                     
                     window.open(url, '_blank');
+                } else {
+                    alert("Gagal: " + response.Message);
+                }
+            },
+            error: function () {
+                btn.html(originalText).prop("disabled", false);
+                alert("Error koneksi server.");
+            }
+        });
+    }
+
+     function onExcelClick() {
+        var tipeLaporan = $("#TipeLaporan").val();
+        var jenisPeriode = $("#JenisPeriode").val();
+        var tahun = $("#Tahun").val();
+        
+        // Logika Bulan
+        var bulan = 12; // Default 12 jika TAHUNAN (Biar keambil Jan-Des)
+        
+        if (jenisPeriode === "BULANAN") {
+            bulan = $("#Bulan").val();
+        }
+
+        // Validasi Sederhana
+        if (!tahun) {
+            alert("Harap isi Tahun.");
+            return;
+        }
+
+        // Siapkan Data DTO Baru
+        var formData = {
+            TipeLaporan: tipeLaporan,
+            JenisPeriode: jenisPeriode,
+            Bulan: parseInt(bulan),
+            Tahun: parseInt(tahun)
+        };
+
+        console.log(formData);
+
+       var btn = $("#btnExcel").data("kendoButton");
+        btn.enable(false);
+
+        $.ajax({
+            url: '/LaporanKeuangan/GenerateExcel',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function (response) {
+                  btn.enable(true);
+
+                if (response.Status === "OK") {
+                    var link = document.createElement('a');
+                    link.href = "data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64," + response.FileData;
+                    link.download = response.FileName;
+                    link.click();
                 } else {
                     alert("Gagal: " + response.Message);
                 }

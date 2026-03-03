@@ -21,6 +21,8 @@ namespace ABB.Application.VoucherKass.Queries
         public decimal TotalDebet { get; set; }
         public decimal TotalKredit { get; set; }
         public decimal SaldoAkhir { get; set; }
+        public string NmKas { get; set; }
+        public string KodeKas { get; set; }
     }
     public class VoucherKasJoinDto
     {
@@ -64,14 +66,20 @@ namespace ABB.Application.VoucherKass.Queries
             CancellationToken cancellationToken)
         {
 
-            var kodeAkun = await _context.KasBank
+            var kasBank = await _context.KasBank
                 .Where(k => k.Kode == request.KodeKas 
-                        && k.KodeCabang == request.KodeCabang)
-                .Select(k => k.NoPerkiraan)
+                        && k.KodeCabang == request.KodeCabang && k.TipeKasBank == "KAS")
+                .Select(k => new
+                    {
+                        k.NoPerkiraan,
+                        k.Keterangan // ganti sesuai nama kolom aslinya
+                    })
                 .FirstOrDefaultAsync(cancellationToken);
 
-            if (string.IsNullOrEmpty(kodeAkun))
-                throw new Exception("Kode Akun tidak ditemukan pada data Kas.");
+                var KodeAkun = kasBank.NoPerkiraan;
+                var NmKas = kasBank.Keterangan;
+
+        
 
 
             // =========================
@@ -109,7 +117,7 @@ namespace ABB.Application.VoucherKass.Queries
                 NoVoucher = v.NoVoucher,
                 TanggalVoucher = v.TanggalVoucher,
                 KeteranganVoucher = v.KeteranganVoucher,
-                TotalVoucher = v.TotalVoucher,
+                TotalVoucher = v.TotalDalamRupiah,
                 DibayarKepada = v.DibayarKepada,
                 DebetKredit = v.DebetKredit,
                 KodeKas = v.KodeKas,
@@ -198,6 +206,8 @@ namespace ABB.Application.VoucherKass.Queries
                 tanggal_awal = request.TanggalAwal.ToString("dd-MM-yyyy"),
                 tanggal_akhir = request.TanggalAkhir.ToString("dd-MM-yyyy"),
                 kas = request.KeteranganKas ?? "-",
+                nama_kas = NmKas ?? "-",
+                kode_kas = request.KodeKas,
                 user = request.UserLogin
             });
 
@@ -208,7 +218,9 @@ namespace ABB.Application.VoucherKass.Queries
                 SaldoAwal = saldoAwal,
                 TotalDebet = totalDebet,
                 TotalKredit = totalKredit,
-                SaldoAkhir = saldoAkhir
+                SaldoAkhir = saldoAkhir,
+                KodeKas = request.KodeKas,
+                NmKas = NmKas
             };
         }
     }

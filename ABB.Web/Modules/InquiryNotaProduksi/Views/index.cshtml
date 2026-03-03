@@ -10,6 +10,7 @@
 @{
     Layout = "~/Modules/Shared/_Layout.cshtml";
     ViewData["Title"] = "Inquiry Nota";
+     bool isOrangPusat = ViewBag.IsPusat ?? false;
 }
 
 <script src="~/Modules/InquiryNotaProduksi/JS/InquiryNotaProduksi.index.js"></script>
@@ -32,6 +33,35 @@
 <div class="flat-box filter-box">
     <div class="flat-box-content">
         <div class="filter-bar" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+
+            <label for="StartDate"><b>Kode Cabang :</b></label>
+
+            
+            @(Html.Kendo().ComboBox()
+                .Name("KodeCabang")
+                .Placeholder("Pilih Cabang ...")
+                .DataTextField("nm_cb")
+                .DataValueField("kd_cb")
+                .Filter("contains")
+                .Suggest(true)
+                .HtmlAttributes(new { style = "width:300px;" })
+                .Template("#: kd_cb # - #: nm_cb #")
+                .DataSource(source =>
+                {
+                    source.Read(read =>
+                    {
+                        read.Action("GetKodeCabang", "InquiryNotaProduksi");
+                    });
+                })
+                .Enable(isOrangPusat) 
+                .AutoBind(true)
+               
+                .Value((string)ViewBag.UserCabangValue)
+                .Text((string)ViewBag.UserCabangText)
+                
+            )
+
+
 
             <!-- Label Periode -->
             <label for="StartDate"><b>Periode :</b></label>
@@ -79,6 +109,13 @@
                 .HtmlAttributes(new { @class = "k-primary", style = "border-radius:6px; margin-left:10px;" })
                 .Events(e => e.Click("onSearchClick"))
             )
+
+             @(Html.Kendo().Button()
+                .Name("btnExcel")
+                .Content(" Export (Excel)")
+                .HtmlAttributes(new { @class = "k-button k-outline", style = "border-radius:6px; width:130px; background-color: #217346; color: white; border-color: #217346;" })
+                .Events(e => e.Click("onExcelClick"))
+            )
         </div>
     </div>
 </div>
@@ -99,7 +136,7 @@
         <div class="div-box">
              @(Html.Kendo().Grid<InquiryNotaProduksiDto>()
                 .Name("InquiryNotaProduksiGrid")
-                .NoRecords(n => n.Template("<div style='padding:5px;'>Data tidak ditemukan</div>"))
+                 .NoRecords(n => n.Template("Data tidak ditemukan"))
                 .AutoBind(false)  
                 .DataSource(dataSource => dataSource.Ajax()
                            .Read(read => read.Action("GetInquiryNotaProduksi", "InquiryNotaProduksi").Data("getAllFilters"))
