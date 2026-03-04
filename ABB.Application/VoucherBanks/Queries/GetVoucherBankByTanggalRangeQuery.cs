@@ -10,10 +10,10 @@ using Microsoft.Extensions.Hosting;
 using Scriban;
 using System.IO;
 using System.Collections.Generic;
+using ABB.Domain.Entities; // Sesuaikan
 
 namespace ABB.Application.VoucherBanks.Queries
 {
-
     public class LaporanVoucherBankResponse
     {
         public string HtmlString { get; set; }
@@ -22,8 +22,9 @@ namespace ABB.Application.VoucherBanks.Queries
         public decimal TotalDebet { get; set; }
         public decimal TotalKredit { get; set; }
         public decimal SaldoAkhir { get; set; }
-         public string NamaBank { get; set; }
+        public string NamaBank { get; set; }
     }
+
     public class GetVoucherBankByTanggalRangeQuery : IRequest<LaporanVoucherBankResponse>
     {
         public DateTime TanggalAwal { get; set; }
@@ -32,159 +33,56 @@ namespace ABB.Application.VoucherBanks.Queries
         public string KeteranganBank { get; set; }
         public string DatabaseName { get; set; }
         public string UserLogin { get; set; }
-
         public string KodeCabang { get; set; }
     }
 
-    public class GetVoucherBankByTanggalRangeQueryHandler
-        : IRequestHandler<GetVoucherBankByTanggalRangeQuery, LaporanVoucherBankResponse>
+    public class GetVoucherBankByTanggalRangeQueryHandler : IRequestHandler<GetVoucherBankByTanggalRangeQuery, LaporanVoucherBankResponse>
     {
         private readonly IDbContextPstNota _context;
         private readonly IHostEnvironment _environment;
 
-        public GetVoucherBankByTanggalRangeQueryHandler(
-            IDbContextPstNota context,
-            IHostEnvironment environment)
+        public GetVoucherBankByTanggalRangeQueryHandler(IDbContextPstNota context, IHostEnvironment environment)
         {
             _context = context;
             _environment = environment;
         }
 
-        public async Task<LaporanVoucherBankResponse> Handle(
-            GetVoucherBankByTanggalRangeQuery request,
-            CancellationToken cancellationToken)
+        public async Task<LaporanVoucherBankResponse> Handle(GetVoucherBankByTanggalRangeQuery request, CancellationToken cancellationToken)
         {
-
             // =========================
-            // VALIDASI TANGGAL
+            // EKSEKUSI STORED PROCEDURE
             // =========================
-            if (request.TanggalAwal > request.TanggalAkhir)
-            {
-                (request.TanggalAwal, request.TanggalAkhir)
-                    = (request.TanggalAkhir, request.TanggalAwal);
-            }
-
-            // =========================
-            // AMBIL SALDO AWAL DARI KASBANK
-            // =========================
-            var kasBank  = await _context.KasBank
-                .Where(k => k.Kode == request.KodeBank && k.KodeCabang == request.KodeCabang && k.TipeKasBank == "BANK")
-                .Select( k => new
-                    {
-                        k.NoPerkiraan,
-                        k.Keterangan // ganti sesuai nama kolom aslinya
-                    })
-                .FirstOrDefaultAsync(cancellationToken);
-
-                var KodeAkun = kasBank.NoPerkiraan;
-                var NamaBank = kasBank.Keterangan;
-
-
-                // =========================
-                // AMBIL SALDO AWAL DARI ABBREKAP
-                // =========================
-                int tahun;
-                int bulan;
-                int tahunAwalSistem = 2026;
-                if (request.TanggalAwal.Year == tahunAwalSistem && request.TanggalAwal.Month == 1)
-                {
-                    tahun = tahunAwalSistem;
-                    bulan = 0;
-                }
-                else
-                {
-                    var periodeSebelumnya = request.TanggalAwal.AddMonths(-1);
-                    tahun = periodeSebelumnya.Year;
-                    bulan = periodeSebelumnya.Month;
-                }
-
-                var rekap = await _context.RekapJurnal
-                    .Where(r =>
-                        r.thn == tahun &&
-                        r.bln == bulan &&
-                        r.gl_akun == KodeAkun)
-                    .ToListAsync(cancellationToken);
-
-               decimal totalDebetAwal = rekap
-                    .Where(r => r.gl_dk == "D")
-                    .Sum(r => (decimal)r.gl_nilai_idr);
-
-                decimal totalKreditAwal = rekap
-                    .Where(r => r.gl_dk == "K")
-                    .Sum(r => (decimal)r.gl_nilai_idr);
-
-                decimal saldoAwal = totalDebetAwal - totalKreditAwal;
-
-        
-
-            // =========================
-            // QUERY MUTASI VOUCHER BANK
-            // =========================
-            var query = from v in _context.VoucherBank
-                        where v.TanggalVoucher.HasValue
-                              && v.TanggalVoucher.Value >= request.TanggalAwal
-                              && v.TanggalVoucher.Value <= request.TanggalAkhir
-                              && v.KodeCabang == request.KodeCabang
-                        select new
-                        {
-                            v.NoVoucher,
-                            v.TanggalVoucher,
-                            v.KeteranganVoucher,
-                            v.TotalDalamRupiah,
-                            v.DebetKredit,
-                            v.KodeBank
-                        };
-
-            if (!string.IsNullOrEmpty(request.KodeBank))
-            {
-                query = query.Where(x => x.KodeBank == request.KodeBank);
-            }
-
-            var result = await query
-                .OrderBy(x => x.TanggalVoucher)
+            var rawDbData = await _context.SpListingVoucherBankResults
+                .FromSqlRaw("EXEC sp_ListingVoucherBank {0}, {1}, {2}, {3}",
+                    request.TanggalAwal,
+                    request.TanggalAkhir,
+                    request.KodeBank ?? "",
+                    request.KodeCabang ?? "")
+                .AsNoTracking()
                 .ToListAsync(cancellationToken);
 
-                var rawList = new List<VoucherBankDto>();
+            if (!rawDbData.Any())
+                throw new Exception("Data Bank atau Voucher tidak ditemukan.");
 
-                foreach (var v in result)
-                {
-                    rawList.Add(new VoucherBankDto
-                    {
-                        NoVoucher = v.NoVoucher,
-                        TanggalVoucher = v.TanggalVoucher,
-                        KeteranganVoucher = v.KeteranganVoucher,
-                        TotalVoucher = v.TotalDalamRupiah,
-                        DebetKredit = v.DebetKredit
-                    });
-                }
+            // Ambil Info Header dari Baris Pertama (RowType 0 pasti ada)
+            var headerInfo = rawDbData.First();
+            decimal saldoAwal = headerInfo.SaldoAwal;
+            string namaBank = headerInfo.NamaBank;
 
-            if (!rawList.Any())
-                throw new Exception("Data voucher bank tidak ditemukan.");
+            // Filter Khusus Data Transaksi
+            var transaksiList = rawDbData.Where(x => x.RowType == 1).ToList();
 
-            // =========================
-            // FORMAT HELPER
-            // =========================
-            Func<decimal?, string> fmtNum =
-                n => n.HasValue ? string.Format("{0:N2}", n.Value) : "0.00";
-
-            // =========================
-            // TOTAL DEBET & KREDIT
-            // =========================
-           decimal totalDebet = rawList
-                .Where(x => x.DebetKredit == "D")
-                .Sum(x => x.TotalVoucher ?? 0);
-
-            decimal totalKredit = rawList
-                .Where(x => x.DebetKredit == "K")
-                .Sum(x => x.TotalVoucher ?? 0);
+            decimal totalDebet = transaksiList.Sum(x => x.Debet);
+            decimal totalKredit = transaksiList.Sum(x => x.Kredit);
             decimal saldoAkhir = saldoAwal + totalDebet - totalKredit;
 
             // =========================
-            // BUILD HTML TABLE
+            // FORMAT HELPER & BUILD HTML
             // =========================
+            Func<decimal?, string> fmtNum = n => n.HasValue ? string.Format("{0:N2}", n.Value) : "0.00";
             StringBuilder sb = new StringBuilder();
 
-            // SALDO AWAL
+            // Row Saldo Awal
             sb.Append($@"
                 <tr class='bold'>
                     <td colspan='6'>Saldo Awal : {fmtNum(saldoAwal)}</td>
@@ -192,30 +90,33 @@ namespace ABB.Application.VoucherBanks.Queries
             ");
 
             int nomor = 1;
-            foreach (var v in rawList)
+            var rawListDto = new List<VoucherBankDto>();
+
+            // Row Transaksi
+            foreach (var v in transaksiList)
             {
                 sb.Append($@"
                     <tr>
                         <td class='center'>{nomor++}</td>
-                        <td class='center'>
-                            {(v.TanggalVoucher.HasValue 
-                                ? v.TanggalVoucher.Value.ToString("dd-MM-yy") 
-                                : "-")}
-                        </td>
+                        <td class='center'>{(v.TanggalVoucher.HasValue ? v.TanggalVoucher.Value.ToString("dd-MM-yy") : "-")}</td>
                         <td>{v.NoVoucher}</td>
-                        <td class='right'>
-                            {(v.DebetKredit == "D" ? fmtNum(v.TotalVoucher ?? 0) : "")}
-                        </td>
-                        <td class='right'>
-                            {(v.DebetKredit == "K" ? fmtNum(v.TotalVoucher ?? 0) : "")}
-                        </td>
+                        <td class='right'>{(v.Debet > 0 ? fmtNum(v.Debet) : "")}</td>
+                        <td class='right'>{(v.Kredit > 0 ? fmtNum(v.Kredit) : "")}</td>
                         <td>{(string.IsNullOrWhiteSpace(v.KeteranganVoucher) ? "-" : v.KeteranganVoucher)}</td>
                     </tr>
                 ");
-               
+
+                // Mapping ke DTO (Jika dibutuhkan controller untuk Excel dll)
+                rawListDto.Add(new VoucherBankDto {
+                    NoVoucher = v.NoVoucher,
+                    TanggalVoucher = v.TanggalVoucher,
+                    KeteranganVoucher = v.KeteranganVoucher,
+                    TotalVoucher = v.Debet > 0 ? v.Debet : v.Kredit,
+                    DebetKredit = v.Debet > 0 ? "D" : "K"
+                });
             }
 
-            // TOTAL
+            // Row Total
             sb.Append($@"
                 <tr class='bold'>
                     <td colspan='3' class='right'>TOTAL</td>
@@ -225,7 +126,7 @@ namespace ABB.Application.VoucherBanks.Queries
                 </tr>
             ");
 
-            // SALDO AKHIR
+            // Row Saldo Akhir
             sb.Append($@"
                 <tr class='bold'>
                     <td colspan='6'>Saldo Akhir : {fmtNum(saldoAkhir)}</td>
@@ -235,13 +136,8 @@ namespace ABB.Application.VoucherBanks.Queries
             // =========================
             // RENDER SCRIBAN
             // =========================
-            string templatePath = Path.Combine(
-                _environment.ContentRootPath,
-                "Modules", "Reports", "Templates", "VoucherBank.html");
-
-            if (!File.Exists(templatePath))
-                throw new FileNotFoundException(
-                    $"Template laporan tidak ditemukan di {templatePath}");
+            string templatePath = Path.Combine(_environment.ContentRootPath, "Modules", "Reports", "Templates", "VoucherBank.html");
+            if (!File.Exists(templatePath)) throw new FileNotFoundException("Template laporan tidak ditemukan.");
 
             string htmlTemplate = await File.ReadAllTextAsync(templatePath);
             var template = Template.Parse(htmlTemplate);
@@ -252,19 +148,19 @@ namespace ABB.Application.VoucherBanks.Queries
                 tanggal_awal = request.TanggalAwal.ToString("dd-MM-yyyy"),
                 tanggal_akhir = request.TanggalAkhir.ToString("dd-MM-yyyy"),
                 kode_bank = request.KodeBank ?? "-",
-                nama_bank = NamaBank ?? "-",
+                nama_bank = namaBank,
                 keterangan_bank = request.KeteranganBank ?? "-"
             });
 
            return new LaporanVoucherBankResponse
             {
                 HtmlString = rendered,
-                RawData = rawList,
+                RawData = rawListDto,
                 SaldoAwal = saldoAwal,
                 TotalDebet = totalDebet,
                 TotalKredit = totalKredit,
                 SaldoAkhir = saldoAkhir,
-                NamaBank = NamaBank
+                NamaBank = namaBank
             };
         }
     }

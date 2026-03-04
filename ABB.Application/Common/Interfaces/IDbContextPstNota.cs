@@ -87,6 +87,11 @@ namespace ABB.Application.Common.Interfaces
         DbSet<LabaRugiKursEntity> LabaRugiKurs { get; set; }
         DbSet<AbbRolePusatEntity> AbbRolePusat { get; set; }
 
+        DbSet<SpListingVoucherBankResult> SpListingVoucherBankResults { get; set; }
+        DbSet<SpListingVoucherKasResult> SpListingVoucherKasResults { get; set; }
+        DbSet<SpLaporanPelunasanResult> SpLaporanPelunasanResults { get; set; }
+         DbSet<SpLaporanOutstandingResult> SpLaporanOutstandingResults { get; set; }
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

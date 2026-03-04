@@ -43,6 +43,10 @@ using RekapJurnalEntity = ABB.Domain.Entities.RekapJurnal;
 using KeteranganProduksiEntity = ABB.Domain.Entities.KeteranganProduksi;
 using LabaRugiKursEntity = ABB.Domain.Entities.LabaRugiKurs;
 using AbbRolePusatEntity = ABB.Domain.Entities.AbbRolePusat;
+using SpListingVoucherBankResult = ABB.Domain.Entities.SpListingVoucherBankResult;
+using SpListingVoucherKasResult = ABB.Domain.Entities.SpListingVoucherKasResult;
+using SpLaporanPelunasanResult = ABB.Domain.Entities.SpLaporanPelunasanResult;
+using SpLaporanOutstandingResult = ABB.Domain.Entities.SpLaporanOutstandingResult;
 
 namespace ABB.Infrastructure.Data
 {
@@ -94,6 +98,10 @@ namespace ABB.Infrastructure.Data
         public DbSet<KeteranganProduksiEntity> KeteranganProduksi { get; set; }
         public DbSet<LabaRugiKursEntity> LabaRugiKurs { get; set; }
         public DbSet<AbbRolePusatEntity> AbbRolePusat { get; set; }
+        public DbSet<SpListingVoucherBankResult> SpListingVoucherBankResults { get; set; }
+        public DbSet<SpListingVoucherKasResult> SpListingVoucherKasResults { get; set; }
+        public DbSet<SpLaporanPelunasanResult> SpLaporanPelunasanResults { get; set; }
+         public DbSet<SpLaporanOutstandingResult> SpLaporanOutstandingResults { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -153,6 +161,30 @@ namespace ABB.Infrastructure.Data
             });
 
               builder.Entity<SpLaporanJurnalHarian117Result>(entity =>
+            {
+                entity.HasNoKey();
+                entity.ToView(null); 
+            });
+
+              builder.Entity<SpListingVoucherBankResult>(entity =>
+            {
+                entity.HasNoKey();
+                entity.ToView(null); 
+            });
+
+            builder.Entity<SpListingVoucherKasResult>(entity =>
+            {
+                entity.HasNoKey();
+                entity.ToView(null); 
+            });
+
+            builder.Entity<SpLaporanPelunasanResult>(entity =>
+            {
+                entity.HasNoKey();
+                entity.ToView(null); 
+            });
+
+              builder.Entity<SpLaporanOutstandingResult>(entity =>
             {
                 entity.HasNoKey();
                 entity.ToView(null); 

@@ -182,6 +182,12 @@
                     columns.Bound(col => col.d_k).Width(100).Title("D/K")
                            .HtmlAttributes(new { style = "text-align:center; font-weight:bold;" });
 
+                    columns.Bound(col => col.curensi).Width(100).Title("Mata Uang")
+                    .HtmlAttributes(new { style = "text-align:center; font-weight:bold;" });
+
+                    columns.Bound(col => col.kurs).Width(100).Title("Nilai Kurs")
+                    .HtmlAttributes(new { style = "text-align:center; font-weight:bold;" });
+
                     // 10. Nilai Nota (netto) - Format Angka & Rata Kanan
                     columns.Bound(col => col.netto)
                            .Width(150)

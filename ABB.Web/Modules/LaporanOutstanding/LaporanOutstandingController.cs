@@ -287,7 +287,14 @@ namespace ABB.Web.Modules.LaporanOutstanding
                     Func<decimal?, decimal> fmtDec = d => d ?? 0;
 
                     // ===== GROUPING =====
-                    IEnumerable<IGrouping<string, InquiryNotaProduksiDto>> groupedData;
+                    // Menggunakan var adalah cara termudah untuk menghindari mismatch tipe data LINQ
+                    var groupedData = model.JenisLaporan switch {
+                        "COB" => response.RawData.GroupBy(x => x.jn_ass ?? "LAINNYA").OrderBy(g => g.Key).AsEnumerable(),
+                        "Tertanggung" => response.RawData.GroupBy(x => x.nm_cust2 ?? "TANPA NAMA").OrderBy(g => g.Key).AsEnumerable(),
+                        "Pos" => response.RawData.GroupBy(x => x.nm_pos ?? "TANPA POS").OrderBy(g => g.Key).AsEnumerable(),
+                        "Broker" => response.RawData.GroupBy(x => x.nm_brok ?? "DIRECT").OrderBy(g => g.Key).AsEnumerable(),
+                        _ => response.RawData.GroupBy(x => x.jn_ass ?? "LAINNYA").OrderBy(g => g.Key).AsEnumerable()
+                    };
 
                     if (model.JenisLaporan == "Detail" || string.IsNullOrEmpty(model.JenisLaporan))
                     {

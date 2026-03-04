@@ -315,9 +315,11 @@ namespace ABB.Web.Modules.InquiryNotaProduksi
                     worksheet.Cell(1, 8).Value = "Customer";
                     worksheet.Cell(1, 9).Value = "Customer 2";
                     worksheet.Cell(1, 10).Value = "D/K";
-                    worksheet.Cell(1, 12).Value = "Nilai Nota";
-                    worksheet.Cell(1, 12).Value = "Nilai Bayar";
-                    worksheet.Cell(1, 13).Value = "Saldo";
+                    worksheet.Cell(1, 11).Value = "Mata Uang";
+                    worksheet.Cell(1, 12).Value = "Nilai Kurs";
+                    worksheet.Cell(1, 13).Value = "Nilai Nota";
+                    worksheet.Cell(1, 14).Value = "Nilai Bayar";
+                    worksheet.Cell(1, 15).Value = "Saldo";
 
                     int row = 2;
 
@@ -333,9 +335,11 @@ namespace ABB.Web.Modules.InquiryNotaProduksi
                         worksheet.Cell(row, 8).Value = item.nm_cust;
                         worksheet.Cell(row, 9).Value = item.nm_cust2;
                         worksheet.Cell(row, 10).Value = item.d_k;
-                        worksheet.Cell(row, 11).Value = item.netto;
-                        worksheet.Cell(row, 12).Value = item.jumlah;
-                        worksheet.Cell(row, 13).Value = item.saldo;
+                        worksheet.Cell(row, 11).Value = item.curensi;
+                        worksheet.Cell(row, 12).Value = item.kurs;
+                        worksheet.Cell(row, 13).Value = item.netto;
+                        worksheet.Cell(row, 14).Value = item.jumlah;
+                        worksheet.Cell(row, 15).Value = item.saldo;
                         row++;
                     }
 
