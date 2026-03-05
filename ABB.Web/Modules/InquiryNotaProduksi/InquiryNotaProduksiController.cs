@@ -274,91 +274,120 @@ namespace ABB.Web.Modules.InquiryNotaProduksi
 
             return Json(filtered);
         }
-
         [HttpPost]
-            public async Task<IActionResult> ExportExcel(
-                string searchKeyword,
-                DateTime? startDate,
-                DateTime? endDate,
-                string jenisAsset,
-                string KodeCabang)
+        public async Task<IActionResult> ExportExcel(
+            string searchKeyword,
+            DateTime? startDate,
+            DateTime? endDate,
+            string jenisAsset,
+            string KodeCabang)
+        {
+            var rawCabang = KodeCabang?.Trim();
+            if (string.IsNullOrEmpty(rawCabang))
+                return BadRequest("Kode Cabang kosong");
+
+            var kodeCabangs = rawCabang.Length >= 2
+                ? rawCabang.Substring(rawCabang.Length - 2)
+                : rawCabang;
+
+            var data = await Mediator.Send(new InquiryNotaProduksiQuery()
             {
-                var rawCabang = KodeCabang?.Trim();
-                if (string.IsNullOrEmpty(rawCabang))
-                    return BadRequest("Kode Cabang kosong");
+                SearchKeyword = searchKeyword,
+                StartDate = startDate,
+                EndDate = endDate,
+                JenisAsset = jenisAsset,
+                KodeCabang = kodeCabangs
+            });
 
-                var kodeCabangs = rawCabang.Length >= 2
-                    ? rawCabang.Substring(rawCabang.Length - 2)
-                    : rawCabang;
+            using (var workbook = new ClosedXML.Excel.XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("Inquiry Nota");
 
-                var data = await Mediator.Send(new InquiryNotaProduksiQuery()
+                // --- 1. HEADER (Struktur Awal + Tambahan Request) ---
+                worksheet.Cell(1, 1).Value = "Lokasi";
+                worksheet.Cell(1, 2).Value = "Tipe";
+                worksheet.Cell(1, 3).Value = "Jenis Ass";
+                worksheet.Cell(1, 4).Value = "No Referensi";
+                worksheet.Cell(1, 5).Value = "No Nota";
+                worksheet.Cell(1, 6).Value = "Tanggal Nota";
+                worksheet.Cell(1, 7).Value = "No Polis";
+                worksheet.Cell(1, 8).Value = "Customer";
+                worksheet.Cell(1, 9).Value = "Customer 2";
+                worksheet.Cell(1, 10).Value = "D/K";
+                worksheet.Cell(1, 11).Value = "Mata Uang";
+                worksheet.Cell(1, 12).Value = "Nilai Kurs";
+                
+                // Tambahan Kolom Baru
+                worksheet.Cell(1, 13).Value = "Premi";
+                worksheet.Cell(1, 14).Value = "Diskon";
+                worksheet.Cell(1, 15).Value = "Polis";
+                worksheet.Cell(1, 16).Value = "Materai";
+                worksheet.Cell(1, 17).Value = "Komisi";
+                worksheet.Cell(1, 18).Value = "Handling Fee";
+                worksheet.Cell(1, 19).Value = "Lain-Lain";
+                worksheet.Cell(1, 20).Value = "Klaim";
+                
+                // Kolom Akhir
+                worksheet.Cell(1, 21).Value = "Nilai Nota (Netto)";
+                worksheet.Cell(1, 22).Value = "Nilai Bayar";
+                worksheet.Cell(1, 23).Value = "Saldo";
+
+                // Styling Header biar Bold
+                worksheet.Range("A1:W1").Style.Font.Bold = true;
+                worksheet.Range("A1:W1").Style.Fill.BackgroundColor = XLColor.LightGray;
+
+                int row = 2;
+                foreach (var item in data)
                 {
-                    SearchKeyword = searchKeyword,
-                    StartDate = startDate,
-                    EndDate = endDate,
-                    JenisAsset = jenisAsset,
-                    KodeCabang = kodeCabangs
-                });
+                    worksheet.Cell(row, 1).Value = item.lok;
+                    worksheet.Cell(row, 2).Value = item.type;
+                    worksheet.Cell(row, 3).Value = item.jn_ass;
+                    worksheet.Cell(row, 4).Value = item.no_ref;
+                    worksheet.Cell(row, 5).Value = item.no_nd;
+                    worksheet.Cell(row, 6).Value = item.date_input;
+                    worksheet.Cell(row, 7).Value = item.no_pl;
+                    worksheet.Cell(row, 8).Value = item.nm_cust;
+                    worksheet.Cell(row, 9).Value = item.nm_cust2;
+                    worksheet.Cell(row, 10).Value = item.d_k;
+                    worksheet.Cell(row, 11).Value = item.curensi;
+                    worksheet.Cell(row, 12).Value = item.kurs;
 
-                using (var workbook = new ClosedXML.Excel.XLWorkbook())
+                    // --- Isi Nilai Keuangan (Pakai n_ field untuk nilainya) ---
+                    worksheet.Cell(row, 13).Value = item.premi;      // Premi
+                    worksheet.Cell(row, 14).Value = item.n_rabat;    // Nilai Diskon
+                    worksheet.Cell(row, 15).Value = item.polis;      // Polis
+                    worksheet.Cell(row, 16).Value = item.materai;    // Materai
+                    worksheet.Cell(row, 17).Value = item.n_komisi;   // Nilai Komisi
+                    worksheet.Cell(row, 18).Value = item.n_hfee;     // Nilai Handling Fee
+                    worksheet.Cell(row, 19).Value = item.lain;       // Lain-Lain
+                    worksheet.Cell(row, 20).Value = item.klaim;      // Klaim
+                    
+                    // --- Nilai Akhir ---
+                    worksheet.Cell(row, 21).Value = item.netto;      // Nilai Nota
+                    worksheet.Cell(row, 22).Value = item.jumlah;     // Nilai Bayar
+                    worksheet.Cell(row, 23).Value = item.saldo;      // Saldo
+
+                    // Format angka biar ada pemisah ribuan (Excel format)
+                    worksheet.Range(row, 12, row, 23).Style.NumberFormat.Format = "#,##0.00";
+
+                    row++;
+                }
+
+                worksheet.Columns().AdjustToContents();
+
+                using (var stream = new MemoryStream())
                 {
-                    var worksheet = workbook.Worksheets.Add("Inquiry Nota");
+                    workbook.SaveAs(stream);
+                    var content = stream.ToArray();
 
-                    // HEADER
-                    worksheet.Cell(1, 1).Value = "Lokasi";
-                    worksheet.Cell(1, 2).Value = "Tipe";
-                    worksheet.Cell(1, 3).Value = "Jenis Ass";
-                    worksheet.Cell(1, 4).Value = "No Referensi";
-                    worksheet.Cell(1, 5).Value = "No Nota";
-                    worksheet.Cell(1, 6).Value = "Tanggal Nota";
-                    worksheet.Cell(1, 7).Value = "No Polis";
-                    worksheet.Cell(1, 8).Value = "Customer";
-                    worksheet.Cell(1, 9).Value = "Customer 2";
-                    worksheet.Cell(1, 10).Value = "D/K";
-                    worksheet.Cell(1, 11).Value = "Mata Uang";
-                    worksheet.Cell(1, 12).Value = "Nilai Kurs";
-                    worksheet.Cell(1, 13).Value = "Nilai Nota";
-                    worksheet.Cell(1, 14).Value = "Nilai Bayar";
-                    worksheet.Cell(1, 15).Value = "Saldo";
-
-                    int row = 2;
-
-                    foreach (var item in data)
-                    {
-                        worksheet.Cell(row, 1).Value = item.lok;
-                        worksheet.Cell(row, 2).Value = item.type;
-                        worksheet.Cell(row, 3).Value = item.jn_ass;
-                        worksheet.Cell(row, 4).Value = item.no_ref;
-                        worksheet.Cell(row, 5).Value = item.no_nd;
-                        worksheet.Cell(row, 6).Value = item.date_input;
-                        worksheet.Cell(row, 7).Value = item.no_pl;
-                        worksheet.Cell(row, 8).Value = item.nm_cust;
-                        worksheet.Cell(row, 9).Value = item.nm_cust2;
-                        worksheet.Cell(row, 10).Value = item.d_k;
-                        worksheet.Cell(row, 11).Value = item.curensi;
-                        worksheet.Cell(row, 12).Value = item.kurs;
-                        worksheet.Cell(row, 13).Value = item.netto;
-                        worksheet.Cell(row, 14).Value = item.jumlah;
-                        worksheet.Cell(row, 15).Value = item.saldo;
-                        row++;
-                    }
-
-                    worksheet.Columns().AdjustToContents();
-
-                    using (var stream = new MemoryStream())
-                    {
-                        workbook.SaveAs(stream);
-                        var content = stream.ToArray();
-
-                        return File(
-                            content,
-                            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                            $"InquiryNota_{DateTime.Now:yyyyMMddHHmmss}.xlsx"
-                        );
-                    }
+                    return File(
+                        content,
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        $"InquiryNotaFull_{DateTime.Now:yyyyMMddHHmmss}.xlsx"
+                    );
                 }
             }
-
+        }
 
     }
 }
