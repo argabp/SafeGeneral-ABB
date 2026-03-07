@@ -6128,6 +6128,12 @@
        <None Update="Modules\Reports\Templates\CetakNotaKlaimReasuransi.html">
          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
        </None>
+       <None Update="Modules\Reports\Templates\PenyelesaianKlaimReasuransiRekap.html">
+         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+       </None>
+       <None Update="Modules\Reports\Templates\PenyelesaianKlaimReasuransiRincian.html">
+         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+       </None>
     </ItemGroup>
 
     <ItemGroup>

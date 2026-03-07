@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan Penyelesaian Klaim Reasuransi Rekap</title>
+    <style>
+        .container {
+            width: 95%;
+            margin: auto;
+        }
+
+        .h1 {
+            text-align: center;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .section {
+            margin-top: 10px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table td {
+            padding: 4px;
+			font-size: 9px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="h1">REKAPITULASI OUTSTANDING KLAIM REASURANSI</div>
+        <div class="section">
+            <table class="table">
+                <tr>
+                    <td style="width: 40%;"></td>
+                    <td style="width: 8%; font-weight: bold">PER</td>
+                    <td style="text-align: justify; width: 1%; font-weight: bold">:</td>
+                    <td style="text-align: justify; text-transform: uppercase; font-weight: bold" colspan="6">{{tgl_akh}}</td>
+                </tr>
+            </table>
+            <table class="table" border="1">
+                <tr>
+                    <td rowspan="2" style="width: 1%; text-align: center; font-weight: bold">NO. </td>
+                    <td rowspan="2" style="width: 5%; text-align: center; font-weight: bold">NAMA CABANG</td>
+                    <td rowspan="2" style="width: 5%; text-align: center; font-weight: bold">NAMA COB</td>
+                    <td rowspan="2" style="width: 5%; text-align: center; font-weight: bold">CURENCY TSI</td>
+                    <td rowspan="2" style="width: 5%; text-align: center; font-weight: bold">T.S.I</td>
+                    <td rowspan="2" style="width: 5%; text-align: center; font-weight: bold">CURENCY</td>
+                    <td rowspan="2" style="width: 5%; text-align: center; font-weight: bold">PENYELESAIAN KLAIM</td>
+                    <td colspan="7" style="width: 20%; text-align: center; font-weight: bold">KLAIM REASURANSI</td>
+                    <td rowspan="2" style="width: 5%; text-align: center; font-weight: bold">JUMLAH</td>
+                </tr>
+                <tr>
+                    <td style="text-align: center; font-weight: bold; width: 1%">QUOTA SHARE</td>
+                    <td style="text-align: center; font-weight: bold; width: 1%">SURPLUS</td>
+                    <td style="text-align: center; font-weight: bold; width: 1%">CONSORSIUM</td>
+                    <td style="text-align: center; font-weight: bold; width: 1%">POOL</td>
+                    <td style="text-align: center; font-weight: bold; width: 1%">BPPDAN</td>
+                    <td style="text-align: center; font-weight: bold; width: 1%">FACULTATIVE</td>
+                    <td style="text-align: center; font-weight: bold; width: 1%">XOL</td>
+                </tr>
+                {{details}}
+            </table>
+        </div>
+    </div>
+</body>
+</html>

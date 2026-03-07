@@ -12,28 +12,30 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Scriban;
 
-namespace ABB.Application.OutstandingKlaimReasuransis.Queries
+namespace ABB.Application.PenyelesaianKlaimReasuransis.Queries
 {
-    public class GetOutstandingKlaimReasuransiQuery : IRequest<string>
+    public class GetPenyelesaianKlaimReasuransiQuery : IRequest<string>
     {
         public string kd_cb { get; set; }
         
         public string kd_cob { get; set; }
+        
+        public DateTime tgl_mul { get; set; }
         
         public DateTime tgl_akh { get; set; }
 
         public string jenis_laporan { get; set; }
     }
 
-    public class GetOutstandingKlaimReasuransiQueryHandler : IRequestHandler<GetOutstandingKlaimReasuransiQuery, string>
+    public class GetPenyelesaianKlaimReasuransiQueryHandler : IRequestHandler<GetPenyelesaianKlaimReasuransiQuery, string>
     {
         private readonly IDbConnectionPst _dbConnectionPst;
         private readonly IHostEnvironment _environment;
         private readonly ReportConfig _reportConfig;
-        private readonly ILogger<GetOutstandingKlaimReasuransiQuery> _logger;
+        private readonly ILogger<GetPenyelesaianKlaimReasuransiQuery> _logger;
 
-        public GetOutstandingKlaimReasuransiQueryHandler(IDbConnectionPst dbConnectionPst, IHostEnvironment environment,
-            ReportConfig reportConfig, ILogger<GetOutstandingKlaimReasuransiQuery> logger)
+        public GetPenyelesaianKlaimReasuransiQueryHandler(IDbConnectionPst dbConnectionPst, IHostEnvironment environment,
+            ReportConfig reportConfig, ILogger<GetPenyelesaianKlaimReasuransiQuery> logger)
         {
             _dbConnectionPst = dbConnectionPst;
             _environment = environment;
@@ -41,7 +43,7 @@ namespace ABB.Application.OutstandingKlaimReasuransis.Queries
             _logger = logger;
         }
 
-        public async Task<string> Handle(GetOutstandingKlaimReasuransiQuery request, CancellationToken cancellationToken)
+        public async Task<string> Handle(GetPenyelesaianKlaimReasuransiQuery request, CancellationToken cancellationToken)
         {
             return await ExceptionHelper.ExecuteWithLoggingAsync(async () => 
             {
@@ -50,18 +52,18 @@ namespace ABB.Application.OutstandingKlaimReasuransis.Queries
                 switch (request.jenis_laporan)
                 {
                     case "P":
-                        sp_name = "spr_cl18r_01_bak2";
+                        sp_name = "spr_cl07r_01_bak";
                         break;
                     case "R":
-                        sp_name = "spr_cl18r_02_bak2";
+                        sp_name = "spr_cl07r_02_bak";
                         break;
                 }
                 
-                var outstandingKlaimDatas = (await _dbConnectionPst.QueryProc<OutstandingKlaimReasuransiDto>(sp_name, 
+                var penyelesaianKlaimDatas = (await _dbConnectionPst.QueryProc<PenyelesaianKlaimReasuransiDto>(sp_name, 
                     new
                     {
                         input_str = $"{request.kd_cb.Trim()},{request.kd_cob.Trim()}," +
-                                    $"{request.tgl_akh.ToShortDateString()}"
+                                    $"{request.tgl_mul.ToShortDateString()},{request.tgl_akh.ToShortDateString()}"
                     })).ToList();
 
                 var report_name = string.Empty;
@@ -69,10 +71,10 @@ namespace ABB.Application.OutstandingKlaimReasuransis.Queries
                 switch (request.jenis_laporan)
                 {
                     case "P":
-                        report_name = "OutstandingKlaimReasuransiRincian.html";
+                        report_name = "PenyelesaianKlaimReasuransiRincian.html";
                         break;
                     case "R":
-                        report_name = "OutstandingKlaimReasuransiRekap.html";
+                        report_name = "PenyelesaianKlaimReasuransiRekap.html";
                         break;
                 }
                 
@@ -80,7 +82,7 @@ namespace ABB.Application.OutstandingKlaimReasuransis.Queries
                 
                 string templateReportHtml = await File.ReadAllTextAsync( reportPath );
                 
-                if (outstandingKlaimDatas.Count == 0)
+                if (penyelesaianKlaimDatas.Count == 0)
                 {
                     throw new NullReferenceException("Data tidak ditemukan");
                 }
@@ -91,7 +93,7 @@ namespace ABB.Application.OutstandingKlaimReasuransis.Queries
 
                 StringBuilder stringBuilder = new StringBuilder();
 
-                var outstandingKlaimData = outstandingKlaimDatas.FirstOrDefault();
+                var penyelesaianKlaimData = penyelesaianKlaimDatas.FirstOrDefault();
                 
                 var reportConfig = _reportConfig.GetReportData(request.kd_cb);
 
@@ -99,7 +101,7 @@ namespace ABB.Application.OutstandingKlaimReasuransis.Queries
                 switch (request.jenis_laporan)
                 {
                     case "P":
-                        var groupedData = outstandingKlaimDatas
+                        var groupedData = penyelesaianKlaimDatas
                             .GroupBy(x => new { x.kd_cb, x.kd_cob, x.kd_scob }) // Outer group
                             .ToList();
                         
@@ -119,7 +121,7 @@ namespace ABB.Application.OutstandingKlaimReasuransis.Queries
                                             <td style='text-transform: uppercase;'>{reportConfig.Title.Title1}</td>
                                         </tr>
                                     </table>
-                                    <div class='h1'>LAPORAN OUTSTANDING KLAIM REASURANSI</div>
+                                    <div class='h1'>LAPORAN PENYELESAIAN KLAIM REASURANSI</div>
                                         <div class='section'>
                                             <table class='table'>
                                                 <tr>
@@ -132,7 +134,7 @@ namespace ABB.Application.OutstandingKlaimReasuransis.Queries
                                                     <td style='width: 40%;'></td>
                                                     <td style='width: 8%; font-weight: bold'>PERIODE</td>
                                                     <td style='text-align: justify; font-weight: bold'>:</td>
-                                                    <td style='text-align: justify; text-transform: uppercase; font-weight: bold' colspan='6'>{ReportHelper.ConvertDateTime(innerFirst.tgl_akh, "dd MMM yyyy")}</td>
+                                                    <td style='text-align: justify; text-transform: uppercase; font-weight: bold' colspan='6'>{ReportHelper.ConvertDateTime(request.tgl_mul, "dd MMM yyyy")} S/D {ReportHelper.ConvertDateTime(innerFirst.tgl_akh, "dd MMM yyyy")}</td>
                                                 </tr>
                                                 <tr>
                                                     <td style='width: 40%;'></td>
@@ -144,14 +146,13 @@ namespace ABB.Application.OutstandingKlaimReasuransis.Queries
                                             <table class='table' border='1'>
                                                 <tr>
                                                     <td rowspan='2' style='width: 1%; text-align: center; font-weight: bold'>NO. </td>
-                                                    <td rowspan='2' style='width: 10%; text-align: center; font-weight: bold'>NOMOR BERKAS <br> NOMOR POLIS <br> TAHUN U/W</td>
+                                                    <td rowspan='2' style='width: 10%; text-align: center; font-weight: bold'>NOMOR BERKAS <br> NOMOR NOTA <br> NOMOR POLIS</td>
                                                     <td rowspan='2' style='width: 10%; text-align: center; font-weight: bold'>TERTANGGUNG</td>
-                                                    <td rowspan='2' style='width: 10%; text-align: center; font-weight: bold'>PERIODE PERTANGGUNGAN <br> TANGGAL KEJADIAN <br> TANGGAL LAPOR</td>
-                                                    <td rowspan='2' style='width: 10%; text-align: center; font-weight: bold'>T.S.I <br> TAKSRIAN KERUGIAN</td>
+                                                    <td rowspan='2' style='width: 10%; text-align: center; font-weight: bold'>TANGGAL PENYELESAIAN <br> TANGGAL KEJADIAN <br> PERIODE PERTANGGUNGAN</td>
+                                                    <td rowspan='2' style='width: 10%; text-align: center; font-weight: bold'>T.S.I <br> PENYELESAIAN KLAIM</td>
                                                     <td rowspan='2' style='width: 10%; text-align: center; font-weight: bold'>MTU</td>
                                                     <td colspan='7' style='width: 30%; text-align: center; font-weight: bold'>KLAIM REASURANSI</td>
                                                     <td rowspan='2' style='width: 10%; text-align: center; font-weight: bold'>JUMLAH</td>
-                                                    <td rowspan='2' style='width: 10%; text-align: center; font-weight: bold'>TANGGAL PLA</td>
                                                 </tr>
                                                 <tr>
                                                     <td style='text-align: center; font-weight: bold'>QUOTA SHARE</td>
@@ -168,11 +169,7 @@ namespace ABB.Application.OutstandingKlaimReasuransis.Queries
                                 foreach (var data in innerGroup)
                                 {
                                     sequence++;
-                                    var nomor_berkas = $"{data.kd_cb}/{data.kd_cob}{data.kd_scob}/{data.kd_thn}/{data.no_kl}";
-                                    var nomor_polis =
-                                        string.IsNullOrWhiteSpace(data.kd_scob) && string.IsNullOrWhiteSpace(data.no_sert)
-                                            ? data.no_pol_ttg
-                                            : $"{data.no_pol_ttg}";
+                                    var nomor_nota = $"{data.kd_cb}.{data.jns_tr}.{data.jns_nt_msk}.{data.kd_thn}.{data.kd_bln}.{data.no_nt_msk}/{data.jns_nt_kel}/{data.no_nt_kel}";
                                     var jns_sor_qts = ReportHelper.ConvertToReportFormat(data.jns_sor_qts);
                                     var jns_sor_spl = ReportHelper.ConvertToReportFormat(data.jns_sor_spl);
                                     var jns_sor_con = ReportHelper.ConvertToReportFormat(data.jns_sor_con);
@@ -188,10 +185,10 @@ namespace ABB.Application.OutstandingKlaimReasuransis.Queries
                                     stringBuilder.Append(@$"
                                     <tr>
                                         <td style=''>{sequence}.</td>
-                                        <td style=''>{nomor_berkas} <br> {nomor_polis} <br> {data.thn_uw}</td>
+                                        <td style=''>{data.no_berkas} <br> {nomor_nota} <br> {data.no_pol_ttg}</td>
                                         <td style=''>{data.nm_ttg}</td>
-                                        <td style=''>{ReportHelper.ConvertDateTime(data.tgl_mul_ptg, "dd/MM/yyyy")} s/d {ReportHelper.ConvertDateTime(data.tgl_akh_ptg, "dd/MM/yyyy")} <br> {ReportHelper.ConvertDateTime(data.tgl_kej, "dd/MM/yyyy")} <br> {ReportHelper.ConvertDateTime(data.tgl_lapor, "dd/MM/yyyy")}</td>
-                                        <td style='width: 1%; text-align: left; '>{data.kd_mtu_symbol_tsi} {ReportHelper.ConvertToReportFormat(data.nilai_share_bgu)} <br> {data.kd_mtu_symbol_tsi} {ReportHelper.ConvertToReportFormat(data.nilai_ttl_kl)}</td>
+                                        <td style=''>{ReportHelper.ConvertDateTime(data.tgl_closing, "dd MMM yyyy")} <br> {ReportHelper.ConvertDateTime(data.tgl_kej, "dd MMM yyyy")} <br> {ReportHelper.ConvertDateTime(data.tgl_mul_ptg, "dd MMM yyyy")} s/d {ReportHelper.ConvertDateTime(data.tgl_akh_ptg, "dd MMM yyyy")}</td>
+                                        <td style='width: 1%; text-align: left; '>{data.kd_mtu_symbol_tsi} {ReportHelper.ConvertToReportFormat(data.nilai_share_bgu)} <br> {data.kd_mtu_symbol} {ReportHelper.ConvertToReportFormat(data.nilai_ttl_dla)}</td>
                                         <td style=''>{data.kd_mtu_symbol}</td>
                                         <td style=''>{jns_sor_qts}</td>
                                         <td style=''>{jns_sor_spl}</td>
@@ -201,7 +198,6 @@ namespace ABB.Application.OutstandingKlaimReasuransis.Queries
                                         <td style=''>{jns_sor_fac}</td>
                                         <td style=''>{jns_sor_xol}</td>
                                         <td style=''>{total}</td>
-                                        <td style=''>{ReportHelper.ConvertDateTime(data.tgl_pla_reas, "dd/MM/yyyy")}</td>
                                     </tr>");
                                 }
                                 
@@ -214,7 +210,7 @@ namespace ABB.Application.OutstandingKlaimReasuransis.Queries
                         break;
                     case "R":
                         sequence = 0;
-                        foreach (var data in outstandingKlaimDatas)
+                        foreach (var data in penyelesaianKlaimDatas)
                         {
                             sequence++;
                             var jns_sor_qts = ReportHelper.ConvertToReportFormat(data.jns_sor_qts);
@@ -252,8 +248,8 @@ namespace ABB.Application.OutstandingKlaimReasuransis.Queries
                 resultTemplate = templateProfileResult.Render( new
                 {
                     details = stringBuilder.ToString(),
-                    outstandingKlaimData.no_pol_ttg, outstandingKlaimData.nm_cb,
-                    outstandingKlaimData.nm_cob, tgl_akh = outstandingKlaimData.tgl_akh.Value.ToString("dd MMMM yyyy")
+                    penyelesaianKlaimData.no_pol_ttg, penyelesaianKlaimData.nm_cb,
+                    penyelesaianKlaimData.nm_cob, tgl_akh = penyelesaianKlaimData.tgl_akh.Value.ToString("dd MMMM yyyy")
                 } );
                 
                 return resultTemplate;
