@@ -9,7 +9,6 @@ using ABB.Application.Common.Interfaces;
 using ABB.Domain.Models;
 using MediatR;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Primitives;
 using Scriban;
 
 namespace ABB.Application.OutstandingKlaim.Queries

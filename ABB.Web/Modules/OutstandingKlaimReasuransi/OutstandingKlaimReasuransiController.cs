@@ -4,20 +4,20 @@ using System.Threading.Tasks;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Queries;
 using ABB.Application.Common.Services;
-using ABB.Application.OutstandingKlaim.Queries;
+using ABB.Application.OutstandingKlaimReasuransis.Queries;
 using ABB.Web.Modules.Base;
-using ABB.Web.Modules.OutstandingKlaim.Models;
+using ABB.Web.Modules.OutstandingKlaimReasuransi.Models;
 using DinkToPdf;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ABB.Web.Modules.OutstandingKlaim
+namespace ABB.Web.Modules.OutstandingKlaimReasuransi
 {
-    public class OutstandingKlaimController : AuthorizedBaseController
+    public class OutstandingKlaimReasuransiController : AuthorizedBaseController
     {
         private readonly IReportGeneratorService _reportGeneratorService;
 
-        public OutstandingKlaimController(IReportGeneratorService reportGeneratorService)
+        public OutstandingKlaimReasuransiController(IReportGeneratorService reportGeneratorService)
         {
             _reportGeneratorService = reportGeneratorService;
         }
@@ -28,7 +28,7 @@ namespace ABB.Web.Modules.OutstandingKlaim
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
             
-            return View(new OutstandingKlaimViewModel()
+            return View(new OutstandingKlaimReasuransiViewModel()
             {
                 kd_cb = Request.Cookies["UserCabang"]?.Trim() ?? string.Empty
             });
@@ -62,10 +62,7 @@ namespace ABB.Web.Modules.OutstandingKlaim
                     Value = ""
                 }
             };
-            var result = await Mediator.Send(new GetCobQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"]
-            });
+            var result = await Mediator.Send(new GetCobPSTQuery());
 
             dropdownData.AddRange(result);
             return Json(dropdownData);
@@ -90,12 +87,11 @@ namespace ABB.Web.Modules.OutstandingKlaim
         }
         
         [HttpPost]
-        public async Task<ActionResult> GenerateReport([FromBody] OutstandingKlaimViewModel model)
+        public async Task<ActionResult> GenerateReport([FromBody] OutstandingKlaimReasuransiViewModel model)
         {
             try
             {
-                var command = Mapper.Map<GetOutstandingKlaimQuery>(model);
-                command.DatabaseName = Request.Cookies["DatabaseValue"];
+                var command = Mapper.Map<GetOutstandingKlaimReasuransiQuery>(model);
 
                 var sessionId = HttpContext.Session.GetString("SessionId");
 
@@ -104,7 +100,8 @@ namespace ABB.Web.Modules.OutstandingKlaim
                 
                 var reportTemplate = await Mediator.Send(command);
                 
-                _reportGeneratorService.GenerateReport("OutstandingKlaim.pdf", reportTemplate, sessionId, Orientation.Landscape);
+                _reportGeneratorService.GenerateReport("OutstandingKlaimReasuransi.pdf", reportTemplate, sessionId, Orientation.Landscape,
+                    0, 0, 10, 10);
 
                 return Ok(new { Status = "OK", Data = sessionId});
             }

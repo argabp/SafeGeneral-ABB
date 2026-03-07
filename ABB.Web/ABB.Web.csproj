@@ -6119,6 +6119,12 @@
        <None Update="Modules\Reports\Templates\VoucherBank.html">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+       <None Update="Modules\Reports\Templates\OutstandingKlaimReasuransiRekap.html">
+         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+       </None>
+       <None Update="Modules\Reports\Templates\OutstandingKlaimReasuransiRincian.html">
+         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+       </None>
     </ItemGroup>
 
     <ItemGroup>
