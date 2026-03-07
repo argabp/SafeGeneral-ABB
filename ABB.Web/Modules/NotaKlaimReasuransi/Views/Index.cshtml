@@ -1,0 +1,92 @@
+﻿@using ABB.Application.NotaKlaimReasuransis.Queries
+@using Kendo.Mvc.UI
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Nota Klaim";
+}
+<script src="~/Modules/NotaKlaimReasuransi/JS/notaKlaimReasuransi.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-8">
+            Entri Nota Klaim Reasuransi
+        </div>
+
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<NotaKlaimReasuransiDto>()
+                .Name("NotaKlaimReasuransiGrid")
+                .Editable(editable => editable.Mode(GridEditMode.InLine))
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetNotaKlaimReasuransis", "NotaKlaimReasuransi").Data("searchFilterServerFiltering"))
+                    .Model(model => model.Id(p => p.nomor_nota))
+                )
+                .Columns(columns =>
+                {
+                    columns.Command(command =>
+                    {
+                        command.Custom("EditNota")
+                            .Text("Edit")
+                            .IconClass("k-icon k-i-edit")
+                            .HtmlAttributes(new { title="Edit"})
+                            .Click("onEditNotaKlaimReasuransi");
+                        command.Custom("ViewNota")
+                            .Text("View")
+                            .IconClass("fa fa-eye")
+                            .HtmlAttributes(new { title = "View" })
+                            .Click("onViewNotaKlaimReasuransi");
+                    }).Width(200).Title("Action").Locked(true);
+                    // columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
+                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
+                    // columns.Bound(col => col.nm_scob).Width(150).Title("Nama SCOB");
+                    // columns.Bound(col => col.no_pol_lama).Title("Nomor Polis").ClientTemplate("#= formatNoPol(no_pol_lama) #");
+                    columns.Bound(col => col.nomor_dla).Width(200).Title("Nomor DLA");
+                    columns.Bound(col => col.nomor_nota).Width(200).Title("Nomor Nota");
+                    columns.Bound(col => col.no_mts).Width(150).Title("Nomor Mutasi");
+                    // columns.Bound(col => col.nm_tipe_mts).Width(200).Title("Tipe Mutasi");
+                    columns.Bound(col => col.nm_ttj).Width(150).Title("Nama Tertuju");
+                    columns.Bound(col => col.tgl_nt).Title("Tanggal Nota").Format("{0: dd-MM-yyyy}");
+                    columns.Bound(col => col.nilai_nt).Width(150).Title("Nilai Nota").Format("{0:n2}");
+                    columns.Bound(col => col.flag_posting).Width(150).Title("Flag Posting");
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("onNotaKlaimReasuransiDataBound"))
+                ) 
+        </div>
+        
+        @(Html.Kendo().Window()
+            .Name("NotaKlaimReasuransiWindow")
+            .Title("Nota Klaim Reasuransi")
+            .Width(1200)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+    </div>
+</div>

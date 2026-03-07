@@ -1282,3 +1282,11 @@ function buildGridRequest(e, searchKeywordProperty) {
 
   return req;
 }
+
+function searchFilterServerFiltering(e) {
+  const gridReq = buildGridRequest(e, "SearchKeyword");
+
+  return {
+    grid: gridReq
+  };
+}
