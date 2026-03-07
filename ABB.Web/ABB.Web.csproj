@@ -6125,6 +6125,9 @@
        <None Update="Modules\Reports\Templates\OutstandingKlaimReasuransiRincian.html">
          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
        </None>
+       <None Update="Modules\Reports\Templates\CetakNotaKlaimReasuransi.html">
+         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+       </None>
     </ItemGroup>
 
     <ItemGroup>

@@ -1,8 +1,8 @@
 using System;
 
-namespace ABB.Application.CetakNotaKlaim.Queries
+namespace ABB.Application.CetakNotaKlaimReasuransis.Queries
 {
-    public class CetakNotaKlaimDto
+    public class CetakNotaKlaimReasuransiDto
     {
         public string flag_postr { get; set; }
         
@@ -28,7 +28,7 @@ namespace ABB.Application.CetakNotaKlaim.Queries
 
         public string no_nota { get; set; }
 
-        public string no_berkas { get; set; }
+        public string no_lpk { get; set; }
 
         public string no_pol_ttg { get; set; }
 
