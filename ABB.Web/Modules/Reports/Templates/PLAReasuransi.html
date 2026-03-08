@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLA Reasuransi</title>
+    <style>
+        body {
+            /* font-family: Arial, sans-serif; */
+        }
+
+        .container {
+            width: 95%;
+            margin: auto;
+            /* border: 1px solid black; */
+        }
+
+        .h1 {
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .section {
+            margin-top: 10px;
+        }
+
+        .table {
+            width: 100%;
+            /* border-collapse: collapse; */
+        }
+
+        .table td {
+            padding: 4px;
+            /* border: 1px solid black; */
+            font-size: 12px;
+        }
+        p {
+            text-align: justify;
+            font-size: 13px;
+            /* font-style: italic; */
+        }
+        h2 {
+            text-align: center;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="table">
+        <table class="table" style="border-collapse: collapse;">
+            <tr>
+                <td style="padding-bottom: 0px; font-weight: bold;">Reinsurance : {{nm_pas}}</td>
+            </tr>
+            <tr>
+                <td style="padding-top: 0px;"></td>
+            </tr>
+            <tr>
+                <td style="height: 15px;"></td>
+            </tr>
+        </table>
+    </div>
+    <div class="h1">PRELIMINARY LOSS ADVICE <br> --------------------------------------------------- <br>  <p style="text-align: center; font-weight: normal; margin:0">No. {{no_berkas_reas}}</p></div>
+
+    <div class="section">
+        <table class="table">
+            <tr>
+                <td style="width: 1%;">01. </td>
+                <td colspan="2" style="width: 35%;">Kind of Insurance </td>
+                <td style="width: 1%;">:</td>
+                <td colspan="3">{{nm_scob}}</td>
+            </tr>
+            <tr>
+                <td style="width: 1%;">02. </td>
+                <td colspan="2" style="width: 20%;">Insured With / Through </td>
+                <td style="width: 1%;">:</td>
+                <td colspan="3">{{no_sert}}</td>
+            </tr>
+            <tr>
+                <td style="width: 1%;">03. </td>
+                <td colspan="2" style="width: 20%;">Policy No / Certificate No</td>
+                <td>:</td>
+                <td colspan="3">{{no_pol_ttg}}</td>
+            </tr>
+            <tr>
+                <td style="width: 1%;">04. </td>
+                <td colspan="2" style="width: 20%;">Name Of Insurance</td>
+                <td>:</td>
+                <td style="width: 1%;" colspan="3">{{nm_ttg}}</td>
+            </tr>
+            <tr>
+                <td style="width: 1%; vertical-align: top;">05. </td>
+                <td colspan="2" style="width: 20%; vertical-align: top;">Address</td>
+                <td>:</td>
+                <td style="width: 30%;" colspan="">{{address}}</td>
+            </tr>
+            <tr>
+                <td style="width: 1%; vertical-align: top;">06. </td>
+                <td colspan="2" style="width: 20%;">Occupation</td>
+                <td>: </td>
+                <td colspan="3">{{ket_oby}}</td>
+            </tr>
+            <tr>
+                <td style="width: 1%;">07. </td>
+                <td colspan="2" style="width: 20%;">Condition</td>
+                <td>:</td>
+                <td colspan="3">{{kond_ptg}}</td>
+            </tr>
+            <tr>
+                <td style="width: 1%; vertical-align: top;">08. </td>
+                <td colspan="2" style="width: 20%;">Period of Insured</td>
+                <td>:</td>
+                <td colspan="3">{{tgl_mul_ptg}} - {{tgl_akh_ptg}}</td>
+            </tr>
+            <tr>
+                <td style="width: 1%; vertical-align: top;">09. </td>
+                <td colspan="2" style="width: 20%;">Total SUM Insured</td>
+                <td>:</td>
+                <td colspan="3">{{symbol_ptg}} {{nilai_ttl_ptg}}</td>
+            </tr>
+            <tr>
+                <td style="width: 1%; vertical-align: top;">10. </td>
+                <td colspan="2" style="width: 20%;">Place Of Loss</td>
+                <td>:</td>
+                <td colspan="3">{{tempat_kej}}</td>
+            </tr>
+            <tr>
+                <td style="width: 1%; vertical-align: top;">11. </td>
+                <td colspan="2" style="width: 20%;">Date Of Loss</td>
+                <td>:</td>
+                <td colspan="3">{{tgl_kej}}</td>
+            </tr>
+            <tr>
+                <td style="width: 1%; vertical-align: top;">12. </td>
+                <td colspan="2" style="width: 20%;">Nature of Accident</td>
+                <td>:</td>
+                <td colspan="3">{{sebab_kerugian}}</td>
+            </tr>
+            <tr>
+                <td style="width: 1%;">13. </td>
+                <td colspan="2" style="width: 20%;">Result of Accident</td>
+                <td>:</td>
+                <td colspan="3">{{sifat_kerugian}}</td>
+            </tr>
+            <tr>
+                <td style="width: 1%;">14. </td>
+                <td colspan="2" style="width: 20%;">Allocation of Risk</td>
+                <td>:</td>
+                <td style="width: 1%;">{{nm_jns_sor_01}}</td>
+                <td style="width: 5%; text-align: right">{{nilai_jns_sor_01}}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="width: 1%;"></td>
+                <td colspan="2" style="width: 20%;"></td>
+                <td>:</td>
+                <td style="width: 1%;">{{nm_jns_sor_02}}</td>
+                <td style="width: 5%; text-align: right">{{nilai_jns_sor_02}}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="width: 1%;"></td>
+                <td colspan="2" style="width: 20%;"></td>
+                <td>:</td>
+                <td style="width: 1%;">{{nm_jns_sor_03}}</td>
+                <td style="width: 5%; text-align: right">{{nilai_jns_sor_03}}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="width: 1%;"></td>
+                <td colspan="2" style="width: 20%;"></td>
+                <td>:</td>
+                <td style="width: 1%;">{{nm_jns_sor_04}}</td>
+                <td style="width: 5%; text-align: right">{{nilai_jns_sor_04}}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="width: 1%;"></td>
+                <td colspan="2" style="width: 20%;"></td>
+                <td>:</td>
+                <td style="width: 1%;">{{nm_jns_sor_05}}</td>
+                <td style="width: 5%; text-align: right">{{nilai_jns_sor_05}}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="width: 1%;"></td>
+                <td colspan="2" style="width: 20%;"></td>
+                <td>:</td>
+                <td style="width: 1%;"></td>
+                <td style="width: 5%; border-top: 1px dotted; text-align: right">{{total_nilai_jns_sor}}</td>
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td style="width: 1%;">15. </td>
+                <td colspan="2" style="width: 20%;">Your Share</td>
+                <td>:</td>
+                <td colspan="3">{{symbol_ptg}} {{nilai_ttl_oby}}</td>
+            </tr>
+            <tr>
+                <td style="width: 1%;">16. </td>
+                <td style="width: 20%;">Allocation of Risk</td>
+                <td>{{nm_sor_pas_01}}</td>
+                <td>:</td>
+                <td style="width: 1%;">{{pst_sor_pas_01}} % {{symbol}}</td>
+                <td style="width: 5%; text-align: right">{{nilai_sor_pas_01}}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="width: 1%;"></td>
+                <td style="width: 20%;"></td>
+                <td>{{nm_sor_pas_02}}</td>
+                <td>:</td>
+                <td style="width: 1%;">{{pst_sor_pas_02}} % {{symbol}}</td>
+                <td style="width: 5%; text-align: right">{{nilai_sor_pas_02}}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="width: 1%;"></td>
+                <td style="width: 20%;"></td>
+                <td>{{nm_sor_pas_03}}</td>
+                <td>:</td>
+                <td style="width: 1%;">{{pst_sor_pas_03}} % {{symbol}}</td>
+                <td style="width: 5%; text-align: right">{{nilai_sor_pas_03}}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="width: 1%;"></td>
+                <td style="width: 20%;"></td>
+                <td>{{nm_sor_pas_04}}</td>
+                <td>:</td>
+                <td style="width: 1%;">{{pst_sor_pas_04}} % {{symbol}}</td>
+                <td style="width: 5%; text-align: right">{{nilai_sor_pas_04}}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="width: 1%;"></td>
+                <td style="width: 20%;"></td>
+                <td>{{nm_sor_pas_05}}</td>
+                <td>:</td>
+                <td style="width: 1%;">{{pst_sor_pas_05}} % {{symbol}}</td>
+                <td style="width: 5%; text-align: right">{{nilai_sor_pas_05}}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="width: 1%;">17. </td>
+                <td colspan="2" style="width: 20%;">Remarks</td>
+                <td>:</td>
+                <td colspan="3">{{ket_pla}}</td>
+            </tr>
+        </table>
+        <table class="table" style="padding-top: 1em;">
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td style="width: 40%;"></td>
+                <td><strong>{{kt_cb}}, {{tgl_closing_ind}}</strong></td>
+            </tr>
+            <tr style="height: 60px;">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><strong></strong></td>
+            </tr>
+            <tr>
+                <td colspan="10" align="center">{{footer}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>
