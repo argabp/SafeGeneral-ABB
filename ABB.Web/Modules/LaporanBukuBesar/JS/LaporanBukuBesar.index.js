@@ -20,10 +20,10 @@ function onSearchClick() {
     // Jika nanti kamu ubah view-nya jadi Kendo ComboBox seperti jurnal harian, ganti jadi:
     // var kodeCabang = $("#KodeCabang").data("kendoComboBox").value();
 
-    if (!kodeCabang) {
-        alert("Silakan pilih cabang terlebih dahulu.");
-        return;
-    }
+    // if (!kodeCabang) {
+    //     alert("Silakan pilih cabang terlebih dahulu.");
+    //     return;
+    // }
 
     // 3. Ambil Kode Akun (Range)
     var akunAwal = $("#AkunAwal").data("kendoComboBox").value();
@@ -38,7 +38,7 @@ function onSearchClick() {
         AkunAkhir: akunAkhir
     };
 
-    console.log("Mengirim Data:", formData);
+    // console.log("Mengirim Data:", formData);
 
     // 5. Kirim ke Controller
     $.ajax({

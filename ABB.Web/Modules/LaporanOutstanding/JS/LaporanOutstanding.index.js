@@ -37,10 +37,10 @@ function onSearchClick() {
             return;
         }
 
-    if (!kodeCabang) {
-        alert("Silakan pilih lokasi terlebih dahulu.");
-        return;
-    }
+    // if (!kodeCabang) {
+    //     alert("Silakan pilih lokasi terlebih dahulu.");
+    //     return;
+    // }
 
     // ⬇️ Data yang dikirim harus sesuai dengan nilai yang Anda punya
     var formData = {
@@ -119,10 +119,10 @@ function onExcelClick() {
             return;
         }
 
-    if (!kodeCabang) {
-        alert("Silakan pilih lokasi terlebih dahulu.");
-        return;
-    }
+    // if (!kodeCabang) {
+    //     alert("Silakan pilih lokasi terlebih dahulu.");
+    //     return;
+    // }
 
     // ⬇️ Data yang dikirim harus sesuai dengan nilai yang Anda punya
     var formData = {

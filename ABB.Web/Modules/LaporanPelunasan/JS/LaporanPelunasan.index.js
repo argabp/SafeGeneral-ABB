@@ -6,10 +6,10 @@ function onSearchClick() {
     var bulanAkhir = $("#BulanAkhir").data("kendoComboBox").value();
     var tahun = $("#Tahun").data("kendoDropDownList").value();
 
-    if (!kodeCabang) {
-        alert("Silakan pilih lokasi terlebih dahulu.");
-        return;
-    }
+    // if (!kodeCabang) {
+    //     alert("Silakan pilih lokasi terlebih dahulu.");
+    //     return;
+    // }
     if (!bulanAwal || !bulanAkhir || !tahun) {
         alert("Silakan pilih bulan dan tahun dengan lengkap.");
         return;
@@ -56,10 +56,10 @@ function onExcelClick() {
     var bulanAkhir = $("#BulanAkhir").data("kendoComboBox").value();
     var tahun = $("#Tahun").data("kendoDropDownList").value();
 
-    if (!kodeCabang) {
-        alert("Silakan pilih lokasi terlebih dahulu.");
-        return;
-    }
+    // if (!kodeCabang) {
+    //     alert("Silakan pilih lokasi terlebih dahulu.");
+    //     return;
+    // }
     if (!bulanAwal || !bulanAkhir || !tahun) {
         alert("Silakan pilih bulan dan tahun dengan lengkap.");
         return;

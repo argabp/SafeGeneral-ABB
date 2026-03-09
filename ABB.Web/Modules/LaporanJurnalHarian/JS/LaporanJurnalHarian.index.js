@@ -10,10 +10,10 @@ function onSearchClick() {
     var kodeCabang = $("#KodeCabang").data("kendoComboBox").value().trim();
     var jenisTransaksi =  $("#JenisTransaksi").data("kendoComboBox").value().trim();
 
-    if (!kodeCabang) {
-        alert("Silakan pilih lokasi terlebih dahulu.");
-        return;
-    }
+    // if (!kodeCabang) {
+    //     alert("Silakan pilih lokasi terlebih dahulu.");
+    //     return;
+    // }
 
     // ⬇️ Data yang dikirim harus sesuai dengan nilai yang Anda punya
     var formData = {
@@ -23,7 +23,7 @@ function onSearchClick() {
         JenisTransaksi: jenisTransaksi
     };
 
-    console.log(formData);
+    // console.log(formData);
 
     $.ajax({
         url: '/LaporanJurnalHarian/GenerateReport',

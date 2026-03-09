@@ -69,7 +69,8 @@ namespace ABB.Application.LaporanPelunasans.Queries
                 throw new Exception("Data tidak ditemukan untuk periode tersebut.");
 
             // 3. Ambil Nama Cabang untuk Header
-            string namaCabang = "-";
+            string namaCabang = "SEMUA CABANG";
+
             if (!string.IsNullOrEmpty(request.KodeCabang))
             {
                 var cabangEntity = await _context.Set<Cabang>()
