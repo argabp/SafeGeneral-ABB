@@ -16,8 +16,16 @@ namespace ABB.Web.Middleware
 
         public async Task Invoke(HttpContext context)
         {
-            var path = context.Request.Path.Value;
+            var path = context.Request.Path.Value.ToLower();
 
+            // 1. Skip if it's the Login page
+            if (path == "/account/login" || path.StartsWith("/account/getcaptcha"))
+            {
+                await _next(context);
+                return;
+            }
+
+            // 2. Existing file/extension check
             if (Path.HasExtension(path))
             {
                 await _next(context);

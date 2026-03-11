@@ -18,6 +18,7 @@ using System.Drawing.Printing;
 using ABB.Application.Cabangs.Queries;
 using ClosedXML.Excel;
 using System.IO;
+using PaperKind = DinkToPdf.PaperKind;
 
 namespace ABB.Web.Modules.ListVoucher
 {

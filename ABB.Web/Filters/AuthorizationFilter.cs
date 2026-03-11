@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Security.Claims;
@@ -29,10 +30,17 @@ namespace ABB.Web.Filters
         {
             try
             {
-                var controller = (string)context.RouteData.Values["Controller"];
-                var action = (string)context.RouteData.Values["Action"];
-                var controllerDashAction = $"{controller}-{action}";
-                if (context.HasAllowAnonymous()) return;
+                if (context.ActionDescriptor.EndpointMetadata.Any(em => em is Microsoft.AspNetCore.Authorization.IAllowAnonymous))
+                {
+                    return; 
+                }
+                
+                var controller = context.RouteData.Values["Controller"]?.ToString();
+                var action = context.RouteData.Values["Action"]?.ToString();
+
+                // Prevent loop in Filter
+                if (controller == "Account" && action == "Login") return;
+                
                 if (context.HttpContext.User.Identity.Name != null)
                 {
                     if (SkippedController(controller, action)) return;

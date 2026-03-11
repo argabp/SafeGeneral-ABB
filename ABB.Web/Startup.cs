@@ -89,6 +89,7 @@ namespace ABB.Web
 
                 options.IdleTimeout = TimeSpan.FromMinutes(idleTimeoutMinutes);
                 options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
             });
             // services.AddScoped<ICustomerServices, CustomerServices>();
             services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
@@ -119,12 +120,7 @@ namespace ABB.Web
             // app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UserStaticFilesModulesFolder();
-            app.UseWhen(context => 
-                    !context.Request.Path.StartsWithSegments("/account/login"),
-                appBuilder =>
-                {
-                    appBuilder.UseMiddleware<SessionGuardMiddleware>();
-                });
+            app.UseMiddleware<SessionGuardMiddleware>();
             app.UseMiddleware<ErrorHandlerMiddleware>();
             app.UseMiddleware<HeaderMiddleware>();
             app.UseMiddleware<JwtMiddleware>();

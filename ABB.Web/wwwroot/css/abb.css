@@ -1000,14 +1000,14 @@ form .k-textbox, form .k-dropdown, form .k-combobox, form .k-multiselect, form .
 }
 
 .login-body {
-    height: 50%;
+    height: 60%;
     padding: 0;
 }
 
 /* Tablet & Mobile */
 @media (max-width: 992px) {
     .login-body {
-        height: 45%;
+        height: 65%;
     }
 }
 

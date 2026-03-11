@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using ABB.Application.Common.Exceptions;
 using ABB.Application.Users.Commands;
@@ -9,6 +11,9 @@ using ABB.Web.Modules.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 
 namespace ABB.Web.Modules.Account
 {
@@ -102,6 +107,16 @@ namespace ABB.Web.Modules.Account
         {
             model.Username = model.Username?.ToLower() ?? "";
             
+            var sessionCaptcha = HttpContext.Session.GetString("CaptchaCode");
+    
+            // Validate Captcha first
+            if (string.IsNullOrEmpty(model.CaptchaInput) || model.CaptchaInput != sessionCaptcha)
+            {
+                ModelState.AddModelError("CaptchaInput", "Kode Captcha salah.");
+                // Return view with existing data
+                return View(model); 
+            }
+            
             try
             {
                 if (await Mediator.Send(Mapper.Map<LoginCommand>(model)))
@@ -182,5 +197,49 @@ namespace ABB.Web.Modules.Account
             return Ok(result);
         }
 
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult GetCaptcha()
+        {
+            // 1. Generate Random Text (Mix of Letters and Numbers)
+            string chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+            Random rand = new Random();
+            string captchaCode = new string(Enumerable.Repeat(chars, 5)
+                .Select(s => s[rand.Next(s.Length)]).ToArray());
+
+            // 2. Store in Session
+            HttpContext.Session.SetString("CaptchaCode", captchaCode);
+
+            // 3. Create Image
+            using (var bitmap = new Bitmap(130, 45))
+            using (var graphics = Graphics.FromImage(bitmap))
+            {
+                graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                graphics.Clear(Color.FromArgb(244, 244, 244)); // Light grey background
+
+                // Add some noise lines so bots can't read it easily
+                for (int i = 0; i < 3; i++)
+                    graphics.DrawLine(new Pen(Color.Silver, 1), rand.Next(0, 130), rand.Next(0, 45), rand.Next(0, 130), rand.Next(0, 45));
+
+                // Draw the text with a bit of rotation
+                using (Font font = new Font("Arial", 20, FontStyle.Bold))
+                {
+                    for (int i = 0; i < captchaCode.Length; i++)
+                    {
+                        var state = graphics.Save();
+                        graphics.TranslateTransform(20 + (i * 18), 22);
+                        graphics.RotateTransform(rand.Next(-15, 15));
+                        graphics.DrawString(captchaCode[i].ToString(), font, Brushes.DarkBlue, -10, -15);
+                        graphics.Restore(state);
+                    }
+                }
+
+                using (var ms = new MemoryStream())
+                {
+                    bitmap.Save(ms, ImageFormat.Png);
+                    return File(ms.ToArray(), "image/png");
+                }
+            }
+        }
     }
 }
