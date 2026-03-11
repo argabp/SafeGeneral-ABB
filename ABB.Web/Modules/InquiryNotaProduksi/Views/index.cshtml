@@ -24,6 +24,24 @@
         content: ">"; /* Ganti '/' dengan '>' */
         padding: 0 .5rem; /* Atur spasi jika perlu */
     }
+    .btn-custom-excel {
+        border-radius: 6px;
+        background-color: #217346 !important; /* Hijau Excel */
+        color: white !important;
+        border-color: #217346 !important;
+        display: flex; 
+        flex-direction: row-reverse; 
+        justify-content: center; 
+        align-items: center; 
+        gap: 6px;
+    }
+
+    /* Efek saat mouse lewat (Hover) - Warnanya jadi hijau gelap */
+    .btn-custom-excel:hover {
+        background-color: #175232 !important; 
+        border-color: #175232 !important;
+        cursor: pointer;
+    }
 </style>
 <nav  aria-label="breadcrumb">
    <ol class="breadcrumb" style="background: white; ">
@@ -111,17 +129,25 @@
                 .Events(e => e.Click("onSearchClick"))
             )
 
-            @(Html.Kendo().Button()
+           @(Html.Kendo().Button()
                 .Name("btnExcel")
-                .Content(" Export (Excel)")
-                .HtmlAttributes(new { @class = "k-button k-outline", style = "border-radius:6px; width:130px; background-color: #217346; color: white; border-color: #217346;" })
+                .IconClass("fa fa-file-excel")
+                .Content("Export")
+                .HtmlAttributes(new { 
+                    @class = "k-button btn-custom-excel", // Panggil classnya di sini
+                    style = "width:100px;" 
+                })
                 .Events(e => e.Click("onExcelClick"))
             )
 
-           @(Html.Kendo().Button()
+            @(Html.Kendo().Button()
                 .Name("btnExcelProduk")
-                .Content(" Cek Produk (Excel)")
-                .HtmlAttributes(new { @class = "k-button k-outline", style = "border-radius:6px; width:130px; background-color: #217346; color: white; border-color: #217346;" })
+                .IconClass("fa fa-file-excel")
+                .Content("Cek Produk") 
+                .HtmlAttributes(new { 
+                    @class = "k-button btn-custom-excel", // Panggil classnya di sini
+                    style = "width:130px;" 
+                })
                 .Events(e => e.Click("onExcelClickProduk"))
             )
         </div>
