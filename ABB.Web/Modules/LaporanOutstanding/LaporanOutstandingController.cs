@@ -70,8 +70,19 @@ namespace ABB.Web.Modules.LaporanOutstanding
                 ? $"{userCabang.kd_cb.Trim()} - {userCabang.nm_cb.Trim()}" 
                 : kodeCabangCookie;
            
-            ViewBag.UserCabangValue = kodeCabangCookie; 
-            ViewBag.UserCabangText = displayCabang;     
+            if (isPusat)
+                {
+                    // User pusat → jangan isi value
+                    ViewBag.UserCabangValue = "";
+                    ViewBag.UserCabangText = "";
+                }
+                else
+                {
+                    // User cabang → otomatis sesuai login
+                    ViewBag.UserCabangValue = kodeCabangCookie;
+                    ViewBag.UserCabangText = displayCabang;
+                }
+    
             return View();
         }
 

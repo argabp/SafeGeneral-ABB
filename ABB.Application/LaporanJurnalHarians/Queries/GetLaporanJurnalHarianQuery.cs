@@ -136,10 +136,12 @@ namespace ABB.Application.LaporanJurnalHarians.Queries
             DateTime tglAwal = DateTime.Parse(request.PeriodeAwal).Date;
             DateTime tglAkhir = DateTime.Parse(request.PeriodeAkhir).Date.AddHours(23).AddMinutes(59).AddSeconds(59);
 
+            string paramKodeCabang = string.IsNullOrWhiteSpace(request.KodeCabang) ? null : request.KodeCabang.Trim();
+
             // 2. Eksekusi Stored Procedure
             var rawData = await _context.SpLaporanJurnalHarianResults
                 .FromSqlRaw("EXEC sp_LaporanJurnalHarian104 {0}, {1}, {2}, {3}",
-                    request.KodeCabang ?? "",
+                    paramKodeCabang,
                     tglAwal,
                     tglAkhir,
                     request.JenisTransaksi ?? ""

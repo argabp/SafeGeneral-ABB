@@ -68,7 +68,7 @@ namespace ABB.Application.LaporanOutstandings.Queries
             if (!dataLaporan.Any()) throw new Exception("Data tidak ditemukan.");
 
             // 3. Ambil Nama Cabang
-            string namaCabang = "-";
+             string namaCabang = "SEMUA CABANG";
             if (!string.IsNullOrEmpty(request.KodeCabang))
             {
                 var cabangEntity = await _context.Set<Cabang>().FirstOrDefaultAsync(c => c.kd_cb == request.KodeCabang, cancellationToken);

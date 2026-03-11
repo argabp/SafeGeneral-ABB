@@ -63,9 +63,22 @@ namespace ABB.Web.Modules.LaporanPelunasan
             ? $"{userCabang.kd_cb.Trim()} - {userCabang.nm_cb.Trim()}" 
             : kodeCabangCookie;
 
+            if (isPusat)
+                {
+                    // User pusat → jangan isi value
+                    ViewBag.UserCabangValue = "";
+                    ViewBag.UserCabangText = "";
+                }
+                else
+                {
+                    // User cabang → otomatis sesuai login
+                    ViewBag.UserCabangValue = kodeCabangCookie;
+                    ViewBag.UserCabangText = displayCabang;
+                }
+
             // 4. Kirim ke View
-            ViewBag.UserCabangValue = kodeCabangCookie; // Untuk .Value()
-            ViewBag.UserCabangText = displayCabang;     // Untuk .Text()
+            // ViewBag.UserCabangValue = kodeCabangCookie; // Untuk .Value()
+            // ViewBag.UserCabangText = displayCabang;     // Untuk .Text()
 
             return View();
         }
@@ -226,6 +239,17 @@ namespace ABB.Web.Modules.LaporanPelunasan
                 
                 if (data == null || !data.Any())
                     throw new Exception("Data tidak ditemukan.");
+                
+                string NamaCabangAja;
+
+                if (string.IsNullOrEmpty(model.KodeCabang))
+                {
+                    NamaCabangAja = "SEMUA CABANG";
+                }
+                else
+                {
+                    NamaCabangAja = model.NamaCabang;
+                }
 
                 using (var workbook = new XLWorkbook())
                 {
@@ -243,7 +267,7 @@ namespace ABB.Web.Modules.LaporanPelunasan
                     worksheet.Cell(1, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
                     // Baris 2: Lokasi
-                    worksheet.Cell(2, 1).Value = $"LOKASI : {model.NamaCabang}";
+                    worksheet.Cell(2, 1).Value = $"LOKASI : {NamaCabangAja}";
                     worksheet.Range("A2:M2").Merge(); // <--- BIKIN MERGE KE TENGAH
                     worksheet.Cell(2, 1).Style.Font.Bold = true;
                     worksheet.Cell(2, 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center; // <--- CENTER TEXT
