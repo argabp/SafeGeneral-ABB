@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Cetak Laporan Neraca Saldo</title>
+
+    <style>
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 11pt;
+            line-height: 1.4;
+            color: #000;
+        }
+
+        .report-header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .report-title {
+            font-size: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .report-sub {
+            font-size: 11pt;
+            font-weight: normal;
+            margin-top: 2px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th {
+            font-size: 10pt;
+            font-weight: bold;
+            text-align: center;
+            border: 1px solid #000;
+            padding: 3px 4px;
+        }
+
+        td {
+            font-size: 9pt;
+            border: 1px solid #000;
+            padding: 2px 4px;
+            vertical-align: top;
+            letter-spacing: 0.5px;
+        }
+
+        .right { text-align: right; }
+        .center { text-align: center; }
+        .no-border { border: none; }
+    </style>
+</head>
+
+<body>
+    <div class="report-header">
+        <div class="report-title">LAPORAN NERACA SALDO</div>
+        <div class="report-sub">PERIODE : {{ periode }}</div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width:40px;" Rowspan="2">Tanggal</th>
+                <th style="width:40px;" Rowspan="2">Group</th>
+                <th style="width:120px;" Rowspan="2">Tipe</th>
+                <th Rowspan="2">Nama Tipe</th>
+                <th style="width:160px;" Rowspan="2">Lokasi</th>
+                <th style="width:160px;" Rowspan="2">Kode Akun</th>
+                <th style="width:160px;" Rowspan="2">Nama Akun</th>
+                <th style="width:160px;" colspan="2">Saldo Awal</th>
+                <th style="width:160px;" colspan="2">Mutasi</th>
+                <th style="width:160px;" colspan="2">Saldo Akhir</th>
+            </tr>
+
+            <tr>
+                <th style="width:80px;">Debet</th>
+                <th style="width:80px;">Kredit</th>
+                <th style="width:80px;">Debet</th>
+                <th style="width:80px;">Kredit</th>
+                <th style="width:80px;">Debet</th>
+                <th style="width:80px;">Kredit</th>
+            </tr>
+
+        </thead>
+        <tbody>
+            {{ details }}
+        </tbody>
+    </table>
+</body>
+</html>

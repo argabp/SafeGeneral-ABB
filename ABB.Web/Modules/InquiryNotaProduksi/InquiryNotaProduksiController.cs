@@ -71,34 +71,26 @@ namespace ABB.Web.Modules.InquiryNotaProduksi
             string searchKeyword,
             DateTime? startDate,
             DateTime? endDate,
-            string jenisAsset, string KodeCabang)
+            string jenisAsset,
+            string KodeCabang)
         {
             var rawCabang = KodeCabang;
             string kodeCabangs = "";
-            // 2. LOGIKA AMBIL 2 ANGKA BELAKANG
+
             if (!string.IsNullOrEmpty(rawCabang))
             {
-                // Bersihkan spasi dulu
-                rawCabang = rawCabang.Trim(); 
+                rawCabang = rawCabang.Trim();
 
                 if (rawCabang.Length >= 2)
-                {
-                    // Ambil 2 karakter terakhir. Contoh: "JK10" -> "10"
                     kodeCabangs = rawCabang.Substring(rawCabang.Length - 2);
-                }
-                else 
-                {
-                    // Jaga-jaga kalau isinya cuma "1" atau "5", ambil apa adanya
+                else
                     kodeCabangs = rawCabang;
-                }
             }
-            else 
+            else
             {
-                // Kalau cookie kosong, return kosong (Safety)
                 return Json(new List<object>().ToDataSourceResult(request));
             }
 
-            // ✅ Cegah load data jika semua filter kosong
             if (string.IsNullOrEmpty(searchKeyword) &&
                 !startDate.HasValue &&
                 !endDate.HasValue &&
@@ -107,7 +99,6 @@ namespace ABB.Web.Modules.InquiryNotaProduksi
                 return Json(new List<object>().ToDataSourceResult(request));
             }
 
-            // 🔹 Ambil data sesuai filter
             var data = await Mediator.Send(new InquiryNotaProduksiQuery()
             {
                 SearchKeyword = searchKeyword,
@@ -117,14 +108,9 @@ namespace ABB.Web.Modules.InquiryNotaProduksi
                 KodeCabang = kodeCabangs
             });
 
-            // ✅ Jika hasil kosong, kirim response dengan indikator “tidak ditemukan”
             var result = data?.ToList() ?? new List<InquiryNotaProduksiDto>();
 
-            return Json(new DataSourceResult
-            {
-                Data = result,
-                Total = result.Count
-            });
+            return Json(result.ToDataSourceResult(request));
         }
 
         public async Task<IActionResult> Add(int id)
@@ -384,6 +370,90 @@ namespace ABB.Web.Modules.InquiryNotaProduksi
                         content,
                         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                         $"InquiryNotaFull_{DateTime.Now:yyyyMMddHHmmss}.xlsx"
+                    );
+                }
+            }
+        }
+
+
+         [HttpPost]
+        public async Task<IActionResult> ExportExcelProduksi(
+            string searchKeyword,
+            DateTime? startDate,
+            DateTime? endDate,
+            string jenisAsset,
+            string KodeCabang)
+        {
+            var rawCabang = KodeCabang?.Trim();
+            if (string.IsNullOrEmpty(rawCabang))
+                return BadRequest("Kode Cabang kosong");
+
+            var kodeCabangs = rawCabang.Length >= 2
+                ? rawCabang.Substring(rawCabang.Length - 2)
+                : rawCabang;
+
+            var data = await Mediator.Send(new GetCekProdukInquiryNotaProduksiQuery()
+            {
+                SearchKeyword = searchKeyword,
+                StartDate = startDate,
+                EndDate = endDate,
+                JenisAsset = jenisAsset,
+                KodeCabang = kodeCabangs
+            });
+
+            using (var workbook = new ClosedXML.Excel.XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("Cek Produk Inquiry Nota");
+
+                // --- 1. HEADER (Struktur Awal + Tambahan Request) ---
+                worksheet.Cell(1, 1).Value = "Lokasi";
+                worksheet.Cell(1, 2).Value = "Kode Ass 2";
+                worksheet.Cell(1, 3).Value = "Premi";
+                worksheet.Cell(1, 4).Value = "Diskon";
+                worksheet.Cell(1, 5).Value = "Bruto";
+                worksheet.Cell(1, 6).Value = "Polis Materai";
+                worksheet.Cell(1, 7).Value = "Komisi";
+                worksheet.Cell(1, 8).Value = "Klaim";
+                worksheet.Cell(1, 9).Value = "h_fee";
+                worksheet.Cell(1, 10).Value = "Lain";
+                worksheet.Cell(1, 11).Value = "Netto";
+
+
+                // Styling Header biar Bold
+                worksheet.Range("A1:K1").Style.Font.Bold = true;
+                worksheet.Range("A1:K1").Style.Fill.BackgroundColor = XLColor.LightGray;
+
+                int row = 2;
+                foreach (var item in data)
+                {
+                    worksheet.Cell(row, 1).Value = item.lok;
+                    worksheet.Cell(row, 2).Value = item.kd_ass2;
+                    worksheet.Cell(row, 3).Value = item.premi;
+                    worksheet.Cell(row, 4).Value = item.n_rabat;
+                    worksheet.Cell(row, 5).Value = item.n_bruto;
+                    worksheet.Cell(row, 6).Value = item.polis;
+                    worksheet.Cell(row, 7).Value = item.n_komisi;
+                    worksheet.Cell(row, 8).Value = item.klaim;
+                    worksheet.Cell(row, 9).Value = item.h_fee;
+                    worksheet.Cell(row, 10).Value = item.lain;
+                    worksheet.Cell(row, 11).Value = item.netto;
+                    
+                    worksheet.Range(row, 12, row, 23).Style.NumberFormat.Format = "#,##0.00";
+
+                    row++;
+                }
+
+                worksheet.Columns().AdjustToContents();
+
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    var content = stream.ToArray();
+
+                    return File(
+                        content,
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        $"Cek Produk_{DateTime.Now:yyyyMMddHHmmss}.xlsx"
                     );
                 }
             }

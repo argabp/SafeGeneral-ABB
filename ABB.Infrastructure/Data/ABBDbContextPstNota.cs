@@ -47,6 +47,7 @@ using SpListingVoucherBankResult = ABB.Domain.Entities.SpListingVoucherBankResul
 using SpListingVoucherKasResult = ABB.Domain.Entities.SpListingVoucherKasResult;
 using SpLaporanPelunasanResult = ABB.Domain.Entities.SpLaporanPelunasanResult;
 using SpLaporanOutstandingResult = ABB.Domain.Entities.SpLaporanOutstandingResult;
+using SpLaporanNeracaSaldoResult = ABB.Domain.Entities.SpLaporanNeracaSaldoResult;
 
 namespace ABB.Infrastructure.Data
 {
@@ -101,7 +102,8 @@ namespace ABB.Infrastructure.Data
         public DbSet<SpListingVoucherBankResult> SpListingVoucherBankResults { get; set; }
         public DbSet<SpListingVoucherKasResult> SpListingVoucherKasResults { get; set; }
         public DbSet<SpLaporanPelunasanResult> SpLaporanPelunasanResults { get; set; }
-         public DbSet<SpLaporanOutstandingResult> SpLaporanOutstandingResults { get; set; }
+        public DbSet<SpLaporanOutstandingResult> SpLaporanOutstandingResults { get; set; }
+        public DbSet<SpLaporanNeracaSaldoResult> SpLaporanNeracaSaldoResults { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -185,6 +187,12 @@ namespace ABB.Infrastructure.Data
             });
 
               builder.Entity<SpLaporanOutstandingResult>(entity =>
+            {
+                entity.HasNoKey();
+                entity.ToView(null); 
+            });
+
+              builder.Entity<SpLaporanNeracaSaldoResult>(entity =>
             {
                 entity.HasNoKey();
                 entity.ToView(null); 

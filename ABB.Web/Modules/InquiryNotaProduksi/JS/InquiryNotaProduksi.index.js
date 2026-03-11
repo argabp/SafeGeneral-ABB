@@ -114,6 +114,29 @@ function onExcelClick() {
 }
 
 
+
+function onExcelClickProduk() {
+
+    var filters = getAllFilters();
+
+    $.ajax({
+        type: "POST",
+        url: "/InquiryNotaProduksi/ExportExcelProduksi",
+        data: filters,
+        xhrFields: {
+            responseType: 'blob'
+        },
+        success: function (data) {
+
+            var blob = new Blob([data], { type: "application/octet-stream" });
+            var link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = "Cek Produk.xlsx";
+            link.click();
+        }
+    });
+}
+
 // Fungsi untuk membuka window view
     
 $(document).ready(function () {
