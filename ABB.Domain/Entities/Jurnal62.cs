@@ -14,8 +14,10 @@ namespace ABB.Domain.Entities
         public string GlKet { get; set; }
         public short GlUrut { get; set; }
         public string GlDk { get; set; }
-        public decimal? GlNilaiOrg { get; set; }
-        public decimal? GlNilaiIdr { get; set; }
+        // public decimal? GlNilaiOrg { get; set; }
+        // public decimal? GlNilaiIdr { get; set; }
+        public double? GlNilaiOrg { get; set; }
+        public double? GlNilaiIdr { get; set; }
         public string GlAkun { get; set; }
         public bool? FlagClosed { get; set; }
         public DateTime? TglInput { get; set; }
