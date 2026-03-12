@@ -1,110 +1,202 @@
 @model ABB.Web.Modules.InquiryNotaProduksi.Models.InquiryNotaProduksiViewModel
-@using ABB.Application.InquiryNotaProduksis.Queries
 @using Kendo.Mvc.UI
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Kendo.Mvc
 
+<style>
+    /* Styling agar menyerupai kertas dokumen A4 */
+    .document-paper {
+        background: white;
+        padding: 40px;
+        margin: 0 auto;
+        font-family: 'Arial', sans-serif;
+        color: black;
+        border: 1px solid #ccc;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        max-width: 950px; /* Dikit dilebarkan biar muat banyak kolom */
+        font-size: 11px;  /* Font dikecilkan dikit biar tabel rincian aman */
+    }
+    .doc-header-table {
+        width: 100%;
+        margin-bottom: 20px;
+        font-size: 12px;
+    }
+    .doc-header-table td {
+        padding: 4px 8px;
+        vertical-align: top;
+    }
+    .doc-header-table .bold-label {
+        font-weight: bold;
+    }
+    /* Mengatur lebar kolom header Kiri dan Kanan */
+    .col-label-left { width: 15%; }
+    .col-value-left { width: 45%; }
+    .col-label-right { width: 15%; }
+    .col-value-right { width: 25%; }
+
+    .doc-details-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+    .doc-details-table th, .doc-details-table td {
+        border: 1px solid #000;
+        padding: 6px;
+        text-align: center;
+    }
+    .doc-details-table th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+    .text-left { text-align: left !important; }
+    .text-right { text-align: right !important; }
+</style>
+
 <div class="window-body">
-    <h4>Detail Pembayaran</h4>
+    <div style="text-align: right; margin-bottom: 15px;">
+        <button type="button" class="btn btn-danger" onclick="exportBuktiToPDF()">
+            <i class="fa fa-file-pdf-o"></i> Simpan sebagai PDF
+        </button>
+    </div>
 
-    <table class="table table-bordered table-striped">
-        <thead style="background:#f5f5f5">
+    <div id="pdf-document-area" class="document-paper">
+        
+        <h3 style="text-align:center; text-decoration: underline; margin-bottom: 30px; font-size: 16px;">BUKTI PEMBAYARAN</h3>
+
+        <table class="doc-header-table">
             <tr>
-                <th style="width:150px;">Tanggal Voucher</th>
-                <th style="width:200px;">No Voucher</th>
-                <th style="width:180px; text-align:right;">Nilai Total</th>
+                <td class="bold-label col-label-left">NO. POLIS</td>
+                <td class="col-value-left">: @Model.InquiryNotaProduksiHeader.no_pl</td>
+                <td class="bold-label col-label-right">COB</td>
+                <td class="col-value-right">: @Model.InquiryNotaProduksiHeader.kd_ass2</td>
             </tr>
-        </thead>
-        <tbody>
-            @* 🔹 PEMBAYARAN BANK *@
-            @if (Model.PembayaranBankList != null && Model.PembayaranBankList.Any())
-            {
-                foreach (var item in Model.PembayaranBankList)
-                {
-                    <tr>
-                        <td style="text-align:center">
-                            @(item.TanggalVoucher?.ToString("dd-MM-yy"))
-                        </td>
-                        <td>@item.NoVoucher</td>
-                        <td style="text-align:right">
-                                @string.Format(new System.Globalization.CultureInfo("id-ID"), 
-                               "Rp {0:N0}", item.TotalDlmRupiah)
-                        </td>
-                    </tr>
-                }
-            }
+            <tr>
+                <td class="bold-label">TERTANGGUNG</td>
+                <td>: @Model.InquiryNotaProduksiHeader.nm_cust</td>
+                <td class="bold-label">PEMBAWA POS</td>
+                <td>: @(Model.InquiryNotaProduksiHeader.nm_pos)</td> 
+            </tr>
+            <tr>
+                <td class="bold-label">CEDING</td>
+                <td>: @Model.InquiryNotaProduksiHeader.nm_cust2</td>
+                <td class="bold-label">AGEN/BROKER</td>
+                <td>: @(Model.InquiryNotaProduksiHeader.nm_brok)</td> 
+            </tr>
+        </table>
 
-            @* 🔹 PEMBAYARAN KAS *@
-            @if (Model.PembayaranKasList != null && Model.PembayaranKasList.Any())
-            {
-                foreach (var item in Model.PembayaranKasList)
-                {
-                    <tr>
-                        <td style="text-align:center">
-                            @(item.TanggalVoucher?.ToString("dd-MM-yy"))
-                        </td>
-                        <td>@item.NoVoucher</td>
-                        <td style="text-align:right">
-                                @string.Format(new System.Globalization.CultureInfo("id-ID"), 
-                               "Rp {0:N0}", item.TotalDlmRupiah)
-                        </td>
-                    </tr>
-                }
-            }
-
-            @* 🔹 PEMBAYARAN PIUTANG *@
-            @if (Model.PembayaranPiutangList != null && Model.PembayaranPiutangList.Any())
-            {
-                foreach (var item in Model.PembayaranPiutangList)
-                {
-                    <tr>
-                        <td style="text-align:center">
-                           @(item.Tanggal?.ToString("dd-MM-yy"))
-                        </td>
-                        <td>@item.NomorBukti</td>
-                        <td style="text-align:right">
-                                @string.Format(new System.Globalization.CultureInfo("id-ID"), 
-                               "Rp {0:N0}", item.TotalBayarRp)
-                        </td>
-                        
-                    </tr>
-                }
-            }
-
-            @* 🔹 JIKA TIDAK ADA DATA *@
-            @if (
-                (Model.PembayaranBankList == null || !Model.PembayaranBankList.Any()) &&
-                (Model.PembayaranKasList == null || !Model.PembayaranKasList.Any()) &&
-                (Model.PembayaranPiutangList == null || !Model.PembayaranPiutangList.Any())
-            )
-            {
+        <table class="doc-details-table">
+            <thead>
                 <tr>
-                    <td colspan="3" style="text-align:center; font-style:italic;">
-                        Tidak ada data pembayaran
-                    </td>
+                    <th>NO.</th>
+                    <th>TANGGAL</th>
+                    <th>NO. NOTA</th>
+                    <th>NO. BUKTI</th>
+                    <th>NO. REFF</th> <th>TGL BAYAR</th>
+                    <th>KETERANGAN</th>
+                    <th>D/K</th>
+                    <th>JUMLAH (Rp)</th>
                 </tr>
-            }
-        </tbody>
+            </thead>
+            <tbody>
+                @{
+                    int urut = 1;
+                    decimal totalSaldo = 0;
+                    
+                    // 1. Baris Pertama (Nilai Nota Asli / Debet)
+                    totalSaldo += Model.InquiryNotaProduksiHeader.jumlah ?? 0;
+                    <tr>
+                        <td>@urut</td>
+                        <td>@(Model.InquiryNotaProduksiHeader.date_input?.ToString("dd/MM/yyyy"))</td>
+                        <td>@Model.InquiryNotaProduksiHeader.no_nd</td>
+                        <td>@Model.InquiryNotaProduksiHeader.no_nd</td> 
+                        <td>@Model.InquiryNotaProduksiHeader.no_ref</td> <td>-</td>
+                        <td class="text-left">NILAI NOTA</td>
+                        <td>D</td>
+                        <td class="text-right">@string.Format("{0:N2}", Model.InquiryNotaProduksiHeader.jumlah)</td>
+                    </tr>
+                    urut++;
 
-        <!-- <tfoot style="background:#fafafa; font-weight:bold;">
-            <tr>
-                <td colspan="2" style="text-align:right;">TOTAL</td>
-                <td style="text-align:right;">
-                    @{
-                        decimal total =
-                            (Model.PembayaranBankList?.Sum(x => x.TotalDlmRupiah) ?? 0) +
-                            (Model.PembayaranKasList?.Sum(x => x.TotalDlmRupiah) ?? 0) +
-                            (Model.PembayaranPiutangList?.Sum(x => x.TotalBayarRp) ?? 0);
+                    // 2. Looping Pembayaran Kas (Kredit)
+                    if (Model.PembayaranKasList != null)
+                    {
+                        foreach (var item in Model.PembayaranKasList)
+                        {
+                            totalSaldo -= item.TotalDlmRupiah ?? 0;
+                            <tr>
+                                <td>@urut</td>
+                                <td>@(Model.InquiryNotaProduksiHeader.date_input?.ToString("dd/MM/yyyy"))</td>
+                                <td>@Model.InquiryNotaProduksiHeader.no_nd</td>
+                                <td>@item.NoVoucher</td>
+                                <td>-</td> <td>@(item.TanggalVoucher?.ToString("dd/MM/yyyy"))</td>
+                                <td class="text-left">PEMBAYARAN KAS</td>
+                                <td>K</td>
+                                <td class="text-right">@string.Format("{0:N2}", item.TotalDlmRupiah)</td>
+                            </tr>
+                            urut++;
+                        }
                     }
-                    @total
-                </td>
-            </tr>
-        </tfoot> -->
-    </table>
 
+                    // 3. Looping Pembayaran Bank (Kredit)
+                    if (Model.PembayaranBankList != null)
+                    {
+                        foreach (var item in Model.PembayaranBankList)
+                        {
+                            totalSaldo -= item.TotalDlmRupiah ?? 0;
+                            <tr>
+                                <td>@urut</td>
+                                <td>@(Model.InquiryNotaProduksiHeader.date_input?.ToString("dd/MM/yyyy"))</td>
+                                <td>@Model.InquiryNotaProduksiHeader.no_nd</td>
+                                <td>@item.NoVoucher</td>
+                                <td>-</td>
+                                <td>@(item.TanggalVoucher?.ToString("dd/MM/yyyy"))</td>
+                                <td class="text-left">PEMBAYARAN BANK</td>
+                                <td>K</td>
+                                <td class="text-right">@string.Format("{0:N2}", item.TotalDlmRupiah)</td>
+                            </tr>
+                            urut++;
+                        }
+                    }
 
+                    // 4. Looping Pembayaran Piutang (Kredit)
+                    if (Model.PembayaranPiutangList != null)
+                    {
+                        foreach (var item in Model.PembayaranPiutangList)
+                        {
+                            totalSaldo -= item.TotalBayarRp ?? 0;
+                            <tr>
+                                <td>@urut</td>
+                                <td>@(Model.InquiryNotaProduksiHeader.date_input?.ToString("dd/MM/yyyy"))</td>
+                                <td>@Model.InquiryNotaProduksiHeader.no_nd</td>
+                                <td>@item.NomorBukti</td>
+                                <td>-</td>
+                                <td>@(item.Tanggal?.ToString("dd/MM/yyyy"))</td>
+                                <td class="text-left">PEMBAYARAN PIUTANG</td>
+                                <td>K</td>
+                                <td class="text-right">@string.Format("{0:N2}", item.TotalBayarRp)</td>
+                            </tr>
+                            urut++;
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+
+        <div style="text-align: right; font-weight: bold; font-size: 14px; margin-top: 10px;">
+            Saldo : Rp @string.Format("{0:N2}", totalSaldo)
+        </div>
+
+    </div>
 </div>
-<div class="window-footer">
-</div>
 
-
+<script>
+    function exportBuktiToPDF() {
+        kendo.drawing.drawDOM("#pdf-document-area", {
+            paperSize: "A4",
+            margin: { top: "1cm", bottom: "1cm", left: "0.5cm", right: "0.5cm" },
+            scale: 0.75, // Scale diperkecil sedikit lagi biar tabel yang agak panjang tidak terpotong ke samping
+            keepTogether: ".doc-details-table tr" 
+        }).then(function(group) {
+            kendo.drawing.pdf.saveAs(group, "Bukti_Pembayaran_@(Model.InquiryNotaProduksiHeader.no_nd).pdf");
+        });
+    }
+</script>

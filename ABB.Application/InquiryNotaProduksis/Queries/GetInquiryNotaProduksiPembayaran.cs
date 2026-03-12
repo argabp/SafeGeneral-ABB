@@ -43,7 +43,15 @@ namespace ABB.Application.InquiryNotaProduksis.Queries
                     nm_cust = x.nm_cust,
                     date = x.date,
                     netto = x.netto,
-                    saldo = x.saldo
+                    saldo = x.saldo,
+                    no_pl = x.no_pl,           // NO. POLIS
+                    kd_ass2 = x.kd_ass2,       // COB
+                    jn_ass = x.jn_ass,         // COB (Cadangan)
+                    nm_pos = x.nm_pos,         // PEMBAWA POS
+                    nm_cust2 = x.nm_cust2,     // CEDING
+                    nm_brok = x.nm_brok,       // AGEN/BROKER
+                    jumlah = x.jumlah,         // JUMLAH BIAYA
+                    date_input = x.date_input  // TANGGAL NOT
                 })
                 .FirstOrDefaultAsync(cancellationToken);
 
