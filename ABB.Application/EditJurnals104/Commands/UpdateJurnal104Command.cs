@@ -61,7 +61,7 @@ namespace ABB.Application.EditJurnals104.Commands
                     foreach (var item in request.Details)
                     {
                         await _context.Database.ExecuteSqlRawAsync(
-                            "EXEC sp_UpdateEditJurnal104 @p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11",
+                            "EXEC sp_UpdateEditJurnal104 @p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12",
                             request.KodeLokasi,
                             request.NoBukti,
                             request.TglBukti,
@@ -73,7 +73,8 @@ namespace ABB.Application.EditJurnals104.Commands
                             item.NilaiOrg,
                             item.NilaiIdr,
                             item.KodeAkun,
-                            request.UserId
+                            request.UserId,
+                            request.GlTran
                         );
                     }
 

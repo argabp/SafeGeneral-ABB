@@ -50,7 +50,7 @@ namespace ABB.Application.InquiryNotaProduksis.Queries
                     nm_pos = x.nm_pos,         // PEMBAWA POS
                     nm_cust2 = x.nm_cust2,     // CEDING
                     nm_brok = x.nm_brok,       // AGEN/BROKER
-                    jumlah = x.jumlah,         // JUMLAH BIAYA
+                    jumlah = x.jumlah * (x.kurs ?? 1),        // JUMLAH BIAYA
                     date_input = x.date_input  // TANGGAL NOT
                 })
                 .FirstOrDefaultAsync(cancellationToken);

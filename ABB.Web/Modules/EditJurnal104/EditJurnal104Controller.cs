@@ -10,16 +10,30 @@ using ABB.Application.EditJurnals104.Queries;
 using ABB.Application.EditJurnals104.Commands;
 using ABB.Application.Coas.Queries;
 using ABB.Application.MataUangs.Queries;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace ABB.Web.Modules.EditJurnal104
 {
     public class EditJurnal104Controller : AuthorizedBaseController
     {
         // 1. TAMPILAN HALAMAN UTAMA (INDEX)
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             ViewBag.Module = Request.Cookies["Module"];
-            ViewBag.DatabaseName = Request.Cookies["DatabaseValue"];
+            ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
+            var databaseName = Request.Cookies["DatabaseValue"]; 
+              var kodeCabangCookie = Request.Cookies["UserCabang"];
+            if (string.IsNullOrEmpty(databaseName) || string.IsNullOrEmpty(kodeCabangCookie))
+            {
+                await HttpContext.SignOutAsync("Identity.Application");
+
+                return RedirectToAction("Login", "Account");
+            }
+            
             ViewBag.UserLogin = CurrentUser.UserId;
             
             return View();

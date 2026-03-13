@@ -14,11 +14,10 @@ namespace ABB.Application.EditJurnals104.Queries
     {
         public string NoBukti { get; set; }
         public string Lokasi { get; set; }
+        public string NamaCabang { get; set; } 
         public DateTime Tanggal { get; set; }
         public string Keterangan { get; set; }
         public decimal TotalNilai { get; set; }
-        
-        // --- 1. TAMBAH KERANJANG GLTRAN DI SINI ---
         public string GlTran { get; set; } 
     }
 
@@ -44,21 +43,21 @@ namespace ABB.Application.EditJurnals104.Queries
             var batasAwal = request.TglAwal.Date;
             var batasAkhir = request.TglAkhir.Date.AddDays(1);
 
-            var query = _context.Set<Jurnal62>()
+            // 1. FILTER DASAR JURNAL
+            var queryJurnal = _context.Set<Jurnal62>()
                 .AsNoTracking()
                 .Where(x => x.FlagClosed == false &&
                             x.GlTanggal >= batasAwal && 
-                        x.GlTanggal < batasAkhir);
+                            x.GlTanggal < batasAkhir);
 
-            // Jika Nomor Bukti diisi, tambahkan filter
             if (!string.IsNullOrWhiteSpace(request.NoBukti))
             {
                 var noBuktiClean = request.NoBukti.Trim();
-                query = query.Where(x => x.GlBukti == noBuktiClean);
+                queryJurnal = queryJurnal.Where(x => x.GlBukti == noBuktiClean);
             }
 
-            // STEP 1: Tarik data dari SQL Server
-            var rawResult = await query
+            // 2. GROUPING DATA JURNAL
+            var groupedJurnal = queryJurnal
                 .GroupBy(x => x.GlBukti)
                 .Select(g => new 
                 {
@@ -66,26 +65,46 @@ namespace ABB.Application.EditJurnals104.Queries
                     Lokasi = g.Max(x => x.GlLok),
                     Tanggal = g.Max(x => x.GlTanggal),
                     Keterangan = g.Max(x => x.GlKet),
-                    
-                    // --- 2. TARIK GL_TRAN DARI DATABASE ---
                     GlTran = g.Max(x => x.GlTran), 
-                    
                     TotalNilaiDouble = g.Where(x => x.GlDk == "D").Sum(x => x.GlNilaiIdr) 
-                })
-                .ToListAsync(cancellationToken);
+                });
 
-            // STEP 2: Mapping
+            // 3. LEFT JOIN MANUAL (Cocokkan dengan akhiran, misal "JK50" berakhiran "50")
+            var joinedQuery = 
+                from j in groupedJurnal
+                from cb in _context.Set<Cabang>() 
+                    .Where(c => c.kd_cb != null && j.Lokasi != null && c.kd_cb.Trim().EndsWith(j.Lokasi.Trim()))
+                    .DefaultIfEmpty()
+                select new 
+                {
+                    NoBukti = j.NoBukti,
+                    KodeLokasi = j.Lokasi.Trim(), 
+                    NamaCabang = cb != null ? cb.nm_cb.Trim() : "", 
+                    Tanggal = j.Tanggal,
+                    Keterangan = j.Keterangan,
+                    GlTran = j.GlTran,
+                    TotalNilaiDouble = j.TotalNilaiDouble
+                };
+
+            // 4. TARIK DATA KE MEMORI
+            var rawResult = await joinedQuery.ToListAsync(cancellationToken);
+
+            // 5. MAPPING FINAL KE DTO
             var result = rawResult
                 .Select(x => new InquiryJurnal104Dto
                 {
                     NoBukti = x.NoBukti,
-                    Lokasi = x.Lokasi,
+                    Lokasi = x.KodeLokasi, 
+                    
+                    // --- GABUNGKAN NAMA CABANG & LOKASI DI SINI ---
+                    // Biar kalau kosong dia cuma nampilin "50", tapi kalau ada jadi "50 - JAKARTA"
+                    NamaCabang = !string.IsNullOrWhiteSpace(x.NamaCabang) 
+                                 ? $"{x.KodeLokasi} - {x.NamaCabang}" 
+                                 : x.KodeLokasi, 
+                    
                     Tanggal = x.Tanggal ?? DateTime.Now,
                     Keterangan = x.Keterangan,
-                    
-                    // --- 3. MASUKKAN KE KERANJANG DTO ---
                     GlTran = x.GlTran, 
-                    
                     TotalNilai = Convert.ToDecimal(x.TotalNilaiDouble ?? 0)
                 })
                 .OrderByDescending(x => x.Tanggal)

@@ -38,7 +38,7 @@
         <div class="row">
             <div class="col-md-2">
                 <label>Periode Awal</label>
-                <kendo-datepicker name="FilterTglAwal" value="DateTime.Now.AddDays(-30)" format="dd-MM-yyyy" style="width: 100%;" />
+                <kendo-datepicker name="FilterTglAwal" value="new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1)" format="dd-MM-yyyy" style="width: 100%;" />
             </div>
             <div class="col-md-2">
                 <label>Periode Akhir</label>
@@ -65,11 +65,11 @@
             )
             .Columns(columns =>
             {
-                columns.Bound(col => col.NoBukti).Width(150).Title("No. Bukti");
-                columns.Bound(col => col.Lokasi).Width(100).Title("Cabang");
-                columns.Bound(col => col.Tanggal).Format("{0:dd-MM-yyyy}").Width(120).Title("Tanggal");
+                columns.Bound(col => col.NoBukti).Width(250).Title("No. Bukti");
+                columns.Bound(col => col.NamaCabang).Width(200).Title("Cabang");
+                columns.Bound(col => col.Tanggal).Format("{0:dd-MM-yyyy}").Width(150).Title("Tanggal");
                 columns.Bound(col => col.Keterangan).Width(350).Title("Keterangan");
-                columns.Bound(col => col.TotalNilai).Format("{0:n2}").Width(150).Title("Total Debet").HtmlAttributes(new { style = "text-align: right;" });
+               //s columns.Bound(col => col.TotalNilai).Format("{0:n2}").Width(150).Title("Total Debet").HtmlAttributes(new { style = "text-align: right;" });
                 
                 columns.Bound("").Title("Action").Width(120).ClientTemplate(
                     "<button class='k-button k-button-icontext k-grid-EditJurnal' onclick='btnEditJurnal_OnClick(event)'><span class='k-icon k-i-edit'></span> Edit</button>"

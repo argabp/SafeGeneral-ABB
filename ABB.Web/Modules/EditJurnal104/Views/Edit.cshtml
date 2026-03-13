@@ -11,30 +11,39 @@
     <form id="EditJurnalHeaderForm">
         <fieldset>
            <div class="form-group row">
-                <label class="col-sm-1 col-form-label pr-0">No. Bukti</label>
-                <div class="col-sm-3">
+                <label class="col-sm-2 col-form-label">No. Bukti</label>
+                <div class="col-sm-5">
                     <input type="text" id="Edit_NoBukti" class="k-textbox custom-kode" style="width: 100%;" readonly="readonly" value="@ViewBag.NoBukti" />
-                </div>
-                
-                <label class="col-sm-1 col-form-label text-right pr-0">Trans</label>
-                <div class="col-sm-2">
-                    <input type="text" id="Edit_GlTran" class="k-textbox custom-kode" style="width: 100%; text-align:center;" readonly="readonly" />
-                </div>
-                
-                <label class="col-sm-1 col-form-label text-right pr-0">Lokasi</label>
-                <div class="col-sm-1">
-                    <input type="text" id="Edit_KodeLokasi" class="k-textbox custom-kode" style="width: 100%; text-align:center;" readonly="readonly" />
-                </div>
-                
-                <label class="col-sm-1 col-form-label text-right pr-0">Tanggal</label>
-                <div class="col-sm-2">
-                    <input type="text" id="Edit_Tanggal" class="k-textbox custom-kode" style="width: 100%;" readonly="readonly" />
                 </div>
             </div>
             <div class="form-group row">
+            
+                <label class="col-sm-2 col-form-label">Trans</label>
+                <div class="col-sm-5">
+                    <input type="text" id="Edit_GlTran" class="k-textbox custom-kode" style="width: 100%; text-align:center;" readonly="readonly" />
+                </div>
+                
+            </div>
+            <div class="form-group row">
+            
+                <label class="col-sm-2 col-form-label">Lokasi</label>
+                <div class="col-sm-5">
+                    <input type="text" id="Edit_KodeLokasi" class="k-textbox custom-kode" style="width: 100%; text-align:center;" readonly="readonly" />
+                </div>
+                
+            </div>
+            <div class="form-group row">
+                
+                <label class="col-sm-2 col-form-label">Tanggal</label>
+                <div class="col-sm-5">
+                    <input type="text" id="Edit_Tanggal" class="k-textbox custom-kode" style="width: 100%;" readonly="readonly" />
+                </div>
+            </div>
+           
+            <div class="form-group row">
                 <label class="col-sm-2 col-form-label">Keterangan Jurnal</label>
                 <div class="col-sm-10">
-                 <textarea id="Edit_KeteranganUtama" class="k-textbox custom-kuning" rows="4" style="width: 100%; resize: vertical; min-height: 80px;"></textarea>
+                 <textarea id="Edit_KeteranganUtama" class="k-textbox custom-kode" rows="4" style="width: 100%; resize: vertical; min-height: 80px; background-color: rgb(233, 236, 239);" readonly="readonly"></textarea>
                 </div>
             </div>
         </fieldset>

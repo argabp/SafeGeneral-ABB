@@ -34,7 +34,7 @@ function btnEditJurnal_OnClick(e) {
     window.one("refresh", function () {
         $("#Edit_GlTran").val(dataItem.GlTran ? dataItem.GlTran.trim() : "");
         // Setelah form Edit berhasil diload dari server, baru jalankan ini:
-        $("#Edit_KodeLokasi").val(dataItem.Lokasi ? dataItem.Lokasi.trim() : "");
+        $("#Edit_KodeLokasi").val(dataItem.NamaCabang ? dataItem.NamaCabang.trim() : "");
         $("#Edit_Tanggal").val(kendo.toString(dataItem.Tanggal, "dd-MM-yyyy"));
         $("#Edit_KeteranganUtama").val(dataItem.Keterangan ? dataItem.Keterangan.trim() : "");
 
@@ -76,7 +76,7 @@ function initDetailGridEdit(noBukti) {
                 model: {
                     id: "Id",
                     fields: {
-                        NoUrut: { type: "number", editable: true },
+                        NoUrut: { type: "number", editable: false },
                         NoNota: { type: "string", editable: false }, 
                         MataUang: { type: "string", editable: false }, 
                         DK: { type: "string", editable: true },
@@ -136,9 +136,9 @@ function initDetailGridEdit(noBukti) {
         columns: [
             { field: "NoUrut", title: "Urut", width: 60 },
             { field: "NoNota", title: "No. Nota", width: 150 },
-            { field: "MataUang", title: "MTU", width: 80 },
+            { field: "MataUang", title: "MTU", width: 50 },
             { 
-                field: "DK", title: "D/K", width: 80,
+                field: "DK", title: "D/K", width: 50,
                 editor: function(container, options) {
                     $('<input required name="' + options.field + '"/>')
                         .appendTo(container)
@@ -148,7 +148,7 @@ function initDetailGridEdit(noBukti) {
             
             // --- FITUR COMBOBOX COA SUPER PINTAR ---
             { 
-                field: "KodeAkun", title: "Kode Akun", width: 250,
+                field: "KodeAkun", title: "Kode Akun", width: 120,
                 editor: function(container, options) {
                     $('<input required name="' + options.field + '"/>')
                         .appendTo(container)
