@@ -16,6 +16,7 @@ namespace ABB.Application.Common.Interfaces
         DbSet<PLAReasuransi> PLAReasuransi { get; set; }
         DbSet<NotaKlaimTreaty> NotaKlaimTreaty { get; set; }
         DbSet<NotaKlaimReasuransi> NotaKlaimReasuransi { get; set; }
+        DbSet<KontrakTreatyMasuk> KontrakTreatyMasuk { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

@@ -39,7 +39,8 @@ function saveDLAReasuransi(url){
 function OnKodePasChange(e){
     var kd_rk_pas = $("#kd_rk_pas").data("kendoDropDownList");
     kd_rk_pas.dataSource.read({
-        kd_grp_pas : e.sender._cascadedValue
+        kd_grp_pas : e.sender._cascadedValue,
+        kd_cb: $("#kd_cb").val().trim()
     });
 }
 
@@ -52,6 +53,11 @@ function dataKodeSCOBDropDown(){
 function OnKodeCabangChange(e){
     var value = e.sender._cascadedValue;
     $("#temp_kd_cb").val(value);
+    var kd_rk_pas = $("#kd_rk_pas").data("kendoDropDownList");
+    kd_rk_pas.dataSource.read({
+        kd_cob : value,
+        kd_grp_pas: $("#kd_grp_pas").val().trim()
+    });
 }
 
 function OnKodeCOBChange(e){
@@ -63,6 +69,7 @@ function OnKodeCOBChange(e){
 
 function dataKodePasDropDown(){
     return {
-        kd_grp_pas: $("#kd_grp_pas").val().trim()
+        kd_grp_pas: $("#kd_grp_pas").val().trim(),
+        kd_cb: $("#kd_cb").val().trim()
     }
 }

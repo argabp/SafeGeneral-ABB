@@ -99,20 +99,17 @@ namespace ABB.Web.Modules.DLAReasuransi
         
         public async Task<JsonResult> GetKodePas()
         {
-            var result = await Mediator.Send(new GetKodeTertujuQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"]
-            });
+            var result = await Mediator.Send(new GetKodeTertujuPSTQuery());
 
             return Json(result);
         }
         
-        public async Task<JsonResult> GetKodeRekananPas(string kd_grp_pas)
+        public async Task<JsonResult> GetKodeRekananPas(string kd_grp_pas, string kd_cb)
         {
-            var result = await Mediator.Send(new GetRekanansByKodeGroupQuery()
+            var result = await Mediator.Send(new GetRekanansByKodeGroupAndCabangPSTQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"],
-                kd_grp_rk = kd_grp_pas
+                kd_grp_rk = kd_grp_pas,
+                kd_cb = kd_cb
             });
 
             return Json(result);

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -237,9 +238,14 @@ namespace ABB.Infrastructure.Data.Grid
 
         public async Task<GridResponse<T>> QueryAsyncPST<T>(GridRequest request, GridConfig config, 
             object parameters)
+        {
+            var filters = new List<string>();
+
+            // 1. Add BaseWhere if it's not empty
+            if (!string.IsNullOrWhiteSpace(config.BaseWhere))
             {
-            // DB already selected by CreateDbConnection()
-            var where = new StringBuilder(" WHERE " + config.BaseWhere);
+                filters.Add($"({config.BaseWhere})");
+            }
 
             // ---- dynamic filters (json) ----
             if (!string.IsNullOrWhiteSpace(request.FiltersJson))
@@ -256,7 +262,7 @@ namespace ABB.Infrastructure.Data.Grid
                     var sqlFilter = BuildWhereFromFilters(root, config);
                     if (!string.IsNullOrWhiteSpace(sqlFilter))
                     {
-                        where.Append(" AND " + sqlFilter);
+                        filters.Add(sqlFilter);
                     }
                 }
             }
@@ -268,7 +274,7 @@ namespace ABB.Infrastructure.Data.Grid
                 var parts = config.SearchableColumns
                     .Select(c => $"{c} LIKE '%{key}%' ");
             
-                where.Append(" AND (" + string.Join(" OR ", parts) + ")");
+                filters.Add(" AND (" + string.Join(" OR ", parts) + ")");
             }
         
             // ---- sorting ----
@@ -282,10 +288,10 @@ namespace ABB.Infrastructure.Data.Grid
             int start = ((request.Page - 1) * request.PageSize) + 1;
             int end = request.Page * request.PageSize;
 
-            if (where.ToString().Trim() == "WHERE")
-            {
-                where.Clear();
-            }
+            // Combine everything
+            string whereClause = filters.Any() 
+                ? " WHERE " + string.Join(" AND ", filters) 
+                : "";
             
             var sql = $@"
                 ;WITH Q AS (
@@ -293,14 +299,14 @@ namespace ABB.Infrastructure.Data.Grid
                 ROW_NUMBER() OVER (ORDER BY {sortCol} {sortDir}) AS rn,
                 src.*
                 {config.FromSql}
-                {where}
+                {whereClause}
                 )
                 SELECT * FROM Q WHERE rn BETWEEN {start} AND {end};
 
 
             SELECT COUNT(1)
             {config.FromSql}
-            {where};
+            {whereClause};
             ";
         
             using var multi = await _dbConnectionPst.QueryMultipleAsync(sql, parameters);
