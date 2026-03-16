@@ -72,7 +72,7 @@ namespace ABB.Application.LaporanKerugianSementara.Queries
                     <td style='width: 20%;'>Share Co-as untuk kami</td>
                     <td>:</td>
                     <td style='vertical-align: top;'>{data.symbol_ptg}</td>
-                    <td style='vertical-align: top;'>{data.nilai_share_bgu}</td>
+                    <td style='vertical-align: top;'>{ReportHelper.ConvertToReportFormat(data.nilai_share_bgu)}</td>
                     <td></td>
                 </tr>"
                 : string.Empty;
