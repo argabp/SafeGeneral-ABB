@@ -10,6 +10,242 @@ function getSearchFilter() {
         NoBukti: $("#SearchKeyword").val()
     };
 }
+function initDetailGridEdit(noBukti) {
+    var cleanNoBukti = encodeURIComponent(noBukti.trim());
+
+    if ($("#EditDetailGrid").data("kendoGrid")) {
+        $("#EditDetailGrid").data("kendoGrid").destroy();
+        $("#EditDetailGrid").empty();
+    }
+
+    $("#EditDetailGrid").kendoGrid({
+        dataSource: {
+            transport: {
+                read: { url: `/EditJurnal104/GetDetailJurnal?noBukti=${cleanNoBukti}`, type: "GET", dataType: "json" }
+            },
+            schema: {
+                data: "Data", 
+                model: { id: "Id" } 
+            },
+            change: updateFooterTotalsEdit
+        },
+        editable: false, // <-- Grid dikunci total
+        navigatable: true,
+        scrollable: true,
+        height: 300,
+        
+        // Fungsi save: function(e) {...} SUDAH DIHAPUS DARI SINI
+
+        columns: [
+            { field: "NoUrut", title: "Urut", width: 60 },
+            { field: "NoNota", title: "No. Nota", width: 150 },
+            { field: "MataUang", title: "MTU", width: 50 },
+            { field: "DK", title: "D/K", width: 50 }, // Editor dihapus
+            { field: "KodeAkun", title: "Kode Akun", width: 120 }, // Editor dihapus
+            { field: "NilaiOrg", title: "Nilai (ORG)", width: 120, format: "{0:n2}", attributes: { style: "text-align:right;" } },
+            { field: "NilaiIdr", title: "Nilai (IDR)", width: 120, format: "{0:n2}", attributes: { style: "text-align:right;" } },
+            { 
+                title: "Aksi", width: 180, 
+                template: "<button type='button' class='k-button k-button-icontext' onclick='editBarisTabel(event)'>Edit</button> " +
+                          "<button type='button' class='k-button k-button-icontext' onclick='hapusBarisTabel(event)'>Delete</button>"
+            }
+        ],
+        dataBound: function() {
+            updateFooterTotalsEdit();
+        }
+    });
+}
+function editBarisTabel(e) {
+    e.preventDefault();
+    var grid = $("#EditDetailGrid").data("kendoGrid");
+    var dataItem = grid.dataItem($(e.target).closest("tr"));
+
+    $("#Detail_Uid").val(dataItem.uid); 
+    $("#Detail_NoUrut").val(dataItem.NoUrut);
+    $("#Detail_NoNota").val(dataItem.NoNota);
+    $("#Detail_MataUang").val(dataItem.MataUang);
+    $("#Detail_DK").data("kendoDropDownList").value(dataItem.DK);
+    
+    var kodeAkunBersih = dataItem.KodeAkun ? dataItem.KodeAkun.trim() : "";
+    var cmb = $("#Detail_KodeAkun").data("kendoComboBox");
+    
+    if(cmb) {
+        cmb.value(kodeAkunBersih); // Pasang kodenya dulu
+        
+        if (kodeAkunBersih !== "") {
+            // Tarik data diam-diam dari server biar nama lengkapnya nongol!
+            $.ajax({
+                url: "/EditJurnal104/GetCoa",
+                type: "GET",
+                data: { searchKeyword: kodeAkunBersih },
+                success: function (res) {
+                    var items = res.Data || res;
+                    if (items.length > 0) {
+                        var kode = items[0].Kode ? items[0].Kode.trim() : "";
+                        var nama = items[0].Nama ? items[0].Nama.trim() : "";
+                        var namaTampil = kode + " - " + nama;
+                        
+                        // Suntikkan data lengkapnya ke ComboBox
+                        cmb.dataSource.add({ Kode: kode, NamaTampil: namaTampil });
+                        cmb.value(kode); // Refresh tampilan
+                    }
+                }
+            });
+        } else {
+            cmb.value("");
+        }
+    }
+    
+    $("#Detail_NilaiOrg").data("kendoNumericTextBox").value(dataItem.NilaiOrg);
+    $("#Detail_NilaiIdr").data("kendoNumericTextBox").value(dataItem.NilaiIdr); 
+
+    $("#FormEntryDetail").slideDown(); 
+}
+function hapusBarisTabel(e) {
+    e.preventDefault();
+    if (confirm("Apakah Anda yakin ingin menghapus baris jurnal ini?")) {
+        var grid = $("#EditDetailGrid").data("kendoGrid");
+        var dataItem = grid.dataItem($(e.target).closest("tr"));
+        grid.dataSource.remove(dataItem);
+        updateFooterTotalsEdit();
+    }
+}
+function btnBatalDetail_OnClick() {
+    $("#FormEntryDetail").slideUp();
+}
+function btnSimpanDetail_OnClick() {
+    var uid = $("#Detail_Uid").val();
+    var noUrut = parseInt($("#Detail_NoUrut").val());
+    var noNota = $("#Detail_NoNota").val();
+    var mataUang = $("#Detail_MataUang").val() || "001";
+    var dk = $("#Detail_DK").data("kendoDropDownList").value();
+    var rawKodeAkun = $("#Detail_KodeAkun").data("kendoComboBox").value();
+    var kodeAkun = rawKodeAkun ? rawKodeAkun.trim() : "";
+
+    var nilaiOrg = $("#Detail_NilaiOrg").data("kendoNumericTextBox").value() || 0;
+    var nilaiIdr = $("#Detail_NilaiIdr").data("kendoNumericTextBox").value() || 0;
+    var tglBukti = kendo.toString(kendo.parseDate($("#Edit_Tanggal").val(), "dd-MM-yyyy"), "yyyy-MM-dd");
+
+    if(!kodeAkun) { showMessage("Warning", "Kode akun harus diisi!", "warning"); return; }
+    if(nilaiOrg === 0) { showMessage("Warning", "Nilai tidak boleh 0!", "warning"); return; }
+
+    // Hitung IDR Otomatis
+    if (mataUang === "001") {
+        masukkanKeTabel(uid, noUrut, noNota, mataUang, dk, kodeAkun, nilaiOrg, nilaiOrg);
+    } else {
+        $.ajax({
+            url: '/EditJurnal104/GetKurs', type: 'GET', data: { kodeMataUang: mataUang, tanggalVoucher: tglBukti },
+            success: function(res) {
+                var kurs = res.nilai_kurs || 1;
+                masukkanKeTabel(uid, noUrut, noNota, mataUang, dk, kodeAkun, nilaiOrg, nilaiIdr);
+            }
+        });
+    }
+}
+
+// 7. EKSEKUTOR INSERT/UPDATE KE KENDO GRID DATA
+function masukkanKeTabel(uid, noUrut, noNota, mataUang, dk, kodeAkun, nilaiOrg, nilaiIdr) {
+    var grid = $("#EditDetailGrid").data("kendoGrid");
+    
+    if (uid) {
+        // Mode UPDATE (Edit Baris)
+        var dataItem = grid.dataSource.getByUid(uid);
+        
+        // Bersihkan data lama dari spasi gaib database
+        var oldNoNota = dataItem.NoNota ? dataItem.NoNota.trim() : "";
+        var oldMataUang = dataItem.MataUang ? dataItem.MataUang.trim() : "";
+        var oldDk = dataItem.DK ? dataItem.DK.trim() : "";
+        var oldKodeAkun = dataItem.KodeAkun ? dataItem.KodeAkun.trim() : "";
+        
+        // HANYA UPDATE KE GRID JIKA BENAR-BENAR BERUBAH!
+        // Ini mencegah Kendo mengira kita mengedit kolom yang tidak disentuh
+        if (oldNoNota !== noNota) dataItem.set("NoNota", noNota);
+        if (oldMataUang !== mataUang) dataItem.set("MataUang", mataUang);
+        if (oldDk !== dk) dataItem.set("DK", dk);
+        if (oldKodeAkun !== kodeAkun) dataItem.set("KodeAkun", kodeAkun);
+        if (dataItem.NilaiOrg !== nilaiOrg) dataItem.set("NilaiOrg", nilaiOrg);
+        if (dataItem.NilaiIdr !== nilaiIdr) dataItem.set("NilaiIdr", nilaiIdr);
+        
+    } else {
+        // Mode INSERT (Tambah Baris Baru)
+        grid.dataSource.add({
+            NoUrut: noUrut, NoNota: noNota, MataUang: mataUang, 
+            DK: dk, KodeAkun: kodeAkun, NilaiOrg: nilaiOrg, NilaiIdr: nilaiIdr
+        });
+    }
+    
+    $("#FormEntryDetail").slideUp(); // Sembunyikan form
+    updateFooterTotalsEdit(); // Update total balance
+}
+
+function initFormDetailWidgets() {
+    if (!$("#Detail_DK").data("kendoDropDownList")) {
+        $("#Detail_DK").kendoDropDownList({ dataSource: ["D", "K"] });
+    }
+    if (!$("#Detail_NilaiIdr").data("kendoNumericTextBox")) {
+        $("#Detail_NilaiIdr").kendoNumericTextBox({ format: "n2", min: 0 });
+    }
+
+    if (!$("#Detail_NilaiOrg").data("kendoNumericTextBox")) {
+        $("#Detail_NilaiOrg").kendoNumericTextBox({ 
+            format: "n2", 
+            min: 0,
+            change: function() {
+                var nilaiOrgBaru = this.value() || 0;
+                var mataUang = $("#Detail_MataUang").val() || "001";
+                var idrBox = $("#Detail_NilaiIdr").data("kendoNumericTextBox");
+                
+                if (mataUang === "001") {
+                    idrBox.value(nilaiOrgBaru); // Jika rupiah, langsung samakan
+                } else {
+                    var tglString = $("#Edit_Tanggal").val(); 
+                    var tglBukti = kendo.toString(kendo.parseDate(tglString, "dd-MM-yyyy"), "yyyy-MM-dd");
+                    
+                    $.ajax({
+                        url: '/EditJurnal104/GetKurs', type: 'GET',
+                        data: { kodeMataUang: mataUang, tanggalVoucher: tglBukti },
+                        success: function(res) {
+                            var kurs = res.nilai_kurs || 1;
+                            idrBox.value(nilaiOrgBaru * kurs); // Kalikan kurs
+                        }
+                    });
+                }
+            }
+        });
+    }
+    if (!$("#Detail_KodeAkun").data("kendoComboBox")) {
+        $("#Detail_KodeAkun").kendoComboBox({
+            dataTextField: "NamaTampil", dataValueField: "Kode", filter: "contains", minLength: 3,
+            placeholder: "Ketik kode akun...",
+            dataSource: {
+                serverFiltering: true, serverPaging: true, pageSize: 25,
+                transport: {
+                    read: {
+                        url: "/EditJurnal104/GetCoa", type: "GET", dataType: "json",
+                        data: function(options) {
+                            var keyword = (options.filter && options.filter.filters.length > 0) ? options.filter.filters[0].value : "";
+                            return { page: 1, pageSize: 25, searchKeyword: keyword };
+                        }
+                    }
+                },
+                schema: {
+                    data: function(response) {
+                        var items = response.Data || response; 
+                        if(items.length > 0) {
+                            for(var i=0; i < items.length; i++) {
+                                var kode = items[i].Kode ? items[i].Kode.trim() : "";
+                                var nama = items[i].Nama ? items[i].Nama.trim() : "";
+                                items[i].Kode = kode;
+                                items[i].NamaTampil = kode + " - " + nama; 
+                            }
+                        }
+                        return items;
+                    }, total: "Total"
+                }
+            }
+        });
+    }
+}
 
 function btnCari_OnClick() {
     $("#EditJurnal104Grid").data("kendoGrid").dataSource.read();
@@ -23,31 +259,24 @@ function btnEditJurnal_OnClick(e) {
     var grid = $("#EditJurnal104Grid").data("kendoGrid");
     var row = $(e.target).closest("tr");
     var dataItem = grid.dataItem(row);
-
     var window = $("#EditJurnal104Window").data("kendoWindow");
 
-    // Bersihkan spasi dari NoBukti dan encode URL agar aman
     var noBuktiAsli = dataItem.NoBukti ? dataItem.NoBukti.trim() : "";
     var cleanNoBukti = encodeURIComponent(noBuktiAsli);
 
-    // 1. PASANG TELINGA DULU (Event Listener)
     window.one("refresh", function () {
         $("#Edit_GlTran").val(dataItem.GlTran ? dataItem.GlTran.trim() : "");
-        // Setelah form Edit berhasil diload dari server, baru jalankan ini:
         $("#Edit_KodeLokasi").val(dataItem.NamaCabang ? dataItem.NamaCabang.trim() : "");
         $("#Edit_Tanggal").val(kendo.toString(dataItem.Tanggal, "dd-MM-yyyy"));
         $("#Edit_KeteranganUtama").val(dataItem.Keterangan ? dataItem.Keterangan.trim() : "");
 
-        // Panggil grid detailnya!
         initDetailGridEdit(noBuktiAsli);
+        
+        // PANGGIL FUNGSI INISIALISASI FORM SINI!
+        initFormDetailWidgets(); 
     });
 
-    // 2. BARU SURUH LOAD URL
-    window.refresh({
-        url: `/EditJurnal104/Edit?noBukti=${cleanNoBukti}`
-    });
-
-    // 3. TAMPILKAN WINDOW
+    window.refresh({ url: `/EditJurnal104/Edit?noBukti=${cleanNoBukti}` });
     window.center().open();
 }
 
@@ -93,7 +322,7 @@ function initDetailGridEdit(noBukti) {
                 }
             }
         },
-        editable: true, 
+        editable: false, 
         navigatable: true,
         scrollable: true,
         height: 300,
@@ -208,7 +437,11 @@ function initDetailGridEdit(noBukti) {
 
             { field: "NilaiOrg", title: "Nilai (ORG)", width: 120, format: "{0:n2}", attributes: { style: "text-align:right;" } },
             { field: "NilaiIdr", title: "Nilai (IDR)", width: 120, format: "{0:n2}", attributes: { style: "text-align:right;" } },
-            { command: "destroy", title: "Aksi", width: 90 }
+            { 
+                title: "Aksi", width: 180, 
+                template: "<button type='button' class=' k-button k-button-icontext  ' onclick='editBarisTabel(event)'> Edit</button> " +
+                          "<button type='button' class=' k-button k-button-icontext  ' onclick='hapusBarisTabel(event)'> Delete</button>"
+            }
         ],
         dataBound: function() {
             updateFooterTotalsEdit();
@@ -217,35 +450,22 @@ function initDetailGridEdit(noBukti) {
 }
 
 function btnTambahBaris_OnClick() {
-    var grid = $("#EditDetailGrid").data("kendoGrid");
-    if (!grid) return;
-
-    // Ambil semua data yang ada di grid saat ini
-    var data = grid.dataSource.data();
+    var data = $("#EditDetailGrid").data("kendoGrid").dataSource.data();
     var maxUrut = 0;
-
-    // Looping untuk mencari NoUrut paling besar
     for (var i = 0; i < data.length; i++) {
-        // Pastikan kita mengecek field NoUrut (bisa jadi ada baris yg baru ditambah)
-        var urutSaatIni = data[i].NoUrut || 0; 
-        if (urutSaatIni > maxUrut) {
-            maxUrut = urutSaatIni;
-        }
+        if ((data[i].NoUrut || 0) > maxUrut) maxUrut = data[i].NoUrut;
     }
 
-    // Nomor urut baru adalah nilai maksimum + 1
-    var newUrut = maxUrut + 1;
+    $("#Detail_Uid").val(""); 
+    $("#Detail_NoUrut").val(maxUrut + 1);
+    $("#Detail_NoNota").val("-");
+    $("#Detail_MataUang").val("001");
+    $("#Detail_DK").data("kendoDropDownList").value("D");
+    if ($("#Detail_KodeAkun").data("kendoComboBox")) $("#Detail_KodeAkun").data("kendoComboBox").value("");
+    $("#Detail_NilaiOrg").data("kendoNumericTextBox").value(0);
+    $("#Detail_NilaiIdr").data("kendoNumericTextBox").value(0); // Reset IDR
 
-    // Tambah baris kosong dengan nomor urut yang sudah presisi
-    grid.dataSource.add({
-        NoUrut: newUrut,
-        NoNota: "-", // Default strip
-        MataUang: "001", // Defaultkan ke Rupiah
-        DK: "D",
-        KodeAkun: "",
-        NilaiOrg: 0,
-        NilaiIdr: 0
-    });
+    $("#FormEntryDetail").slideDown(); 
 }
 
 function updateFooterTotalsEdit() {
@@ -295,7 +515,7 @@ function onSaveAllEditJurnal() {
     });
 
     if (Math.abs(debet - kredit) > 0.01) {
-        showMessage('Error', 'Total Debet dan Kredit tidak seimbang!', 'error');
+        showMessage('Error', 'Total Debet dan Kredit tidak balance!', 'error');
         return;
     }
 
