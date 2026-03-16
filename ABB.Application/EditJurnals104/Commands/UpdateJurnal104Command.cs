@@ -43,7 +43,7 @@ namespace ABB.Application.EditJurnals104.Commands
 
             if (totalDebet != totalKredit)
             {
-                throw new Exception("Total Debet dan Kredit tidak balance (seimbang)! Data gagal disimpan.");
+                throw new Exception("Total Debet dan Kredit tidak balance! Data gagal disimpan.");
             }
 
             // 2. Buka Transaksi Database (Supaya aman kalau di tengah jalan ada error)

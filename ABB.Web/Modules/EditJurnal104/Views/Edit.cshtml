@@ -5,6 +5,16 @@
 <style>
     .custom-kode input, .custom-kode .k-input { background-color: #00FFFF !important; }
     .custom-kuning input, .custom-kuning .k-input { background-color: rgb(255, 255, 225) !important; }
+    
+    /* Styling form detail agar beda dengan header */
+    .detail-form-box {
+        background-color: #f9f9f9;
+        border: 1px solid #e9e9e9;
+        padding: 15px; 
+        border-radius: 6px; 
+        margin-bottom: 15px;
+        display: none; /* Disembunyikan dulu */
+    }
 </style>
 
 <div class="window-body">
@@ -12,48 +22,84 @@
         <fieldset>
            <div class="form-group row">
                 <label class="col-sm-2 col-form-label">No. Bukti</label>
-                <div class="col-sm-5">
+                <div class="col-sm-4">
                     <input type="text" id="Edit_NoBukti" class="k-textbox custom-kode" style="width: 100%;" readonly="readonly" value="@ViewBag.NoBukti" />
                 </div>
-            </div>
-            <div class="form-group row">
-            
-                <label class="col-sm-2 col-form-label">Trans</label>
-                <div class="col-sm-5">
+                
+                <label class="col-sm-2 col-form-label text-right">Trans</label>
+                <div class="col-sm-4">
                     <input type="text" id="Edit_GlTran" class="k-textbox custom-kode" style="width: 100%; text-align:center;" readonly="readonly" />
                 </div>
-                
             </div>
             <div class="form-group row">
-            
                 <label class="col-sm-2 col-form-label">Lokasi</label>
-                <div class="col-sm-5">
-                    <input type="text" id="Edit_KodeLokasi" class="k-textbox custom-kode" style="width: 100%; text-align:center;" readonly="readonly" />
+                <div class="col-sm-4">
+                    <input type="text" id="Edit_KodeLokasi" class="k-textbox custom-kode" style="width: 100%;" readonly="readonly" />
                 </div>
                 
-            </div>
-            <div class="form-group row">
-                
-                <label class="col-sm-2 col-form-label">Tanggal</label>
-                <div class="col-sm-5">
-                    <input type="text" id="Edit_Tanggal" class="k-textbox custom-kode" style="width: 100%;" readonly="readonly" />
+                <label class="col-sm-2 col-form-label text-right">Tanggal</label>
+                <div class="col-sm-4">
+                    <input type="text" id="Edit_Tanggal" class="k-textbox custom-kode" style="width: 100%; text-align:center;" readonly="readonly" />
                 </div>
             </div>
            
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label">Keterangan Jurnal</label>
-                <div class="col-sm-10">
-                 <textarea id="Edit_KeteranganUtama" class="k-textbox custom-kode" rows="4" style="width: 100%; resize: vertical; min-height: 80px; background-color: rgb(233, 236, 239);" readonly="readonly"></textarea>
+               <div class="col-sm-10">
+
+                <textarea id="Edit_KeteranganUtama" class="k-textbox custom-kode" rows="3" style="width: 100%; resize: vertical; background-color: rgb(233, 236, 239);" readonly="readonly"></textarea>
+
                 </div>
             </div>
         </fieldset>
     </form>
    
-    <hr/>
-    <div style="margin-bottom: 10px;">
-        <button class="k-button k-primary" onclick="btnTambahBaris_OnClick()"><i class="fa fa-plus"></i> Tambah Baris Manual</button>
+    <hr style="margin: 10px 0;"/>
+
+    <div style="margin-bottom: 15px;">
+        <button class="k-button k-primary" onclick="btnTambahBaris_OnClick()"><i class="fa fa-plus"></i> Tambah Baris Jurnal</button>
     </div>
 
+    <div id="FormEntryDetail" class="detail-form-box">
+        <input type="hidden" id="Detail_Uid" /> <div class="row">
+            <div class="col-md-2 mb-2">
+                <label>No. Urut</label>
+                <input type="text" id="Detail_NoUrut" class="k-textbox" style="width: 100%;" readonly="readonly" />
+            </div>
+            <div class="col-md-3 mb-2">
+                <label>No. Nota</label>
+                <input type="text" id="Detail_NoNota" class="k-textbox" style="width: 100%;" readonly="readonly" />
+            </div>
+            <div class="col-md-2 mb-2">
+                <label>Mata Uang</label>
+                <input type="text" id="Detail_MataUang" class="k-textbox" style="width: 100%;" placeholder="001" readonly="readonly" />
+            </div>
+            <div class="col-md-2 mb-2">
+                <label>D/K</label><br/>
+                <select id="Detail_DK" style="width: 100%;"></select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 mb-2">
+                <label>Kode Akun</label><br/>
+                <input id="Detail_KodeAkun" style="width: 100%;" />
+            </div>
+            <div class="col-md-3 mb-2">
+                <label>Nilai (ORG)</label><br/>
+                <input id="Detail_NilaiOrg" style="width: 100%;" />
+            </div>
+            <div class="col-md-3 mb-2">
+                <label>Nilai (IDR)</label><br/>
+                <input id="Detail_NilaiIdr" style="width: 100%;" />
+            </div>
+        </div>
+
+        <div class="mt-2 text-right">
+            <button class="btn btn-sm btn-secondary" onclick="btnBatalDetail_OnClick()">Cancel</button>
+            <button class="btn btn-sm btn-success" onclick="btnSimpanDetail_OnClick()"> Simpan Pembayaran</button>
+        </div>
+    </div>
     <div id="EditDetailGrid"></div>
 
     <div style="margin-top: 10px; padding: 10px; background: #eee; border: 1px solid #ddd; font-weight: bold; display: flex; justify-content: flex-end; gap: 30px;">
@@ -63,9 +109,9 @@
     </div>
 
     <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
-        <button type="button" class="btn btn-secondary" onclick="btnCloseWindow()">Batal</button>
-        <button type="button" onclick="onSaveAllEditJurnal()" class="btn btn-success">
-            <i class="fa fa-save"></i> Simpan Perubahan Jurnal
+        <button type="button" class="btn btn-secondary" onclick="btnCloseWindow()">Batal Semua</button>
+        <button type="button" onclick="onSaveAllEditJurnal()" class="btn btn-primary">
+            <i class="fa fa-save"></i> Simpan Perubahan Jurnal (Database)
         </button>
     </div>
 </div>
