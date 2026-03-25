@@ -111,11 +111,14 @@ namespace ABB.Web.Modules.KontrakTreatyMasuk
             return Json(cobs);
         }
         
-        public async Task<JsonResult> GetKodePas()
+        public JsonResult GetKodePas()
         {
-            var result = await Mediator.Send(new GetKodeTertujuPSTQuery());
+            var dropdownOptionDtos = new List<DropdownOptionDto>()
+            {
+                new DropdownOptionDto() { Text = "PAS / REAS", Value = "5" }
+            };
 
-            return Json(result);
+            return Json(dropdownOptionDtos);
         }
         
         public async Task<JsonResult> GetKodeRekanan(string kd_grp, string kd_cb)

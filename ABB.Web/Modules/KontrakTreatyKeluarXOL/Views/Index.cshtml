@@ -1,0 +1,95 @@
+@using ABB.Application.KontrakTreatyKeluarXOLs.Queries
+@using Kendo.Mvc.UI
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Kontrak Treaty Keluar XOL";
+}
+<script src="~/Modules/KontrakTreatyKeluarXOL/JS/kontrakTreatyKeluarXOL.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Kontrak Treaty Keluar XOL
+        </div>
+
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+        </div>
+
+        <div class="col-md-2">
+            <button class="flat-btn-primary" onclick="btnAddKontrakTreatyKeluarXOL_OnClick()" >Add</button>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<KontrakTreatyKeluarXOLDto>()
+                .Name("KontrakTreatyKeluarXOLGrid")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetKontrakTreatyKeluarXOLs", "KontrakTreatyKeluarXOL").Data("searchFilterKontrakTreatyKeluarXOL"))
+                    .Model(model => model.Id(p => p.Id))
+                )
+                .Columns(columns =>
+                {
+                    columns.Command(command =>
+                    {
+                        command.Custom("EditKontrakTreatyKeluarXOL")
+                            .Text("Edit")
+                            .IconClass("k-icon k-i-edit")
+                            .HtmlAttributes(new { title="Edit"})
+                            .Click("onEditKontrakTreatyKeluarXOL");
+                        command.Custom("DeleteKontrakTreatyKeluarXOL")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeleteKontrakTreatyKeluarXOL");
+                    }).Width(150).Title("Action").Locked(true);
+                    columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
+                    columns.Bound(col => col.nm_jns_sor).Width(150).Title("Nama Jenis SOR");
+                    columns.Bound(col => col.kd_tty_npps).Width(200).Title("Kode Treaty XOL");
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit"))
+                ) 
+        </div>
+        
+        @(Html.Kendo().Window()
+            .Name("KontrakTreatyKeluarXOLWindow")
+            .Title("Kontrak Treaty Keluar XOL")
+            .Width(800)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+        
+        @(Html.Kendo().Window()
+            .Name("DetailKontrakTreatyKeluarXOLWindow")
+            .Title("Detail Kontrak Treaty Keluar XOL")
+            .Width(600)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+        )
+    </div>
+</div>

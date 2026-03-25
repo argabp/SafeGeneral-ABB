@@ -26,6 +26,8 @@ namespace ABB.Infrastructure.Data
         public DbSet<NotaKlaimTreaty> NotaKlaimTreaty { get; set; }
         public DbSet<NotaKlaimReasuransi> NotaKlaimReasuransi { get; set; }
         public DbSet<KontrakTreatyMasuk> KontrakTreatyMasuk { get; set; }
+        public DbSet<KontrakTreatyKeluarXOL> KontrakTreatyKeluarXOL { get; set; }
+        public DbSet<DetailKontrakTreatyKeluarXOL> DetailKontrakTreatyKeluarXOL { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -37,6 +39,8 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new NotaKlaimTreatyMap());
             builder.ApplyConfiguration(new NotaKlaimReasuransiMap());
             builder.ApplyConfiguration(new KontrakTreatyMasukMap());
+            builder.ApplyConfiguration(new KontrakTreatyKeluarXOLMap());
+            builder.ApplyConfiguration(new DetailKontrakTreatyKeluarXOLMap());
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

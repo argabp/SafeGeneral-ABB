@@ -10,7 +10,6 @@ using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.KontrakTreatyMasuks.Commands
 {
-    
     public class DeleteKontrakTreatyMasukCommand : IRequest
     {
         public string kd_cb { get; set; }

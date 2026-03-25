@@ -79,7 +79,7 @@ namespace ABB.Web.Filters
                             }
                             else
                             {
-                                context.Result = new RedirectToActionResult("Login", "Account", null);
+                                context.Result = new RedirectToActionResult("403", "Error", null);
                             }
                         }
                     }
