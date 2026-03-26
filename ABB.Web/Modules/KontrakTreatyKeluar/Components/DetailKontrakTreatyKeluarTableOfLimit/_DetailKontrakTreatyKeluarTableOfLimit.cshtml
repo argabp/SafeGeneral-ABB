@@ -1,0 +1,64 @@
+@using ABB.Application.KontrakTreatyKeluars.Queries
+@using Kendo.Mvc.UI
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+<script src="~/Modules/KontrakTreatyKeluar/Components/DetailKontrakTreatyKeluarTableOfLimit/detailKontrakTreatyKeluarTableOfLimit.js"></script>
+
+@Html.AntiForgeryToken()
+<div class="window-body" style="background-color: lightgray">
+    <div class="row col-sm-12">
+        <div class="offset-9">
+            
+        </div>
+        <div class="col-sm-2" style="padding-bottom: 1em">
+            <button class="flat-btn-primary" style="height: 1em" onclick="btnAddDetailKontrakTreatyKeluarTableOfLimit_OnClick()">Add Table Of Limit</button>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        @(Html.Kendo().Grid<DetailKontrakTreatyKeluarTableOfLimitDto>()
+            .Name("DetailKontrakTreatyKeluarTableOfLimitGrid")
+            .DataSource(dataSource => dataSource.Ajax()
+                .Read(read => read.Action("GetDetailKontrakTreatyKeluarTableOfLimits", "KontrakTreatyKeluar").Data("searchFilterDetailKontrakTreatyKeluarTableOfLimit"))
+                .Model(m => m.Id(p => p.Id))
+            )
+            .Columns(columns =>
+            {
+                columns.Bound(col => col.nm_okup).Width(150).Title("Okupasi");
+                columns.Bound(col => col.nm_category_rsk).Width(150).Title("Kategori Resiko");
+                columns.Bound(col => col.nm_kls_konstr).Width(150).Title("Kelas Konstruksi");
+                columns.Bound(col => col.pst_bts_tty).Width(150).Title("Persentase Batas").Format("{0:n2}");
+                columns.Command(command =>
+                {
+                    command.Custom("EditDetailKontrakTreatyKeluarTableOfLimit")
+                        .Text("Edit")
+                        .IconClass("k-icon k-i-edit")
+                        .HtmlAttributes(new { title = "Edit" })
+                        .Click("onEditDetailKontrakTreatyKeluarTableOfLimit");
+                    command.Custom("DeleteDetailKontrakTreatyKeluarTableOfLimit")
+                        .Text("Delete")
+                        .IconClass("k-icon k-i-delete")
+                        .HtmlAttributes(new { title = "Delete" })
+                        .Click("onDeleteDetailKontrakTreatyKeluarTableOfLimit");
+                }).Width(200).Title("Action");
+            })
+            .Pageable(pager => pager
+                .Refresh(true)
+                .Info(true)
+                .PageSizes(true)
+            )
+            .Sortable()
+            .Selectable()
+            .Filterable()
+            .Scrollable()
+            .Height(380)
+            .Resizable(a => a.Columns(true))
+            .Events(ev => ev.DataBound("gridAutoFit"))
+        )
+    </div>
+</div>
+<div class="window-footer">
+    <button type="button" id="btn-previous-detailKontrakTreatyKeluarTableOfLimit" class="btn btn-primary space-right">
+        <span class="fa fa-arrow-left"></span> Previous
+    </button>
+</div>

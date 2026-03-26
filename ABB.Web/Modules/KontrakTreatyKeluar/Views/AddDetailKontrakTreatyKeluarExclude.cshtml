@@ -1,0 +1,31 @@
+@using Kendo.Mvc.UI
+@model ABB.Web.Modules.KontrakTreatyKeluar.Models.DetailKontrakTreatyKeluarExcludeViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+<script src="~/Modules/KontrakTreatyKeluar/JS/kontrakTreatyKeluar.DetailExclude.js"></script>
+
+@Html.AntiForgeryToken()
+<form id="DetailKontrakTreatyKeluarExcludeForm" enctype="multipart/form-data">
+    <div class="window-body" style="background-color: lightgray">
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-6">Okupasi</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_okup" style="width: 100%" option-label="Pilih Okupasi" class="primary-dropdown"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetOkupasi", "KontrakTreatyKeluar")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_okup" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="window-footer">
+        <button type="button" id="btn-save-detailKontrakTreatyKeluarExclude" class="btn btn-primary space-right">Save</button>
+    </div>
+</form>

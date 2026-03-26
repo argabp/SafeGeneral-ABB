@@ -1,0 +1,67 @@
+@using ABB.Application.KontrakTreatyKeluars.Queries
+@using Kendo.Mvc.UI
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+<script src="~/Modules/KontrakTreatyKeluar/Components/DetailKontrakTreatyKeluarCoverage/detailKontrakTreatyKeluarCoverage.js"></script>
+
+@Html.AntiForgeryToken()
+<div class="window-body" style="background-color: lightgray">
+    <div class="row col-sm-12">
+        <div class="offset-9">
+            
+        </div>
+        <div class="col-sm-2" style="padding-bottom: 1em">
+            <button class="flat-btn-primary" style="height: 1em" onclick="btnAddDetailKontrakTreatyKeluarCoverage_OnClick()">Add Coverage</button>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        @(Html.Kendo().Grid<DetailKontrakTreatyKeluarCoverageDto>()
+            .Name("DetailKontrakTreatyKeluarCoverageGrid")
+            .DataSource(dataSource => dataSource.Ajax()
+                .Read(read => read.Action("GetDetailKontrakTreatyKeluarCoverages", "KontrakTreatyKeluar").Data("searchFilterDetailKontrakTreatyKeluarCoverage"))
+                .Model(m => m.Id(p => p.Id))
+            )
+            .Columns(columns =>
+            {
+                columns.Bound(col => col.nm_cvrg).Width(150).Title("Nama Coverage");
+                columns.Bound(col => col.pst_kms_reas).Width(150).Title("Komisi Reas (%)").Format("{0:n2}");
+                columns.Bound(col => col.max_limit_jktb).Width(150).Title("Limit Treaty Jabodetabek").Format("{0:n2}");
+                columns.Bound(col => col.max_limit_prov).Width(150).Title("Limit Treaty Provinsi").Format("{0:n2}");
+                columns.Command(command =>
+                {
+                    command.Custom("EditDetailKontrakTreatyKeluarCoverage")
+                        .Text("Edit")
+                        .IconClass("k-icon k-i-edit")
+                        .HtmlAttributes(new { title = "Edit" })
+                        .Click("onEditDetailKontrakTreatyKeluarCoverage");
+                    command.Custom("DeleteDetailKontrakTreatyKeluarCoverage")
+                        .Text("Delete")
+                        .IconClass("k-icon k-i-delete")
+                        .HtmlAttributes(new { title = "Delete" })
+                        .Click("onDeleteDetailKontrakTreatyKeluarCoverage");
+                }).Width(200).Title("Action");
+            })
+            .Pageable(pager => pager
+                .Refresh(true)
+                .Info(true)
+                .PageSizes(true)
+            )
+            .Sortable()
+            .Selectable()
+            .Filterable()
+            .Scrollable()
+            .Height(380)
+            .Resizable(a => a.Columns(true))
+            .Events(ev => ev.DataBound("gridAutoFit"))
+        )
+    </div>
+</div>
+<div class="window-footer">
+    <button type="button" id="btn-previous-detailKontrakTreatyKeluarCoverage" class="btn btn-primary space-right">
+        <span class="fa fa-arrow-left"></span> Previous
+    </button>
+    <button type="button" id="btn-next-detailKontrakTreatyKeluarCoverage" class="btn btn-primary space-right">
+        Next <span class="fa fa-arrow-right"></span>
+    </button>
+</div>

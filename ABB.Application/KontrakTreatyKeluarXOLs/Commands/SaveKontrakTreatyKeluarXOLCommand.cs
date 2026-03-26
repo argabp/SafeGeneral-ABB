@@ -91,7 +91,7 @@ namespace ABB.Application.KontrakTreatyKeluarXOLs.Commands
 
                     if (string.IsNullOrWhiteSpace(kd_tty_npps))
                     {
-                        _logger.LogInformation("Null Result exec SP spe_ri01e_01 '{kd_cb}', '{kd_jns_sor}', '{thn_uw}'",
+                        _logger.LogInformation("Null Result exec SP spe_ri04e_01 '{kd_cb}', '{kd_jns_sor}', '{thn_uw}'",
                             request.kd_cb, request.kd_jns_sor, request.thn_tty_npps);
                         throw new NullReferenceException(kd_tty_npps);
                     }

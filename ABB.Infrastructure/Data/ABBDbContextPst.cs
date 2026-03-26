@@ -28,6 +28,13 @@ namespace ABB.Infrastructure.Data
         public DbSet<KontrakTreatyMasuk> KontrakTreatyMasuk { get; set; }
         public DbSet<KontrakTreatyKeluarXOL> KontrakTreatyKeluarXOL { get; set; }
         public DbSet<DetailKontrakTreatyKeluarXOL> DetailKontrakTreatyKeluarXOL { get; set; }
+        public DbSet<KontrakTreatyKeluar> KontrakTreatyKeluar { get; set; }
+        public DbSet<DetailKontrakTreatyKeluar> DetailKontrakTreatyKeluar { get; set; }
+        public DbSet<DetailKontrakTreatyKeluarSCOB> DetailKontrakTreatyKeluarSCOB { get; set; }
+        public DbSet<DetailKontrakTreatyKeluarExclude> DetailKontrakTreatyKeluarExclude { get; set; }
+        public DbSet<DetailKontrakTreatyKeluarTableOfLimit> DetailKontrakTreatyKeluarTableOfLimit { get; set; }
+        public DbSet<DetailKontrakTreatyKeluarKoasuransi> DetailKontrakTreatyKeluarKoasuransi { get; set; }
+        public DbSet<DetailKontrakTreatyKeluarCoverage> DetailKontrakTreatyKeluarCoverage { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -41,6 +48,14 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new KontrakTreatyMasukMap());
             builder.ApplyConfiguration(new KontrakTreatyKeluarXOLMap());
             builder.ApplyConfiguration(new DetailKontrakTreatyKeluarXOLMap());
+            builder.ApplyConfiguration(new KontrakTreatyKeluarMap());
+            builder.ApplyConfiguration(new DetailKontrakTreatyKeluarMap());
+            builder.ApplyConfiguration(new DetailKontrakTreatyKeluarMap());
+            builder.ApplyConfiguration(new DetailKontrakTreatyKeluarSCOBMap());
+            builder.ApplyConfiguration(new DetailKontrakTreatyKeluarExcludeMap());
+            builder.ApplyConfiguration(new DetailKontrakTreatyKeluarCoverageMap());
+            builder.ApplyConfiguration(new DetailKontrakTreatyKeluarTableOfLimitMap());
+            builder.ApplyConfiguration(new DetailKontrakTreatyKeluarKoasuransiMap());
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

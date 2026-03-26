@@ -40,10 +40,6 @@ namespace ABB.Web.Modules.KontrakTreatyKeluarXOL.Models
 
         public decimal? pst_reinst { get; set; }
 
-        public decimal? mindep { get; set; }
-
-        public short? hit { get; set; }
-
         public List<DetailKontrakTreatyKeluarXOLDataDto> Details { get; set; }
 
         public void Mapping(Profile profile)

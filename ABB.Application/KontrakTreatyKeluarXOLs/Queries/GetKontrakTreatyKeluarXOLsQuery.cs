@@ -10,12 +10,6 @@ namespace ABB.Application.KontrakTreatyKeluarXOLs.Queries
     public class GetKontrakTreatyKeluarXOLsQuery : IRequest<GridResponse<KontrakTreatyKeluarXOLDto>>
     {
         public GridRequest Grid { get; set; }
-        
-        public string kd_cb { get; set; }
-        
-        public string kd_jns_sor { get; set; }
-        
-        public string kd_tty_npps { get; set; }
     }
 
     public class GetKontrakTreatyKeluarXOLsQueryHandler : IRequestHandler<GetKontrakTreatyKeluarXOLsQuery, GridResponse<KontrakTreatyKeluarXOLDto>>
@@ -38,7 +32,6 @@ namespace ABB.Application.KontrakTreatyKeluarXOLs.Queries
                 config,
                 new
                 {
-                    request.kd_cb, request.kd_jns_sor, request.kd_tty_npps
                 }
             );
         }

@@ -1,0 +1,51 @@
+@using ABB.Application.KontrakTreatyKeluars.Queries
+@using Kendo.Mvc.UI
+@model ABB.Web.Modules.KontrakTreatyKeluar.Models.KontrakTreatyKeluarParameterViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/KontrakTreatyKeluar/JS/kontrakTreatyKeluar.form.js"></script>
+
+<div class="window-body">
+    <div id="kontrakTreatyKeluarTab">
+        <ul>
+            <li class="k-active">
+                Kontrak Treaty Keluar
+            </li>
+            <li>
+                SCOB
+            </li>
+            <li>
+                Coverage
+            </li>
+            <li>
+                Exclude
+            </li>
+            <li>
+                Koasuransi
+            </li>
+            <li>
+                Table of Limit
+            </li>
+        </ul>
+        <div id="tabKontrakTreatyKeluar">
+            <vc:kontrak-treaty-keluar model="@Model"></vc:kontrak-treaty-keluar >
+        </div>
+        <div id="tabSCOB">
+            <vc:detail-kontrak-treaty-keluar-scob model="@Model"></vc:detail-kontrak-treaty-keluar-scob>
+        </div>
+        <div id="tabCoverage">
+            <vc:detail-kontrak-treaty-keluar-coverage model="@Model"></vc:detail-kontrak-treaty-keluar-coverage>
+        </div>
+        <div id="tabExclude">
+            <vc:detail-kontrak-treaty-keluar-exclude model="@Model"></vc:detail-kontrak-treaty-keluar-exclude>
+        </div>
+        <div id="tabKoasuransi">
+            <vc:detail-kontrak-treaty-keluar-koasuransi model="@Model"></vc:detail-kontrak-treaty-keluar-koasuransi>
+        </div>
+        <div id="tabTableOfLimit">
+            <vc:detail-kontrak-treaty-keluar-table-of-limit model="@Model"></vc:detail-kontrak-treaty-keluar-table-of-limit>
+        </div>
+    </div>
+</div>

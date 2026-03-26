@@ -19,6 +19,13 @@ namespace ABB.Application.Common.Interfaces
         DbSet<KontrakTreatyMasuk> KontrakTreatyMasuk { get; set; }
         DbSet<KontrakTreatyKeluarXOL> KontrakTreatyKeluarXOL { get; set; }
         DbSet<DetailKontrakTreatyKeluarXOL> DetailKontrakTreatyKeluarXOL { get; set; }
+        DbSet<KontrakTreatyKeluar> KontrakTreatyKeluar { get; set; }
+        DbSet<DetailKontrakTreatyKeluar> DetailKontrakTreatyKeluar { get; set; }
+        DbSet<DetailKontrakTreatyKeluarSCOB> DetailKontrakTreatyKeluarSCOB { get; set; }
+        DbSet<DetailKontrakTreatyKeluarExclude> DetailKontrakTreatyKeluarExclude { get; set; }
+        DbSet<DetailKontrakTreatyKeluarTableOfLimit> DetailKontrakTreatyKeluarTableOfLimit { get; set; }
+        DbSet<DetailKontrakTreatyKeluarKoasuransi> DetailKontrakTreatyKeluarKoasuransi { get; set; }
+        DbSet<DetailKontrakTreatyKeluarCoverage> DetailKontrakTreatyKeluarCoverage { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

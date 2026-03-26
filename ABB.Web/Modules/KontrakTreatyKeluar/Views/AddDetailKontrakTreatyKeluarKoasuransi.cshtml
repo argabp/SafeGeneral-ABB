@@ -1,0 +1,43 @@
+@using Kendo.Mvc.UI
+@model ABB.Web.Modules.KontrakTreatyKeluar.Models.DetailKontrakTreatyKeluarKoasuransiViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+<script src="~/Modules/KontrakTreatyKeluar/JS/kontrakTreatyKeluar.DetailKoasuransi.js"></script>
+
+@Html.AntiForgeryToken()
+<form id="DetailKontrakTreatyKeluarKoasuransiForm" enctype="multipart/form-data">
+    <div class="window-body" style="background-color: lightgray">
+        @Html.HiddenFor(h => h.no_urut)
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-6">Persentase Share Mulai</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" max="100" decimals="2" for="pst_share_mul" style="width: 100%; background-color: #FFFFE1"/>
+                    <span asp-validation-for="pst_share_mul" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-6">Persentase Share Akhir</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" decimals="2" max="100" for="pst_share_akh" style="width: 100%; background-color: #FFFFE1"/>
+                    <span asp-validation-for="pst_share_akh" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-6">Persentase Batas Koasuransi</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" decimals="2" max="100" for="pst_bts_koas" style="width: 100%; background-color: #FFFFE1"/>
+                    <span asp-validation-for="pst_bts_koas" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="window-footer">
+        <button type="button" id="btn-save-detailKontrakTreatyKeluarKoasuransi" class="btn btn-primary space-right">Save</button>
+    </div>
+</form>

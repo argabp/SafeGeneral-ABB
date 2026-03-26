@@ -52,7 +52,14 @@ namespace ABB.Web.Modules.KontrakTreatyKeluarXOL
         
         public IActionResult Add()
         {
-            return View(new KontrakTreatyKeluarXOLViewModel());
+            return View(new KontrakTreatyKeluarXOLViewModel()
+            {
+                pst_adj_onrpi = 0,
+                nilai_bts_or = 0,
+                nilai_bts_tty = 0,
+                nilai_kurs = 0,
+                pst_reinst = 0
+            });
         }
         
         public async Task<IActionResult> Edit(string kd_cb, string kd_jns_sor, string kd_tty_npps)
@@ -74,7 +81,11 @@ namespace ABB.Web.Modules.KontrakTreatyKeluarXOL
         
         public IActionResult AddDetail()
         {
-            return View(new DetailKontrakTreatyKeluarXOLViewModel());
+            return View(new DetailKontrakTreatyKeluarXOLViewModel()
+            {
+                pst_com = 0,
+                pst_share = 0
+            });
         }
         
         public IActionResult EditDetail(string kd_grp_pas, string kd_rk_pas, decimal pst_com, 

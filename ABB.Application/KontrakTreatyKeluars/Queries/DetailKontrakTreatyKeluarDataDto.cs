@@ -1,10 +1,10 @@
 using ABB.Application.Common.Interfaces;
-using ABB.Application.KontrakTreatyKeluarXOLs.Queries;
+using ABB.Domain.Entities;
 using AutoMapper;
 
-namespace ABB.Web.Modules.KontrakTreatyKeluarXOL.Models
+namespace ABB.Application.KontrakTreatyKeluars.Queries
 {
-    public class DetailKontrakTreatyKeluarXOLViewModel : IMapFrom<DetailKontrakTreatyKeluarXOLDataDto>
+    public class DetailKontrakTreatyKeluarDataDto : IMapFrom<DetailKontrakTreatyKeluar>
     {
         public string kd_grp_pas { get; set; }
 
@@ -20,7 +20,7 @@ namespace ABB.Web.Modules.KontrakTreatyKeluarXOL.Models
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<DetailKontrakTreatyKeluarXOLViewModel, DetailKontrakTreatyKeluarXOLDataDto>();
+            profile.CreateMap<DetailKontrakTreatyKeluarDataDto, DetailKontrakTreatyKeluar>();
         }
     }
 }

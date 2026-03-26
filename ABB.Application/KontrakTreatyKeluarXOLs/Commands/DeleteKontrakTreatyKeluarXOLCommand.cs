@@ -40,19 +40,19 @@ namespace ABB.Application.KontrakTreatyKeluarXOLs.Commands
                 if (kontrakTreatyKeluarXOL == null)
                 {
                     _logger.LogError(
-                        "Failed Delete KontrakTreatyKeluarXOL with kd_cb: {kd_cb}, kd_jns_sor: {kd_jns_sor}, kd_tty_msk: {kd_tty_msk}",
+                        "Failed Delete KontrakTreatyKeluarXOL with kd_cb: {kd_cb}, kd_jns_sor: {kd_jns_sor}, kd_tty_npps: {kd_tty_npps}",
                         request.kd_cb, request.kd_jns_sor, request.kd_tty_npps);
                     
                     throw new NotFoundException("Kontrak Treaty KeluarXOL Not Found");
                 }
                 
-                var detailKontrakTreatyKeluarXOL =
+                var detailKontrakTreatyKeluarXOLs =
                     _contextPst.DetailKontrakTreatyKeluarXOL.Where(w => w.kd_cb == request.kd_cb 
                                                                         && w.kd_jns_sor == request.kd_jns_sor
                                                                         && w.kd_tty_npps == request.kd_tty_npps);
                 
                 _contextPst.KontrakTreatyKeluarXOL.Remove(kontrakTreatyKeluarXOL);
-                _contextPst.DetailKontrakTreatyKeluarXOL.RemoveRange(detailKontrakTreatyKeluarXOL);
+                _contextPst.DetailKontrakTreatyKeluarXOL.RemoveRange(detailKontrakTreatyKeluarXOLs);
 
                 await _contextPst.SaveChangesAsync(cancellationToken);
             }, _logger);

@@ -1,0 +1,67 @@
+@using ABB.Application.KontrakTreatyKeluars.Queries
+@using Kendo.Mvc.UI
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+<script src="~/Modules/KontrakTreatyKeluar/Components/DetailKontrakTreatyKeluarKoasuransi/detailKontrakTreatyKeluarKoasuransi.js"></script>
+
+@Html.AntiForgeryToken()
+<div class="window-body" style="background-color: lightgray">
+    <div class="row col-sm-12">
+        <div class="offset-9">
+            
+        </div>
+        <div class="col-sm-2" style="padding-bottom: 1em">
+            <button class="flat-btn-primary" style="height: 1em" onclick="btnAddDetailKontrakTreatyKeluarKoasuransi_OnClick()">Add Koasuransi</button>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        @(Html.Kendo().Grid<DetailKontrakTreatyKeluarKoasuransiDto>()
+            .Name("DetailKontrakTreatyKeluarKoasuransiGrid")
+            .DataSource(dataSource => dataSource.Ajax()
+                .Read(read => read.Action("GetDetailKontrakTreatyKeluarKoasuransis", "KontrakTreatyKeluar").Data("searchFilterDetailKontrakTreatyKeluarKoasuransi"))
+                .Model(m => m.Id(p => p.Id))
+            )
+            .Columns(columns =>
+            {
+                columns.Bound(col => col.no_urut).Width(150).Title("No Urut");
+                columns.Bound(col => col.pst_share_mul).Width(150).Title("Persentase Share Mulai").Format("{0:n2}");
+                columns.Bound(col => col.pst_share_akh).Width(150).Title("Persentase Share Akhir").Format("{0:n2}");
+                columns.Bound(col => col.pst_bts_koas).Width(150).Title("Persentase Batas Koasuransi").Format("{0:n2}");
+                columns.Command(command =>
+                {
+                    command.Custom("EditDetailKontrakTreatyKeluarKoasuransi")
+                        .Text("Edit")
+                        .IconClass("k-icon k-i-edit")
+                        .HtmlAttributes(new { title = "Edit" })
+                        .Click("onEditDetailKontrakTreatyKeluarKoasuransi");
+                    command.Custom("DeleteDetailKontrakTreatyKeluarKoasuransi")
+                        .Text("Delete")
+                        .IconClass("k-icon k-i-delete")
+                        .HtmlAttributes(new { title = "Delete" })
+                        .Click("onDeleteDetailKontrakTreatyKeluarKoasuransi");
+                }).Width(200).Title("Action");
+            })
+            .Pageable(pager => pager
+                .Refresh(true)
+                .Info(true)
+                .PageSizes(true)
+            )
+            .Sortable()
+            .Selectable()
+            .Filterable()
+            .Scrollable()
+            .Height(380)
+            .Resizable(a => a.Columns(true))
+            .Events(ev => ev.DataBound("gridAutoFit"))
+        )
+    </div>
+</div>
+<div class="window-footer">
+    <button type="button" id="btn-previous-detailKontrakTreatyKeluarKoasuransi" class="btn btn-primary space-right">
+        <span class="fa fa-arrow-left"></span> Previous
+    </button>
+    <button type="button" id="btn-next-detailKontrakTreatyKeluarKoasuransi" class="btn btn-primary space-right">
+        Next <span class="fa fa-arrow-right"></span>
+    </button>
+</div>

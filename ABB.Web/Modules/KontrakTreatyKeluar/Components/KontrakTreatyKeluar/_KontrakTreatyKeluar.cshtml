@@ -1,0 +1,312 @@
+@using ABB.Application.KontrakTreatyKeluars.Queries
+@using Kendo.Mvc.UI
+@model ABB.Web.Modules.KontrakTreatyKeluar.Models.KontrakTreatyKeluarViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+<script src="~/Modules/KontrakTreatyKeluar/Components/KontrakTreatyKeluar/kontrakTreatyKeluar.js"></script>
+
+@Html.AntiForgeryToken()
+<form id="KontrakTreatyKeluarForm" enctype="multipart/form-data">
+    <div class="window-body" style="background-color: lightgray">
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Cabang</label>
+                <div class="col-sm-6">
+                    <input type="hidden" id="temp_kd_cb" value="@Model.kd_cb">
+                    <kendo-dropdownlist for="kd_cb" style="width: 100%" on-change="OnKodeCabangChange" option-label="Pilih Cabang"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetCabang", "KontrakTreatyKeluar")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_cb" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Jenis SOR</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_jns_sor" style="width: 100%" option-label="Pilih Jenis Sor"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetJenisSor", "KontrakTreatyKeluar")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_jns_sor" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Treaty Proporsional</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="kd_tty_pps" readonly="true" style="width: 100%"/>
+                    <span asp-validation-for="kd_tty_pps" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode COB</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_cob" style="width: 100%" option-label="Pilih COB" class="not-null-dropdown" on-change="OnKodeCOBChange"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetCOB", "KontrakTreatyKeluar")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_cob" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Tahun Treaty</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" format="#" on-change="OnTahunTreatyChange"  for="thn_tty_pps" style="width: 100%; background-color: #FFFFE1"/>
+                    <span asp-validation-for="thn_tty_pps" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nama Treaty</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="nm_tty_pps" style="width: 100%; background-color: #FFFFE1"/>
+                    <span asp-validation-for="nm_tty_pps" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Periode Pertanggungan</label>
+                <div class="col-sm-6 row">
+                    <div class="col-sm-5">
+                        <kendo-datepicker for="tgl_mul_ptg" style="background-color: #FFFFE1"/>
+                        <span asp-validation-for="tgl_mul_ptg" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-2" style="align-content: center">
+                        <p style="margin-bottom: 3px; justify-self: center">s/d</p>
+                    </div>
+                    <div class="col-sm-5">
+                        <kendo-datepicker for="tgl_akh_ptg" style="background-color: #FFFFE1"/>
+                        <span asp-validation-for="tgl_akh_ptg" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Frekuwensi Pelaporan</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="frek_lap" style="width: 100%" option-label="Pilih Frekuwensi Pelaporan"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetFrekuwensiPelaporan", "KontrakTreatyKeluar")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="frek_lap" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-4">Batas Cash Call</label>
+                <label class="col-sm-2" style="text-align: right">(US$)</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_bts_cash_call" style="width: 100%; background-color: #FFFFE1"/>
+                    <span asp-validation-for="nilai_bts_cash_call" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Rupiah (Rp)</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_bts_cash_call_idr" style="width: 100%; background-color: #FFFFE1"/>
+                    <span asp-validation-for="nilai_bts_cash_call_idr" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-4">Batas Own Retention</label>
+                <label class="col-sm-2" style="text-align: right">(US$)</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_bts_or" style="width: 100%; background-color: #FFFFE1"/>
+                    <span asp-validation-for="nilai_bts_or" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Rupiah (Rp)</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_bts_or_idr" style="width: 100%; background-color: #FFFFE1"/>
+                    <span asp-validation-for="nilai_bts_or_idr" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-4">Batas Treaty</label>
+                <label class="col-sm-2" style="text-align: right">(US$)</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_bts_tty" style="width: 100%; background-color: #FFFFE1"/>
+                    <span asp-validation-for="nilai_bts_tty" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Rupiah (Rp)</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_bts_tty_idr" style="width: 100%; background-color: #FFFFE1"/>
+                    <span asp-validation-for="nilai_bts_tty_idr" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-4">Batas PLA</label>
+                <label class="col-sm-2" style="text-align: right">(US$)</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_bts_cash_pla" style="width: 100%; background-color: #FFFFE1"/>
+                    <span asp-validation-for="nilai_bts_cash_pla" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Rupiah (Rp)</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_bts_cash_pla_idr" style="width: 100%; background-color: #FFFFE1"/>
+                    <span asp-validation-for="nilai_bts_cash_pla_idr" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nilai Kurs</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_kurs" style="width: 100%;"/>
+                    <span asp-validation-for="nilai_kurs" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-3">
+                <label class="col-sm-6">Share Reas (%)</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" max="100" decimals="2" for="pst_share_reas" style="width: 100%;"/>
+                    <span asp-validation-for="pst_share_reas" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-3">
+                <label class="col-sm-6">Faktor SOR</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="faktor_sor" style="width: 100%" option-label="Pilih Faktor SOR"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetFaktorSOR", "KontrakTreatyKeluar")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="faktor_sor" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">RI Comm (%)</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" max="100" decimals="2" for="pst_kms_reas" style="width: 100%; background-color: #FFFFE1"/>
+                    <span asp-validation-for="pst_kms_reas" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-3">
+                <label class="col-sm-6">Handling Fee (%)</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" max="100" decimals="2" for="pst_hf" style="width: 100%;"/>
+                    <span asp-validation-for="pst_hf" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-3">
+                <label class="col-sm-6">Profit Comm (%)</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" max="100" decimals="2" for="pst_profit_comm" style="width: 100%;"/>
+                    <span asp-validation-for="pst_profit_comm" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-3">Keterangan Treaty</label>
+                <div class="col-sm-9">
+                    <kendo-textarea name="ket_tty_pps" rows="5" style="width: 100%; background-color: white">@Model.ket_tty_pps</kendo-textarea>
+                    <span asp-validation-for="ket_tty_pps" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="col-sm-12 row">
+                <div class="offset-9"></div>
+                <div class="col-sm-2" style="padding-bottom: 1em;">
+                    <button type="button" onclick="btnAddDetailKontrakTreatyKeluar_OnClick()" class="flat-btn-primary" style="height: 1em">Add</button>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                @(Html.Kendo().Grid<DetailKontrakTreatyKeluarDto>()
+                    .Name("DetailKontrakTreatyKeluarGrid")
+                    .DataSource(dataSource => dataSource.Ajax()
+                        .Read(read => read.Action("GetDetailKontrakTreatyKeluars", "KontrakTreatyKeluar").Data("searchFilterDetailKontrakTreatyKeluar"))
+                        .Model(m => m.Id(p => p.Id))
+                    )
+                    .Columns(columns =>
+                    {
+                        columns.Bound(col => col.nm_grp_sb_bis).Width(150).Title("Sumber Bisnis");
+                        columns.Bound(col => col.nm_rk_sb_bis).Width(150).Title("Rekanan Sumber Bisnis");
+                        columns.Bound(col => col.nm_grp_pas).Width(150).Title("Kode Group");
+                        columns.Bound(col => col.nm_rk_pas).Width(150).Title("Rekanan Kode Group");
+                        columns.Bound(col => col.pst_share).Width(200).Title("Share (%)").Format("{0:n2}");
+                        columns.Bound(col => col.pst_com).Width(200).Title("Komisi (%)").Format("{0:n2}");
+                        columns.Command(command =>
+                        {
+
+                            command.Custom("EditDetailKontrakTreatyKeluar")
+                                .Text("Edit")
+                                .IconClass("k-icon k-i-edit")
+                                .HtmlAttributes(new { title = "Edit" })
+                                .Click("onEditDetailKontrakTreatyKeluar");
+                            command.Custom("DeleteDetailKontrakTreatyKeluar")
+                                .Text("Delete")
+                                .IconClass("k-icon k-i-delete")
+                                .HtmlAttributes(new { title = "Delete" })
+                                .Click("onDeleteDetailKontrakTreatyKeluar");
+                        }).Width(200).Title("Action");
+                    })
+                    .Pageable(pager => pager
+                        .Refresh(true)
+                        .Info(true)
+                        .PageSizes(true)
+                    )
+                    .Sortable()
+                    .Selectable()
+                    .Filterable()
+                    .Scrollable()
+                    .Height(380)
+                    .Resizable(a => a.Columns(true))
+                    .Events(ev => ev.DataBound("OnDetailKontrakTreatyKeluarDataBound").Save("onSaveDetailKontrakTreatyKeluar"))
+                )
+            </div>
+            <span asp-validation-for="Details" class="text-danger"></span>
+            <div class="form-group row col-sm-12" style="padding-top: 1em">
+                <p class="col-sm-6" style="font-weight: bold;">Total Share (%)</p>
+                <p class="col-sm-3" style="font-weight: bold;" id="totalPersentaseShare">0</p>
+            </div>
+        </div>
+    </div>
+    <div class="window-footer">
+        <button type="button" id="btn-save-kontrakTreatyKeluar" class="btn btn-primary space-right">Save</button>
+        <button type="button" id="btn-next-kontrakTreatyKeluar" class="btn btn-primary space-right">
+            Next <span class="fa fa-arrow-right"></span>
+        </button>
+    </div>
+</form>

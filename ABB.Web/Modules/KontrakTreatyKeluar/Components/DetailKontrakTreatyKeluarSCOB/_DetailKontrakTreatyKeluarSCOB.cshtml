@@ -1,0 +1,59 @@
+@using ABB.Application.KontrakTreatyKeluars.Queries
+@using Kendo.Mvc.UI
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+<script src="~/Modules/KontrakTreatyKeluar/Components/DetailKontrakTreatyKeluarSCOB/detailKontrakTreatyKeluarSCOB.js"></script>
+
+@Html.AntiForgeryToken()
+<div class="window-body" style="background-color: lightgray">
+    <div class="row col-sm-12">
+        <div class="offset-9">
+            
+        </div>
+        <div class="col-sm-2" style="padding-bottom: 1em">
+            <button class="flat-btn-primary" style="height: 1em" onclick="btnAddDetailKontrakTreatyKeluarSCOB_OnClick()">Add SCOB</button>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        @(Html.Kendo().Grid<DetailKontrakTreatyKeluarSCOBDto>()
+            .Name("DetailKontrakTreatyKeluarSCOBGrid")
+            .DataSource(dataSource => dataSource.Ajax()
+                .Read(read => read.Action("GetDetailKontrakTreatyKeluarSCOBs", "KontrakTreatyKeluar").Data("searchFilterDetailKontrakTreatyKeluarSCOB"))
+                .Model(m => m.Id(p => p.Id))
+            )
+            .Columns(columns =>
+            {
+                columns.Bound(col => col.nm_scob).Width(150).Title("Nama SCOB");
+                columns.Command(command =>
+                {
+                    command.Custom("DeleteDetailKontrakTreatyKeluarSCOB")
+                        .Text("Delete")
+                        .IconClass("k-icon k-i-delete")
+                        .HtmlAttributes(new { title = "Delete" })
+                        .Click("onDeleteDetailKontrakTreatyKeluarSCOB");
+                }).Width(200).Title("Action");
+            })
+            .Pageable(pager => pager
+                .Refresh(true)
+                .Info(true)
+                .PageSizes(true)
+            )
+            .Sortable()
+            .Selectable()
+            .Filterable()
+            .Scrollable()
+            .Height(380)
+            .Resizable(a => a.Columns(true))
+            .Events(ev => ev.DataBound("gridAutoFit"))
+        )
+    </div>
+</div>
+<div class="window-footer">
+    <button type="button" id="btn-previous-detailKontrakTreatyKeluarSCOB" class="btn btn-primary space-right">
+        <span class="fa fa-arrow-left"></span> Previous
+    </button>
+    <button type="button" id="btn-next-detailKontrakTreatyKeluarSCOB" class="btn btn-primary space-right">
+        Next <span class="fa fa-arrow-right"></span>
+    </button>
+</div>

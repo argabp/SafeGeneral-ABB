@@ -1,0 +1,72 @@
+@using Kendo.Mvc.UI
+@model ABB.Web.Modules.KontrakTreatyKeluar.Models.DetailKontrakTreatyKeluarTableOfLimitViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+<script src="~/Modules/KontrakTreatyKeluar/JS/kontrakTreatyKeluar.DetailTableOfLimit.js"></script>
+
+@Html.AntiForgeryToken()
+<form id="DetailKontrakTreatyKeluarTableOfLimitForm" enctype="multipart/form-data">
+    <div class="window-body" style="background-color: lightgray">
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-6">Okupasi</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_okup" style="width: 100%" option-label="Pilih Okupasi" class="primary-dropdown" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetOkupasi", "KontrakTreatyKeluar")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_okup" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-6">Kategori Resiko</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="category_rsk" style="width: 100%" option-label="Pilih Kategori Resiko" class="primary-dropdown" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKategoriResiko", "KontrakTreatyKeluar")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="category_rsk" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-6">Kelas Konstruksi</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_kls_konstr" style="width: 100%" option-label="Pilih Kelas Konstruksi" class="primary-dropdown" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKelasKonstruksi", "KontrakTreatyKeluar")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_kls_konstr" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-6">Persentase Batas</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" decimals="2" max="100" for="pst_bts_tty" style="width: 100%; background-color: #FFFFE1"/>
+                    <span asp-validation-for="pst_bts_tty" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="window-footer">
+        <button type="button" id="btn-save-detailKontrakTreatyKeluarTableOfLimit" class="btn btn-primary space-right">Save</button>
+    </div>
+</form>
