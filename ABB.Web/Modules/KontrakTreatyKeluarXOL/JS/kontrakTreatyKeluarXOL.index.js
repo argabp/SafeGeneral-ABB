@@ -35,7 +35,7 @@ function onEditKontrakTreatyKeluarXOL(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     console.log('dataItem', dataItem);
-    openKontrakTreatyKeluarXOLWindow(`/KontrakTreatyKeluarXOL/Edit?kd_cb=${dataItem.kd_cb}&kd_jns_sor=${dataItem.kd_jns_sor}&kd_tty_npps=${dataItem.kd_tty_npps}`, 'Edit Kontrak Treaty Keluar XOL');
+    openKontrakTreatyKeluarXOLWindow(`/KontrakTreatyKeluarXOL/Edit?kd_cb=${dataItem.kd_cb}&kd_jns_sor=${dataItem.kd_jns_sor}&kd_tty_npps=${dataItem.kd_tty_npps}`, 'Edit');
 }
 
 function onDeleteKontrakTreatyKeluarXOL(e){

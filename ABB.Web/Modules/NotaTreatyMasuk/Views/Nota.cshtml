@@ -1,0 +1,176 @@
+@using ABB.Application.NotaTreatyMasuks.Queries
+@using Kendo.Mvc.UI
+@model ABB.Web.Modules.NotaTreatyMasuk.Models.NotaViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+<script src="~/Modules/NotaTreatyMasuk/JS/notaTreatyMasuk.nota.js"></script>
+
+@{
+    var nomor_nota = Model.kd_cb + "." + Model.jns_tr + "." + 
+                     Model.jns_nt_msk + "." + Model.kd_thn + "." + Model.kd_bln + "." + 
+                     Model.no_nt_msk + "/" + Model.jns_nt_kel + "." + Model.no_nt_kel ;
+    var label_nilai = Model.nilai_nt >= 0 ? "Nilai Nota Debet" : "Nilai Nota Kredit";
+}
+
+@Html.AntiForgeryToken()
+<form id="NotaForm" enctype="multipart/form-data">
+    <div class="window-body" style="background-color: lightgray">
+        @Html.HiddenFor(m => m.kd_cb)
+        @Html.HiddenFor(m => m.jns_tr)
+        @Html.HiddenFor(m => m.jns_nt_msk)
+        @Html.HiddenFor(m => m.kd_thn)
+        @Html.HiddenFor(m => m.kd_bln)
+        @Html.HiddenFor(m => m.no_nt_msk)
+        @Html.HiddenFor(m => m.jns_nt_kel)
+        @Html.HiddenFor(m => m.no_nt_kel)
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Treaty Masuk</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="nomor_nota" value="@nomor_nota" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode COB</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_cob" style="width: 100%" option-label="Pilih COB" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetCOB", "NotaTreatyMasuk")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_cob" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Jenis SOR</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_jns_sor" style="width: 100%" option-label="Pilih Jenis SOR" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetJenisSor", "NotaTreatyMasuk")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_jns_sor" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-3">Kode Treaty Masuk</label>
+                <div class="col-sm-9">
+                    <kendo-dropdownlist for="kd_rk_sor" style="width: 100%" option-label="Pilih Rekanan SOR" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetRekananSor", "NotaTreatyMasuk")" data="dataRekananSorDropDown"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_rk_sor" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Mata Uang</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_mtu" style="width: 100%" option-label="Pilih Mata Uang" class="not-null-dropdown" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetMataUang", "NotaTreatyMasuk")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_mtu" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-12">
+                <label class="col-sm-3">Persh. Ass.</label>
+                <div class="col-sm-5">
+                    <kendo-dropdownlist for="kd_grp_pas" style="width: 100%" option-label="Pilih Persh. Ass." class="not-null-dropdown" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetGroupPas", "NotaTreatyMasuk")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_grp_pas" class="text-danger"></span>
+                </div>
+                <div class="col-sm-4">
+                    <input type="hidden" id="temp_kd_rk_pas" value="@Model.kd_rk_pas">
+                    <kendo-dropdownlist for="kd_rk_pas" style="width: 100%" option-label="Pilih Rekanan Pas" class="not-null-dropdown" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetRekananPas", "NotaTreatyMasuk")" data="dataKodePasDropDown"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_rk_pas" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Keterangan Nota</label>
+                <div class="col-sm-6">
+                    <kendo-textarea name="ket_nt" rows="3" style="width: 100%; background-color: white">@Model.ket_nt</kendo-textarea>
+                    <span asp-validation-for="ket_nt" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">@label_nilai</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox spinners="false" for="nilai_nt" readonly="true" style="width: 100%; background-color: #FFFFE1"/>
+                    <span asp-validation-for="nilai_nt" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6" style="align-content: center;">
+                <label class="col-sm-6">Flag Cancel</label>
+                <input type="hidden" id="tempFlag_cancel" value="@Model.flag_cancel">
+                <div class="col-sm-6">
+                    <label>
+                        <input type="checkbox" class="k-checkbox" disabled="disabled" id="flag_cancel"/> Cancel
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Tanggal Nota</label>
+                <div class="col-sm-6">
+                    <kendo-datepicker for="tgl_nt" readonly="true"></kendo-datepicker>
+                    <span asp-validation-for="tgl_nt" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6" style="align-content: center;">
+                <label class="col-sm-6">Flag Posting</label>
+                <input type="hidden" id="tempFlag_posting" value="@Model.flag_posting">
+                <div class="col-sm-6">
+                    <label>
+                        <input type="checkbox" class="k-checkbox" disabled="disabled" id="flag_posting"/> Posting
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="window-footer">
+        <button type="button" id="btn-save-nota" class="btn btn-primary space-right">Save</button>
+    </div>
+</form>

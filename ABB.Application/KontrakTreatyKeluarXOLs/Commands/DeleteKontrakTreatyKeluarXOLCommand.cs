@@ -43,7 +43,7 @@ namespace ABB.Application.KontrakTreatyKeluarXOLs.Commands
                         "Failed Delete KontrakTreatyKeluarXOL with kd_cb: {kd_cb}, kd_jns_sor: {kd_jns_sor}, kd_tty_npps: {kd_tty_npps}",
                         request.kd_cb, request.kd_jns_sor, request.kd_tty_npps);
                     
-                    throw new NotFoundException("Kontrak Treaty KeluarXOL Not Found");
+                    throw new NotFoundException("Kontrak Treaty Keluar XOL Not Found");
                 }
                 
                 var detailKontrakTreatyKeluarXOLs =

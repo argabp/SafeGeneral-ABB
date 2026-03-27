@@ -1,4 +1,4 @@
-@using ABB.Application.KontrakTreatyKeluarXOLs.Queries
+@using ABB.Application.NotaTreatyMasuks.Queries
 @using Kendo.Mvc.UI
 @using Microsoft.Extensions.Configuration
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
@@ -8,9 +8,9 @@
 
 @{
     Layout = "~/Modules/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Kontrak Treaty Keluar XOL";
+    ViewData["Title"] = "Nota Treaty Masuk";
 }
-<script src="~/Modules/KontrakTreatyKeluarXOL/JS/kontrakTreatyKeluarXOL.index.js"></script>
+<script src="~/Modules/NotaTreatyMasuk/JS/notaTreatyMasuk.index.js"></script>
 
 <style>
     .div-box{
@@ -21,7 +21,7 @@
 <div class="flat-box">
     <div class="row">
         <div class="flat-box-title col-md-6">
-            Kontrak Treaty Keluar XOL
+            Nota Treaty Masuk
         </div>
 
         <div class="col-md-4">
@@ -29,36 +29,43 @@
         </div>
 
         <div class="col-md-2">
-            <button class="flat-btn-primary" onclick="btnAddKontrakTreatyKeluarXOL_OnClick()" >Add</button>
+            <button class="flat-btn-primary" onclick="btnAddNotaTreatyMasuk_OnClick()" >Add</button>
         </div>
     </div>
 
     <div class="flat-box-content">
         <div class="div-box">
-            @(Html.Kendo().Grid<KontrakTreatyKeluarXOLDto>()
-                .Name("KontrakTreatyKeluarXOLGrid")
+            @(Html.Kendo().Grid<NotaTreatyMasukDto>()
+                .Name("NotaTreatyMasukGrid")
                 .DataSource(dataSource => dataSource.Ajax()
-                    .Read(read => read.Action("GetKontrakTreatyKeluarXOLs", "KontrakTreatyKeluarXOL").Data("searchFilterKontrakTreatyKeluarXOL"))
+                    .Read(read => read.Action("GetNotaTreatyMasuks", "NotaTreatyMasuk").Data("searchFilterNotaTreatyMasuk"))
                     .Model(model => model.Id(p => p.Id))
                 )
                 .Columns(columns =>
                 {
                     columns.Command(command =>
                     {
-                        command.Custom("EditKontrakTreatyKeluarXOL")
+                        command.Custom("Nota")
+                            .Text("Nota")
+                            .IconClass("fa fa-envelope")
+                            .HtmlAttributes(new { title="Nota"})
+                            .Click("onNota");
+                        command.Custom("EditNotaTreatyMasuk")
                             .Text("Edit")
                             .IconClass("k-icon k-i-edit")
                             .HtmlAttributes(new { title="Edit"})
-                            .Click("onEditKontrakTreatyKeluarXOL");
-                        command.Custom("DeleteKontrakTreatyKeluarXOL")
+                            .Click("onEditNotaTreatyMasuk");
+                        command.Custom("DeleteNotaTreatyMasuk")
                             .Text("Delete")
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
-                            .Click("onDeleteKontrakTreatyKeluarXOL");
+                            .Click("onDeleteNotaTreatyMasuk");
                     }).Width(150).Title("Action").Locked(true);
-                    columns.Bound(col => col.nm_cb).Width(150).Title("Cabang");
-                    columns.Bound(col => col.nm_jns_sor).Width(150).Title("Jenis SOR");
-                    columns.Bound(col => col.kd_tty_npps).Width(200).Title("Kode Treaty XOL");
+                    columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
+                    columns.Bound(col => col.nm_jns_sor).Width(150).Title("Nama Jenis SOR");
+                    columns.Bound(col => col.kd_tty_msk).Width(200).Title("Kode Treaty Masuk");
+                    columns.Bound(col => col.nm_mtu).Width(200).Title("Nama Mata uang");
+                    columns.Bound(col => col.nomor_transaksi).Width(200).Title("Nomor Transaksi");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)
@@ -75,8 +82,8 @@
         </div>
         
         @(Html.Kendo().Window()
-            .Name("KontrakTreatyKeluarXOLWindow")
-            .Title("Kontrak Treaty Keluar XOL")
+            .Name("NotaTreatyMasukWindow")
+            .Title("Nota Treaty Masuk")
             .Width(800)
             .Modal(true)
             .Visible(false)
@@ -84,8 +91,8 @@
             )
         
         @(Html.Kendo().Window()
-            .Name("DetailKontrakTreatyKeluarXOLWindow")
-            .Title("Detail Kontrak Treaty Keluar XOL")
+            .Name("TreatyMasukWindow")
+            .Title("TreatyMasuk")
             .Width(600)
             .Modal(true)
             .Visible(false)
