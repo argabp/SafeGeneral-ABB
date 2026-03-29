@@ -10,25 +10,24 @@ namespace ABB.Application.KlaimAlokasiReasuransis.Queries
 {
     public class GetRekananSorQuery : IRequest<List<DropdownOptionDto>>
     {
-        public string DatabaseName { get; set; }
         public string jns_lookup { get; set; }
         public string kd_cb { get; set; }
+        public string kd_cob { get; set; }
         public string kd_jns_sor { get; set; }
     }
 
     public class GetRekananSorQueryHandler : IRequestHandler<GetRekananSorQuery, List<DropdownOptionDto>>
     {
-        private readonly IDbConnectionFactory _connectionFactory;
+        private readonly IDbConnectionPst _connectionPst;
 
-        public GetRekananSorQueryHandler(IDbConnectionFactory connectionFactory)
+        public GetRekananSorQueryHandler(IDbConnectionPst connectionPst)
         {
-            _connectionFactory = connectionFactory;
+            _connectionPst = connectionPst;
         }
 
         public async Task<List<DropdownOptionDto>> Handle(GetRekananSorQuery request, CancellationToken cancellationToken)
         {
-            _connectionFactory.CreateDbConnection(request.DatabaseName);
-            var result = (await _connectionFactory.QueryProc<string>("spg_ddlb_all",
+            var result = (await _connectionPst.QueryProc<string>("spg_ddlb_all",
                 new
                 {
                     request.jns_lookup, nm_kolom = "kd_rk_sor"
@@ -48,11 +47,11 @@ namespace ABB.Application.KlaimAlokasiReasuransis.Queries
             
             if (menuName.Contains("Rekanan"))
             {
-                dropdown = (await _connectionFactory.Query<DropdownOptionDto>($"SELECT kd_rk Value, nm_rk Text FROM {dbName} WHERE kd_grp_rk = '5' AND kd_cb = '{request.kd_cb}'")).ToList();
+                dropdown = (await _connectionPst.Query<DropdownOptionDto>($"SELECT kd_rk Value, nm_rk Text FROM {dbName} WHERE kd_grp_rk = '5' AND kd_cb = '{request.kd_cb}'")).ToList();
             }
             else
             {
-                dropdown = (await _connectionFactory.Query<DropdownOptionDto>($"SELECT kd_tty_pps Value, nm_tty_pps Text FROM {dbName} WHERE kd_jns_sor = '{request.kd_jns_sor}'")).ToList();
+                dropdown = (await _connectionPst.Query<DropdownOptionDto>($"SELECT kd_tty_pps Value, nm_tty_pps Text FROM {dbName} WHERE kd_jns_sor = '{request.kd_jns_sor}' AND kd_cob = '{request.kd_cob}'")).ToList();
             }
 
             return dropdown;

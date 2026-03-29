@@ -55,7 +55,7 @@ function reopenAlokasiKlaimReasuransi(dataItem){
 
     var data = JSON.stringify(form);
     ajaxPost(`/ReopenAlokasiKlaimReasuransi/ReopenAlokasiKlaimReasuransi`, data,  function (response) {
-        if (response.Result === "OK") {
+        if (response.Status === "OK") {
             showMessage('Reopen Successfully', response.Message);
         }
         else {

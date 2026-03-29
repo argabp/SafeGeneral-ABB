@@ -1,9 +1,12 @@
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ABB.Application.Common.Grids.Interfaces;
 using ABB.Application.Common.Grids.Models;
+using ABB.Application.Common.Helpers;
 using ABB.Application.KlaimAlokasiReasuransis.Configs;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.KlaimAlokasiReasuransis.Queries
 {
@@ -22,32 +25,40 @@ namespace ABB.Application.KlaimAlokasiReasuransis.Queries
     public class GetKlaimAlokasiReasuransisQueryHandler : IRequestHandler<GetKlaimAlokasiReasuransisQuery, GridResponse<KlaimAlokasiReasuransiDto>>
     {
         private readonly IGridQueryEngine _gridEngine;
-        
-        public GetKlaimAlokasiReasuransisQueryHandler(IGridQueryEngine gridEngine)
+        private readonly ILogger<GetKlaimAlokasiReasuransisQueryHandler> _logger;
+
+        public GetKlaimAlokasiReasuransisQueryHandler(IGridQueryEngine gridEngine,
+            ILogger<GetKlaimAlokasiReasuransisQueryHandler> logger)
         {
             _gridEngine = gridEngine;
+            _logger = logger;
         }
         
         public async Task<GridResponse<KlaimAlokasiReasuransiDto>> Handle(
             GetKlaimAlokasiReasuransisQuery request,
             CancellationToken cancellationToken)
         {
-            var config = KlaimAlokasiReasuransiConfig.Create();
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
+            {
+                var config = KlaimAlokasiReasuransiConfig.Create();
 
-            return await _gridEngine.QueryAsyncPST<KlaimAlokasiReasuransiDto>(
-                request.Grid,
-                config,
-                new
-                {
-                    request.kd_cb,
-                    request.kd_cob,
-                    request.kd_scob,
-                    request.kd_thn,
-                    request.no_kl,
-                    request.no_mts,
-                    request.SearchKeyword
-                }
-            );
+                var response = await _gridEngine.QueryAsyncPST<KlaimAlokasiReasuransiDto>(
+                    request.Grid,
+                    config,
+                    new
+                    {
+                        request.kd_cb,
+                        request.kd_cob,
+                        request.kd_scob,
+                        request.kd_thn,
+                        request.no_kl,
+                        request.no_mts,
+                        request.SearchKeyword
+                    }
+                );
+
+                return response;
+            }, _logger);
         }
     }
 }

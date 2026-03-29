@@ -50,7 +50,7 @@
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
-                                <read url="@Url.Action("GetKontrakSOR", "KlaimAlokasiReasuransi")"/>
+                                <read url="@Url.Action("GetKontrakSOR", "KlaimAlokasiReasuransi")" data="dataKontrakDropDown"/>
                             </transport>
                         </datasource>
                     </kendo-dropdownlist>

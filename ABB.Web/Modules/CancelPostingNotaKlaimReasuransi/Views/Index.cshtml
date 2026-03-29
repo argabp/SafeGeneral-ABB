@@ -28,7 +28,7 @@
         </div>
 
         <div class="col-md-2">
-            <button class="flat-btn-primary" onclick="postingNotaKlaimReasuransi()">Cancel Posting</button>
+            <button class="flat-btn-primary" onclick="cancelPostingNotaKlaimReasuransi()">Cancel Posting</button>
         </div>
 
         @* <div class="col-md-2"> *@
@@ -50,7 +50,7 @@
                     columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
                     columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
                     columns.Bound(col => col.nm_scob).Width(150).Title("Nama Sub COB");
-                    columns.Bound(col => col.nomor_register).Width(200).Title("Nomor Mutasi Klaim");
+                    columns.Bound(col => col.nomor_berkas).Width(200).Title("Nomor Berkas");
                     columns.Bound(col => col.nm_ttg).Width(150).Title("Nama Tertanggung");
                 })
                 .Pageable(pager => pager

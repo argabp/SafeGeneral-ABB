@@ -55,7 +55,7 @@ function OnKodeJenisSorChange(e){
                 var kd_rk_sor = response.Data.split(",")[4];
 
                 var kd_rk_sor_dp = $("#kd_rk_sor").data("kendoDropDownList");
-                kd_rk_sor_dp.dataSource.read({jns_lookup : kd_grp_sor + ",R", kd_cb: $("#kd_cb").val(), kd_jns_sor : $("#kd_jns_sor").val()});
+                kd_rk_sor_dp.dataSource.read({jns_lookup : kd_grp_sor + ",R", kd_cb: $("#kd_cb").val(), kd_cob: $("#kd_cob").val(), kd_jns_sor : $("#kd_jns_sor").val()});
 
                 kd_rk_sor_dp.value(kd_rk_sor);
             }
@@ -65,4 +65,42 @@ function OnKodeJenisSorChange(e){
                 showMessage("Error", response);
         }
     );
+}
+
+function dataRekananSorDropDown(){
+    return {
+        jns_lookup: $("#kd_cb").val().trim() + ",R",
+        kd_cb: $("#kd_cb").val().trim(),
+        kd_cob: $("#kd_cob").val().trim(),
+        kd_jns_sor: $("#kd_jns_sor").val().trim()        
+    }
+}
+
+function OnShareChange(e){
+    var pst_share = e.sender.value();
+    var nilai_ttl_kl = $("#nilai_ttl_kl").val();
+    
+    ajaxGet(`/KlaimAlokasiReasuransi/GenerateNilaiKlaim?pst_share=${pst_share}&nilai_ttl_kl=${nilai_ttl_kl}`,
+        function (response) {
+            if (response.Status == "OK") {
+                var nilai_kl = response.Data.split(",")[1];
+
+                $("#nilai_kl").data("kendoNumericTextBox").value(nilai_kl);
+            }
+            else if (response.Status == "ERROR")
+                showMessage("Error", response.Message);
+            else
+                showMessage("Error", response);
+        }
+    );
+}
+
+function OnFlagNotaChange(element) {
+    var isChecked = $(element).is(':checked');
+
+    // 2. Find the Flag Cash Call checkbox by ID
+    var cashCall = $("#flag_cash_call");
+
+    // 3. Sync the checked property
+    cashCall.prop('checked', isChecked);
 }

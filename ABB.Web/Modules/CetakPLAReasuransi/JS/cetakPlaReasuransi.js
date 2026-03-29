@@ -8,10 +8,12 @@ function searchKeyword_OnKeyUp() {
     });
 }
 
-function searchFilter() {
+function searchFilter(e) {
+    const gridReq = buildGridRequest(e, "SearchKeyword");
+
     return {
-        searchkeyword: $("#SearchKeyword").val()
-    }
+        grid: gridReq
+    };
 }
 
 function viewReport(element){

@@ -32,6 +32,11 @@ namespace ABB.Application.ReopenAlokasiKlaimReasuransis.Configs
                                         -- Essential for your WHERE clause
                                         p.flag_closing, 
                                         p.flag_reas,
+                                        p.tgl_mts,
+                                        p.no_pol_lama,
+                                        p.tgl_closing,
+                                        p.tgl_reas,
+                                        p.nm_ttg,
                                         -- Pulling p.* here prevents naming collisions with joined tables
                                         p.kd_cb, p.kd_cob, p.kd_scob, p.kd_thn, p.no_kl, p.no_mts, p.nilai_ttl_kl, p.tipe_mts,
                                         -- Add any other specific columns from p you need here
@@ -42,7 +47,7 @@ namespace ABB.Application.ReopenAlokasiKlaimReasuransis.Configs
                                         cob.nm_cob,
                                         scob.nm_scob,
                                         COALESCE(c5.total_nilai_kl_cl05, 0) as nilai_total_klaim,
-                                        (COALESCE(c5.total_nilai_kl_cl05, 0) - p.nilai_ttl_kl) as sisa_alokasi,
+                                        (p.nilai_ttl_kl - COALESCE(c5.total_nilai_kl_cl05, 0)) as sisa_alokasi,
                                         CASE RTRIM(p.tipe_mts)
                                             WHEN 'P' THEN 'PLA'
                                             WHEN 'D' THEN 'DLA'
@@ -51,7 +56,7 @@ namespace ABB.Application.ReopenAlokasiKlaimReasuransis.Configs
                                             ELSE ''
                                         END as nm_tipe_mts,
                                         'K.' + RTRIM(p.kd_cb) + '.' + RTRIM(p.kd_scob) + '.' + 
-                                        RTRIM(p.kd_thn) + '.' + RTRIM(p.no_kl) as nomor_register
+                                        RTRIM(p.kd_thn) + '.' + RTRIM(p.no_kl) + '.' + RTRIM(p.no_mts) as nomor_register
                                 ) as src
                             ",
                 

@@ -20,11 +20,11 @@ namespace ABB.Application.PostingNotaKlaimReasuransis.Queries
 
         public string no_kl { get; set; }
 
-        public short no_mts { get; set; }
+        public string no_mts { get; set; }
 
         public string st_tipe_dla { get; set; }
 
-        public string nomor_register { get; set; }
+        public string nomor_berkas { get; set; }
 
         public string nm_ttg { get; set; }
 

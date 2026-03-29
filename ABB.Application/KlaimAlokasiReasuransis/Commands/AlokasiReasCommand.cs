@@ -26,10 +26,10 @@ namespace ABB.Application.KlaimAlokasiReasuransis.Commands
 
     public class AlokasiReasCommandHandler : IRequestHandler<AlokasiReasCommand, (string, string, string)>
     {
-        private readonly IDbConnectionPstNota _connectionPst;
+        private readonly IDbConnectionPst _connectionPst;
         private readonly ILogger<AlokasiReasCommandHandler> _logger;
 
-        public AlokasiReasCommandHandler(IDbConnectionPstNota connectionPst,
+        public AlokasiReasCommandHandler(IDbConnectionPst connectionPst,
             ILogger<AlokasiReasCommandHandler> logger)
         {
             _connectionPst = connectionPst;

@@ -92,7 +92,7 @@ namespace ABB.Web.Modules.KlaimAlokasiReasuransi
             return Json(result);
         }
          
-        public async Task<IActionResult> ClosingKlaimAlokasiReasuransi(MutasiKlaimModel model)
+        public async Task<IActionResult> ClosingKlaimAlokasiReasuransi([FromBody] MutasiKlaimModel model)
         {
             try
             {
@@ -108,7 +108,7 @@ namespace ABB.Web.Modules.KlaimAlokasiReasuransi
             }
         }
 
-        public async Task<IActionResult> AlokasiReasuransi(MutasiKlaimModel model)
+        public async Task<IActionResult> AlokasiReasuransi([FromBody] MutasiKlaimModel model)
         {
             try
             {
@@ -235,7 +235,7 @@ namespace ABB.Web.Modules.KlaimAlokasiReasuransi
         }
 
         public async Task<IActionResult> AddSOL(string kd_cb, string kd_cob,
-            string kd_scob, string kd_thn, string no_kl, Int16 no_mts)
+            string kd_scob, string kd_thn, string no_kl, Int16 no_mts, decimal nilai_ttl_kl)
         {
             var klaimAlokasiReasuransiViewModel = new KlaimAlokasiReasuransiViewModel()
             {
@@ -244,7 +244,8 @@ namespace ABB.Web.Modules.KlaimAlokasiReasuransi
                 kd_scob = kd_scob,
                 kd_thn = kd_thn,
                 no_kl = no_kl,
-                no_mts = no_mts
+                no_mts = no_mts,
+                nilai_ttl_kl = nilai_ttl_kl
             };
             
             return PartialView(klaimAlokasiReasuransiViewModel);
@@ -302,7 +303,8 @@ namespace ABB.Web.Modules.KlaimAlokasiReasuransi
                 kd_scob = kd_scob,
                 kd_thn = kd_thn,
                 no_kl = no_kl,
-                no_mts = no_mts
+                no_mts = no_mts,
+                kd_jns_sor = "XOL"
             };
             
             return PartialView(klaimAlokasiReasuransiXLViewModel);
@@ -354,10 +356,7 @@ namespace ABB.Web.Modules.KlaimAlokasiReasuransi
         {
             try
             {
-                var command = new GetJenisSorQuery()
-                {
-                    DatabaseName = DatabaseName
-                };
+                var command = new GetJenisSorPSTQuery();
                 
                 var result = await Mediator.Send(command);
                 
@@ -371,7 +370,7 @@ namespace ABB.Web.Modules.KlaimAlokasiReasuransi
 
         [HttpGet]
         public async Task<ActionResult> GetRekananSor(string? jns_lookup, 
-            string kd_cb, string kd_jns_sor)
+            string kd_cb, string kd_jns_sor, string kd_cob)
         {
             try
             {
@@ -380,10 +379,10 @@ namespace ABB.Web.Modules.KlaimAlokasiReasuransi
                 
                 var command = new GetRekananSorQuery()
                 {
-                    DatabaseName = DatabaseName,
                     jns_lookup = jns_lookup,
                     kd_cb = kd_cb,
-                    kd_jns_sor = kd_jns_sor
+                    kd_jns_sor = kd_jns_sor,
+                    kd_cob = kd_cob
                 };
                 
                 var result = await Mediator.Send(command);
@@ -397,11 +396,15 @@ namespace ABB.Web.Modules.KlaimAlokasiReasuransi
         }
     
         [HttpGet]
-        public async Task<ActionResult> GetKontrakSOR()
+        public async Task<ActionResult> GetKontrakSOR(string kd_cb, string kd_cob)
         {
             try
             {
-                var command = new GetKontrakSORsQuery();
+                var command = new GetKontrakSORsQuery()
+                {
+                    kd_cb = kd_cb,
+                    kd_cob = kd_cob
+                };
                 
                 var result = await Mediator.Send(command);
                 
@@ -412,9 +415,7 @@ namespace ABB.Web.Modules.KlaimAlokasiReasuransi
                 return Ok( new { Status = "ERROR", Message = e.InnerException == null ? e.Message : e.InnerException.Message});
             }
         }
-
         
-
         [HttpGet]
         public async Task<ActionResult> GetGroupAndRekananSor(string kd_jns_sor)
         {
@@ -423,6 +424,27 @@ namespace ABB.Web.Modules.KlaimAlokasiReasuransi
                 var command = new GetGroupAndRekananSorQuery()
                 {
                     kd_jns_sor = kd_jns_sor
+                };
+                
+                var result = await Mediator.Send(command);
+
+                return Ok(new { Status = "OK", Data = result });
+            }
+            catch (Exception e)
+            {
+                return Ok( new { Status = "ERROR", Message = e.InnerException == null ? e.Message : e.InnerException.Message});
+            }
+        }
+        
+        [HttpGet]
+        public async Task<ActionResult> GenerateNilaiKlaim(decimal nilai_ttl_kl, decimal pst_share)
+        {
+            try
+            {
+                var command = new GenerateNilaiKlaimQuery()
+                {
+                    nilai_ttl_kl = nilai_ttl_kl,
+                    pst_share = pst_share
                 };
                 
                 var result = await Mediator.Send(command);

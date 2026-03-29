@@ -17,16 +17,14 @@ namespace ABB.Application.DLAReasuransis.Queries
         public string kd_scob { get; set; }
 
         public string nm_scob { get; set; }
-
-        public string nomor_register { get; set; }
         
         public string kd_thn { get; set; }
 
         public string no_kl { get; set; }
 
-        public Int16 no_mts { get; set; }
+        public string no_mts { get; set; }
 
-        public short no_dla { get; set; }
+        public string no_dla { get; set; }
 
         public string kd_grp_pas { get; set; }
 
@@ -37,5 +35,9 @@ namespace ABB.Application.DLAReasuransis.Queries
         public string nm_rk_pas { get; set; }
 
         public string? ket_dla { get; set; }
+        public string nomor_berkas { get; set; }
+        public string no_pol_lama { get; set; }
+        public string nm_ttg { get; set; }
+        public string nm_ttj { get; set; }
     }
 }

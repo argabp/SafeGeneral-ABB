@@ -45,5 +45,7 @@ namespace ABB.Application.KlaimAlokasiReasuransis.Queries
         public decimal nilai_total_klaim { get; set; }
 
         public decimal sisa_alokasi { get; set; }
+
+        public string? flag_reas { get; set; }
     }
 }

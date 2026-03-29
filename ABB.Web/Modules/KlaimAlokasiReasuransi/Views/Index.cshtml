@@ -63,10 +63,11 @@
                     columns.Bound(col => col.nm_ttg).Width(200).Title("Nama Tertanggung");
                     columns.Bound(col => col.tgl_mts).Width(150).Title("Tanggal Mutasi").Format("{0: dd-MM-yyyy}");
                     columns.Bound(col => col.tgl_closing).Width(150).Title("Tanggal Closing").Format("{0: dd-MM-yyyy}");
-                    columns.Bound(col => col.tgl_reas).Width(150).Title("Tanggal Closing").Format("{0: dd-MM-yyyy}");
+                    columns.Bound(col => col.tgl_reas).Width(150).Title("Tanggal Reas").Format("{0: dd-MM-yyyy}");
                     columns.Bound(col => col.nilai_ttl_kl).Width(150).Title("Nilai Klaim").Format("{0:n2}");
                     columns.Bound(col => col.nilai_total_klaim).Width(150).Title("Nilai Klaim Koas").Format("{0:n2}");
                     columns.Bound(col => col.sisa_alokasi).Width(150).Title("Sisa Alokasi").Format("{0:n2}");
+                    columns.Bound(col => col.flag_reas).Width(150).Title("Flag Reas");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)
@@ -79,7 +80,7 @@
                 .Scrollable()
                 .Height(450)
                 .Resizable(a => a.Columns(true))
-                .Events(ev => ev.DataBound("gridAutoFit"))
+                .Events(ev => ev.DataBound("OnMutasiKlaimDataBound"))
 
                 )
         </div>
@@ -93,8 +94,8 @@
                     {
                         items.Add().Text("SOL").Content(@<text>
                             <div class="row col-sm-12">
-                                <div class="col-md-1">
-                                    <button class="flat-btn-primary" style="height: 1em" onclick='OnClickAddSOL("#=kd_cb#", "#=kd_cob#", "#=kd_scob#", "#=kd_thn#", "#=no_kl#", "#=no_mts#")'>Add SOL</button>
+                                <div class="col-md-1" id="add_btn_sol_#=id#">
+                                    <button class="flat-btn-primary" style="height: 1em" onclick='OnClickAddSOL("#=kd_cb#", "#=kd_cob#", "#=kd_scob#", "#=kd_thn#", "#=no_kl#", "#=no_mts#", "#=nilai_ttl_kl#")'>Add SOL</button>
                                 </div>
                             </div>
                             @(Html.Kendo().Grid<KlaimAlokasiReasuransiDto>()
@@ -123,9 +124,9 @@
                                             .Click("onDeleteSOL");
                                     }).Width(100).Title("Action");
                                     columns.Bound(col => col.nm_jns_sor).Width(150).Title("Jenis SOR");
-                                    columns.Bound(col => col.nm_rk_sor).Width(150).Title("Nama Rekanan Sor");
-                                    columns.Bound(col => col.pst_share).Width(150).Title("Share (%)").Format("{0:n2}");
-                                    columns.Bound(col => col.nilai_kl).Width(150).Title("Nilai Klaim").Format("{0:n2}");
+                                    columns.Bound(col => col.nm_rk_sor).Width(150).Title("Nama Rekanan Sor").ClientFooterTemplate("<div>Total Share dan Klaim</div>");
+                                    columns.Bound(col => col.pst_share).Width(150).Title("Share (%)").Format("{0:n6}").ClientFooterTemplate("<div class='sum-pst_share'>0.000000</div>");
+                                    columns.Bound(col => col.nilai_kl).Width(150).Title("Nilai Klaim").Format("{0:n4}").ClientFooterTemplate("<div class='sum-nilai_kl'>0.000000</div>");
                                     columns.Bound(col => col.flag_nota).Width(150).Title("Flag Nota");
                                     columns.Bound(col => col.flag_cash_call).Width(150).Title("Flag Cash Call");
                                     
@@ -147,8 +148,8 @@
                         );
                         items.Add().Text("SOL XOL").Content(@<text>
                             <div class="row col-sm-12">
-                                <div class="col-md-1">
-                                    <button class="flat-btn-primary" style="height: 1em" onclick='OnClickAddSOLXOL("#=kd_cb#", "#=kd_cob#", "#=kd_scob#", "#=kd_thn#", "#=no_kl#", "#=no_mts#")'>Add SOL</button>
+                                <div class="col-md-1" id="add_btn_xol_#=id#">
+                                    <button class="flat-btn-primary" style="height: 1em" onclick='OnClickAddSOLXOL("#=kd_cb#", "#=kd_cob#", "#=kd_scob#", "#=kd_thn#", "#=no_kl#", "#=no_mts#")'>Add SOL XOL</button>
                                 </div>
                             </div>
                             @(Html.Kendo().Grid<KlaimAlokasiReasuransiXLDto>()
@@ -193,7 +194,7 @@
                                 .Scrollable()
                                 .Height(380)
                                 .Resizable(a=>a.Columns(true))
-                                .Events(ev => ev.DataBound("OnKlaimAlokasiReasuransiXLDataBound"))
+                                .Events(ev => ev.DataBound("OnKlaimAlokasiReasuransiXOLDataBound"))
                                 .ToClientTemplate())
                                                            </text>
                         );

@@ -45,10 +45,14 @@ namespace ABB.Application.NotaKlaimReasuransis.Queries
 
         public string no_kl { get; set; }
 
+        public short no_dla { get; set; }
+
         public string flag_posting { get; set; }
 
         public string? no_pol_lama { get; set; }
 
         public decimal? nilai_nt { get; set; }
+        public string nomor_berkas { get; set; }
+        public string nm_ttg { get; set; }
     }
 }

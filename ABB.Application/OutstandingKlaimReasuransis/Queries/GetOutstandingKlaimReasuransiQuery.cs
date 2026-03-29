@@ -180,11 +180,14 @@ namespace ABB.Application.OutstandingKlaimReasuransis.Queries
                                     var jns_sor_bppdan = ReportHelper.ConvertToReportFormat(data.jns_sor_bppdan);
                                     var jns_sor_fac = ReportHelper.ConvertToReportFormat(data.jns_sor_fac);
                                     var jns_sor_xol = ReportHelper.ConvertToReportFormat(data.jns_sor_xol);
-                                    var total = ReportHelper.ConvertToReportFormat(data.jns_sor_qts + data.jns_sor_spl + data.jns_sor_con + 
-                                                                                        data.jns_sor_pol + data.jns_sor_bppdan + data.jns_sor_fac +
-                                                                                        data.jns_sor_xol);
+                                    var total = ReportHelper.ConvertToReportFormat(
+                                        ReportHelper.ConvertToDecimalFormat(jns_sor_qts) +
+                                        ReportHelper.ConvertToDecimalFormat(jns_sor_spl) +
+                                        ReportHelper.ConvertToDecimalFormat(jns_sor_con) +
+                                        ReportHelper.ConvertToDecimalFormat(jns_sor_bppdan) +
+                                        ReportHelper.ConvertToDecimalFormat(jns_sor_fac) +
+                                        ReportHelper.ConvertToDecimalFormat(jns_sor_xol));
                                     
-
                                     stringBuilder.Append(@$"
                                     <tr>
                                         <td style=''>{sequence}.</td>

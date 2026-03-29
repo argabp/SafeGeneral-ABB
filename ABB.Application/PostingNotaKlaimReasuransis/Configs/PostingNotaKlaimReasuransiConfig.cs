@@ -17,7 +17,7 @@ namespace ABB.Application.PostingNotaKlaimReasuransis.Configs
                                     cob.nm_cob,
                                     scob.nm_scob,
                                      'K.' + RTRIM(p.kd_cb) + '.' + RTRIM(p.kd_scob) + '.' + 
-                                     RTRIM(p.kd_thn) + '.' + RTRIM(p.no_kl) + CAST(p.no_mts AS VARCHAR) as nomor_register,
+                                     RTRIM(p.kd_thn) + '.' + RTRIM(p.no_kl) + '.' + CAST(p.no_mts AS VARCHAR) as nomor_berkas,
                                      RTRIM(p.kd_cb) + '-' + RTRIM(p.kd_cob) + '-' + RTRIM(p.kd_scob) + '-' + 
                                         RTRIM(p.kd_thn) + '-' + RTRIM(p.no_kl) + '-' + CAST(p.no_mts AS VARCHAR) + '-' + 
                                         CAST(p.st_tipe_dla AS VARCHAR) AS Id
@@ -33,7 +33,7 @@ namespace ABB.Application.PostingNotaKlaimReasuransis.Configs
 
                 ColumnMap = new Dictionary<string, string>
                 {
-                    ["nomor_register"] = "src.nomor_register",
+                    ["nomor_berkas"] = "src.nomor_berkas",
                     ["nm_cb"] = "src.nm_cb",
                     ["nm_cob"] = "src.nm_cob",
                     ["nm_scob"] = "src.nm_scob",
@@ -46,7 +46,7 @@ namespace ABB.Application.PostingNotaKlaimReasuransis.Configs
                     "src.nm_scob",
                     "src.nm_cob",
                     "src.nm_cb",
-                    "src.nomor_register"
+                    "src.nomor_berkas"
                 }
             };
         }

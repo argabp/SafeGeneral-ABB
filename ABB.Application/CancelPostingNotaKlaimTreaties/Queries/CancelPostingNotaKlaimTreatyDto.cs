@@ -1,3 +1,5 @@
+using System;
+
 namespace ABB.Application.CancelPostingNotaKlaimTreaties.Queries
 {
     public class CancelPostingNotaKlaimTreatyDto
@@ -21,5 +23,7 @@ namespace ABB.Application.CancelPostingNotaKlaimTreaties.Queries
         public string jns_nt_kel { get; set; }
         
         public string no_nt_kel { get; set; }
+
+        public DateTime? tgl_nt { get; set; }
     }
 }

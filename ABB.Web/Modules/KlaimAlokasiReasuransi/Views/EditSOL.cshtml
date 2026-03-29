@@ -21,6 +21,7 @@
         @Html.HiddenFor(h => h.no_kl)
         @Html.HiddenFor(h => h.no_mts)
         @Html.HiddenFor(h => h.kd_grp_sor)
+        @Html.HiddenFor(h => h.nilai_ttl_kl)
         <div class="form-group row">
             <div class="row col-sm-12">
                 <label class="col-sm-4">Nomor Register Klaim</label>
@@ -53,7 +54,7 @@
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
-                                <read url="@Url.Action("GetRekananSor", "KlaimAlokasiReasuransi")"/>
+                                <read url="@Url.Action("GetRekananSor", "KlaimAlokasiReasuransi")" data="dataRekananSorDropDown"/>
                             </transport>
                         </datasource>
                     </kendo-dropdownlist>
@@ -65,7 +66,7 @@
             <div class="row col-sm-12">
                 <label class="col-sm-4">Share (%)</label>
                 <div class="col-sm-8">
-                    <kendo-numerictextbox decimals="2" max="100" spinners="false" for="pst_share" style="width: 100%;"/>
+                    <kendo-numerictextbox decimals="2" max="100" on-change="OnShareChange" spinners="false" for="pst_share" style="width: 100%;"/>
                 </div>
             </div>
         </div>
@@ -84,7 +85,7 @@
                     <label class="col-sm-6">Flag Nota</label>
                     <div class="col-sm-6 center">
                         <label>
-                            <input type="checkbox" class="k-checkbox" id="flag_nota"/>
+                            <input type="checkbox" onchange="OnFlagNotaChange(this)" class="k-checkbox" id="flag_nota"/>
                         </label>
                         <span asp-validation-for="flag_nota" class="text-danger"></span>
                     </div>
@@ -94,7 +95,7 @@
                     <label class="col-sm-6">Flag Cash Call</label>
                     <div class="col-sm-6 center">
                         <label>
-                            <input type="checkbox" class="k-checkbox" id="flag_cash_call"/>
+                            <input type="checkbox" disabled class="k-checkbox" id="flag_cash_call"/>
                         </label>
                         <span asp-validation-for="flag_cash_call" class="text-danger"></span>
                     </div>

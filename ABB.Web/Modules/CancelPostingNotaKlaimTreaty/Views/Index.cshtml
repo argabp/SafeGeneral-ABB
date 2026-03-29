@@ -28,7 +28,7 @@
         </div>
 
         <div class="col-md-2">
-            <button class="flat-btn-primary" onclick="postingNotaKlaimTreaty()">Cancel Posting</button>
+            <button class="flat-btn-primary" onclick="cancelPostingNotaKlaimTreaty()">Cancel Posting</button>
         </div>
     </div>
 
@@ -45,6 +45,7 @@
                     columns.Select().Width(50);
                     columns.Bound(col => col.nomor_nota).Width(150).Title("Nomor Nota");
                     columns.Bound(col => col.nm_rk).Width(150).Title("Nama Tertuju");
+                    columns.Bound(col => col.tgl_nt).Width(150).Title("Tanggal Nota").Format("{0: dd-MM-yyyy}");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

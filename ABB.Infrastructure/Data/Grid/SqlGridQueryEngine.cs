@@ -108,7 +108,7 @@ namespace ABB.Infrastructure.Data.Grid
                 var parts = config.SearchableColumns
                     .Select(c => $"{c} LIKE '%{key}%' ");
             
-                where.Append(" AND (" + string.Join(" OR ", parts) + ")");
+                where.Append(" (" + string.Join(" OR ", parts) + ")");
             }
         
             // ---- sorting ----
@@ -189,7 +189,7 @@ namespace ABB.Infrastructure.Data.Grid
                 var parts = config.SearchableColumns
                     .Select(c => $"{c} LIKE '%{key}%' ");
             
-                where.Append(" AND (" + string.Join(" OR ", parts) + ")");
+                where.Append(" (" + string.Join(" OR ", parts) + ")");
             }
         
             // ---- sorting ----
@@ -274,7 +274,7 @@ namespace ABB.Infrastructure.Data.Grid
                 var parts = config.SearchableColumns
                     .Select(c => $"{c} LIKE '%{key}%' ");
             
-                filters.Add(" AND (" + string.Join(" OR ", parts) + ")");
+                filters.Add(" (" + string.Join(" OR ", parts) + ")");
             }
         
             // ---- sorting ----

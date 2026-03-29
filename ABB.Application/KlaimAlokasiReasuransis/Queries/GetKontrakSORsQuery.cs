@@ -10,6 +10,9 @@ namespace ABB.Application.KlaimAlokasiReasuransis.Queries
 {
     public class GetKontrakSORsQuery : IRequest<List<DropdownOptionDto>>
     {
+        public string kd_cb { get; set; }
+
+        public string kd_cob { get; set; }
     }
 
     public class GetKontrakSORsQueryHandler : IRequestHandler<GetKontrakSORsQuery, List<DropdownOptionDto>>
@@ -23,7 +26,10 @@ namespace ABB.Application.KlaimAlokasiReasuransis.Queries
 
         public async Task<List<DropdownOptionDto>> Handle(GetKontrakSORsQuery request, CancellationToken cancellationToken)
         {
-            return (await _connectionPst.Query<DropdownOptionDto>("Select kd_tty_npps Value, nm_tty_npps Text From v_ri02t")).ToList();
+            return (await _connectionPst.Query<DropdownOptionDto>("Select kd_tty_npps Value, nm_tty_npps Text From v_ri02t WHERE kd_cb = @kd_cb AND kd_cob = @kd_cob", new
+            {
+                request.kd_cb, request.kd_cob
+            })).ToList();
         }
     }
 }

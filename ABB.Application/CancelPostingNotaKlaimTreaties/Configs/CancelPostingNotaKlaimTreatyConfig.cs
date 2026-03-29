@@ -32,13 +32,15 @@ namespace ABB.Application.CancelPostingNotaKlaimTreaties.Configs
                 ColumnMap = new Dictionary<string, string>
                 {
                     ["nomor_nota"] = "src.nomor_nota",
-                    ["nm_rk"] = "src.nm_rk"
+                    ["nm_rk"] = "src.nm_rk",
+                    ["tgl_nt"] = "src.tgl_nt"
                 },
 
                 SearchableColumns = new List<string>
                 {
                     "src.nomor_nota",
-                    "src.nm_rk"
+                    "src.nm_rk",
+                    "src.tgl_nt"
                 }
             };
         }

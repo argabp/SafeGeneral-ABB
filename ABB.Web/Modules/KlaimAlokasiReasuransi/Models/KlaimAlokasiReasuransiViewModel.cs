@@ -20,6 +20,7 @@ namespace ABB.Web.Modules.KlaimAlokasiReasuransi.Models
         public string flag_cash_call { get; set; }
         public string flag_nota { get; set; }
         public string? flag_nt { get; set; }
+        public decimal nilai_ttl_kl { get; set; }
 
         public void Mapping(Profile profile)
         {

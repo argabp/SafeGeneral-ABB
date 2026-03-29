@@ -24,7 +24,7 @@ namespace ABB.Application.CancelPostingNotaKlaimReasuransis.Queries
 
         public string st_tipe_dla { get; set; }
 
-        public string nomor_register { get; set; }
+        public string nomor_berkas { get; set; }
 
         public string nm_ttg { get; set; }
 

@@ -14,6 +14,8 @@ namespace ABB.Application.CetakDLAReasuransis.Queries
         
         public string symbol { get; set; }
         
+        public string symbol_ptg { get; set; }
+        
         public decimal nilai_ttl_ptg { get; set; }
         
         public decimal nilai_share_bgu { get; set; }
@@ -119,5 +121,11 @@ namespace ABB.Application.CetakDLAReasuransis.Queries
         public string? ket_oby { get; set; }
 
         public string? kond_ptg { get; set; }
+
+        public decimal? nilai_ttl_oby { get; set; }
+        
+        public decimal? nilai_ttl_r { get; set; }
+        
+        public decimal? nilai_ttl_b { get; set; }
     }
 }
