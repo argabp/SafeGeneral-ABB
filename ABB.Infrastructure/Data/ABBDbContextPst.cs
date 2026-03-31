@@ -37,6 +37,7 @@ namespace ABB.Infrastructure.Data
         public DbSet<DetailKontrakTreatyKeluarCoverage> DetailKontrakTreatyKeluarCoverage { get; set; }
         public DbSet<NotaTreatyMasuk> NotaTreatyMasuk { get; set; }
         public DbSet<TransaksiTreatyMasuk> TransaksiTreatyMasuk { get; set; }
+        public DbSet<MutasiKlaim> MutasiKlaim { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -60,6 +61,7 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new DetailKontrakTreatyKeluarKoasuransiMap());
             builder.ApplyConfiguration(new NotaTreatyMasukMap());
             builder.ApplyConfiguration(new TransaksiTreatyMasukMap());
+            builder.ApplyConfiguration(new MutasiKlaimMap());
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

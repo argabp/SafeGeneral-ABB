@@ -41,6 +41,11 @@
                             .IconClass("fa fa-eye")
                             .HtmlAttributes(new { title = "View" })
                             .Click("OnClickViewMutasiKlaim");
+                        // command.Custom("Edit")
+                        //     .Text("Edit")
+                        //     .IconClass("k-icon k-i-edit")
+                        //     .HtmlAttributes(new { title = "Edit" })
+                        //     .Click("OnClickEditMutasiKlaim");
                         command.Custom("AlokasiReasuransi")
                             .Text("Alokasi Reasuransi")
                             .IconClass("fa fa-plus")
@@ -95,7 +100,7 @@
                         items.Add().Text("SOL").Content(@<text>
                             <div class="row col-sm-12">
                                 <div class="col-md-1" id="add_btn_sol_#=id#">
-                                    <button class="flat-btn-primary" style="height: 1em" onclick='OnClickAddSOL("#=kd_cb#", "#=kd_cob#", "#=kd_scob#", "#=kd_thn#", "#=no_kl#", "#=no_mts#", "#=nilai_ttl_kl#")'>Add SOL</button>
+                                    <button class="flat-btn-primary" style="height: 1em" onclick='OnClickAddSOL("#=kd_cb#", "#=kd_cob#", "#=kd_scob#", "#=kd_thn#", "#=no_kl#", "#=no_mts#", "#=sisa_alokasi#")'>Add SOL</button>
                                 </div>
                             </div>
                             @(Html.Kendo().Grid<KlaimAlokasiReasuransiDto>()

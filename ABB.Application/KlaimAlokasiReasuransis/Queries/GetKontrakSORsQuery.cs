@@ -26,9 +26,9 @@ namespace ABB.Application.KlaimAlokasiReasuransis.Queries
 
         public async Task<List<DropdownOptionDto>> Handle(GetKontrakSORsQuery request, CancellationToken cancellationToken)
         {
-            return (await _connectionPst.Query<DropdownOptionDto>("Select kd_tty_npps Value, nm_tty_npps Text From v_ri02t WHERE kd_cb = @kd_cb AND kd_cob = @kd_cob", new
+            return (await _connectionPst.Query<DropdownOptionDto>("Select kd_tty_npps Value, nm_tty_npps Text From v_ri02t WHERE kd_cob = @kd_cob", new
             {
-                request.kd_cb, request.kd_cob
+                request.kd_cob
             })).ToList();
         }
     }

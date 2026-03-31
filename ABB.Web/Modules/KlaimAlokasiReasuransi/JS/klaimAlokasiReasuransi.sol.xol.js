@@ -44,7 +44,6 @@ function saveKlaimAlokasiReasuransiXL(url) {
 
 function dataKontrakDropDown(){
     return {
-        kd_cb: $("#kd_cb").val().trim(),
         kd_cob: $("#kd_cob").val().trim()
     }
 }
