@@ -40,7 +40,7 @@ namespace ABB.Application.EditJurnals104.Queries
 
        public async Task<List<InquiryJurnal104Dto>> Handle(GetInquiryEditJurnal104Query request, CancellationToken cancellationToken)
         {
-            var batasAwal = request.TglAwal.Date;
+           var batasAwal = request.TglAwal.Date;
             var batasAkhir = request.TglAkhir.Date.AddDays(1);
 
             // 1. FILTER DASAR JURNAL
@@ -50,11 +50,14 @@ namespace ABB.Application.EditJurnals104.Queries
                             x.GlTanggal >= batasAwal && 
                             x.GlTanggal < batasAkhir);
 
+            // --- PERBAIKAN DI SINI ---
             if (!string.IsNullOrWhiteSpace(request.NoBukti))
             {
                 var noBuktiClean = request.NoBukti.Trim();
-                queryJurnal = queryJurnal.Where(x => x.GlBukti == noBuktiClean);
+                // Ubah '==' menjadi '.Contains()' agar pencarian fleksibel
+                queryJurnal = queryJurnal.Where(x => x.GlBukti.Contains(noBuktiClean));
             }
+            // -------------------------
 
             // 2. GROUPING DATA JURNAL
             var groupedJurnal = queryJurnal
@@ -69,7 +72,7 @@ namespace ABB.Application.EditJurnals104.Queries
                     TotalNilaiDouble = g.Where(x => x.GlDk == "D").Sum(x => x.GlNilaiIdr) 
                 });
 
-            // 3. LEFT JOIN MANUAL (Cocokkan dengan akhiran, misal "JK50" berakhiran "50")
+            // 3. LEFT JOIN MANUAL
             var joinedQuery = 
                 from j in groupedJurnal
                 from cb in _context.Set<Cabang>() 
@@ -95,13 +98,9 @@ namespace ABB.Application.EditJurnals104.Queries
                 {
                     NoBukti = x.NoBukti,
                     Lokasi = x.KodeLokasi, 
-                    
-                    // --- GABUNGKAN NAMA CABANG & LOKASI DI SINI ---
-                    // Biar kalau kosong dia cuma nampilin "50", tapi kalau ada jadi "50 - JAKARTA"
                     NamaCabang = !string.IsNullOrWhiteSpace(x.NamaCabang) 
                                  ? $"{x.KodeLokasi} - {x.NamaCabang}" 
                                  : x.KodeLokasi, 
-                    
                     Tanggal = x.Tanggal ?? DateTime.Now,
                     Keterangan = x.Keterangan,
                     GlTran = x.GlTran, 
