@@ -310,12 +310,20 @@ namespace ABB.Web.Modules.LaporanPelunasan
                     foreach (var item in data)
                     {
                         worksheet.Cell(row, 1).Value = idx;
-                        worksheet.Cell(row, 2).Value = item.date.HasValue ? item.date.Value.ToString("dd-MM-yyyy") : "-";
+                        if (item.date.HasValue)
+                        {
+                            worksheet.Cell(row, 2).Value = item.date.Value;
+                            worksheet.Cell(row, 2).Style.DateFormat.Format = "dd-MM-yyyy";
+                        }
+                        else
+                        {
+                            worksheet.Cell(row, 2).Value = "-";
+                        }
                         
                         // Pake string.IsNullOrWhiteSpace biar kalau datanya "" (kosong) tetep diubah jadi "-"
                         worksheet.Cell(row, 3).Value = string.IsNullOrWhiteSpace(item.no_nd) ? "-" : item.no_nd.Trim();
                         worksheet.Cell(row, 4).Value = string.IsNullOrWhiteSpace(item.no_pl) ? "-" : item.no_pl.Trim();
-                        worksheet.Cell(row, 5).Value = string.IsNullOrWhiteSpace(item.nm_cust2) ? "-" : item.nm_cust2.Trim();
+                        worksheet.Cell(row, 5).Value = string.IsNullOrWhiteSpace(item.nm_cust) ? "-" : item.nm_cust.Trim();
                         worksheet.Cell(row, 6).Value = string.IsNullOrWhiteSpace(item.nm_pos) ? "-" : item.nm_pos.Trim();
                         worksheet.Cell(row, 7).Value = string.IsNullOrWhiteSpace(item.nm_brok) ? "-" : item.nm_brok.Trim();
                         worksheet.Cell(row, 8).Value = string.IsNullOrWhiteSpace(item.nm_cust2) ? "-" : item.nm_cust2.Trim(); 
@@ -323,7 +331,15 @@ namespace ABB.Web.Modules.LaporanPelunasan
                         worksheet.Cell(row, 10).Value = string.IsNullOrWhiteSpace(item.kd_tutup) ? "-" : item.kd_tutup.Trim();
                         worksheet.Cell(row, 11).Value = string.IsNullOrWhiteSpace(item.no_bukti) ? "-" : item.no_bukti.Trim();
                         
-                        worksheet.Cell(row, 12).Value = item.tgl_byr.HasValue ? item.tgl_byr.Value.ToString("dd-MM-yyyy") : "-";
+                        if (item.tgl_byr.HasValue)
+                        {
+                            worksheet.Cell(row, 12).Value = item.tgl_byr.Value;
+                            worksheet.Cell(row, 12).Style.DateFormat.Format = "dd-MM-yyyy";
+                        }
+                        else
+                        {
+                            worksheet.Cell(row, 12).Value = "-";
+                        }
                         
                         worksheet.Cell(row, 13).Value = item.jumlah ?? 0;
                         worksheet.Cell(row, 13).Style.NumberFormat.Format = "#,##0.00"; 

@@ -7,18 +7,18 @@
     /* Styling agar menyerupai kertas dokumen A4 */
     .document-paper {
         background: white;
-        padding: 40px;
+        padding: 10px;
         margin: 0 auto;
         font-family: 'Arial', sans-serif;
         color: black;
         border: 1px solid #ccc;
         box-shadow: 0 0 10px rgba(0,0,0,0.1);
         max-width: 950px; /* Dikit dilebarkan biar muat banyak kolom */
-        font-size: 11px;  /* Font dikecilkan dikit biar tabel rincian aman */
+        font-size: 10px;  /* Font dikecilkan dikit biar tabel rincian aman */
     }
     .doc-header-table {
         width: 100%;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         font-size: 12px;
     }
     .doc-header-table td {
@@ -87,14 +87,15 @@
         <table class="doc-details-table">
             <thead>
                 <tr>
-                    <th>NO.</th>
-                    <th>TANGGAL</th>
-                    <th>NO. NOTA</th>
-                    <th>NO. BUKTI</th>
-                    <th>NO. REFF</th> <th>TGL BAYAR</th>
-                    <th>KETERANGAN</th>
-                    <th>D/K</th>
-                    <th>JUMLAH (Rp)</th>
+                    <th width="2%">NO.</th>
+                    <th width="10%">TANGGAL</th>
+                    <th width="20%">NO. NOTA</th>
+                    <th width="15%">NO. BUKTI</th>
+                    <th width="10%">NO. REFF</th> 
+                    <th width="10%">TGL BAYAR</th>
+                    <th width="20%">KETERANGAN</th>
+                    <th width="3%">D/K</th>
+                    <th width="10%">JUMLAH (Rp)</th>
                 </tr>
             </thead>
             <tbody>
@@ -111,7 +112,7 @@
                         <td>@Model.InquiryNotaProduksiHeader.no_nd</td> 
                         <td>@Model.InquiryNotaProduksiHeader.no_ref</td> <td>-</td>
                         <td class="text-left">NILAI NOTA</td>
-                        <td>D</td>
+                        <td>@Model.InquiryNotaProduksiHeader.d_k</td>
                         <td class="text-right">@string.Format("{0:N2}", Model.InquiryNotaProduksiHeader.jumlah)</td>
                     </tr>
                     urut++;
@@ -192,8 +193,9 @@
     function exportBuktiToPDF() {
         kendo.drawing.drawDOM("#pdf-document-area", {
             paperSize: "A4",
+            landscape: true,
             margin: { top: "1cm", bottom: "1cm", left: "0.5cm", right: "0.5cm" },
-            scale: 0.75, // Scale diperkecil sedikit lagi biar tabel yang agak panjang tidak terpotong ke samping
+            scale: 0.85, // Scale diperkecil sedikit lagi biar tabel yang agak panjang tidak terpotong ke samping
             keepTogether: ".doc-details-table tr" 
         }).then(function(group) {
             kendo.drawing.pdf.saveAs(group, "Bukti_Pembayaran_@(Model.InquiryNotaProduksiHeader.no_nd).pdf");

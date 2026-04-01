@@ -7,6 +7,7 @@ namespace ABB.Domain.Entities
         public string no_nd { get; set; }
         public string no_pl { get; set; }
         public string nm_cust2 { get; set; }
+        public string nm_cust { get; set; }
         public string nm_pos { get; set; }
         public string nm_brok { get; set; }
         public string jn_ass { get; set; }
@@ -18,5 +19,6 @@ namespace ABB.Domain.Entities
         public decimal? kurs { get; set; }
         public decimal? saldo { get; set; }  // Nilai Nota
         public decimal? jumlah { get; set; } // Nilai Total Bayar (Bank+Kas+Piutang)
+        public decimal? netto { get; set; }
     }
 }
