@@ -301,7 +301,7 @@ namespace ABB.Web.Modules.LaporanOutstanding
                     // Menggunakan var adalah cara termudah untuk menghindari mismatch tipe data LINQ
                     var groupedData = model.JenisLaporan switch {
                         "COB" => response.RawData.GroupBy(x => x.jn_ass ?? "LAINNYA").OrderBy(g => g.Key).AsEnumerable(),
-                        "Tertanggung" => response.RawData.GroupBy(x => x.nm_cust2 ?? "TANPA NAMA").OrderBy(g => g.Key).AsEnumerable(),
+                        "Tertanggung" => response.RawData.GroupBy(x => x.nm_cust ?? "TANPA NAMA").OrderBy(g => g.Key).AsEnumerable(),
                         "Pos" => response.RawData.GroupBy(x => x.nm_pos ?? "TANPA POS").OrderBy(g => g.Key).AsEnumerable(),
                         "Broker" => response.RawData.GroupBy(x => x.nm_brok ?? "DIRECT").OrderBy(g => g.Key).AsEnumerable(),
                         _ => response.RawData.GroupBy(x => x.jn_ass ?? "LAINNYA").OrderBy(g => g.Key).AsEnumerable()
@@ -319,7 +319,7 @@ namespace ABB.Web.Modules.LaporanOutstanding
                                 groupedData = data.GroupBy(x => x.jn_ass ?? "LAINNYA");
                                 break;
                             case "Tertanggung":
-                                groupedData = data.GroupBy(x => x.nm_cust2 ?? "TANPA NAMA");
+                                groupedData = data.GroupBy(x => x.nm_cust ?? "TANPA NAMA");
                                 break;
                             case "Pos":
                                 groupedData = data.GroupBy(x => x.nm_pos ?? "TANPA POS");
@@ -361,14 +361,14 @@ namespace ABB.Web.Modules.LaporanOutstanding
                                 if (umur < 0) umur = 0;
                             }
 
-                            decimal nNota = fmtDec(item.saldo);
+                            decimal nNota = fmtDec(item.netto);
                             decimal nBayar = fmtDec(item.jumlah);
                             decimal nOs = nNota - nBayar;
 
                             worksheet.Cell(row, 1).Value = no++;
                             worksheet.Cell(row, 2).Value = item.no_nd;
                             worksheet.Cell(row, 3).Value = item.no_pl;
-                            worksheet.Cell(row, 4).Value = item.nm_cust2;
+                            worksheet.Cell(row, 4).Value = item.nm_cust;
                             worksheet.Cell(row, 5).Value = item.nm_pos;
                             worksheet.Cell(row, 6).Value = item.nm_brok;
                             worksheet.Cell(row, 7).Value = item.nm_brok;
@@ -376,8 +376,25 @@ namespace ABB.Web.Modules.LaporanOutstanding
                             worksheet.Cell(row, 9).Value = "";
                             worksheet.Cell(row, 10).Value = item.lok;
                             worksheet.Cell(row, 11).Value = item.jn_ass;
-                            worksheet.Cell(row, 12).Value = fmtDate(item.date);
-                            worksheet.Cell(row, 13).Value = fmtDate(item.tgl_jth_tempo);
+                            if (item.date.HasValue)
+                                {
+                                    worksheet.Cell(row, 12).Value = item.date.Value;
+                                    worksheet.Cell(row, 12).Style.DateFormat.Format = "dd-MM-yyyy";
+                                }
+                                else
+                                {
+                                    worksheet.Cell(row, 12).Value = "";
+                                }
+
+                                if (item.tgl_jth_tempo.HasValue)
+                                {
+                                    worksheet.Cell(row, 13).Value = item.tgl_jth_tempo.Value;
+                                    worksheet.Cell(row, 13).Style.DateFormat.Format = "dd-MM-yyyy";
+                                }
+                                else
+                                {
+                                    worksheet.Cell(row, 13).Value = "";
+                                }
                             worksheet.Cell(row, 14).Value = item.curensi;
                             worksheet.Cell(row, 15).Value = item.kurs;
                             worksheet.Cell(row, 16).Value = umur;
