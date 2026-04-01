@@ -92,7 +92,7 @@ namespace ABB.Web.Modules.KlaimAlokasiReasuransi
             return Json(result);
         }
          
-        public async Task<IActionResult> ClosingKlaimAlokasiReasuransi([FromBody] MutasiKlaimModel model)
+        public async Task<IActionResult> ClosingKlaimAlokasiReasuransi([FromBody] ClosingMutasiKlaimViewModel model)
         {
             try
             {
@@ -181,6 +181,20 @@ namespace ABB.Web.Modules.KlaimAlokasiReasuransi
             var users = await Mediator.Send(new GetUsersQuery());
             
             return Json(users);
+        }
+        
+        public IActionResult Closing(string kd_cb, string kd_cob,
+            string kd_scob, string kd_thn, string no_kl, Int16 no_mts)
+        {
+            return PartialView(new MutasiKlaimModel()
+            {
+                kd_cb = kd_cb,
+                kd_cob = kd_cob,
+                kd_scob = kd_scob,
+                kd_thn = kd_thn,
+                no_kl = no_kl,
+                no_mts = no_mts
+            });
         }
         
         public async Task<IActionResult> Edit(string kd_cb, string kd_cob,

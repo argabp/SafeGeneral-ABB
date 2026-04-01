@@ -13,6 +13,7 @@ namespace ABB.Web.Modules.CetakPLAReasuransi.Models
         public int kd_thn { get; set; }
         public string no_kl { get; set; }
         public Int16 no_mts { get; set; }
+        public Int16 no_pla { get; set; }
         public void Mapping(Profile profile)
         {
             profile.CreateMap<CetakPLAReasuransiViewModel, GetCetakPLAReasuransiQuery>();

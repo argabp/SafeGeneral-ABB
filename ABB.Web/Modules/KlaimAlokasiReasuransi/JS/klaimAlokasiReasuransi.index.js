@@ -150,38 +150,7 @@ function onDeleteSOLXOL(e){
 function OnClickClosingMutasiKlaim(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-    
-    showConfirmation('Confirmation', `Are you sure you want to closing SOL?`,
-        function () {
-            showProgressOnGrid('#MutasiKlaimGrid');
-            setTimeout(function () { closingMutasiKlaim(dataItem); }, 500);
-        }
-    );
-}
-
-function closingMutasiKlaim(dataItem){    
-    var form = {};
-
-    form.kd_cb = dataItem.kd_cb;
-    form.kd_cob = dataItem.kd_cob;
-    form.kd_scob = dataItem.kd_scob;
-    form.kd_thn = dataItem.kd_thn;
-    form.no_kl = dataItem.no_kl;
-    form.no_mts = dataItem.no_mts;
-    // form.tgl_closing = kendo.toString(dataItem.tgl_reas, "MM/dd/yyyy");
-
-    var data = JSON.stringify(form);
-    ajaxPost(`/KlaimAlokasiReasuransi/ClosingKlaimAlokasiReasuransi`, data,  function (response) {
-        if (response.Result === "OK") {
-            showMessage('Closing Successfully', response.Message);
-        }
-        else {
-            showMessage('Error', 'Clossing is failed, ' + response.Message);
-        };
-
-        refreshGrid("#MutasiKlaimGrid");
-        closeProgressOnGrid('#MutasiKlaimGrid');
-    });
+    openWindow("#ClosingMutasiKlaimiWindow", `/KlaimAlokasiReasuransi/Closing?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}&no_mts=${dataItem.no_mts}`, "Closing");
 }
 
 function OnClickAlokasiReasuransi(e) {

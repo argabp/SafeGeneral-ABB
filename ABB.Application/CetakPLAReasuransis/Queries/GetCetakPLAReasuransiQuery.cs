@@ -41,12 +41,11 @@ namespace ABB.Application.CetakPLAReasuransis.Queries
         {
             return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
             {
-                var no_pla = request.no_pla == 0 ? 1 : request.no_pla;
                 var datas = (await _connectionPst.QueryProc<CetakPLAReasuransiDto>("spr_cl03r_02", 
                     new
                     {
                         input_str = $"{request.kd_cb.Trim()},{request.kd_cob.Trim()},{request.kd_scob.Trim()}," +
-                                    $"{request.kd_thn},{request.no_kl.Trim()},{request.no_mts},{no_pla}"
+                                    $"{request.kd_thn},{request.no_kl.Trim()},{request.no_mts},{request.no_pla}"
                     })).ToList();
 
                 string reportPath = Path.Combine( _environment.ContentRootPath, "Modules", "Reports", "Templates", "PLAReasuransi.html" );

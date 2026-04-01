@@ -1,11 +1,12 @@
 
+using System;
 using ABB.Application.Common.Interfaces;
 using ABB.Application.KlaimAlokasiReasuransis.Commands;
 using AutoMapper;
 
 namespace ABB.Web.Modules.KlaimAlokasiReasuransi.Models
 {
-    public class MutasiKlaimModel : IMapFrom<AlokasiReasCommand>
+    public class ClosingMutasiKlaimViewModel : IMapFrom<ClosingKlaimAlokasiReasuransiCommand>
     {
         public string kd_cb { get; set; }
 
@@ -19,9 +20,11 @@ namespace ABB.Web.Modules.KlaimAlokasiReasuransi.Models
 
         public short no_mts { get; set; }
 
+        public DateTime tgl_closing { get; set; }
+
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<MutasiKlaimModel, AlokasiReasCommand>();
+            profile.CreateMap<ClosingMutasiKlaimViewModel, ClosingKlaimAlokasiReasuransiCommand>();
         }
     }
 }

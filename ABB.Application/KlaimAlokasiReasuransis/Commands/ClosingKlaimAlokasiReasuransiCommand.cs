@@ -17,6 +17,8 @@ namespace ABB.Application.KlaimAlokasiReasuransis.Commands
         public string kd_thn { get; set; }
         public string no_kl { get; set; }
         public Int16 no_mts { get; set; }
+
+        public DateTime tgl_closing { get; set; }
     }
 
     public class ClosingKlaimAlokasiReasuransiCommandHandler : IRequestHandler<ClosingKlaimAlokasiReasuransiCommand, (string, string, string)>
@@ -40,7 +42,7 @@ namespace ABB.Application.KlaimAlokasiReasuransis.Commands
                     {
                         request.kd_cb, request.kd_cob, request.kd_scob,
                         request.kd_thn, request.no_kl, request.no_mts,
-                        tgl_closing = DateTime.Now
+                        request.tgl_closing
                     })).FirstOrDefault();
             }, _logger);
         }

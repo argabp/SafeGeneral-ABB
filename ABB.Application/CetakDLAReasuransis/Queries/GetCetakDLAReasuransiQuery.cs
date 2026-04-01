@@ -42,12 +42,11 @@ namespace ABB.Application.CetakDLAReasuransis.Queries
         {
             return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
             {
-                var no_dla = request.no_dla == 0 ? 1 : request.no_dla;
                 var datas = (await _connectionPst.QueryProc<CetakDLAReasuransiDto>("spr_cl03r_02", 
                     new
                     {
                         input_str = $"{request.kd_cb.Trim()},{request.kd_cob.Trim()},{request.kd_scob.Trim()}," +
-                                    $"{request.kd_thn},{request.no_kl.Trim()},{request.no_mts},{no_dla}"
+                                    $"{request.kd_thn},{request.no_kl.Trim()},{request.no_mts},{request.no_dla}"
                     })).ToList();
 
                 string reportPath = Path.Combine( _environment.ContentRootPath, "Modules", "Reports", "Templates", "DLAReasuransi.html" );

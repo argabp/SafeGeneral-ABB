@@ -1,0 +1,27 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.KlaimAlokasiReasuransi.Models.MutasiKlaimModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/KlaimAlokasiReasuransi/JS/klaimAlokasiReasuransi.closing.js"></script>
+
+<div class="window-body">
+    <form id="mutasiKlaimorm" enctype="multipart/form-data" autocomplete="off">
+        <input type="hidden" id="kd_cb_mutasi_klaim" value="@Model.kd_cb">
+        <input type="hidden" id="kd_cob_mutasi_klaim" value="@Model.kd_cob">
+        <input type="hidden" id="kd_scob_mutasi_klaim" value="@Model.kd_scob">
+        <input type="hidden" id="kd_thn_mutasi_klaim" value="@Model.kd_thn">
+        <input type="hidden" id="no_kl_mutasi_klaim" value="@Model.no_kl">
+        <input type="hidden" id="no_mts_mutasi_klaim" value="@Model.no_mts">
+        <div class="col-sm-12 form-group">
+            <kendo-datepicker name="tgl_closing_mutasi_klaim" value="DateTime.Now"></kendo-datepicker>
+        </div>
+    </form>
+
+    <div class="window-footer">
+        <button type="button" id="btn-closing-mutasiKlaim" class="btn btn-primary space-right">
+            Closing
+        </button>
+    </div>
+</div>

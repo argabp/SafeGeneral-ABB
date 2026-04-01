@@ -30,7 +30,7 @@ function viewReport(element){
     form.no_kl = dataItem.no_kl;
     form.no_mts = dataItem.no_mts;
     form.kd_thn = dataItem.kd_thn;
-    // form.bahasa = formElement[0].querySelector('select[name="bahasa"]').value
+    form.no_pla = dataItem.no_pla;
     
     ajaxPost("/CetakPLAReasuransi/GenerateReport", JSON.stringify(form),
         function (response) {

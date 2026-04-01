@@ -30,6 +30,7 @@ function viewReport(element){
     form.no_kl = dataItem.no_kl;
     form.no_mts = dataItem.no_mts;
     form.kd_thn = dataItem.kd_thn;
+    form.no_dla = dataItem.no_dla;
     form.jenisLaporan = formElement[0].value
     
     ajaxPost("/CetakDLAReasuransi/GenerateReport", JSON.stringify(form),

@@ -13,6 +13,7 @@ namespace ABB.Web.Modules.CetakDLAReasuransi.Models
         public int kd_thn { get; set; }
         public string no_kl { get; set; }
         public Int16 no_mts { get; set; }
+        public Int16 no_dla { get; set; }
         public string jns_lap { get; set; }
         public void Mapping(Profile profile)
         {
