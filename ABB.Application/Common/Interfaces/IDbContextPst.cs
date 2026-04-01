@@ -28,6 +28,7 @@ namespace ABB.Application.Common.Interfaces
         DbSet<DetailKontrakTreatyKeluarCoverage> DetailKontrakTreatyKeluarCoverage { get; set; }
         DbSet<NotaTreatyMasuk> NotaTreatyMasuk { get; set; }
         DbSet<TransaksiTreatyMasuk> TransaksiTreatyMasuk { get; set; }
+        DbSet<MutasiKlaim> MutasiKlaim { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

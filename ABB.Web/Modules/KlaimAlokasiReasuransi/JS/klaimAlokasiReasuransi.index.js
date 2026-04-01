@@ -28,7 +28,16 @@ function OnClickViewMutasiKlaim(e) {
     showProgressByElement($("#KlaimAlokasiReasuransiWindow"));
     
     openKlaimAlokasiReasuransiWindow(`/KlaimAlokasiReasuransi/View?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}&no_mts=${dataItem.no_mts}`, 'View');
-    
+}
+
+function OnClickEditMutasiKlaim(e) {
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    console.log('dataItem', dataItem);
+
+    showProgressByElement($("#KlaimAlokasiReasuransiWindow"));
+
+    openKlaimAlokasiReasuransiWindow(`/KlaimAlokasiReasuransi/Edit?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}&no_mts=${dataItem.no_mts}`, 'Edit');
 }
 
 function OnClickEditSOL(e) {
@@ -159,7 +168,7 @@ function closingMutasiKlaim(dataItem){
     form.kd_thn = dataItem.kd_thn;
     form.no_kl = dataItem.no_kl;
     form.no_mts = dataItem.no_mts;
-    // form.tgl_closing = kendo.toString(dataItem.tgl_closing, "MM/dd/yyyy");
+    // form.tgl_closing = kendo.toString(dataItem.tgl_reas, "MM/dd/yyyy");
 
     var data = JSON.stringify(form);
     ajaxPost(`/KlaimAlokasiReasuransi/ClosingKlaimAlokasiReasuransi`, data,  function (response) {

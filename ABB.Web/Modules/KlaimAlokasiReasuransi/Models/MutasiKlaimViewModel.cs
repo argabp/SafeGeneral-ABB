@@ -1,5 +1,6 @@
 using System;
 using ABB.Application.Common.Interfaces;
+using ABB.Application.KlaimAlokasiReasuransis.Commands;
 using AutoMapper;
 
 namespace ABB.Web.Modules.KlaimAlokasiReasuransi.Models
@@ -57,6 +58,7 @@ namespace ABB.Web.Modules.KlaimAlokasiReasuransi.Models
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Domain.Entities.MutasiKlaim, MutasiKlaimViewModel>();
+            profile.CreateMap<MutasiKlaimViewModel, SaveMutasiKlaimCommand>();
         }
     }
 }

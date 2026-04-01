@@ -183,6 +183,27 @@ namespace ABB.Web.Modules.KlaimAlokasiReasuransi
             return Json(users);
         }
         
+        public async Task<IActionResult> Edit(string kd_cb, string kd_cob,
+            string kd_scob, string kd_thn, string no_kl, Int16 no_mts)
+        {
+            var mutasiKlaim = await Mediator.Send(new GetMutasiKlaimQuery()
+            {
+                kd_cb = kd_cb,
+                kd_cob = kd_cob,
+                kd_scob = kd_scob,
+                kd_thn = kd_thn,
+                no_kl = no_kl,
+                no_mts = no_mts
+            });
+
+            mutasiKlaim.kd_cb = mutasiKlaim.kd_cb.Trim();
+            mutasiKlaim.kd_cob = mutasiKlaim.kd_cob.Trim();
+            mutasiKlaim.kd_scob = mutasiKlaim.kd_scob.Trim();
+            mutasiKlaim.validitas = mutasiKlaim.validitas.Trim();
+            
+            return PartialView(Mapper.Map<MutasiKlaimViewModel>(mutasiKlaim));
+        }
+        
         public async Task<IActionResult> View(string kd_cb, string kd_cob,
             string kd_scob, string kd_thn, string no_kl, Int16 no_mts)
         {
@@ -202,6 +223,22 @@ namespace ABB.Web.Modules.KlaimAlokasiReasuransi
             mutasiKlaim.validitas = mutasiKlaim.validitas.Trim();
             
             return PartialView(Mapper.Map<MutasiKlaimViewModel>(mutasiKlaim));
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> Save([FromBody] MutasiKlaimViewModel model)
+        {
+            try
+            {
+                var command = Mapper.Map<SaveMutasiKlaimCommand>(model);
+                
+                await Mediator.Send(command);
+                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", ex.Message });
+            }
         }
         
         [HttpPost]
@@ -293,6 +330,7 @@ namespace ABB.Web.Modules.KlaimAlokasiReasuransi
                 return Json(new { Result = "ERROR", ex.Message });
             }
         }
+        
         public async Task<IActionResult> AddSOLXOL(string kd_cb, string kd_cob,
             string kd_scob, string kd_thn, string no_kl, Int16 no_mts)
         {
@@ -396,13 +434,12 @@ namespace ABB.Web.Modules.KlaimAlokasiReasuransi
         }
     
         [HttpGet]
-        public async Task<ActionResult> GetKontrakSOR(string kd_cb, string kd_cob)
+        public async Task<ActionResult> GetKontrakSOR(string kd_cob)
         {
             try
             {
                 var command = new GetKontrakSORsQuery()
                 {
-                    kd_cb = kd_cb,
                     kd_cob = kd_cob
                 };
                 
