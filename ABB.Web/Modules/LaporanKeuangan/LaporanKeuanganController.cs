@@ -38,21 +38,43 @@ namespace ABB.Web.Modules.LaporanKeuangan
                 LaporanKeuanganResponse response = null;
                 string outputFileName = "";
 
-                // PERCABANGAN LOGIKA BERDASARKAN TIPE LAPORAN
+                // PERCABANGAN LOGIKA BERDASARKAN TIPE LAPORAN (PDF)
                 switch (model.TipeLaporan)
                 {
                     case "NERACA":
-                        response = await Mediator.Send(new GetLaporanNeracaQuery { JenisPeriode = model.JenisPeriode, Bulan = model.Bulan, Tahun = model.Tahun });
-                        outputFileName = "LaporanNeraca.pdf";
+                    case "NERACA (BULAN)":
+                        response = await Mediator.Send(new GetLaporanNeracaQuery 
+                        { 
+                            TipeLaporan = model.TipeLaporan,
+                            JenisPeriode = model.JenisPeriode, 
+                            Bulan = model.Bulan, 
+                            Tahun = model.Tahun 
+                        });
+                        outputFileName = model.TipeLaporan == "NERACA" ? "LaporanNeraca.pdf" : "LaporanNeracaBulan.pdf";
                         break;
+
                     case "LABARUGI":
-                        response = await Mediator.Send(new GetLaporanLabaRugiQuery { JenisPeriode = model.JenisPeriode, Bulan = model.Bulan, Tahun = model.Tahun });
-                        outputFileName = "LaporanLabaRugi.pdf";
+                    case "LABA RUGI (BULAN)": 
+                        response = await Mediator.Send(new GetLaporanLabaRugiQuery 
+                        { 
+                            TipeLaporan = model.TipeLaporan,
+                            JenisPeriode = model.JenisPeriode, 
+                            Bulan = model.Bulan, 
+                            Tahun = model.Tahun 
+                        });
+                        outputFileName = model.TipeLaporan == "LABARUGI" ? "LaporanLabaRugi.pdf" : "LaporanLabaRugiBulan.pdf";
                         break;
+
                     case "ARUSKAS":
-                        response = await Mediator.Send(new GetLaporanArusKasQuery { JenisPeriode = model.JenisPeriode, Bulan = model.Bulan, Tahun = model.Tahun });
+                        response = await Mediator.Send(new GetLaporanArusKasQuery 
+                        { 
+                            JenisPeriode = model.JenisPeriode, 
+                            Bulan = model.Bulan, 
+                            Tahun = model.Tahun 
+                        });
                         outputFileName = "LaporanArusKas.pdf";
                         break;
+
                     default:
                         throw new Exception("Tipe Laporan tidak valid.");
                 }
@@ -63,7 +85,7 @@ namespace ABB.Web.Modules.LaporanKeuangan
                 // GENERATE PDF
                 _reportGeneratorService.GenerateReport(
                     outputFileName, 
-                    response.HtmlString, // Ambil HtmlString dari Response
+                    response.HtmlString, 
                     user,
                     Orientation.Portrait,
                     5, 5, 5, 5,
@@ -85,39 +107,71 @@ namespace ABB.Web.Modules.LaporanKeuangan
             {
                 LaporanKeuanganResponse response = null;
 
-                // Tarik data yang sama persis dengan PDF
+                // PERCABANGAN LOGIKA BERDASARKAN TIPE LAPORAN (EXCEL)
                 switch (model.TipeLaporan)
                 {
                     case "NERACA":
-                        response = await Mediator.Send(new GetLaporanNeracaQuery { JenisPeriode = model.JenisPeriode, Bulan = model.Bulan, Tahun = model.Tahun });
+                    case "NERACA (BULAN)":
+                        response = await Mediator.Send(new GetLaporanNeracaQuery 
+                        { 
+                            TipeLaporan = model.TipeLaporan,
+                            JenisPeriode = model.JenisPeriode, 
+                            Bulan = model.Bulan, 
+                            Tahun = model.Tahun 
+                        });
                         break;
+
                     case "LABARUGI":
-                        response = await Mediator.Send(new GetLaporanLabaRugiQuery { JenisPeriode = model.JenisPeriode, Bulan = model.Bulan, Tahun = model.Tahun });
+                    case "LABA RUGI (BULAN)":
+                        response = await Mediator.Send(new GetLaporanLabaRugiQuery 
+                        { 
+                            TipeLaporan = model.TipeLaporan,
+                            JenisPeriode = model.JenisPeriode, 
+                            Bulan = model.Bulan, 
+                            Tahun = model.Tahun 
+                        });
                         break;
+
                     case "ARUSKAS":
-                        response = await Mediator.Send(new GetLaporanArusKasQuery { JenisPeriode = model.JenisPeriode, Bulan = model.Bulan, Tahun = model.Tahun });
+                        response = await Mediator.Send(new GetLaporanArusKasQuery 
+                        { 
+                            JenisPeriode = model.JenisPeriode, 
+                            Bulan = model.Bulan, 
+                            Tahun = model.Tahun 
+                        });
                         break;
-                    default: throw new Exception("Tipe Laporan tidak valid.");
+
+                    default: 
+                        throw new Exception("Tipe Laporan tidak valid.");
                 }
 
                 if (response == null || response.ExcelData == null) throw new Exception("Data tidak ditemukan.");
 
                 using (var workbook = new XLWorkbook())
                 {
-                    var worksheet = workbook.Worksheets.Add(model.TipeLaporan);
+                    // Bersihkan nama sheet dari karakter aneh
+                    string sheetName = model.TipeLaporan.Replace(" ", "").Replace("(", "").Replace(")", "");
+                    // Max nama sheet di Excel itu 31 Karakter, jadi kita potong kalau kepanjangan
+                    if (sheetName.Length > 31) sheetName = sheetName.Substring(0, 31);
+                    
+                    var worksheet = workbook.Worksheets.Add(sheetName);
+
+                    bool isBulanan = model.TipeLaporan.Contains("(BULAN)");
+                    int maxCol = isBulanan ? 4 : 3;
 
                     // --- 1. KOP LAPORAN ---
                     worksheet.Cell(1, 1).Value = $"LAPORAN {model.TipeLaporan}";
-                    worksheet.Range("A1:C1").Merge().Style.Font.SetBold().Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                    worksheet.Range(1, 1, 1, maxCol).Merge().Style.Font.SetBold().Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
                     
                     string labelPeriode = model.JenisPeriode == "BULANAN" ? $"Bulan {model.Bulan} " : "";
                     worksheet.Cell(2, 1).Value = $"PERIODE: {labelPeriode}Tahun {model.Tahun}";
-                    worksheet.Range("A2:C2").Merge().Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                    worksheet.Range(2, 1, 2, maxCol).Merge().Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
 
-                    // --- 2. SETUP KOLOM ---
-                    worksheet.Column(1).Width = 50; // Deskripsi
-                    worksheet.Column(2).Width = 20; // Tahun Ini
-                    worksheet.Column(3).Width = 20; // Tahun Lalu
+                    // --- 2. SETUP LEBAR KOLOM ---
+                    worksheet.Column(1).Width = 50; 
+                    worksheet.Column(2).Width = 20; 
+                    worksheet.Column(3).Width = 20; 
+                    if (isBulanan) worksheet.Column(4).Width = 20; 
 
                     int currentRow = 4;
 
@@ -131,44 +185,54 @@ namespace ABB.Web.Modules.LaporanKeuangan
                         }
 
                         var cellDesc = worksheet.Cell(currentRow, 1);
-                        var cellIni = worksheet.Cell(currentRow, 2);
-                        var cellLalu = worksheet.Cell(currentRow, 3);
+                        cellDesc.Value = item.Deskripsi;
 
-                        // Header Utama (Aset, Kewajiban beserta label Tahun)
+                        // Header Utama (Aset, Kewajiban beserta label kolom)
                         if (item.IsHeaderKolom)
                         {
-                            cellDesc.Value = item.Deskripsi;
-                            cellIni.Value = item.HeaderTahunIni;
-                            cellLalu.Value = item.HeaderTahunLalu;
-                            
-                            var headerRange = worksheet.Range(currentRow, 1, currentRow, 3);
+                            var headerRange = worksheet.Range(currentRow, 1, currentRow, maxCol);
                             headerRange.Style.Font.SetBold();
                             headerRange.Style.Border.TopBorder = XLBorderStyleValues.Thin;
                             headerRange.Style.Border.BottomBorder = XLBorderStyleValues.Thin;
-                            cellIni.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
-                            cellLalu.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+
+                            if (isBulanan)
+                            {
+                                worksheet.Cell(currentRow, 2).Value = "s/d Bulan Lalu";
+                                worksheet.Cell(currentRow, 3).Value = "Mutasi";
+                                worksheet.Cell(currentRow, 4).Value = "s/d Bulan Ini";
+                                worksheet.Range(currentRow, 2, currentRow, 4).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                            }
+                            else
+                            {
+                                worksheet.Cell(currentRow, 2).Value = item.HeaderTahunIni;
+                                worksheet.Cell(currentRow, 3).Value = item.HeaderTahunLalu;
+                                worksheet.Range(currentRow, 2, currentRow, 3).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                            }
                             currentRow++;
                             continue;
                         }
 
-                        // Isi Deskripsi Biasa
-                        cellDesc.Value = item.Deskripsi;
-
-                        // Isi Angka
-                        if (item.NilaiIni.HasValue) {
-                            cellIni.Value = item.NilaiIni.Value;
-                            cellIni.Style.NumberFormat.Format = "#,##0.00";
+                        // Isi Angka Berdasarkan Tipe
+                        if (isBulanan)
+                        {
+                            if (item.NilaiLalu.HasValue) worksheet.Cell(currentRow, 2).Value = item.NilaiLalu.Value;
+                            if (item.NilaiMutasi.HasValue) worksheet.Cell(currentRow, 3).Value = item.NilaiMutasi.Value;
+                            if (item.NilaiIni.HasValue) worksheet.Cell(currentRow, 4).Value = item.NilaiIni.Value;
+                            
+                            worksheet.Range(currentRow, 2, currentRow, 4).Style.NumberFormat.Format = "#,##0.00";
                         }
-                        if (item.NilaiLalu.HasValue) {
-                            cellLalu.Value = item.NilaiLalu.Value;
-                            cellLalu.Style.NumberFormat.Format = "#,##0.00";
+                        else
+                        {
+                            if (item.NilaiIni.HasValue) worksheet.Cell(currentRow, 2).Value = item.NilaiIni.Value;
+                            if (item.NilaiLalu.HasValue) worksheet.Cell(currentRow, 3).Value = item.NilaiLalu.Value;
+                            
+                            worksheet.Range(currentRow, 2, currentRow, 3).Style.NumberFormat.Format = "#,##0.00";
                         }
 
                         // --- 4. LOGIKA INDENTASI & FONT BOLD (MIRROR PDF) ---
                         if (item.TipeBaris == "HEADING")
                         {
                             cellDesc.Style.Font.SetBold();
-                            // Beri spasi indentasi berdasarkan level
                             if (item.Level > 1) cellDesc.Style.Alignment.SetIndent(item.Level - 1);
                         }
                         else if (item.TipeBaris == "DETAIL")
@@ -177,21 +241,17 @@ namespace ABB.Web.Modules.LaporanKeuangan
                         }
                         else if (item.TipeBaris == "TOTAL")
                         {
-                            cellDesc.Style.Font.SetBold();
-                            cellIni.Style.Font.SetBold();
-                            cellLalu.Style.Font.SetBold();
-                            
+                            var totalRange = worksheet.Range(currentRow, 1, currentRow, maxCol);
+                            totalRange.Style.Font.SetBold();
                             cellDesc.Style.Alignment.SetIndent(item.Level > 1 ? item.Level : 0);
 
                             // Garis Atas
-                            cellIni.Style.Border.TopBorder = XLBorderStyleValues.Thin;
-                            cellLalu.Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                            worksheet.Range(currentRow, 2, currentRow, maxCol).Style.Border.TopBorder = XLBorderStyleValues.Thin;
 
                             // Garis Bawah Ganda untuk Grand Total (Level 1)
                             if (item.Level == 1) 
                             {
-                                cellIni.Style.Border.BottomBorder = XLBorderStyleValues.Double;
-                                cellLalu.Style.Border.BottomBorder = XLBorderStyleValues.Double;
+                                worksheet.Range(currentRow, 2, currentRow, maxCol).Style.Border.BottomBorder = XLBorderStyleValues.Double;
                             }
                         }
 
@@ -201,7 +261,7 @@ namespace ABB.Web.Modules.LaporanKeuangan
                     using (var stream = new MemoryStream())
                     {
                         workbook.SaveAs(stream);
-                        return Ok(new { Status = "OK", FileName = $"Laporan_{model.TipeLaporan}_{DateTime.Now:yyyyMMdd}.xlsx", FileData = Convert.ToBase64String(stream.ToArray()) });
+                        return Ok(new { Status = "OK", FileName = $"Laporan_{sheetName}_{DateTime.Now:yyyyMMdd}.xlsx", FileData = Convert.ToBase64String(stream.ToArray()) });
                     }
                 }
             }
@@ -210,16 +270,13 @@ namespace ABB.Web.Modules.LaporanKeuangan
                 return Ok(new { Status = "ERROR", Message = ex.Message });
             }
         }
-
-    
     }
 
-    // UPDATE DTO AGAR SESUAI DENGAN KIRIMAN JAVASCRIPT
     public class LaporanKeuanganFilterDto
     {
         public string TipeLaporan { get; set; }
-        public string JenisPeriode { get; set; } // Baru
-        public int Bulan { get; set; }           // Baru (int)
-        public int Tahun { get; set; }           // Baru (int)
+        public string JenisPeriode { get; set; } 
+        public int Bulan { get; set; }           
+        public int Tahun { get; set; }           
     }
 }

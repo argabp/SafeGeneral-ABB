@@ -6,6 +6,7 @@
     Layout = "~/Modules/Shared/_Layout.cshtml";
     ViewData["Title"] = "Laporan Keuangan";
     int currentYear = DateTime.Now.Year;
+    int currentMonth = DateTime.Now.Month; // Tambahan untuk default bulan
 }
 
 <style>
@@ -23,22 +24,18 @@
     .flat-box-content { padding: 25px; }
     label { font-weight: 600; font-size: 12px; color: #555; margin-bottom: 5px; display: block;}
     .btn-generate { background-color: var(--primary-blue); color: white; font-weight: bold; }
-    .btn-generate:hover{
-        color: grey;
-    }
+    .btn-generate:hover{ color: grey; }
 
     .custom-btn {
         height: 40px;
         border-radius: 6px;
         font-weight: 500;
     }
-
     .btn-generate {
         background-color: #007bff;
         color: white;
         border: 1px solid #007bff;
     }
-
     .btn-generate:hover {
         background-color: #0069d9;
         border-color: #0062cc;
@@ -55,14 +52,15 @@
 <div class="flat-box">
     <div class="flat-box-title ">
        Laporan Keuangan
-       </div>
+    </div>
     <div class="flat-box-content">
         <div class="row">
-            <div class="col-md-3">
+           <div class="col-md-3">
                 <div class="form-group">
                     <label>Jenis Laporan</label>
                     @(Html.Kendo().DropDownList().Name("TipeLaporan")
-                        .BindTo(new List<string>() { "NERACA", "LABARUGI","ARUSKAS" })
+                        .BindTo(new List<string>() { "NERACA", "LABARUGI", "ARUSKAS", "NERACA (BULAN)", "LABA RUGI (BULAN)" })
+                        .Events(e => e.Change("onTipeLaporanChange")) // <--- TRIGGER OTOMATIS GANTI PERIODE
                         .HtmlAttributes(new { style = "width: 100%" }))
                 </div>
             </div>
@@ -71,14 +69,37 @@
                 <div class="form-group">
                     <label>Periode</label>
                     @(Html.Kendo().DropDownList().Name("JenisPeriode")
-                        .BindTo(new List<string>() { "TAHUNAN" })
-                        .Events(e => e.Change("onPeriodeChange")) // Trigger saat ganti
+                        .BindTo(new List<string>() { "TAHUNAN", "BULANAN" }) // <--- TAMBAH BULANAN
+                        .Events(e => e.Change("onPeriodeChange"))
                         .HtmlAttributes(new { style = "width: 100%" }))
                 </div>
             </div>
 
-           
-
+            <div class="col-md-2" id="divBulan" style="display:none;">
+                <div class="form-group">
+                    <label>Bulan</label>
+                    @(Html.Kendo().DropDownList().Name("Bulan")
+                        .DataTextField("Text")
+                        .DataValueField("Value")
+                        .BindTo(new List<dynamic>() {
+                            new { Text = "Januari", Value = "1" },
+                            new { Text = "Februari", Value = "2" },
+                            new { Text = "Maret", Value = "3" },
+                            new { Text = "April", Value = "4" },
+                            new { Text = "Mei", Value = "5" },
+                            new { Text = "Juni", Value = "6" },
+                            new { Text = "Juli", Value = "7" },
+                            new { Text = "Agustus", Value = "8" },
+                            new { Text = "September", Value = "9" },
+                            new { Text = "Oktober", Value = "10" },
+                            new { Text = "November", Value = "11" },
+                            new { Text = "Desember", Value = "12" }
+                        })
+                        .Value(currentMonth.ToString()) // Otomatis bulan sekarang
+                        .HtmlAttributes(new { style = "width: 100%" })
+                    )
+                </div>
+            </div>
             <div class="col-md-2">
                 <div class="form-group">
                     <label>Tahun</label>
@@ -89,14 +110,11 @@
                         .HtmlAttributes(new { style = "width: 100%" }))
                 </div>
             </div>
-
-          
         </div>
 
-          <div class="col-md-3 d-flex gap-2 align-items-stretch">
-
-                <button class="btn btn-generate flex-fill custom-btn"
-                        onclick="onGenerateClick()">
+        <div class="row mt-3">
+            <div class="col-md-3 d-flex gap-2 align-items-stretch">
+                <button class="btn btn-generate flex-fill custom-btn" onclick="onGenerateClick()">
                      Lihat (PDF)
                 </button>
 
@@ -109,20 +127,50 @@
                     })
                     .Events(e => e.Click("onExcelClick"))
                 )
-
             </div>
+        </div>
     </div>
 </div>
 
 <script>
-    // Event saat dropdown Periode berubah
+    // --- 1. JIKA USER GANTI JENIS LAPORAN ---
+    function onTipeLaporanChange() {
+        var tipe = $("#TipeLaporan").val();
+        var ddPeriode = $("#JenisPeriode").data("kendoDropDownList");
+
+        if (tipe.includes("(BULAN)")) {
+            ddPeriode.value("BULANAN");
+            $("#divBulan").show();
+        } else {
+            ddPeriode.value("TAHUNAN");
+            $("#divBulan").hide();
+        }
+    }
+
+    // --- 2. JIKA USER GANTI PERIODE ---
     function onPeriodeChange() {
         var periode = $("#JenisPeriode").val();
+        var ddTipe = $("#TipeLaporan").data("kendoDropDownList");
+        var tipeSaatIni = ddTipe.value();
         
         if (periode === "TAHUNAN") {
-            $("#divBulan").hide(); // Sembunyikan Bulan
+            $("#divBulan").hide(); 
+            
+            // Kalau periodenya Tahunan, tapi laporannya masih (Bulan), balikkan ke NERACA
+            if (tipeSaatIni.includes("(BULAN)")) {
+                ddTipe.value("NERACA");
+            }
         } else {
-            $("#divBulan").show(); // Tampilkan Bulan
+            $("#divBulan").show(); 
+            
+            // (BONUS UX) Kalau periodenya Bulanan, tapi laporannya masih yang tahunan, paksa ke versi bulannya
+            if (!tipeSaatIni.includes("(BULAN)")) {
+                if (tipeSaatIni === "LABARUGI") {
+                    ddTipe.value("LABA RUGI (BULAN)");
+                } else {
+                    ddTipe.value("NERACA (BULAN)");
+                }
+            }
         }
     }
 
@@ -131,20 +179,13 @@
         var jenisPeriode = $("#JenisPeriode").val();
         var tahun = $("#Tahun").val();
         
-        // Logika Bulan
-        var bulan = 12; // Default 12 jika TAHUNAN (Biar keambil Jan-Des)
-        
+        var bulan = 12; 
         if (jenisPeriode === "BULANAN") {
             bulan = $("#Bulan").val();
         }
 
-        // Validasi Sederhana
-        if (!tahun) {
-            alert("Harap isi Tahun.");
-            return;
-        }
+        if (!tahun) { alert("Harap isi Tahun."); return; }
 
-        // Siapkan Data DTO Baru
         var formData = {
             TipeLaporan: tipeLaporan,
             JenisPeriode: jenisPeriode,
@@ -163,13 +204,8 @@
             data: JSON.stringify(formData),
             success: function (response) {
                 btn.html(originalText).prop("disabled", false);
-
                 if (response.Status === "OK") {
-                    var userId = response.Data;
-                    var fileName = response.Filename; // Contoh: "LaporanLabaRugi.pdf"
-                    
-                    var url = "/Reports/" + userId + "/" + fileName;
-                    
+                    var url = "/Reports/" + response.Data + "/" + response.Filename;
                     window.open(url, '_blank');
                 } else {
                     alert("Gagal: " + response.Message);
@@ -187,20 +223,13 @@
         var jenisPeriode = $("#JenisPeriode").val();
         var tahun = $("#Tahun").val();
         
-        // Logika Bulan
-        var bulan = 12; // Default 12 jika TAHUNAN (Biar keambil Jan-Des)
-        
+        var bulan = 12; 
         if (jenisPeriode === "BULANAN") {
             bulan = $("#Bulan").val();
         }
 
-        // Validasi Sederhana
-        if (!tahun) {
-            alert("Harap isi Tahun.");
-            return;
-        }
+        if (!tahun) { alert("Harap isi Tahun."); return; }
 
-        // Siapkan Data DTO Baru
         var formData = {
             TipeLaporan: tipeLaporan,
             JenisPeriode: jenisPeriode,
@@ -208,9 +237,7 @@
             Tahun: parseInt(tahun)
         };
 
-        console.log(formData);
-
-       var btn = $("#btnExcel").data("kendoButton");
+        var btn = $("#btnExcel").data("kendoButton");
         btn.enable(false);
 
         $.ajax({
@@ -220,7 +247,6 @@
             data: JSON.stringify(formData),
             success: function (response) {
                   btn.enable(true);
-
                 if (response.Status === "OK") {
                     var link = document.createElement('a');
                     link.href = "data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64," + response.FileData;
@@ -231,14 +257,14 @@
                 }
             },
             error: function () {
-                btn.html(originalText).prop("disabled", false);
+                btn.enable(true);
                 alert("Error koneksi server.");
             }
         });
     }
 
     $(document).ready(function() {
-        // Trigger sekali di awal untuk set state awal
-        onPeriodeChange();
+        // Trigger saat halaman pertama kali dibuka
+        onTipeLaporanChange();
     });
 </script>

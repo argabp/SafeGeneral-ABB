@@ -142,6 +142,62 @@
                             )
                         </div>
                     </text>);
+                items.Add().Text("Neraca (Bulan)")
+                    .Content(@<text>
+                        <div class="div-box">
+                            @(Html.Kendo().Grid<TemplateLapKeuDto>()
+                                .Name("GridNeracaBulan")
+                                .DataSource(dataSource => dataSource.Ajax()
+                                    .Read(read => read.Action("GetGridData", "TemplateLapKeu").Data("getFilterNeracaBulan"))
+                                    .Model(model => model.Id(p => p.Id)).PageSize(500)
+                                    .Sort(sort => sort.Add("Urutan").Ascending())
+                                )
+                                 .Columns(columns =>
+                                {
+                                    columns.Bound(c => c.Urutan).Title("No").Width(50).Sortable(true);
+                                    columns.Bound(col => col.TipeBaris).Title("Tipe").Width(100);
+                                    columns.Bound(col => col.Deskripsi).Title("Deskripsi").Width(300);
+                                    columns.Bound(col => col.Rumus).Title("Rumus / Akun").Width(200);
+                                    columns.Bound(col => col.Level).Title("Lvl").Width(60).HtmlAttributes(new { style = "text-align:center" });
+                                    columns.Command(command =>
+                                    {
+                                        command.Custom("EditTemplate").Text(" Edit").IconClass("fa fa-edit").Click("onEditClick");
+                                        command.Custom("DeleteTemplate").Text(" Hapus").IconClass("fa fa-trash").Click("onDeleteClick");
+                                    }).Width(200).Title("Aksi").Locked(true);
+                                })
+                                .Sortable().Filterable().Scrollable().Height(600).Resizable(a => a.Columns(true))
+                            )
+                        </div>
+                    </text>);
+
+                // --- TAB 5: LABA RUGI (BULAN) ---
+                items.Add().Text("Laba Rugi (Bulan)")
+                    .Content(@<text>
+                        <div class="div-box">
+                            @(Html.Kendo().Grid<TemplateLapKeuDto>()
+                                .Name("GridLabaRugiBulan")
+                                .DataSource(dataSource => dataSource.Ajax()
+                                    .Read(read => read.Action("GetGridData", "TemplateLapKeu").Data("getFilterLabaRugiBulan"))
+                                    .Model(model => model.Id(p => p.Id)).PageSize(500)
+                                    .Sort(sort => sort.Add("Urutan").Ascending())
+                                )
+                                .Columns(columns =>
+                                {
+                                    columns.Bound(c => c.Urutan).Title("No").Width(50).Sortable(true);
+                                    columns.Bound(col => col.TipeBaris).Title("Tipe").Width(100);
+                                    columns.Bound(col => col.Deskripsi).Title("Deskripsi").Width(300);
+                                    columns.Bound(col => col.Rumus).Title("Rumus / Akun").Width(200);
+                                    columns.Bound(col => col.Level).Title("Lvl").Width(60).HtmlAttributes(new { style = "text-align:center" });
+                                    columns.Command(command =>
+                                    {
+                                        command.Custom("EditTemplate").Text(" Edit").IconClass("fa fa-edit").Click("onEditClick");
+                                        command.Custom("DeleteTemplate").Text(" Hapus").IconClass("fa fa-trash").Click("onDeleteClick");
+                                    }).Width(200).Title("Aksi").Locked(true);
+                                })
+                                .Sortable().Filterable().Scrollable().Height(600).Resizable(a => a.Columns(true))
+                            )
+                        </div>
+                    </text>);
             })
         )
 
@@ -162,6 +218,8 @@
     function getFilterNeraca() { return { searchKeyword: $("#SearchKeyword").val(), tipeLaporan: "NERACA" }; }
     function getFilterLabaRugi() { return { searchKeyword: $("#SearchKeyword").val(), tipeLaporan: "LABARUGI" }; }
     function getFilterArusKas() { return { searchKeyword: $("#SearchKeyword").val(), tipeLaporan: "ARUSKAS" }; }
+    function getFilterNeracaBulan() { return { searchKeyword: $("#SearchKeyword").val(), tipeLaporan: "NERACA (BULAN)" }; }
+    function getFilterLabaRugiBulan() { return { searchKeyword: $("#SearchKeyword").val(), tipeLaporan: "LABA RUGI (BULAN)" }; }
 
     $(document).ready(function () {
         // 1. Search Logic

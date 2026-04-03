@@ -34,7 +34,7 @@
                 <label class="col-sm-3 col-form-label">Tipe Laporan</label>
                 <div class="col-sm-9">
                     <kendo-dropdownlist name="TipeLaporan" for="TipeLaporan" style="width: 100%;" class="custom-kuning"
-                                        bind-to='new List<string>() { "NERACA", "LABARUGI", "ARUSKAS" }'
+                                      bind-to='new List<string>() { "NERACA", "LABARUGI", "ARUSKAS", "NERACA (BULAN)", "LABA RUGI (BULAN)" }'
                                         on-change="onTipeLaporanChange"> </kendo-dropdownlist>
                 </div>
             </div>
@@ -72,11 +72,11 @@
             <hr />
 
             <div class="form-group row" id="div-manual">
-                <label class="col-sm-3 col-form-label">Kode Akun</label>
+                <label class="col-sm-3 col-form-label">Tipe Akun</label>
                 <div class="col-sm-9">
                      <kendo-textarea name="RumusManual" rows="3" class="custom-kuning" style="width: 100%;" placeholder="Contoh: 1101,1102">
                     </kendo-textarea>
-                    <small class="text-muted" id="rumus-hint">* Masukkan Kode Akun dipisah koma.</small>
+                    <small class="text-muted" id="rumus-hint">* Masukkan Tipe Akun dipisah koma.</small>
                 </div>
             </div>
 
