@@ -100,7 +100,7 @@ namespace ABB.Application.LaporanOutstandings.Queries
                     <tr>
                         <td class='center'>{index}</td>
                         <td>{item.no_nd}/<br>{item.no_pl}</td>
-                        <td>{item.nm_cust2}/<br>{item.nm_pos}</td>
+                        <td>{item.nm_cust}/<br>{item.nm_pos}</td>
                         <td>{item.nm_brok}</td>
                         <td>{item.jn_ass}</td>
                         <td>{item.lok}/<br>{item.kd_tutup}</td>
@@ -139,7 +139,7 @@ namespace ABB.Application.LaporanOutstandings.Queries
             {
                 IEnumerable<IGrouping<string, SpLaporanOutstandingResult>> groupedData = request.JenisLaporan switch {
                     "COB" => dataLaporan.GroupBy(x => x.jn_ass ?? "LAINNYA").OrderBy(g => g.Key),
-                    "Tertanggung" => dataLaporan.GroupBy(x => x.nm_cust2 ?? "TANPA NAMA").OrderBy(g => g.Key),
+                    "Tertanggung" => dataLaporan.GroupBy(x => x.nm_cust ?? "TANPA NAMA").OrderBy(g => g.Key),
                     "Pos" => dataLaporan.GroupBy(x => x.nm_pos ?? "TANPA POS").OrderBy(g => g.Key),
                     "Broker" => dataLaporan.GroupBy(x => x.nm_brok ?? "DIRECT").OrderBy(g => g.Key),
                     _ => dataLaporan.GroupBy(x => x.jn_ass ?? "LAINNYA").OrderBy(g => g.Key)

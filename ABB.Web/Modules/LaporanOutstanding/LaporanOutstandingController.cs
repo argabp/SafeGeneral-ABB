@@ -265,7 +265,7 @@ namespace ABB.Web.Modules.LaporanOutstanding
                     //judul table
                     int startRow = 7; 
 
-                    worksheet.Cell(startRow, 1).Value = "No";
+                    worksheet.Cell(startRow, 1).Value = "Noww";
                     worksheet.Cell(startRow, 2).Value = "NO NOTA";
                     worksheet.Cell(startRow, 3).Value = "No.POLIS";
                     worksheet.Cell(startRow, 4).Value = "TERTANGGUNG";
