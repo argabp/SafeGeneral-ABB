@@ -6144,6 +6144,12 @@
        <None Update="Modules\Reports\Templates\LaporanNeracaSaldo.html">
          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
        </None>
+        <None Update="Modules\Reports\Templates\LaporanLabaRugiBulan.html">
+         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+       </None>
+        <None Update="Modules\Reports\Templates\LaporanNeracaBulan.html">
+         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+       </None>
     </ItemGroup>
 
     <ItemGroup>
