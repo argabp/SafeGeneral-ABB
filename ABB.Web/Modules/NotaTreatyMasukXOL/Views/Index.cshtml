@@ -1,0 +1,102 @@
+@using ABB.Application.NotaTreatyMasukXOLs.Queries
+@using Kendo.Mvc.UI
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Nota Treaty Masuk XOL";
+}
+<script src="~/Modules/NotaTreatyMasukXOL/JS/notaTreatyMasukXOL.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Nota Treaty Masuk XOL
+        </div>
+
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+        </div>
+
+        <div class="col-md-2">
+            <button class="flat-btn-primary" onclick="btnAddNotaTreatyMasukXOL_OnClick()" >Add</button>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<NotaTreatyMasukXOLDto>()
+                .Name("NotaTreatyMasukXOLGrid")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetNotaTreatyMasukXOLs", "NotaTreatyMasukXOL").Data("searchFilterNotaTreatyMasukXOL"))
+                    .Model(model => model.Id(p => p.Id))
+                )
+                .Columns(columns =>
+                {
+                    columns.Command(command =>
+                    {
+                        command.Custom("Nota")
+                            .Text("Nota")
+                            .IconClass("fa fa-envelope")
+                            .HtmlAttributes(new { title="Nota"})
+                            .Click("onNota");
+                        command.Custom("EditNotaTreatyMasukXOL")
+                            .Text("Edit")
+                            .IconClass("k-icon k-i-edit")
+                            .HtmlAttributes(new { title="Edit"})
+                            .Click("onEditNotaTreatyMasukXOL");
+                        command.Custom("DeleteNotaTreatyMasukXOL")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeleteNotaTreatyMasukXOL");
+                    }).Width(150).Title("Action").Locked(true);
+                    columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
+                    columns.Bound(col => col.nm_jns_sor).Width(150).Title("Nama Jenis SOR");
+                    columns.Bound(col => col.kd_tty_msk).Width(200).Title("Kode Treaty Masuk");
+                    columns.Bound(col => col.nm_mtu).Width(200).Title("Nama Mata uang");
+                    columns.Bound(col => col.nomor_transaksi).Width(200).Title("Nomor Transaksi");
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit"))
+                ) 
+        </div>
+        
+        @(Html.Kendo().Window()
+            .Name("NotaTreatyMasukXOLWindow")
+            .Title("Nota Treaty Masuk")
+            .Width(800)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+        
+        @(Html.Kendo().Window()
+            .Name("TreatyMasukWindow")
+            .Title("TreatyMasuk")
+            .Width(600)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+        )
+    </div>
+</div>

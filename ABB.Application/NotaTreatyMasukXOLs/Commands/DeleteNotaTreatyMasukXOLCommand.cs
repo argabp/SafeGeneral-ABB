@@ -6,9 +6,9 @@ using ABB.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace ABB.Application.NotaTreatyMasuks.Commands
+namespace ABB.Application.NotaTreatyMasukXOLs.Commands
 {
-    public class DeleteNotaTreatyMasukCommand : IRequest
+    public class DeleteNotaTreatyMasukXOLCommand : IRequest
     {
         public string kd_cb { get; set; }
 
@@ -25,19 +25,19 @@ namespace ABB.Application.NotaTreatyMasuks.Commands
         public string no_tr { get; set; }
     }
 
-    public class DeleteNotaTreatyMasukCommandHandler : IRequestHandler<DeleteNotaTreatyMasukCommand>
+    public class DeleteNotaTreatyMasukXOLCommandHandler : IRequestHandler<DeleteNotaTreatyMasukXOLCommand>
     {
         private readonly IDbContextPst _contextPst;
-        private readonly ILogger<DeleteNotaTreatyMasukCommandHandler> _logger;
+        private readonly ILogger<DeleteNotaTreatyMasukXOLCommandHandler> _logger;
 
-        public DeleteNotaTreatyMasukCommandHandler(IDbContextPst contextPst,
-            ILogger<DeleteNotaTreatyMasukCommandHandler> logger)
+        public DeleteNotaTreatyMasukXOLCommandHandler(IDbContextPst contextPst,
+            ILogger<DeleteNotaTreatyMasukXOLCommandHandler> logger)
         {;
             _contextPst = contextPst;
             _logger = logger;
         }
 
-        public async Task<Unit> Handle(DeleteNotaTreatyMasukCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DeleteNotaTreatyMasukXOLCommand request, CancellationToken cancellationToken)
         {
             await ExceptionHelper.ExecuteWithLoggingAsync(async () => 
             {
@@ -51,7 +51,7 @@ namespace ABB.Application.NotaTreatyMasuks.Commands
                         "Failed Delete TransaksiTreatyMasuk with kd_cb: {kd_cb}, kd_jns_sor: {kd_jns_sor}, kd_tty_msk: {kd_tty_msk}, kd_tty_msk: {kd_thn}, kd_tty_msk: {kd_bln}, kd_tty_msk: {kd_mtu}",
                         request.kd_cb, request.kd_jns_sor, request.kd_tty_msk, request.kd_thn, request.kd_bln, request.kd_mtu);
                     
-                    throw new NotFoundException("Nota Treaty Masuk Not Found");
+                    throw new NotFoundException("Nota Treaty Masuk XOL Not Found");
                 }
                 
                 _contextPst.TransaksiTreatyMasuk.Remove(transaksiTreatyMasuk);

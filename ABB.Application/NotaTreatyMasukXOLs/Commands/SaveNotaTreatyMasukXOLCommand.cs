@@ -10,9 +10,9 @@ using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace ABB.Application.NotaTreatyMasuks.Commands
+namespace ABB.Application.NotaTreatyMasukXOLs.Commands
 {
-    public class SaveNotaTreatyMasukCommand : IRequest, IMapFrom<TransaksiTreatyMasuk>
+    public class SaveNotaTreatyMasukXOLCommand : IRequest, IMapFrom<TransaksiTreatyMasuk>
     {
         public string kd_cb { get; set; }
 
@@ -62,20 +62,20 @@ namespace ABB.Application.NotaTreatyMasuks.Commands
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<SaveNotaTreatyMasukCommand, TransaksiTreatyMasuk>();
+            profile.CreateMap<SaveNotaTreatyMasukXOLCommand, TransaksiTreatyMasuk>();
         }
     }
 
-    public class SaveNotaTreatyMasukCommandHandler : IRequestHandler<SaveNotaTreatyMasukCommand>
+    public class SaveNotaTreatyMasukXOLCommandHandler : IRequestHandler<SaveNotaTreatyMasukXOLCommand>
     {
         private readonly IDbContextPst _contextPst;
         private readonly IDbConnectionPst _connectionPst;
-        private readonly ILogger<SaveNotaTreatyMasukCommandHandler> _logger;
+        private readonly ILogger<SaveNotaTreatyMasukXOLCommandHandler> _logger;
         private readonly IMapper _mapper;
         private readonly ICurrentUserService _currentUserService;
 
-        public SaveNotaTreatyMasukCommandHandler(IDbContextPst contextPst, IDbConnectionPst connectionPst,
-            ILogger<SaveNotaTreatyMasukCommandHandler> logger, IMapper mapper, ICurrentUserService currentUserService)
+        public SaveNotaTreatyMasukXOLCommandHandler(IDbContextPst contextPst, IDbConnectionPst connectionPst,
+            ILogger<SaveNotaTreatyMasukXOLCommandHandler> logger, IMapper mapper, ICurrentUserService currentUserService)
         {;
             _contextPst = contextPst;
             _connectionPst = connectionPst;
@@ -84,7 +84,7 @@ namespace ABB.Application.NotaTreatyMasuks.Commands
             _currentUserService = currentUserService;
         }
 
-        public async Task<Unit> Handle(SaveNotaTreatyMasukCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(SaveNotaTreatyMasukXOLCommand request, CancellationToken cancellationToken)
         {
             await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
             {

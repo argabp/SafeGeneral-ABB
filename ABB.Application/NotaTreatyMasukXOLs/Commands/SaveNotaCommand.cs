@@ -7,7 +7,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace ABB.Application.NotaTreatyMasuks.Commands
+namespace ABB.Application.NotaTreatyMasukXOLs.Commands
 {
     public class SaveNotaCommand : IRequest, IMapFrom<NotaTreatyMasuk>
     {

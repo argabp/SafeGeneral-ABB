@@ -1,0 +1,54 @@
+﻿@using ABB.Application.NotaTreatyMasukXOLs.Queries
+@using Kendo.Mvc.UI
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+<script src="~/Modules/NotaTreatyMasukXOL/JS/notaTreatyMasukXOL.treatyMasuk.js"></script>
+
+<div class="window-body">
+    
+    <div class="row">
+        <div class="col-offset-8"></div>
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeywordTreatyMasuk" placeholder="Search"/>
+        </div>
+    </div>
+    
+    @(Html.Kendo().Grid<TreatyMasukXOLDto>()
+        .Name("treatyMasukGrid")
+        .DataSource(dataSource => dataSource.Ajax().ServerOperation(true).PageSize(25)
+            .Read(read => read.Action("GettreatyMasuks", "NotaTreatyMasukXOL").Data("searchFilterTreatyMasuk"))
+        )
+        .Columns(columns =>
+        {
+            columns.Bound(col => col.Id).Hidden();
+            columns.Bound(col => col.nm_cob).Width(150).Title("COB");
+            columns.Bound(col => col.kd_tty_msk).Width(175).Title("Kode Treaty Masuk");
+            columns.Bound(col => col.nm_tipe_tty_msk).Width(175).Title("Tipe Treaty Masuk");
+            columns.Bound(col => col.thn_uw).Width(175).Title("Tahun Underwriting");
+            columns.Bound(col => col.nm_grp_sb_bis).Width(150).Title("Sumber Bisnis");
+            columns.Bound(col => col.nm_rk_sb_bis).Width(200).Title("Rekanan Sumber Bisnis");
+            columns.Bound(col => col.nm_grp_pas).Width(150).Title("Kode Group");
+            columns.Bound(col => col.nm_rk_pas).Width(200).Title("Rekanan Kode Group");
+            columns.Bound(col => col.desk_tty).Width(200).Title("Desktripsi Treaty");
+            columns.Bound(col => col.pst_share_tty).Width(150).Title("Share (%)").Format("{0:n2}");
+        })
+        .Selectable()
+        .Pageable(pager => pager
+            .Refresh(true)
+            .Info(true)
+            .PageSizes(true)
+        )
+        .Sortable()
+        .Filterable()
+        .Scrollable()
+        .Height(380)
+        .Resizable(a => a.Columns(true))
+        .Events(ev => ev.DataBound("gridAutoFit").Change("OnTreatyMasukChange"))
+
+        )
+</div>
+
