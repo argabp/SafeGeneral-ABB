@@ -47,7 +47,7 @@ function setupUI(tipe) {
         $("#div-manual").show();
         $("#div-range").hide();
         if (manualInput) manualInput.enable(true);
-        if (hint) hint.html("* Masukkan <b>Kode Akun</b> dipisah koma (Contoh: 1101,1102).");
+        if (hint) hint.html("* Masukkan <b>Tipe Akun</b> dipisah koma (Contoh: 10,12).");
     } 
     else {
         // HEADING atau SPASI -> SEMBUNYIKAN SEMUA RUMUS
