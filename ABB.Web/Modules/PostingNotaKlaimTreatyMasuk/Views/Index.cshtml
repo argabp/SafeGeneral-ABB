@@ -1,4 +1,4 @@
-﻿@using ABB.Application.PostingNotaKlaimTreaties.Queries
+﻿@using ABB.Application.PostingNotaKlaimTreatyMasuks.Queries
 @using Kendo.Mvc.UI
 @using Microsoft.Extensions.Configuration
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
@@ -10,7 +10,7 @@
     Layout = "~/Modules/Shared/_Layout.cshtml";
     ViewData["Title"] = "Posting Nota Klaim Treaty";
 }
-<script src="~/Modules/PostingNotaKlaimTreaty/JS/postingNotaKlaimTreaty.js"></script>
+<script src="~/Modules/PostingNotaKlaimTreatyMasuk/JS/postingNotaKlaimTreatyMasuk.js"></script>
 
 <style>
     .div-box{
@@ -20,7 +20,7 @@
 <div class="flat-box">
     <div class="row">
         <div class="flat-box-title col-md-6">
-            Posting Nota Klaim Treaty
+            Posting Nota Klaim Treaty Masuk
         </div>
 
         <div class="col-md-4">
@@ -34,10 +34,10 @@
 
     <div class="flat-box-content">
         <div class="div-box">
-            @(Html.Kendo().Grid<PostingNotaKlaimTreatyDto>()
-                .Name("PostingNotaKlaimTreatyGrid")
+            @(Html.Kendo().Grid<PostingNotaKlaimTreatyMasukDto>()
+                .Name("PostingNotaKlaimTreatyMasukGrid")
                 .DataSource(dataSource => dataSource.Ajax()
-                    .Read(read => read.Action("GetPostingNotaKlaimTreaties", "PostingNotaKlaimTreaty").Data("searchFilterPostingNotaKlaimTreaty"))
+                    .Read(read => read.Action("GetPostingNotaKlaimTreaties", "PostingNotaKlaimTreatyMasuk").Data("searchFilterPostingNotaKlaimTreatyMasuk"))
                     .Model(model => model.Id(p => p.nomor_nota))
                 )
                 .Columns(columns =>
@@ -58,7 +58,7 @@
                 .Scrollable()
                 .Height(450)
                 .Resizable(a=>a.Columns(true))
-                .Events(ev => ev.DataBound("gridAutoFit").Change("onChangeGridPostingNotaKlaimTreaty"))
+                .Events(ev => ev.DataBound("gridAutoFit").Change("onChangeGridPostingNotaKlaimTreatyMasuk"))
         
                 )    
         </div>
