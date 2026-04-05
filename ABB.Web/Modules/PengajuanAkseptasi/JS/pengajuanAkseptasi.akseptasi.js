@@ -34,8 +34,8 @@ function OnAkseptasiChange(e){
         $("#kd_grp_sb_bis").getKendoDropDownList().trigger("change");
         $("#kd_grp_ttg").getKendoDropDownList().value(returnValue[4].split(",")[1].trim());
         $("#kd_grp_ttg").getKendoDropDownList().trigger("change");
-        $("#tgl_mul_ptg").getKendoDatePicker().value(returnValue[9].split(",")[1].trim());
-        $("#tgl_mul_ptg").getKendoDatePicker().value(returnValue[10].split(",")[1].trim());
+        $("#tgl_akh_ptg").getKendoDatePicker().value(new Date(returnValue[9].split(",")[1].trim()));
+        $("#tgl_mul_ptg").getKendoDatePicker().value(new Date(returnValue[10].split(",")[1].trim()));
 
         setTimeout(() => {
             $("#kd_rk_mkt").getKendoDropDownList().value(returnValue[5].split(",")[1].trim());
