@@ -100,6 +100,10 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
         public decimal? pst_tol { get; set; }
 
         public decimal? pst_koas { get; set; }
+
+        public string? jns_pengajuan { get; set; }
+
+        public string? no_ref_pol { get; set; }
         
         public void Mapping(Profile profile)
         {
@@ -213,6 +217,8 @@ namespace ABB.Application.PengajuanAkseptasi.Commands
                     entity.kd_tol = request.kd_tol;
                     entity.pst_tol = request.pst_tol;
                     entity.pst_koas = request.pst_koas;
+                    entity.jns_pengajuan = request.jns_pengajuan;
+                    entity.no_ref_pol = request.no_ref_pol;
                 }
 
                 await _context.SaveChangesAsync(cancellationToken);

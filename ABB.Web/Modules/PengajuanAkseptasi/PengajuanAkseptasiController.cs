@@ -6,6 +6,7 @@ using ABB.Application.ApprovalAkseptasis.Commands;
 using ABB.Application.Common;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Exceptions;
+using ABB.Application.Common.Grids.Models;
 using ABB.Application.Common.Queries;
 using ABB.Application.Common.Services;
 using ABB.Application.PengajuanAkseptasi.Commands;
@@ -48,6 +49,20 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
                 kd_cb = Request.Cookies["UserCabang"]
             });
             return Json(ds.AsQueryable().ToDataSourceResult(request));
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> GetAkseptasis(GridRequest grid,
+            string jns_pengajuan)
+        {
+            var result = await Mediator.Send(new GetAkseptasisQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                jns_pengajuan = jns_pengajuan,
+                Grid = grid,
+            });
+
+            return Json(result);
         }
         
         
@@ -98,6 +113,11 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
                 DatabaseName = Request.Cookies["DatabaseValue"]
             });
             return Json(result);
+        }
+
+        public IActionResult Akseptasi()
+        {
+            return View();
         }
 
         public IActionResult Submit()
@@ -508,6 +528,30 @@ namespace ABB.Web.Modules.PengajuanAkseptasi
             {
                 return Json(new { Result = "ERROR", Message = ex.Message });
             }
+        }
+        
+        public JsonResult GetJenisPengajuan()
+        {
+            var result = new List<DropdownOptionDto>()
+            {
+                new DropdownOptionDto() { Text = "Baru", Value = "1" },
+                new DropdownOptionDto() { Text = "Endorsment Normal", Value = "2" },
+                new DropdownOptionDto() { Text = "Endorsment Cancel", Value = "3" },
+                new DropdownOptionDto() { Text = "Renewel", Value = "4" }
+            };
+
+            return Json(result);
+        }
+
+        public async Task<JsonResult> GetDataPolis(string no_pol_ttg)
+        {
+            var result = await Mediator.Send(new GetAkseptasiDataQuery()
+            {
+                DatabaseName = Request.Cookies["DatabaseValue"],
+                no_pol_ttg = no_pol_ttg
+            });
+
+            return Json(result);
         }
     }
 }

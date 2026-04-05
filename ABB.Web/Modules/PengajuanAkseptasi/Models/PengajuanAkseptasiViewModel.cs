@@ -94,6 +94,10 @@ namespace ABB.Web.Modules.PengajuanAkseptasi.Models
         public decimal? pst_tol { get; set; }
 
         public decimal? pst_koas { get; set; }
+
+        public string? jns_pengajuan { get; set; }
+
+        public string? no_ref_pol { get; set; }
         
         public void Mapping(Profile profile)
         {

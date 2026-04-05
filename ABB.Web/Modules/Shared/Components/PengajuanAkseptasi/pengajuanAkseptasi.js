@@ -3,7 +3,14 @@
     btnNextPengajuanAkseptasi();
     showProgress('#PengajuanAkseptasiWindow');
     await setPengajuanAkseptasiEditedValue();
+    btnSelectAkseptasi();
 });
+
+function btnSelectAkseptasi(){
+    $('#btn-select-akseptasi').click(function () {
+        openWindow('#AkseptasiWindow', '/PengajuanAkseptasi/Akseptasi', 'Data Akseptasi');
+    });
+}
 
 function dataKodeTertanggungDropDown(){
     return {
@@ -85,6 +92,13 @@ async function setPengajuanAkseptasiEditedValue(){
         $("#kd_cb").getKendoDropDownList().readonly(true);
         $("#kd_cob").getKendoDropDownList().readonly(true);
         $("#kd_scob").getKendoDropDownList().readonly(true);
+        
+        if(value == $("#temp_no_ref_pol".val())){
+            $("#div-data-polis").hide();
+        } else {
+            $("#div-data-polis").show();
+        }
+    
     }
 
     closeProgress('#PengajuanAkseptasiWindow');
@@ -249,8 +263,24 @@ function OnTableOfLimitChange(e){
     });
 }
 
+function dataNoRefPol(){
+    return {
+        jns_pengajuan: $("#jns_pengajuan").val()
+    }
+}
+
 function OnPstShareChange(e){
     ajaxGet(`/PengajuanAkseptasi/GetPstKoas?pst_share=` + e.sender.value(), (returnValue) => {
         $("#pst_koas").getKendoNumericTextBox().value(returnValue);
     });
+}
+
+function OnJenisPengajuanChange(e){
+    var value = e.sender._cascadedValue;
+    if(value == "1"){
+        $("#div-data-polis").hide();
+        $("#no_ref_pol").getKendoTextBox().value("");
+    } else {
+        $("#div-data-polis").show();
+    }
 }

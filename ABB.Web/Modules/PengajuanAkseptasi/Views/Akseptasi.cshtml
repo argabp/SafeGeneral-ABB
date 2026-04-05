@@ -1,0 +1,49 @@
+﻿@using ABB.Application.PengajuanAkseptasi.Queries
+@using Kendo.Mvc.TagHelpers
+@using Kendo.Mvc.UI
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+<script src="~/Modules/PengajuanAkseptasi/JS/pengajuanAkseptasi.akseptasi.js"></script>
+
+<div class="window-body">
+    
+    <div class="row">
+        <div class="col-offset-8"></div>
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeywordAkseptasi" placeholder="Search"/>
+        </div>
+    </div>
+    
+    @(Html.Kendo().Grid<AkseptasiDto>()
+        .Name("AkseptasiGrid")
+        .DataSource(dataSource => dataSource.Ajax().ServerOperation(true).PageSize(25)
+            .Read(read => read.Action("GetAkseptasis", "PengajuanAkseptasi").Data("searchFilterAkseptasi"))
+        )
+        .Columns(columns =>
+        {
+            columns.Bound(col => col.no_pol_ttg).Width(200).Title("Nomor Polis").ClientTemplate("#= formatNoPol(no_pol_ttg) #");
+            columns.Bound(col => col.nm_ttg).Width(200).Title("Nama Tertanggung");
+            columns.Bound(col => col.tgl_mul_ptg).Width(150).Title("Tanggal Mulai").Format("{0: dd-MM-yyyy}");
+            columns.Bound(col => col.tgl_akh_ptg).Width(150).Title("Tanggal Akhir").Format("{0: dd-MM-yyyy}");
+        })
+        .Selectable()
+        .Pageable(pager => pager
+            .Refresh(true)
+            .Info(true)
+            .PageSizes(true)
+        )
+        .Sortable()
+        .Filterable()
+        .Scrollable()
+        .Height(380)
+        .Resizable(a => a.Columns(true))
+        .Events(ev => ev.DataBound("gridAutoFit").Change("OnAkseptasiChange"))
+
+        )
+</div>
+

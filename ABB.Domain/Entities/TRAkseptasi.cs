@@ -105,5 +105,9 @@ namespace ABB.Domain.Entities
         public decimal? pst_tol { get; set; }
 
         public decimal? pst_koas { get; set; }
+
+        public string? jns_pengajuan { get; set; }
+
+        public string? no_ref_pol { get; set; }
     }
 }
