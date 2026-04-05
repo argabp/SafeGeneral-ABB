@@ -41,7 +41,9 @@ namespace ABB.Application.LaporanKeuangan.Queries
         {
             // Cek apakah user minta versi Bulanan (3 Kolom) atau Tahunan (2 Kolom)
             bool isBulanan = request.TipeLaporan == "LABA RUGI (BULAN)";
-            string templateName = isBulanan ? "LABA RUGI (BULAN)" : "LABARUGI";
+            
+            // [PERBAIKAN DARI ATASAN]: Selalu tembak ke Master "LABARUGI" biasa!
+            string templateName = "LABARUGI"; 
 
             var templates = await _context.TemplateLapKeu
                                     .Where(t => t.TipeLaporan == templateName)
@@ -59,8 +61,12 @@ namespace ABB.Application.LaporanKeuangan.Queries
             // =================================================================
             if (isBulanan)
             {
-                System.Linq.Expressions.Expression<Func<RekapJurnal, bool>> filterLalu = x => x.thn == request.Tahun && x.bln < request.Bulan;
-                System.Linq.Expressions.Expression<Func<RekapJurnal, bool>> filterMutasi = x => x.thn == request.Tahun && x.bln == request.Bulan;
+                int targetBulanDB = request.Bulan - 1; 
+
+                System.Linq.Expressions.Expression<Func<RekapJurnal, bool>> filterLalu = 
+                    x => x.thn == request.Tahun && x.bln < targetBulanDB;
+                System.Linq.Expressions.Expression<Func<RekapJurnal, bool>> filterMutasi = 
+                    x => x.thn == request.Tahun && x.bln == targetBulanDB;
 
                 async Task<List<AkunSaldo>> GetSaldoByFilterBulan(System.Linq.Expressions.Expression<Func<RekapJurnal, bool>> filter)
                 {
@@ -186,8 +192,12 @@ namespace ABB.Application.LaporanKeuangan.Queries
             // =================================================================
             else
             {
-                System.Linq.Expressions.Expression<Func<RekapJurnal, bool>> filterIni = x => x.thn == request.Tahun && x.bln <= request.Bulan;
-                System.Linq.Expressions.Expression<Func<RekapJurnal, bool>> filterLalu = x => x.thn == request.Tahun - 1 && x.bln <= request.Bulan;
+                int targetBulanDB = request.Bulan - 1;
+
+                System.Linq.Expressions.Expression<Func<RekapJurnal, bool>> filterIni = 
+                    x => x.thn == request.Tahun && x.bln <= targetBulanDB;
+                System.Linq.Expressions.Expression<Func<RekapJurnal, bool>> filterLalu = 
+                    x => x.thn == request.Tahun - 1 && x.bln <= targetBulanDB;
 
                 async Task<List<AkunSaldo>> GetSaldoByFilterTahun(System.Linq.Expressions.Expression<Func<RekapJurnal, bool>> filter)
                 {
