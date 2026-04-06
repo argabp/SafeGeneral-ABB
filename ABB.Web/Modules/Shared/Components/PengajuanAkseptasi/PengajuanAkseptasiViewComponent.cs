@@ -49,9 +49,12 @@ namespace ABB.Web.Modules.Shared.Components.PengajuanAkseptasi
             result.kd_cb = result.kd_cb.Trim();
             result.kd_cob = result.kd_cob.Trim();
             result.kd_scob = result.kd_scob.Trim();
-            result.kd_tol = result.kd_tol.Trim();
+            result.kd_tol = result.kd_tol?.Trim();
 
-            return View("_PengajuanAkseptasi", _mapper.Map<PengajuanAkseptasiViewModel>(result));
+            var newModel = _mapper.Map<PengajuanAkseptasiViewModel>(result);
+            newModel.IsEdit = true;
+            
+            return View("_PengajuanAkseptasi", newModel);
         }
     }
 }

@@ -21,7 +21,7 @@ function OnAkseptasiChange(e){
     var grid = e.sender;
     var dataAkseptasi = grid.dataItem(this.select());
 
-    $("#no_ref_pol").getKendoTextBox().value(dataAkseptasi.no_pol_ttg);
+    $("#no_ref_pol").getKendoMaskedTextBox().value(dataAkseptasi.no_pol_ttg);
     
     ajaxGet("/PengajuanAkseptasi/GetDataPolis?no_pol_ttg=" + dataAkseptasi.no_pol_ttg, (returnValue) => {
         $("#kd_cb").getKendoDropDownList().value(returnValue[0].split(",")[1].trim());

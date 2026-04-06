@@ -8,7 +8,7 @@
 
 function btnSelectAkseptasi(){
     $('#btn-select-akseptasi').click(function () {
-        openWindow('#AkseptasiWindow', '/PengajuanAkseptasi/Akseptasi', 'Data Akseptasi');
+        openWindow('#AkseptasiWindow', '/PengajuanAkseptasi/Akseptasi', 'Data Polis');
     });
 }
 
@@ -93,7 +93,7 @@ async function setPengajuanAkseptasiEditedValue(){
         $("#kd_cob").getKendoDropDownList().readonly(true);
         $("#kd_scob").getKendoDropDownList().readonly(true);
         
-        if(value == $("#temp_no_ref_pol".val())){
+        if($("#temp_no_ref_pol").val() == "1"){
             $("#div-data-polis").hide();
         } else {
             $("#div-data-polis").show();
@@ -131,6 +131,7 @@ function setPengajuanAkseptasiModel(model){
 function savePengajuanAkseptasi(url) {
     var form = getFormData($('#PengajuanAkseptasiForm'));
     form.ket_rsk = $("#ket_rsk").getKendoEditor().value();
+    form.no_ref_pol = $("#no_ref_pol").getKendoMaskedTextBox().raw();
     var data = JSON.stringify(form);
     ajaxPost(url,  data,
         function (response) {
@@ -279,7 +280,7 @@ function OnJenisPengajuanChange(e){
     var value = e.sender._cascadedValue;
     if(value == "1"){
         $("#div-data-polis").hide();
-        $("#no_ref_pol").getKendoTextBox().value("");
+        $("#no_ref_pol").getKendoMaskedTextBox().value("");
     } else {
         $("#div-data-polis").show();
     }

@@ -26,7 +26,7 @@
         )
         .Columns(columns =>
         {
-            columns.Bound(col => col.no_pol_ttg).Width(200).Title("Nomor Polis").ClientTemplate("#= formatNoPol(no_pol_ttg) #");
+            columns.Bound(col => col.no_pol_ttg_masked).Width(200).Title("Nomor Polis");
             columns.Bound(col => col.nm_ttg).Width(200).Title("Nama Tertanggung");
             columns.Bound(col => col.tgl_mul_ptg).Width(150).Title("Tanggal Mulai").Format("{0: dd-MM-yyyy}");
             columns.Bound(col => col.tgl_akh_ptg).Width(150).Title("Tanggal Akhir").Format("{0: dd-MM-yyyy}");

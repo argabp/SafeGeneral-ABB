@@ -98,6 +98,8 @@ namespace ABB.Web.Modules.PengajuanAkseptasi.Models
         public string? jns_pengajuan { get; set; }
 
         public string? no_ref_pol { get; set; }
+
+        public bool IsEdit { get; set; }
         
         public void Mapping(Profile profile)
         {

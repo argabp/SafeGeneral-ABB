@@ -78,9 +78,14 @@ namespace ABB.Infrastructure.Data.Grid
         public async Task<GridResponse<T>> QueryAsync<T>(GridRequest request, GridConfig config, 
             object parameters, string databaseName)
         {
-            // DB already selected by CreateDbConnection()
-            var where = new StringBuilder(" WHERE " + config.BaseWhere);
+            var filters = new List<string>();
 
+            // 1. Add BaseWhere if it's not empty
+            if (!string.IsNullOrWhiteSpace(config.BaseWhere))
+            {
+                filters.Add($"({config.BaseWhere})");
+            }
+            
             // ---- dynamic filters (json) ----
             if (!string.IsNullOrWhiteSpace(request.FiltersJson))
             {
@@ -96,7 +101,7 @@ namespace ABB.Infrastructure.Data.Grid
                     var sqlFilter = BuildWhereFromFilters(root, config);
                     if (!string.IsNullOrWhiteSpace(sqlFilter))
                     {
-                        where.Append(" AND " + sqlFilter);
+                        filters.Add(sqlFilter);
                     }
                 }
             }
@@ -108,7 +113,7 @@ namespace ABB.Infrastructure.Data.Grid
                 var parts = config.SearchableColumns
                     .Select(c => $"{c} LIKE '%{key}%' ");
             
-                where.Append(" (" + string.Join(" OR ", parts) + ")");
+                filters.Add(" (" + string.Join(" OR ", parts) + ")");
             }
         
             // ---- sorting ----
@@ -122,10 +127,10 @@ namespace ABB.Infrastructure.Data.Grid
             int start = ((request.Page - 1) * request.PageSize) + 1;
             int end = request.Page * request.PageSize;
 
-            if (where.ToString().Trim() == "WHERE")
-            {
-                where.Clear();
-            }
+            // Combine everything
+            string whereClause = filters.Any() 
+                ? " WHERE " + string.Join(" AND ", filters) 
+                : "";
         
             var sql = $@"
                 ;WITH Q AS (
@@ -133,14 +138,14 @@ namespace ABB.Infrastructure.Data.Grid
                 ROW_NUMBER() OVER (ORDER BY {sortCol} {sortDir}) AS rn,
                 *
                 {config.FromSql}
-                {where}
+                {whereClause}
                 )
                 SELECT * FROM Q WHERE rn BETWEEN {start} AND {end};
 
 
             SELECT COUNT(1)
             {config.FromSql}
-            {where};
+            {whereClause}
             ";
         
             _db.CreateDbConnection(databaseName);
@@ -158,10 +163,15 @@ namespace ABB.Infrastructure.Data.Grid
 
         public async Task<GridResponse<T>> QueryAsyncCSM<T>(GridRequest request, GridConfig config, 
             object parameters)
-            {
-            // DB already selected by CreateDbConnection()
-            var where = new StringBuilder(" WHERE " + config.BaseWhere);
+        {
+            var filters = new List<string>();
 
+            // 1. Add BaseWhere if it's not empty
+            if (!string.IsNullOrWhiteSpace(config.BaseWhere))
+            {
+                filters.Add($"({config.BaseWhere})");
+            }
+            
             // ---- dynamic filters (json) ----
             if (!string.IsNullOrWhiteSpace(request.FiltersJson))
             {
@@ -177,7 +187,7 @@ namespace ABB.Infrastructure.Data.Grid
                     var sqlFilter = BuildWhereFromFilters(root, config);
                     if (!string.IsNullOrWhiteSpace(sqlFilter))
                     {
-                        where.Append(" AND " + sqlFilter);
+                        filters.Add(sqlFilter);
                     }
                 }
             }
@@ -189,7 +199,7 @@ namespace ABB.Infrastructure.Data.Grid
                 var parts = config.SearchableColumns
                     .Select(c => $"{c} LIKE '%{key}%' ");
             
-                where.Append(" (" + string.Join(" OR ", parts) + ")");
+                filters.Add(" (" + string.Join(" OR ", parts) + ")");
             }
         
             // ---- sorting ----
@@ -203,10 +213,10 @@ namespace ABB.Infrastructure.Data.Grid
             int start = ((request.Page - 1) * request.PageSize) + 1;
             int end = request.Page * request.PageSize;
 
-            if (where.ToString().Trim() == "WHERE")
-            {
-                where.Clear();
-            }
+            // Combine everything
+            string whereClause = filters.Any() 
+                ? " WHERE " + string.Join(" AND ", filters) 
+                : "";
         
             var sql = $@"
                 ;WITH Q AS (
@@ -214,14 +224,14 @@ namespace ABB.Infrastructure.Data.Grid
                 ROW_NUMBER() OVER (ORDER BY {sortCol} {sortDir}) AS rn,
                 *
                 {config.FromSql}
-                {where}
+                {whereClause}
                 )
                 SELECT * FROM Q WHERE rn BETWEEN {start} AND {end};
 
 
             SELECT COUNT(1)
             {config.FromSql}
-            {where};
+            {whereClause}   
             ";
         
             using var multi = await _dbConnectionCSM.QueryMultipleAsync(sql, parameters);

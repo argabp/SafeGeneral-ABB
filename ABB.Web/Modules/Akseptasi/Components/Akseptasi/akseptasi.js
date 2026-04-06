@@ -72,6 +72,12 @@ async function setAkseptasiEditedValue(){
         $("#kd_cb").getKendoDropDownList().readonly(true);
         $("#kd_cob").getKendoDropDownList().readonly(true);
         $("#kd_scob").getKendoDropDownList().readonly(true);
+
+        if($("#temp_kd_cob").val() == "E"){
+            $("#RekayasaDiv").show();
+        } else {
+            $("#RekayasaDiv").hide();
+        }
     }
 
     closeProgress('#AkseptasiWindow');

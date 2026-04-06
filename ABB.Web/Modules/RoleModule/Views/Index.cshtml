@@ -45,7 +45,7 @@
 
             }).Title("Action").Width(150).Locked(true);
             columns.Bound(col => col.RoleId).Hidden();
-            columns.Bound(col => col.RoleName).Width(100);
+            columns.Bound(col => col.RoleName).Width(200);
             columns.Bound(col => col.Modules).ClientTemplate("#= brTemplate(Modules)#").Width(250);
 
         })

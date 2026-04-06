@@ -21,6 +21,7 @@
     <form id="PengajuanAkseptasiForm" enctype="multipart/form-data" autocomplete="off">
     @Html.HiddenFor(f => f.kd_thn)
     @Html.HiddenFor(f => f.no_aks)
+    @Html.HiddenFor(f => f.IsEdit)
     <div class="form-group row">
         <div class="col-sm-6">
             <div class="form-group row">
@@ -36,7 +37,7 @@
                     <label class="col-sm-4">Jenis Pengajuan</label>
                     <div class="col-sm-8">
                         <kendo-dropdownlist for="jns_pengajuan" style="width: 100%" on-change="OnJenisPengajuanChange" option-label="Pilih Jenis Pengajuan"
-                                            datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                                            datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown">
                             <datasource type="DataSourceTagHelperType.Custom">
                                 <transport>
                                     <read url="@Url.Action("GetJenisPengajuan", "PengajuanAkseptasi")"/>
@@ -49,9 +50,9 @@
             </div>
             <div class="form-group row" id="div-data-polis" style="display: none">
                 <div class="row col-sm-12">
-                    <label class="col-sm-4">No Ref Pol</label>
+                    <label class="col-sm-4">Nomor Referensi Polis</label>
                     <div class="col-sm-6">
-                        <kendo-textbox for="no_ref_pol" readonly="true" style="width: 100%"/>
+                        <kendo-maskedtextbox mask="00.000.00.0000.0000-0" for="no_ref_pol" readonly="true" style="width: 100%"/>
                     </div>
                     <div class="col-sm-2">
                         <button type="button" id="btn-select-akseptasi" class="btn btn-success space-right">
