@@ -41,6 +41,7 @@
             text-align: center;
             border: 1px solid #000;
             padding: 3px 4px;
+            background-color: #f2f2f2; /* Tambahan warna abu-abu biar header lebih jelas */
         }
 
         td {
@@ -66,17 +67,16 @@
     <table>
         <thead>
             <tr>
-                <th style="width:40px;" Rowspan="2">Tanggal</th>
-                <th style="width:40px;" Rowspan="2">Group</th>
-                <th style="width:120px;" Rowspan="2">Tipe</th>
-                <th Rowspan="2">Nama Tipe</th>
-                <th style="width:160px;" Rowspan="2">Lokasi</th>
-                <th style="width:160px;" Rowspan="2">Kode Akun</th>
-                <th style="width:160px;" Rowspan="2">Nama Akun</th>
-                <th style="width:160px;" colspan="2">Saldo Awal</th>
-                <th style="width:160px;" colspan="2">Mutasi</th>
-                <th style="width:160px;" colspan="2">Saldo Akhir</th>
-            </tr>
+                <th style="width:40px;" rowspan="2">Tanggal</th>
+                <th style="width:40px;" rowspan="2">Group</th>
+                <th style="width:40px;" rowspan="2">Tipe</th>
+                <th style="width:120px;" rowspan="2">Nama Tipe</th>
+                <th style="width:40px;" rowspan="2">Lokasi</th>
+                <th style="width:60px;" rowspan="2">Kode Akun</th>
+                <th rowspan="2">Nama Akun</th>
+                <th colspan="2">Saldo Awal</th>
+                <th colspan="2">Mutasi</th>
+                <th colspan="3">Saldo Akhir</th> </tr>
 
             <tr>
                 <th style="width:80px;">Debet</th>
@@ -85,8 +85,8 @@
                 <th style="width:80px;">Kredit</th>
                 <th style="width:80px;">Debet</th>
                 <th style="width:80px;">Kredit</th>
+                <th style="width:80px;">Netto</th>
             </tr>
-
         </thead>
         <tbody>
             {{ details }}

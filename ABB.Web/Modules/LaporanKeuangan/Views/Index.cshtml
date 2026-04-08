@@ -6,7 +6,7 @@
     Layout = "~/Modules/Shared/_Layout.cshtml";
     ViewData["Title"] = "Laporan Keuangan";
     int currentYear = DateTime.Now.Year;
-    int currentMonth = DateTime.Now.Month; // Tambahan untuk default bulan
+    int currentMonth = DateTime.Now.Month;
 }
 
 <style>
@@ -60,7 +60,7 @@
                     <label>Jenis Laporan</label>
                     @(Html.Kendo().DropDownList().Name("TipeLaporan")
                         .BindTo(new List<string>() { "NERACA", "LABARUGI", "ARUSKAS", "NERACA (BULAN)", "LABA RUGI (BULAN)" })
-                        .Events(e => e.Change("onTipeLaporanChange")) // <--- TRIGGER OTOMATIS GANTI PERIODE
+                        .Events(e => e.Change("onTipeLaporanChange")) 
                         .HtmlAttributes(new { style = "width: 100%" }))
                 </div>
             </div>
@@ -69,15 +69,15 @@
                 <div class="form-group">
                     <label>Periode</label>
                     @(Html.Kendo().DropDownList().Name("JenisPeriode")
-                        .BindTo(new List<string>() { "TAHUNAN", "BULANAN" }) // <--- TAMBAH BULANAN
+                        .BindTo(new List<string>() { "TAHUNAN", "BULANAN" }) 
                         .Events(e => e.Change("onPeriodeChange"))
                         .HtmlAttributes(new { style = "width: 100%" }))
                 </div>
             </div>
 
-            <div class="col-md-2" id="divBulan" style="display:none;">
+            <div class="col-md-2" id="divBulan">
                 <div class="form-group">
-                    <label>Bulan</label>
+                    <label>Bulan s/d</label>
                     @(Html.Kendo().DropDownList().Name("Bulan")
                         .DataTextField("Text")
                         .DataValueField("Value")
@@ -95,11 +95,12 @@
                             new { Text = "November", Value = "11" },
                             new { Text = "Desember", Value = "12" }
                         })
-                        .Value(currentMonth.ToString()) // Otomatis bulan sekarang
+                        .Value(currentMonth.ToString()) 
                         .HtmlAttributes(new { style = "width: 100%" })
                     )
                 </div>
             </div>
+            
             <div class="col-md-2">
                 <div class="form-group">
                     <label>Tahun</label>
@@ -133,37 +134,30 @@
 </div>
 
 <script>
-    // --- 1. JIKA USER GANTI JENIS LAPORAN ---
+    // PERBAIKAN LOGIKA JS: 
+    // Bulan selalu tampil, kita cuma ngatur dropdown JenisPeriode & TipeLaporan biar sinkron.
+
     function onTipeLaporanChange() {
         var tipe = $("#TipeLaporan").val();
         var ddPeriode = $("#JenisPeriode").data("kendoDropDownList");
 
         if (tipe.includes("(BULAN)")) {
             ddPeriode.value("BULANAN");
-            $("#divBulan").show();
         } else {
             ddPeriode.value("TAHUNAN");
-            $("#divBulan").hide();
         }
     }
 
-    // --- 2. JIKA USER GANTI PERIODE ---
     function onPeriodeChange() {
         var periode = $("#JenisPeriode").val();
         var ddTipe = $("#TipeLaporan").data("kendoDropDownList");
         var tipeSaatIni = ddTipe.value();
         
         if (periode === "TAHUNAN") {
-            $("#divBulan").hide(); 
-            
-            // Kalau periodenya Tahunan, tapi laporannya masih (Bulan), balikkan ke NERACA
             if (tipeSaatIni.includes("(BULAN)")) {
                 ddTipe.value("NERACA");
             }
         } else {
-            $("#divBulan").show(); 
-            
-            // (BONUS UX) Kalau periodenya Bulanan, tapi laporannya masih yang tahunan, paksa ke versi bulannya
             if (!tipeSaatIni.includes("(BULAN)")) {
                 if (tipeSaatIni === "LABARUGI") {
                     ddTipe.value("LABA RUGI (BULAN)");
@@ -179,10 +173,8 @@
         var jenisPeriode = $("#JenisPeriode").val();
         var tahun = $("#Tahun").val();
         
-        var bulan = 12; 
-        if (jenisPeriode === "BULANAN") {
-            bulan = $("#Bulan").val();
-        }
+        // PERBAIKAN: Selalu ambil nilai dropdown Bulan, nggak peduli TAHUNAN atau BULANAN
+        var bulan = $("#Bulan").val(); 
 
         if (!tahun) { alert("Harap isi Tahun."); return; }
 
@@ -223,10 +215,8 @@
         var jenisPeriode = $("#JenisPeriode").val();
         var tahun = $("#Tahun").val();
         
-        var bulan = 12; 
-        if (jenisPeriode === "BULANAN") {
-            bulan = $("#Bulan").val();
-        }
+        // PERBAIKAN: Selalu ambil nilai dropdown Bulan
+        var bulan = $("#Bulan").val(); 
 
         if (!tahun) { alert("Harap isi Tahun."); return; }
 
@@ -264,7 +254,6 @@
     }
 
     $(document).ready(function() {
-        // Trigger saat halaman pertama kali dibuka
         onTipeLaporanChange();
     });
 </script>

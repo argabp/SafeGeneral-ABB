@@ -92,8 +92,14 @@ namespace ABB.Application.LaporanOutstandings.Queries
             string BuildRowHtml(int index, SpLaporanOutstandingResult item)
             {
                 int umur = (item.date.HasValue && item.tgl_jth_tempo.HasValue) ? Math.Max(0, (item.tgl_jth_tempo.Value - item.date.Value).Days) : 0;
+                
+                // [PERBAIKAN FATAL]
+                // 1. Nilai Nota dikali Kurs (Jika dari DB bentuknya mata uang asing)
                 decimal nNota = (item.netto ?? 0) * (item.kurs ?? 1); 
-                decimal nBayar = (item.jumlah ?? 0) * (item.kurs ?? 1); 
+                
+                // 2. Nilai Bayar JANGAN dikali Kurs lagi! Karena total_dalam_rupiah sudah bentuk Rupiah
+                decimal nBayar = item.jumlah ?? 0; 
+                
                 decimal nOs = nNota - nBayar;
 
                 return $@"
@@ -131,8 +137,10 @@ namespace ABB.Application.LaporanOutstandings.Queries
             {
                 foreach (var item in dataLaporan) detailsBuilder.Append(BuildRowHtml(idx++, item));
                 
-                decimal gNota = dataLaporan.Sum(x => x.saldo ?? 0);
+                // [PERBAIKAN TOTAL] Harus konsisten dengan rumus baris! Jangan pakai x.saldo
+                decimal gNota = dataLaporan.Sum(x => (x.netto ?? 0) * (x.kurs ?? 1));
                 decimal gBayar = dataLaporan.Sum(x => x.jumlah ?? 0);
+                
                 detailsBuilder.Append(BuildSubtotalHtml("KESELURUHAN", gNota, gBayar, gNota - gBayar));
             }
             else
@@ -153,7 +161,9 @@ namespace ABB.Application.LaporanOutstandings.Queries
                     foreach (var item in group)
                     {
                         detailsBuilder.Append(BuildRowHtml(idx++, item));
-                        subNota += (item.saldo ?? 0);
+                        
+                        // [PERBAIKAN SUBTOTAL]
+                        subNota += (item.netto ?? 0) * (item.kurs ?? 1);
                         subBayar += (item.jumlah ?? 0);
                     }
                     detailsBuilder.Append(BuildSubtotalHtml(group.Key, subNota, subBayar, subNota - subBayar));

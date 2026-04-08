@@ -1,6 +1,28 @@
+function onTipeAkunAwalChange() {
+    var comboAwal = $("#TipeAkunAwal").data("kendoComboBox");
+    var comboAkhir = $("#TipeAkunAkhir").data("kendoComboBox");
+    
+    if (comboAwal && comboAkhir) {
+        var valAwal = comboAwal.value();
+        // Cek jika awal diisi, tapi akhir masih kosong
+        if (valAwal && !comboAkhir.value()) {
+            comboAkhir.value(valAwal);
+            comboAkhir.text(comboAwal.text()); // Set labelnya juga
+        }
+    }
+}
+function getTipeAkunParam() {
+    return {
+        text: $(document.activeElement).val()
+    };
+}
+
 function onSearchClick() {
     var bulan = $("#Bulan").data("kendoComboBox").value();
     var tahun = $("#Tahun").data("kendoDropDownList").value();
+    // Ambil kedua nilainya
+    var tipeAwal = $("#TipeAkunAwal").data("kendoComboBox").value();
+    var tipeAkhir = $("#TipeAkunAkhir").data("kendoComboBox").value();
 
     if (!bulan || !tahun) {
         alert("Silakan pilih bulan dan tahun dengan lengkap.");
@@ -9,7 +31,9 @@ function onSearchClick() {
 
     var formData = {
         Bulan: bulan,
-        Tahun: tahun
+        Tahun: tahun,
+        TipeAkunAwal: tipeAwal,   // <-- Baru
+        TipeAkunAkhir: tipeAkhir
     };
     console.log(formData)
 
@@ -34,6 +58,8 @@ function onSearchClick() {
 function onExcelClick() {
     var bulan = $("#Bulan").data("kendoComboBox").value();
     var tahun = $("#Tahun").data("kendoDropDownList").value();
+    var tipeAwal = $("#TipeAkunAwal").data("kendoComboBox").value();
+    var tipeAkhir = $("#TipeAkunAkhir").data("kendoComboBox").value();
 
     if (!bulan || !tahun) {
         alert("Silakan pilih bulan dan tahun dengan lengkap.");
@@ -42,7 +68,9 @@ function onExcelClick() {
 
     var formData = {
         Bulan: bulan,
-        Tahun: tahun
+        Tahun: tahun,
+        TipeAkunAwal: tipeAwal,   // <-- Baru
+        TipeAkunAkhir: tipeAkhir  // <-- Baru
     };
 
     // Ubah text tombol biar user tau lagi loading

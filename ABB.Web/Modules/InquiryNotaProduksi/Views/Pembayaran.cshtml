@@ -98,51 +98,67 @@
                     <th width="10%">JUMLAH (Rp)</th>
                 </tr>
             </thead>
-            <tbody>
+           <tbody>
                 @{
                     int urut = 1;
                     decimal totalSaldo = 0;
                     
-                    // 1. Baris Pertama (Nilai Nota Asli / Debet)
-                    totalSaldo += Model.InquiryNotaProduksiHeader.jumlah ?? 0;
+                    // 1. Ambil Nilai Nota Asli dan D/K-nya
+                    decimal nilaiNota = Model.InquiryNotaProduksiHeader.jumlah ?? 0;
+                    string notaDK = Model.InquiryNotaProduksiHeader.d_k?.Trim().ToUpper() ?? "D";
+                    
+                    // Saldo awal = Nilai Nota (biarkan sesuai aslinya, minus ya minus, plus ya plus)
+                    totalSaldo = nilaiNota;
+
+                    // Baris Pertama (Nilai Nota)
                     <tr>
                         <td>@urut</td>
                         <td>@(Model.InquiryNotaProduksiHeader.date_input?.ToString("dd/MM/yyyy"))</td>
                         <td>@Model.InquiryNotaProduksiHeader.no_nd</td>
                         <td>@Model.InquiryNotaProduksiHeader.no_nd</td> 
-                        <td>@Model.InquiryNotaProduksiHeader.no_ref</td> <td>-</td>
+                        <td>@Model.InquiryNotaProduksiHeader.no_ref</td> 
+                        <td>-</td>
                         <td class="text-left">NILAI NOTA</td>
-                        <td>@Model.InquiryNotaProduksiHeader.d_k</td>
-                        <td class="text-right">@string.Format("{0:N2}", Model.InquiryNotaProduksiHeader.jumlah)</td>
+                        <td>@notaDK</td>
+                        <td class="text-right">@string.Format("{0:N2}", nilaiNota)</td>
                     </tr>
                     urut++;
 
-                    // 2. Looping Pembayaran Kas (Kredit)
+                    // [LOGIC SAKTI]: Cara melunasi Saldo
+                    // Kalau Nota aslinya Kredit (K) -> Nilainya biasa Minus. Untuk melunasinya, saldo harus di-TAMBAH (+=) pembayaran.
+                    // Kalau Nota aslinya Debet (D) -> Nilainya biasa Plus. Untuk melunasinya, saldo harus di-KURANGI (-=) pembayaran.
+                    bool isNotaKredit = notaDK == "K";
+
+                    // 2. Looping Pembayaran Kas
                     if (Model.PembayaranKasList != null)
                     {
                         foreach (var item in Model.PembayaranKasList)
                         {
-                            totalSaldo -= item.TotalDlmRupiah ?? 0;
+                            decimal bayar = item.TotalDlmRupiah ?? 0;
+                            if (isNotaKredit) { totalSaldo += bayar; } else { totalSaldo -= bayar; }
+                            
                             <tr>
                                 <td>@urut</td>
                                 <td>@(Model.InquiryNotaProduksiHeader.date_input?.ToString("dd/MM/yyyy"))</td>
                                 <td>@Model.InquiryNotaProduksiHeader.no_nd</td>
                                 <td>@item.NoVoucher</td>
-                                <td>-</td> <td>@(item.TanggalVoucher?.ToString("dd/MM/yyyy"))</td>
+                                <td>-</td> 
+                                <td>@(item.TanggalVoucher?.ToString("dd/MM/yyyy"))</td>
                                 <td class="text-left">PEMBAYARAN KAS</td>
-                                <td>K</td>
-                                <td class="text-right">@string.Format("{0:N2}", item.TotalDlmRupiah)</td>
+                                <td>@(isNotaKredit ? "D" : "K")</td> <td class="text-right">@string.Format("{0:N2}", bayar)</td>
                             </tr>
                             urut++;
                         }
                     }
 
-                    // 3. Looping Pembayaran Bank (Kredit)
+                    // 3. Looping Pembayaran Bank
                     if (Model.PembayaranBankList != null)
                     {
                         foreach (var item in Model.PembayaranBankList)
                         {
-                            totalSaldo -= item.TotalDlmRupiah ?? 0;
+                            decimal bayar = item.TotalDlmRupiah ?? 0;
+                            if (isNotaKredit) { totalSaldo += bayar; } else { totalSaldo -= bayar; }
+
                             <tr>
                                 <td>@urut</td>
                                 <td>@(Model.InquiryNotaProduksiHeader.date_input?.ToString("dd/MM/yyyy"))</td>
@@ -151,19 +167,21 @@
                                 <td>-</td>
                                 <td>@(item.TanggalVoucher?.ToString("dd/MM/yyyy"))</td>
                                 <td class="text-left">PEMBAYARAN BANK</td>
-                                <td>K</td>
-                                <td class="text-right">@string.Format("{0:N2}", item.TotalDlmRupiah)</td>
+                                <td>@(isNotaKredit ? "D" : "K")</td>
+                                <td class="text-right">@string.Format("{0:N2}", bayar)</td>
                             </tr>
                             urut++;
                         }
                     }
 
-                    // 4. Looping Pembayaran Piutang (Kredit)
+                    // 4. Looping Pembayaran Piutang
                     if (Model.PembayaranPiutangList != null)
                     {
                         foreach (var item in Model.PembayaranPiutangList)
                         {
-                            totalSaldo -= item.TotalBayarRp ?? 0;
+                            decimal bayar = item.TotalBayarRp ?? 0;
+                            if (isNotaKredit) { totalSaldo += bayar; } else { totalSaldo -= bayar; }
+
                             <tr>
                                 <td>@urut</td>
                                 <td>@(Model.InquiryNotaProduksiHeader.date_input?.ToString("dd/MM/yyyy"))</td>
@@ -172,8 +190,8 @@
                                 <td>-</td>
                                 <td>@(item.Tanggal?.ToString("dd/MM/yyyy"))</td>
                                 <td class="text-left">PEMBAYARAN PIUTANG</td>
-                                <td>K</td>
-                                <td class="text-right">@string.Format("{0:N2}", item.TotalBayarRp)</td>
+                                <td>@(isNotaKredit ? "D" : "K")</td>
+                                <td class="text-right">@string.Format("{0:N2}", bayar)</td>
                             </tr>
                             urut++;
                         }

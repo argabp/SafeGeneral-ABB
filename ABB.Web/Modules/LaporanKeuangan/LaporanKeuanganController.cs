@@ -107,7 +107,6 @@ namespace ABB.Web.Modules.LaporanKeuangan
             {
                 LaporanKeuanganResponse response = null;
 
-                // PERCABANGAN LOGIKA BERDASARKAN TIPE LAPORAN (EXCEL)
                 switch (model.TipeLaporan)
                 {
                     case "NERACA":
@@ -149,9 +148,7 @@ namespace ABB.Web.Modules.LaporanKeuangan
 
                 using (var workbook = new XLWorkbook())
                 {
-                    // Bersihkan nama sheet dari karakter aneh
                     string sheetName = model.TipeLaporan.Replace(" ", "").Replace("(", "").Replace(")", "");
-                    // Max nama sheet di Excel itu 31 Karakter, jadi kita potong kalau kepanjangan
                     if (sheetName.Length > 31) sheetName = sheetName.Substring(0, 31);
                     
                     var worksheet = workbook.Worksheets.Add(sheetName);
@@ -163,8 +160,11 @@ namespace ABB.Web.Modules.LaporanKeuangan
                     worksheet.Cell(1, 1).Value = $"LAPORAN {model.TipeLaporan}";
                     worksheet.Range(1, 1, 1, maxCol).Merge().Style.Font.SetBold().Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
                     
-                    string labelPeriode = model.JenisPeriode == "BULANAN" ? $"Bulan {model.Bulan} " : "";
-                    worksheet.Cell(2, 1).Value = $"PERIODE: {labelPeriode}Tahun {model.Tahun}";
+                    // PERBAIKAN: Judul periode di atas tabel (baris 2) pakai nama bulan
+                    string[] arrayBulan = { "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember" };
+                    string namaBulan = arrayBulan[model.Bulan - 1]; 
+                    
+                    worksheet.Cell(2, 1).Value = $"PERIODE: s/d {namaBulan} {model.Tahun}";
                     worksheet.Range(2, 1, 2, maxCol).Merge().Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
 
                     // --- 2. SETUP LEBAR KOLOM ---
@@ -175,7 +175,6 @@ namespace ABB.Web.Modules.LaporanKeuangan
 
                     int currentRow = 4;
 
-                    // --- 3. LOOP DATA DARI TEMPLATE DATABASE ---
                     foreach (var item in response.ExcelData)
                     {
                         if (item.TipeBaris == "SPASI" || item.TipeBaris == "BLANK")
@@ -187,7 +186,6 @@ namespace ABB.Web.Modules.LaporanKeuangan
                         var cellDesc = worksheet.Cell(currentRow, 1);
                         cellDesc.Value = item.Deskripsi;
 
-                        // Header Utama (Aset, Kewajiban beserta label kolom)
                         if (item.IsHeaderKolom)
                         {
                             var headerRange = worksheet.Range(currentRow, 1, currentRow, maxCol);
@@ -204,6 +202,7 @@ namespace ABB.Web.Modules.LaporanKeuangan
                             }
                             else
                             {
+                                // PERBAIKAN: Tulis "s/d Bulan Tahun" di kolom Excel
                                 worksheet.Cell(currentRow, 2).Value = item.HeaderTahunIni;
                                 worksheet.Cell(currentRow, 3).Value = item.HeaderTahunLalu;
                                 worksheet.Range(currentRow, 2, currentRow, 3).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
@@ -212,24 +211,23 @@ namespace ABB.Web.Modules.LaporanKeuangan
                             continue;
                         }
 
-                        // Isi Angka Berdasarkan Tipe
                         if (isBulanan)
                         {
                             if (item.NilaiLalu.HasValue) worksheet.Cell(currentRow, 2).Value = item.NilaiLalu.Value;
                             if (item.NilaiMutasi.HasValue) worksheet.Cell(currentRow, 3).Value = item.NilaiMutasi.Value;
                             if (item.NilaiIni.HasValue) worksheet.Cell(currentRow, 4).Value = item.NilaiIni.Value;
                             
-                            worksheet.Range(currentRow, 2, currentRow, 4).Style.NumberFormat.Format = "#,##0.00";
+                            worksheet.Range(currentRow, 2, currentRow, 4).Style.NumberFormat.Format = "#,##0.00;(#,##0.00);0.00";
                         }
                         else
                         {
                             if (item.NilaiIni.HasValue) worksheet.Cell(currentRow, 2).Value = item.NilaiIni.Value;
                             if (item.NilaiLalu.HasValue) worksheet.Cell(currentRow, 3).Value = item.NilaiLalu.Value;
                             
-                            worksheet.Range(currentRow, 2, currentRow, 3).Style.NumberFormat.Format = "#,##0.00";
+                            // [PERBAIKAN]: Tambahkan format kurung untuk Excel Laporan Tahunan
+                            worksheet.Range(currentRow, 2, currentRow, 3).Style.NumberFormat.Format = "#,##0.00;(#,##0.00);0.00";
                         }
 
-                        // --- 4. LOGIKA INDENTASI & FONT BOLD (MIRROR PDF) ---
                         if (item.TipeBaris == "HEADING")
                         {
                             cellDesc.Style.Font.SetBold();
@@ -245,10 +243,8 @@ namespace ABB.Web.Modules.LaporanKeuangan
                             totalRange.Style.Font.SetBold();
                             cellDesc.Style.Alignment.SetIndent(item.Level > 1 ? item.Level : 0);
 
-                            // Garis Atas
                             worksheet.Range(currentRow, 2, currentRow, maxCol).Style.Border.TopBorder = XLBorderStyleValues.Thin;
 
-                            // Garis Bawah Ganda untuk Grand Total (Level 1)
                             if (item.Level == 1) 
                             {
                                 worksheet.Range(currentRow, 2, currentRow, maxCol).Style.Border.BottomBorder = XLBorderStyleValues.Double;

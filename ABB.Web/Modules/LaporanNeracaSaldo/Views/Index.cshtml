@@ -90,7 +90,48 @@
                 .OptionLabel("Pilih Tahun ...")
                 .HtmlAttributes(new { style = "width:120px;" })
             )
+
+            <label class="filter-label">Tipe Akun :</label>
+            <div style="display:flex; align-items:center; gap:10px;">
+                
+                @(Html.Kendo().ComboBox()
+                    .Name("TipeAkunAwal")
+                    .Placeholder("Pilih Tipe Awal...")
+                    .DataTextField("Text")
+                    .DataValueField("Value")
+                    .DataSource(source => {
+                        source.Read(read => {
+                            read.Action("GetTipeAkunList", "LaporanNeracaSaldo").Data("getTipeAkunParam");
+                        }).ServerFiltering(true);
+                    })
+                    .HtmlAttributes(new { style = "width:250px;" })
+                    .ClearButton(true)
+                    .Filter(FilterType.Contains)
+                    .Suggest(true)
+                    .Events(e => e.Change("onTipeAkunAwalChange")) 
+                )
+
+                <span style="font-weight:bold; margin: 0 5px;">s/d</span>
+
+                @(Html.Kendo().ComboBox()
+                    .Name("TipeAkunAkhir")
+                    .Placeholder("Pilih Tipe Akhir...")
+                    .DataTextField("Text")
+                    .DataValueField("Value")
+                    .DataSource(source => {
+                        source.Read(read => {
+                            read.Action("GetTipeAkunList", "LaporanNeracaSaldo").Data("getTipeAkunParam");
+                        }).ServerFiltering(true);
+                    })
+                    .HtmlAttributes(new { style = "width:250px;" })
+                    .ClearButton(true)
+                    .Filter(FilterType.Contains)
+                    .Suggest(true)
+                )
+
+            </div>
         </div>
+       
 
         <!-- Baris 4: Tombol Cari -->
         <div class="filter-section">

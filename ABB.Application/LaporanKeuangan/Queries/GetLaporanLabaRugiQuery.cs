@@ -20,7 +20,7 @@ namespace ABB.Application.LaporanKeuangan.Queries
     // =========================================================================
     public class GetLaporanLabaRugiQuery : IRequest<LaporanKeuanganResponse>
     {
-        public string TipeLaporan { get; set; } // Tambahan Indikator (LABARUGI / LABA RUGI (BULAN))
+        public string TipeLaporan { get; set; } 
         public string JenisPeriode { get; set; } 
         public int Bulan { get; set; } 
         public int Tahun { get; set; } 
@@ -39,7 +39,6 @@ namespace ABB.Application.LaporanKeuangan.Queries
 
         public async Task<LaporanKeuanganResponse> Handle(GetLaporanLabaRugiQuery request, CancellationToken cancellationToken)
         {
-            // Cek apakah user minta versi Bulanan (3 Kolom) atau Tahunan (2 Kolom)
             bool isBulanan = request.TipeLaporan == "LABA RUGI (BULAN)";
             
             // [PERBAIKAN DARI ATASAN]: Selalu tembak ke Master "LABARUGI" biasa!
@@ -52,6 +51,34 @@ namespace ABB.Application.LaporanKeuangan.Queries
 
             var mapTipeBaris = templates.ToDictionary(x => x.Urutan, x => x.TipeBaris);
             
+            // =================================================================
+            // [SAMAKAN DENGAN NERACA]: BIKIN KAMUS (DICTIONARY) DARI MASTER COA & TYPE COA
+            // =================================================================
+            
+            // 1. Kamus Tipe Akun -> D/K (Normal Balance)
+            var typeCoaList = await _context.TypeCoa.AsNoTracking().ToListAsync(cancellationToken);
+            var mapTipeToDK = new Dictionary<string, string>();
+            foreach (var tc in typeCoaList)
+            {
+                if (!string.IsNullOrEmpty(tc.Type))
+                {
+                    string normalBalance = tc.Dk != null ? tc.Dk.ToString().Trim().ToUpper() : "D"; 
+                    mapTipeToDK[tc.Type.Trim().ToUpper()] = normalBalance;
+                }
+            }
+
+            // 2. Kamus Kode Akun -> Tipe Akun
+            var coaList = await _context.Set<Coa>().AsNoTracking().ToListAsync(cancellationToken);
+            var mapAkunToTipe = new Dictionary<string, string>();
+            foreach(var c in coaList) 
+            {
+                if(!string.IsNullOrEmpty(c.gl_kode)) 
+                {
+                    string tipeAkun = c.gl_type != null ? c.gl_type.Trim().ToUpper() : "";
+                    mapAkunToTipe[c.gl_kode.Trim()] = tipeAkun;
+                }
+            }
+
             StringBuilder sb = new StringBuilder();
             var excelData = new List<LaporanExcelRow>(); 
             int romanCounter = 0, detailCounter = 0, subDetailCounter = 0;
@@ -86,12 +113,35 @@ namespace ABB.Application.LaporanKeuangan.Queries
 
                     if (item.TipeBaris == "DETAIL" && !string.IsNullOrEmpty(item.Rumus))
                     {
-                        var akunList = item.Rumus.Split(',', StringSplitOptions.RemoveEmptyEntries);
-                        foreach (var akun in akunList)
+                        var tipeList = item.Rumus.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                        foreach (var tipeInput in tipeList)
                         {
-                            var clean = akun.Trim();
-                            nilaiLalu += dataSaldoLalu.Where(x => x.KodeAkun != null && x.KodeAkun.StartsWith(clean)).Sum(x => x.Total);
-                            nilaiMutasi += dataSaldoMutasi.Where(x => x.KodeAkun != null && x.KodeAkun.StartsWith(clean)).Sum(x => x.Total);
+                            var cleanTipe = tipeInput.Trim().ToUpper();
+                            
+                            // Ambil Saldo Normal dari kamus (Default 'D' jika tidak ketemu)
+                            string posisiDK = mapTipeToDK.ContainsKey(cleanTipe) ? mapTipeToDK[cleanTipe] : "D";
+
+                            decimal sumLalu = dataSaldoLalu.Where(x => 
+                                x.KodeAkun != null && 
+                                mapAkunToTipe.ContainsKey(x.KodeAkun.Trim()) && 
+                                mapAkunToTipe[x.KodeAkun.Trim()] == cleanTipe
+                            ).Sum(x => x.Total);
+                            
+                            decimal sumMutasi = dataSaldoMutasi.Where(x => 
+                                x.KodeAkun != null && 
+                                mapAkunToTipe.ContainsKey(x.KodeAkun.Trim()) && 
+                                mapAkunToTipe[x.KodeAkun.Trim()] == cleanTipe
+                            ).Sum(x => x.Total);
+
+                            // [LOGIKA MINUS] Jika tipe akun adalah Kredit, balikkan nilainya agar positif
+                            if (posisiDK == "K")
+                            {
+                                sumLalu = sumLalu * -1;
+                                sumMutasi = sumMutasi * -1;
+                            }
+
+                            nilaiLalu += sumLalu;
+                            nilaiMutasi += sumMutasi;
                         }
                     }
                     else if (item.TipeBaris == "TOTAL" && !string.IsNullOrEmpty(item.Rumus))
@@ -129,7 +179,10 @@ namespace ABB.Application.LaporanKeuangan.Queries
                     string strLalu = "", strMutasi = "", strIni = "";
                     if (item.TipeBaris == "DETAIL" || item.TipeBaris == "TOTAL")
                     {
-                        strLalu = nilaiLalu.ToString("#,##0.00"); strMutasi = nilaiMutasi.ToString("#,##0.00"); strIni = nilaiIni.ToString("#,##0.00");
+                        // [PERBAIKAN FORMAT KURUNG]: Format string khusus akuntansi
+                        strLalu = nilaiLalu.ToString("#,##0.00;(#,##0.00);0.00"); 
+                        strMutasi = nilaiMutasi.ToString("#,##0.00;(#,##0.00);0.00"); 
+                        strIni = nilaiIni.ToString("#,##0.00;(#,##0.00);0.00");
                     }
 
                     if (item.TipeBaris == "SPASI" || item.TipeBaris == "BLANK")
@@ -188,11 +241,18 @@ namespace ABB.Application.LaporanKeuangan.Queries
                 }
             }
             // =================================================================
-            // LOGIKA CABANG: JIKA TAHUNAN (2 KOLOM - LAMA)
+            // LOGIKA CABANG: JIKA TAHUNAN (2 KOLOM)
             // =================================================================
             else
             {
                 int targetBulanDB = request.Bulan - 1;
+
+                // [SAMAKAN DENGAN NERACA] Bikin Array Nama Bulan untuk Judul Kolom
+                string[] arrayBulan = { "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember" };
+                string namaBulan = arrayBulan[request.Bulan - 1]; 
+                
+                string judulKolomIni = $"s/d {namaBulan} {request.Tahun}";
+                string judulKolomLalu = $"s/d {namaBulan} {request.Tahun - 1}";
 
                 System.Linq.Expressions.Expression<Func<RekapJurnal, bool>> filterIni = 
                     x => x.thn == request.Tahun && x.bln <= targetBulanDB;
@@ -217,12 +277,35 @@ namespace ABB.Application.LaporanKeuangan.Queries
 
                     if (item.TipeBaris == "DETAIL" && !string.IsNullOrEmpty(item.Rumus))
                     {
-                        var akunList = item.Rumus.Split(',', StringSplitOptions.RemoveEmptyEntries);
-                        foreach (var akun in akunList)
+                        var tipeList = item.Rumus.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                        foreach (var tipeInput in tipeList)
                         {
-                            var clean = akun.Trim();
-                            nilaiIni += dataSaldoIni.Where(x => x.KodeAkun != null && x.KodeAkun.StartsWith(clean)).Sum(x => x.Total);
-                            nilaiLalu += dataSaldoLalu.Where(x => x.KodeAkun != null && x.KodeAkun.StartsWith(clean)).Sum(x => x.Total);
+                            var cleanTipe = tipeInput.Trim().ToUpper();
+
+                            // Ambil Saldo Normal dari kamus (Default 'D' jika tidak ketemu)
+                            string posisiDK = mapTipeToDK.ContainsKey(cleanTipe) ? mapTipeToDK[cleanTipe] : "D";
+
+                            decimal sumIni = dataSaldoIni.Where(x => 
+                                x.KodeAkun != null && 
+                                mapAkunToTipe.ContainsKey(x.KodeAkun.Trim()) && 
+                                mapAkunToTipe[x.KodeAkun.Trim()] == cleanTipe
+                            ).Sum(x => x.Total);
+
+                            decimal sumLalu = dataSaldoLalu.Where(x => 
+                                x.KodeAkun != null && 
+                                mapAkunToTipe.ContainsKey(x.KodeAkun.Trim()) && 
+                                mapAkunToTipe[x.KodeAkun.Trim()] == cleanTipe
+                            ).Sum(x => x.Total);
+
+                            // [LOGIKA MINUS] Jika tipe akun adalah Kredit, balikkan nilainya agar positif
+                            if (posisiDK == "K")
+                            {
+                                sumIni = sumIni * -1;
+                                sumLalu = sumLalu * -1;
+                            }
+
+                            nilaiIni += sumIni;
+                            nilaiLalu += sumLalu;
                         }
                     }
                     else if (item.TipeBaris == "TOTAL" && !string.IsNullOrEmpty(item.Rumus))
@@ -259,7 +342,9 @@ namespace ABB.Application.LaporanKeuangan.Queries
                     string strIni = "", strLalu = "";
                     if (item.TipeBaris == "DETAIL" || item.TipeBaris == "TOTAL")
                     {
-                        strIni = nilaiIni.ToString("#,##0.00"); strLalu = nilaiLalu.ToString("#,##0.00");
+                        // [PERBAIKAN FORMAT KURUNG]: Format string khusus akuntansi
+                        strIni = nilaiIni.ToString("#,##0.00;(#,##0.00);0.00"); 
+                        strLalu = nilaiLalu.ToString("#,##0.00;(#,##0.00);0.00");
                     }
 
                     if (item.TipeBaris == "SPASI" || item.TipeBaris == "BLANK")
@@ -295,8 +380,10 @@ namespace ABB.Application.LaporanKeuangan.Queries
                         if (item.TipeBaris == "HEADING" && currentLevel == 1) {
                             rowExcel.Deskripsi = string.Join("  ", item.Deskripsi.Trim().ToCharArray());
                             rowExcel.IsHeaderKolom = true;
-                            rowExcel.HeaderTahunIni = request.Tahun.ToString();
-                            rowExcel.HeaderTahunLalu = (request.Tahun - 1).ToString();
+                            
+                            // [SAMAKAN DENGAN NERACA] Masukkan judul dinamis ke Excel
+                            rowExcel.HeaderTahunIni = judulKolomIni;
+                            rowExcel.HeaderTahunLalu = judulKolomLalu;
                         }
                         excelData.Add(rowExcel);
 
@@ -306,7 +393,9 @@ namespace ABB.Application.LaporanKeuangan.Queries
                             if (currentLevel == 1)
                             {
                                 sb.Append($"<td class='lvl-1'>{string.Join("  ", item.Deskripsi.Trim().ToCharArray())}</td>");
-                                sb.Append($"<td class='lvl-1' style='text-align:center;'>{request.Tahun}</td><td class='lvl-1' style='text-align:center;'>{request.Tahun - 1}</td>");
+                                
+                                // [SAMAKAN DENGAN NERACA] Print HTML dengan Judul Dinamis
+                                sb.Append($"<td class='lvl-1' style='text-align:center;'>{judulKolomIni}</td><td class='lvl-1' style='text-align:center;'>{judulKolomLalu}</td>");
                             }
                             else sb.Append($"<td colspan='3' class='{cssClass}'>{deskripsiFinal}</td>");
                         }
@@ -332,7 +421,7 @@ namespace ABB.Application.LaporanKeuangan.Queries
 
             DateTime tanggalLaporan = new DateTime(request.Tahun, request.Bulan, 1).AddMonths(1).AddDays(-1); 
             
-            // Tentukan template HTML berdasarkan Bulanan / Tahunan
+            // Ambil template HTML sesuai versinya
             string templateHtmlName = isBulanan ? "LaporanLabaRugiBulan.html" : "LaporanLabaRugi.html";
             string reportPath = Path.Combine(_environment.ContentRootPath, "Modules", "Reports", "Templates", templateHtmlName);
             if (!File.Exists(reportPath)) throw new FileNotFoundException($"Template not found: {reportPath}");
