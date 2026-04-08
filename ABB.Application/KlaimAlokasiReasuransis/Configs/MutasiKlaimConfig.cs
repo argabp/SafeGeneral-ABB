@@ -10,53 +10,55 @@ namespace ABB.Application.KlaimAlokasiReasuransis.Configs
             return new GridConfig
             {
                 FromSql = @"
+                            FROM (SELECT 
+                                p.flag_closing, 
+                                p.tgl_mts,
+                                p.no_pol_lama,
+                                p.tgl_closing,
+                                p.tgl_reas,
+                                p.flag_reas,
+                                p.nm_ttg,
+                                p.kd_cb, 
+                                p.kd_cob, 
+                                p.kd_scob, 
+                                p.kd_thn, 
+                                p.no_kl, 
+                                p.no_mts, 
+                                p.nilai_ttl_kl, 
+                                p.tipe_mts,
+                                RTRIM(p.kd_cb) + '-' + RTRIM(p.kd_cob) + '-' + RTRIM(p.kd_scob) + '-' + 
+                                RTRIM(p.kd_thn) + '-' + RTRIM(p.no_kl) + '-' + CAST(p.no_mts AS VARCHAR) AS Id,
+                                cb.nm_cb,
+                                cob.nm_cob,
+                                scob.nm_scob,
+                                COALESCE(c5.total_nilai_kl_cl05, 0) AS nilai_total_klaim,
+                                (p.nilai_ttl_kl - COALESCE(c5.total_nilai_kl_cl05, 0)) AS sisa_alokasi,
+                                CASE RTRIM(p.tipe_mts)
+                                    WHEN 'P' THEN 'PLA'
+                                    WHEN 'D' THEN 'DLA'
+                                    WHEN 'B' THEN 'Beban'
+                                    WHEN 'R' THEN 'Recovery'
+                                    ELSE ''
+                                END AS nm_tipe_mts,
+                                'K.' + RTRIM(p.kd_cb) + '.' + RTRIM(p.kd_scob) + '.' + 
+                                RTRIM(p.kd_thn) + '.' + RTRIM(p.no_kl) AS nomor_register
                             FROM v_cl03 p
-                                INNER JOIN rf01 cb ON p.kd_cb = cb.kd_cb
-                                INNER JOIN rf04 cob ON p.kd_cob = cob.kd_cob
-                                INNER JOIN rf05 scob ON p.kd_cob = scob.kd_cob 
-                                                    AND p.kd_scob = scob.kd_scob
-                                LEFT JOIN (
-                                    SELECT 
-                                        kd_cb, kd_cob, kd_scob, kd_thn, no_kl, no_mts,
-                                        SUM(nilai_kl) as total_nilai_kl_cl05
-                                    FROM cl05
-                                    GROUP BY kd_cb, kd_cob, kd_scob, kd_thn, no_kl, no_mts
-                                ) c5 ON p.kd_cb = c5.kd_cb 
-                                    AND p.kd_cob = c5.kd_cob 
-                                    AND p.kd_scob = c5.kd_scob 
-                                    AND p.kd_thn = c5.kd_thn 
-                                    AND p.no_kl = c5.no_kl 
-                                    AND p.no_mts = c5.no_mts
-                                CROSS APPLY (
-                                    SELECT 
-                                        -- Essential for your WHERE clause
-                                        p.flag_closing, 
-                                        p.tgl_mts,
-                                        p.no_pol_lama,
-                                        p.tgl_closing,
-                                        p.tgl_reas,
-                                        p.flag_reas,
-                                        p.nm_ttg,
-                                        -- Pulling p.* here prevents naming collisions with joined tables
-                                        p.kd_cb, p.kd_cob, p.kd_scob, p.kd_thn, p.no_kl, p.no_mts, p.nilai_ttl_kl, p.tipe_mts,
-                                        -- Add any other specific columns from p you need here
-                        
-                                        RTRIM(p.kd_cb) + '-' + RTRIM(p.kd_cob) + '-' + RTRIM(p.kd_scob) + '-' + 
-                                        RTRIM(p.kd_thn) + '-' + RTRIM(p.no_kl) + '-' + CAST(p.no_mts AS VARCHAR) as Id,
-                                        cb.nm_cb,
-                                        cob.nm_cob,
-                                        scob.nm_scob,
-                                        COALESCE(c5.total_nilai_kl_cl05, 0) as nilai_total_klaim,
-                                        (p.nilai_ttl_kl - COALESCE(c5.total_nilai_kl_cl05, 0)) as sisa_alokasi,
-                                        CASE RTRIM(p.tipe_mts)
-                                            WHEN 'P' THEN 'PLA'
-                                            WHEN 'D' THEN 'DLA'
-                                            WHEN 'B' THEN 'Beban'
-                                            WHEN 'R' THEN 'Recovery'
-                                            ELSE ''
-                                        END as nm_tipe_mts,
-                                        'K.' + RTRIM(p.kd_cb) + '.' + RTRIM(p.kd_scob) + '.' + 
-                                        RTRIM(p.kd_thn) + '.' + RTRIM(p.no_kl) as nomor_register
+                            INNER JOIN rf01 cb ON p.kd_cb = cb.kd_cb
+                            INNER JOIN rf04 cob ON p.kd_cob = cob.kd_cob
+                            INNER JOIN rf05 scob ON p.kd_cob = scob.kd_cob 
+                                                AND p.kd_scob = scob.kd_scob
+                            LEFT JOIN (
+                                SELECT 
+                                    kd_cb, kd_cob, kd_scob, kd_thn, no_kl, no_mts,
+                                    SUM(nilai_kl) as total_nilai_kl_cl05
+                                FROM cl05
+                                GROUP BY kd_cb, kd_cob, kd_scob, kd_thn, no_kl, no_mts
+                            ) c5 ON p.kd_cb = c5.kd_cb 
+                                AND p.kd_cob = c5.kd_cob 
+                                AND p.kd_scob = c5.kd_scob 
+                                AND p.kd_thn = c5.kd_thn 
+                                AND p.no_kl = c5.no_kl 
+                                AND p.no_mts = c5.no_mts
                                 ) as src
                             ",
                 
