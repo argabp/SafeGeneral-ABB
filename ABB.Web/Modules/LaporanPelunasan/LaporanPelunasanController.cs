@@ -260,7 +260,7 @@ namespace ABB.Web.Modules.LaporanPelunasan
                     // ==========================================
                     
                     // Baris 1: Judul
-                    worksheet.Cell(1, 1).Value = "LAPORAN PELUNASAN POS SENDIRI";
+                    worksheet.Cell(1, 1).Value = "LAPORAN PEMBAYARAN";
                     worksheet.Range("A1:M1").Merge(); 
                     worksheet.Cell(1, 1).Style.Font.Bold = true;
                     worksheet.Cell(1, 1).Style.Font.FontSize = 14;
@@ -283,10 +283,10 @@ namespace ABB.Web.Modules.LaporanPelunasan
                     // ==========================================
                     int startRow = 5; 
 
-                    worksheet.Cell(startRow, 1).Value = "No";
+                    worksheet.Cell(startRow, 1).Value = "NO";
                     worksheet.Cell(startRow, 2).Value = "TGL PRODUKSI";
-                    worksheet.Cell(startRow, 3).Value = "No.Nota";
-                    worksheet.Cell(startRow, 4).Value = "No.Polis";
+                    worksheet.Cell(startRow, 3).Value = "NO.Nota";
+                    worksheet.Cell(startRow, 4).Value = "NO.Polis";
                     worksheet.Cell(startRow, 5).Value = "TERTANGGUNG";
                     worksheet.Cell(startRow, 6).Value = "PEMBAWA POS";
                     worksheet.Cell(startRow, 7).Value = "AGEN/BROKER";
@@ -294,8 +294,8 @@ namespace ABB.Web.Modules.LaporanPelunasan
                     worksheet.Cell(startRow, 9).Value = "LOK";
                     worksheet.Cell(startRow, 10).Value = "COB";
                     worksheet.Cell(startRow, 11).Value = "NO.BUKTI";
-                    worksheet.Cell(startRow, 12).Value = "TGL LUNAS";
-                    worksheet.Cell(startRow, 13).Value = "NILAI LUNAS";
+                    worksheet.Cell(startRow, 12).Value = "TGL VOUCHER";
+                    worksheet.Cell(startRow, 13).Value = "NILAI VOUCHER";
 
                     var headerRange = worksheet.Range($"A{startRow}:M{startRow}");
                     headerRange.Style.Font.Bold = true;

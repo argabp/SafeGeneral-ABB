@@ -92,8 +92,8 @@ namespace ABB.Application.LaporanOutstandings.Queries
             string BuildRowHtml(int index, SpLaporanOutstandingResult item)
             {
                 int umur = (item.date.HasValue && item.tgl_jth_tempo.HasValue) ? Math.Max(0, (item.tgl_jth_tempo.Value - item.date.Value).Days) : 0;
-                decimal nNota = item.netto ?? 0;
-                decimal nBayar = item.jumlah ?? 0; 
+                decimal nNota = (item.netto ?? 0) * (item.kurs ?? 1); 
+                decimal nBayar = (item.jumlah ?? 0) * (item.kurs ?? 1); 
                 decimal nOs = nNota - nBayar;
 
                 return $@"

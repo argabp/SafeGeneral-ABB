@@ -62,12 +62,18 @@ function onSearchClick() {
 }
 
 function onAkunAwalChange() {
-    var valAwal = $("#AkunAwal").data("kendoComboBox").value();
+    var comboAwal = $("#AkunAwal").data("kendoComboBox");
     var comboAkhir = $("#AkunAkhir").data("kendoComboBox");
     
-    // Otomatis isi Akun Akhir sama dengan Akun Awal pas pertama pilih
-    if(comboAkhir && !comboAkhir.value()) {
-        comboAkhir.value(valAwal);
+    if (comboAwal && comboAkhir) {
+        var valAwal = comboAwal.value();
+        
+        // Otomatis isi Akun Akhir sama dengan Akun Awal pas pertama pilih
+        // dan asalkan AkunAkhir belum diisi oleh user
+        if (valAwal && !comboAkhir.value()) {
+            comboAkhir.value(valAwal);
+            comboAkhir.text(comboAwal.text()); // Set display text-nya juga biar ga blank
+        }
     }
 }
 
@@ -76,11 +82,16 @@ function onAkunAwalChange() {
 function getKodeCabangParam() {
     var comboCabang = $("#KodeCabang").data("kendoComboBox");
     // Kita ambil aja teks dari input yang lagi "fokus" diketik user
-    var activeText = $(document.activeElement).val();
+    // var activeText = $(document.activeElement).val();
+    
+    // Perbaikan: Pastikan comboCabang sudah inisialisasi, kalau belum kasih ""
+    var cabangValue = "";
+    if (comboCabang) {
+        cabangValue = comboCabang.value() || ""; 
+    }
 
     return {
-        kodeCabangDropdown: comboCabang ? comboCabang.value() : "",
-        text: activeText
+        kodeCabangDropdown: cabangValue
     };
 }
 // Me-refresh isi combobox AkunAwal & AkunAkhir setiap kali Cabang diubah
@@ -89,11 +100,14 @@ function onCabangChange() {
     var cbAkhir = $("#AkunAkhir").data("kendoComboBox");
 
     if (cbAwal) {
-        cbAwal.value("");
-        cbAwal.dataSource.read();
+        cbAwal.value(""); // Kosongkan text yang lama
+        cbAwal.text("");
+        // PAKSA baca data ulang ke server dengan bawa nilai Cabang baru
+        cbAwal.dataSource.read(); 
     }
     if (cbAkhir) {
         cbAkhir.value("");
+        cbAkhir.text("");
         cbAkhir.dataSource.read();
     }
 }

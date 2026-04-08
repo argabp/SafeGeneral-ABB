@@ -127,14 +127,13 @@ namespace ABB.Web.Modules.LaporanBukuBesar
                 .AsQueryable();
 
             if (!string.IsNullOrEmpty(kodeCabangDropdown))
-            {
-                // Ambil 2 digit terakhir untuk gl_dept
-                string glDept = kodeCabangDropdown.Length >= 2 
-                    ? kodeCabangDropdown.Substring(kodeCabangDropdown.Length - 2) 
-                    : kodeCabangDropdown;
+                {
+                    string glDept = kodeCabangDropdown.Length >= 2 
+                        ? kodeCabangDropdown.Substring(kodeCabangDropdown.Length - 2) 
+                        : kodeCabangDropdown;
 
-                query = query.Where(x => x.gl_dept == glDept);
-            }
+                    query = query.Where(x => x.gl_dept != null && x.gl_dept.Trim() == glDept);
+                }
 
             if (!string.IsNullOrEmpty(filterText))
             {

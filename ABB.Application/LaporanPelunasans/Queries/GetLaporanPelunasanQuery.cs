@@ -110,8 +110,8 @@ namespace ABB.Application.LaporanPelunasans.Queries
                         <td>{(string.IsNullOrWhiteSpace(item.nm_cust2) ? "-" : item.nm_cust2)}</td>
                         <td>{(string.IsNullOrWhiteSpace(item.lok) ? "-" : item.lok)}</td>
                         <td>{(string.IsNullOrWhiteSpace(item.kd_tutup) ? "-" : item.kd_tutup)}</td>
-                        <td>{(string.IsNullOrWhiteSpace(item.no_bukti) ? "-" : item.no_bukti)}</td>
-                        <td>{fmtDate(item.tgl_byr)}</td>
+                        <td>{(string.IsNullOrWhiteSpace(item.no_bukti) ? "-" : item.no_bukti)}</td> 
+                        <td>{fmtDate(item.tgl_byr)}</td>                                          
                         <td class='right'>{fmtNum(item.jumlah)}</td>
                     </tr>");
                 idx++;
