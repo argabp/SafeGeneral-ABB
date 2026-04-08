@@ -11,6 +11,7 @@ using ABB.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.ApprovalMutasiKlaims.Commands
 {
@@ -42,10 +43,12 @@ namespace ABB.Application.ApprovalMutasiKlaims.Commands
         private readonly IEmailService _emailService;
         private readonly IDbContextFactory _dbContextFactory;
         private readonly IDbContext _dbContext;
+        private readonly ILogger<ApprovalMutasiKlaimEscCommandHandler> _logger;
 
         public ApprovalMutasiKlaimEscCommandHandler(IDbConnectionFactory connectionFactory,
             IConfiguration configuration, IProfilePictureHelper pictureHelper, ICurrentUserService userService, 
-            IEmailService emailService, IDbContextFactory dbContextFactory, IDbContext dbContext)
+            IEmailService emailService, IDbContextFactory dbContextFactory, IDbContext dbContext,
+            ILogger<ApprovalMutasiKlaimEscCommandHandler> logger)
         {
             _connectionFactory = connectionFactory;
             _configuration = configuration;
@@ -54,23 +57,25 @@ namespace ABB.Application.ApprovalMutasiKlaims.Commands
             _emailService = emailService;
             _dbContextFactory = dbContextFactory;
             _dbContext = dbContext;
+            _logger = logger;
         }
 
         public async Task<(string, List<string>)> Handle(ApprovalMutasiKlaimEscCommand request, CancellationToken cancellationToken)
         {
-            _connectionFactory.CreateDbConnection(request.DatabaseName);
-            var message = string.Empty;
-            var userIds = new List<string>();
-            try
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
             {
-                    message = (await _connectionFactory.QueryProc<string>("sp_ApprovalPengajuanKlaimEsc",
-                    new
-                    {
-                        request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn, 
-                        request.no_kl, request.no_mts, kd_user_status = _userService.UserId,
-                        request.kd_status, tgl_status = DateTime.Now, request.keterangan,
-                        kd_user_sign1 = request.kd_user_sign
-                    })).First();
+                _connectionFactory.CreateDbConnection(request.DatabaseName);
+                var message = string.Empty;
+                var userIds = new List<string>();
+            
+                message = (await _connectionFactory.QueryProc<string>("sp_ApprovalPengajuanKlaimEsc",
+                new
+                {
+                    request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn, 
+                    request.no_kl, request.no_mts, kd_user_status = _userService.UserId,
+                    request.kd_status, tgl_status = DateTime.Now, request.keterangan,
+                    kd_user_sign1 = request.kd_user_sign
+                })).FirstOrDefault();
 
                 var no_urut = ( await _connectionFactory.Query<Int16>($@"SELECT no_urut FROM TR_KlaimStatus WHERE 
                                                                                 kd_cb = '{request.kd_cb}' AND kd_cob = '{request.kd_cob}' 
@@ -129,14 +134,9 @@ namespace ABB.Application.ApprovalMutasiKlaims.Commands
                 var emailSends = _dbContext.User.Where(w => userIds.Distinct().Contains(w.Id)).Select(s => s.Email).ToList();
 
                 await _emailService.SendMutasiKlaimEmail(emailSends, viewKlaim);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
 
-            return (message, userIds.Distinct().ToList());
+                return (message, userIds.Distinct().ToList());
+            }, _logger);
         }
     }
 }
