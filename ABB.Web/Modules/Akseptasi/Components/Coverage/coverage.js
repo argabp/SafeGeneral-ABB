@@ -37,7 +37,7 @@ function btnEditAkseptasiCoverage_OnClick(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     console.log('dataItem', dataItem);
-    openAkseptasiCoverageWindow(`/Akseptasi/EditCoverage?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_aks=${dataItem.no_aks}&no_updt=${dataItem.no_updt}&no_rsk=${dataItem.no_rsk}&kd_endt=${dataItem.kd_endt}&kd_cvrg=${dataItem.kd_cvrg}`, 'Edit Coverage');
+    openAkseptasiCoverageWindow(`/Akseptasi/EditCoverage?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_aks=${dataItem.no_aks}&no_updt=${dataItem.no_updt}&no_rsk=${dataItem.no_rsk}&kd_endt=${dataItem.kd_endt}&kd_cvrg=${encodeURIComponent(dataItem.kd_cvrg)}`, 'Edit Coverage');
 }
 function btnDeleteAkseptasiCoverage_OnClick(e) {
     e.preventDefault();
