@@ -17,7 +17,6 @@ namespace ABB.Web.Modules.KlaimAlokasiReasuransi
 {
     public class KlaimAlokasiReasuransiController : AuthorizedBaseController
     {
-        private readonly string DatabaseName = "abb_pst";
         private readonly List<DropdownOptionDto> _tipeMutasi = new List<DropdownOptionDto>()
         {
             new DropdownOptionDto() { Text = "PLA", Value = "P" },

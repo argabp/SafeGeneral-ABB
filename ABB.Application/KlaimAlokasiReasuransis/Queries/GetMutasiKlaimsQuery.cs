@@ -6,7 +6,8 @@ using ABB.Application.KlaimAlokasiReasuransis.Configs;
 using MediatR;
 
 namespace ABB.Application.KlaimAlokasiReasuransis.Queries
-{    public class GetMutasiKlaimsQuery : IRequest<GridResponse<MutasiKlaimDto>>
+{    
+    public class GetMutasiKlaimsQuery : IRequest<GridResponse<MutasiKlaimDto>>
     {
         public GridRequest Grid { get; set; }
 

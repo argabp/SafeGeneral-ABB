@@ -120,8 +120,8 @@ namespace ABB.Web
             // app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UserStaticFilesModulesFolder();
-            app.UseMiddleware<SessionGuardMiddleware>();
             app.UseMiddleware<ErrorHandlerMiddleware>();
+            app.UseMiddleware<SessionGuardMiddleware>();
             app.UseMiddleware<HeaderMiddleware>();
             app.UseMiddleware<JwtMiddleware>();
             app.UseStatusCodePagesWithReExecute("/Error/{0}");
