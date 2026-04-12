@@ -1,7 +1,7 @@
 ﻿$(document).ready(function () {
     btnSaveAkseptasiResiko_Click();
     
-    if(resiko.kd_endt === "D"){
+    if($("#temp_kd_endt").val() == "D"){
         $("#btn-save-akseptasiResiko").hide();
     }
 });

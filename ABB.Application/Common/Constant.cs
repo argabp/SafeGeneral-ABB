@@ -74,6 +74,12 @@ namespace ABB.Application.Common
             },
             {
                 "d_uw01r_06do", "LampiranPolisMotorDetil.html"
+            },
+            {
+                "d_uw02r_01_n_kw_as", "CetakanKwitansiAngsuran.html"
+            },
+            {
+                "d_uw02r_01_n_db_as", "CetakanNotaDebetKreditAngsuran.html"
             }
         };
         
@@ -147,6 +153,12 @@ namespace ABB.Application.Common
             },
             {
                 "LampiranPolisMotorDetil.html", "spr_uw01r_06do" 
+            },
+            {
+                "CetakanKwitansiAngsuran.html", "spr_uw02r_01_n_as"
+            },
+            {
+                "CetakanNotaDebetKreditAngsuran.html", "spr_uw02r_01_n_as"
             }
         };
 
@@ -155,7 +167,7 @@ namespace ABB.Application.Common
                                                         <head>
                                                             <meta charset='UTF-8'>
                                                             <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-                                                            <title>Polis PA Sirama Multi</title>
+                                                            <title>{{TITLE}}</title>
                                                             <style>
                                                                 body {
                                                                     /*font-family: Arial, sans-serif;*/
@@ -201,6 +213,32 @@ namespace ABB.Application.Common
                                                                     opacity: 0.3;
                                                                     z-index: -1;
                                                                     font-weight: bold;
+                                                                }
+                                                            </style>
+                                                        </head>
+                                                        <body>";
+        
+        
+        public static readonly string HeaderReportSimple = @"<!DOCTYPE html>
+                                                        <html lang='id'>
+                                                        <head>
+                                                            <meta charset='UTF-8'>
+                                                            <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                                                            <title>{{TITLE}}</title>
+                                                            <style>
+                                                                body {
+                                                                    /*font-family: Arial, sans-serif;*/
+                                                                    font-size: 11pt;   /* readable in print */
+                                                                    line-height: 1.4;  /* adds vertical space */
+                                                                }
+                                                                td {
+                                                                    font-size: 9pt;
+                                                                    padding: 2px 4px; /* give breathing room */
+                                                                    letter-spacing: 1px;
+                                                                }
+
+                                                                .container {
+                                                                    page-break-before: always; /* Forces a page break before this element */
                                                                 }
                                                             </style>
                                                         </head>

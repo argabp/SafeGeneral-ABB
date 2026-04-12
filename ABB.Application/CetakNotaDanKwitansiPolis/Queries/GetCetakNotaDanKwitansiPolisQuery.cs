@@ -43,6 +43,8 @@ namespace ABB.Application.CetakNotaDanKwitansiPolis.Queries
 
         private List<string> MultipleReport = new List<string>()
         {
+            "CetakanKwitansiAngsuran.html",
+            "CetakanNotaDebetKreditAngsuran.html"
         };
 
         public GetCetakNotaDanKwitansiPolisQueryHandler(IDbConnectionFactory connectionFactory, IHostEnvironment environment, 
@@ -122,9 +124,12 @@ namespace ABB.Application.CetakNotaDanKwitansiPolis.Queries
                 jabatan = $"<p style='margin: 0'><strong>{_reportTtdConfig.Jabatan}<strong></p>";
                 footer_template = $@"<div style='text-align: center;'>{ttd_image}{nm_pejabat}{jabatan}</div>";
             }
-
+            
+            var reportConfig = _reportConfig.GetReportData(request.kd_cb);
+            
             if (MultipleReport.Contains(reportTemplateName))
-                return GenerateMultipleReport(reportTemplateName, cetakNotaDanKwitansiPolisData, templateReportHtml);
+                return GenerateMultipleReport(reportTemplateName, cetakNotaDanKwitansiPolisData, templateReportHtml,
+                    reportConfig, footer_template, ttd_image, jabatan, nm_pejabat);
             
             var nilai_01 = ReportHelper.ConvertToReportFormat(cetakNotaDanKwitansiPolis.nilai_01);
             var nilai_02 = ReportHelper.ConvertToReportFormat(cetakNotaDanKwitansiPolis.nilai_02);
@@ -145,8 +150,6 @@ namespace ABB.Application.CetakNotaDanKwitansiPolis.Queries
                                                                  cetakNotaDanKwitansiPolis.nilai_ppn +
                                                                  cetakNotaDanKwitansiPolis.nilai_pph +
                                                                  cetakNotaDanKwitansiPolis.nilai_lain);
-            
-            var reportConfig = _reportConfig.GetReportData(request.kd_cb);
             
             if (ReportHaveDetails.Contains(reportTemplateName))
             {
@@ -267,64 +270,91 @@ namespace ABB.Application.CetakNotaDanKwitansiPolis.Queries
             }
         }
         
-        private (string, string) GenerateMultipleReport(string reportType, List<CetakNotaDanKwitansiPolisDto> datas, string template)
+        private (string, string) GenerateMultipleReport(string reportType, List<CetakNotaDanKwitansiPolisDto> datas, 
+            string template, ReportData reportConfig, string footer_template, string ttd_image, string jabatan,
+            string nm_pejabat)
         {
-            Template templateProfileResult = Template.Parse( template );
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.Append(Constant.HeaderReport);
-            // switch (reportType)
-            // {
-            //     case "PolisPASiramaMulti.html":
-            //         foreach (var cetakSchedulePolis in datas)
-            //         {
-            //             var sub_total_kebakaran = cetakSchedulePolis.nilai_ttl -
-            //                                       (cetakSchedulePolis.nilai_bia_mat + cetakSchedulePolis.nilai_bia_pol);
-            //             stringBuilder.Append(templateProfileResult.Render(new
-            //             {
-            //                 cetakSchedulePolis.no_pol_ttg, cetakSchedulePolis.nm_ttg,
-            //                 cetakSchedulePolis.almt_ttg, cetakSchedulePolis.kd_pos,
-            //                 cetakSchedulePolis.almt_rsk, cetakSchedulePolis.kd_pos_rsk,
-            //                 cetakSchedulePolis.jk_wkt_ptg, cetakSchedulePolis.tgl_mul_ptg_ind,
-            //                 cetakSchedulePolis.tgl_akh_ptg_ind, cetakSchedulePolis.nm_okup,
-            //                 cetakSchedulePolis.kd_okup, cetakSchedulePolis.nm_kls_konstr,
-            //                 cetakSchedulePolis.pst_rate_prm_pkk, cetakSchedulePolis.stn_rate_prm_pkk,
-            //                 cetakSchedulePolis.kd_mtu_symbol, cetakSchedulePolis.nilai_prk_pkk,
-            //                 cetakSchedulePolis.nm_cvrg_01, cetakSchedulePolis.kd_cvrg_01,
-            //                 cetakSchedulePolis.pst_rate_prm_01, cetakSchedulePolis.stn_rate_prm_01,
-            //                 cetakSchedulePolis.nilai_prm_tbh_01, cetakSchedulePolis.nm_cvrg_02,
-            //                 cetakSchedulePolis.kd_cvrg_02, cetakSchedulePolis.pst_rate_prm_02,
-            //                 cetakSchedulePolis.stn_rate_prm_02, cetakSchedulePolis.nilai_prm_tbh_02,
-            //                 cetakSchedulePolis.ket_dis, cetakSchedulePolis.nilai_dis,
-            //                 cetakSchedulePolis.nilai_bia_pol, cetakSchedulePolis.nilai_bia_mat,
-            //                 cetakSchedulePolis.nilai_ttl, cetakSchedulePolis.ket_klausula,
-            //                 cetakSchedulePolis.desk_oby_01, cetakSchedulePolis.nilai_oby_01,
-            //                 cetakSchedulePolis.desk_oby_02, cetakSchedulePolis.nilai_oby_02,
-            //                 cetakSchedulePolis.desk_oby_03, cetakSchedulePolis.nilai_oby_03,
-            //                 cetakSchedulePolis.desk_oby_04, cetakSchedulePolis.nilai_oby_04,
-            //                 cetakSchedulePolis.desk_oby_05, cetakSchedulePolis.nilai_oby_05,
-            //                 cetakSchedulePolis.nilai_ttl_ptg, cetakSchedulePolis.tgl_closing_ind,
-            //                 cetakSchedulePolis.stnc, cetakSchedulePolis.ctt_pol,
-            //                 cetakSchedulePolis.kt_cb, cetakSchedulePolis.nm_user,
-            //                 cetakSchedulePolis.no_msn, cetakSchedulePolis.no_rangka,
-            //                 cetakSchedulePolis.no_pls, cetakSchedulePolis.nilai_prm_pkm,
-            //                 cetakSchedulePolis.jml_tempat_ddk, cetakSchedulePolis.nm_jns_kend,
-            //                 cetakSchedulePolis.desk_aksesoris, cetakSchedulePolis.nm_utk,
-            //                 cetakSchedulePolis.no_oby, cetakSchedulePolis.desk_oby,
-            //                 cetakSchedulePolis.ket_okup, cetakSchedulePolis.kd_kls_konstr,
-            //                 cetakSchedulePolis.kd_penerangan, cetakSchedulePolis.symbol,
-            //                 cetakSchedulePolis.ket_rsk, cetakSchedulePolis.nm_mtu,
-            //                 cetakSchedulePolis.nm_grp_oby, cetakSchedulePolis.nm_grp_oby_1,
-            //                 sub_total_kebakaran
-            //             }));
-            //         }
-            //
-            //         break;
-            // }
+            // 1. Map filenames to Display Titles
+            var reportTitles = new Dictionary<string, string>
+            {
+                { "CetakanKwitansiAngsuran.html", "Cetakan Kwitansi Angsuran" },
+                { "CetakanNotaDebetKreditAngsuran.html", "Cetakan Nota Debet/Kredit Angsuran" },
+                // Add new report types here easily
+            };
+
+            // Fallback to filename if not in dictionary
+            string displayTitle = reportTitles.GetValueOrDefault(reportType, "Laporan Polis");
+
+            var templateProfileResult = Template.Parse(template);
+            var stringBuilder = new StringBuilder();
+
+            stringBuilder.Append(Constant.HeaderReportSimple.Replace("{{TITLE}}", displayTitle));
+
+            var totalData = datas.Count;
+            var sequence = 1;
+            // 2. The Generic Loop
+            foreach (var item in datas)
+            {
+                // Helper to keep the Render call clean
+                Func<decimal?, bool, string> fmt = ReportHelper.ConvertToReportFormat;
+
+                stringBuilder.Append(templateProfileResult.Render(new
+                {
+                    // Concatenated Fields
+                    jns_nota = $"{item.jns_tr} . {item.jns_nt_msk} . {item.jns_nt_kel}",
+                    pst_pph_title = item.pst_pph == 2 ? "PPH 23" : "PPH 21",
+                    
+                    // Formatted Values
+                    nilai_01 = fmt(item.nilai_01, false),
+                    nilai_02 = fmt(item.nilai_02, false),
+                    nilai_03 = fmt(item.nilai_03, false),
+                    nilai_04 = fmt(item.nilai_04, false),
+                    nilai_ttl_ptg = fmt(item.nilai_ttl_ptg, false),
+                    nilai_nt = fmt(item.nilai_nt, false),
+                    total_nilai = fmt(item.nilai_01 + item.nilai_03 + item.nilai_04, false),
+                    nilai_net_kms = fmt(item.nilai_net_kms, false),
+                    nilai_ppn = fmt(item.nilai_ppn, false),
+                    nilai_pph = fmt(item.nilai_pph, false),
+                    nilai_lain = fmt(item.nilai_lain, false),
+                    nilai_total = fmt(item.nilai_net_kms + item.nilai_ppn + item.nilai_pph + item.nilai_lain, false),
+                    
+                    // Percentages/Ratios
+                    pst_kms = fmt(item.pst_kms, true),
+                    pst_ppn = fmt(item.pst_ppn, true),
+                    pst_pph = fmt(item.pst_pph, true),
+                    pst_lain = fmt(item.pst_lain, true),
+
+                    // Pass-through data
+                    item.no_nota, item.tgl_nt_ind, item.no_reg, item.no_ref, item.uraian_01, item.nm_ttg,
+                    item.uraian_02, item.no_pol_ttg, item.uraian_03, item.periode_polis, item.uraian_04, item.nm_scob,
+                    item.ket_nilai_nt, item.nm_cb, item.nm_rek, item.nm_akun, item.nm_ttj_kms, item.almt_ttj_kms, 
+                    item.kt_ttj_kms, item.no_npwp, item.ket_nt_kms, item.almt_nota, item.nm_nota, item.kt_cb, 
+                    item.almt_ttg, item.ket_kwi, item.period_polis, item.kd_mtu_symbol,
+
+                    // Aliases for template compatibility
+                    kd_mtu_symbol_1 = item.kd_mtu_symbol, kd_mtu_symbol_2 = item.kd_mtu_symbol,
+                    kd_mtu_symbol_3 = item.kd_mtu_symbol, kd_mtu_symbol_4 = item.kd_mtu_symbol,
+                    kd_mtu_symbol_5 = item.kd_mtu_symbol, kd_mtu_symbol_6 = item.kd_mtu_symbol,
+                    kd_mtu_symbol_7 = item.kd_mtu_symbol, kd_mtu_symbol_8 = item.kd_mtu_symbol,
+                    kd_mtu_symbol_9 = item.kd_mtu_symbol, kd_mtu_symbol_11 = item.kd_mtu_symbol,
+
+                    // Config & Parameters
+                    footer_template, ttd_image, jabatan, nm_pejabat,
+                    title3 = reportConfig.Title.Title3, 
+                    title4 = reportConfig.Title.Title4, 
+                    title6 = reportConfig.Title.Title6
+                }));
+
+                if (sequence < totalData)
+                {
+                    sequence++;
+                    stringBuilder.Append("\n<div class='container'></div>");
+                }
+            }
 
             stringBuilder.Append(Constant.FooterReport);
 
-            var reportName = reportType.Split(".")[0];
-            return (reportName, stringBuilder.ToString());
+            return (reportType.Replace(".html", ""), stringBuilder.ToString());
         }
     }
 }
