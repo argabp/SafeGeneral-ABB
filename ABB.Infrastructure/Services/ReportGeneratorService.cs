@@ -1,10 +1,10 @@
 using System;
-using System.Threading.Tasks;
+using System.IO;
 using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Services;
 using DinkToPdf;
 using DinkToPdf.Contracts;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 
 namespace ABB.Infrastructure.Services
 {
@@ -15,17 +15,29 @@ namespace ABB.Infrastructure.Services
         private readonly string _baseReportPath;
 
         public ReportGeneratorService(IConverter converter, IProfilePictureHelper profilePictureHelper,
-            IConfiguration configuration)
+            IHostEnvironment root)
         {
             _converter = converter;
             _profilePictureHelper = profilePictureHelper;
-            _baseReportPath = configuration["ReportConfig:PhysicalPath"];
+            _baseReportPath = Path.Combine(root.ContentRootPath, "wwwroot", "Reports");
         }
 
         public void GenerateReport(string reportName, string templateReport, string path, 
             Orientation orientation = Orientation.Portrait, double right = 20, double left = 20, 
             double top = 20, double bottom = 20, PaperKind paperSize = PaperKind.A4, bool useFooter = false)
         {
+            // Create a custom temp path inside your app directory
+            string customTempPath = Path.Combine(_baseReportPath, "Temp");
+    
+            if (!Directory.Exists(customTempPath))
+            {
+                Directory.CreateDirectory(customTempPath);
+            }
+
+            // This forces the current process (and the PDF converter) to use your folder
+            Environment.SetEnvironmentVariable("TEMP", customTempPath);
+            Environment.SetEnvironmentVariable("TMP", customTempPath);
+            
             var doc = new HtmlToPdfDocument()
             {
                 GlobalSettings = {
@@ -38,7 +50,15 @@ namespace ABB.Infrastructure.Services
                     new ObjectSettings() {
                         PagesCount = true,
                         HtmlContent = templateReport,
-                        WebSettings = { DefaultEncoding = "utf-8", EnableIntelligentShrinking = false },
+                        WebSettings = { 
+                            DefaultEncoding = "utf-8", 
+                            EnableIntelligentShrinking = false,
+                        },
+                        LoadSettings = {
+                            // This tells wkhtmltopdf not to crash if it can't reach 'Host c'
+                            LoadErrorHandling = ContentErrorHandling.Ignore,
+                            BlockLocalFileAccess = false
+                        },
                         FooterSettings = useFooter ? new FooterSettings
                         {
                         Center = "Test",   // or Page numbering
@@ -53,7 +73,7 @@ namespace ABB.Infrastructure.Services
             string logFilePath = System.IO.Path.Combine(_baseReportPath, "pdf_error_log.txt");
         
             _converter.Error += (sender, args) => {
-                System.IO.File.AppendAllText(logFilePath, $"{DateTime.Now}: {args.Message}\n");
+                File.AppendAllText(logFilePath, $"{DateTime.Now}: {args.Message}\n");
             };
             // -----------------------------
 

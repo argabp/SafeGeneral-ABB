@@ -1,24 +1,16 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Quartz;
 
 namespace ABB.Web.JobSchedules
 {
     public class ReportCleanUpJob : IJob
     {
-        private readonly IConfiguration _configuration;
-
-        public ReportCleanUpJob(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
-        
         public async Task Execute(IJobExecutionContext context)
         {
             // Access content root path and combine with your folder structure
-            var folderPath = _configuration["ReportConfig:PhysicalPath"];
+            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Reports");
 
             try
             {

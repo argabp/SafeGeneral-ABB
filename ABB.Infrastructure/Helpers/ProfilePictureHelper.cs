@@ -103,9 +103,7 @@ namespace ABB.Infrastructure.Helpers
 
         public void UploadByteFile(byte[] file, string fileName, string path)
         {
-            var physicalBase = _config["ReportConfig:PhysicalPath"];
-            
-            var fixPath = Path.Combine(physicalBase, path);
+            var fixPath = Path.Combine(_root.ContentRootPath, "wwwroot", "Reports", path);
             
             if (!Directory.Exists(fixPath))
                 Directory.CreateDirectory(fixPath);
