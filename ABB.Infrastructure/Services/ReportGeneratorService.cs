@@ -4,6 +4,7 @@ using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Services;
 using DinkToPdf;
 using DinkToPdf.Contracts;
+using Microsoft.Extensions.Configuration;
 
 namespace ABB.Infrastructure.Services
 {
@@ -11,11 +12,14 @@ namespace ABB.Infrastructure.Services
     {
         private readonly IConverter _converter;
         private readonly IProfilePictureHelper _profilePictureHelper;
+        private readonly string _baseReportPath;
 
-        public ReportGeneratorService(IConverter converter, IProfilePictureHelper profilePictureHelper)
+        public ReportGeneratorService(IConverter converter, IProfilePictureHelper profilePictureHelper,
+            IConfiguration configuration)
         {
             _converter = converter;
             _profilePictureHelper = profilePictureHelper;
+            _baseReportPath = configuration["ReportConfig:PhysicalPath"];
         }
 
         public void GenerateReport(string reportName, string templateReport, string path, 
@@ -44,8 +48,21 @@ namespace ABB.Infrastructure.Services
                     }
                 }
             };
+            
+            // --- DYNAMIC DEBUG LOGGING ---
+            string logFilePath = System.IO.Path.Combine(_baseReportPath, "pdf_error_log.txt");
+        
+            _converter.Error += (sender, args) => {
+                System.IO.File.AppendAllText(logFilePath, $"{DateTime.Now}: {args.Message}\n");
+            };
+            // -----------------------------
 
             var bytes = _converter.Convert(doc);
+
+            if (bytes == null || bytes.Length == 0)
+            {
+                throw new Exception($"PDF Converter failed. Details logged at: {logFilePath}");
+            }
 
             _profilePictureHelper.UploadByteFile(bytes, reportName, path);
         }

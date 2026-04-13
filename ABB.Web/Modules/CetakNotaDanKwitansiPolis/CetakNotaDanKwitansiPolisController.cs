@@ -13,16 +13,19 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace ABB.Web.Modules.CetakNotaDanKwitansiPolis
 {
     public class CetakNotaDanKwitansiPolisController : AuthorizedBaseController
     {
         private readonly IReportGeneratorService _reportGeneratorService;
+        private readonly IConfiguration _configuration;
 
-        public CetakNotaDanKwitansiPolisController(IReportGeneratorService reportGeneratorService)
+        public CetakNotaDanKwitansiPolisController(IReportGeneratorService reportGeneratorService, IConfiguration configuration)
         {
             _reportGeneratorService = reportGeneratorService;
+            _configuration = configuration;
         }
         
         public async Task<ActionResult> Index()
@@ -87,10 +90,13 @@ namespace ABB.Web.Modules.CetakNotaDanKwitansiPolis
                     throw new Exception("Session user tidak ditemukan");
                 
                 var result = await Mediator.Send(command);
-                var reportName = result.Item1 + ".pdf";
-                _reportGeneratorService.GenerateReport(reportName, result.Item2, sessionId, right: 0, left: 0, top: 0, bottom: 0);
+                var fileName = result.Item1 + ".pdf";
+                _reportGeneratorService.GenerateReport(fileName, result.Item2, sessionId, right: 0, left: 0, top: 0, bottom: 0);
 
-                return Ok(new { Status = "OK", Data = sessionId, ReportName = reportName});
+                var requestBase = _configuration["ReportConfig:RequestPath"];
+                var fileUrl = $"{requestBase}/{sessionId}/{fileName}";
+                
+                return Ok(new { Status = "OK", Data = fileUrl});
             }
             catch (Exception e)
             {

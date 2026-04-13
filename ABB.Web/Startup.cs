@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 
@@ -118,7 +119,27 @@ namespace ABB.Web
             app.UseRouting();
             app.UseSession();
             // app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            
+            //Configure Report folder to serve static files
+            var reportConfig = Configuration.GetSection("ReportConfig");
+            string physicalPath = reportConfig["PhysicalPath"];
+            string requestPath = reportConfig["RequestPath"];
+
+            // Ensure the physical directory exists
+            if (!Directory.Exists(physicalPath))
+            {
+                Directory.CreateDirectory(physicalPath);
+            }
+
+            app.UseStaticFiles(); // Default wwwroot
+
+            // Add the external folder mapping
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(physicalPath),
+                RequestPath = requestPath
+            });
+            
             app.UserStaticFilesModulesFolder();
             app.UseMiddleware<ErrorHandlerMiddleware>();
             app.UseMiddleware<SessionGuardMiddleware>();
