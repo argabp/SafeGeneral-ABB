@@ -1856,7 +1856,7 @@ namespace ABB.Application.CetakSchedulePolis.Queries
         {
             Template templateProfileResult = Template.Parse( template );
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.Append(Constant.HeaderReport);
+            stringBuilder.Append(Constant.HeaderReport.Replace("{{TITLE}}", "Polis PA Sirama Multi"));
             switch (reportType)
             {
                 case "PolisPASiramaMulti.html":

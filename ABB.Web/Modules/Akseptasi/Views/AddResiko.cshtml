@@ -58,6 +58,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Kode Endorsment</label>
                 <div class="col-sm-6">
+                    <input type="hidden" id="temp_kd_endt" value="@Model.kd_endt">
                     <kendo-dropdownlist for="kd_endt" style="width: 100%" readonly="true"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
@@ -150,7 +151,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Komisi</label>
                 <div class="col-sm-2">
-                    <kendo-numerictextbox decimals="2" spinners="false" name="resiko_pst_kms" value="@resiko_pst_kms" on-change="OnPstKomisiChange" style="width: 100%"/>
+                    <kendo-numerictextbox decimals="2" spinners="false" name="resiko_pst_kms" value="@resiko_pst_kms" on-change="OnKomisiDiskonChange" style="width: 100%"/>
                 </div>
                 <div class="col-sm-4">
                     <kendo-numerictextbox decimals="2" spinners="false" name="resiko_nilai_kms" value="@resiko_nilai_kms" style="width: 100%; background-color: #FFFFE1"/>

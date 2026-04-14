@@ -36,7 +36,7 @@
                     .Click("btnDeleteAkseptasiCoverage_OnClick");
             }).Width(200).Locked(true).Title("Action");
             columns.Bound(col => col.kd_cvrg).Width(150).Title("Kode Coverage");
-            columns.Bound(col => col.kd_cvrg).Width(150).Title("Rate Premi").ClientTemplate("#= pst_rate_prm # #= stn_rate_prm == 1 ? '%' : '%o' #");
+            columns.Bound(col => col.pst_rate_prm).Width(150).Title("Rate Premi").ClientTemplate("#= pst_rate_prm # #= stn_rate_prm == 1 ? '%' : '%o' #");
         })
         .Pageable(pager => pager
             .Refresh(true)

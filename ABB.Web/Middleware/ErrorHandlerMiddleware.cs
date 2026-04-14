@@ -25,6 +25,20 @@ namespace ABB.Web.Middleware
             try
             {
                 await _next(context);
+                
+                // Scenario A: No route found (404)
+                if (context.Response.StatusCode == 404 || context.GetEndpoint() == null)
+                {
+                    if (!context.Response.HasStarted) // Safety check
+                    {
+                        HandleStatusRedirect(context, 404);
+                    }
+                }
+                // Scenario B: Forbidden access (403)
+                else if (context.Response.StatusCode == 403)
+                {
+                    HandleStatusRedirect(context, 403);
+                }
             }
             catch (Exception ex)
             {
@@ -32,6 +46,20 @@ namespace ABB.Web.Middleware
                 _logger.LogError(ex, message);
 
                 await ErrorResponse(context);
+            }
+        }
+        
+        private void HandleStatusRedirect(HttpContext context, int statusCode)
+        {
+            if (context.Request.IsAjaxRequest())
+            {
+                context.Response.StatusCode = statusCode;
+                // Optionally send a string for your frontend to catch
+                // await context.Response.WriteAsync($"ERROR_{statusCode}");
+            }
+            else
+            {
+                context.Response.Redirect($"/Error/{statusCode}");
             }
         }
 

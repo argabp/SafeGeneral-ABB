@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using ABB.Application.Common.Grids.Models;
 
-namespace ABB.Application.KlaimAlokasiReasuransis.Configs
+namespace ABB.Application.ProsesAlokasiKlaimReasuransis.Configs
 {
-    public static class MutasiKlaimConfig
+    public static class ProsesAlokasiKlaimReasuransiConfig
     {
         public static GridConfig Create()
         {
@@ -11,6 +11,7 @@ namespace ABB.Application.KlaimAlokasiReasuransis.Configs
             {
                 FromSql = @"
                             FROM (SELECT 
+                                DISTINCT
                                 p.flag_closing, 
                                 p.tgl_mts,
                                 p.no_pol_lama,
@@ -59,6 +60,14 @@ namespace ABB.Application.KlaimAlokasiReasuransis.Configs
                                 AND p.kd_thn = c5.kd_thn 
                                 AND p.no_kl = c5.no_kl 
                                 AND p.no_mts = c5.no_mts
+                            LEFT OUTER JOIN cl06 c6
+                            ON   p.kd_cb = c6.kd_cb 
+                                AND p.kd_cob = c6.kd_cob 
+                                AND p.kd_scob = c6.kd_scob 
+                                AND p.kd_thn = c6.kd_thn 
+                                AND p.no_kl = c6.no_kl 
+                                AND p.no_mts = c6.no_mts
+                            AND c6.kd_cb IS null    
                                 ) as src
                             ",
                 
