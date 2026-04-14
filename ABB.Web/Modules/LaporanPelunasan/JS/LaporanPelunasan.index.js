@@ -32,7 +32,7 @@ function onSearchClick() {
         data: JSON.stringify(formData),
         success: function (response) {
             if (response.Status === "OK") {
-                window.open("/Reports/" + response.Data + "/LaporanPelunasan.pdf", '_blank');
+                window.open("/Reports/" + response.Data + "/LaporanPembayaran.pdf", '_blank');
             } else {
                 alert("Gagal membuat laporan: " + response.Message);
             }

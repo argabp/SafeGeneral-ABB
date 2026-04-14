@@ -94,10 +94,12 @@ namespace ABB.Application.LaporanPelunasans.Queries
             
             StringBuilder detailsBuilder = new StringBuilder();
             var idx = 1;
+            decimal grandTotalJumlah = 0;
             
             // 4. Looping langsung dari Entity Baru
             foreach (var item in dataLaporan) 
             {
+                grandTotalJumlah += item.jumlah ?? 0;
                 detailsBuilder.Append($@"
                     <tr>
                         <td class='center'>{idx}</td>
@@ -116,6 +118,12 @@ namespace ABB.Application.LaporanPelunasans.Queries
                     </tr>");
                 idx++;
             }
+
+            detailsBuilder.Append($@"
+                <tr style='font-weight:bold; background-color: #f2f2f2;'>
+                    <td colspan='12' style='text-align:right; padding-right: 10px;'>TOTAL</td>
+                    <td class='right'>{fmtNum(grandTotalJumlah)}</td>
+                </tr>");
             
             Template templateReport = Template.Parse(templateReportHtml);
 

@@ -196,7 +196,7 @@ namespace ABB.Web.Modules.LaporanPelunasan
                     throw new Exception("User ID tidak ditemukan. Tidak dapat menyimpan laporan.");                
                 
                 _reportGeneratorService.GenerateReport(
-                    "LaporanPelunasan.pdf",
+                    "LaporanPembayaran.pdf",
                     response.HtmlString, 
                     userId,
                     Orientation.Landscape,
@@ -295,7 +295,7 @@ namespace ABB.Web.Modules.LaporanPelunasan
                     worksheet.Cell(startRow, 10).Value = "COB";
                     worksheet.Cell(startRow, 11).Value = "NO.BUKTI";
                     worksheet.Cell(startRow, 12).Value = "TGL VOUCHER";
-                    worksheet.Cell(startRow, 13).Value = "NILAI VOUCHER";
+                    worksheet.Cell(startRow, 13).Value = "NILAI VOUCHER (IDR)";
 
                     var headerRange = worksheet.Range($"A{startRow}:M{startRow}");
                     headerRange.Style.Font.Bold = true;
@@ -357,10 +357,31 @@ namespace ABB.Web.Modules.LaporanPelunasan
                         idx++;
                     }
 
-                    // Tambahan: Kasih Border ke semua isi tabel biar makin cakep
-                    var tableRange = worksheet.Range($"A5:M{row - 1}");
-                    tableRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                    tableRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                   decimal grandTotal = data.Sum(x => x.jumlah ?? 0);
+
+                    // Tulis teks "TOTAL" dan merge dari kolom 1 sampai 12
+                    var totalLabelRange = worksheet.Range(row, 1, row, 12);
+                    totalLabelRange.Merge();
+                    totalLabelRange.Value = "TOTAL NILAI VOUCHER KESELURUHAN";
+                    totalLabelRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+                    totalLabelRange.Style.Font.Bold = true;
+
+                    // Tulis nilai total di kolom 13 (M)
+                    var totalValueCell = worksheet.Cell(row, 13);
+                    totalValueCell.Value = grandTotal;
+                    totalValueCell.Style.NumberFormat.Format = "#,##0.00";
+                    totalValueCell.Style.Font.Bold = true;
+
+                    // Tambahkan border dan background warna untuk baris total agar menonjol
+                    var totalRange = worksheet.Range(row, 1, row, 13);
+                    totalRange.Style.Fill.BackgroundColor = XLColor.LightYellow;
+                    
+                    // --- PERBAIKAN DI SINI ---
+                    // Cukup definisikan SATU tableRange yang mencakup dari header (A5) sampai total (M + row)
+                    var finalTableRange = worksheet.Range($"A5:M{row}");
+                    finalTableRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    finalTableRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+
 
                     worksheet.Columns().AdjustToContents();
 
@@ -370,7 +391,7 @@ namespace ABB.Web.Modules.LaporanPelunasan
                         var content = stream.ToArray();
                         var base64Str = Convert.ToBase64String(content);
 
-                        return Ok(new { Status = "OK", FileName = "Laporan_Pelunasan.xlsx", FileData = base64Str });
+                        return Ok(new { Status = "OK", FileName = "Laporan_Pembayaran.xlsx", FileData = base64Str });
                     }
                 }
             }

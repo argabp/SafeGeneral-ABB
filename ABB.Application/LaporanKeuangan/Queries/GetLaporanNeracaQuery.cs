@@ -114,12 +114,22 @@ namespace ABB.Application.LaporanKeuangan.Queries
             // =================================================================
             if (isBulanan)
             {
-                int targetBulanDB = request.Bulan - 1; 
+                int targetBulanDB = request.Bulan; 
 
-                System.Linq.Expressions.Expression<Func<RekapJurnal, bool>> filterLalu = 
-                    x => x.thn == request.Tahun && x.bln < targetBulanDB;
+                // System.Linq.Expressions.Expression<Func<RekapJurnal, bool>> filterLalu = 
+                //     x => x.thn == request.Tahun && x.bln < targetBulanDB;
+                // System.Linq.Expressions.Expression<Func<RekapJurnal, bool>> filterMutasi = 
+                //     x => x.thn == request.Tahun && x.bln == targetBulanDB;
+
+               System.Linq.Expressions.Expression<Func<RekapJurnal, bool>> filterLalu = 
+                    x => (x.thn < request.Tahun) || (x.thn == request.Tahun && x.bln < targetBulanDB);
+
+                // 2. MUTASI: Ambil HANYA aktivitas di bulan target pada tahun tersebut
                 System.Linq.Expressions.Expression<Func<RekapJurnal, bool>> filterMutasi = 
                     x => x.thn == request.Tahun && x.bln == targetBulanDB;
+
+
+
 
                 async Task<List<AkunSaldo>> GetSaldoByFilterBulan(System.Linq.Expressions.Expression<Func<RekapJurnal, bool>> filter)
                 {
@@ -128,8 +138,23 @@ namespace ABB.Application.LaporanKeuangan.Queries
                         .ToListAsync(cancellationToken);
                 }
 
+                async Task<List<AkunSaldo>> GetMutasiBulan()
+                {
+                    return await _context.RekapJurnal
+                        .Where(x => x.thn == request.Tahun && x.bln == targetBulanDB)
+                        .GroupBy(x => x.gl_akun)
+                        .Select(g => new AkunSaldo
+                        {
+                            KodeAkun = g.Key,
+                            Total = g.Sum(x => x.gl_dk == "D"
+                                ? (decimal)x.gl_nilai_idr
+                                : -(decimal)x.gl_nilai_idr)
+                        })
+                        .ToListAsync(cancellationToken);
+                }
+
                 var dataSaldoLalu = await GetSaldoByFilterBulan(filterLalu);
-                var dataSaldoMutasi = await GetSaldoByFilterBulan(filterMutasi);
+                var dataSaldoMutasi = await GetMutasiBulan();
                 var hasilPerBaris = new Dictionary<int, (decimal Lalu, decimal Mutasi, decimal Ini)>();
 
                 foreach (var item in templates)
@@ -272,7 +297,7 @@ namespace ABB.Application.LaporanKeuangan.Queries
             // =================================================================
             else
             {
-                int targetBulanDB = request.Bulan - 1;
+                int targetBulanDB = request.Bulan;
 
                 string[] arrayBulan = { "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember" };
                 string namaBulan = arrayBulan[request.Bulan - 1]; 
@@ -281,9 +306,11 @@ namespace ABB.Application.LaporanKeuangan.Queries
                 string judulKolomLalu = $"s/d {namaBulan} {request.Tahun - 1}";
 
                 System.Linq.Expressions.Expression<Func<RekapJurnal, bool>> filterIni = 
-                    x => x.thn == request.Tahun && x.bln <= targetBulanDB;
+                    x => (x.thn < request.Tahun) || (x.thn == request.Tahun && x.bln <= targetBulanDB);
+
+                // Filter Tahun Lalu: Akumulasi dari AWAL WAKTU sampai bulan berjalan tahun LALU
                 System.Linq.Expressions.Expression<Func<RekapJurnal, bool>> filterLalu = 
-                    x => x.thn == request.Tahun - 1 && x.bln <= targetBulanDB;
+                    x => (x.thn < request.Tahun - 1) || (x.thn == request.Tahun - 1 && x.bln <= targetBulanDB);
 
                 async Task<List<AkunSaldo>> GetSaldoByFilterTahun(System.Linq.Expressions.Expression<Func<RekapJurnal, bool>> filter)
                 {
