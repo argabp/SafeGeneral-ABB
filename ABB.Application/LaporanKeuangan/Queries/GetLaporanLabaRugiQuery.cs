@@ -88,7 +88,7 @@ namespace ABB.Application.LaporanKeuangan.Queries
             // =================================================================
             if (isBulanan)
             {
-                int targetBulanDB = request.Bulan - 1; 
+                int targetBulanDB = request.Bulan; 
 
                 System.Linq.Expressions.Expression<Func<RekapJurnal, bool>> filterLalu = 
                     x => x.thn == request.Tahun && x.bln < targetBulanDB;
@@ -245,7 +245,7 @@ namespace ABB.Application.LaporanKeuangan.Queries
             // =================================================================
             else
             {
-                int targetBulanDB = request.Bulan - 1;
+                int targetBulanDB = request.Bulan;
 
                 // [SAMAKAN DENGAN NERACA] Bikin Array Nama Bulan untuk Judul Kolom
                 string[] arrayBulan = { "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember" };
