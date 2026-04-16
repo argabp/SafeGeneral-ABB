@@ -26,7 +26,7 @@ namespace ABB.Application.CancelTutupBulan.Queries
         public async Task<List<ProsesTutupBulanDto>> Handle(GetPeriodeCancelQuery request, CancellationToken cancellationToken)
             {
                 var listPeriode = await _context.EntriPeriode
-                    .Where(x => x.FlagClosing != "N")
+                    .Where(x => x.FlagClosing != "Y")
                     .OrderBy(x => x.ThnPrd).ThenBy(x => x.BlnPrd)
                     .ToListAsync(cancellationToken);
 
