@@ -6,11 +6,11 @@ var selectedRowsData = [];
 
 function searchKeyword_OnKeyUp() {
     $('#SearchKeyword').keyup(function () {
-        refreshGrid("#ProsesSpreadingOfRiskGrid");
+        refreshGrid("#ClosingSpreadingOfRiskGrid");
     });
 }
 
-function searchFilterProsesSpreadingOfRisk(e) {
+function searchFilterClosingSpreadingOfRisk(e) {
     const gridReq = buildGridRequest(e, "SearchKeyword");
 
     return {
@@ -18,7 +18,7 @@ function searchFilterProsesSpreadingOfRisk(e) {
     };
 }
 
-function onChangeGridProsesSpreadingOfRisk(e) {
+function onChangeGridClosingSpreadingOfRisk(e) {
     var grid = e.sender;
     var selectedIds = grid.selectedKeyNames();
 
@@ -48,7 +48,9 @@ function onChangeGridProsesSpreadingOfRisk(e) {
                 kd_thn: item.kd_thn,
                 no_pol: item.no_pol,
                 no_updt: item.no_updt,
-                tgl_closing: item.tgl_closing
+                tgl_closing: item.tgl_closing,
+                no_updt_reas: item.no_updt_reas,
+                jk_bln: item.jk_bln
             });
         } else if (!isSelected && index !== -1) {
             // If deselected and in our list, remove it
@@ -57,24 +59,24 @@ function onChangeGridProsesSpreadingOfRisk(e) {
     });
 }
 
-function prosesSpreadingOfRisk(){
-    showConfirmation('Confirmation', `Are you sure you want to Auto SOL?`,
+function closingSpreadingOfRisk(){
+    showConfirmation('Confirmation', `Are you sure you want to Closing?`,
         function () {
-            showProgressOnGrid('#ProsesSpreadingOfRiskGrid');
+            showProgressOnGrid('#ClosingSpreadingOfRiskGrid');
 
-            ajaxPost("/ProsesSpreadingOfRisk/AlokasiReasuransi", JSON.stringify(selectedRowsData),
+            ajaxPost("/ClosingSpreadingOfRisk/Closing", JSON.stringify(selectedRowsData),
                 function (response) {
                     if(response.Result === "OK"){
-                        showMessage("Success", "Proses SOR Reasuransi Selesai!")
+                        showMessage("Success", "Closing SOR Reasuransi Selesai!")
                     } else {
                         showMessage('Error', response.Message);
                     }
-                    var grid = $("#ProsesSpreadingOfRiskGrid").data("kendoGrid");
+                    var grid = $("#ClosingSpreadingOfRiskGrid").data("kendoGrid");
                     if (grid) {
                         grid.clearSelection();
                     }
                     selectedRowsData = [];
-                    refreshGrid('#ProsesSpreadingOfRiskGrid');
+                    refreshGrid('#ClosingSpreadingOfRiskGrid');
                 },
             );
         }

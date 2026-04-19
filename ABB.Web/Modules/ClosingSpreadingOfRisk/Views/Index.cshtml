@@ -1,4 +1,4 @@
-﻿@using ABB.Application.ProsesSpreadingOfRisks.Queries
+﻿@using ABB.Application.ClosingSpreadingOfRisks.Queries
 @using Kendo.Mvc.TagHelpers
 @using Kendo.Mvc.UI
 @using Microsoft.EntityFrameworkCore.Metadata.Internal
@@ -10,30 +10,30 @@
 
 @{
     Layout = "~/Modules/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Proses SOR";
+    ViewData["Title"] = "Closing SOR";
 }
-<script src="~/Modules/ProsesSpreadingOfRisk/JS/prosesSpreadingOfRisk.index.js"></script>
+<script src="~/Modules/ClosingSpreadingOfRisk/JS/closingSpreadingOfRisk.index.js"></script>
 
 <div class="flat-box">
     <div class="row">
         <div class="flat-box-title col-md-6">
-            Proses Spreading of Risk (SOR)
+            Closing Spreading of Risk (SOR)
         </div>
         <div class="col-md-4">
             <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
         </div>
 
         <div class="col-md-2">
-            <button class="flat-btn-primary" onclick="prosesSpreadingOfRisk()">Auto SOR</button>
+            <button class="flat-btn-primary" onclick="closingSpreadingOfRisk()">Closing</button>
         </div>
     </div>
 
     <div class="flat-box-content">
         <div class="div-box">
-            @(Html.Kendo().Grid<ProsesSpreadingOfRiskDto>()
-                .Name("ProsesSpreadingOfRiskGrid")
+            @(Html.Kendo().Grid<ClosingSpreadingOfRiskDto>()
+                .Name("ClosingSpreadingOfRiskGrid")
                 .DataSource(dataSource => dataSource.Ajax()
-                    .Read(read => read.Action("GetProsesSpreadingOfRisks", "ProsesSpreadingOfRisk").Data("searchFilterProsesSpreadingOfRisk"))
+                    .Read(read => read.Action("GetClosingSpreadingOfRisks", "ClosingSpreadingOfRisk").Data("searchFilterClosingSpreadingOfRisk"))
                     .Model(model => model.Id(p => p.Id))
                 )
                 .Columns(columns =>
@@ -60,7 +60,7 @@
                 .Scrollable()
                 .Height(450)
                 .Resizable(a => a.Columns(true))
-                .Events(ev => ev.DataBound("gridAutoFit").Change("onChangeGridProsesSpreadingOfRisk"))
+                .Events(ev => ev.DataBound("gridAutoFit").Change("onChangeGridClosingSpreadingOfRisk"))
                 )
         </div>
     </div>

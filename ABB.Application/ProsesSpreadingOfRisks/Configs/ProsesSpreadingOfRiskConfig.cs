@@ -15,26 +15,11 @@ namespace ABB.Application.ProsesSpreadingOfRisks.Configs
                     FROM (  
                         SELECT DISTINCT
                             CAST(BINARY_CHECKSUM(uw08e.kd_cb, uw08e.kd_cob, uw08e.kd_scob, uw08e.kd_thn, uw08e.no_pol, uw08e.no_updt) AS BIGINT) AS Id,
-                            uw08e.kd_cb, 
-                            uw08e.kd_cob,   
-                            uw08e.kd_scob,   
-                            uw08e.kd_thn,   
-                            uw08e.no_pol,   
-                            uw08e.no_updt,   
-                            RTRIM(ISNULL(uw08e.kd_cb,'')) + '.' + 
-                            RTRIM(ISNULL(uw08e.kd_cob,'')) + 
-                            RTRIM(ISNULL(uw08e.kd_scob,'')) + '.' + 
-                            RTRIM(ISNULL(uw08e.kd_thn,'')) + '.' +  
-                            RTRIM(ISNULL(uw08e.no_pol,'')) + '.' + 
-                            CAST(uw08e.no_updt AS VARCHAR) as nomor_akseptasi,
-                            uw08e.kd_bln,   
-                            uw01e.nm_ttg,     
-                            uw01e.tgl_closing,   
-                            uw08e.no_pol_ttg,
-                            /* These columns are kept for the BaseWhere logic */
-                            uw01e.flag_reas,
-                            uw08e.flag_posting,
-                            uw08e.flag_cancel,
+                            uw08e.*, 
+                            uw01e.*,
+                            cb.nm_cb,
+                            cob.nm_cob,
+                            scob.nm_scob,
                             SUBSTRING(uw08e.no_pol_ttg, 1, 2) + '.' +
                             SUBSTRING(uw08e.no_pol_ttg, 3, 3) + '.' +
                             SUBSTRING(uw08e.no_pol_ttg, 6, 2) + '.' +
@@ -45,6 +30,10 @@ namespace ABB.Application.ProsesSpreadingOfRisks.Configs
                         JOIN uw01e ON uw01e.kd_cb = uw08e.kd_cb AND uw01e.kd_cob = uw08e.kd_cob 
                                   AND uw01e.kd_scob = uw08e.kd_scob AND uw01e.kd_thn = uw08e.kd_thn 
                                   AND uw01e.no_pol = uw08e.no_pol AND uw01e.no_updt = uw08e.no_updt
+                        INNER JOIN rf01 cb ON uw08e.kd_cb = cb.kd_cb
+                        INNER JOIN rf04 cob ON uw08e.kd_cob = cob.kd_cob
+                        INNER JOIN rf05 scob ON uw08e.kd_cob = scob.kd_cob 
+                                            AND uw08e.kd_scob = scob.kd_scob
                     ) as src",
 
                 // Moving the heavy uw04e check here using EXISTS makes it very clean and fast
@@ -65,17 +54,25 @@ namespace ABB.Application.ProsesSpreadingOfRisks.Configs
 
                 ColumnMap = new Dictionary<string, string>
                 {
-                    ["nomor_akseptasi"] = "src.nomor_akseptasi",
+                    ["nm_cb"] = "src.nm_cb",
+                    ["nm_cob"] = "src.nm_cob",
+                    ["nm_scob"] = "src.nm_scob",
                     ["tgl_closing"] = "src.tgl_closing",
+                    ["tgl_mul_ptg"] = "src.tgl_mul_ptg",
+                    ["tgl_akh_ptg"] = "src.tgl_akh_ptg",
                     ["no_pol_ttg_masked"] = "src.no_pol_ttg_masked",
                     ["nm_ttg"] = "src.nm_ttg"
                 },
 
                 SearchableColumns = new List<string>
                 {
-                    "src.nomor_akseptasi",
+                    "src.nm_cb",
+                    "src.nm_cob",
+                    "src.nm_scob",
                     "src.nm_ttg",
                     "src.tgl_closing",
+                    "src.tgl_mul_ptg",
+                    "src.tgl_akh_ptg",
                     "src.no_pol_ttg_masked"
                 }
             };

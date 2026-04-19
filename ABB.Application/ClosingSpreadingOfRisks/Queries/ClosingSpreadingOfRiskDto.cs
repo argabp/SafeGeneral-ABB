@@ -1,8 +1,8 @@
 using System;
 
-namespace ABB.Application.ProsesSpreadingOfRisks.Queries
+namespace ABB.Application.ClosingSpreadingOfRisks.Queries
 {
-    public class ProsesSpreadingOfRiskDto
+    public class ClosingSpreadingOfRiskDto
     {
         public string Id { get; set; }
 
