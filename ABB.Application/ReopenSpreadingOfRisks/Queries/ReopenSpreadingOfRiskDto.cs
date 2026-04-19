@@ -1,8 +1,8 @@
 using System;
 
-namespace ABB.Application.ClosingSpreadingOfRisks.Queries
+namespace ABB.Application.ReopenSpreadingOfRisks.Queries
 {
-    public class ClosingSpreadingOfRiskDto
+    public class ReopenSpreadingOfRiskDto
     {
         public string Id { get; set; }
 
@@ -31,8 +31,6 @@ namespace ABB.Application.ClosingSpreadingOfRisks.Queries
         public short no_updt { get; set; }
 
         public short no_updt_reas { get; set; }
-
-        public int jk_bln { get; set; }
 
         public DateTime? tgl_closing { get; set; }
         

@@ -9,8 +9,6 @@ namespace ABB.Application.ProsesSpreadingOfRisks.Configs
         {
             return new GridConfig
             {
-                // We removed uw04e from the FROM clause to stop the 1.1M row multiplication
-                // We also removed DISTINCT because EXISTS handles uniqueness naturally
                 FromSql = @"
                     FROM (  
                         SELECT DISTINCT

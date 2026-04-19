@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using ABB.Application.Common.Grids.Models;
 
-namespace ABB.Application.ClosingSpreadingOfRisks.Configs
+namespace ABB.Application.ReopenSpreadingOfRisks.Configs
 {
-    public static class ClosingSpreadingOfRiskConfig
+    public static class ReopenSpreadingOfRiskConfig
     {
         public static GridConfig Create()
         {
@@ -13,7 +13,7 @@ namespace ABB.Application.ClosingSpreadingOfRisks.Configs
                     FROM (  
                         SELECT DISTINCT
                             CAST(BINARY_CHECKSUM(p.kd_cb, p.kd_cob, p.kd_scob, p.kd_thn, p.no_pol, p.no_updt) AS BIGINT) AS Id,
-                            p.*, 
+                            p.*,
                             cb.nm_cb,
                             cob.nm_cob,
                             scob.nm_scob,
@@ -32,7 +32,7 @@ namespace ABB.Application.ClosingSpreadingOfRisks.Configs
 
                 // Moving the heavy uw04e check here using EXISTS makes it very clean and fast
                 BaseWhere = @"(
-                    src.flag_closing = 'N'
+                    src.flag_closing = 'Y' 
                     )",
 
                 ColumnMap = new Dictionary<string, string>
