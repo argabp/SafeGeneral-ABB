@@ -1,22 +1,23 @@
 ﻿$(document).ready(function () {
-    prosesNotaKlaimTreaty();
+    prosesNotaPremiTreaty();
 });
 
-function prosesNotaKlaimTreaty(){
+function prosesNotaPremiTreaty(){
     $('#btn-proses').click(function () {
         showConfirmation('Confirmation', `Are you sure you want to proses?`,
             function () {
-                showProgressByElement($('#ProsesNotaKlaimTreatyForm'));
+                showProgressByElement($('#ProsesNotaPremiTreatyForm'));
                 var data = {
-                    tgl_proses: $("#tgl_proses").val()
+                    tgl_proses: $("#tgl_proses").val(),
+                    kd_cob: $("#kd_cob").val(),
                 }
 
-                ajaxPost("/ProsesNotaKlaimTreaty/Proses", JSON.stringify(data), (response) => {
+                ajaxPost("/ProsesNotaPremiTreaty/Proses", JSON.stringify(data), (response) => {
                     if (response.Result == "OK") {
                         showMessage('Success', response.Message);
                     } else
                         showMessage('Error', response.Message);
-                    closeProgressByElement($('#ProsesNotaKlaimTreatyForm'));
+                    closeProgressByElement($('#ProsesNotaPremiTreatyForm'));
                 });
             });
     });

@@ -6,6 +6,7 @@ function cancelProsesNotaKlaimTreaty(){
     $('#btn-cancel').click(function () {
         showConfirmation('Confirmation', `Are you sure you want to cancel proses?`,
             function () {
+                showProgressByElement($('#CancelProsesNotaKlaimTreatyForm'));
                 var data = {
                     tgl_proses: $("#tgl_proses").val()
                 }
@@ -15,6 +16,7 @@ function cancelProsesNotaKlaimTreaty(){
                         showMessage('Success', response.Message);
                     } else
                         showMessage('Error', response.Message);
+                    showProgressByElement($('#CancelProsesNotaKlaimTreatyForm'));
                 });
             });
     });
