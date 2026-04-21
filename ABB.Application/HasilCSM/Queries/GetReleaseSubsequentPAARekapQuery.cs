@@ -8,28 +8,28 @@ using Newtonsoft.Json;
 
 namespace ABB.Application.HasilCSM.Queries
 {
-    public class GetReleaseIntialPAAQuery : IRequest<string>
+    public class GetReleaseSubsequentPAARekapQuery : IRequest<string>
     {
         public DateTime PeriodeMulai { get; set; }
         
         public DateTime PeriodeAkhir { get; set; }
     }
 
-    public class GetReleaseIntialPAAQueryHandler : IRequestHandler<GetReleaseIntialPAAQuery, string>
+    public class GetReleaseSubsequentPAARekapQueryHandler : IRequestHandler<GetReleaseSubsequentPAARekapQuery, string>
     {
         private readonly IDbConnectionCSM _dbConnectionCsm;
 
-        public GetReleaseIntialPAAQueryHandler(IDbConnectionCSM dbConnectionCsm)
+        public GetReleaseSubsequentPAARekapQueryHandler(IDbConnectionCSM dbConnectionCsm)
         {
             _dbConnectionCsm = dbConnectionCsm;
         }
 
-        public async Task<string> Handle(GetReleaseIntialPAAQuery request,
+        public async Task<string> Handle(GetReleaseSubsequentPAARekapQuery request,
             CancellationToken cancellationToken)
         {
             var periodeMulai = request.PeriodeMulai.ToString("yyyy-MM-dd");
             var periodeAkhir = request.PeriodeAkhir.ToString("yyyy-MM-dd");
-            var data = (await _dbConnectionCsm.Query<dynamic>($"SELECT * FROM ReleaseIntialPAA WHERE PeriodeProses BETWEEN '{periodeMulai}' AND '{periodeAkhir}'")).ToList();
+            var data = (await _dbConnectionCsm.Query<dynamic>($"SELECT * FROM ReleaseSubsequentPAARekap WHERE PeriodeProses BETWEEN '{periodeMulai}' AND '{periodeAkhir}'")).ToList();
             
             return JsonConvert.SerializeObject(data);
         }

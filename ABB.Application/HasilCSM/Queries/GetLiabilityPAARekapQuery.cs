@@ -8,25 +8,25 @@ using Newtonsoft.Json;
 
 namespace ABB.Application.HasilCSM.Queries
 {
-    public class GetLiabilityGMMQuery : IRequest<string>
+    public class GetLiabilityPAARekapQuery : IRequest<string>
     {
         public DateTime PeriodeAkhir { get; set; }
     }
 
-    public class GetLiabilityGMMQueryHandler : IRequestHandler<GetLiabilityGMMQuery, string>
+    public class GetLiabilityPAARekapQueryHandler : IRequestHandler<GetLiabilityPAARekapQuery, string>
     {
         private readonly IDbConnectionCSM _dbConnectionCsm;
 
-        public GetLiabilityGMMQueryHandler(IDbConnectionCSM dbConnectionCsm)
+        public GetLiabilityPAARekapQueryHandler(IDbConnectionCSM dbConnectionCsm)
         {
             _dbConnectionCsm = dbConnectionCsm;
         }
 
-        public async Task<string> Handle(GetLiabilityGMMQuery request,
+        public async Task<string> Handle(GetLiabilityPAARekapQuery request,
             CancellationToken cancellationToken)
         {
             var periode = request.PeriodeAkhir.ToString("yyyy-MM-dd");
-            var data = (await _dbConnectionCsm.Query<dynamic>($"SELECT * FROM LiabilityGMM WHERE PeriodeProses = '{periode}'")).ToList();
+            var data = (await _dbConnectionCsm.Query<dynamic>($"SELECT * FROM LiabilityPAARekap WHERE PeriodeProses = '{periode}'")).ToList();
             
             return JsonConvert.SerializeObject(data);
         }

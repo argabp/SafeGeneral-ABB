@@ -10,9 +10,7 @@ namespace ABB.Application.HasilCSM.Queries
 {
     public class GetLiabilityPAAQuery : IRequest<string>
     {
-        public string TipeTransaksi { get; set; }
-        
-        public DateTime Periode { get; set; }
+        public DateTime PeriodeAkhir { get; set; }
     }
 
     public class GetLiabilityPAAQueryHandler : IRequestHandler<GetLiabilityPAAQuery, string>
@@ -27,8 +25,8 @@ namespace ABB.Application.HasilCSM.Queries
         public async Task<string> Handle(GetLiabilityPAAQuery request,
             CancellationToken cancellationToken)
         {
-            var periode = request.Periode.ToString("yyyy-MM-dd");
-            var data = (await _dbConnectionCsm.Query<dynamic>($"SELECT * FROM LiabilityPAA WHERE TipeTransaksi = '{request.TipeTransaksi}' AND PeriodeProses = '{periode}'")).ToList();
+            var periode = request.PeriodeAkhir.ToString("yyyy-MM-dd");
+            var data = (await _dbConnectionCsm.Query<dynamic>($"SELECT * FROM LiabilityPAA WHERE PeriodeProses = '{periode}'")).ToList();
             
             return JsonConvert.SerializeObject(data);
         }

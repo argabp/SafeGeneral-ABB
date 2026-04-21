@@ -10,9 +10,9 @@ namespace ABB.Application.HasilCSM.Queries
 {
     public class GetReleaseSubsequentPAAQuery : IRequest<string>
     {
-        public string TipeTransaksi { get; set; }
+        public DateTime PeriodeMulai { get; set; }
         
-        public DateTime Periode { get; set; }
+        public DateTime PeriodeAkhir { get; set; }
     }
 
     public class GetReleaseSubsequentPAAQueryHandler : IRequestHandler<GetReleaseSubsequentPAAQuery, string>
@@ -27,8 +27,9 @@ namespace ABB.Application.HasilCSM.Queries
         public async Task<string> Handle(GetReleaseSubsequentPAAQuery request,
             CancellationToken cancellationToken)
         {
-            var periode = request.Periode.ToString("yyyy-MM-dd");
-            var data = (await _dbConnectionCsm.Query<dynamic>($"SELECT * FROM ReleaseSubsequentPAA WHERE TipeTransaksi = '{request.TipeTransaksi}' AND PeriodeProses = '{periode}'")).ToList();
+            var periodeMulai = request.PeriodeMulai.ToString("yyyy-MM-dd");
+            var periodeAkhir = request.PeriodeAkhir.ToString("yyyy-MM-dd");
+            var data = (await _dbConnectionCsm.Query<dynamic>($"SELECT * FROM ReleaseSubsequentPAA WHERE PeriodeProses BETWEEN '{periodeMulai}' AND '{periodeAkhir}'")).ToList();
             
             return JsonConvert.SerializeObject(data);
         }

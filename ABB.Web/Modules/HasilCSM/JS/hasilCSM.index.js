@@ -4,11 +4,11 @@
 
 function dataViewSourceDataHasil(){
     return {
-        TipeTransaksi: $("#TipeTransaksi").val(),
         KodeMetode: $("#KodeMetode").val(),
-        Periode: $("#Periode").val(),
-        Perhitungan: $("#Perhitungan").val(),
+        PeriodeMulai: $("#PeriodeMulai").val(),
+        PeriodeAkhir: $("#PeriodeAkhir").val(),
         Pengukuran: $("#Pengukuran").val(),
+        JenisLaporan: $("#JenisLaporan").val()
     }
 }
 
@@ -22,16 +22,6 @@ function refreshViewSourceDataHasilGrid(){
             $("#custom-loader").hide();
         })
     });
-}
-
-function onChangePerhitungan(e){
-    console.log("change Perhitungan");
-    if(e.sender._cascadedValue === "P")
-        $("#divPengukuran").show();
-    else{
-        $("#divPengukuran").hide();
-        $("#Pengukuran").getKendoDropDownList().value("");
-    }
 }
 
 var dateFields = [];
@@ -88,11 +78,20 @@ function generateGrid(gridData) {
     }
 }
 
+function onChangePengukuran(e){
+    if(e.sender._cascadedValue === "L")
+        $("#divPeriodeMulai").hide();
+    else{
+        $("#divPeriodeMulai").show();
+    }
+}
+
 function generateModel(gridData) {
     var model = {};
     model.id = "ID";
     var fields = {};
     for (var property in gridData) {
+        var value = gridData[property];
         var propType = typeof gridData[property];
 
         if (propType == "number") {
@@ -109,6 +108,16 @@ function generateModel(gridData) {
                     required: true
                 }
             };
+        } else if (propType === "string" && !isNaN(Date.parse(value)) && value.includes("T")) {
+            fields[property] = {
+                type: "string",
+                validation: { required: true },
+                parse: function(e) {
+                    return new Date(e).toLocaleDateString();
+                }
+            };
+            
+            gridData[property] = value.split('T')[0];
         } else {
             fields[property] = {
                 validation: {

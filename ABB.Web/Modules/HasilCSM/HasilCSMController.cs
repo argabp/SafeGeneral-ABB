@@ -1,14 +1,9 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using ABB.Application.Common.Dtos;
 using ABB.Application.HasilCSM.Queries;
 using ABB.Web.Modules.Base;
 using ABB.Web.Modules.HasilCSM.Models;
-using ABB.Web.Modules.ProsesCSM.Models;
-using Kendo.Mvc.Extensions;
-using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -26,27 +21,6 @@ namespace ABB.Web.Modules.HasilCSM
             var model = new HasilCSMViewModel();
             
             return View(model);
-        }
-
-        public JsonResult GetTipeTransaksi()
-        {
-            var result = new List<DropdownOptionDto>()
-            {
-                new DropdownOptionDto() { Text = "A1", Value = "A1" },
-                new DropdownOptionDto() { Text = "A2", Value = "A2" },
-                new DropdownOptionDto() { Text = "A3", Value = "A3" },
-                new DropdownOptionDto() { Text = "B1", Value = "B1" },
-                new DropdownOptionDto() { Text = "B2", Value = "B2" },
-                new DropdownOptionDto() { Text = "C1", Value = "C1" },
-                new DropdownOptionDto() { Text = "C2", Value = "C2" },
-                new DropdownOptionDto() { Text = "K1", Value = "K1" },
-                new DropdownOptionDto() { Text = "K2", Value = "K2" },
-                new DropdownOptionDto() { Text = "K3", Value = "K3" },
-                new DropdownOptionDto() { Text = "K4", Value = "K4" },
-                new DropdownOptionDto() { Text = "K5", Value = "K5" }
-            };
-
-            return Json(result);
         }
 
         public JsonResult GetKodeMetode()
@@ -76,61 +50,107 @@ namespace ABB.Web.Modules.HasilCSM
             var result = new List<Pengukuran>()
             {
                 new Pengukuran() { Text = "Initial", Value = "I" },
-                new Pengukuran() { Text = "Subsequent", Value = "S" }
+                new Pengukuran() { Text = "Subsequent", Value = "S" },
+                new Pengukuran() { Text = "Liability", Value = "L" }
+            };
+
+            return Json(result);
+        }
+
+        public JsonResult GetJenisLaporan()
+        {
+            var result = new List<DropdownOptionDto>()
+            {
+                new DropdownOptionDto() { Text = "Detil", Value = "D" },
+                new DropdownOptionDto() { Text = "Rekap", Value = "R" }
             };
 
             return Json(result);
         }
         
-        // public async Task<ActionResult> GetViewSourceData([DataSourceRequest] DataSourceRequest request, HasilCSMViewModel model)
-        // {
-        //     var command = Mapper.Map<GetViewSourceDataHasilQuery>(model);
-        //     var ds = await Mediator.Send(command);
-        //     return Json(ds.AsQueryable().ToDataSourceResult(request));
-        // }
-        
         [HttpPost]
         public async Task<ActionResult> GetViewSourceDataHasil([FromBody] HasilCSMViewModel model)
         {
-
-            if (model.KodeMetode == "1" && model.Perhitungan == "C")
-            {
-                var command = Mapper.Map<GetLiabilityPAAQuery>(model);
-                var ds = await Mediator.Send(command);
-                return Json(JsonConvert.DeserializeObject(ds));
-            } 
-            
-            if (model.KodeMetode == "2" && model.Perhitungan == "C")
-            {
-                var command = Mapper.Map<GetLiabilityGMMQuery>(model);
-                var ds = await Mediator.Send(command);
-                return Json(JsonConvert.DeserializeObject(ds));
-            }
-            
-            if (model.KodeMetode == "1" && model.Perhitungan == "P" && model.Pengukuran == "I")
+            if (model.KodeMetode == "1" && model.Pengukuran == "I" && model.JenisLaporan == "D")
             {
                 var command = Mapper.Map<GetReleaseIntialPAAQuery>(model);
                 var ds = await Mediator.Send(command);
                 return Json(JsonConvert.DeserializeObject(ds));
             }
             
-            if (model.KodeMetode == "1" && model.Perhitungan == "P" && model.Pengukuran == "S")
+            if (model.KodeMetode == "1" && model.Pengukuran == "I" && model.JenisLaporan == "R")
             {
-                var command = Mapper.Map<GetReleaseSubsequentPAAQuery>(model);
+                var command = Mapper.Map<GetReleaseIntialPAARekapQuery>(model);
                 var ds = await Mediator.Send(command);
                 return Json(JsonConvert.DeserializeObject(ds));
             }
             
-            if (model.KodeMetode == "2" && model.Perhitungan == "P" && model.Pengukuran == "I")
+            if (model.KodeMetode == "2" && model.Pengukuran == "I" && model.JenisLaporan == "D")
             {
                 var command = Mapper.Map<GetReleaseIntialGMMQuery>(model);
                 var ds = await Mediator.Send(command);
                 return Json(JsonConvert.DeserializeObject(ds));
             }
             
-            if (model.KodeMetode == "2" && model.Perhitungan == "P" && model.Pengukuran == "S")
+            if (model.KodeMetode == "2" && model.Pengukuran == "I" && model.JenisLaporan == "R")
+            {
+                var command = Mapper.Map<GetReleaseIntialGMMRekapQuery>(model);
+                var ds = await Mediator.Send(command);
+                return Json(JsonConvert.DeserializeObject(ds));
+            }
+            
+            if (model.KodeMetode == "1" && model.Pengukuran == "S" && model.JenisLaporan == "D")
+            {
+                var command = Mapper.Map<GetReleaseSubsequentPAAQuery>(model);
+                var ds = await Mediator.Send(command);
+                return Json(JsonConvert.DeserializeObject(ds));
+            }
+            
+            if (model.KodeMetode == "1" && model.Pengukuran == "S" && model.JenisLaporan == "R")
+            {
+                var command = Mapper.Map<GetReleaseSubsequentPAARekapQuery>(model);
+                var ds = await Mediator.Send(command);
+                return Json(JsonConvert.DeserializeObject(ds));
+            }
+            
+            if (model.KodeMetode == "2" && model.Pengukuran == "S" && model.JenisLaporan == "D")
             {
                 var command = Mapper.Map<GetReleaseSubsequentGMMQuery>(model);
+                var ds = await Mediator.Send(command);
+                return Json(JsonConvert.DeserializeObject(ds));
+            }
+            
+            if (model.KodeMetode == "2" && model.Pengukuran == "S" && model.JenisLaporan == "R")
+            {
+                var command = Mapper.Map<GetReleaseSubsequentGMMRekapQuery>(model);
+                var ds = await Mediator.Send(command);
+                return Json(JsonConvert.DeserializeObject(ds));
+            }
+            
+            if (model.KodeMetode == "1" && model.Pengukuran == "L" && model.JenisLaporan == "D")
+            {
+                var command = Mapper.Map<GetLiabilityPAAQuery>(model);
+                var ds = await Mediator.Send(command);
+                return Json(JsonConvert.DeserializeObject(ds));
+            }
+            
+            if (model.KodeMetode == "1" && model.Pengukuran == "L" && model.JenisLaporan == "R")
+            {
+                var command = Mapper.Map<GetLiabilityPAARekapQuery>(model);
+                var ds = await Mediator.Send(command);
+                return Json(JsonConvert.DeserializeObject(ds));
+            }
+            
+            if (model.KodeMetode == "2" && model.Pengukuran == "L" && model.JenisLaporan == "D")
+            {
+                var command = Mapper.Map<GetLiabilityGMMQuery>(model);
+                var ds = await Mediator.Send(command);
+                return Json(JsonConvert.DeserializeObject(ds));
+            }
+            
+            if (model.KodeMetode == "2" && model.Pengukuran == "L" && model.JenisLaporan == "R")
+            {
+                var command = Mapper.Map<GetLiabilityGMMRekapQuery>(model);
                 var ds = await Mediator.Send(command);
                 return Json(JsonConvert.DeserializeObject(ds));
             }
