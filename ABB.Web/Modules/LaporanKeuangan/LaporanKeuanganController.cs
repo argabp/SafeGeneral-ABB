@@ -266,7 +266,48 @@ namespace ABB.Web.Modules.LaporanKeuangan
                 return Ok(new { Status = "ERROR", Message = ex.Message });
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> CheckClosingStatus([FromBody] ClosingRequest request)
+        {
+            // 1. Validasi Input (penting agar tidak error di MediatR)
+            if (request == null || request.Bulan == 0 || request.Tahun == 0)
+            {
+                return Json(new { Status = "ERROR", Message = "Data bulan atau tahun tidak valid." });
+            }
+
+            try
+            {
+                // 2. Panggil Mediator (Gunakan 'Mediator' properti dari base class)
+                var isClosed = await Mediator.Send(new CheckStatusClosingQuery(request.Bulan, request.Tahun));
+
+                if (!isClosed)
+                {
+                    return Json(new { 
+                        Status = "WARN", 
+                        Message = $"Periode {request.Bulan}/{request.Tahun} belum di-closing." 
+                    });
+                }
+
+                return Json(new { Status = "OK" });
+            }
+            catch (Exception ex)
+            {
+                // Jangan biarkan exception meledak ke Middleware jika ingin response JSON yang stabil
+                // Log error di sini jika perlu
+                return Json(new { Status = "ERROR", Message = "Terjadi kesalahan internal: " + ex.Message });
+            }
+        }
+
+            // Model sederhana untuk request body
+            public class ClosingRequest 
+            {
+                public int Bulan { get; set; }
+                public int Tahun { get; set; }
+            }
     }
+
+   
 
     public class LaporanKeuanganFilterDto
     {

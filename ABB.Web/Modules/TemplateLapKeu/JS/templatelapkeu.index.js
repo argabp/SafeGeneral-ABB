@@ -36,9 +36,10 @@ function onTipeBarisChange() {
 function setupUI(tipe) {
     var hint = $("#rumus-hint");
     var manualInput = $("#RumusManual").data("kendoTextArea");
+    var labelManual = $("#div-manual label.col-form-label"); // Ambil labelnya
 
     if (tipe === "TOTAL") {
-        // Tampilkan Range, Sembunyikan Manual
+        // Tampilkan Range, Sembunyikan Manual (Kecuali dicentang)
         $("#div-manual").hide();
         $("#div-range").show();
     } 
@@ -46,30 +47,40 @@ function setupUI(tipe) {
         // Tampilkan Manual, Sembunyikan Range
         $("#div-manual").show();
         $("#div-range").hide();
-        if (manualInput) manualInput.enable(true);
-        if (hint) hint.html("* Masukkan <b>Tipe Akun</b> dipisah koma (Contoh: 10,12).");
+        labelManual.text("Tipe Akun"); // Kembalikan label untuk Detail
+        
+        if (manualInput) {
+            manualInput.enable(true);
+            $(manualInput.element).attr("placeholder", "Contoh: 11,12");
+        }
+        if (hint) hint.html("* Masukkan <b>Tipe Akun</b> dipisah koma (Contoh: 11,12).");
     } 
     else {
         // HEADING atau SPASI -> SEMBUNYIKAN SEMUA RUMUS
-        $("#div-manual").hide(); // <--- INI YG BIKIN HILANG TOTAL
+        $("#div-manual").hide(); 
         $("#div-range").hide();
     }
 }
-
 // 4. Dipanggil saat Checkbox "Input Manual" di centang/uncentang
 function toggleManualTotal() {
     var manualInput = $("#RumusManual").data("kendoTextArea");
-    
+    var hint = $("#rumus-hint");
+    var labelManual = $("#div-manual label.col-form-label");
+
     if ($("#chkManualTotal").is(":checked")) {
-        // Mode Manual Total (Grand Total)
+        // Mode Manual Total (Rumus Matematika)
         $("#div-manual").show();
         $("#div-range").hide();
+        
+        labelManual.text("Rumus Total"); // Ubah label khusus untuk Total
+
         if (manualInput) {
             manualInput.enable(true);
             manualInput.value("");
-            // Ganti placeholder biar user ngeh
-            $(manualInput.element).attr("placeholder", "Contoh: 10, 20");
+            $(manualInput.element).attr("placeholder", "Contoh: 10+15-20");
         }
+        if (hint) hint.html("* Masukkan rumus matematika menggunakan <b>No Urut</b> baris.<br>Operator yang didukung: <b>+</b> (Tambah), <b>-</b> (Kurang), <b>*</b> (Kali), <b>/</b> (Bagi).<br>Contoh: <b>10+15-20</b>");
+
     } else {
         // Balik ke Mode Range
         $("#div-manual").hide();

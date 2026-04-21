@@ -15,9 +15,10 @@ using Microsoft.Extensions.Hosting;
 
 namespace ABB.Application.LaporanKeuangan.Queries
 {
-    // =========================================================================
-    // QUERY TUNGGAL (UNTUK LABA RUGI TAHUNAN & BULANAN)
-    // =========================================================================
+    // CATATAN: Pastikan class LaporanKeuanganResponse, LaporanExcelRow, dan AkunSaldo 
+    // tidak bentrok (duplicate) dengan yang ada di file GetLaporanNeracaQuery.cs.
+    // Jika error duplicate, hapus 3 class penampung ini dari salah satu file (biarkan di Neraca saja).
+
     public class GetLaporanLabaRugiQuery : IRequest<LaporanKeuanganResponse>
     {
         public string TipeLaporan { get; set; } 
@@ -40,8 +41,6 @@ namespace ABB.Application.LaporanKeuangan.Queries
         public async Task<LaporanKeuanganResponse> Handle(GetLaporanLabaRugiQuery request, CancellationToken cancellationToken)
         {
             bool isBulanan = request.TipeLaporan == "LABA RUGI (BULAN)";
-            
-            // [PERBAIKAN DARI ATASAN]: Selalu tembak ke Master "LABARUGI" biasa!
             string templateName = "LABARUGI"; 
 
             var templates = await _context.TemplateLapKeu
@@ -52,10 +51,8 @@ namespace ABB.Application.LaporanKeuangan.Queries
             var mapTipeBaris = templates.ToDictionary(x => x.Urutan, x => x.TipeBaris);
             
             // =================================================================
-            // [SAMAKAN DENGAN NERACA]: BIKIN KAMUS (DICTIONARY) DARI MASTER COA & TYPE COA
+            // KAMUS (DICTIONARY) DARI MASTER COA & TYPE COA
             // =================================================================
-            
-            // 1. Kamus Tipe Akun -> D/K (Normal Balance)
             var typeCoaList = await _context.TypeCoa.AsNoTracking().ToListAsync(cancellationToken);
             var mapTipeToDK = new Dictionary<string, string>();
             foreach (var tc in typeCoaList)
@@ -67,7 +64,6 @@ namespace ABB.Application.LaporanKeuangan.Queries
                 }
             }
 
-            // 2. Kamus Kode Akun -> Tipe Akun
             var coaList = await _context.Set<Coa>().AsNoTracking().ToListAsync(cancellationToken);
             var mapAkunToTipe = new Dictionary<string, string>();
             foreach(var c in coaList) 
@@ -88,7 +84,7 @@ namespace ABB.Application.LaporanKeuangan.Queries
             // =================================================================
             if (isBulanan)
             {
-                int targetBulanDB = request.Bulan; 
+                int targetBulanDB = request.Bulan - 1; 
 
                 System.Linq.Expressions.Expression<Func<RekapJurnal, bool>> filterLalu = 
                     x => x.thn == request.Tahun && x.bln < targetBulanDB;
@@ -117,8 +113,6 @@ namespace ABB.Application.LaporanKeuangan.Queries
                         foreach (var tipeInput in tipeList)
                         {
                             var cleanTipe = tipeInput.Trim().ToUpper();
-                            
-                            // Ambil Saldo Normal dari kamus (Default 'D' jika tidak ketemu)
                             string posisiDK = mapTipeToDK.ContainsKey(cleanTipe) ? mapTipeToDK[cleanTipe] : "D";
 
                             decimal sumLalu = dataSaldoLalu.Where(x => 
@@ -133,7 +127,6 @@ namespace ABB.Application.LaporanKeuangan.Queries
                                 mapAkunToTipe[x.KodeAkun.Trim()] == cleanTipe
                             ).Sum(x => x.Total);
 
-                            // [LOGIKA MINUS] Jika tipe akun adalah Kredit, balikkan nilainya agar positif
                             if (posisiDK == "K")
                             {
                                 sumLalu = sumLalu * -1;
@@ -146,29 +139,56 @@ namespace ABB.Application.LaporanKeuangan.Queries
                     }
                     else if (item.TipeBaris == "TOTAL" && !string.IsNullOrEmpty(item.Rumus))
                     {
-                        if (item.Rumus.Contains("-"))
+                        string rumus = item.Rumus.Trim();
+
+                        if (rumus.Contains("-") && !rumus.Contains("+") && !rumus.Contains("*") && !rumus.Contains("/") && !rumus.Contains(" ") && rumus.Split('-').Length == 2)
                         {
-                            var parts = item.Rumus.Split('-');
-                            if (parts.Length == 2 && int.TryParse(parts[0], out int startUrutan) && int.TryParse(parts[1], out int endUrutan))
+                            var parts = rumus.Split('-');
+                            if (int.TryParse(parts[0], out int startUrutan) && int.TryParse(parts[1], out int endUrutan))
                             {
                                 for (int i = startUrutan; i <= endUrutan; i++)
                                 {
-                                    if (hasilPerBaris.ContainsKey(i) && mapTipeBaris.ContainsKey(i) && mapTipeBaris[i] == "DETAIL") 
+                                    if (hasilPerBaris.ContainsKey(i)) 
                                     {
-                                        nilaiLalu += hasilPerBaris[i].Lalu; nilaiMutasi += hasilPerBaris[i].Mutasi;
+                                        nilaiLalu += hasilPerBaris[i].Lalu; 
+                                        nilaiMutasi += hasilPerBaris[i].Mutasi;
                                     }
                                 }
                             }
                         }
                         else 
                         {
-                            var urutanList = item.Rumus.Split(',', StringSplitOptions.RemoveEmptyEntries);
-                            foreach (var strUrutan in urutanList)
+                            rumus = rumus.Replace(",", "+"); 
+                            try
                             {
-                                if (int.TryParse(strUrutan.Trim(), out int targetUrutan) && hasilPerBaris.ContainsKey(targetUrutan))
+                                string calcLalu = rumus;
+                                string calcMutasi = rumus;
+
+                                var numsInRumus = System.Text.RegularExpressions.Regex.Matches(rumus, @"\d+").Cast<System.Text.RegularExpressions.Match>().Select(m => m.Value).Distinct().OrderByDescending(x => int.Parse(x)).ToList();
+
+                                foreach (var numStr in numsInRumus)
                                 {
-                                    nilaiLalu += hasilPerBaris[targetUrutan].Lalu; nilaiMutasi += hasilPerBaris[targetUrutan].Mutasi;
+                                    int noUrutTarget = int.Parse(numStr);
+                                    
+                                    decimal valLalu = hasilPerBaris.ContainsKey(noUrutTarget) ? hasilPerBaris[noUrutTarget].Lalu : 0;
+                                    decimal valMutasi = hasilPerBaris.ContainsKey(noUrutTarget) ? hasilPerBaris[noUrutTarget].Mutasi : 0;
+
+                                    // PERBAIKAN: Gunakan format 4 desimal agar terhindar dari Int32 overflow dan bungkus kurung
+                                    string calcValLaluStr = $"({valLalu.ToString("0.0000", System.Globalization.CultureInfo.InvariantCulture)})";
+                                    string calcValMutasiStr = $"({valMutasi.ToString("0.0000", System.Globalization.CultureInfo.InvariantCulture)})";
+
+                                    calcLalu = System.Text.RegularExpressions.Regex.Replace(calcLalu, @"\b" + numStr + @"\b", calcValLaluStr);
+                                    calcMutasi = System.Text.RegularExpressions.Regex.Replace(calcMutasi, @"\b" + numStr + @"\b", calcValMutasiStr);
                                 }
+
+                                var dt = new System.Data.DataTable();
+                                nilaiLalu += Convert.ToDecimal(dt.Compute(calcLalu, ""));
+                                nilaiMutasi += Convert.ToDecimal(dt.Compute(calcMutasi, ""));
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine("Error Kalkulasi Bulanan: " + ex.Message);
+                                nilaiLalu = 0; nilaiMutasi = 0;
                             }
                         }
                     }
@@ -179,7 +199,6 @@ namespace ABB.Application.LaporanKeuangan.Queries
                     string strLalu = "", strMutasi = "", strIni = "";
                     if (item.TipeBaris == "DETAIL" || item.TipeBaris == "TOTAL")
                     {
-                        // [PERBAIKAN FORMAT KURUNG]: Format string khusus akuntansi
                         strLalu = nilaiLalu.ToString("#,##0.00;(#,##0.00);0.00"); 
                         strMutasi = nilaiMutasi.ToString("#,##0.00;(#,##0.00);0.00"); 
                         strIni = nilaiIni.ToString("#,##0.00;(#,##0.00);0.00");
@@ -247,7 +266,6 @@ namespace ABB.Application.LaporanKeuangan.Queries
             {
                 int targetBulanDB = request.Bulan;
 
-                // [SAMAKAN DENGAN NERACA] Bikin Array Nama Bulan untuk Judul Kolom
                 string[] arrayBulan = { "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember" };
                 string namaBulan = arrayBulan[request.Bulan - 1]; 
                 
@@ -281,8 +299,6 @@ namespace ABB.Application.LaporanKeuangan.Queries
                         foreach (var tipeInput in tipeList)
                         {
                             var cleanTipe = tipeInput.Trim().ToUpper();
-
-                            // Ambil Saldo Normal dari kamus (Default 'D' jika tidak ketemu)
                             string posisiDK = mapTipeToDK.ContainsKey(cleanTipe) ? mapTipeToDK[cleanTipe] : "D";
 
                             decimal sumIni = dataSaldoIni.Where(x => 
@@ -297,7 +313,6 @@ namespace ABB.Application.LaporanKeuangan.Queries
                                 mapAkunToTipe[x.KodeAkun.Trim()] == cleanTipe
                             ).Sum(x => x.Total);
 
-                            // [LOGIKA MINUS] Jika tipe akun adalah Kredit, balikkan nilainya agar positif
                             if (posisiDK == "K")
                             {
                                 sumIni = sumIni * -1;
@@ -308,31 +323,58 @@ namespace ABB.Application.LaporanKeuangan.Queries
                             nilaiLalu += sumLalu;
                         }
                     }
-                    else if (item.TipeBaris == "TOTAL" && !string.IsNullOrEmpty(item.Rumus))
+                   else if (item.TipeBaris == "TOTAL" && !string.IsNullOrEmpty(item.Rumus))
                     {
-                        if (item.Rumus.Contains("-"))
+                        string rumus = item.Rumus.Trim();
+
+                        if (rumus.Contains("-") && !rumus.Contains("+") && !rumus.Contains("*") && !rumus.Contains("/") && !rumus.Contains(" ") && rumus.Split('-').Length == 2)
                         {
-                            var parts = item.Rumus.Split('-');
-                            if (parts.Length == 2 && int.TryParse(parts[0], out int startUrutan) && int.TryParse(parts[1], out int endUrutan))
+                            var parts = rumus.Split('-');
+                            if (int.TryParse(parts[0], out int startUrutan) && int.TryParse(parts[1], out int endUrutan))
                             {
                                 for (int i = startUrutan; i <= endUrutan; i++)
                                 {
-                                    if (hasilPerBaris.ContainsKey(i) && mapTipeBaris.ContainsKey(i) && mapTipeBaris[i] == "DETAIL") 
+                                    if (hasilPerBaris.ContainsKey(i)) 
                                     {
-                                        nilaiIni += hasilPerBaris[i].Ini; nilaiLalu += hasilPerBaris[i].Lalu;
+                                        nilaiIni += hasilPerBaris[i].Ini; 
+                                        nilaiLalu += hasilPerBaris[i].Lalu;
                                     }
                                 }
                             }
                         }
                         else 
                         {
-                            var urutanList = item.Rumus.Split(',', StringSplitOptions.RemoveEmptyEntries);
-                            foreach (var strUrutan in urutanList)
+                            rumus = rumus.Replace(",", "+"); 
+                            try
                             {
-                                if (int.TryParse(strUrutan.Trim(), out int targetUrutan) && hasilPerBaris.ContainsKey(targetUrutan))
+                                string calcIni = rumus;
+                                string calcLalu = rumus;
+
+                                var numsInRumus = System.Text.RegularExpressions.Regex.Matches(rumus, @"\d+").Cast<System.Text.RegularExpressions.Match>().Select(m => m.Value).Distinct().OrderByDescending(x => int.Parse(x)).ToList();
+
+                                foreach (var numStr in numsInRumus)
                                 {
-                                    nilaiIni += hasilPerBaris[targetUrutan].Ini; nilaiLalu += hasilPerBaris[targetUrutan].Lalu;
+                                    int noUrutTarget = int.Parse(numStr);
+                                    
+                                    decimal valIni = hasilPerBaris.ContainsKey(noUrutTarget) ? hasilPerBaris[noUrutTarget].Ini : 0;
+                                    decimal valLalu = hasilPerBaris.ContainsKey(noUrutTarget) ? hasilPerBaris[noUrutTarget].Lalu : 0;
+
+                                    // PERBAIKAN: Gunakan format 4 desimal agar terhindar dari Int32 overflow dan bungkus kurung
+                                    string calcValIniStr = $"({valIni.ToString("0.0000", System.Globalization.CultureInfo.InvariantCulture)})";
+                                    string calcValLaluStr = $"({valLalu.ToString("0.0000", System.Globalization.CultureInfo.InvariantCulture)})";
+
+                                    calcIni = System.Text.RegularExpressions.Regex.Replace(calcIni, @"\b" + numStr + @"\b", calcValIniStr);
+                                    calcLalu = System.Text.RegularExpressions.Regex.Replace(calcLalu, @"\b" + numStr + @"\b", calcValLaluStr);
                                 }
+
+                                var dt = new System.Data.DataTable();
+                                nilaiIni += Convert.ToDecimal(dt.Compute(calcIni, ""));
+                                nilaiLalu += Convert.ToDecimal(dt.Compute(calcLalu, ""));
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine("Error Kalkulasi Tahunan: " + ex.Message);
+                                nilaiIni = 0; nilaiLalu = 0;
                             }
                         }
                     }
@@ -342,7 +384,6 @@ namespace ABB.Application.LaporanKeuangan.Queries
                     string strIni = "", strLalu = "";
                     if (item.TipeBaris == "DETAIL" || item.TipeBaris == "TOTAL")
                     {
-                        // [PERBAIKAN FORMAT KURUNG]: Format string khusus akuntansi
                         strIni = nilaiIni.ToString("#,##0.00;(#,##0.00);0.00"); 
                         strLalu = nilaiLalu.ToString("#,##0.00;(#,##0.00);0.00");
                     }
@@ -380,8 +421,6 @@ namespace ABB.Application.LaporanKeuangan.Queries
                         if (item.TipeBaris == "HEADING" && currentLevel == 1) {
                             rowExcel.Deskripsi = string.Join("  ", item.Deskripsi.Trim().ToCharArray());
                             rowExcel.IsHeaderKolom = true;
-                            
-                            // [SAMAKAN DENGAN NERACA] Masukkan judul dinamis ke Excel
                             rowExcel.HeaderTahunIni = judulKolomIni;
                             rowExcel.HeaderTahunLalu = judulKolomLalu;
                         }
@@ -393,8 +432,6 @@ namespace ABB.Application.LaporanKeuangan.Queries
                             if (currentLevel == 1)
                             {
                                 sb.Append($"<td class='lvl-1'>{string.Join("  ", item.Deskripsi.Trim().ToCharArray())}</td>");
-                                
-                                // [SAMAKAN DENGAN NERACA] Print HTML dengan Judul Dinamis
                                 sb.Append($"<td class='lvl-1' style='text-align:center;'>{judulKolomIni}</td><td class='lvl-1' style='text-align:center;'>{judulKolomLalu}</td>");
                             }
                             else sb.Append($"<td colspan='3' class='{cssClass}'>{deskripsiFinal}</td>");
@@ -421,7 +458,6 @@ namespace ABB.Application.LaporanKeuangan.Queries
 
             DateTime tanggalLaporan = new DateTime(request.Tahun, request.Bulan, 1).AddMonths(1).AddDays(-1); 
             
-            // Ambil template HTML sesuai versinya
             string templateHtmlName = isBulanan ? "LaporanLabaRugiBulan.html" : "LaporanLabaRugi.html";
             string reportPath = Path.Combine(_environment.ContentRootPath, "Modules", "Reports", "Templates", templateHtmlName);
             if (!File.Exists(reportPath)) throw new FileNotFoundException($"Template not found: {reportPath}");

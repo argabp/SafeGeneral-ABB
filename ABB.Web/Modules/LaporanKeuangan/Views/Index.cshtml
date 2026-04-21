@@ -178,12 +178,20 @@
 
         if (!tahun) { alert("Harap isi Tahun."); return; }
 
+        validateClosing(bulan, tahun, function() {
         var formData = {
             TipeLaporan: tipeLaporan,
             JenisPeriode: jenisPeriode,
             Bulan: parseInt(bulan),
             Tahun: parseInt(tahun)
         };
+
+        // var formData = {
+        //     TipeLaporan: tipeLaporan,
+        //     JenisPeriode: jenisPeriode,
+        //     Bulan: parseInt(bulan),
+        //     Tahun: parseInt(tahun)
+        // };
 
         var btn = $("button.btn-generate");
         var originalText = btn.html();
@@ -207,6 +215,7 @@
                 btn.html(originalText).prop("disabled", false);
                 alert("Error koneksi server.");
             }
+            });
         });
     }
 
@@ -252,6 +261,28 @@
             }
         });
     }
+
+    function validateClosing(bulan, tahun, callback) {
+            $.ajax({
+                url: '/LaporanKeuangan/CheckClosingStatus',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ Bulan: parseInt(bulan), Tahun: parseInt(tahun) }),
+                success: function (res) {
+                    if (res.Status === "WARN") {
+                        // Tampilkan konfirmasi, user bisa pilih tetap lanjut atau batal
+                        if (confirm(res.Message + " Tetap tampilkan laporan?")) {
+                            callback();
+                        }
+                    } else {
+                        callback();
+                    }
+                },
+                error: function () {
+                    alert("Gagal mengecek status closing.");
+                }
+            });
+        }
 
     $(document).ready(function() {
         onTipeLaporanChange();
