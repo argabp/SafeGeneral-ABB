@@ -84,10 +84,14 @@ namespace ABB.Application.LaporanKeuangan.Queries
             // =================================================================
             if (isBulanan)
             {
-                int targetBulanDB = request.Bulan - 1; 
+               int targetBulanDB = request.Bulan - 1; 
 
+                // Filter untuk kolom "s/d Bulan Lalu" (Contoh: Jan s/d Feb)
+                // Menambahkan x.bln >= 1 agar bulan 0 tidak ikut
                 System.Linq.Expressions.Expression<Func<RekapJurnal, bool>> filterLalu = 
-                    x => x.thn == request.Tahun && x.bln < targetBulanDB;
+                    x => x.thn == request.Tahun && x.bln >= 1 && x.bln < targetBulanDB;
+
+                // Filter untuk kolom "Mutasi" (Hanya bulan terpilih)
                 System.Linq.Expressions.Expression<Func<RekapJurnal, bool>> filterMutasi = 
                     x => x.thn == request.Tahun && x.bln == targetBulanDB;
 
@@ -197,8 +201,24 @@ namespace ABB.Application.LaporanKeuangan.Queries
                     if (item.Urutan > 0) hasilPerBaris[item.Urutan] = (nilaiLalu, nilaiMutasi, nilaiIni);
 
                     string strLalu = "", strMutasi = "", strIni = "";
-                    if (item.TipeBaris == "DETAIL" || item.TipeBaris == "TOTAL")
+                    // if (item.TipeBaris == "DETAIL" || item.TipeBaris == "TOTAL")
+                    // {
+                    //     // strLalu = nilaiLalu.ToString("#,##0.00;(#,##0.00);0.00"); 
+                    //     strLalu = nilaiLalu == 0 ? "" : nilaiLalu.ToString("#,##0.00;(#,##0.00)");
+                    //     strMutasi = nilaiMutasi.ToString("#,##0.00;(#,##0.00);0.00"); 
+                    //     strIni = nilaiIni.ToString("#,##0.00;(#,##0.00);0.00");
+                    // }
+
+                    if (item.TipeBaris == "DETAIL" && string.IsNullOrEmpty(item.Rumus))
                     {
+                        // Jika DETAIL tapi tidak ada rumus, kita paksa jadi kosong
+                        strLalu = "";
+                        strMutasi = "";
+                        strIni = "";
+                    }
+                    else if (item.TipeBaris == "DETAIL" || item.TipeBaris == "TOTAL")
+                    {
+                        // Jika ada rumus atau tipe TOTAL, baru gunakan format angka
                         strLalu = nilaiLalu.ToString("#,##0.00;(#,##0.00);0.00"); 
                         strMutasi = nilaiMutasi.ToString("#,##0.00;(#,##0.00);0.00"); 
                         strIni = nilaiIni.ToString("#,##0.00;(#,##0.00);0.00");
@@ -272,10 +292,18 @@ namespace ABB.Application.LaporanKeuangan.Queries
                 string judulKolomIni = $"s/d {namaBulan} {request.Tahun}";
                 string judulKolomLalu = $"s/d {namaBulan} {request.Tahun - 1}";
 
+                // System.Linq.Expressions.Expression<Func<RekapJurnal, bool>> filterIni = 
+                //     x => x.thn == request.Tahun && x.bln <= targetBulanDB;
+                // System.Linq.Expressions.Expression<Func<RekapJurnal, bool>> filterLalu = 
+                //     x => x.thn == request.Tahun - 1 && x.bln <= targetBulanDB;
+
+                // Filter Tahun Ini (Januari s/d Bulan Terpilih)
                 System.Linq.Expressions.Expression<Func<RekapJurnal, bool>> filterIni = 
-                    x => x.thn == request.Tahun && x.bln <= targetBulanDB;
+                    x => x.thn == request.Tahun && x.bln >= 1 && x.bln <= targetBulanDB;
+
+                // Filter Tahun Lalu (Januari s/d Bulan Terpilih di tahun sebelumnya)
                 System.Linq.Expressions.Expression<Func<RekapJurnal, bool>> filterLalu = 
-                    x => x.thn == request.Tahun - 1 && x.bln <= targetBulanDB;
+                    x => x.thn == request.Tahun - 1 && x.bln >= 1 && x.bln <= targetBulanDB;
 
                 async Task<List<AkunSaldo>> GetSaldoByFilterTahun(System.Linq.Expressions.Expression<Func<RekapJurnal, bool>> filter)
                 {
@@ -382,7 +410,19 @@ namespace ABB.Application.LaporanKeuangan.Queries
                     if (item.Urutan > 0) hasilPerBaris[item.Urutan] = (nilaiIni, nilaiLalu);
 
                     string strIni = "", strLalu = "";
-                    if (item.TipeBaris == "DETAIL" || item.TipeBaris == "TOTAL")
+                    // if (item.TipeBaris == "DETAIL" || item.TipeBaris == "TOTAL")
+                    // {
+                    //     strIni = nilaiIni.ToString("#,##0.00;(#,##0.00);0.00"); 
+                    //     // strLalu = nilaiLalu.ToString("#,##0.00;(#,##0.00);0.00");
+                    //     strLalu = nilaiLalu == 0 ? "" : nilaiLalu.ToString("#,##0.00;(#,##0.00)");
+                    // }
+
+                    if (item.TipeBaris == "DETAIL" && string.IsNullOrEmpty(item.Rumus))
+                    {
+                        strIni = "";
+                        strLalu = "";
+                    }
+                    else if (item.TipeBaris == "DETAIL" || item.TipeBaris == "TOTAL")
                     {
                         strIni = nilaiIni.ToString("#,##0.00;(#,##0.00);0.00"); 
                         strLalu = nilaiLalu.ToString("#,##0.00;(#,##0.00);0.00");
