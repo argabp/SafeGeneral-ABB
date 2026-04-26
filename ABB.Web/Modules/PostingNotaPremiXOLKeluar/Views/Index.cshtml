@@ -1,4 +1,4 @@
-﻿@using ABB.Application.PostingNotaKlaimTreatyMasuks.Queries
+﻿@using ABB.Application.PostingNotaPremiXOLKeluars.Queries
 @using Kendo.Mvc.UI
 @using Microsoft.Extensions.Configuration
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
@@ -8,9 +8,9 @@
 
 @{
     Layout = "~/Modules/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Posting Nota Klaim Treaty";
+    ViewData["Title"] = "Posting Nota Premi XOL Keluar";
 }
-<script src="~/Modules/PostingNotaKlaimTreatyMasuk/JS/postingNotaKlaimTreatyMasuk.js"></script>
+<script src="~/Modules/PostingNotaPremiXOLKeluar/JS/postingNotaPremiXOLKeluar.js"></script>
 
 <style>
     .div-box{
@@ -34,18 +34,22 @@
 
     <div class="flat-box-content">
         <div class="div-box">
-            @(Html.Kendo().Grid<PostingNotaKlaimTreatyMasukDto>()
-                .Name("PostingNotaKlaimTreatyMasukGrid")
+            @(Html.Kendo().Grid<PostingNotaPremiXOLKeluarDto>()
+                .Name("PostingNotaPremiXOLKeluarGrid")
                 .DataSource(dataSource => dataSource.Ajax()
-                    .Read(read => read.Action("GetPostingNotaKlaimTreaties", "PostingNotaKlaimTreatyMasuk").Data("searchFilterPostingNotaKlaimTreatyMasuk"))
+                    .Read(read => read.Action("GetPostingNotaKlaimTreaties", "PostingNotaPremiXOLKeluar").Data("searchFilterPostingNotaPremiXOLKeluar"))
                     .Model(model => model.Id(p => p.nomor_nota))
                 )
                 .Columns(columns =>
                 {
                     columns.Select().Width(50);
                     columns.Bound(col => col.nomor_nota).Width(150).Title("Nomor Nota");
-                    columns.Bound(col => col.nm_rk).Width(150).Title("Nama Tertuju");
+                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
+                    columns.Bound(col => col.nm_mtu).Width(150).Title("Nama Mata Uang");
+                    columns.Bound(col => col.nm_ttj).Width(150).Title("Nama Tertuju");
+                    columns.Bound(col => col.ket_nt).Width(150).Title("Keterangan Nota");
                     columns.Bound(col => col.tgl_nt).Width(150).Title("Tanggal Nota").Format("{0: dd-MM-yyyy}");
+                    columns.Bound(col => col.nilai_nt).Width(150).Title("Nilai Nota").Format("{0:n2}");;
                 })
                 .Pageable(pager => pager
                     .Refresh(true)
@@ -58,7 +62,7 @@
                 .Scrollable()
                 .Height(450)
                 .Resizable(a=>a.Columns(true))
-                .Events(ev => ev.DataBound("gridAutoFit").Change("onChangeGridPostingNotaKlaimTreatyMasuk"))
+                .Events(ev => ev.DataBound("gridAutoFit").Change("onChangeGridPostingNotaPremiXOLKeluar"))
         
                 )    
         </div>
