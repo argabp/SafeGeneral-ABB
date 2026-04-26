@@ -1,4 +1,4 @@
-﻿@using ABB.Application.PostingNotaPremiXOLKeluars.Queries
+﻿@using ABB.Application.PostingNotaPremiFakultatifKeluars.Queries
 @using Kendo.Mvc.UI
 @using Microsoft.Extensions.Configuration
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
@@ -8,9 +8,9 @@
 
 @{
     Layout = "~/Modules/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Posting Nota Premi XOL Keluar";
+    ViewData["Title"] = "Posting Nota Premi Fakultatif Keluar";
 }
-<script src="~/Modules/PostingNotaPremiXOLKeluar/JS/postingNotaPremiXOLKeluar.js"></script>
+<script src="~/Modules/PostingNotaPremiFakultatifKeluar/JS/postingNotaPremiFakultatifKeluar.js"></script>
 
 <style>
     .div-box{
@@ -20,7 +20,7 @@
 <div class="flat-box">
     <div class="row">
         <div class="flat-box-title col-md-6">
-            Posting Nota Klaim Treaty Masuk
+            Posting Nota Premi Fakultatif Keluar
         </div>
 
         <div class="col-md-4">
@@ -28,26 +28,29 @@
         </div>
 
         <div class="col-md-2">
-            <button class="flat-btn-primary" onclick="postingNotaPremiXOLKeluar()">Posting</button>
+            <button class="flat-btn-primary" onclick="postingNotaPremiFakultatifKeluar()">Posting</button>
         </div>
     </div>
 
     <div class="flat-box-content">
         <div class="div-box">
-            @(Html.Kendo().Grid<PostingNotaPremiXOLKeluarDto>()
-                .Name("PostingNotaPremiXOLKeluarGrid")
+            @(Html.Kendo().Grid<PostingNotaPremiFakultatifKeluarDto>()
+                .Name("PostingNotaPremiFakultatifKeluarGrid")
                 .DataSource(dataSource => dataSource.Ajax()
-                    .Read(read => read.Action("GetPostingNotaPremiXOLKeluars", "PostingNotaPremiXOLKeluar").Data("searchFilterPostingNotaPremiXOLKeluar"))
-                    .Model(model => model.Id(p => p.nomor_nota))
+                    .Read(read => read.Action("GetPostingNotaPremiFakultatifKeluar", "PostingNotaPremiFakultatifKeluar").Data("searchFilterPostingNotaPremiFakultatifKeluar"))
+                    .Model(model => model.Id(p => p.Id))
                 )
                 .Columns(columns =>
                 {
                     columns.Select().Width(50);
-                    columns.Bound(col => col.nomor_nota).Width(200).Title("Nomor Nota");
+                    columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
                     columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
-                    columns.Bound(col => col.nm_mtu).Width(150).Title("Nama Mata Uang");
+                    columns.Bound(col => col.nm_scob).Width(150).Title("Nama Sub COB");
+                    columns.Bound(col => col.no_pol).Width(150).Title("Nomor Polis");
+                    columns.Bound(col => col.no_rsk).Width(150).Title("No Resiko");
+                    columns.Bound(col => col.nomor_nota).Width(200).Title("Nomor Nota");
+                    columns.Bound(col => col.nm_ttg).Width(150).Title("Nama Tertanggung");
                     columns.Bound(col => col.nm_ttj).Width(150).Title("Nama Tertuju");
-                    columns.Bound(col => col.ket_nt).Width(150).Title("Keterangan Nota");
                     columns.Bound(col => col.tgl_nt).Width(150).Title("Tanggal Nota").Format("{0: dd-MM-yyyy}");
                     columns.Bound(col => col.nilai_nt).Width(150).Title("Nilai Nota").Format("{0:n2}");;
                 })
@@ -62,7 +65,7 @@
                 .Scrollable()
                 .Height(450)
                 .Resizable(a=>a.Columns(true))
-                .Events(ev => ev.DataBound("gridAutoFit").Change("onChangeGridPostingNotaPremiXOLKeluar"))
+                .Events(ev => ev.DataBound("gridAutoFit").Change("onChangeGridPostingNotaPremiFakultatifKeluar"))
         
                 )    
         </div>

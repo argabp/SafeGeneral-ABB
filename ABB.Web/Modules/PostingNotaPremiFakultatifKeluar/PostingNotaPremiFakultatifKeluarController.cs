@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ABB.Application.Common.Grids.Models;
-using ABB.Application.PostingNotaKlaimTreatyMasuks.Commands;
-using ABB.Application.PostingNotaKlaimTreatyMasuks.Queries;
+using ABB.Application.PostingNotaPremiFakultatifKeluars.Commands;
+using ABB.Application.PostingNotaPremiFakultatifKeluars.Queries;
 using ABB.Web.Modules.Base;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ABB.Web.Modules.PostingNotaKlaimTreatyMasuk
+namespace ABB.Web.Modules.PostingNotaPremiFakultatifKeluar
 {
-    public class PostingNotaKlaimTreatyMasukController : AuthorizedBaseController
+    public class PostingNotaPremiFakultatifKeluarController : AuthorizedBaseController
     {
         public ActionResult Index()
         {
@@ -20,9 +20,9 @@ namespace ABB.Web.Modules.PostingNotaKlaimTreatyMasuk
             return View();
         }
         
-        public async Task<ActionResult> GetPostingNotaKlaimTreatyMasuk(GridRequest grid)
+        public async Task<ActionResult> GetPostingNotaPremiFakultatifKeluar(GridRequest grid)
         {
-            var result = await Mediator.Send(new GetPostingNotaKlaimTreatyMasuksQuery()
+            var result = await Mediator.Send(new GetPostingNotaPremiFakultatifKeluarsQuery()
             {
                 Grid = grid
             });
@@ -31,11 +31,11 @@ namespace ABB.Web.Modules.PostingNotaKlaimTreatyMasuk
         }
         
         [HttpPost]
-        public async Task<ActionResult> Posting([FromBody] List<PostingNotaKlaimTreatyMasukModel> model)
+        public async Task<ActionResult> Posting([FromBody] List<PostingNotaPremiFakultatifKeluarModel> model)
         {
             try
             {
-                var command = new PostingNotaKlaimTreatyMasukCommand()
+                var command = new PostingNotaPremiFakultatifKeluarCommand()
                 {
                     Data = model
                 };

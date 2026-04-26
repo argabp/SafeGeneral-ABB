@@ -20,7 +20,7 @@ namespace ABB.Web.Modules.PostingNotaPremiTreatyKeluar
             return View();
         }
         
-        public async Task<ActionResult> GetPostingNotaKlaimTreaties(GridRequest grid)
+        public async Task<ActionResult> GetPostingNotaPremiTreatyKeluars(GridRequest grid)
         {
             var result = await Mediator.Send(new GetPostingNotaPremiTreatyKeluarsQuery()
             {

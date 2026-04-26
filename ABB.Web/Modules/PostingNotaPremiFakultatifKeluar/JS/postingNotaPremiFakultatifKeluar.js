@@ -6,11 +6,11 @@ var selectedRowsData = [];
 
 function searchKeyword_OnKeyUp() {
     $('#SearchKeyword').keyup(function () {
-        refreshGrid("#PostingNotaPremiTreatyKeluarGrid");
+        refreshGrid("#PostingNotaPremiFakultatifKeluarGrid");
     });
 }
 
-function searchFilterPostingNotaPremiTreatyKeluar(e) {
+function searchFilterPostingNotaPremiFakultatifKeluar(e) {
     const gridReq = buildGridRequest(e, "SearchKeyword");
 
     return {
@@ -18,7 +18,7 @@ function searchFilterPostingNotaPremiTreatyKeluar(e) {
     };
 }
 
-function onChangeGridPostingNotaPremiTreatyKeluar(e) {
+function onChangeGridPostingNotaPremiFakultatifKeluar(e) {
     var grid = e.sender;
     var selectedIds = grid.selectedKeyNames();
 
@@ -50,25 +50,25 @@ function onChangeGridPostingNotaPremiTreatyKeluar(e) {
     });
 }
 
-function postingNotaPremiTreatyKeluar(){
+function postingNotaPremiFakultatifKeluar(){
     showConfirmation('Confirmation', `Are you sure you want to posting?`,
         function () {
-            showProgressOnGrid('#PostingNotaPremiTreatyKeluarGrid');
+            showProgressOnGrid('#PostingNotaPremiFakultatifKeluarGrid');
 
-            ajaxPost("/PostingNotaPremiTreatyKeluar/Posting", JSON.stringify(selectedRowsData),
+            ajaxPost("/PostingNotaPremiFakultatifKeluar/Posting", JSON.stringify(selectedRowsData),
                 function (response) {
                     if(response.Status === "OK"){
                         showMessage("Success", "Posting Sukses")
                     } else {
                         showMessage('Error', response.Message);
                     }
-                    var grid = $("#PostingNotaPremiTreatyKeluarGrid").data("kendoGrid");
+                    var grid = $("#PostingNotaPremiFakultatifKeluarGrid").data("kendoGrid");
                     if (grid) {
                         grid.clearSelection();
                     }
                     selectedRowsData = [];
-                    refreshGrid('#PostingNotaPremiTreatyKeluarGrid');
-                    closeProgressOnGrid('#PostingNotaPremiTreatyKeluarGrid');
+                    refreshGrid('#PostingNotaPremiFakultatifKeluarGrid');
+                    closeProgressOnGrid('#PostingNotaPremiFakultatifKeluarGrid');
                 },
             );
         }

@@ -37,7 +37,7 @@
             @(Html.Kendo().Grid<PostingNotaPremiTreatyKeluarDto>()
                 .Name("PostingNotaPremiTreatyKeluarGrid")
                 .DataSource(dataSource => dataSource.Ajax()
-                    .Read(read => read.Action("GetPostingNotaKlaimTreaties", "PostingNotaPremiTreatyKeluar").Data("searchFilterPostingNotaPremiTreatyKeluar"))
+                    .Read(read => read.Action("GetPostingNotaPremiTreatyKeluars", "PostingNotaPremiTreatyKeluar").Data("searchFilterPostingNotaPremiTreatyKeluar"))
                     .Model(model => model.Id(p => p.Id))
                 )
                 .Columns(columns =>

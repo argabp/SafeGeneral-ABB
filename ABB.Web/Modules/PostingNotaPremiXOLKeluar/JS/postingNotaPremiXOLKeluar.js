@@ -27,13 +27,13 @@ function onChangeGridPostingNotaPremiXOLKeluar(e) {
     var currentData = grid.dataSource.view();
 
     currentData.forEach(item => {
-        var index = selectedRowsData.findIndex(x => x.Id == item.Id);
-        var isSelected = selectedIds.includes(item.Id.toString());
+        var index = selectedRowsData.findIndex(x => x.id == item.id);
+        var isSelected = selectedIds.includes(item.id.toString());
 
         if (isSelected && index === -1) {
             // If selected and not in our list, add it
             selectedRowsData.push({
-                Id: item.Id,
+                id: item.id,
                 jns_sb_nt: item.jns_sb_nt,
                 kd_cb: item.kd_cb,
                 jns_tr: item.jns_tr,
