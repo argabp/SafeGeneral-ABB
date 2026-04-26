@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using ABB.Domain.Entities;
 using AutoMapper;
@@ -11,8 +12,6 @@ namespace ABB.Application.Alokasis.Commands
 {
     public class SaveDetailAlokasiCommand : IRequest, IMapFrom<DetailAlokasi>
     {
-        public string DatabaseName { get; set; }
-        
         public string kd_cb { get; set; }
 
         public string kd_cob { get; set; }
@@ -70,37 +69,33 @@ namespace ABB.Application.Alokasis.Commands
 
     public class SaveDetailAlokasiCommandHandler : IRequestHandler<SaveDetailAlokasiCommand>
     {
-        private readonly IDbContextFactory _contextFactory;
+        private readonly IDbContextPst _dbContextPst;
         private readonly IMapper _mapper;
-        private readonly IDbConnectionFactory _connectionFactory;
         private readonly ILogger<SaveDetailAlokasiCommandHandler> _logger;
 
-        public SaveDetailAlokasiCommandHandler(IDbContextFactory contextFactory, IMapper mapper,
-            IDbConnectionFactory connectionFactory, ILogger<SaveDetailAlokasiCommandHandler> logger)
+        public SaveDetailAlokasiCommandHandler(IDbContextPst dbContextPst, IMapper mapper,
+            ILogger<SaveDetailAlokasiCommandHandler> logger)
         {
-            _contextFactory = contextFactory;
+            _dbContextPst = dbContextPst;
             _mapper = mapper;
-            _connectionFactory = connectionFactory;
             _logger = logger;
         }
 
         public async Task<Unit> Handle(SaveDetailAlokasiCommand request, CancellationToken cancellationToken)
         {
-            try
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
             {
-                var dbContext = _contextFactory.CreateDbContext(request.DatabaseName);
-                
-                var entity = await dbContext.DetailAlokasi.FindAsync(request.kd_cb, 
-                    request.kd_cob, request.kd_scob, request.kd_thn, request.no_pol, request.no_updt, 
-                    request.no_rsk, request.kd_endt, request.no_updt_reas, request.kd_jns_sor, 
+                var entity = await _dbContextPst.DetailAlokasi.FindAsync(request.kd_cb,
+                    request.kd_cob, request.kd_scob, request.kd_thn, request.no_pol, request.no_updt,
+                    request.no_rsk, request.kd_endt, request.no_updt_reas, request.kd_jns_sor,
                     request.kd_grp_sor, request.kd_rk_sor, request.kd_grp_sb_bis);
-            
+
                 if (entity == null)
                 {
                     var detailAlokasi = _mapper.Map<DetailAlokasi>(request);
-                    dbContext.DetailAlokasi.Add(detailAlokasi);
+                    _dbContextPst.DetailAlokasi.Add(detailAlokasi);
 
-                    await dbContext.SaveChangesAsync(cancellationToken);
+                    await _dbContextPst.SaveChangesAsync(cancellationToken);
 
                 }
                 else
@@ -114,34 +109,29 @@ namespace ABB.Application.Alokasis.Commands
                     entity.stn_adj_reas = request.stn_adj_reas;
                     entity.nilai_adj_reas = request.nilai_adj_reas;
 
-                    if(entity.kd_cb.Length != 5)
+                    if (entity.kd_cb.Length != 5)
                         for (int sequence = entity.kd_cb.Length; sequence < 5; sequence++)
                         {
                             entity.kd_cb += " ";
                         }
-            
-                    if(entity.kd_cob.Length != 2)
+
+                    if (entity.kd_cob.Length != 2)
                         for (int sequence = entity.kd_cob.Length; sequence < 2; sequence++)
                         {
                             entity.kd_cob += " ";
                         }
 
-                    if(entity.kd_scob.Length != 5)
+                    if (entity.kd_scob.Length != 5)
                         for (int sequence = entity.kd_scob.Length; sequence < 5; sequence++)
                         {
                             entity.kd_scob += " ";
                         }
-            
-                    await dbContext.SaveChangesAsync(cancellationToken);
+
+                    await _dbContextPst.SaveChangesAsync(cancellationToken);
                 }
 
                 return Unit.Value;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e.InnerException == null ? e.Message : e.InnerException.Message);
-                throw e.InnerException ?? e;
-            }
+            }, _logger);
         }
     }
 }

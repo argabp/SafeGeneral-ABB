@@ -1,0 +1,64 @@
+﻿@using ABB.Application.Alokasis.Queries
+@using Kendo.Mvc.UI
+
+<script src="~/Modules/Alokasi/Components/Alokasi/alokasi.js"></script>
+
+<div class="window-body">
+    <div class="row">
+        <div class="col-md-4">
+            <input type="text" class="search-field-top" style="height: 1em" id="SearchKeywordAlokasi" placeholder="Search"/>
+        </div>
+        <div class="offset-5"></div>
+        <div class="col-md-2" id="divAddAlokasi">
+            <button class="flat-btn-primary" style="height: 1em" id="btnAddNewAlokasi">Add Alokasi</button>
+        </div>
+    </div>
+    
+    @(Html.Kendo().Grid<AlokasiDto>()
+        .Name("AlokasiGrid")
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetAlokasis", "Alokasi").Data("searchFilterAlokasi"))
+        )
+        .Columns(columns =>
+        {
+            columns.Command(command =>
+            {
+                command.Custom("ViewAlokasi")
+                    .Text("View")
+                    .IconClass("fa fa-eye")
+                    .HtmlAttributes(new { title = "View" })
+                    .Click("btnViewAlokasi_OnClick");
+                command.Custom("DeleteAlokasi")
+                    .Text("Delete")
+                    .IconClass("k-icon k-i-delete")
+                    .HtmlAttributes(new { title = "Delete" })
+                    .Click("btnDeleteAlokasi_OnClick");
+            }).Width(150).Locked(true).Title("Action");
+            columns.Bound(col => col.no_rsk).Width(150).Title("Nomor Risiko");
+            columns.Bound(col => col.kd_endt).Width(150).Title("Kode Endorsment").ClientTemplate("#= data.kd_endt == 'I' ? 'Insert' : 'Delete' #");;
+            columns.Bound(col => col.no_updt_reas).Width(150).Title("No Update Reas");
+            columns.Bound(col => col.nm_mtu_prm).Width(150).Title("Mata Uang");
+            columns.Bound(col => col.nilai_ttl_ptg).Width(150).Title("Nilai Pertanggungan").Format("{0:n2}");
+            columns.Bound(col => col.nilai_prm).Width(150).Title("Nilai Premi").Format("{0:n2}");
+        })
+        .Pageable(pager => pager
+            .Refresh(true)
+            .Info(true)
+            .PageSizes(true)
+        )
+        .Sortable()
+        .Filterable()
+        .Scrollable()
+        .Selectable()
+        .Height(450)
+        .Resizable(a => a.Columns(true))
+        .Events(ev => ev.DataBound("onAlokasiDataBound").Change("OnAlokasiChange"))
+    
+        )
+    
+    <div class="window-footer">
+        <button type="button" id="btn-next-alokasi" class="btn btn-primary space-right">
+            Next <span class="fa fa-arrow-right"></span>
+        </button>
+    </div>
+</div>

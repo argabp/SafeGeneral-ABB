@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.Alokasis.Commands
 {
-    public class DeleteDetailAlokasiCommand : IRequest
+    public class DeleteAlokasiCommand : IRequest
     {
         public string kd_cb { get; set; }
 
@@ -29,40 +29,32 @@ namespace ABB.Application.Alokasis.Commands
         public string kd_endt { get; set; }
 
         public Int16 no_updt_reas { get; set; }
-
-        public string kd_jns_sor { get; set; }
-
-        public string kd_grp_sor { get; set; }
-
-        public string kd_rk_sor { get; set; }
-        public string kd_grp_sb_bis { get; set; }
     }
 
-    public class DeleteDetailAlokasiCommandHandler : IRequestHandler<DeleteDetailAlokasiCommand>
+    public class DeleteAlokasiCommandHandler : IRequestHandler<DeleteAlokasiCommand>
     {
         private readonly IDbContextPst _dbContextPst;
         private readonly ILogger<GetKodeTOLPSTQueryHandler> _logger;
 
-        public DeleteDetailAlokasiCommandHandler(IDbContextPst dbContextPst,
+        public DeleteAlokasiCommandHandler(IDbContextPst dbContextPst,
             ILogger<GetKodeTOLPSTQueryHandler> logger)
         {
             _dbContextPst = dbContextPst;
             _logger = logger;
         }
 
-        public async Task<Unit> Handle(DeleteDetailAlokasiCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DeleteAlokasiCommand request, CancellationToken cancellationToken)
         {
             return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
             {
-                var entity = await _dbContextPst.DetailAlokasi.FindAsync(request.kd_cb,
+                var entity = await _dbContextPst.Alokasi.FindAsync(request.kd_cb,
                     request.kd_cob, request.kd_scob, request.kd_thn, request.no_pol, request.no_updt,
-                    request.no_rsk, request.kd_endt, request.no_updt_reas, request.kd_jns_sor,
-                    request.kd_grp_sor, request.kd_rk_sor, request.kd_grp_sb_bis);
+                    request.no_rsk, request.kd_endt, request.no_updt_reas);
 
                 if (entity == null)
                     throw new NotFoundException();
 
-                _dbContextPst.DetailAlokasi.Remove(entity);
+                _dbContextPst.Alokasi.Remove(entity);
 
                 await _dbContextPst.SaveChangesAsync(cancellationToken);
 

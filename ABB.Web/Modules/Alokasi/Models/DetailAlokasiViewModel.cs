@@ -1,12 +1,12 @@
 using System;
 using ABB.Application.Alokasis.Commands;
-using ABB.Application.Alokasis.Queries;
 using ABB.Application.Common.Interfaces;
+using ABB.Domain.Entities;
 using AutoMapper;
 
-namespace ABB.Web.Modules.Akseptasi.Models
+namespace ABB.Web.Modules.Alokasi.Models
 {
-    public class DetailAlokasiViewModel : IMapFrom<DetailAlokasiDto>
+    public class DetailAlokasiViewModel : IMapFrom<DetailAlokasi>
     {
         public string kd_cb { get; set; }
 
@@ -57,9 +57,11 @@ namespace ABB.Web.Modules.Akseptasi.Models
         public string kd_grp_sb_bis { get; set; }
         public string kd_rk_sb_bis { get; set; }
 
+        public bool IsView { get; set; }
+
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<DetailAlokasiDto, DetailAlokasiViewModel>();
+            profile.CreateMap<DetailAlokasi, DetailAlokasiViewModel>();
             profile.CreateMap<DetailAlokasiViewModel, SaveDetailAlokasiCommand>();
         }
     }

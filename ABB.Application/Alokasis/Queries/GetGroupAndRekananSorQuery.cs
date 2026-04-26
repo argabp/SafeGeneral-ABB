@@ -2,14 +2,15 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.Alokasis.Queries
 {
     public class GetGroupAndRekananSorQuery : IRequest<string>
     {
-        public string DatabaseName { get; set; }
         public string kd_jns_sor { get; set; }
         public string kd_cob { get; set; }
         public string kd_cb { get; set; }
@@ -20,22 +21,24 @@ namespace ABB.Application.Alokasis.Queries
 
     public class GetGroupAndRekananSorQueryHandler : IRequestHandler<GetGroupAndRekananSorQuery, string>
     {
-        private readonly IDbConnectionFactory _connectionFactory;
+        private readonly IDbConnectionPst _dbConnectionPst;
+        private readonly ILogger<GetGroupAndRekananSorQueryHandler> _logger;
 
-        public GetGroupAndRekananSorQueryHandler(IDbConnectionFactory connectionFactory)
+        public GetGroupAndRekananSorQueryHandler(IDbConnectionPst dbConnectionPst,
+            ILogger<GetGroupAndRekananSorQueryHandler> logger)
         {
-            _connectionFactory = connectionFactory;
+            _dbConnectionPst = dbConnectionPst;
+            _logger = logger;
         }
 
         public async Task<string> Handle(GetGroupAndRekananSorQuery request, CancellationToken cancellationToken)
         {
-            _connectionFactory.CreateDbConnection(request.DatabaseName);
-            return (await _connectionFactory.QueryProc<string>("spe_ri05e_02",
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () => (await _dbConnectionPst.QueryProc<string>("spe_ri05e_02",
                 new
                 {
                     request.kd_jns_sor, request.kd_cob, request.kd_cb,
                     request.thn_uw, request.nilai_ttl_ptg, request.nilai_prm
-                })).FirstOrDefault();
+                })).FirstOrDefault(), _logger);
         }
     }
 }

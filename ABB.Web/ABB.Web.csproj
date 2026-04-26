@@ -5357,9 +5357,6 @@
       <None Update="Modules\EntriNota\JS\entriNota.index.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Modules\Akseptasi\Components\Alokasi\alokasi.js">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
       <None Update="Modules\PembatalanAkseptasi\JS\pembatalanAkseptasi.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
@@ -5929,9 +5926,6 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Modules\Inquiry\Components\Inquiry\inquiry.js">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Modules\Inquiry\Components\InquiryAlokasi\alokasi.js">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Modules\Inquiry\Components\InquiryCoverage\coverage.js">

@@ -1,11 +1,11 @@
 ﻿@using System.Globalization
 @using Kendo.Mvc.UI
-@model ABB.Web.Modules.Akseptasi.Models.DetailAlokasiViewModel
+@model ABB.Web.Modules.Alokasi.Models.DetailAlokasiViewModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Kendo.Mvc
 @addTagHelper *, ABB.Web
 
-<script src="~/Modules/Akseptasi/JS/akseptasi.alokasi.js"></script>
+<script src="~/Modules/Alokasi/JS/alokasi.detail.form.js"></script>
 
 <style>
     p {
@@ -36,11 +36,11 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Jenis Sor</label>
                 <div class="col-sm-6">
-                    <kendo-dropdownlist for="kd_jns_sor" style="width: 100%" on-change="OnKodeJenisSorChange" option-label="Pilih Jenis Sor" readonly="true"
+                    <kendo-dropdownlist for="kd_jns_sor" style="width: 100%" on-change="OnKodeJenisSorChange" option-label="Pilih Jenis Sor"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
-                                <read url="@Url.Action("GetJenisSor", "Akseptasi")"/>
+                                <read url="@Url.Action("GetJenisSor", "Alokasi")"/>
                             </transport>
                         </datasource>
                     </kendo-dropdownlist>
@@ -52,11 +52,11 @@
                 <input type="hidden" id="temp_kd_rk_sor" value="@Model.kd_rk_sor">
                 <label class="col-sm-6">Kode Sor</label>
                 <div class="col-sm-6">
-                    <kendo-dropdownlist for="kd_rk_sor" style="width: 100%" readonly="true"
+                    <kendo-dropdownlist for="kd_rk_sor" style="width: 100%"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
-                                <read url="@Url.Action("GetRekananSor", "Akseptasi")"/>
+                                <read url="@Url.Action("GetRekananSor", "Alokasi")"/>
                             </transport>
                         </datasource>
                     </kendo-dropdownlist>
@@ -107,14 +107,14 @@
             <div class="col-sm-6 row">
                 <label class="col-sm-6">Rate Adjustment</label>
                 <div class="col-sm-3">
-                    <kendo-numerictextbox spinners="false" decimals="4" name="pst_adj_reas_alokasi" value="@pst_adj_reas_alokasi" on-change="OnAdjReasChange" style="width: 100%"/>
+                    <kendo-numerictextbox spinners="false" decimals="4" format="n4" name="pst_adj_reas_alokasi" value="@pst_adj_reas_alokasi" on-change="OnAdjReasChange" style="width: 100%"/>
                 </div>
                 <div class="col-sm-3">
                     <kendo-dropdownlist name="stn_adj_reas_alokasi" style="width: 100%" on-change="OnAdjReasChange" value="@stn_adj_reas_alokasi"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
-                                <read url="@Url.Action("GetRatePremi", "Akseptasi")"/>
+                                <read url="@Url.Action("GetRatePremi", "Alokasi")"/>
                             </transport>
                         </datasource>
                     </kendo-dropdownlist>
@@ -132,7 +132,7 @@
     </form>
 
     <div class="window-footer">
-        <button type="button" id="btn-save-akseptasiAlokasi" class="btn btn-success space-right">
+        <button type="button" id="btn-save-alokasiDetail" class="btn btn-success space-right">
             <span class="fa fa-save"></span> Save
         </button>
     </div>

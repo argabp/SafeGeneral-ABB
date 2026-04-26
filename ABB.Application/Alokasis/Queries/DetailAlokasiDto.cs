@@ -7,6 +7,8 @@ namespace ABB.Application.Alokasis.Queries
 {
     public class DetailAlokasiDto : IMapFrom<DetailAlokasi>
     {
+        public string Id => $"{kd_cb}|{kd_cob}|{kd_scob}|{kd_thn}|{no_pol}|{no_updt}|{no_rsk}|{kd_endt}|{no_updt_reas}|{kd_jns_sor}|{kd_grp_sor}|{kd_rk_sor}";
+        
         public string kd_cb { get; set; }
 
         public string kd_cob { get; set; }

@@ -2,14 +2,15 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.Alokasis.Commands
 {
     public class ProsesAlokasiCommand : IRequest<string>
     {
-        public string DatabaseName { get; set; }
         public string kd_cb { get; set; }
         public string kd_cob { get; set; }
         public string kd_scob { get; set; }
@@ -23,25 +24,26 @@ namespace ABB.Application.Alokasis.Commands
 
     public class ProsesAlokasiCommandHandler : IRequestHandler<ProsesAlokasiCommand, string>
     {
-        private readonly IDbConnectionFactory _connectionFactory;
+        private readonly IDbConnectionPst _dbConnectionPst;
+        private readonly ILogger<ProsesAlokasiCommandHandler> _logger;
 
-        public ProsesAlokasiCommandHandler(IDbConnectionFactory connectionFactory)
+        public ProsesAlokasiCommandHandler(IDbConnectionPst dbConnectionPst,
+            ILogger<ProsesAlokasiCommandHandler> logger)
         {
-            _connectionFactory = connectionFactory;
+            _dbConnectionPst = dbConnectionPst;
+            _logger = logger;
         }
 
         public async Task<string> Handle(ProsesAlokasiCommand request, CancellationToken cancellationToken)
         {
-            _connectionFactory.CreateDbConnection(request.DatabaseName);
-            return (await _connectionFactory.QueryProc<string>("spp_ri04p_07",
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () => 
+                (await _dbConnectionPst.QueryProc<string>("spp_ri04p_07",
                 new
                 {
                     request.kd_cb, request.kd_cob, request.kd_scob,
                     request.kd_thn, request.no_pol, request.no_updt,
                     tgl_closing_reas = request.tgl_closing, request.st_tty, request.flag_survey
-                })).FirstOrDefault();
-
-
+                })).FirstOrDefault(), _logger);
         }
     }
 }

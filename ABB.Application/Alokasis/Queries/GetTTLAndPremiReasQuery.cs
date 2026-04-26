@@ -1,14 +1,15 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.Alokasis.Queries
 {
     public class GetTTLAndPremiReasQuery : IRequest<string>
     {
-        public string DatabaseName { get; set; }
         public decimal pst_share { get; set; }
         public decimal nilai_prm_reas { get; set; }
         public string kd_jns_sor { get; set; }
@@ -19,22 +20,24 @@ namespace ABB.Application.Alokasis.Queries
 
     public class GetTTLAndPremiReasQueryHandler : IRequestHandler<GetTTLAndPremiReasQuery, string>
     {
-        private readonly IDbConnectionFactory _connectionFactory;
+        private readonly IDbConnectionPst _dbConnectionPst;
+        private readonly ILogger<GetTTLAndPremiReasQueryHandler> _logger;
 
-        public GetTTLAndPremiReasQueryHandler(IDbConnectionFactory connectionFactory)
+        public GetTTLAndPremiReasQueryHandler(IDbConnectionPst dbConnectionPst,
+            ILogger<GetTTLAndPremiReasQueryHandler> logger)
         {
-            _connectionFactory = connectionFactory;
+            _dbConnectionPst = dbConnectionPst;
+            _logger = logger;
         }
 
         public async Task<string> Handle(GetTTLAndPremiReasQuery request, CancellationToken cancellationToken)
         {
-            _connectionFactory.CreateDbConnection(request.DatabaseName);
-            return (await _connectionFactory.QueryProc<string>("spe_ri05e_03",
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () => (await _dbConnectionPst.QueryProc<string>("spe_ri05e_03",
                 new
                 {
-                    request.pst_share, request.nilai_prm_reas, request.kd_jns_sor, 
-                    request.nilai_prm, request.net_prm, request.nilai_ttl_ptg 
-                })).FirstOrDefault();
+                    request.pst_share, request.nilai_prm_reas, request.kd_jns_sor,
+                    request.nilai_prm, request.net_prm, request.nilai_ttl_ptg
+                })).FirstOrDefault(), _logger);
         }
     }
 }

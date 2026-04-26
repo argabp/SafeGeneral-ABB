@@ -8,11 +8,12 @@ using MediatR;
 
 namespace ABB.Application.Alokasis.Queries
 {
-    public class GetDetailAlokasisQuery : IRequest<GridResponse<DetailAlokasiDto>>
+    public class GetAlokasisQuery : IRequest<GridResponse<AlokasiDto>>
     {
         public GridRequest Grid { get; set; }
-        public string kd_cb { get; set; }
         
+        public string kd_cb { get; set; }
+
         public string kd_cob { get; set; }
 
         public string kd_scob { get; set; }
@@ -22,33 +23,28 @@ namespace ABB.Application.Alokasis.Queries
         public string no_pol { get; set; }
 
         public Int16 no_updt { get; set; }
-
-        public Int16 no_rsk { get; set; }
-        
-        public string kd_endt { get; set; }
     }
 
-    public class GetDetailAlokasisQueryHandler : IRequestHandler<GetDetailAlokasisQuery, GridResponse<DetailAlokasiDto>>
+    public class GetAlokasisQueryHandler : IRequestHandler<GetAlokasisQuery, GridResponse<AlokasiDto>>
     {
         private readonly IGridQueryEngine _gridEngine;
 
-        public GetDetailAlokasisQueryHandler(IGridQueryEngine gridEngine)
+        public GetAlokasisQueryHandler(IGridQueryEngine gridEngine)
         {
             _gridEngine = gridEngine;
         }
 
-        public async Task<GridResponse<DetailAlokasiDto>> Handle(GetDetailAlokasisQuery request, CancellationToken cancellationToken)
+        public async Task<GridResponse<AlokasiDto>> Handle(GetAlokasisQuery request, CancellationToken cancellationToken)
         {
-            var config = DetailAlokasiConfig.Create();
+            var config = AlokasiConfig.Create();
 
-            return await _gridEngine.QueryAsyncPST<DetailAlokasiDto>(
+            return await _gridEngine.QueryAsyncPST<AlokasiDto>(
                 request.Grid,
                 config,
                 new
                 {
                     request.kd_cb, request.kd_cob, request.kd_scob,
-                    request.kd_thn, request.no_pol, request.no_updt, 
-                    request.no_rsk, request.kd_endt
+                    request.kd_thn, request.no_pol, request.no_updt
                 }
             );
         }

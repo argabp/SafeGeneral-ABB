@@ -29,6 +29,8 @@ namespace ABB.Application.Common.Interfaces
         DbSet<NotaTreatyMasuk> NotaTreatyMasuk { get; set; }
         DbSet<TransaksiTreatyMasuk> TransaksiTreatyMasuk { get; set; }
         DbSet<MutasiKlaim> MutasiKlaim { get; set; }
+        DbSet<Alokasi> Alokasi { get; set; }
+        DbSet<DetailAlokasi> DetailAlokasi { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

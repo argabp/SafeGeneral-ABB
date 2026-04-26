@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.Alokasis.Queries
 {
-    public class GetDetailAlokasiQuery : IRequest<DetailAlokasi>
+    public class GetAlokasiQuery : IRequest<Alokasi>
     {
         public string kd_cb { get; set; }
 
@@ -29,40 +29,31 @@ namespace ABB.Application.Alokasis.Queries
         public string kd_endt { get; set; }
 
         public Int16 no_updt_reas { get; set; }
-
-        public string kd_jns_sor { get; set; }
-
-        public string kd_grp_sor { get; set; }
-
-        public string kd_rk_sor { get; set; }
-
-        public string kd_grp_sb_bis { get; set; }
     }
 
-    public class GetDetailAlokasiQueryHandler : IRequestHandler<GetDetailAlokasiQuery, DetailAlokasi>
+    public class GetAlokasiQueryHandler : IRequestHandler<GetAlokasiQuery, Alokasi>
     {
         private readonly IDbContextFactory _contextFactory;
         private readonly IDbContextPst _dbContextPst;
-        private readonly ILogger<GetDetailAlokasiQueryHandler> _logger;
+        private readonly ILogger<GetAlokasiQueryHandler> _logger;
 
-        public GetDetailAlokasiQueryHandler(IDbContextPst dbContextPst,
-            ILogger<GetDetailAlokasiQueryHandler> logger)
+        public GetAlokasiQueryHandler(IDbContextPst dbContextPst,
+            ILogger<GetAlokasiQueryHandler> logger)
         {
             _dbContextPst = dbContextPst;
             _logger = logger;
         }
 
-        public async Task<DetailAlokasi> Handle(GetDetailAlokasiQuery request, CancellationToken cancellationToken)
+        public async Task<Alokasi> Handle(GetAlokasiQuery request, CancellationToken cancellationToken)
         {
             return await ExceptionHelper.ExecuteWithLoggingAsync(async () =>
             {
-                var entity = await _dbContextPst.DetailAlokasi.FindAsync(request.kd_cb, 
+                var entity = await _dbContextPst.Alokasi.FindAsync(request.kd_cb, 
                     request.kd_cob, request.kd_scob, request.kd_thn, request.no_pol, request.no_updt, 
-                    request.no_rsk, request.kd_endt, request.no_updt_reas, request.kd_jns_sor, 
-                    request.kd_grp_sor, request.kd_rk_sor, request.kd_grp_sb_bis);
+                    request.no_rsk, request.kd_endt, request.no_updt_reas);
                                          
                 if (entity == null)
-                    throw new NullReferenceException("Detail Alokasi tidak dapat ditemukan");
+                    throw new NullReferenceException("Alokasi tidak dapat ditemukan");
 
                 return entity;
             }, _logger);

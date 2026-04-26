@@ -1,11 +1,11 @@
 ﻿@using System.Globalization
 @using Kendo.Mvc.UI
-@model ABB.Web.Modules.Inquiry.Models.DetailAlokasiViewModel
+@model ABB.Web.Modules.Alokasi.Models.DetailAlokasiViewModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Kendo.Mvc
 @addTagHelper *, ABB.Web
 
-<script src="~/Modules/Akseptasi/JS/akseptasi.alokasi.js"></script>
+<script src="~/Modules/Alokasi/JS/alokasi.detail.form.js"></script>
 
 <style>
     p {
@@ -36,11 +36,11 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Jenis Sor</label>
                 <div class="col-sm-6">
-                    <kendo-dropdownlist for="kd_jns_sor" style="width: 100%" on-change="OnKodeJenisSorChange" option-label="Pilih Jenis Sor" readonly="true"
+                    <kendo-dropdownlist for="kd_jns_sor" style="width: 100%" on-change="OnKodeJenisSorChange" readonly="true" option-label="Pilih Jenis Sor"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
-                                <read url="@Url.Action("GetJenisSor", "Inquiry")"/>
+                                <read url="@Url.Action("GetJenisSor", "Alokasi")"/>
                             </transport>
                         </datasource>
                     </kendo-dropdownlist>
@@ -56,7 +56,7 @@
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
-                                <read url="@Url.Action("GetRekananSor", "Inquiry")"/>
+                                <read url="@Url.Action("GetRekananSor", "Alokasi")"/>
                             </transport>
                         </datasource>
                     </kendo-dropdownlist>
@@ -67,7 +67,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">TSI</label>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox decimals="2" spinners="false" for="nilai_ttl_ptg_reas" readonly="true" style="width: 100%"/>
+                    <kendo-numerictextbox decimals="2" spinners="false" readonly="true" for="nilai_ttl_ptg_reas" on-change="OnPtgReasChange" style="width: 100%"/>
                 </div>
             </div>
         </div>
@@ -75,7 +75,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Share (%)</label>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox decimals="2" spinners="false" for="pst_share" readonly="true" style="width: 100%"/>
+                    <kendo-numerictextbox decimals="2" spinners="false" readonly="true" for="pst_share" on-change="OnPstShareChange" style="width: 100%"/>
                 </div>
             </div>
         </div>
@@ -83,7 +83,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Premi</label>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox decimals="2" spinners="false" for="nilai_prm_reas" style="width: 100%" readonly="true"/>
+                    <kendo-numerictextbox decimals="2" spinners="false" readonly="true" for="nilai_prm_reas" style="width: 100%"/>
                 </div>
             </div>
         </div>
@@ -91,7 +91,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Pst (%)</label>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox decimals="2" spinners="false" name="pst_kms_reas_alokasi" value="@pst_kms_reas_alokasi" readonly="true" style="width: 100%"/>
+                    <kendo-numerictextbox decimals="2" spinners="false" readonly="true" name="pst_kms_reas_alokasi" value="@pst_kms_reas_alokasi" on-change="OnPstKmsReasChange" style="width: 100%"/>
                 </div>
             </div>
         </div>
@@ -99,7 +99,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Komisi</label>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox decimals="2" spinners="false" name="nilai_kms_reas_alokasi" value="@nilai_kms_reas_alokasi" style="width: 100%" readonly="true"/>
+                    <kendo-numerictextbox decimals="2" spinners="false" readonly="true" name="nilai_kms_reas_alokasi" value="@nilai_kms_reas_alokasi" style="width: 100%"/>
                 </div>
             </div>
         </div>
@@ -107,14 +107,14 @@
             <div class="col-sm-6 row">
                 <label class="col-sm-6">Rate Adjustment</label>
                 <div class="col-sm-3">
-                    <kendo-numerictextbox spinners="false" decimals="2" name="pst_adj_reas_alokasi" value="@pst_adj_reas_alokasi" readonly="true" style="width: 100%"/>
+                    <kendo-numerictextbox spinners="false" decimals="4" readonly="true" format="n4" name="pst_adj_reas_alokasi" value="@pst_adj_reas_alokasi" on-change="OnAdjReasChange" style="width: 100%"/>
                 </div>
                 <div class="col-sm-3">
-                    <kendo-dropdownlist name="stn_adj_reas_alokasi" style="width: 100%" readonly="true" value="@stn_adj_reas_alokasi"
+                    <kendo-dropdownlist name="stn_adj_reas_alokasi" style="width: 100%" readonly="true" on-change="OnAdjReasChange" value="@stn_adj_reas_alokasi"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
-                                <read url="@Url.Action("GetRatePremi", "Inquiry")"/>
+                                <read url="@Url.Action("GetRatePremi", "Alokasi")"/>
                             </transport>
                         </datasource>
                     </kendo-dropdownlist>
@@ -125,7 +125,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Premi Adjustment</label>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox decimals="2" spinners="false" for="nilai_adj_reas" style="width: 100%" readonly="true"/>
+                    <kendo-numerictextbox decimals="2" spinners="false" for="nilai_adj_reas" style="width: 100%"/>
                 </div>
             </div>
         </div>

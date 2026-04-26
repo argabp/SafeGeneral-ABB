@@ -1,0 +1,101 @@
+@using ABB.Application.Alokasis.Queries
+@using Kendo.Mvc.TagHelpers
+@using Kendo.Mvc.UI
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Spreading of Risk (SOR)";
+}
+<script src="~/Modules/Alokasi/JS/alokasi.index.js"></script>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-8">
+            Spreading of Risk (SOR)
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+        </div>
+        @* <div class="col-md-2"> *@
+        @*     <button class="flat-btn-primary" id="btnAddNewRegisterKlaim">Add Register Klaim</button> *@
+        @* </div> *@
+    </div>
+
+    <div class="flat-box-content">
+        @(Html.Kendo().Grid<SORDto>()
+        .Name("SORGrid")
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetSORs", "Alokasi").Data("searchFilterServerFiltering"))
+        )
+        .Columns(columns =>
+        {
+            columns.Command(command =>
+            {
+                command.Custom("Edit")
+                    .Text(" Edit")
+                    .IconClass("fa fa-pencil-alt")
+                    .HtmlAttributes(new { title = "Edit" })
+                    .Click("OnClickEditAlokasi");
+                command.Custom("View")
+                    .Text("View")
+                    .IconClass("fa fa-eye")
+                    .HtmlAttributes(new { title = "View" })
+                    .Click("OnClickViewAlokasi");
+                // command.Custom("Delete")
+                //     .Text("Delete")
+                //     .IconClass("k-icon k-i-delete")
+                //     .HtmlAttributes(new { title = "Delete" })
+                //     .Click("OnClickDeleteAlokasi");
+            }).Title("Action").Width(200).Locked(true);
+            columns.Bound(col => col.Id).Hidden();
+            columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
+            columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
+            columns.Bound(col => col.nm_scob).Width(150).Title("Nama Sub COB");
+            columns.Bound(col => col.no_pol_ttg_masked).Width(150).Title("Nomor Polis");
+            columns.Bound(col => col.nm_ttg).Width(200).Title("Nama Tertanggung");
+            columns.Bound(col => col.tgl_mul_ptg).Width(150).Title("Tanggal Mulai").Format("{0: dd-MM-yyyy}");
+            columns.Bound(col => col.tgl_akh_ptg).Width(150).Title("Tanggal Akhir").Format("{0: dd-MM-yyyy}");
+            columns.Bound(col => col.tgl_closing).Width(150).Title("Tanggal Closing").Format("{0: dd-MM-yyyy}");
+            columns.Bound(col => col.tgl_closing_reas).Width(150).Title("Tanggal Reas").Format("{0: dd-MM-yyyy}");
+            columns.Bound(col => col.flag_closing).Width(200).Title("Flag Closing");
+        })
+        .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                    )
+        .Sortable()
+        .Filterable()
+        .Scrollable()
+        .Height(380)
+        .Resizable(a=>a.Columns(true))
+        .Events(ev => ev.DataBound("setButtonActions"))
+    
+            )
+
+        @(Html.Kendo().Window()
+                    .Name("AlokasiWindow")
+                    .Title("Alokasi Page")
+                    .Width(1000)
+                    .Modal(true)
+                    .Visible(false)
+                    .Draggable(true)
+            )
+        
+        @(Html.Kendo().Window()
+            .Name("FormAlokasiWindow")
+            .Title("Form Alokasi Page")
+            .Width(800)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+        )
+    </div>
+</div>
+

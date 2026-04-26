@@ -2,14 +2,15 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.Alokasis.Queries
 {
     public class GetAdjReasQuery : IRequest<string>
     {
-        public string DatabaseName { get; set; }
         public decimal pst_share { get; set; }
         public decimal pst_adj_reas { get; set; }
         public byte stn_adj_reas { get; set; }
@@ -29,17 +30,19 @@ namespace ABB.Application.Alokasis.Queries
 
     public class GetAdjReasQueryHandler : IRequestHandler<GetAdjReasQuery, string>
     {
-        private readonly IDbConnectionFactory _connectionFactory;
+        private readonly IDbConnectionPst _dbConnectionPst;
+        private readonly ILogger<GetAdjReasQueryHandler> _logger;
 
-        public GetAdjReasQueryHandler(IDbConnectionFactory connectionFactory)
+        public GetAdjReasQueryHandler(IDbConnectionPst dbConnectionPst,
+            ILogger<GetAdjReasQueryHandler> logger)
         {
-            _connectionFactory = connectionFactory;
+            _dbConnectionPst = dbConnectionPst;
+            _logger = logger;
         }
 
         public async Task<string> Handle(GetAdjReasQuery request, CancellationToken cancellationToken)
         {
-            _connectionFactory.CreateDbConnection(request.DatabaseName);
-            return (await _connectionFactory.QueryProc<string>("spe_ri05e_06",
+            return await ExceptionHelper.ExecuteWithLoggingAsync(async () => (await _dbConnectionPst.QueryProc<string>("spe_ri05e_06",
                 new
                 {
                     request.pst_share, request.pst_adj_reas, request.stn_adj_reas,
@@ -47,7 +50,8 @@ namespace ABB.Application.Alokasis.Queries
                     request.pst_rate_prm, request.stn_rate_prm, request.kd_cb,
                     request.kd_cob, request.kd_scob, request.kd_thn,
                     request.no_pol, request.no_updt, request.no_rsk
-                })).FirstOrDefault();
+                })).FirstOrDefault(), _logger);
+
         }
     }
 }
