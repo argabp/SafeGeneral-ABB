@@ -1,4 +1,4 @@
-﻿$(document).ready(function () {
+$(document).ready(function () {
     searchKeyword_OnKeyUp();
 });
 
@@ -6,11 +6,11 @@ var selectedRowsData = [];
 
 function searchKeyword_OnKeyUp() {
     $('#SearchKeyword').keyup(function () {
-        refreshGrid("#PostingNotaPremiXOLKeluarGrid");
+        refreshGrid("#PostingNotaPremiTreatyKeluarGrid");
     });
 }
 
-function searchFilterPostingNotaPremiXOLKeluar(e) {
+function searchFilterPostingNotaPremiTreatyKeluar(e) {
     const gridReq = buildGridRequest(e, "SearchKeyword");
 
     return {
@@ -18,7 +18,7 @@ function searchFilterPostingNotaPremiXOLKeluar(e) {
     };
 }
 
-function onChangeGridPostingNotaPremiXOLKeluar(e) {
+function onChangeGridPostingNotaPremiTreatyKeluar(e) {
     var grid = e.sender;
     var selectedIds = grid.selectedKeyNames();
 
@@ -34,7 +34,6 @@ function onChangeGridPostingNotaPremiXOLKeluar(e) {
             // If selected and not in our list, add it
             selectedRowsData.push({
                 Id: item.Id,
-                jns_sb_nt: item.jns_sb_nt,
                 kd_cb: item.kd_cb,
                 jns_tr: item.jns_tr,
                 jns_nt_msk: item.jns_nt_msk,
@@ -51,25 +50,25 @@ function onChangeGridPostingNotaPremiXOLKeluar(e) {
     });
 }
 
-function postingNotaPremiXOLKeluar(){
+function postingNotaPremiTreatyKeluar(){
     showConfirmation('Confirmation', `Are you sure you want to posting?`,
         function () {
-            showProgressOnGrid('#PostingNotaPremiXOLKeluarGrid');
+            showProgressOnGrid('#PostingNotaPremiTreatyKeluarGrid');
 
-            ajaxPost("/PostingNotaPremiXOLKeluar/Posting", JSON.stringify(selectedRowsData),
+            ajaxPost("/PostingNotaPremiTreatyKeluar/Posting", JSON.stringify(selectedRowsData),
                 function (response) {
                     if(response.Status === "OK"){
                         showMessage("Success", "Posting Sukses")
                     } else {
                         showMessage('Error', response.Message);
                     }
-                    var grid = $("#PostingNotaPremiXOLKeluarGrid").data("kendoGrid");
+                    var grid = $("#PostingNotaPremiTreatyKeluarGrid").data("kendoGrid");
                     if (grid) {
                         grid.clearSelection();
                     }
                     selectedRowsData = [];
-                    refreshGrid('#PostingNotaPremiXOLKeluarGrid');
-                    closeProgressOnGrid('#PostingNotaPremiXOLKeluarGrid');
+                    refreshGrid('#PostingNotaPremiTreatyKeluarGrid');
+                    closeProgressOnGrid('#PostingNotaPremiTreatyKeluarGrid');
                 },
             );
         }

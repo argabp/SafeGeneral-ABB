@@ -1,4 +1,4 @@
-﻿@using ABB.Application.PostingNotaPremiXOLKeluars.Queries
+﻿@using ABB.Application.PostingNotaPremiTreatyKeluars.Queries
 @using Kendo.Mvc.UI
 @using Microsoft.Extensions.Configuration
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
@@ -8,9 +8,9 @@
 
 @{
     Layout = "~/Modules/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Posting Nota Premi XOL Keluar";
+    ViewData["Title"] = "Posting Nota Premi Treaty Keluar";
 }
-<script src="~/Modules/PostingNotaPremiXOLKeluar/JS/postingNotaPremiXOLKeluar.js"></script>
+<script src="~/Modules/PostingNotaPremiTreatyKeluar/JS/postingNotaPremiTreatyKeluar.js"></script>
 
 <style>
     .div-box{
@@ -20,7 +20,7 @@
 <div class="flat-box">
     <div class="row">
         <div class="flat-box-title col-md-6">
-            Posting Nota Klaim Treaty Masuk
+            Posting Nota Premi Treaty Keluar
         </div>
 
         <div class="col-md-4">
@@ -28,17 +28,17 @@
         </div>
 
         <div class="col-md-2">
-            <button class="flat-btn-primary" onclick="postingNotaPremiXOLKeluar()">Posting</button>
+            <button class="flat-btn-primary" onclick="postingNotaPremiTreatyKeluar()">Posting</button>
         </div>
     </div>
 
     <div class="flat-box-content">
         <div class="div-box">
-            @(Html.Kendo().Grid<PostingNotaPremiXOLKeluarDto>()
-                .Name("PostingNotaPremiXOLKeluarGrid")
+            @(Html.Kendo().Grid<PostingNotaPremiTreatyKeluarDto>()
+                .Name("PostingNotaPremiTreatyKeluarGrid")
                 .DataSource(dataSource => dataSource.Ajax()
-                    .Read(read => read.Action("GetPostingNotaKlaimTreaties", "PostingNotaPremiXOLKeluar").Data("searchFilterPostingNotaPremiXOLKeluar"))
-                    .Model(model => model.Id(p => p.nomor_nota))
+                    .Read(read => read.Action("GetPostingNotaKlaimTreaties", "PostingNotaPremiTreatyKeluar").Data("searchFilterPostingNotaPremiTreatyKeluar"))
+                    .Model(model => model.Id(p => p.Id))
                 )
                 .Columns(columns =>
                 {
@@ -62,7 +62,7 @@
                 .Scrollable()
                 .Height(450)
                 .Resizable(a=>a.Columns(true))
-                .Events(ev => ev.DataBound("gridAutoFit").Change("onChangeGridPostingNotaPremiXOLKeluar"))
+                .Events(ev => ev.DataBound("gridAutoFit").Change("onChangeGridPostingNotaPremiTreatyKeluar"))
         
                 )    
         </div>
