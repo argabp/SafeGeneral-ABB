@@ -28,6 +28,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Jenis Sor</label>
                 <div class="col-sm-6">
+                    <input type="hidden" id="temp_kd_jns_sor" value="@Model.kd_jns_sor">
                     <kendo-dropdownlist for="kd_jns_sor" style="width: 100%" on-change="OnKodeJenisSorChange" option-label="Pilih Jenis Sor"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
@@ -63,7 +64,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Share (%)</label>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox decimals="2" spinners="false" for="pst_share" on-change="OnPstShareChange" style="width: 100%"/>
+                    <kendo-numerictextbox decimals="6" format="n6" spinners="false" for="pst_share" on-change="OnPstShareChange" style="width: 100%"/>
                 </div>
             </div>
         </div>
@@ -77,7 +78,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Pst (%)</label>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox decimals="2" spinners="false" for="pst_kms_reas" on-change="OnPstKmsReasChange" style="width: 100%"/>
+                    <kendo-numerictextbox decimals="6" format="n6" spinners="false" for="pst_kms_reas" on-change="OnPstKmsReasChange" style="width: 100%"/>
                 </div>
             </div>
         </div>
@@ -91,7 +92,7 @@
             <div class="col-sm-6 row">
                 <label class="col-sm-6">Rate Adjustment</label>
                 <div class="col-sm-3">
-                    <kendo-numerictextbox spinners="false" decimals="4" format="n4" for="pst_adj_reas" on-change="OnAdjReasChange" style="width: 100%"/>
+                    <kendo-numerictextbox spinners="false" decimals="6" format="n6" for="pst_adj_reas" on-change="OnAdjReasChange" style="width: 100%"/>
                 </div>
                 <div class="col-sm-3">
                     <kendo-dropdownlist for="stn_adj_reas" style="width: 100%" on-change="OnAdjReasChange" 
@@ -116,7 +117,7 @@
     </form>
 
     <div class="window-footer">
-        <button type="button" id="btn-save-alokasiDetail" class="btn btn-success space-right">
+        <button type="button" id="btn-save-detailAlokasi" class="btn btn-success space-right">
             <span class="fa fa-save"></span> Save
         </button>
     </div>

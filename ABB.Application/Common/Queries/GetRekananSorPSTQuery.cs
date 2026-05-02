@@ -37,12 +37,17 @@ namespace ABB.Application.Common.Queries
                         request.jns_lookup, nm_kolom = "kd_rk_sor"
                     })).FirstOrDefault();
 
+                List<DropdownOptionDto> dropdown =  new List<DropdownOptionDto>();
+
+                if (string.IsNullOrWhiteSpace(result))
+                {
+                    return dropdown;
+                }
+                
                 var data = result?.Split("#")[1];
 
                 var menuName = data?.Split(",")[0];
                 var dbName = data?.Split(",")[1];
-
-                List<DropdownOptionDto> dropdown;
 
                 if (menuName.Contains("Rekanan"))
                 {

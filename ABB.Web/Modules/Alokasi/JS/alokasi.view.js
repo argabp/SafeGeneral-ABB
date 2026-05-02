@@ -8,5 +8,5 @@ $(document).ready(function () {
     setTimeout(() => {
         $("#AlokasiGrid").data("kendoGrid").hideColumn(0);
         $("#DetailAlokasiGrid").data("kendoGrid").hideColumn(0);
-    }, 3000);
+    }, 1000);
 });

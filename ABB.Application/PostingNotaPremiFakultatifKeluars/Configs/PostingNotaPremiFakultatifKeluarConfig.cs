@@ -15,6 +15,8 @@ namespace ABB.Application.PostingNotaPremiFakultatifKeluars.Configs
                                     p.*,
                                     cob.nm_cob,
                                     scob.nm_scob,
+                                    r.nm_rk nm_ttj,
+                                    pp.nm_ttg,
                                     p.kd_cb + '-' + 
                                     p.jns_tr + '-' + 
                                     p.jns_nt_msk + '-' + 
@@ -30,6 +32,17 @@ namespace ABB.Application.PostingNotaPremiFakultatifKeluars.Configs
                                     INNER JOIN rf04 cob ON p.kd_cob = cob.kd_cob
                                     INNER JOIN rf05 scob ON p.kd_cob = scob.kd_cob 
                                                         AND p.kd_scob = scob.kd_scob
+                                    INNER JOIN rf03 r 
+                                        ON p.kd_rk_pas = r.kd_rk
+                                            AND p.kd_grp_pas = r.kd_grp_rk
+                                            AND p.kd_cb = r.kd_cb
+                                    INNER JOIN uw01e pp
+                                        ON pp.kd_cb = p.kd_cb_pol
+                                        AND pp.kd_cob = p.kd_cob
+                                        AND pp.kd_scob = p.kd_scob
+                                        AND pp.kd_thn = p.kd_thn
+                                        AND pp.no_pol = p.no_pol
+                                        AND pp.no_updt = p.no_updt
                             ) src
                             ",
 

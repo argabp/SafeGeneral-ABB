@@ -1,4 +1,4 @@
-﻿@using ABB.Application.CancelPostingNotaKlaimTreaties.Queries
+﻿@using ABB.Application.CancelPostingNotaPremiTreatyKeluars.Queries
 @using Kendo.Mvc.UI
 @using Microsoft.Extensions.Configuration
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
@@ -8,9 +8,9 @@
 
 @{
     Layout = "~/Modules/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Cancel Posting Nota Klaim Treaty";
+    ViewData["Title"] = "Cancel Posting Nota Premi Treaty Keluar";
 }
-<script src="~/Modules/CancelPostingNotaKlaimTreaty/JS/cancelPostingNotaKlaimTreaty.js"></script>
+<script src="~/Modules/CancelPostingNotaPremiTreatyKeluar/JS/cancelPostingNotaPremiTreatyKeluar.js"></script>
 
 <style>
     .div-box{
@@ -20,7 +20,7 @@
 <div class="flat-box">
     <div class="row">
         <div class="flat-box-title col-md-6">
-            Cancel Posting Nota Klaim Treaty
+            Cancel Posting Nota Premi Treaty Keluar
         </div>
 
         <div class="col-md-4">
@@ -28,24 +28,24 @@
         </div>
 
         <div class="col-md-2">
-            <button class="flat-btn-primary" onclick="cancelPostingNotaPremiFakultatifKeluar()">Cancel Posting</button>
+            <button class="flat-btn-primary" onclick="cancelPostingNotaPremiTreatyKeluar()">Cancel Posting</button>
         </div>
     </div>
 
     <div class="flat-box-content">
         <div class="div-box">
-            @(Html.Kendo().Grid<CancelPostingNotaKlaimTreatyDto>()
-                .Name("CancelPostingNotaKlaimTreatyGrid")
+            @(Html.Kendo().Grid<CancelPostingNotaPremiTreatyKeluarDto>()
+                .Name("CancelPostingNotaPremiTreatyKeluarGrid")
                 .DataSource(dataSource => dataSource.Ajax()
-                    .Read(read => read.Action("GetCancelPostingNotaKlaimTreaties", "CancelPostingNotaKlaimTreaty").Data("searchFilterCancelPostingNotaKlaimTreaty"))
+                    .Read(read => read.Action("GetCancelPostingNotaPremiTreatyKeluars", "CancelPostingNotaPremiTreatyKeluar").Data("searchFilterCancelPostingNotaPremiTreatyKeluar"))
                     .Model(model => model.Id(p => p.nomor_nota))
                 )
                 .Columns(columns =>
                 {
                     columns.Select().Width(50);
                     columns.Bound(col => col.nomor_nota).Width(150).Title("Nomor Nota");
-                    columns.Bound(col => col.nm_rk).Width(150).Title("Nama Tertuju");
-                    columns.Bound(col => col.tgl_nt).Width(150).Title("Tanggal Nota").Format("{0: dd-MM-yyyy}");
+                    columns.Bound(col => col.nm_ttj).Width(150).Title("Nama Tertuju");
+                    // columns.Bound(col => col.tgl_nt).Width(150).Title("Tanggal Nota").Format("{0: dd-MM-yyyy}");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)
@@ -58,7 +58,7 @@
                 .Scrollable()
                 .Height(450)
                 .Resizable(a=>a.Columns(true))
-                .Events(ev => ev.DataBound("gridAutoFit").Change("onChangeGridCancelPostingNotaKlaimTreaty"))
+                .Events(ev => ev.DataBound("gridAutoFit").Change("onChangeGridCancelPostingNotaPremiTreatyKeluar"))
         
                 )    
         </div>

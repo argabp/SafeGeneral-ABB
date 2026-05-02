@@ -58,6 +58,12 @@ namespace ABB.Application.Alokasis.Queries
         public string? st_tty { get; set; }
 
         public DateTime? tgl_sor { get; set; }
+
+        public decimal net_prm { get; set; }
+        
+        public decimal pst_rate_prm { get; set; }
+        
+        public string stn_rate_prm { get; set; }
         
         public void Mapping(Profile profile)
         {

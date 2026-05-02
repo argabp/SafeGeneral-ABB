@@ -14,9 +14,21 @@ namespace ABB.Application.Alokasis.Configs
                         SELECT DISTINCT
                             CAST(BINARY_CHECKSUM(p.kd_cb, p.kd_cob, p.kd_scob, p.kd_thn, p.no_pol, p.no_updt) AS BIGINT) AS Id,
                             p.*,
-                            m.nm_mtu nm_mtu_prm
+                            m.nm_mtu nm_mtu_prm,
+                            pp.nilai_prm - pp.nilai_dis net_prm,
+                            pp.pst_rate_prm,
+                            pp.stn_rate_prm
                         FROM ri01e p
                         INNER JOIN rf06 m ON p.kd_mtu_prm = m.kd_mtu
+                        INNER JOIN uw04e pp
+                            ON pp.kd_cb = p.kd_cb
+                            AND pp.kd_cob = p.kd_cob
+                            AND pp.kd_scob = p.kd_scob
+                            AND pp.kd_thn = p.kd_thn
+                            AND pp.no_pol = p.no_pol
+                            AND pp.no_updt = p.no_updt
+                            AND pp.no_rsk = p.no_rsk
+                            AND pp.kd_endt = p.kd_endt
                     ) as src",
                 
                 BaseWhere = "(src.kd_cb = @kd_cb AND src.kd_cob = @kd_cob AND" +

@@ -1,7 +1,6 @@
 $(document).ready(function () {
     searchKeyword_OnKeyUp();
     var sorData;
-    btnAddAlokasi_Click();
 });
 
 let statusFilterApplied = false;
@@ -12,14 +11,8 @@ function searchKeyword_OnKeyUp() {
     });
 }
 
-function openAlokasiWindow(url, title) {
+function openSORWindow(url, title) {
     openWindow('#AlokasiWindow', url, title);
-}
-
-function btnAddAlokasi_Click() {
-    $('#btnAddNewAlokasi').click(function () {
-        openAlokasiWindow('/Alokasi/Add', 'Add');
-    });
 }
 
 function OnClickEditAlokasi(e) {
@@ -27,7 +20,7 @@ function OnClickEditAlokasi(e) {
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     sorData = dataItem;
     console.log('dataItem', dataItem);
-    openAlokasiWindow(`/Alokasi/Edit?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}
+    openSORWindow(`/Alokasi/Edit?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}
                                     &kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}
                                     &no_pol=${dataItem.no_pol}&no_updt=${dataItem.no_updt}
                                     &no_rsk=${dataItem.no_rsk}&kd_endt=${dataItem.kd_endt}
@@ -39,7 +32,7 @@ function OnClickViewAlokasi(e) {
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     sorData = dataItem;
     console.log('dataItem', dataItem);
-    openAlokasiWindow(`/Alokasi/View?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}
+    openSORWindow(`/Alokasi/View?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}
                                     &kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}
                                     &no_pol=${dataItem.no_pol}&no_updt=${dataItem.no_updt}
                                     &no_rsk=${dataItem.no_rsk}&kd_endt=${dataItem.kd_endt}
