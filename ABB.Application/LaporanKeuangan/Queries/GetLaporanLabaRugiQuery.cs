@@ -84,7 +84,7 @@ namespace ABB.Application.LaporanKeuangan.Queries
             // =================================================================
             if (isBulanan)
             {
-               int targetBulanDB = request.Bulan - 1; 
+               int targetBulanDB = request.Bulan; 
 
                 // Filter untuk kolom "s/d Bulan Lalu" (Contoh: Jan s/d Feb)
                 // Menambahkan x.bln >= 1 agar bulan 0 tidak ikut
