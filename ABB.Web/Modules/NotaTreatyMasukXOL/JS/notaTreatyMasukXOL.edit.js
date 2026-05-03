@@ -5,4 +5,9 @@ $(document).ready(async function () {
 async function setNotaTreatyMasukXOLEditedValue(){
     var flag_closing = $("#tempFlag_closing").val();
     flag_closing == "Y" ? $("#flag_closing").prop("checked", true) : $("#flag_closing").prop("checked", false);
+
+    if(flag_closing == "Y"){
+        $("#nm_ttg").getKendoTextBox().readonly(true);
+        $("#btn-save-notaTreatyMasukXOL").hide();
+    }
 }

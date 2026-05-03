@@ -87,6 +87,28 @@ namespace ABB.Web.Modules.NotaTreatyMasuk
             return View(Mapper.Map<NotaTreatyMasukViewModel>(result));
         }
         
+        public async Task<IActionResult> View(string kd_cb, string kd_thn, string kd_bln,
+            string kd_jns_sor, string kd_tty_msk, string kd_mtu, string no_tr)
+        {
+            var command = new GetNotaTreatyMasukQuery()
+            {
+                kd_cb = kd_cb,
+                kd_thn = kd_thn,
+                kd_bln = kd_bln,
+                kd_jns_sor = kd_jns_sor,
+                kd_tty_msk = kd_tty_msk,
+                kd_mtu = kd_mtu,
+                no_tr = no_tr
+            };
+            
+            var result = await Mediator.Send(command);
+
+            result.kd_cb = result.kd_cb.Trim();
+            result.kd_jns_sor = result.kd_jns_sor.Trim();
+            
+            return View(Mapper.Map<NotaTreatyMasukViewModel>(result));
+        }
+        
         public async Task<IActionResult> Nota(string kd_cb, string kd_thn, string kd_bln,
             string kd_jns_sor, string kd_tty_msk, string kd_mtu, string no_tr)
         {

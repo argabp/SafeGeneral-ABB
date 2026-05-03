@@ -8,7 +8,7 @@
 
 @{
     Layout = "~/Modules/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Kontrak Treaty Keluar XOL";
+    ViewData["Title"] = "Entri Kontrak Treaty Keluar XOL";
 }
 <script src="~/Modules/KontrakTreatyKeluarXOL/JS/kontrakTreatyKeluarXOL.index.js"></script>
 
@@ -21,7 +21,7 @@
 <div class="flat-box">
     <div class="row">
         <div class="flat-box-title col-md-6">
-            Kontrak Treaty Keluar XOL
+            Entri Kontrak Treaty Keluar XOL
         </div>
 
         <div class="col-md-4">
@@ -56,9 +56,10 @@
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteKontrakTreatyKeluarXOL");
                     }).Width(150).Title("Action").Locked(true);
-                    columns.Bound(col => col.nm_cb).Width(150).Title("Cabang");
                     columns.Bound(col => col.nm_jns_sor).Width(150).Title("Jenis SOR");
                     columns.Bound(col => col.kd_tty_npps).Width(200).Title("Kode Treaty XOL");
+                    columns.Bound(col => col.thn_tty_npps).Width(150).Title("Tahun Treaty");
+                    columns.Bound(col => col.nm_tty_npps).Width(200).Title("Nama Treaty");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

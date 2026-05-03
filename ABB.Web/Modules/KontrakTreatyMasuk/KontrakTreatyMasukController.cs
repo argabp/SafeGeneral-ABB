@@ -36,7 +36,10 @@ namespace ABB.Web.Modules.KontrakTreatyMasuk
         
         public IActionResult Add()
         {
-            return View(new KontrakTreatyMasukViewModel());
+            return View(new KontrakTreatyMasukViewModel()
+            {
+                kd_cb = "PS10"
+            });
         }
         
         public async Task<IActionResult> Edit(string kd_cb, string kd_jns_sor, string kd_tty_msk)
@@ -159,6 +162,25 @@ namespace ABB.Web.Modules.KontrakTreatyMasuk
             };
 
             return Json(dropdownOptionDtos);
+        }
+        
+        public async Task<JsonResult> GetKeteranganTreaty(string kd_cob, string nm_jns_sor, decimal thn_uw)
+        {
+            try
+            {
+                var result = await Mediator.Send(new GetKeteranganTreatyQuery()
+                {
+                    kd_cob = kd_cob,
+                    nm_jns_sor = nm_jns_sor,
+                    thn_uw = thn_uw
+                });
+
+                return Json(new { Result = "OK", Data = result});
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = "ERROR", Message = ex.Message });
+            }
         }
     }
 }

@@ -17,9 +17,11 @@ function setDetailAlokasiEditedValue(){
     }
 
     if($("#temp_kd_jns_sor").val().trim() == "FAC"){
-        $("#premiAdjustmentDiv").show()
+        $("#rateAdjustmentDiv").show();
+        $("#premiAdjustmentDiv").show();
     } else{
-        $("#premiAdjustmentDiv").hide()
+        $("#premiAdjustmentDiv").hide();
+        $("#rateAdjustmentDiv").hide();
     }
 
     closeProgress('#FormAlokasiWindow');
@@ -86,9 +88,13 @@ function OnKodeJenisSorChange(e){
                 kd_rk_sor_dp.value(kd_rk_sor);
 
                 if(kd_jns_sor == "FAC"){
-                    $("#premiAdjustmentDiv").show()
+                    $("#rateAdjustmentDiv").show();
+                    $("#premiAdjustmentDiv").show();
                 } else{
-                    $("#premiAdjustmentDiv").hide()
+                    $("#rateAdjustmentDiv").hide();
+                    $("#premiAdjustmentDiv").hide();
+                    $("#pst_adj_reas").getKendoNumericTextBox().value(0);
+                    $("#nilai_adj_reas").getKendoNumericTextBox().value(0);
                 }
             }
             else if (response.Status == "ERROR")
@@ -101,7 +107,7 @@ function OnKodeJenisSorChange(e){
 
 function OnPtgReasChange(e){
     var kd_jns_sor = $("#kd_jns_sor").val().trim();
-    var nilai_ttl_ptg_reas = $("#nilai_ttl_ptg_reas").val();
+    var nilai_ttl_ptg_reas = e.sender.value();
     var nilai_ttl_ptg = alokasi?.nilai_ttl_ptg;
     var nilai_prm = alokasi?.nilai_prm;
     var net_prm = alokasi?.net_prm;
@@ -147,7 +153,7 @@ function OnPstShareChange(e){
 }
 
 function OnPstKmsReasChange(e){
-    var pst_kms_reas = $("#pst_kms_reas").val();
+    var pst_kms_reas = e.sender.value();
     var nilai_prm_reas = $("#nilai_prm_reas").val();
     var nilai_adj_reas = $("#nilai_adj_reas").val();
 
@@ -167,7 +173,7 @@ function OnPstKmsReasChange(e){
 
 function OnAdjReasChange(e){
     var pst_share = $("#pst_share").val();
-    var pst_adj_reas = $("#pst_adj_reas").val();
+    var pst_adj_reas = e.sender.value();
     var stn_adj_reas = $("#stn_adj_reas").val();
     var pst_kms = $("#pst_kms_reas").val();
     var nilai_prm_reas = $("#nilai_prm_reas").val();

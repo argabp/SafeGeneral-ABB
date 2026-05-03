@@ -31,6 +31,7 @@ namespace ABB.Application.Common.Interfaces
         DbSet<MutasiKlaim> MutasiKlaim { get; set; }
         DbSet<Alokasi> Alokasi { get; set; }
         DbSet<DetailAlokasi> DetailAlokasi { get; set; }
+        DbSet<ProsesPremiXOLKeluar> ProsesPremiXOLKeluar { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

@@ -14,29 +14,28 @@ namespace ABB.Application.KontrakTreatyKeluarXOLs.Configs
                                 SELECT 
                                     RTRIM(p.kd_cb) + '-' + RTRIM(p.kd_jns_sor) + '-' + RTRIM(p.kd_tty_npps) AS Id,
                                     p.*,
-                                    cb.nm_cb,
                                     s.nm_jns_sor
                                 FROM ri02t p
-                                INNER JOIN rf01 cb ON p.kd_cb = cb.kd_cb
                                 INNER JOIN rf18 s ON p.kd_jns_sor = s.kd_jns_sor
                             ) src
                             ",
                 
                 BaseWhere = "",
-
-
+                
                 ColumnMap = new Dictionary<string, string>
                 {
-                    ["nm_cb"]       = "src.nm_cb",
+                    ["thn_tty_npps"]       = "src.thn_tty_npps",
                     ["nm_jns_sor"]      = "src.nm_jns_sor",
-                    ["kd_tty_npps"]     = "src.kd_tty_npps"
+                    ["kd_tty_pps"]     = "src.kd_tty_pps",
+                    ["nm_tty_npps"]     = "src.nm_tty_npps"
                 },
                 
                 SearchableColumns = new List<string>
                 {
-                    "src.nm_cb",
+                    "src.thn_tty_npps",
                     "src.nm_jns_sor",
-                    "src.kd_tty_npps"
+                    "src.kd_tty_pps",
+                    "src.nm_tty_npps"
                 }
             };
         }

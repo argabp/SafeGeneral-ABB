@@ -56,9 +56,10 @@
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteKontrakTreatyMasuk");
                     }).Width(150).Title("Action").Locked(true);
-                    columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
                     columns.Bound(col => col.nm_jns_sor).Width(150).Title("Nama Jenis SOR");
                     columns.Bound(col => col.kd_tty_msk).Width(200).Title("Kode Treaty Masuk");
+                    columns.Bound(col => col.thn_uw).Width(200).Title("Tahun Underwriting");
+                    columns.Bound(col => col.desk_tty).Width(200).Title("Keterangan Treaty");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

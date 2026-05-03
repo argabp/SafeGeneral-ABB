@@ -65,6 +65,13 @@ function OnNilaiKlaimChange(e){
     var nilai_prm = $("#nilai_prm").data("kendoNumericTextBox").value();
     var nilai_kms = $("#nilai_kms").data("kendoNumericTextBox").value();
     var nilai_kl = e.sender.value();
+    var due_to_us = nilai_prm - nilai_kms - nilai_kl;
 
-    $("#due_to_us").getKendoNumericTextBox().value(nilai_prm - nilai_kms - nilai_kl);
+    if(due_to_us < 0){
+        $("#labelDueTo").text("Due To You");
+    } else {
+        $("#labelDueTo").text("Due To Us");
+    }
+
+    $("#due_to_us").getKendoNumericTextBox().value(due_to_us);
 }

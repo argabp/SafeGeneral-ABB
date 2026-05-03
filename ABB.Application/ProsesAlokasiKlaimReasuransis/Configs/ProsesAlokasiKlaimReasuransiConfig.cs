@@ -10,68 +10,85 @@ namespace ABB.Application.ProsesAlokasiKlaimReasuransis.Configs
             return new GridConfig
             {
                 FromSql = @"
-                            FROM (SELECT 
-                                DISTINCT
-                                p.flag_closing, 
-                                p.tgl_mts,
-                                p.no_pol_lama,
-                                p.tgl_closing,
-                                p.tgl_reas,
-                                p.flag_reas,
-                                p.nm_ttg,
-                                p.kd_cb, 
-                                p.kd_cob, 
-                                p.kd_scob, 
-                                p.kd_thn, 
-                                p.no_kl, 
-                                p.no_mts, 
-                                p.nilai_ttl_kl, 
-                                p.tipe_mts,
-                                RTRIM(p.kd_cb) + '-' + RTRIM(p.kd_cob) + '-' + RTRIM(p.kd_scob) + '-' + 
-                                RTRIM(p.kd_thn) + '-' + RTRIM(p.no_kl) + '-' + CAST(p.no_mts AS VARCHAR) AS Id,
-                                cb.nm_cb,
-                                cob.nm_cob,
-                                scob.nm_scob,
-                                COALESCE(c5.total_nilai_kl_cl05, 0) AS nilai_total_klaim,
-                                (p.nilai_ttl_kl - COALESCE(c5.total_nilai_kl_cl05, 0)) AS sisa_alokasi,
-                                CASE RTRIM(p.tipe_mts)
-                                    WHEN 'P' THEN 'PLA'
-                                    WHEN 'D' THEN 'DLA'
-                                    WHEN 'B' THEN 'Beban'
-                                    WHEN 'R' THEN 'Recovery'
-                                    ELSE ''
-                                END AS nm_tipe_mts,
-                                'K.' + RTRIM(p.kd_cb) + '.' + RTRIM(p.kd_scob) + '.' + 
-                                RTRIM(p.kd_thn) + '.' + RTRIM(p.no_kl) AS nomor_register
+                            FROM (SELECT DISTINCT
+                                   p.flag_closing,
+                                   p.tgl_mts,
+                                   p.no_pol_lama,
+                                   p.tgl_closing,
+                                   p.tgl_reas,
+                                   p.flag_reas,
+                                   p.nm_ttg,
+                                   p.kd_cb,
+                                   c6.kd_cb kd_cb_join,
+                                   p.kd_cob,
+                                   p.kd_scob,
+                                   p.kd_thn,
+                                   p.no_kl,
+                                   p.no_mts,
+                                   p.nilai_ttl_kl,
+                                   p.tipe_mts,
+                                   RTRIM(p.kd_cb) + '-' + RTRIM(p.kd_cob) + '-' + RTRIM(p.kd_scob) + '-' + RTRIM(p.kd_thn) + '-' + RTRIM(p.no_kl)
+                                   + '-' + CAST(p.no_mts AS VARCHAR) AS Id,
+                                   cb.nm_cb,
+                                   cob.nm_cob,
+                                   scob.nm_scob,
+                                   COALESCE(c5.total_nilai_kl_cl05, 0) AS nilai_total_klaim,
+                                   (p.nilai_ttl_kl - COALESCE(c5.total_nilai_kl_cl05, 0)) AS sisa_alokasi,
+                                   CASE RTRIM(p.tipe_mts)
+                                       WHEN 'P' THEN
+                                           'PLA'
+                                       WHEN 'D' THEN
+                                           'DLA'
+                                       WHEN 'B' THEN
+                                           'Beban'
+                                       WHEN 'R' THEN
+                                           'Recovery'
+                                       ELSE
+                                           ''
+                                   END AS nm_tipe_mts,
+                                   'K.' + RTRIM(p.kd_cb) + '.' + RTRIM(p.kd_scob) + '.' + RTRIM(p.kd_thn) + '.' + RTRIM(p.no_kl) AS nomor_register
                             FROM v_cl03 p
-                            INNER JOIN rf01 cb ON p.kd_cb = cb.kd_cb
-                            INNER JOIN rf04 cob ON p.kd_cob = cob.kd_cob
-                            INNER JOIN rf05 scob ON p.kd_cob = scob.kd_cob 
-                                                AND p.kd_scob = scob.kd_scob
-                            LEFT JOIN (
-                                SELECT 
-                                    kd_cb, kd_cob, kd_scob, kd_thn, no_kl, no_mts,
-                                    SUM(nilai_kl) as total_nilai_kl_cl05
-                                FROM cl05
-                                GROUP BY kd_cb, kd_cob, kd_scob, kd_thn, no_kl, no_mts
-                            ) c5 ON p.kd_cb = c5.kd_cb 
-                                AND p.kd_cob = c5.kd_cob 
-                                AND p.kd_scob = c5.kd_scob 
-                                AND p.kd_thn = c5.kd_thn 
-                                AND p.no_kl = c5.no_kl 
-                                AND p.no_mts = c5.no_mts
-                            LEFT OUTER JOIN cl06 c6
-                            ON   p.kd_cb = c6.kd_cb 
-                                AND p.kd_cob = c6.kd_cob 
-                                AND p.kd_scob = c6.kd_scob 
-                                AND p.kd_thn = c6.kd_thn 
-                                AND p.no_kl = c6.no_kl 
-                                AND p.no_mts = c6.no_mts
-                            AND c6.kd_cb IS null    
+                                INNER JOIN rf01 cb
+                                    ON p.kd_cb = cb.kd_cb
+                                INNER JOIN rf04 cob
+                                    ON p.kd_cob = cob.kd_cob
+                                INNER JOIN rf05 scob
+                                    ON p.kd_cob = scob.kd_cob
+                                       AND p.kd_scob = scob.kd_scob
+                                LEFT JOIN
+                                (
+                                    SELECT kd_cb,
+                                           kd_cob,
+                                           kd_scob,
+                                           kd_thn,
+                                           no_kl,
+                                           no_mts,
+                                           SUM(nilai_kl) AS total_nilai_kl_cl05
+                                    FROM cl05
+                                    GROUP BY kd_cb,
+                                             kd_cob,
+                                             kd_scob,
+                                             kd_thn,
+                                             no_kl,
+                                             no_mts
+                                ) c5
+                                    ON p.kd_cb = c5.kd_cb
+                                       AND p.kd_cob = c5.kd_cob
+                                       AND p.kd_scob = c5.kd_scob
+                                       AND p.kd_thn = c5.kd_thn
+                                       AND p.no_kl = c5.no_kl
+                                       AND p.no_mts = c5.no_mts
+                                LEFT OUTER JOIN cl06 c6
+                                    ON p.kd_cb = c6.kd_cb
+                                       AND p.kd_cob = c6.kd_cob
+                                       AND p.kd_scob = c6.kd_scob
+                                       AND p.kd_thn = c6.kd_thn
+                                       AND p.no_kl = c6.no_kl
+                                       AND p.no_mts = c6.no_mts   
                                 ) as src
                             ",
                 
-               BaseWhere = @"src.flag_closing = 'Y'",
+               BaseWhere = @"src.flag_closing = 'Y' AND src.kd_cb_join IS null ",
 
 
                 ColumnMap = new Dictionary<string, string>

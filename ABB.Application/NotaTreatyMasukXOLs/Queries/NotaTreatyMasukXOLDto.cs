@@ -1,3 +1,5 @@
+using System;
+
 namespace ABB.Application.NotaTreatyMasukXOLs.Queries
 {
     public class NotaTreatyMasukXOLDto
@@ -25,5 +27,11 @@ namespace ABB.Application.NotaTreatyMasukXOLs.Queries
         public string no_tr { get; set; }
 
         public string nomor_transaksi { get; set; }
+
+        public string ket_tr { get; set; }
+
+        public DateTime tgl_closing { get; set; }
+        
+        public string flag_closing { get; set; }
     }
 }

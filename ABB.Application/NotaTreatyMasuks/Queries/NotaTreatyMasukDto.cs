@@ -1,3 +1,5 @@
+using System;
+
 namespace ABB.Application.NotaTreatyMasuks.Queries
 {
     public class NotaTreatyMasukDto
@@ -19,11 +21,15 @@ namespace ABB.Application.NotaTreatyMasuks.Queries
         public string kd_tty_msk { get; set; }
 
         public string kd_mtu { get; set; }
-
-        public string nm_mtu { get; set; }
         
         public string no_tr { get; set; }
 
         public string nomor_transaksi { get; set; }
+
+        public string ket_tr { get; set; }
+
+        public DateTime tgl_closing { get; set; }
+        
+        public string flag_closing { get; set; }
     }
 }

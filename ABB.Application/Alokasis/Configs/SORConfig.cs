@@ -11,7 +11,7 @@ namespace ABB.Application.Alokasis.Configs
             {
                 FromSql = @"
                     FROM (  
-                        SELECT DISTINCT TOP 100 
+                        SELECT DISTINCT 
                             CAST(uw01e.kd_cb AS VARCHAR) + '-' + 
                                 CAST(uw01e.kd_cob AS VARCHAR) + '-' + 
                                 CAST(uw01e.kd_scob AS VARCHAR) + '-' + 

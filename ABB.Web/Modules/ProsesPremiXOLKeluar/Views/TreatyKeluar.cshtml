@@ -1,0 +1,56 @@
+﻿
+@using ABB.Application.ProsesPremiXOLKeluars.Queries
+@using Kendo.Mvc.UI
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+<script src="~/Modules/ProsesPremiXOLKeluar/JS/prosesPremiXOLKeluar.treatyKeluar.js"></script>
+
+<div class="window-body">
+    
+    <div class="row">
+        <div class="col-offset-8"></div>
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeywordTreatyMasuk" placeholder="Search"/>
+        </div>
+    </div>
+    
+    @(Html.Kendo().Grid<TreatyKeluarXOLDto>()
+        .Name("TreatyKeluarGrid")
+        .DataSource(dataSource => dataSource.Ajax().ServerOperation(true).PageSize(25)
+            .Read(read => read.Action("GetTreatyKeluars", "ProsesPremiXOLKeluar").Data("searchFilterTreatyKeluar"))
+        )
+        .Columns(columns =>
+        {
+            columns.Bound(col => col.Id).Hidden();
+            columns.Bound(col => col.nm_cob).Width(150).Title("COB");
+            columns.Bound(col => col.kd_tty_npps).Width(175).Title("Kode Treaty XOL");
+            columns.Bound(col => col.npps_layer).Width(150).Title("Layer");
+            columns.Bound(col => col.thn_tty_npps).Width(150).Title("Tahun Treaty");
+            columns.Bound(col => col.nm_tty_npps).Width(175).Title("Nama Treaty");
+            columns.Bound(col => col.tgl_mul_ptg).Width(150).Title("Tanggal Mulai").Format("{0: dd-MM-yyyy}");
+            columns.Bound(col => col.tgl_akh_ptg).Width(150).Title("Tanggal Akhir").Format("{0: dd-MM-yyyy}");
+            columns.Bound(col => col.nilai_bts_or).Width(150).Title("Batas OR").Format("{0:n2}");
+            columns.Bound(col => col.nilai_bts_tty).Width(150).Title("Batas Treaty").Format("{0:n2}");
+            columns.Bound(col => col.pst_adj_onrpi).Width(200).Title("Komisi Reasuransi (%)").Format("{0:n2}");
+            columns.Bound(col => col.ket_tty_npps).Width(200).Title("Keterangan Treaty");
+        })
+        .Selectable()
+        .Pageable(pager => pager
+            .Refresh(true)
+            .Info(true)
+            .PageSizes(true)
+        )
+        .Sortable()
+        .Filterable()
+        .Scrollable()
+        .Height(380)
+        .Resizable(a => a.Columns(true))
+        .Events(ev => ev.DataBound("gridAutoFit").Change("OnTreatyKeluarChange"))
+
+        )
+</div>
+

@@ -37,7 +37,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Jenis SOR</label>
                 <div class="col-sm-6">
-                    <kendo-dropdownlist for="kd_jns_sor" style="width: 100%" option-label="Pilih Jenis SOR"
+                    <kendo-dropdownlist for="kd_jns_sor" style="width: 100%" option-label="Pilih Jenis SOR" readonly="true"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown" >
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -118,7 +118,7 @@
         </div>
         <div class="form-group row">
             <div class="row col-sm-12">
-                <label class="col-sm-3">Nama Tertanggung</label>
+                <label class="col-sm-3">Keterangan</label>
                 <div class="col-sm-9">
                     <kendo-textbox for="nm_ttg" style="width: 100%;"/>
                     <span asp-validation-for="nm_ttg" class="text-danger"></span>
@@ -170,7 +170,7 @@
                 </div>
             </div>
             <div class="row col-sm-6">
-                <label class="col-sm-6">Due To Us</label>
+                <label class="col-sm-6" id="labelDueTo">Due To Us</label>
                 <div class="col-sm-6">
                     <kendo-numerictextbox spinners="false" name="due_to_us" readonly="true" style="width: 100%; background-color: #FFFFE1"/>
                 </div>

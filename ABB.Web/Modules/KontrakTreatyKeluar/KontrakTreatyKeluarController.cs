@@ -52,7 +52,10 @@ namespace ABB.Web.Modules.KontrakTreatyKeluar
         
         public IActionResult Add()
         {
-            return View(new KontrakTreatyKeluarParameterViewModel());
+            return View(new KontrakTreatyKeluarParameterViewModel()
+            {
+                kd_cb = "PS10"
+            });
         }
         
         public IActionResult Edit(string kd_cb, string kd_jns_sor, string kd_tty_pps)

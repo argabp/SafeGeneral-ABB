@@ -58,7 +58,9 @@ namespace ABB.Web.Modules.KontrakTreatyKeluarXOL
                 nilai_bts_or = 0,
                 nilai_bts_tty = 0,
                 nilai_kurs = 0,
-                pst_reinst = 0
+                pst_reinst = 0,
+                kd_cb = "PS10",
+                kd_jns_sor = "XOL"
             });
         }
         

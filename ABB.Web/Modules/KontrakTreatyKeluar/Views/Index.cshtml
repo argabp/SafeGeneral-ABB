@@ -56,9 +56,10 @@
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteKontrakTreatyKeluar");
                     }).Width(150).Title("Action").Locked(true);
-                    columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
                     columns.Bound(col => col.nm_jns_sor).Width(150).Title("Nama Jenis SOR");
-                    columns.Bound(col => col.kd_tty_pps).Width(200).Title("Kode Treaty");
+                    columns.Bound(col => col.kd_tty_pps).Width(200).Title("Kode Treaty Keluar");
+                    columns.Bound(col => col.thn_tty_pps).Width(150).Title("Tahun Treaty");
+                    columns.Bound(col => col.nm_tty_pps).Width(200).Title("Nama Treaty");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

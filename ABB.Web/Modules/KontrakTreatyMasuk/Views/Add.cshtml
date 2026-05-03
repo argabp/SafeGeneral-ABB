@@ -13,7 +13,7 @@
                 <label class="col-sm-6">Kode Cabang</label>
                 <div class="col-sm-6">
                     <input type="hidden" id="temp_kd_cb" value="@Model.kd_cb">
-                    <kendo-dropdownlist for="kd_cb" style="width: 100%" on-change="OnKodeCabangChange" option-label="Pilih Cabang"
+                    <kendo-dropdownlist for="kd_cb" style="width: 100%" on-change="OnKodeCabangChange" readonly="true" option-label="Pilih Cabang"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown" >
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -88,7 +88,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Tahun Underwriting</label>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox spinners="false" format="#" for="thn_uw" style="width: 100%; background-color: #FFFFE1"/>
+                    <kendo-numerictextbox spinners="false" format="#" on-change="OnTahunUnderwritingChange" for="thn_uw" style="width: 100%; background-color: #FFFFE1"/>
                     <span asp-validation-for="thn_uw" class="text-danger"></span>
                 </div>
             </div>

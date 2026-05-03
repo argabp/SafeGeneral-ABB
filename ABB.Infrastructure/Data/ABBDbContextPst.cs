@@ -40,6 +40,7 @@ namespace ABB.Infrastructure.Data
         public DbSet<MutasiKlaim> MutasiKlaim { get; set; }
         public DbSet<Alokasi> Alokasi { get; set; }
         public DbSet<DetailAlokasi> DetailAlokasi { get; set; }
+        public DbSet<ProsesPremiXOLKeluar> ProsesPremiXOLKeluar { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -66,6 +67,7 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new MutasiKlaimMap());
             builder.ApplyConfiguration(new AlokasiMap());
             builder.ApplyConfiguration(new DetailAlokasiMap());
+            builder.ApplyConfiguration(new ProsesPremiXOLKeluarMap());
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

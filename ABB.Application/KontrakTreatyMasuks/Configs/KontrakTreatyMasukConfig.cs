@@ -14,29 +14,28 @@ namespace ABB.Application.KontrakTreatyMasuks.Configs
                                 SELECT 
                                     RTRIM(p.kd_cb) + '-' + RTRIM(p.kd_jns_sor) + '-' + RTRIM(p.kd_tty_msk) AS Id,
                                     p.*,
-                                    cb.nm_cb,
                                     s.nm_jns_sor
                                 FROM ri01i p
-                                INNER JOIN rf01 cb ON p.kd_cb = cb.kd_cb
                                 INNER JOIN rf18 s ON p.kd_jns_sor = s.kd_jns_sor
                             ) src
                             ",
-                
-               BaseWhere = "",
 
+                BaseWhere = "",
 
                 ColumnMap = new Dictionary<string, string>
                 {
-                    ["nm_cb"]       = "src.nm_cb",
+                    ["thn_uw"]       = "src.thn_uw",
                     ["nm_jns_sor"]      = "src.nm_jns_sor",
-                    ["kd_tty_msk"]     = "src.kd_tty_msk"
+                    ["kd_tty_msk"]     = "src.kd_tty_msk",
+                    ["desk_tty"]     = "src.desk_tty"
                 },
                 
                 SearchableColumns = new List<string>
                 {
-                    "src.nm_cb",
+                    "src.thn_uw",
                     "src.nm_jns_sor",
-                    "src.kd_tty_msk"
+                    "src.kd_tty_msk",
+                    "src.desk_tty"
                 }
             };
         }

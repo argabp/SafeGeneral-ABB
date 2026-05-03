@@ -18,9 +18,9 @@
     </div>
     
     @(Html.Kendo().Grid<TreatyMasukXOLDto>()
-        .Name("treatyMasukGrid")
+        .Name("TreatyMasukGrid")
         .DataSource(dataSource => dataSource.Ajax().ServerOperation(true).PageSize(25)
-            .Read(read => read.Action("GettreatyMasuks", "NotaTreatyMasukXOL").Data("searchFilterTreatyMasuk"))
+            .Read(read => read.Action("GetTreatyMasuks", "NotaTreatyMasukXOL").Data("searchFilterTreatyMasuk"))
         )
         .Columns(columns =>
         {

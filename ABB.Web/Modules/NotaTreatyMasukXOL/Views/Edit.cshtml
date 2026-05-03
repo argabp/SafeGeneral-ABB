@@ -53,7 +53,7 @@
         <div class="form-group row">
             <div class="row col-sm-6">
                 <label class="col-sm-6">Kode Treaty Masuk</label>
-                <div class="col-sm-4">
+                <div class="col-sm-6">
                     <kendo-textbox for="kd_tty_msk" readonly="true" style="width: 100%"/>
                     <span asp-validation-for="kd_tty_msk" class="text-danger"></span>
                 </div>
@@ -114,7 +114,7 @@
         </div>
         <div class="form-group row">
             <div class="row col-sm-12">
-                <label class="col-sm-3">Nama Tertanggung</label>
+                <label class="col-sm-3">Keterangan</label>
                 <div class="col-sm-9">
                     <kendo-textbox for="nm_ttg" style="width: 100%;"/>
                     <span asp-validation-for="nm_ttg" class="text-danger"></span>
@@ -166,7 +166,7 @@
                 </div>
             </div>
             <div class="row col-sm-6">
-                <label class="col-sm-6">Due To Us</label>
+                <label class="col-sm-6" id="labelDueTo">Due To Us</label>
                 <div class="col-sm-6">
                     <kendo-numerictextbox spinners="false" name="due_to_us" readonly="true" style="width: 100%; background-color: #FFFFE1"/>
                 </div>
@@ -240,6 +240,40 @@
                     <label>
                         <input type="checkbox" class="k-checkbox" disabled="disabled" id="flag_closing"/> Closing
                     </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode User Input</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist name="kd_usr_input_field" value="@Model.kd_usr_input"  style="width: 100%" option-label="Pilih User Input" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetUsers", "NotaTreatyMasukXOL")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_usr_input" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6" style="align-content: center;">
+                <label class="col-sm-6">Flag Closing</label>
+                <input type="hidden" id="tempFlag_closing" value="@Model.flag_closing">
+                <div class="col-sm-6">
+                    <label>
+                        <input type="checkbox" class="k-checkbox" disabled="disabled" id="flag_closing"/> Closing
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Tanggal Input</label>
+                <div class="col-sm-6">
+                    <kendo-datepicker for="tgl_input" style="background-color: #FFFFE1" readonly="true"></kendo-datepicker>
+                    <span asp-validation-for="tgl_input" class="text-danger"></span>
                 </div>
             </div>
         </div>

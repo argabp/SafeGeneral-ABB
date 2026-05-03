@@ -1,0 +1,107 @@
+@using ABB.Application.ProsesPremiXOLKeluars.Queries
+@using Kendo.Mvc.UI
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Proses Premi XOL Keluar";
+}
+<script src="~/Modules/ProsesPremiXOLKeluar/JS/prosesPremiXOLKeluar.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Proses Premi XOL Keluar
+        </div>
+
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+        </div>
+
+        <div class="col-md-2">
+            <button class="flat-btn-primary" onclick="btnAddProsesPremiXOLKeluar_OnClick()" >Add</button>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<ProsesPremiXOLKeluarDto>()
+                .Name("ProsesPremiXOLKeluarGrid")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetProsesPremiXOLKeluars", "ProsesPremiXOLKeluar").Data("searchFilterProsesPremiXOLKeluar"))
+                    .Model(model => model.Id(p => p.Id))
+                )
+                .Columns(columns =>
+                {
+                    columns.Command(command =>
+                    {
+                        command.Custom("Proses")
+                            .Text("Proses")
+                            .IconClass("fa fa-circle-notch")
+                            .HtmlAttributes(new { title="Proses"})
+                            .Click("onProsesPremiXOLKeluar");
+                        command.Custom("EditProsesPremiXOLKeluar")
+                            .Text("Edit")
+                            .IconClass("k-icon k-i-edit")
+                            .HtmlAttributes(new { title="Edit"})
+                            .Click("onEditProsesPremiXOLKeluar");
+                        command.Custom("DeleteProsesPremiXOLKeluar")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeleteProsesPremiXOLKeluar");
+                        command.Custom("ViewProsesPremiXOLKeluar")
+                            .Text("View")
+                            .IconClass("fa fa-eye")
+                            .HtmlAttributes(new { title = "View" })
+                            .Click("onViewProsesPremiXOLKeluar");
+                    }).Width(150).Title("Action").Locked(true);
+                    columns.Bound(col => col.nm_jns_sor).Width(150).Title("Nama Jenis SOR");
+                    columns.Bound(col => col.kd_tty_npps).Width(200).Title("Kode Treaty Keluar XOL");
+                    columns.Bound(col => col.no_ref).Width(200).Title("Nomor Referensi");
+                    columns.Bound(col => col.tgl_closing).Width(150).Title("Tanggal Closing").Format("{0: dd-MM-yyyy}");
+                    columns.Bound(col => col.flag_closing).Width(200).Title("Flag Closing");
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("OnProsesPremiXOLKeluarDataBound"))
+                ) 
+        </div>
+        
+        @(Html.Kendo().Window()
+            .Name("ProsesPremiXOLKeluarWindow")
+            .Title("Proses Premi XOL Keluar")
+            .Width(800)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+        
+        @(Html.Kendo().Window()
+            .Name("TreatyKeluarWindow")
+            .Title("TreatyKeluar")
+            .Width(600)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+        )
+    </div>
+</div>

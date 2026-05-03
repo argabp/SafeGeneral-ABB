@@ -60,6 +60,8 @@ namespace ABB.Application.Alokasis.Queries
         public DateTime? tgl_sor { get; set; }
 
         public decimal net_prm { get; set; }
+
+        public decimal nilai_dis { get; set; }
         
         public decimal pst_rate_prm { get; set; }
         

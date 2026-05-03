@@ -1277,10 +1277,30 @@ function buildGridRequest(e, searchKeywordProperty) {
 
   // ---- filters ----
   if (e.filter) {
-    req.FiltersJson = JSON.stringify(e.filter);
+    // Deep clone the filter object so we don't break the actual Grid UI state
+    const filterCopy = $.extend(true, {}, e.filter);
+
+    // Format all Date objects into plain strings
+    formatFilterDates(filterCopy);
+
+    req.FiltersJson = JSON.stringify(filterCopy);
   }
 
   return req;
+}
+
+function formatFilterDates(filter) {
+  if (filter.filters) {
+    for (let i = 0; i < filter.filters.length; i++) {
+      formatFilterDates(filter.filters[i]);
+    }
+  } else {
+    // Check if the value is a JavaScript Date object
+    if (filter.value instanceof Date) {
+      // Formats to '2014-08-01' (strips the timezone Z)
+      filter.value = kendo.toString(filter.value, "yyyy-MM-dd");
+    }
+  }
 }
 
 function searchFilterServerFiltering(e) {

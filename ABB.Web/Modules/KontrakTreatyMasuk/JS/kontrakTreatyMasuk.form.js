@@ -72,3 +72,22 @@ function dataKodeSbBisDropDown(){
         kd_cb: $("#kd_cb").val().trim(),
     }
 }
+
+function OnTahunUnderwritingChange(e){
+    var kd_cob = $("#kd_cob").val();
+    var kd_jns_sor = $("#kd_jns_sor").data("kendoDropDownList");
+    var thn_uw = e.sender.value();
+
+    ajaxGet(`/KontrakTreatyMasuk/GetKeteranganTreaty?kd_cob=${kd_cob}&nm_jns_sor=${kd_jns_sor.text()}&thn_uw=${thn_uw}`,
+        function (response) {
+            if (response.Result == "OK") {
+                var desk_tty = response.Data.split(",")[1];
+                $("#desk_tty").getKendoTextArea().value(desk_tty);
+            }
+            else if (response.Result == "ERROR")
+                showMessage("Error", response.Message);
+            else
+                showMessage("Error", response);
+        }
+    );
+}

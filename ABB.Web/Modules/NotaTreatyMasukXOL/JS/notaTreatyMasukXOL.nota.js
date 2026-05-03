@@ -9,6 +9,14 @@ async function setNotaEditedValue(){
     flag_posting == "Y" ? $("#flag_posting").prop("checked", true) : $("#flag_posting").prop("checked", false);
     var flag_cancel = $("#tempFlag_cancel").val();
     flag_cancel == "Y" ? $("#flag_cancel").prop("checked", true) : $("#flag_cancel").prop("checked", false);
+
+    if(notaTreatyMasuk.flag_closing == "Y"){
+        var ket_nt = $("#ket_nt").data("kendoTextArea");
+        $(ket_nt.element).css("cssText", "background-color: var(--soft-grey) !important;");
+        ket_nt.readonly(true);
+        
+        $("#btn-save-nota").hide();
+    }
 }
 
 function btnSave_Click() {

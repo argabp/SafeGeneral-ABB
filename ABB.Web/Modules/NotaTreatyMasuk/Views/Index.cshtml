@@ -60,12 +60,17 @@
                             .IconClass("k-icon k-i-delete")
                             .HtmlAttributes(new { title="Delete"})
                             .Click("onDeleteNotaTreatyMasuk");
+                        command.Custom("ViewNotaTreatyMasuk")
+                            .Text("View")
+                            .IconClass("fa fa-eye")
+                            .HtmlAttributes(new { title = "View" })
+                            .Click("onViewNotaTreatyMasuk");
                     }).Width(150).Title("Action").Locked(true);
-                    columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
                     columns.Bound(col => col.nm_jns_sor).Width(150).Title("Nama Jenis SOR");
                     columns.Bound(col => col.kd_tty_msk).Width(200).Title("Kode Treaty Masuk");
-                    columns.Bound(col => col.nm_mtu).Width(200).Title("Nama Mata uang");
-                    columns.Bound(col => col.nomor_transaksi).Width(200).Title("Nomor Transaksi");
+                    columns.Bound(col => col.ket_tr).Width(200).Title("Nomor Referensi");
+                    columns.Bound(col => col.tgl_closing).Width(150).Title("Tanggal Closing").Format("{0: dd-MM-yyyy}");
+                    columns.Bound(col => col.flag_closing).Width(200).Title("Flag Closing");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)
@@ -77,7 +82,7 @@
                 .Scrollable()
                 .Height(450)
                 .Resizable(a=>a.Columns(true))
-                .Events(ev => ev.DataBound("gridAutoFit"))
+                .Events(ev => ev.DataBound("OnNotaTreatyMasukDataBound"))
                 ) 
         </div>
         

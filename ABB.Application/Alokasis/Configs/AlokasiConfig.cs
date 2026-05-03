@@ -15,6 +15,7 @@ namespace ABB.Application.Alokasis.Configs
                             CAST(BINARY_CHECKSUM(p.kd_cb, p.kd_cob, p.kd_scob, p.kd_thn, p.no_pol, p.no_updt) AS BIGINT) AS Id,
                             p.*,
                             m.nm_mtu nm_mtu_prm,
+                            pp.nilai_dis,
                             pp.nilai_prm - pp.nilai_dis net_prm,
                             pp.pst_rate_prm,
                             pp.stn_rate_prm
