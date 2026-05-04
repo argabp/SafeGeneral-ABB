@@ -1,11 +1,11 @@
 using System;
 using ABB.Application.Common.Interfaces;
-using ABB.Application.EntriNotaKlaimTreaties.Commands;
+using ABB.Application.NotaPremiTreatyKeluars.Commands;
 using AutoMapper;
 
-namespace ABB.Web.Modules.EntriNotaKlaimTreaty.Models
+namespace ABB.Web.Modules.NotaPremiTreatyKeluar.Models
 {
-    public class EntriNotaKlaimTreatyViewModel : IMapFrom<SaveEntriNotaKlaimTreatyCommand>
+    public class NotaPremiTreatyKeluarViewModel : IMapFrom<SaveNotaPremiTreatyKeluarCommand>
     {
         public string kd_cb { get; set; }
 
@@ -25,6 +25,10 @@ namespace ABB.Web.Modules.EntriNotaKlaimTreaty.Models
 
         public string kd_cob { get; set; }
 
+        public string kd_jns_tty { get; set; }
+
+        public string kd_rk_tty { get; set; }
+
         public string kd_mtu { get; set; }
 
         public string kd_grp_pas { get; set; }
@@ -34,17 +38,19 @@ namespace ABB.Web.Modules.EntriNotaKlaimTreaty.Models
         public string? ket_nt { get; set; }
 
         public decimal nilai_nt { get; set; }
-
+        
         public DateTime tgl_nt { get; set; }
 
         public string flag_cancel { get; set; }
 
         public string flag_posting { get; set; }
 
+        public string? kd_cb_pol { get; set; }
+
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<EntriNotaKlaimTreatyViewModel, SaveEntriNotaKlaimTreatyCommand>();
-            profile.CreateMap<Domain.Entities.NotaKlaimTreaty, EntriNotaKlaimTreatyViewModel>();
+            profile.CreateMap<NotaPremiTreatyKeluarViewModel, SaveNotaPremiTreatyKeluarCommand>();
+            profile.CreateMap<Domain.Entities.NotaPremiTreatyKeluar, NotaPremiTreatyKeluarViewModel>();
         }
     }
 }

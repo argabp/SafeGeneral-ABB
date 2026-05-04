@@ -41,6 +41,7 @@ namespace ABB.Infrastructure.Data
         public DbSet<Alokasi> Alokasi { get; set; }
         public DbSet<DetailAlokasi> DetailAlokasi { get; set; }
         public DbSet<ProsesPremiXOLKeluar> ProsesPremiXOLKeluar { get; set; }
+        public DbSet<NotaPremiTreatyKeluar> NotaPremiTreatyKeluar { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -68,6 +69,7 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new AlokasiMap());
             builder.ApplyConfiguration(new DetailAlokasiMap());
             builder.ApplyConfiguration(new ProsesPremiXOLKeluarMap());
+            builder.ApplyConfiguration(new NotaPremiTreatyKeluarMap());
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

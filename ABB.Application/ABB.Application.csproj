@@ -32,6 +32,9 @@
       <Folder Include="CetakNotaKoasuransiKeluars\Commands" />
       <Folder Include="CetakSchedulePolis\Commands" />
       <Folder Include="HasilCSM\Commands" />
+      <Folder Include="NotaPremiXOLs\Commands\" />
+      <Folder Include="NotaPremiXOLs\Configs\" />
+      <Folder Include="NotaPremiXOLs\Queries\" />
       <Folder Include="RenewalNotices\Commands" />
       <Folder Include="RoleLevels\Queries" />
     </ItemGroup>

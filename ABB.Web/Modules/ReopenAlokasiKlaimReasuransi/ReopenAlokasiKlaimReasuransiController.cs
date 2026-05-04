@@ -36,9 +36,9 @@ namespace ABB.Web.Modules.ReopenAlokasiKlaimReasuransi
             try
             {
                 var command = Mapper.Map<ReopenAlokasiKlaimReasuransiCommand>(model);
-                await Mediator.Send(command);
+                var result = await Mediator.Send(command);
 
-                return Ok(new { Status = "OK" });
+                return Ok(new { Status = "OK", Message = result.Item2 });
             }
             catch (Exception e)
             {

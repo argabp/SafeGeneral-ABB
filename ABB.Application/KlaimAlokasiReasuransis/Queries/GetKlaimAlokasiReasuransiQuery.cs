@@ -37,7 +37,12 @@ namespace ABB.Application.KlaimAlokasiReasuransis.Queries
             CancellationToken cancellationToken)
         {
             try
-            {                
+            {
+                if (string.IsNullOrWhiteSpace(request.kd_rk_sor))
+                {
+                    request.kd_rk_sor = string.Empty;
+                }
+                
                 var klaimAlokasiReasuransi = _dbContextPst.KlaimAlokasiReasuransi.Find(request.kd_cb, request.kd_cob, request.kd_scob, request.kd_thn, request.no_kl, request.no_mts, request.kd_jns_sor, request.kd_grp_sor, request.kd_rk_sor);
 
                 return klaimAlokasiReasuransi;
