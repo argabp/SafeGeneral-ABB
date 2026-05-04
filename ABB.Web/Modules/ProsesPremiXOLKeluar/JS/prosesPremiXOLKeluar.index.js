@@ -55,6 +55,27 @@ function onProsesPremiXOLKeluar(e) {
     );
 }
 
+function onCancelProsesPremiXOLKeluar(e) {
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    showConfirmation('Confirmation', `Are you sure you want to Cancel Proses?`,
+        function () {
+            showProgressOnGrid('#ProsesPremiXOLKeluarGrid');
+
+            ajaxPost("/ProsesPremiXOLKeluar/CancelProses", JSON.stringify(dataItem),
+                function (response) {
+                    if (response.Result === "OK") {
+                        showMessage("Success", response.Message)
+                    } else {
+                        showMessage('Error', response.Message);
+                    }
+                    refreshGrid('#ProsesPremiXOLKeluarGrid');
+                },
+            );
+        }
+    );
+}
+
 function onDeleteProsesPremiXOLKeluar(e){
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
@@ -99,8 +120,10 @@ function OnProsesPremiXOLKeluarDataBound(e){
             if(dataItem.flag_closing == "Y"){
                 buttonContainer.find(".k-grid-EditProsesPremiXOLKeluar").hide();
                 buttonContainer.find(".k-grid-DeleteProsesPremiXOLKeluar").hide();
+                buttonContainer.find(".k-grid-Proses").hide();
             } else {
                 buttonContainer.find(".k-grid-ViewProsesPremiXOLKeluar").hide();
+                buttonContainer.find(".k-grid-CancelProses").hide();
             }
         }
     });

@@ -26,6 +26,7 @@ namespace ABB.Web.Modules.ProsesPremiXOLKeluar.Models
         public void Mapping(Profile profile)
         {
             profile.CreateMap<ProsesPremiXOLKeluarModel, ProsesPremiXOLKeluarCommand>();
+            profile.CreateMap<ProsesPremiXOLKeluarModel, CancelProsesPremiXOLKeluarCommand>();
         }
     }
 }

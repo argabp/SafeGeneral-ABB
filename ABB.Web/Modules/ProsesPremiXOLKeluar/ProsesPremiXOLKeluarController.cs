@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ABB.Application.Common;
-using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Grids.Models;
 using ABB.Application.Common.Queries;
 using ABB.Application.ProsesPremiXOLKeluars.Commands;
@@ -193,9 +191,25 @@ namespace ABB.Web.Modules.ProsesPremiXOLKeluar
             try
             {
                 var command = Mapper.Map<ProsesPremiXOLKeluarCommand>(model);
-                await Mediator.Send(command);
+                var result = await Mediator.Send(command);
                 
-                return Json(new { Result = "OK", Message = Constant.DataDisimpan });
+                return Json(new { Result = "OK", Message = result.Item2 });
+            }
+            catch (Exception e)
+            {
+                return Json(new
+                    { Result = "ERROR", Message = e.InnerException == null ? e.Message : e.InnerException.Message });
+            }
+        }
+
+        public async Task<IActionResult> CancelProses([FromBody] ProsesPremiXOLKeluarModel model)
+        {
+            try
+            {
+                var command = Mapper.Map<CancelProsesPremiXOLKeluarCommand>(model);
+                var result = await Mediator.Send(command);
+                
+                return Json(new { Result = "OK", Message = result.Item2 });
             }
             catch (Exception e)
             {

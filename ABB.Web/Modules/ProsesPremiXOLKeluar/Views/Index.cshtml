@@ -50,6 +50,11 @@
                             .IconClass("fa fa-circle-notch")
                             .HtmlAttributes(new { title="Proses"})
                             .Click("onProsesPremiXOLKeluar");
+                        command.Custom("CancelProses")
+                            .Text("Cancel Proses")
+                            .IconClass("fa fa-times-circle")
+                            .HtmlAttributes(new { title="Cancel Proses"})
+                            .Click("onCancelProsesPremiXOLKeluar");
                         command.Custom("EditProsesPremiXOLKeluar")
                             .Text("Edit")
                             .IconClass("k-icon k-i-edit")

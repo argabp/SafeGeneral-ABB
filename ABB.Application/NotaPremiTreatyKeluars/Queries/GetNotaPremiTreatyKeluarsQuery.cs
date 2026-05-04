@@ -13,6 +13,7 @@ namespace ABB.Application.NotaPremiTreatyKeluars.Queries
     {
         public GridRequest Grid { get; set; }
     }
+    
     public class GetNotaPremiTreatyKeluarsQueryHandler : IRequestHandler<GetNotaPremiTreatyKeluarsQuery, GridResponse<NotaPremiTreatyKeluarDto>>
     {
         private readonly IGridQueryEngine _gridEngine;

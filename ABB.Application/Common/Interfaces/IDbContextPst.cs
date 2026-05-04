@@ -33,6 +33,7 @@ namespace ABB.Application.Common.Interfaces
         DbSet<DetailAlokasi> DetailAlokasi { get; set; }
         DbSet<ProsesPremiXOLKeluar> ProsesPremiXOLKeluar { get; set; }
         DbSet<NotaPremiTreatyKeluar> NotaPremiTreatyKeluar { get; set; }
+        DbSet<NotaKomisiTambahan> NotaKomisiTambahan { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
