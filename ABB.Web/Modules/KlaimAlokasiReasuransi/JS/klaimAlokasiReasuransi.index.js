@@ -46,8 +46,19 @@ function OnClickEditSOL(e) {
     console.log('dataItem', dataItem);
     
     showProgressByElement($("#KlaimAlokasiReasuransiWindow"));
+
+    var parentId =
+        dataItem.kd_cb.trim() + "-" +
+        dataItem.kd_cob.trim() + "-" +
+        dataItem.kd_scob.trim() + "-" +
+        dataItem.kd_thn.trim() + "-" +
+        dataItem.no_kl.trim() + "-" +
+        dataItem.no_mts;
+
+    const element = document.getElementById("addButton_" + parentId);
+    const nilai_ttl_kl = element.getAttribute("data-nilai-ttl-kl");
     
-    openKlaimAlokasiReasuransiWindow(`/KlaimAlokasiReasuransi/EditSOL?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}&no_mts=${dataItem.no_mts}&kd_jns_sor=${dataItem.kd_jns_sor}&kd_rk_sor=${dataItem.kd_rk_sor}&kd_grp_sor=${dataItem.kd_grp_sor}`, 'Edit SOL');
+    openKlaimAlokasiReasuransiWindow(`/KlaimAlokasiReasuransi/EditSOL?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_kl=${dataItem.no_kl}&no_mts=${dataItem.no_mts}&kd_jns_sor=${dataItem.kd_jns_sor}&kd_rk_sor=${dataItem.kd_rk_sor}&kd_grp_sor=${dataItem.kd_grp_sor}&nilai_ttl_kl=${nilai_ttl_kl}`, 'Edit SOL');
 }
 
 function OnClickEditSOLXOL(e) {

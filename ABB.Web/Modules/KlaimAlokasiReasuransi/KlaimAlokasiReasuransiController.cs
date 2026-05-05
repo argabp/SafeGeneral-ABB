@@ -303,7 +303,7 @@ namespace ABB.Web.Modules.KlaimAlokasiReasuransi
 
         public async Task<IActionResult> EditSOL(string kd_cb, string kd_cob,
             string kd_scob, string kd_thn, string no_kl, Int16 no_mts,
-            string kd_jns_sor, string kd_grp_sor, string kd_rk_sor)
+            string kd_jns_sor, string kd_grp_sor, string kd_rk_sor, decimal nilai_ttl_kl)
         {
             var klaimAlokasiReasuransi = await Mediator.Send(new GetKlaimAlokasiReasuransiQuery()
             {
@@ -324,8 +324,12 @@ namespace ABB.Web.Modules.KlaimAlokasiReasuransi
             klaimAlokasiReasuransi.kd_jns_sor = klaimAlokasiReasuransi.kd_jns_sor.Trim();
             klaimAlokasiReasuransi.kd_grp_sor = klaimAlokasiReasuransi.kd_grp_sor.Trim();
             klaimAlokasiReasuransi.kd_rk_sor = klaimAlokasiReasuransi.kd_rk_sor.Trim();
+
+            var viewModel = Mapper.Map<KlaimAlokasiReasuransiViewModel>(klaimAlokasiReasuransi);
+
+            viewModel.nilai_ttl_kl = nilai_ttl_kl;
             
-            return PartialView(Mapper.Map<KlaimAlokasiReasuransiViewModel>(klaimAlokasiReasuransi));
+            return PartialView(viewModel);
         }
         
         [HttpPost]

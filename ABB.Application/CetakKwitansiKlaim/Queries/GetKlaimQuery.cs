@@ -43,7 +43,7 @@ namespace ABB.Application.CetakKwitansiKlaim.Queries
 					INNER JOIN rf05 scob
 						ON p.kd_cob = scob.kd_cob
 						AND p.kd_scob = scob.kd_scob
-				WHERE cb.kd_cb = @KodeCabang AND (p.no_nt_msk like '%'+@SearchKeyword+'%' 
+				WHERE cb.kd_cb = @KodeCabang AND p.flag_cancel = 'N' AND (p.no_nt_msk like '%'+@SearchKeyword+'%' 
 					OR p.kd_bln like '%'+@SearchKeyword+'%' 
 					OR cb.nm_cb like '%'+@SearchKeyword+'%' 
 					OR cob.nm_cob like '%'+@SearchKeyword+'%' 
