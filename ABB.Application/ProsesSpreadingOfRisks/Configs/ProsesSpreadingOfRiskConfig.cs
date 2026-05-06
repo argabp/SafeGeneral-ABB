@@ -10,45 +10,55 @@ namespace ABB.Application.ProsesSpreadingOfRisks.Configs
             return new GridConfig
             {
                 FromSql = @"
-                    FROM (  
-                        SELECT DISTINCT
+                    FROM (  SELECT DISTINCT
                             CAST(BINARY_CHECKSUM(uw08e.kd_cb, uw08e.kd_cob, uw08e.kd_scob, uw08e.kd_thn, uw08e.no_pol, uw08e.no_updt) AS BIGINT) AS Id,
-                            uw08e.*, 
-                            uw01e.*,
-                            cb.nm_cb,
-                            cob.nm_cob,
-                            scob.nm_scob,
+                               uw08e.kd_cb,
+                               uw08e.kd_cob,
+                               uw08e.kd_scob,
+                               uw08e.kd_thn,
+                               uw08e.kd_bln,
+                               uw08e.no_pol,
+                               uw08e.no_updt,
+                               uw01e.nm_ttg,
+                                rf01.nm_cb,
+                                rf04.nm_cob,
+                                rf05.nm_scob,
                             SUBSTRING(uw08e.no_pol_ttg, 1, 2) + '.' +
                             SUBSTRING(uw08e.no_pol_ttg, 3, 3) + '.' +
                             SUBSTRING(uw08e.no_pol_ttg, 6, 2) + '.' +
                             SUBSTRING(uw08e.no_pol_ttg, 8, 4) + '.' +
                             SUBSTRING(uw08e.no_pol_ttg, 12, 4) + '-' +
                             SUBSTRING(uw08e.no_pol_ttg, 16, LEN(uw08e.no_pol_ttg)) no_pol_ttg_masked
-                        FROM uw08e
-                        JOIN uw01e ON uw01e.kd_cb = uw08e.kd_cb AND uw01e.kd_cob = uw08e.kd_cob 
-                                  AND uw01e.kd_scob = uw08e.kd_scob AND uw01e.kd_thn = uw08e.kd_thn 
-                                  AND uw01e.no_pol = uw08e.no_pol AND uw01e.no_updt = uw08e.no_updt
-                        INNER JOIN rf01 cb ON uw08e.kd_cb = cb.kd_cb
-                        INNER JOIN rf04 cob ON uw08e.kd_cob = cob.kd_cob
-                        INNER JOIN rf05 scob ON uw08e.kd_cob = scob.kd_cob 
-                                            AND uw08e.kd_scob = scob.kd_scob
+                        FROM uw01e,
+                             uw08e,
+                             uw04e,
+                             rf01,
+                             rf04,
+                             rf05
+                        WHERE uw01e.kd_cb = uw08e.kd_cb
+                              AND uw01e.kd_cob = uw08e.kd_cob
+                              AND uw01e.kd_scob = uw08e.kd_scob
+                              AND uw01e.kd_thn = uw08e.kd_thn
+                              AND uw01e.no_pol = uw08e.no_pol
+                              AND uw01e.no_updt = uw08e.no_updt
+                              AND uw01e.flag_reas = 'N'
+                              AND uw08e.flag_posting = 'Y'
+                              AND uw08e.flag_cancel = 'N'
+                              AND uw04e.nilai_prm <> 0
+                              AND uw01e.kd_cb = uw04e.kd_cb
+                              AND uw01e.kd_cob = uw04e.kd_cob
+                              AND uw01e.kd_scob = uw04e.kd_scob
+                              AND uw01e.kd_thn = uw04e.kd_thn
+                              AND uw01e.no_pol = uw04e.no_pol
+                              AND uw01e.no_updt = uw04e.no_updt
+                              AND uw01e.kd_cb = rf01.kd_cb
+                              AND uw01e.kd_cob = rf04.kd_cob
+                              AND uw01e.kd_cob = rf05.kd_cob
+                              AND uw01e.kd_scob = rf05.kd_scob
                     ) as src",
 
                 // Moving the heavy uw04e check here using EXISTS makes it very clean and fast
-                BaseWhere = @"
-                    src.flag_reas = 'N' 
-                    AND src.flag_posting = 'Y' 
-                    AND src.flag_cancel = 'N'
-                    AND EXISTS (
-                        SELECT 1 FROM uw04e 
-                        WHERE uw04e.kd_cb = src.kd_cb 
-                          AND uw04e.kd_cob = src.kd_cob 
-                          AND uw04e.kd_scob = src.kd_scob 
-                          AND uw04e.kd_thn = src.kd_thn 
-                          AND uw04e.no_pol = src.no_pol 
-                          AND uw04e.no_updt = src.no_updt 
-                          AND uw04e.nilai_prm <> 0
-                    )",
+                BaseWhere = @"",
 
                 ColumnMap = new Dictionary<string, string>
                 {
