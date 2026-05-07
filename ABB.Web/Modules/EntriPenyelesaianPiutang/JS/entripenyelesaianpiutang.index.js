@@ -208,11 +208,15 @@ function onSavePembayaran() {
         }
     } else if (flagPembayaran.toUpperCase() === "NOTA") {
         NoNotaValue = $("#NoNota").val();
+        kodeAkunValue = $("#KodeAkun").data("kendoComboBox").value();
         if (!NoNotaValue || NoNotaValue.trim() === "") {
             showMessage('warning', 'Silakan pilih Nomor Nota.');
             return; // Stop
         }
+        
     }
+
+    console.log(kodeAkunValue);
     // --- AKHIR VALIDASI DETAIL ---
 
 
@@ -245,6 +249,8 @@ function onSavePembayaran() {
                 KodeAkun: kodeAkunValue,
                 NoNota: NoNotaValue
             };
+
+            console.log(data);
         
             // --- 4. AJAX CALL UNTUK SIMPAN DETAIL ---
             $.ajax({
@@ -315,6 +321,7 @@ function onEditPembayaran(e) {
         $("#notaField").show();
         $("#akunField").hide();
         $("#NoNota").data("kendoTextBox").value(dataItem.NoNota);
+        $("#KodeAkun").data("kendoComboBox").value(dataItem.KodeAkun);
     }
     $("#KodeMataUang").data("kendoComboBox").value(dataItem.KodeMataUang);
 

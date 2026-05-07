@@ -64,6 +64,7 @@ function onSavePembayaran() {
         kodeAkunValue = $("#KodeAkun").data("kendoComboBox").value();
     } else if (flagPembayaran && flagPembayaran.toUpperCase() === "NOTA") {
         noNota4Value = $("#NoNota4").val();
+        kodeAkunValue = $("#KodeAkun").data("kendoComboBox").value();
     }
 
     var data = {
