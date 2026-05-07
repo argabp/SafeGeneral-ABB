@@ -45,21 +45,20 @@ namespace ABB.Application.InquiryNotaProduksis.Queries
                     d_k = x.d_k,
                     netto = x.netto,
                     saldo = x.saldo,
-                    no_pl = x.no_pl,           // NO. POLIS
-                    kd_ass2 = x.kd_ass2,       // COB
-                    jn_ass = x.jn_ass,         // COB (Cadangan)
-                    nm_pos = x.nm_pos,         // PEMBAWA POS
-                    nm_cust2 = x.nm_cust2,     // CEDING
-                    nm_brok = x.nm_brok,       // AGEN/BROKER
-                    jumlah = x.netto * (x.kurs ?? 1),        // JUMLAH BIAYA
-                    date_input = x.date_input  // TANGGAL NOT
+                    no_pl = x.no_pl,           
+                    kd_ass2 = x.kd_ass2,       
+                    jn_ass = x.jn_ass,         
+                    nm_pos = x.nm_pos,         
+                    nm_cust2 = x.nm_cust2,     
+                    nm_brok = x.nm_brok,       
+                    jumlah = x.netto * (x.kurs ?? 1),        
+                    date_input = x.date_input  
                 })
                 .FirstOrDefaultAsync(cancellationToken);
 
             if (header == null)
                 return null;
 
-            // 🔹 PEMBAYARAN BANK
             var pembayaranBank = await (
                 from pb in _context.EntriPembayaranBank
                 join vb in _context.VoucherBank
@@ -67,9 +66,10 @@ namespace ABB.Application.InquiryNotaProduksis.Queries
                 where pb.NoNota4 == request.NoNota
                 select new EntriPembayaranBankDto
                 {
-                    NoVoucher = vb.NoVoucher,          // dari VoucherBank
-                    TanggalVoucher = vb.TanggalVoucher,       // dari VoucherBank
-                    TotalDlmRupiah = pb.TotalDlmRupiah       // dari PembayaranBank
+                    NoVoucher = vb.NoVoucher,          
+                    TanggalVoucher = vb.TanggalVoucher,       
+                    TotalDlmRupiah = pb.TotalDlmRupiah,
+                    DebetKredit = pb.DebetKredit // <--- PAKAI HURUF BESAR SESUAI ENTITY
                 }
             ).ToListAsync(cancellationToken);
 
@@ -83,7 +83,8 @@ namespace ABB.Application.InquiryNotaProduksis.Queries
                 {
                     NoVoucher = vk.NoVoucher,
                     TanggalVoucher = vk.TanggalVoucher,
-                    TotalDlmRupiah = pk.TotalDlmRupiah
+                    TotalDlmRupiah = pk.TotalDlmRupiah,
+                    DebetKredit = pk.DebetKredit // <--- PAKAI HURUF BESAR SESUAI ENTITY
                 }
             ).ToListAsync(cancellationToken);
 
@@ -97,7 +98,8 @@ namespace ABB.Application.InquiryNotaProduksis.Queries
                 {
                     NomorBukti = vp.NomorBukti,
                     Tanggal = vp.Tanggal,
-                    TotalBayarRp = pp.TotalBayarRp
+                    TotalBayarRp = pp.TotalBayarRp,
+                    DebetKredit = pp.DebetKredit // <--- PAKAI HURUF BESAR SESUAI ENTITY
                 }
             ).ToListAsync(cancellationToken);
 

@@ -145,7 +145,8 @@
                                 <td>-</td> 
                                 <td>@(item.TanggalVoucher?.ToString("dd/MM/yyyy"))</td>
                                 <td class="text-left">PEMBAYARAN KAS</td>
-                                <td>@(isNotaKredit ? "D" : "K")</td> <td class="text-right">@string.Format("{0:N2}", bayar)</td>
+                                <td>@(isNotaKredit ? "D" : "K")</td>
+                                 <td class="text-right">@string.Format("{0:N2}", bayar)</td>
                             </tr>
                             urut++;
                         }
@@ -180,7 +181,10 @@
                         foreach (var item in Model.PembayaranPiutangList)
                         {
                             decimal bayar = item.TotalBayarRp ?? 0;
-                            if (isNotaKredit) { totalSaldo += bayar; } else { totalSaldo -= bayar; }
+                            if (item.DebetKredit == "D")
+                                totalSaldo += bayar;
+                            else
+                                totalSaldo -= bayar;
 
                             <tr>
                                 <td>@urut</td>
@@ -190,7 +194,7 @@
                                 <td>-</td>
                                 <td>@(item.Tanggal?.ToString("dd/MM/yyyy"))</td>
                                 <td class="text-left">PEMBAYARAN PIUTANG</td>
-                                <td>@(isNotaKredit ? "D" : "K")</td>
+                                <td>@item.DebetKredit</td>
                                 <td class="text-right">@string.Format("{0:N2}", bayar)</td>
                             </tr>
                             urut++;

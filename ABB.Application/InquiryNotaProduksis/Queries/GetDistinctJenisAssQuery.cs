@@ -27,10 +27,10 @@ namespace ABB.Application.InquiryNotaProduksis.Queries
             var query = _context.Produksi.AsQueryable();
 
             // Filter Lokasi dulu sebelum distinct
-            if (!string.IsNullOrEmpty(request.KodeCabang))
-            {
-                query = query.Where(p => p.lok == request.KodeCabang);
-            }
+            // if (!string.IsNullOrEmpty(request.KodeCabang))
+            // {
+            //     query = query.Where(p => p.lok == request.KodeCabang);
+            // }
 
             var result = await query
                 .Where(p => !string.IsNullOrEmpty(p.jn_ass))
