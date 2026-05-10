@@ -6,9 +6,9 @@ using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Interfaces;
 using MediatR;
 
-namespace ABB.Application.KlaimAlokasiReasuransis.Queries
+namespace ABB.Application.Common.Queries
 {
-    public class GetRekananSorQuery : IRequest<List<DropdownOptionDto>>
+    public class GetRekananSorFullPSTQuery : IRequest<List<DropdownOptionDto>>
     {
         public string jns_lookup { get; set; }
         public string kd_cb { get; set; }
@@ -16,16 +16,16 @@ namespace ABB.Application.KlaimAlokasiReasuransis.Queries
         public string kd_jns_sor { get; set; }
     }
 
-    public class GetRekananSorQueryHandler : IRequestHandler<GetRekananSorQuery, List<DropdownOptionDto>>
+    public class GetRekananSorFullPSTHandler : IRequestHandler<GetRekananSorFullPSTQuery, List<DropdownOptionDto>>
     {
         private readonly IDbConnectionPst _connectionPst;
 
-        public GetRekananSorQueryHandler(IDbConnectionPst connectionPst)
+        public GetRekananSorFullPSTHandler(IDbConnectionPst connectionPst)
         {
             _connectionPst = connectionPst;
         }
 
-        public async Task<List<DropdownOptionDto>> Handle(GetRekananSorQuery request, CancellationToken cancellationToken)
+        public async Task<List<DropdownOptionDto>> Handle(GetRekananSorFullPSTQuery request, CancellationToken cancellationToken)
         {
             var result = (await _connectionPst.QueryProc<string>("spg_ddlb_all",
                 new

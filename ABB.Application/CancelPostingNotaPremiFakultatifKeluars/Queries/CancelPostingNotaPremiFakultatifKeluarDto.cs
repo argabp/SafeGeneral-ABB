@@ -1,3 +1,5 @@
+using System;
+
 namespace ABB.Application.CancelPostingNotaPremiFakultatifKeluars.Queries
 {
     public class CancelPostingNotaPremiFakultatifKeluarDto
@@ -5,6 +7,12 @@ namespace ABB.Application.CancelPostingNotaPremiFakultatifKeluars.Queries
         public string nomor_nota { get; set; }
         
         public string nm_ttj { get; set; }
+
+        public string nm_ttg { get; set; }
+
+        public string no_pol { get; set; }
+
+        public string nilai_nt { get; set; }
         
         public string jns_sb_nt { get; set; }
         
@@ -23,5 +31,7 @@ namespace ABB.Application.CancelPostingNotaPremiFakultatifKeluars.Queries
         public string jns_nt_kel { get; set; }
         
         public string no_nt_kel { get; set; }
+
+        public DateTime tgl_nt { get; set; }
     }
 }

@@ -56,7 +56,7 @@ namespace ABB.Application.NotaTreatyMasukXOLs.Configs
                     ["nm_grp_pas"]       = "src.nm_grp_pas",
                     ["nm_rk_pas"]       = "src.nm_rk_pas",
                     ["desk_tty"]       = "src.desk_tty",
-                    ["pst_share"]       = "src.pst_share"
+                    ["pst_share_tty"]       = "src.pst_share_tty"
                 },
                 
                 SearchableColumns = new List<string>
@@ -70,7 +70,7 @@ namespace ABB.Application.NotaTreatyMasukXOLs.Configs
                     "src.nm_grp_pas",
                     "src.nm_rk_pas",
                     "src.desk_tty",
-                    "src.pst_share"
+                    "src.pst_share_tty"
                 }
             };
         }

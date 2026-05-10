@@ -8,7 +8,7 @@
 
 @{
     Layout = "~/Modules/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Cancel Posting Nota Premi XOL Keluar";
+    ViewData["Title"] = "Cancel Posting Nota Premi Fakultatif Keluar";
 }
 <script src="~/Modules/CancelPostingNotaPremiFakultatifKeluar/JS/cancelPostingNotaPremiFakultatifKeluar.js"></script>
 
@@ -20,7 +20,7 @@
 <div class="flat-box">
     <div class="row">
         <div class="flat-box-title col-md-4">
-            Cancel Posting Nota Premi XOL Keluar
+            Cancel Posting Nota Premi Fakultatif Keluar
         </div>
 
         <div class="col-md-4">
@@ -30,9 +30,9 @@
         <div class="col-md-2">
             <button class="flat-btn-primary" onclick="cancelPostingNotaPremiFakultatifKeluar()">Cancel Posting</button>
         </div>
-        <div class="col-md-2">
-            <button class="flat-btn-primary" onclick="accountingPostingNotaPremiFakultatifKeluar()">Posting Accounting</button>
-        </div>
+        @* <div class="col-md-2"> *@
+        @*     <button class="flat-btn-primary" onclick="accountingPostingNotaPremiFakultatifKeluar()">Posting Accounting</button> *@
+        @* </div> *@
     </div>
 
     <div class="flat-box-content">
@@ -46,9 +46,12 @@
                 .Columns(columns =>
                 {
                     columns.Select().Width(50);
-                    columns.Bound(col => col.nomor_nota).Width(150).Title("Nomor Nota");
+                    columns.Bound(col => col.no_pol).Width(150).Title("Nomor Polis");
+                    columns.Bound(col => col.nm_ttg).Width(150).Title("Nama Tertanggung");
+                    columns.Bound(col => col.nomor_nota).Width(200).Title("Nomor Nota");
                     columns.Bound(col => col.nm_ttj).Width(150).Title("Nama Tertuju");
-                    // columns.Bound(col => col.tgl_nt).Width(150).Title("Tanggal Nota").Format("{0: dd-MM-yyyy}");
+                    columns.Bound(col => col.tgl_nt).Width(150).Title("Tanggal Nota").Format("{0: dd-MM-yyyy}");
+                    columns.Bound(col => col.nilai_nt).Width(150).Title("Nilai Nota").Format("{0:n4}");;
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

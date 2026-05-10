@@ -39,9 +39,9 @@
             columns.Bound(col => col.no_updt_reas).Width(150).Title("No Update Reas");
             columns.Bound(col => col.nm_mtu_prm).Width(150).Title("Mata Uang");
             columns.Bound(col => col.nilai_ttl_ptg).Width(150).Title("Nilai Pertanggungan").Format("{0:n2}");
-            columns.Bound(col => col.nilai_prm).Width(150).Title("Nilai Premi").Format("{0:n2}");
-            columns.Bound(col => col.nilai_dis).Width(150).Title("Nilai Diskon").Format("{0:n2}");
             columns.Bound(col => col.net_prm).Width(150).Title("Nilai Premi").Format("{0:n2}");
+            columns.Bound(col => col.nilai_dis).Width(150).Title("Nilai Diskon").Format("{0:n2}");
+            columns.Bound(col => col.nilai_prm_uw).Width(150).Title("Nett Premi").Format("{0:n2}");
         })
         .Pageable(pager => pager
             .Refresh(true)

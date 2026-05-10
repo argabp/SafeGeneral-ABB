@@ -86,10 +86,10 @@ function OnNotaTreatyMasukXOLDataBound(e){
 
         if (buttonContainer.length) {
             if(dataItem.flag_closing == "Y"){
-                buttonContainer.find(".k-grid-EditNotaTreatyMasuk").hide();
-                buttonContainer.find(".k-grid-DeleteNotaTreatyMasuk").hide();
+                buttonContainer.find(".k-grid-EditNotaTreatyMasukXOL").hide();
+                buttonContainer.find(".k-grid-DeleteNotaTreatyMasukXOL").hide();
             } else {
-                buttonContainer.find(".k-grid-ViewNotaTreatyMasuk").hide();
+                buttonContainer.find(".k-grid-ViewNotaTreatyMasukXOL").hide();
             }
         }
     });

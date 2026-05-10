@@ -117,7 +117,10 @@ namespace ABB.Application.NotaTreatyMasuks.Commands
                     var newTransaksiTreatyMasuk = _mapper.Map<TransaksiTreatyMasuk>(request);
                     newTransaksiTreatyMasuk.no_tr = no_tr;
                     newTransaksiTreatyMasuk.kd_usr_input = _currentUserService.UserId;
+                    newTransaksiTreatyMasuk.kd_usr_updt = _currentUserService.UserId;
+                    newTransaksiTreatyMasuk.kd_usr_closing = _currentUserService.UserId;
                     newTransaksiTreatyMasuk.tgl_input = DateTime.Now;
+                    newTransaksiTreatyMasuk.tgl_updt = DateTime.Now;
                     newTransaksiTreatyMasuk.flag_closing = "N";
                     _contextPst.TransaksiTreatyMasuk.Add(newTransaksiTreatyMasuk);
                 }

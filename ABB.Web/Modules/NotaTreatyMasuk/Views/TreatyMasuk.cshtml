@@ -20,7 +20,7 @@
     @(Html.Kendo().Grid<TreatyMasukDto>()
         .Name("treatyMasukGrid")
         .DataSource(dataSource => dataSource.Ajax().ServerOperation(true).PageSize(25)
-            .Read(read => read.Action("GettreatyMasuks", "NotatreatyMasuk").Data("searchFilterTreatyMasuk"))
+            .Read(read => read.Action("GetTreatyMasuks", "NotatreatyMasuk").Data("searchFilterTreatyMasuk"))
         )
         .Columns(columns =>
         {

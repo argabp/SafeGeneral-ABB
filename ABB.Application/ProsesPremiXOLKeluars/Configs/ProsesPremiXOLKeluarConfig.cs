@@ -30,19 +30,19 @@ namespace ABB.Application.ProsesPremiXOLKeluars.Configs
 
                 ColumnMap = new Dictionary<string, string>
                 {
-                    ["nm_cb"]       = "src.nm_cb",
+                    ["no_ref"]       = "src.no_ref",
                     ["nm_jns_sor"]       = "src.nm_jns_sor",
-                    ["nm_mtu"]       = "src.nm_mtu",
-                    ["nomor_transaksi"]       = "src.nomor_transaksi",
+                    ["tgl_closing"]       = "src.tgl_closing",
+                    ["flag_closing"]       = "src.flag_closing",
                     ["kd_tty_npps"]       = "src.kd_tty_npps"
                 },
                 
                 SearchableColumns = new List<string>
                 {
-                    "src.nm_cb",
+                    "src.no_ref",
                     "src.nm_jns_sor",
-                    "src.nm_mtu",
-                    "src.nomor_transaksi",
+                    "src.tgl_closing",
+                    "src.flag_closing",
                     "src.kd_tty_npps"
                 }
             };

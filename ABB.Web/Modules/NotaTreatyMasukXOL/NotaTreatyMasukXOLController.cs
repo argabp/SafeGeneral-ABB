@@ -51,6 +51,7 @@ namespace ABB.Web.Modules.NotaTreatyMasukXOL
         {
             return View(new NotaTreatyMasukXOLViewModel()
             {
+                kd_cb = "PS10",
                 flag_closing = "N",
                 kuartal_tr = 5,
                 nilai_prm = 0,

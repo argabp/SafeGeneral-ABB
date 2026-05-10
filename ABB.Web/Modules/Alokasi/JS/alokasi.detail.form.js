@@ -203,3 +203,12 @@ function OnAdjReasChange(e){
         }
     );
 }
+
+function dataRekananSorDropDown(){
+    return {
+        jns_lookup: alokasi.kd_cb + ",R",
+        kd_cb: alokasi.kd_cb,
+        kd_cob: alokasi.kd_cob,
+        kd_jns_sor: $("#kd_jns_sor").val().trim()
+    }
+}

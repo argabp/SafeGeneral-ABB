@@ -1,3 +1,5 @@
+using System;
+
 namespace ABB.Application.CancelPostingNotaPremiTreatyKeluars.Queries
 {
     public class CancelPostingNotaPremiTreatyKeluarDto
@@ -7,6 +9,16 @@ namespace ABB.Application.CancelPostingNotaPremiTreatyKeluars.Queries
         public string nm_ttj { get; set; }
         
         public string kd_cb { get; set; }
+        
+        public string nm_cob { get; set; }
+
+        public string nm_mtu { get; set; }
+
+        public string ket_nt { get; set; }
+
+        public DateTime tgl_nt { get; set; }
+
+        public string nilai_nt { get; set; }
 
         public string jns_tr { get; set; }
 

@@ -47,7 +47,7 @@
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
-                                <read url="@Url.Action("GetRekananSor", "Alokasi")"/>
+                                <read url="@Url.Action("GetRekananSor", "Alokasi")" data="dataRekananSorDropDown"/>
                             </transport>
                         </datasource>
                     </kendo-dropdownlist>

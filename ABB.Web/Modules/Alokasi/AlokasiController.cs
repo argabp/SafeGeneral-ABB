@@ -381,10 +381,7 @@ namespace ABB.Web.Modules.Alokasi
         {
             try
             {
-                var command = new GetJenisSorQuery()
-                {
-                    DatabaseName = Request.Cookies["DatabaseValue"]
-                };
+                var command = new GetJenisSorPSTQuery();
                 
                 var result = await Mediator.Send(command);
                 
@@ -397,16 +394,20 @@ namespace ABB.Web.Modules.Alokasi
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetRekananSor(string? jns_lookup)
+        public async Task<ActionResult> GetRekananSor(string? jns_lookup, 
+            string kd_cb, string kd_jns_sor, string kd_cob)
         {
             try
             {
                 if (jns_lookup == null)
                     return Ok();
                 
-                var command = new GetRekananSorPSTQuery()
+                var command = new GetRekananSorFullPSTQuery()
                 {
-                    jns_lookup = jns_lookup
+                    jns_lookup = jns_lookup,
+                    kd_cb = kd_cb,
+                    kd_jns_sor = kd_jns_sor,
+                    kd_cob = kd_cob
                 };
                 
                 var result = await Mediator.Send(command);
@@ -536,7 +537,7 @@ namespace ABB.Web.Modules.Alokasi
             
             return Json(mataUang);
         }
-        
+
         public JsonResult GetRatePremi()
         {
             var result = new List<DropdownOptionDto>()

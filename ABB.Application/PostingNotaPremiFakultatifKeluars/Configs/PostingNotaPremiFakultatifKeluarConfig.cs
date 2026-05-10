@@ -13,8 +13,6 @@ namespace ABB.Application.PostingNotaPremiFakultatifKeluars.Configs
                             FROM (
                                 SELECT 
                                     p.*,
-                                    cob.nm_cob,
-                                    scob.nm_scob,
                                     r.nm_rk nm_ttj,
                                     pp.nm_ttg,
                                     p.kd_cb + '-' + 
@@ -29,9 +27,6 @@ namespace ABB.Application.PostingNotaPremiFakultatifKeluars.Configs
                                     RTRIM(p.jns_nt_msk) + '.' + RTRIM(p.kd_thn) + '.' +  RTRIM(p.kd_bln) + '.' + 
                                     RTRIM(p.no_nt_msk) + '.' + RTRIM(p.jns_nt_kel) + '.' +  RTRIM(p.no_nt_kel) as nomor_nota
                                  FROM ri04e p
-                                    INNER JOIN rf04 cob ON p.kd_cob = cob.kd_cob
-                                    INNER JOIN rf05 scob ON p.kd_cob = scob.kd_cob 
-                                                        AND p.kd_scob = scob.kd_scob
                                     INNER JOIN rf03 r 
                                         ON p.kd_rk_pas = r.kd_rk
                                             AND p.kd_grp_pas = r.kd_grp_rk

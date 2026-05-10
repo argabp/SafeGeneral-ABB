@@ -14,11 +14,15 @@ namespace ABB.Application.CancelPostingNotaPremiTreatyKeluars.Configs
                                 SELECT 
                                     p.*,
                                     r.nm_rk nm_ttj,
+                                    cob.nm_cob,
+                                    m.nm_mtu,
                                      RTRIM(p.kd_cb) + '.' + RTRIM(p.jns_tr) + '.' + 
                                      RTRIM(p.jns_nt_msk) + '.' + RTRIM(p.kd_thn) + '.' +  RTRIM(p.kd_bln) + '.' + 
                                      RTRIM(p.no_nt_msk) + '.' + RTRIM(p.jns_nt_kel) + '.' +  RTRIM(p.no_nt_kel) as nomor_nota
                                  FROM ri07e p
                                 INNER JOIN rf03 r 
+                                    INNER JOIN rf04 cob ON p.kd_cob = cob.kd_cob
+                                    INNER JOIN rf06 m ON p.kd_mtu = m.kd_mtu
                                     ON p.kd_rk_pas = r.kd_rk
                                         AND p.kd_grp_pas = r.kd_grp_rk
                                         AND p.kd_cb = r.kd_cb

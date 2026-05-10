@@ -9,6 +9,7 @@
 
 @{
     var nomor_transaksi = Model.kd_thn + "." + Model.kd_bln + "." + Model.no_tr;
+    var due_to_us = Convert.ToDouble(Model.nilai_prm - Model.nilai_kms - Model.nilai_kl);
 }
 
 @Html.AntiForgeryToken()
@@ -168,7 +169,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6" id="labelDueTo">Due To Us</label>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox spinners="false" name="due_to_us" readonly="true" style="width: 100%; background-color: #FFFFE1"/>
+                    <kendo-numerictextbox spinners="false" name="due_to_us" value="@due_to_us" readonly="true" style="width: 100%; background-color: #FFFFE1"/>
                 </div>
             </div>
         </div>

@@ -47,7 +47,7 @@
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
-                                <read url="@Url.Action("GetRekananSor", "Alokasi")"/>
+                                <read url="@Url.Action("GetRekananSor", "Alokasi")" data="dataRekananSorDropDown"/>
                             </transport>
                         </datasource>
                     </kendo-dropdownlist>
@@ -58,7 +58,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">TSI</label>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox decimals="2" spinners="false" for="nilai_ttl_ptg_reas" on-change="OnPtgReasChange" style="width: 100%"/>
+                    <kendo-numerictextbox decimals="4" format="n4" spinners="false" for="nilai_ttl_ptg_reas" on-change="OnPtgReasChange" style="width: 100%"/>
                 </div>
             </div>
             <div class="col-sm-6 row" id="rateAdjustmentDiv">
@@ -88,7 +88,7 @@
             <div class="row col-sm-6" id="premiAdjustmentDiv" style="display: none">
                 <label class="col-sm-6">Premi Adjustment</label>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox decimals="2" spinners="false" for="nilai_adj_reas" style="width: 100%"/>
+                    <kendo-numerictextbox decimals="4" format="n4" spinners="false" for="nilai_adj_reas" style="width: 100%"/>
                 </div>
             </div>
         </div>
@@ -96,7 +96,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Nilai Premi</label>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox decimals="2" spinners="false" for="nilai_prm_reas" style="width: 100%"/>
+                    <kendo-numerictextbox decimals="4" format="n4" spinners="false" for="nilai_prm_reas" style="width: 100%"/>
                 </div>
             </div>
         </div>
@@ -112,7 +112,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Nilai Komisi</label>
                 <div class="col-sm-6">
-                    <kendo-numerictextbox decimals="2" spinners="false" for="nilai_kms_reas" style="width: 100%"/>
+                    <kendo-numerictextbox decimals="4" format="n4" spinners="false" for="nilai_kms_reas" style="width: 100%"/>
                 </div>
             </div>
         </div>

@@ -55,7 +55,7 @@ function OnKodeJenisSorChange(e){
                 var kd_rk_sor = response.Data.split(",")[4];
 
                 var kd_rk_sor_dp = $("#kd_rk_sor").data("kendoDropDownList");
-                kd_rk_sor_dp.dataSource.read({jns_lookup : kd_grp_sor + ",R", kd_cb: $("#kd_cb").val(), kd_cob: $("#kd_cob").val(), kd_jns_sor : $("#kd_jns_sor").val()});
+                kd_rk_sor_dp.dataSource.read({jns_lookup : kd_grp_sor + ",R", kd_cb: $("#kd_cb").val(), kd_cob: $("#kd_cob").val(), kd_jns_sor : kd_jns_sor});
 
                 kd_rk_sor_dp.value(kd_rk_sor);
             }

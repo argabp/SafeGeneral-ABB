@@ -1,3 +1,5 @@
+using System;
+
 namespace ABB.Application.CancelPostingNotaTreatyMasukXOLs.Queries
 {
     public class CancelPostingNotaTreatyMasukXOLDto
@@ -21,5 +23,7 @@ namespace ABB.Application.CancelPostingNotaTreatyMasukXOLs.Queries
         public string jns_nt_kel { get; set; }
         
         public string no_nt_kel { get; set; }
+
+        public DateTime tgl_nt { get; set; }
     }
 }

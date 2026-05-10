@@ -11,7 +11,6 @@ using ABB.Application.KlaimAlokasiReasuransis.Queries;
 using ABB.Web.Modules.Base;
 using ABB.Web.Modules.KlaimAlokasiReasuransi.Models;
 using Microsoft.AspNetCore.Mvc;
-using GetRekananSorQuery = ABB.Application.KlaimAlokasiReasuransis.Queries.GetRekananSorQuery;
 
 namespace ABB.Web.Modules.KlaimAlokasiReasuransi
 {
@@ -432,7 +431,7 @@ namespace ABB.Web.Modules.KlaimAlokasiReasuransi
                 if (jns_lookup == null)
                     return Ok();
                 
-                var command = new GetRekananSorQuery()
+                var command = new GetRekananSorFullPSTQuery()
                 {
                     jns_lookup = jns_lookup,
                     kd_cb = kd_cb,

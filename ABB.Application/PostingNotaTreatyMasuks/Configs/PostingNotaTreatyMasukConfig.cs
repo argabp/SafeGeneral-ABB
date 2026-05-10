@@ -13,6 +13,7 @@ namespace ABB.Application.PostingNotaTreatyMasuks.Configs
                             FROM (
                                 SELECT 
                                     p.*,
+                                    r.nm_rk nm_ttj,
                                     cob.nm_cob,
                                     m.nm_mtu,
                                     p.kd_cb + '-' + 
@@ -29,6 +30,10 @@ namespace ABB.Application.PostingNotaTreatyMasuks.Configs
                                  FROM ri03i p
                                     INNER JOIN rf04 cob ON p.kd_cob = cob.kd_cob
                                     INNER JOIN rf06 m ON p.kd_mtu = m.kd_mtu
+                                INNER JOIN rf03 r 
+                                    ON p.kd_rk_pas = r.kd_rk
+                                        AND p.kd_grp_pas = r.kd_grp_rk
+                                        AND p.kd_cb = r.kd_cb
                             ) src
                             ",
 
