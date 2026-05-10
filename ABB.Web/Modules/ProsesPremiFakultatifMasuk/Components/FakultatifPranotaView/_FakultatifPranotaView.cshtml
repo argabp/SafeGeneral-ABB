@@ -1,0 +1,33 @@
+﻿@using Kendo.Mvc.TagHelpers
+@using Kendo.Mvc.UI
+@model ABB.Web.Modules.Akseptasi.Models.AkseptasiPranotaParameterViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/ProsesPremiFakultatifMasuk/Components/FakultatifPranotaView/fakultatifPranotaView.js"></script>
+
+<div class="window-body">
+    <div id="pranotaTab">
+        <ul>
+            <li class="k-active">
+                Tertanggung
+            </li>
+            <li>
+                Koasuransi Member
+            </li>
+        </ul>
+        <div id="tabTertanggung">
+            <vc:fakultatif-pranota model="@Model"></vc:fakultatif-pranota>
+        </div>
+        <div id="tabKoasuransi">
+            <vc:fakultatif-pranota-koas model="@Model"></vc:fakultatif-pranota-koas>
+        </div>
+    </div>
+
+    <div class="window-footer">
+        <button type="button" id="btn-previous-akseptasiPranota" class="btn btn-primary space-right">
+            <span class="fa fa-arrow-left"></span> Previous
+        </button>
+    </div>
+</div>

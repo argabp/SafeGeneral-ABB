@@ -1,0 +1,108 @@
+﻿$(document).ready(function () {
+    btnPreviousOther();
+    btnSaveAkseptasiResikoOther_Click();
+    btnDeleteAkseptasiResikoOtherHoleInOne_Click();
+
+    if($("#IsNewOther").val() === "True"){
+        $("#btn-delete-akseptasiResikoOtherHoleInOne").hide();
+    }
+});
+
+function btnPreviousOther(){
+    $('#btn-previous-akseptasiResikoOther').click(function () {
+        $("#resikoTab").getKendoTabStrip().select(2);
+    });
+}
+
+function btnDeleteAkseptasiResikoOtherHoleInOne_Click(){
+    $('#btn-delete-akseptasiResikoOtherHoleInOne').click(function () {
+        showConfirmation('Confirmation', `Are you sure you want to delete?`,
+            function () {
+                showProgress('#AkseptasiWindow');
+                setTimeout(function () { deleteAkseptasiResikoOtherHoleInOne(); }, 500);
+            }
+        );
+    });
+}
+
+function deleteAkseptasiResikoOtherHoleInOne() {
+    var data = {
+        kd_cb: $("#kd_cb").val(),
+        kd_cob: $("#kd_cob").val(),
+        kd_scob: $("#kd_scob").val(),
+        kd_thn: $("#kd_thn").val(),
+        no_aks: $("#no_aks").val(),
+        no_updt: resiko.no_updt,
+        no_rsk: resiko.no_rsk,
+        kd_endt: resiko.kd_endt
+    }
+
+    ajaxPost(`/ProsesPremiFakultatifMasuk/DeleteOtherHoleInOne`, JSON.stringify(data), function (response) {
+        if (response.Result) {
+            showMessage('Success', 'Data has been deleted');
+            $("#btn-delete-akseptasiResikoOtherHoleInOne").hide();
+        }
+        else {
+            showMessage('Error', 'Delete data is failed, this data is already used');
+        }
+        
+        var dataOther = {
+            kd_cb: $("#kd_cb").val(),
+            kd_cob: $("#kd_cob").val(),
+            kd_scob: $("#kd_scob").val(),
+            kd_thn: $("#kd_thn").val(),
+            no_aks: $("#no_aks").val(),
+            no_updt: resiko.no_updt,
+            no_rsk: resiko.no_rsk,
+            kd_endt: resiko.kd_endt,
+            pst_share: resiko.pst_share_bgu,
+        }
+
+        ajaxPost(`/ProsesPremiFakultatifMasuk/CheckOther`, JSON.stringify(dataOther),
+            function (response) {
+                $("#tabOther").html(response);
+                closeProgress('#AkseptasiWindow');
+            }
+        );
+        
+        closeProgress('#AkseptasiWindow');
+    });
+}
+
+function btnSaveAkseptasiResikoOther_Click() {
+    $('#btn-save-akseptasiResikoOtherHoleInOne').click(function () {
+        showProgress('#AkseptasiWindow');
+        setTimeout(function () {
+            saveAkseptasiResikoOther('/ProsesPremiFakultatifMasuk/SaveAkseptasiOtherHoleInOne')
+        }, 500);
+    });
+}
+
+function saveAkseptasiResikoOther(url) {
+    var form = getFormData($('#OtherHoleInOneForm'));
+    form.kd_cb = $("#kd_cb").val();
+    form.kd_cob = $("#kd_cob").val();
+    form.kd_scob = $("#kd_scob").val();
+    form.kd_thn = $("#kd_thn").val();
+    form.no_aks = $("#no_aks").val();
+    form.no_updt = resiko.no_updt;
+    form.no_rsk = resiko.no_rsk;
+    form.kd_endt = resiko.kd_endt;
+    form.no_pol_ttg = $("#no_pol_ttg").val();
+
+    var data = JSON.stringify(form);
+
+    ajaxPost(url, data,
+        function (response) {
+            if (response.Result == "OK") {
+                showMessage('Success', response.Message);
+            }
+            else if (response.Result == "ERROR")
+                showMessage("Error", response.Message);
+            else
+                showMessage("Error", response);
+
+            closeProgress('#AkseptasiWindow');
+        }
+    );
+}

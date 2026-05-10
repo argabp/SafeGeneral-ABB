@@ -1,0 +1,165 @@
+﻿$(document).ready(function () {
+    btnPreviousOther();
+    btnSaveAkseptasiResikoOther_Click();
+    btnDeleteAkseptasiResikoOtherBanding_Click();
+    
+    if($("#IsNewOther").val() === "True"){
+        $("#btn-delete-akseptasiResikoOtherBonding").hide();
+    }
+});
+
+function btnPreviousOther(){
+    $('#btn-previous-akseptasiResikoOther').click(function () {
+        $("#resikoTab").getKendoTabStrip().select(2);
+    });
+}
+
+function btnDeleteAkseptasiResikoOtherBanding_Click(){
+    $('#btn-delete-akseptasiResikoOtherBonding').click(function () {
+        showConfirmation('Confirmation', `Are you sure you want to delete?`,
+            function () {
+                showProgress('#AkseptasiWindow');
+                setTimeout(function () { deleteAkseptasiResikoOtherBanding(); }, 500);
+            }
+        );
+    });
+}
+
+function deleteAkseptasiResikoOtherBanding() {
+    var data = {
+        kd_cb: $("#kd_cb").val(),
+        kd_cob: $("#kd_cob").val(),
+        kd_scob: $("#kd_scob").val(),
+        kd_thn: $("#kd_thn").val(),
+        no_aks: $("#no_aks").val(),
+        no_updt: fakultatifResiko.no_updt,
+        no_rsk: fakultatifResiko.no_rsk,
+        kd_endt: fakultatifResiko.kd_endt
+    }
+    
+    ajaxPost(`/ProsesPremiFakultatifMasuk/DeleteOtherBonding`, JSON.stringify(data), function (response) {
+        if (response.Result) {
+            showMessage('Success', 'Data has been deleted');
+            $("#btn-delete-akseptasiResikoOtherBonding").hide();
+        }
+        else {
+            showMessage('Error', 'Delete data is failed, this data is already used');
+        }
+
+        var dataOther = {
+            kd_cb: $("#kd_cb").val(),
+            kd_cob: $("#kd_cob").val(),
+            kd_scob: $("#kd_scob").val(),
+            kd_thn: $("#kd_thn").val(),
+            no_aks: $("#no_aks").val(),
+            no_updt: fakultatifResiko.no_updt,
+            no_rsk: fakultatifResiko.no_rsk,
+            kd_endt: fakultatifResiko.kd_endt,
+            pst_share: fakultatifResiko.pst_share_bgu,
+        }
+
+        ajaxPost(`/ProsesPremiFakultatifMasuk/CheckOther`, JSON.stringify(dataOther),
+            function (response) {
+                $("#tabOther").html(response);
+                closeProgress('#AkseptasiWindow');
+            }
+        );
+
+        closeProgress('#AkseptasiWindow');
+    });
+}
+
+function dataKodeSerutyDropDown(){
+    return {
+        kd_cb: $("#kd_cb").val(),
+        kd_grp_surety: $("#kd_grp_surety").val()
+    }
+}
+
+function dataKodePrincipalDropDown(){
+    return {
+        kd_cb: $("#kd_cb").val(),
+        kd_grp_rk: $("#kd_grp_prc").val()
+    }
+}
+
+function OnChangeKodePrincipal(e){
+    $("#kd_rk_prc").getKendoDropDownList().dataSource.read();
+}
+
+function dataGroupObligeeDropDown(){
+    return {
+        grp_obl: $("#grp_obl").val()
+    }
+}
+
+function dataKodeObligeeDropDown(){
+    return {
+        kd_grp_rk: $("#kd_grp_obl").val()
+    }
+}
+
+function dataGroupKontrakDropDown(){
+    return {
+        grp_kontr: $("#grp_kontr").val()
+    }
+}
+
+function dataKodePekerjaanDropDown(){
+    return {
+        kd_grp_rk: $("#grp_jns_pekerjaan").val()
+    }
+}
+
+function dataTTDSuretyDropDown(){
+    return {
+        kd_cb: $("#kd_cb").val()
+    }
+}
+
+function btnSaveAkseptasiResikoOther_Click() {
+    $('#btn-save-akseptasiResikoOtherBonding').click(function () {
+        showProgress('#AkseptasiWindow');
+        setTimeout(function () {
+            saveAkseptasiResikoOther('/ProsesPremiFakultatifMasuk/SaveAkseptasiOtherBonding')
+        }, 500);
+    });
+}
+
+function saveAkseptasiResikoOther(url) {
+    var form = getFormData($('#OtherBondingForm'));
+    form.kd_cb = $("#kd_cb").val();
+    form.kd_cob = $("#kd_cob").val();
+    form.kd_scob = $("#kd_scob").val();
+    form.kd_thn = $("#kd_thn").val();
+    form.no_aks = $("#no_aks").val();
+    form.no_updt = fakultatifResiko.no_updt;
+    form.no_rsk = fakultatifResiko.no_rsk;
+    form.kd_endt = fakultatifResiko.kd_endt;
+    form.no_pol_ttg = $("#no_pol_ttg").val();
+
+    var data = JSON.stringify(form);
+
+    ajaxPost(url, data,
+        function (response) {
+            refreshGrid("#AkseptasiResikoGrid");
+            if (response.Result == "OK") {
+                showMessage('Success', response.Message);
+            }
+            else if (response.Result == "ERROR")
+                showMessage("Error", response.Message);
+            else
+                showMessage("Error", response);
+
+            closeProgress('#AkseptasiWindow');
+        }
+    );
+}
+
+function OnKodeObligeeChange(e){
+    var value = e.sender.value();
+    ajaxGet(`/ProsesPremiFakultatifMasuk/GenerateNameAndAddressObligee?kd_cb=${$("#kd_cb").val()}&kd_rk_obl=${value}`, (returnValue) => {
+        $("#nm_obl").getKendoTextArea().value(returnValue.split(",")[1]);
+        $("#almt_obl").getKendoTextArea().value(returnValue.split(",")[4]);
+    });
+}

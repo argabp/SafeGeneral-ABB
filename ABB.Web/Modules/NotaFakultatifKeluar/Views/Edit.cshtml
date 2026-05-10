@@ -1,0 +1,290 @@
+@using ABB.Application.NotaFakultatifKeluars.Queries
+@using Kendo.Mvc.UI
+@model ABB.Web.Modules.NotaFakultatifKeluar.Models.NotaFakultatifKeluarViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@{
+    var nomor_nota = Model.kd_cb.Trim() + " . " + Model.jns_tr.Trim() + " . " + Model.kd_thn.Trim() + " . " + 
+                     Model.kd_bln.Trim() + " . " + Model.no_nt_msk.Trim()+ " / " + Model.jns_nt_kel.Trim() + " . " + 
+                     Model.no_nt_kel.Trim();
+}
+
+<script src="~/Modules/NotaFakultatifKeluar/JS/notaFakultatifKeluar.edit.js"></script>
+<script src="~/Modules/NotaFakultatifKeluar/JS/notaFakultatifKeluar.form.js"></script>
+
+@Html.AntiForgeryToken()
+<form id="NotaFakultatifKeluarForm" enctype="multipart/form-data">
+    <div class="window-body" style="background-color: lightgray">
+        @Html.HiddenFor(m => m.kd_cb)
+        @Html.HiddenFor(m => m.jns_tr)
+        @Html.HiddenFor(m => m.jns_nt_msk)
+        @Html.HiddenFor(m => m.kd_thn)
+        @Html.HiddenFor(m => m.kd_bln)
+        @Html.HiddenFor(m => m.no_nt_msk)
+        @Html.HiddenFor(m => m.jns_nt_kel)
+        @Html.HiddenFor(m => m.no_nt_kel)
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Polis</label>
+                <div class="col-sm-6">
+                    <kendo-maskedtextbox mask="00.000.00.0000.0000-0" for="no_pol_ttg" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Update</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="no_updt" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Nota</label>
+                <div class="col-sm-6">
+                    <kendo-textbox name="temp_nomor_nota" value="@nomor_nota" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Endorsement</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_endt" style="width: 100%" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeEndorsement", "NotaFakultatifKeluar")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Mata Uang</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_mtu" style="width: 100%" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetMataUang", "NotaFakultatifKeluar")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Update Reas</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="no_updt_reas" readonly="true" style="width: 100%"/>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nomor Slip</label>
+                <div class="col-sm-6">
+                    <kendo-textbox for="no_slip" readonly="true" style="width: 100%"/>
+                    <span asp-validation-for="no_slip" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Sumber Bisnis</label>
+                <div class="col-sm-6">
+                    <input type="hidden" id="temp_kd_grp_sb_bis" value="@Model.kd_grp_sb_bis">
+                    <kendo-dropdownlist for="kd_grp_sb_bis" style="width: 100%" readonly="true" option-label="Pilih Sumber Bisnis"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetSumberBisnis", "NotaFakultatifKeluar")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_grp_sb_bis" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <div class="col-sm-6">
+                    <input type="hidden" id="temp_kd_rk_sb_bis" value="@Model.kd_rk_sb_bis">
+                    <kendo-dropdownlist for="kd_rk_sb_bis" style="width: 100%" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeRekanan", "NotaFakultatifKeluar")" data="dataKodeSumberBisnisDropDown"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_rk_sb_bis" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Kode Tertuju</label>
+                <div class="col-sm-6">
+                    <input type="hidden" id="temp_kd_grp_pas" value="@Model.kd_grp_pas">
+                    <kendo-dropdownlist for="kd_grp_pas" style="width: 100%" readonly="true" option-label="Pilih Kode Tertuju"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" >
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeTertuju", "NotaFakultatifKeluar")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_grp_pas" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <div class="col-sm-6">
+                    <input type="hidden" id="temp_kd_rk_pas" value="@Model.kd_rk_pas">
+                    <kendo-dropdownlist for="kd_rk_pas" style="width: 100%" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeRekanan", "NotaFakultatifKeluar")" data="dataKodePasDropDown"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_rk_pas" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-9">
+                <label class="col-sm-4">Keterangan Nota</label>
+                <div class="col-sm-8">
+                    <kendo-textarea name="ket_nt" rows="2" style="width: 100%; background-color: white">@Model.ket_nt</kendo-textarea>
+                    <span asp-validation-for="ket_nt" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Nilai Nota</label>
+                <div class="col-sm-3">
+                    <kendo-numerictextbox spinners="false" decimals="2" for="nilai_nt" readonly="true" style="width: 100%; background-color: #FFFFE1"/>
+                    <span asp-validation-for="nilai_nt" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Flag Cancel</label>
+                <input type="hidden" id="tempFlag_cancel" value="@Model.flag_cancel">
+                <div class="col-sm-6">
+                    <label>
+                        <input type="checkbox" disabled class="k-checkbox" id="flag_cancel"/> Cancel
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Tanggal Nota</label>
+                <div class="col-sm-6">
+                    <kendo-datepicker for="tgl_nt" readonly="true" style="width: 100%"/>
+                    <span asp-validation-for="tgl_nt" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-6">Flag Posting</label>
+                <input type="hidden" id="tempFlag_posting" value="@Model.flag_posting">
+                <div class="col-sm-6">
+                    <label>
+                        <input type="checkbox" disabled class="k-checkbox" id="flag_posting"/> Posting
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-6">
+                <label class="col-sm-6">WPC</label>
+                <div class="col-sm-6">
+                    <kendo-numerictextbox for="wpc" readonly="true" style="width: 100%" spinners="false"/>
+                    <span asp-validation-for="wpc" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row col-sm-6">
+                <label class="col-sm-3">Periode Reas</label>
+                <div class="col-sm-9 row">
+                    <div class="col-sm-5">
+                        <kendo-datepicker for="tgl_mul_reas" readonly="true" style="width: 100%"/>
+                    </div>
+                    <div class="col-sm-2" style="align-content: center">
+                        <p>s/d</p>
+                    </div>
+                    <div class="col-sm-5">
+                        <kendo-datepicker for="tgl_akh_reas" readonly="true" style="width: 100%"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-9">
+                <label class="col-sm-4">Term & Condition</label>
+                <div class="col-sm-8">
+                    <kendo-textarea name="ket_tc" rows="2" style="width: 100%; background-color: white">@Model.ket_tc</kendo-textarea>
+                    <span asp-validation-for="ket_tc" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-sm-12">
+            <div class="col-sm-12">
+                @(Html.Kendo().Grid<DetailNotaFakultatifKeluarDto>()
+                    .Name("DetailNotaFakultatifKeluarGrid")
+                    .ToolBar(toolbar => toolbar.Create())
+                    .Editable(editable => editable.Mode(GridEditMode.InLine))
+                    .DataSource(dataSource => dataSource.Ajax()
+                        .Read(read => read.Action("GetDetailNotaFakultatifKeluars", "NotaFakultatifKeluar").Data("searchFilterDetailNotaFakultatifKeluar"))
+                        .Model(m => m.Id(p => p.Id))
+                    )
+                    .Columns(columns =>
+                    {
+                        columns.Command(command =>
+                        {
+                            command.Edit();
+                            command.Custom("DeleteDetailNotaFakultatifKeluar")
+                                .Text("Delete")
+                                .IconClass("k-icon k-i-delete")
+                                .HtmlAttributes(new { title = "Delete" })
+                                .Click("onDeleteDetailNotaFakultatifKeluar");
+                        }).Width(200).Locked(true).Title("Action");
+                        columns.Bound(col => col.tgl_ang).Width(150).Title("Tanggal Angsuran").Format("{0: dd-MM-yyyy}").EditorTemplateName("KendoDateEditor");
+                        columns.Bound(col => col.tgl_jth_tempo).Width(150).Title("Tanggal Jatuh Tempo").Format("{0: dd-MM-yyyy}").EditorTemplateName("KendoDateEditor");
+                        columns.Bound(col => col.pst_ang).Width(200).Title("Angsuran (%)").Format("{0:n2}").EditorTemplateName("KendoNumericTextBoxTwoDecimal");
+                        columns.Bound(col => col.nilai_ang).Width(200).Title("Nilai Angsuran").Format("{0:n2}").EditorTemplateName("KendoNumericTextBoxTwoDecimal");
+                    })
+                    .Pageable(pager => pager
+                        .Refresh(true)
+                        .Info(true)
+                        .PageSizes(true)
+                    )
+                    .Sortable()
+                    .Selectable()
+                    .Filterable()
+                    .Scrollable()
+                    .Height(380)
+                    .Resizable(a => a.Columns(true))
+                    .Events(ev => ev.DataBound("OnDetailNotaFakultatifKeluarDataBound").Save("onSaveDetailNotaFakultatifKeluar"))
+                )
+            </div>
+            <span asp-validation-for="Details" class="text-danger"></span>
+            <div class="form-group row col-sm-12" style="padding-top: 1em">
+                <p class="col-sm-6" style="font-weight: bold;">Total Presentase Angsuran & Nilai Angsuran (%)</p>
+                <p class="col-sm-3" style="font-weight: bold;" id="totalPersentaseAngsuran">0</p>
+                <p class="col-sm-3" style="font-weight: bold;" id="totalNilaiAngsuran">0</p>
+            </div>
+        </div>
+    </div>
+    <div class="window-footer">
+        <button type="button" id="btn-save-notaFakultatifKeluar" class="btn btn-primary space-right">Save</button>
+    </div>
+</form>

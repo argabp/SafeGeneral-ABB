@@ -1,0 +1,33 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.Akseptasi.Models.AkseptasiParameterViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/Akseptasi/JS/akseptasi.form.js"></script>
+<script src="~/Modules/Akseptasi/JS/akseptasi.edit.js"></script>
+
+<div class="window-body">
+    <div id="akseptasiTab">
+        <ul>
+            <li class="k-active">
+                Akseptasi
+            </li>
+            <li>
+                Resiko
+            </li>
+            <li>
+                Pranota
+            </li>
+        </ul>
+        <div id="tabAkseptasi">
+            <vc:akseptasi model="Model"></vc:akseptasi>
+        </div>
+        <div id="tabResikoView">
+            <vc:resiko-view model="Model"></vc:resiko-view>
+        </div>
+        <div id="tabPranota">
+            <vc:pranota-view model="@Model"></vc:pranota-view>
+        </div>
+    </div>
+</div>

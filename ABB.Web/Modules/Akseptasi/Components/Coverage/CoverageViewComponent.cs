@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using ABB.Application.Akseptasis.Commands;
 using ABB.Web.Modules.Akseptasi.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +18,7 @@ namespace ABB.Web.Modules.Akseptasi.Components.Coverage
         {
             if (string.IsNullOrWhiteSpace(model.kd_cob) && string.IsNullOrWhiteSpace(model.kd_scob))
             {
-                return View("~/Modules/Shared/Empty.cshtml");
+                return View("Empty");
             }
             
             // return View("_Coverage", akseptasiViewModel);

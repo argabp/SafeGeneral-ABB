@@ -1,0 +1,67 @@
+﻿@using ABB.Application.Akseptasis.Queries
+@using Kendo.Mvc.UI
+
+<script src="~/Modules/Akseptasi/JS/akseptasi.copyEndors.js"></script>
+
+<style>
+    .flat-btn-primary{
+        padding: 10px 0px;
+    }
+</style>
+
+<div class="window-body">
+    <div class="row">
+        <div class="col-md-4">
+            <input type="text" class="search-field-top" style="height: 1em" id="SearchKeywordCopyEndors" placeholder="Search"/>
+        </div>
+    </div>
+    
+    @(Html.Kendo().Grid<CopyEndorsDto>()
+        .Name("CopyEndorsGrid")
+        .DataSource(dataSource => dataSource.Ajax()
+            .Read(read => read.Action("GetCopyEndors", "Akseptasi").Data("searchFilterCopyEndors"))
+            .Model(model => model.Id(p => p.Id))
+        )
+        .Columns(columns =>
+        {
+            columns.Bound(col => col.no_rsk).Width(150).Title("Nomor Resiko");
+            columns.Bound(col => col.kd_endt).Width(150).Title("Kode Endors").ClientTemplate("#= data.kd_endt == 'I' ? 'Insert' : 'Delete' #");
+            columns.Bound(col => col.ket_rsk).Width(200).Title("Keterangan Resiko");
+            columns.Bound(col => col.nilai_ttl_ptg).Width(200).Title("Total Pertanggungan");
+            columns.Bound(col => col.nilai_prm).Width(150).Title("Premi");
+            columns.Bound(col => col.nilai_dis).Width(100).Title("Diskon");
+            columns.Bound(col => col.nilai_kms).Width(100).Title("Komisi");
+            columns.Command(command =>
+            {
+                command.Custom("DeleteCopyEndors")
+                    .Text("Delete")
+                    .IconClass("k-icon k-i-delete")
+                    .HtmlAttributes(new { title = "Delete" })
+                    .Click("btnDeleteCopyEndors_OnClick");
+                command.Custom("UpdateCopyEndors")
+                    .Text("Update")
+                    .IconClass("fa fa-pencil-alt")
+                    .HtmlAttributes(new { title = "Update" })
+                    .Click("btnUpdateCopyEndors_OnClick");
+                command.Custom("InsertCopyEndors")
+                    .Text("Insert")
+                    .IconClass("fa fa-plus")
+                    .HtmlAttributes(new { title = "Insert" })
+                    .Click("btnInsertCopyEndors_OnClick");
+            }).Width(200).Title("Action");
+        })
+        .Pageable(pager => pager
+            .Refresh(true)
+            .Info(true)
+            .PageSizes(true)
+        )
+        .Sortable()
+        .Filterable()
+        .Scrollable()
+        .Selectable()
+        .Height(450)
+        .Resizable(a => a.Columns(true))
+        .Events(ev => ev.DataBound("gridAutoFit"))
+
+        )
+</div>

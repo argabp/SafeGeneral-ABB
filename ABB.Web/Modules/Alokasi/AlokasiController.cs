@@ -9,7 +9,6 @@ using ABB.Application.Common.Exceptions;
 using ABB.Application.Common.Grids.Models;
 using ABB.Application.Common.Queries;
 using ABB.Web.Extensions;
-using ABB.Web.Modules.Akseptasi.Models;
 using ABB.Web.Modules.Alokasi.Models;
 using ABB.Web.Modules.Base;
 using Microsoft.AspNetCore.Mvc;

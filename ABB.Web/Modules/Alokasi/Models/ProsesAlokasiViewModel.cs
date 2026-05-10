@@ -3,7 +3,7 @@ using ABB.Application.Alokasis.Commands;
 using ABB.Application.Common.Interfaces;
 using AutoMapper;
 
-namespace ABB.Web.Modules.Akseptasi.Models
+namespace ABB.Web.Modules.Alokasi.Models
 {
     public class ProsesAlokasiViewModel : IMapFrom<ProsesAlokasiCommand>
     {

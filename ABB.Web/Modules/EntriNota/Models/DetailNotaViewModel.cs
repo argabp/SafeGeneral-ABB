@@ -1,8 +1,6 @@
 using System;
 using ABB.Application.Common.Interfaces;
-using ABB.Application.EntriNotas.Commands;
 using ABB.Application.EntriNotas.Queries;
-using AutoMapper;
 
 namespace ABB.Web.Modules.EntriNota.Models
 {
