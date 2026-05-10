@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ABB.Application.Common.Grids.Models;
-using ABB.Application.PostingNotaKlaimTreatyMasuks.Commands;
-using ABB.Application.PostingNotaKlaimTreatyMasuks.Queries;
+using ABB.Application.PostingNotaKlaimTreatyMasukXOLs.Commands;
+using ABB.Application.PostingNotaKlaimTreatyMasukXOLs.Queries;
 using ABB.Web.Modules.Base;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ABB.Web.Modules.PostingNotaKlaimTreatyMasuk
+namespace ABB.Web.Modules.PostingNotaKlaimTreatyMasukXOL
 {
-    public class PostingNotaKlaimTreatyMasukController : AuthorizedBaseController
+    public class PostingNotaKlaimTreatyMasukXOLController : AuthorizedBaseController
     {
         public ActionResult Index()
         {
@@ -20,9 +20,9 @@ namespace ABB.Web.Modules.PostingNotaKlaimTreatyMasuk
             return View();
         }
         
-        public async Task<ActionResult> GetPostingNotaKlaimTreatyMasuks(GridRequest grid)
+        public async Task<ActionResult> GetPostingNotaKlaimTreatyMasukXOLs(GridRequest grid)
         {
-            var result = await Mediator.Send(new GetPostingNotaKlaimTreatyMasuksQuery()
+            var result = await Mediator.Send(new GetPostingNotaKlaimTreatyMasukXOLsQuery()
             {
                 Grid = grid
             });
@@ -31,11 +31,11 @@ namespace ABB.Web.Modules.PostingNotaKlaimTreatyMasuk
         }
         
         [HttpPost]
-        public async Task<ActionResult> Posting([FromBody] List<PostingNotaKlaimTreatyMasukModel> model)
+        public async Task<ActionResult> Posting([FromBody] List<PostingNotaKlaimTreatyMasukXOLModel> model)
         {
             try
             {
-                var command = new PostingNotaKlaimTreatyMasukCommand()
+                var command = new PostingNotaKlaimTreatyMasukXOLCommand()
                 {
                     Data = model
                 };

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using ABB.Application.Common.Grids.Models;
 
-namespace ABB.Application.PostingNotaKlaimTreatyMasuks.Configs
+namespace ABB.Application.PostingNotaKlaimTreatyMasukXOLs.Configs
 {
-    public static class PostingNotaKlaimTreatyMasukConfig
+    public static class PostingNotaKlaimTreatyMasukXOLConfig
     {
         public static GridConfig Create()
         {
@@ -26,7 +26,7 @@ namespace ABB.Application.PostingNotaKlaimTreatyMasuks.Configs
                             ",
 
                 BaseWhere = @"
-                            (src.flag_cancel = 'N' AND src.flag_posting = 'N' AND src.kd_jns_sor <> 'XOL')
+                            (src.flag_cancel = 'N' AND src.flag_posting = 'N' AND src.kd_jns_sor = 'XOL')
                             ",
 
                 ColumnMap = new Dictionary<string, string>
