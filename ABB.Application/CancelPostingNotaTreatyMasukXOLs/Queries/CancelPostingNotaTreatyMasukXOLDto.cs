@@ -1,6 +1,6 @@
-namespace ABB.Application.CancelPostingNotaTreatyMasuks.Queries
+namespace ABB.Application.CancelPostingNotaTreatyMasukXOLs.Queries
 {
-    public class CancelPostingNotaTreatyMasukDto
+    public class CancelPostingNotaTreatyMasukXOLDto
     {
         public string nomor_nota { get; set; }
 

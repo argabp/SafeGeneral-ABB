@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using ABB.Application.Common.Grids.Models;
 
-namespace ABB.Application.CancelPostingNotaTreatyMasuks.Configs
+namespace ABB.Application.CancelPostingNotaTreatyMasukXOLs.Configs
 {
-    public static class CancelPostingNotaTreatyMasukConfig
+    public class CancelPostingNotaTreatyMasukXOLConfig
     {
         public static GridConfig Create()
         {
@@ -26,7 +26,7 @@ namespace ABB.Application.CancelPostingNotaTreatyMasuks.Configs
                             ",
 
                 BaseWhere = @"
-                            (src.flag_cancel = 'N' AND src.flag_posting = 'Y' AND src.kd_jns_sor <> 'XOL')
+                            (src.flag_cancel = 'N' AND src.flag_posting = 'Y' AND src.kd_jns_sor = 'XOL')
                             ",
 
                 ColumnMap = new Dictionary<string, string>

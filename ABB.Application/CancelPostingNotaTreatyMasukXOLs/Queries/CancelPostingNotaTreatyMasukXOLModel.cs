@@ -1,11 +1,7 @@
-namespace ABB.Application.CancelPostingNotaTreatyMasuks.Queries
+namespace ABB.Application.CancelPostingNotaTreatyMasukXOLs.Queries
 {
-    public class CancelPostingNotaTreatyMasukDto
+    public class CancelPostingNotaTreatyMasukXOLModel
     {
-        public string nomor_nota { get; set; }
-
-        public string nm_ttj { get; set; }
-        
         public string kd_cb { get; set; }
 
         public string jns_tr { get; set; }
