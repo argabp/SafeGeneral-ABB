@@ -79,6 +79,7 @@ namespace ABB.Application.LaporanKeuangan.Queries
             var excelData = new List<LaporanExcelRow>(); 
             int romanCounter = 0, detailCounter = 0, subDetailCounter = 0;
 
+            decimal nilaiLabaRugiFinal = 0;
             // =================================================================
             // LOGIKA CABANG: JIKA BULANAN (3 KOLOM)
             // =================================================================
@@ -199,6 +200,15 @@ namespace ABB.Application.LaporanKeuangan.Queries
 
                     nilaiIni = nilaiLalu + nilaiMutasi;
                     if (item.Urutan > 0) hasilPerBaris[item.Urutan] = (nilaiLalu, nilaiMutasi, nilaiIni);
+
+                   // Menggunakan Urutan 44 seperti request
+                    if (item.Urutan == 44)
+                    {
+                        nilaiLabaRugiFinal = nilaiMutasi; 
+                    }
+                    // ------------------------------
+
+
 
                     string strLalu = "", strMutasi = "", strIni = "";
                     // if (item.TipeBaris == "DETAIL" || item.TipeBaris == "TOTAL")
@@ -517,7 +527,11 @@ namespace ABB.Application.LaporanKeuangan.Queries
             scriptObj.Import(modelData, renamer: member => member.Name);
             context.PushGlobal(scriptObj);
             
-            return new LaporanKeuanganResponse { HtmlString = template.Render(context), ExcelData = excelData };
+            return new LaporanKeuanganResponse { 
+                HtmlString = template.Render(context), 
+                ExcelData = excelData,
+                LabaRugiSetelahPajak = nilaiLabaRugiFinal // <--- Tambahkan line ini!
+            };
         }
 
         private string ToRoman(int number) {

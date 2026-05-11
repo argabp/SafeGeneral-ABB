@@ -22,6 +22,7 @@ namespace ABB.Application.LaporanKeuangan.Queries
     {
         public string HtmlString { get; set; }
         public List<LaporanExcelRow> ExcelData { get; set; }
+        public decimal LabaRugiSetelahPajak { get; set; }
     }
 
     public class LaporanExcelRow
@@ -491,7 +492,7 @@ namespace ABB.Application.LaporanKeuangan.Queries
             scriptObj.Import(modelData, renamer: member => member.Name);
             context.PushGlobal(scriptObj);
             
-            return new LaporanKeuanganResponse { HtmlString = template.Render(context), ExcelData = excelData };
+            return new LaporanKeuanganResponse { HtmlString = template.Render(context), ExcelData = excelData};
         }
 
         private string ToRoman(int number) {
