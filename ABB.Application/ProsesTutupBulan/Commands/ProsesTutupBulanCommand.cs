@@ -72,7 +72,7 @@ namespace ABB.Application.ProsesTutupBulan.Commands
                 if (Math.Abs(labaRugiAkumulasi) > 0)
                 {
                     // [LOGIKA SAKTI D/K]: Jika minus -> Kredit (K), jika plus/nol -> Debet (D)
-                    string dkFlag = labaRugiAkumulasi < 0 ? "K" : "D";
+                    string dkFlag = labaRugiAkumulasi < 0 ? "D" : "K";
 
                     // Nominal yang masuk ke database HARUS SELALU POSITIF
                     decimal nilaiIdrPositif = Math.Abs(labaRugiAkumulasi);
