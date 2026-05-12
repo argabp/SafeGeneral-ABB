@@ -81,16 +81,29 @@ function onAkunAwalChange() {
 // Fungsi ini otomatis dipanggil Kendo pas user ngetik di ComboBox mana pun yang pake .Data() ini
 function getKodeCabangParam() {
     var comboCabang = $("#KodeCabang").data("kendoComboBox");
-    // Kita ambil aja teks dari input yang lagi "fokus" diketik user
-    // var activeText = $(document.activeElement).val();
-    
-    // Perbaikan: Pastikan comboCabang sudah inisialisasi, kalau belum kasih ""
     var cabangValue = "";
+
     if (comboCabang) {
-        cabangValue = comboCabang.value() || ""; 
+        cabangValue = comboCabang.value() || "";
+    }
+
+    // CARA AMPUH MENGAMBIL TEKS KETIKAN DARI KENDO COMBOBOX:
+    // Kendo menyimpan teks yang sedang diketik di elemen input dengan id namacombo-text
+    // Karena fungsi ini dipakai untuk AkunAwal dan AkunAkhir, kita cek mana yang lagi aktif.
+    var activeElementId = document.activeElement.id;
+    var typedText = "";
+
+    if (activeElementId === "AkunAwal") {
+        typedText = $("#AkunAwal").data("kendoComboBox").text();
+    } else if (activeElementId === "AkunAkhir") {
+        typedText = $("#AkunAkhir").data("kendoComboBox").text();
+    } else {
+        // Fallback jika tidak terdeteksi (meski jarang terjadi)
+        typedText = $(document.activeElement).val() || "";
     }
 
     return {
+        text: typedText, // <--- Ini yang akan ditangkap oleh Controller sebagai 'string text'
         kodeCabangDropdown: cabangValue
     };
 }
