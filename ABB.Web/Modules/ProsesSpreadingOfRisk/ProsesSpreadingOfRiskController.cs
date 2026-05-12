@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ABB.Application.Common;
 using ABB.Application.Common.Grids.Models;
@@ -7,6 +8,8 @@ using ABB.Application.ProsesSpreadingOfRisks.Commands;
 using ABB.Application.ProsesSpreadingOfRisks.Queries;
 using ABB.Web.Modules.Base;
 using ABB.Web.Modules.ProsesSpreadingOfRisk.Models;
+using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ABB.Web.Modules.ProsesSpreadingOfRisk
@@ -22,15 +25,21 @@ namespace ABB.Web.Modules.ProsesSpreadingOfRisk
             return View();
         }
         
-        [HttpPost]
-        public async Task<IActionResult> GetProsesSpreadingOfRisks(GridRequest grid)
-        {
-            var result = await Mediator.Send(new GetProsesSpreadingOfRisksQuery()
-            {
-                Grid = grid
-            });
+        // [HttpPost]
+        // public async Task<IActionResult> GetProsesSpreadingOfRisks(GridRequest grid)
+        // {
+        //     var result = await Mediator.Send(new GetProsesSpreadingOfRisksQuery()
+        //     {
+        //         Grid = grid
+        //     });
+        //
+        //     return Json(result);
+        // }
 
-            return Json(result);
+        public async Task<ActionResult> GetProsesSpreadingOfRisks([DataSourceRequest] DataSourceRequest request, string searchkeyword)
+        {
+            var ds = await Mediator.Send(new GetProsesSpreadingOfRisksQuery() { SearchKeyword = searchkeyword });
+            return Json(ds.AsQueryable().ToDataSourceResult(request));
         }
 
         public async Task<IActionResult> AlokasiReasuransi([FromBody] List<ProsesSpreadingOfRiskViewModel> models)

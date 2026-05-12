@@ -66,6 +66,7 @@ function closingSpreadingOfRisk(){
 
             ajaxPost("/ClosingSpreadingOfRisk/Closing", JSON.stringify(selectedRowsData),
                 function (response) {
+                    closeProgressOnGrid('#ClosingSpreadingOfRiskGrid');
                     if(response.Result === "OK"){
                         showMessage("Success", "Closing SOR Reasuransi Selesai!")
                     } else {

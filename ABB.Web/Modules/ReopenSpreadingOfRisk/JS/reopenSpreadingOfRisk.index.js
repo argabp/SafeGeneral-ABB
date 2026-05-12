@@ -74,6 +74,7 @@ function reopenSpreadingOfRisk(){
                         grid.clearSelection();
                     }
                     selectedRowsData = [];
+                    closeProgressOnGrid('#ReopenSpreadingOfRiskGrid');
                     refreshGrid('#ReopenSpreadingOfRiskGrid');
                 },
             );

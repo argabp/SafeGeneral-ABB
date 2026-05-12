@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ABB.Web.Modules.ProsesPremiFakultatifMasuk.Components.FakultatifCoverage
 {
-    public class CoverageViewComponent : ViewComponent
+    public class FakultatifCoverageViewComponent : ViewComponent
     {
         public async Task<IViewComponentResult> InvokeAsync(AkseptasiResikoParameterViewModel model)
         {
             if (string.IsNullOrWhiteSpace(model.kd_cob) && string.IsNullOrWhiteSpace(model.kd_scob))
             {
-                return View("Empty");
+                return View("~/Modules/Shared/Empty.cshtml");
             }
             
             return View("_FakultatifCoverage", new AkseptasiResikoCoverageViewModel());

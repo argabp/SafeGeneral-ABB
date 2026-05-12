@@ -64,6 +64,7 @@ function prosesSpreadingOfRisk(){
 
             ajaxPost("/ProsesSpreadingOfRisk/AlokasiReasuransi", JSON.stringify(selectedRowsData),
                 function (response) {
+                    closeProgressOnGrid('#ProsesSpreadingOfRiskGrid');
                     if(response.Result === "OK"){
                         showMessage("Success", "Proses SOR Reasuransi Selesai!")
                     } else {

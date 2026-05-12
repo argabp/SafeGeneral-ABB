@@ -33,7 +33,8 @@
             @(Html.Kendo().Grid<ProsesSpreadingOfRiskDto>()
                 .Name("ProsesSpreadingOfRiskGrid")
                 .DataSource(dataSource => dataSource.Ajax()
-                    .Read(read => read.Action("GetProsesSpreadingOfRisks", "ProsesSpreadingOfRisk").Data("searchFilterProsesSpreadingOfRisk"))
+                    // .Read(read => read.Action("GetProsesSpreadingOfRisks", "ProsesSpreadingOfRisk").Data("searchFilterProsesSpreadingOfRisk"))
+                    .Read(read => read.Action("GetProsesSpreadingOfRisks", "ProsesSpreadingOfRisk").Data("searchFilter"))
                     .Model(model => model.Id(p => p.Id))
                 )
                 .Columns(columns =>

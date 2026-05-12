@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ABB.Application.Alokasis.Commands;
 using ABB.Application.Alokasis.Queries;
@@ -11,6 +12,8 @@ using ABB.Application.Common.Queries;
 using ABB.Web.Extensions;
 using ABB.Web.Modules.Alokasi.Models;
 using ABB.Web.Modules.Base;
+using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ABB.Web.Modules.Alokasi
@@ -26,14 +29,20 @@ namespace ABB.Web.Modules.Alokasi
             return View();
         }
         
-        public async Task<ActionResult> GetSORs(GridRequest grid)
+        // public async Task<ActionResult> GetSORs(GridRequest grid)
+        // {
+        //     var result = await Mediator.Send(new GetSORsQuery()
+        //     {
+        //         Grid = grid
+        //     });
+        //     
+        //     return Json(result);
+        // }
+
+        public async Task<ActionResult> GetSORs([DataSourceRequest] DataSourceRequest request, string searchkeyword)
         {
-            var result = await Mediator.Send(new GetSORsQuery()
-            {
-                Grid = grid
-            });
-            
-            return Json(result);
+            var ds = await Mediator.Send(new GetSORsQuery() { SearchKeyword = searchkeyword });
+            return Json(ds.AsQueryable().ToDataSourceResult(request));
         }
         
         public async Task<ActionResult> GetAlokasis(GridRequest grid, string kd_cb, string kd_cob, 

@@ -1,6 +1,6 @@
-namespace ABB.Application.PostingNotaTreatyMasuks.Queries
+namespace ABB.Application.PostingNotaTreatyXOLMasuks.Queries
 {
-    public class PostingNotaTreatyMasukModel
+    public class PostingNotaTreatyXOLMasukModel
     {
         public string kd_cb { get; set; }
 

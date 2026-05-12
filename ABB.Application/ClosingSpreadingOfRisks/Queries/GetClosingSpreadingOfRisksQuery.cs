@@ -1,43 +1,74 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ABB.Application.ClosingSpreadingOfRisks.Configs;
 using ABB.Application.Common.Grids.Interfaces;
 using ABB.Application.Common.Grids.Models;
+using ABB.Application.Common.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.ClosingSpreadingOfRisks.Queries
 {
-    
-    public class GetClosingSpreadingOfRisksQuery : IRequest<GridResponse<ClosingSpreadingOfRiskDto>>
+    public class GetClosingSpreadingOfRisksQuery : IRequest<List<ClosingSpreadingOfRiskDto>>
     {
-        public GridRequest Grid { get; set; }
-
         public string SearchKeyword { get; set; }
     }
 
-    public class GetClosingSpreadingOfRisksQueryHandler : IRequestHandler<GetClosingSpreadingOfRisksQuery, GridResponse<ClosingSpreadingOfRiskDto>>
+    public class GetClosingSpreadingOfRisksQueryHandler : IRequestHandler<GetClosingSpreadingOfRisksQuery, List<ClosingSpreadingOfRiskDto>>
     {
-        private readonly IGridQueryEngine _gridEngine;
-        
-        public GetClosingSpreadingOfRisksQueryHandler(IGridQueryEngine gridEngine)
+        private readonly IDbConnectionPst _dbConnectionPst;
+        private readonly ILogger<GetClosingSpreadingOfRisksQueryHandler> _logger;
+
+        public GetClosingSpreadingOfRisksQueryHandler(IDbConnectionPst dbConnectionPst,
+            ILogger<GetClosingSpreadingOfRisksQueryHandler> logger)
         {
-            _gridEngine = gridEngine;
+            _dbConnectionPst = dbConnectionPst;
+            _logger = logger;
         }
-        
-        public async Task<GridResponse<ClosingSpreadingOfRiskDto>> Handle(
-            GetClosingSpreadingOfRisksQuery request,
+
+        public async Task<List<ClosingSpreadingOfRiskDto>> Handle(GetClosingSpreadingOfRisksQuery request,
             CancellationToken cancellationToken)
         {
-            var config = ClosingSpreadingOfRiskConfig.Create();
+            try
+            {
+                var rekanans = (await _dbConnectionPst.Query<ClosingSpreadingOfRiskDto>(@"
+                        SELECT DISTINCT
+                            CAST(BINARY_CHECKSUM(p.kd_cb, p.kd_cob, p.kd_scob, p.kd_thn, p.no_pol, p.no_updt) AS BIGINT) AS Id,
+                            p.*, 
+                            cb.nm_cb,
+                            cob.nm_cob,
+                            scob.nm_scob,
+                            SUBSTRING(p.no_pol_ttg, 1, 2) + '.' +
+                            SUBSTRING(p.no_pol_ttg, 3, 3) + '.' +
+                            SUBSTRING(p.no_pol_ttg, 6, 2) + '.' +
+                            SUBSTRING(p.no_pol_ttg, 8, 4) + '.' +
+                            SUBSTRING(p.no_pol_ttg, 12, 4) + '-' +
+                            SUBSTRING(p.no_pol_ttg, 16, LEN(p.no_pol_ttg)) no_pol_ttg_masked
+                        FROM v_ri01e p
+                        INNER JOIN rf01 cb ON p.kd_cb = cb.kd_cb
+                        INNER JOIN rf04 cob ON p.kd_cob = cob.kd_cob
+                        INNER JOIN rf05 scob ON p.kd_cob = scob.kd_cob 
+                                            AND p.kd_scob = scob.kd_scob
+                        WHERE p.flag_closing = 'N' AND (cb.nm_cb like '%'+@SearchKeyword+'%' 
+					OR cob.nm_cob like '%'+@SearchKeyword+'%' 
+					OR scob.nm_scob like '%'+@SearchKeyword+'%' 
+					OR p.nm_ttg like '%'+@SearchKeyword+'%' 
+					OR p.tgl_closing like '%'+@SearchKeyword+'%' 
+					OR p.tgl_mul_ptg like '%'+@SearchKeyword+'%' 
+					OR p.tgl_akh_ptg like '%'+@SearchKeyword+'%' 
+					OR p.no_pol_ttg like '%'+@SearchKeyword+'%' 
+					OR @SearchKeyword = '' OR @SearchKeyword IS NULL)", new { request.SearchKeyword })).ToList();
 
-            return await _gridEngine.QueryAsyncPST<ClosingSpreadingOfRiskDto>(
-                request.Grid,
-                config,
-                new
-                {
-                    request.SearchKeyword
-                }
-            );
+                return rekanans;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
         }
     }
 }

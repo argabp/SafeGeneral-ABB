@@ -10,7 +10,7 @@ namespace ABB.Application.ReopenSpreadingOfRisks.Configs
             return new GridConfig
             {
                 FromSql = @"
-                    FROM (  
+                    FROM (
                         SELECT DISTINCT
                             CAST(BINARY_CHECKSUM(p.kd_cb, p.kd_cob, p.kd_scob, p.kd_thn, p.no_pol, p.no_updt) AS BIGINT) AS Id,
                             p.*,

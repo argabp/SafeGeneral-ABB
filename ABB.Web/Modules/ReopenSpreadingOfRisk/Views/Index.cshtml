@@ -33,7 +33,8 @@
             @(Html.Kendo().Grid<ReopenSpreadingOfRiskDto>()
                 .Name("ReopenSpreadingOfRiskGrid")
                 .DataSource(dataSource => dataSource.Ajax()
-                    .Read(read => read.Action("GetReopenSpreadingOfRisks", "ReopenSpreadingOfRisk").Data("searchFilterReopenSpreadingOfRisk"))
+                    // .Read(read => read.Action("GetReopenSpreadingOfRisks", "ReopenSpreadingOfRisk").Data("searchFilterReopenSpreadingOfRisk"))
+                    .Read(read => read.Action("GetReopenSpreadingOfRisks", "ReopenSpreadingOfRisk").Data("searchFilter"))
                     .Model(model => model.Id(p => p.Id))
                 )
                 .Columns(columns =>

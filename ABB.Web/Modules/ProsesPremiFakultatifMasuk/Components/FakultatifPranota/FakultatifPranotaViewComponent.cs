@@ -8,7 +8,7 @@ namespace ABB.Web.Modules.ProsesPremiFakultatifMasuk.Components.FakultatifPranot
     {
         public async Task<IViewComponentResult> InvokeAsync(AkseptasiPranotaParameterViewModel model)
         {
-            return View("Empty");
+            return View("~/Modules/Shared/Empty.cshtml");
         }
     }
 }

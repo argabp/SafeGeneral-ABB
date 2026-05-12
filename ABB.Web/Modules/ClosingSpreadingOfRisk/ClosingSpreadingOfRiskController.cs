@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ABB.Application.ClosingSpreadingOfRisks.Commands;
 using ABB.Application.Common.Grids.Models;
@@ -7,6 +8,8 @@ using ABB.Application.ClosingSpreadingOfRisks.Queries;
 using ABB.Application.Common;
 using ABB.Web.Modules.Base;
 using ABB.Web.Modules.ClosingSpreadingOfRisk.Models;
+using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ABB.Web.Modules.ClosingSpreadingOfRisk
@@ -22,15 +25,21 @@ namespace ABB.Web.Modules.ClosingSpreadingOfRisk
             return View();
         }
         
-        [HttpPost]
-        public async Task<IActionResult> GetClosingSpreadingOfRisks(GridRequest grid)
-        {
-            var result = await Mediator.Send(new GetClosingSpreadingOfRisksQuery()
-            {
-                Grid = grid
-            });
+        // [HttpPost]
+        // public async Task<IActionResult> GetClosingSpreadingOfRisks(GridRequest grid)
+        // {
+        //     var result = await Mediator.Send(new GetClosingSpreadingOfRisksQuery()
+        //     {
+        //         Grid = grid
+        //     });
+        //
+        //     return Json(result);
+        // }
 
-            return Json(result);
+        public async Task<ActionResult> GetClosingSpreadingOfRisks([DataSourceRequest] DataSourceRequest request, string searchkeyword)
+        {
+            var ds = await Mediator.Send(new GetClosingSpreadingOfRisksQuery() { SearchKeyword = searchkeyword });
+            return Json(ds.AsQueryable().ToDataSourceResult(request));
         }
 
         public async Task<IActionResult> Closing([FromBody] List<ClosingSpreadingOfRiskViewModel> models)

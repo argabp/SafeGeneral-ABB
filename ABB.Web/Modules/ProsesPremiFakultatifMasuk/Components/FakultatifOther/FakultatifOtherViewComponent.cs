@@ -8,7 +8,7 @@ namespace ABB.Web.Modules.ProsesPremiFakultatifMasuk.Components.FakultatifOther
     {
         public async Task<IViewComponentResult> InvokeAsync(AkseptasiResikoParameterViewModel model)
         {
-            return View("Empty");
+            return View("~/Modules/Shared/Empty.cshtml");
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ABB.Application.Common;
 using ABB.Application.Common.Grids.Models;
@@ -7,6 +8,8 @@ using ABB.Application.ReopenSpreadingOfRisks.Commands;
 using ABB.Application.ReopenSpreadingOfRisks.Queries;
 using ABB.Web.Modules.Base;
 using ABB.Web.Modules.ReopenSpreadingOfRisk.Models;
+using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ABB.Web.Modules.ReopenSpreadingOfRisk
@@ -22,15 +25,21 @@ namespace ABB.Web.Modules.ReopenSpreadingOfRisk
             return View();
         }
         
-        [HttpPost]
-        public async Task<IActionResult> GetReopenSpreadingOfRisks(GridRequest grid)
-        {
-            var result = await Mediator.Send(new GetReopenSpreadingOfRisksQuery()
-            {
-                Grid = grid
-            });
+        // [HttpPost]
+        // public async Task<IActionResult> GetReopenSpreadingOfRisks(GridRequest grid)
+        // {
+        //     var result = await Mediator.Send(new GetReopenSpreadingOfRisksQuery()
+        //     {
+        //         Grid = grid
+        //     });
+        //
+        //     return Json(result);
+        // }
 
-            return Json(result);
+        public async Task<ActionResult> GetReopenSpreadingOfRisks([DataSourceRequest] DataSourceRequest request, string searchkeyword)
+        {
+            var ds = await Mediator.Send(new GetReopenSpreadingOfRisksQuery() { SearchKeyword = searchkeyword });
+            return Json(ds.AsQueryable().ToDataSourceResult(request));
         }
 
         public async Task<IActionResult> Reopen([FromBody] List<ReopenSpreadingOfRiskViewModel> models)

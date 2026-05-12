@@ -8,8 +8,6 @@ namespace ABB.Web.Modules.Akseptasi.Components.PranotaView
     {
         public async Task<IViewComponentResult> InvokeAsync(AkseptasiParameterViewModel model)
         {
-            
-            // return View("_Coverage", akseptasiViewModel);
             return View("_PranotaView", new AkseptasiPranotaParameterViewModel()
             {
                 kd_cb = model.kd_cb,
