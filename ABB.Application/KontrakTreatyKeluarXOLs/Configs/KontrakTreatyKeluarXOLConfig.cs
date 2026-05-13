@@ -26,7 +26,7 @@ namespace ABB.Application.KontrakTreatyKeluarXOLs.Configs
                 {
                     ["thn_tty_npps"]       = "src.thn_tty_npps",
                     ["nm_jns_sor"]      = "src.nm_jns_sor",
-                    ["kd_tty_pps"]     = "src.kd_tty_pps",
+                    ["kd_tty_npps"]     = "src.kd_tty_npps",
                     ["nm_tty_npps"]     = "src.nm_tty_npps"
                 },
                 
@@ -34,7 +34,7 @@ namespace ABB.Application.KontrakTreatyKeluarXOLs.Configs
                 {
                     "src.thn_tty_npps",
                     "src.nm_jns_sor",
-                    "src.kd_tty_pps",
+                    "src.kd_tty_npps",
                     "src.nm_tty_npps"
                 }
             };

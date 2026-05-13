@@ -10,28 +10,33 @@ namespace ABB.Application.KontrakTreatyKeluars.Configs
             return new GridConfig
             {
                 FromSql = @"
-                            FROM (
-                                SELECT 
-                                    RTRIM(p.kd_cb) + RTRIM(p.kd_jns_sor) + RTRIM(p.kd_tty_pps) + RTRIM(p.kd_grp_pas) + RTRIM(p.kd_rk_pas) AS Id,
-                                    p.*,
-                                    CASE RTRIM(p.kd_grp_sb_bis)
-                                            WHEN '2' THEN 'Broker'
-                                            WHEN '5' THEN '-'
-                                            ELSE ''
-                                        END as nm_grp_sb_bis,
-                                    rekanan1.nm_rk nm_rk_sb_bis,
-                                    CASE RTRIM(p.kd_grp_pas)
-                                            WHEN '5' THEN 'PAS / REAS'
-                                            ELSE ''
-                                        END as nm_grp_pas,
-                                    rekanan2.nm_rk nm_rk_pas
+                            FROM (SELECT RTRIM(p.kd_cb) + RTRIM(p.kd_jns_sor) + RTRIM(p.kd_tty_pps) + RTRIM(p.kd_grp_pas) + RTRIM(p.kd_rk_pas) AS Id,
+                                       p.*,
+                                       CASE RTRIM(p.kd_grp_sb_bis)
+                                           WHEN '2' THEN
+                                               'Broker'
+                                           WHEN '5' THEN
+                                               '-'
+                                           ELSE
+                                               ''
+                                       END AS nm_grp_sb_bis,
+                                       rekanan1.nm_rk nm_rk_sb_bis,
+                                       CASE RTRIM(p.kd_grp_pas)
+                                           WHEN '5' THEN
+                                               'PAS / REAS'
+                                           ELSE
+                                               ''
+                                       END AS nm_grp_pas,
+                                       rekanan2.nm_rk nm_rk_pas
                                 FROM ri01td01 p
-                                INNER JOIN rf03 rekanan1 ON p.kd_cb = rekanan1.kd_cb
-                                                            AND p.kd_rk_sb_bis = rekanan1.kd_rk
-															AND p.kd_grp_sb_bis = rekanan1.kd_grp_rk
-                                INNER JOIN rf03 rekanan2 ON p.kd_cb = rekanan2.kd_cb
-                                                            AND p.kd_rk_pas = rekanan2.kd_rk
-															AND p.kd_grp_pas = rekanan2.kd_grp_rk
+                                    LEFT OUTER JOIN rf03 rekanan1
+                                        ON p.kd_cb = rekanan1.kd_cb
+                                           AND p.kd_rk_sb_bis = rekanan1.kd_rk
+                                           AND p.kd_grp_sb_bis = rekanan1.kd_grp_rk
+                                    INNER JOIN rf03 rekanan2
+                                        ON p.kd_cb = rekanan2.kd_cb
+                                           AND p.kd_rk_pas = rekanan2.kd_rk
+                                           AND p.kd_grp_pas = rekanan2.kd_grp_rk
                             ) src
                             ",
                 

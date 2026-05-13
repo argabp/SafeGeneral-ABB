@@ -14,7 +14,7 @@
                 <label class="col-sm-6">Kode Cabang</label>
                 <div class="col-sm-6">
                     <input type="hidden" id="temp_kd_cb" value="@Model.kd_cb">
-                    <kendo-dropdownlist for="kd_cb" style="width: 100%" on-change="OnKodeCabangChange" option-label="Pilih Cabang"
+                    <kendo-dropdownlist for="kd_cb" style="width: 100%" on-change="OnKodeCabangChange" option-label="Pilih Cabang" readonly="true"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown" >
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
@@ -30,7 +30,7 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Jenis SOR</label>
                 <div class="col-sm-6">
-                    <kendo-dropdownlist for="kd_jns_sor" style="width: 100%" option-label="Pilih Jenis Sor"
+                    <kendo-dropdownlist for="kd_jns_sor" style="width: 100%" option-label="Pilih Jenis Sor" readonly="true"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" class="primary-dropdown" >
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>

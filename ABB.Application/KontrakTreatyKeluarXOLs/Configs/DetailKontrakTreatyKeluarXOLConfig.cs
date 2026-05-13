@@ -26,7 +26,7 @@ namespace ABB.Application.KontrakTreatyKeluarXOLs.Configs
                                         END as nm_grp_pas,
                                     rekanan2.nm_rk nm_rk_pas
                                 FROM ri02td01 p
-                                INNER JOIN rf03 rekanan1 ON p.kd_cb = rekanan1.kd_cb
+                                LEFT OUTER JOIN rf03 rekanan1 ON p.kd_cb = rekanan1.kd_cb
                                                             AND p.kd_rk_sb_bis = rekanan1.kd_rk
 															AND p.kd_grp_sb_bis = rekanan1.kd_grp_rk
                                 INNER JOIN rf03 rekanan2 ON p.kd_cb = rekanan2.kd_cb
