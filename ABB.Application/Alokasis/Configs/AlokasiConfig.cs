@@ -16,7 +16,7 @@ namespace ABB.Application.Alokasis.Configs
                             p.*,
                             m.nm_mtu nm_mtu_prm,
                             pp.nilai_dis,
-                            pp.nilai_prm_uw,
+                            pp.nilai_prm nilai_prm_uw,
                             pp.nilai_prm + pp.nilai_dis net_prm,
                             pp.pst_rate_prm,
                             pp.stn_rate_prm
