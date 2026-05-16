@@ -52,9 +52,9 @@ function searchFilterOtherMotorDetail() {
         kd_scob: $("#kd_scob").val(),
         kd_thn: $("#kd_thn").val(),
         no_aks: $("#no_aks").val(),
-        no_updt: fakultatifResiko.no_updt,
+        no_updt: resiko.no_updt,
         kd_endt: $resiko.kd_endt,
-        no_rsk: fakultatifResiko?.no_rsk,
+        no_rsk: resiko?.no_rsk,
     }
 }
 

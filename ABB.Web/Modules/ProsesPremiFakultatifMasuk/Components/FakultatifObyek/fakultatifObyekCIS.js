@@ -43,9 +43,9 @@ function searchFilterObyekCIS() {
         kd_scob: $("#kd_scob").val(),
         kd_thn: $("#kd_thn").val(),
         no_aks: $("#no_aks").val(),
-        no_updt: fakultatifResiko.no_updt,
-        no_rsk: fakultatifResiko?.no_rsk,
-        kd_endt: fakultatifResiko?.kd_endt
+        no_updt: resiko.no_updt,
+        no_rsk: resiko?.no_rsk,
+        kd_endt: resiko?.kd_endt
     }
 }
 
@@ -74,9 +74,9 @@ function saveAkseptasiObyekCIS(dataItem) {
         kd_scob : $("#kd_scob").val(),
         kd_thn : $("#kd_thn").val(),
         no_aks : $("#no_aks").val(),
-        no_updt : fakultatifResiko.no_updt,
-        no_rsk : fakultatifResiko.no_rsk,
-        kd_endt : fakultatifResiko.kd_endt,
+        no_updt : resiko.no_updt,
+        no_rsk : resiko.no_rsk,
+        kd_endt : resiko.kd_endt,
         no_pol_ttg : $("#no_pol_ttg").val(),
         tgl_oby: dataItem.model.tgl_oby.toDateString(),
         nilai_saldo: dataItem.model.nilai_saldo,

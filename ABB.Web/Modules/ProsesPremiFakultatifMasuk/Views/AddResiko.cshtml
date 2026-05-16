@@ -4,7 +4,7 @@
 @addTagHelper *, Kendo.Mvc
 @addTagHelper *, ABB.Web
 
-<script src="~/Modules/Akseptasi/JS/akseptasi.resiko.js"></script>
+<script src="~/Modules/ProsesPremiFakultatifMasuk/JS/prosesPremiFakultatifMasuk.resiko.js"></script>
 
 <style>
     p {
@@ -63,7 +63,7 @@
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
-                                <read url="@Url.Action("GetKodeEndorsment", "Akseptasi")"/>
+                                <read url="@Url.Action("GetKodeEndorsment", "ProsesPremiFakultatifMasuk")"/>
                             </transport>
                         </datasource>
                     </kendo-dropdownlist>
@@ -88,7 +88,7 @@
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
-                                <read url="@Url.Action("GetMataUang", "Akseptasi")"/>
+                                <read url="@Url.Action("GetMataUang", "ProsesPremiFakultatifMasuk")"/>
                             </transport>
                         </datasource>
                     </kendo-dropdownlist>
@@ -108,7 +108,7 @@
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
-                                <read url="@Url.Action("GetRatePremi", "Akseptasi")"/>
+                                <read url="@Url.Action("GetRatePremi", "ProsesPremiFakultatifMasuk")"/>
                             </transport>
                         </datasource>
                     </kendo-dropdownlist>
@@ -172,7 +172,7 @@
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
-                                <read url="@Url.Action("GetKodeTOL", "Akseptasi", new { Model.kd_cob })"/>
+                                <read url="@Url.Action("GetKodeTOL", "ProsesPremiFakultatifMasuk", new { Model.kd_cob })"/>
                             </transport>
                         </datasource>
                     </kendo-dropdownlist>
@@ -194,7 +194,7 @@
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
-                                <read url="@Url.Action("GetKodeKemendagri", "Akseptasi")"/>
+                                <read url="@Url.Action("GetKodeKemendagri", "ProsesPremiFakultatifMasuk")"/>
                             </transport>
                         </datasource>
                     </kendo-dropdownlist>

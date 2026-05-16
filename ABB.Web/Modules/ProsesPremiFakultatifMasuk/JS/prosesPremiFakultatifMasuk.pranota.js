@@ -7,7 +7,7 @@ function btnSaveAkseptasiPranota_Click() {
     $('#btn-save-akseptasiPranota').click(function () {
         showProgress('#AkseptasiPranotaWindow');
         setTimeout(function () {
-            saveAkseptasiPranota('/Akseptasi/SaveAkseptasiPranota')
+            saveAkseptasiPranota('/ProsesPremiFakultatifMasuk/SaveAkseptasiPranota')
         }, 500);
     });
 }

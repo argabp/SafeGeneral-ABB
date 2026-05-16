@@ -1,7 +1,7 @@
 ﻿@using ABB.Application.Akseptasis.Queries
 @using Kendo.Mvc.UI
 
-<script src="~/Modules/Akseptasi/JS/akseptasi.copyEndors.js"></script>
+<script src="~/Modules/ProsesPremiFakultatifMasuk/JS/prosesPremiFakultatifMasuk.copyEndors.js"></script>
 
 <style>
     .flat-btn-primary{
@@ -19,7 +19,7 @@
     @(Html.Kendo().Grid<CopyEndorsDto>()
         .Name("CopyEndorsGrid")
         .DataSource(dataSource => dataSource.Ajax()
-            .Read(read => read.Action("GetCopyEndors", "Akseptasi").Data("searchFilterCopyEndors"))
+            .Read(read => read.Action("GetCopyEndors", "ProsesPremiFakultatifMasuk").Data("searchFilterCopyEndors"))
             .Model(model => model.Id(p => p.Id))
         )
         .Columns(columns =>

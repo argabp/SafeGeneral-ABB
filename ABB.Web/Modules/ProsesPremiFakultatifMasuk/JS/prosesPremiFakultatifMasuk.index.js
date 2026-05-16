@@ -15,8 +15,8 @@ function openAkseptasiWindow(url, title) {
 
 function btnAddAkseptasi_Click() {
     $('#btnAddNewAkseptasi').click(function () {
-        openAkseptasiWindow('/Akseptasi/Add', 'Add New Polis');
-        fakultatifResiko = null;
+        openAkseptasiWindow('/ProsesPremiFakultatifMasuk/Add', 'Add New Polis');
+        resiko = null;
     });
 }
 
@@ -24,8 +24,8 @@ function btnEditAkseptasi_OnClick(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     console.log('dataItem', dataItem);
-    fakultatifResiko = null;
-    openAkseptasiWindow(`/Akseptasi/Edit?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_aks=${dataItem.no_aks}&no_updt=${dataItem.no_updt}`, 'Edit Akseptasi');
+    resiko = null;
+    openAkseptasiWindow(`/ProsesPremiFakultatifMasuk/Edit?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_aks=${dataItem.no_aks}&no_updt=${dataItem.no_updt}`, 'Edit Akseptasi');
 }
 
 function btnClosingAkseptasi_OnClick(e) {
@@ -43,7 +43,7 @@ function btnKeteranganEndorsment_OnClick(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     console.log('dataItem', dataItem);
-    openAkseptasiWindow(`/Akseptasi/KeteranganEndorsment?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_aks=${dataItem.no_aks}&no_updt=${dataItem.no_updt}`, 'Keterangan Endorsment');
+    openAkseptasiWindow(`/ProsesPremiFakultatifMasuk/KeteranganEndorsment?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_aks=${dataItem.no_aks}&no_updt=${dataItem.no_updt}`, 'Keterangan Endorsment');
 }
 
 function closingAkseptasi(dataItem){
@@ -58,7 +58,7 @@ function closingAkseptasi(dataItem){
     form.no_updt = dataItem.no_updt;
     
     var data = JSON.stringify(form);
-    ajaxPost(`/Akseptasi/ClosingAkseptasi`, data,  function (response) {
+    ajaxPost(`/ProsesPremiFakultatifMasuk/ClosingAkseptasi`, data,  function (response) {
         if (response.Result === "OK") {
             showMessage('Closing Successfully', response.Message);
             refreshGrid("#AkseptasiGrid");
@@ -89,7 +89,7 @@ function searchFilter() {
 }
 
 function deleteAkseptasi(dataItem) {
-    ajaxGet(`/Akseptasi/Delete?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_aks=${dataItem.no_aks}&no_updt=${dataItem.no_updt}`, function (response) {
+    ajaxGet(`/ProsesPremiFakultatifMasuk/Delete?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_aks=${dataItem.no_aks}&no_updt=${dataItem.no_updt}`, function (response) {
         if (response.Result) {
             showMessage('Success', 'Data has been deleted');
             refreshGrid("#AkseptasiGrid");

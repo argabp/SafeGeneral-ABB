@@ -1,13 +1,13 @@
 ﻿@using ABB.Application.Akseptasis.Queries
 @using Kendo.Mvc.UI
 
-<script src="~/Modules/Akseptasi/JS/akseptasi.lokasiResiko.js"></script>
+<script src="~/Modules/ProsesPremiFakultatifMasuk/JS/prosesPremiFakultatifMasuk.lokasiResiko.js"></script>
 
 <div class="window-body">
     @(Html.Kendo().Grid<LokasiResikoDto>()
         .Name("LokasiResikoGrid")
         .DataSource(dataSource => dataSource.Ajax()
-            .Read(read => read.Action("GetLokasiResiko", "Akseptasi"))
+            .Read(read => read.Action("GetLokasiResiko", "ProsesPremiFakultatifMasuk"))
             .Model(model => model.Id(p => p.Id))
         )
         .Columns(columns =>

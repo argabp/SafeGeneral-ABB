@@ -3562,7 +3562,7 @@ namespace ABB.Web.Modules.ProsesPremiFakultatifMasuk
                 DatabaseName = DatabaseName
             });
             
-            return View("~/Modules/Akseptasi/ProsesPremiFakultatifMasukComponents/FakultatifPranota/_FakultatifPranota.cshtml");
+            return View("~/Modules/ProsesPremiFakultatifMasuk/Components/FakultatifPranota/_FakultatifPranota.cshtml");
         }
         
         [HttpGet]

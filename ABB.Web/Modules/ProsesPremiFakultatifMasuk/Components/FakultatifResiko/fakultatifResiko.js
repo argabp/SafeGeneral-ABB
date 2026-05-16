@@ -25,7 +25,7 @@ function openAkseptasiResikoWindow(url, title) {
 
 function btnAddAkseptasiResiko_Click() {
     $('#btnAddNewAkseptasiResiko').click(function () {
-        openAkseptasiResikoWindow(`/Akseptasi/AddResiko?kd_cb=${$("#kd_cb").val()}&kd_cob=${$("#kd_cob").val()}&kd_scob=${$("#kd_scob").val()}&kd_thn=${$("#kd_thn").val()}&no_aks=${$("#no_aks").val()}&no_updt=${$("#no_updt").val()}&tgl_mul_ptg=${$("#tgl_mul_ptg").val()}&tgl_akh_ptg=${$("#tgl_akh_ptg").val()}&pst_share_bgu=${$("#pst_share_bgu").val()}&faktor_prd=${$("#faktor_prd").val()}`, 'Add New Resiko');
+        openAkseptasiResikoWindow(`/ProsesPremiFakultatifMasuk/AddResiko?kd_cb=${$("#kd_cb").val()}&kd_cob=${$("#kd_cob").val()}&kd_scob=${$("#kd_scob").val()}&kd_thn=${$("#kd_thn").val()}&no_aks=${$("#no_aks").val()}&no_updt=${$("#no_updt").val()}&tgl_mul_ptg=${$("#tgl_mul_ptg").val()}&tgl_akh_ptg=${$("#tgl_akh_ptg").val()}&pst_share_bgu=${$("#pst_share_bgu").val()}&faktor_prd=${$("#faktor_prd").val()}`, 'Add New Resiko');
     });
 }
 
@@ -33,7 +33,7 @@ function btnEditAkseptasiResiko_OnClick(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     console.log('dataItem', dataItem);
-    openAkseptasiResikoWindow(`/Akseptasi/EditResiko?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_aks=${dataItem.no_aks}&no_updt=${dataItem.no_updt}&no_rsk=${dataItem.no_rsk}&kd_endt=${dataItem.kd_endt}`, 'Edit Resiko');
+    openAkseptasiResikoWindow(`/ProsesPremiFakultatifMasuk/EditResiko?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_aks=${dataItem.no_aks}&no_updt=${dataItem.no_updt}&no_rsk=${dataItem.no_rsk}&kd_endt=${dataItem.kd_endt}`, 'Edit Resiko');
 }
 
 function btnDeleteAkseptasiResiko_OnClick(e) {
@@ -60,7 +60,7 @@ function searchFilterResiko() {
 }
 
 function deleteAkseptasiResiko(dataItem) {
-    ajaxGet(`/Akseptasi/DeleteResiko?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_aks=${dataItem.no_aks}&no_updt=${dataItem.no_updt}&no_rsk=${dataItem.no_rsk}&kd_endt=${dataItem.kd_endt}`, function (response) {
+    ajaxGet(`/ProsesPremiFakultatifMasuk/DeleteResiko?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_aks=${dataItem.no_aks}&no_updt=${dataItem.no_updt}&no_rsk=${dataItem.no_rsk}&kd_endt=${dataItem.kd_endt}`, function (response) {
         if (response.Result) {
             showMessage('Success', 'Data has been deleted');
             refreshGrid("#AkseptasiResikoGrid");
@@ -77,20 +77,20 @@ function deleteAkseptasiResiko(dataItem) {
 }
 
 
-var fakultatifResiko;
+var resiko;
 
 function OnResikoChange(e){
     var grid = e.sender;
-    fakultatifResiko = grid.dataItem(this.select());
+    resiko = grid.dataItem(this.select());
     
-    if(fakultatifResiko.no_updt === 1){
+    if(resiko.no_updt === 1){
         $("#btnCopyEndorsResiko").show();
     } else {
         $("#btnCopyEndorsResiko").hide();
     }
 
     var tabstrip = $('#resikoTab').data("kendoTabStrip");
-    if(fakultatifResiko.kd_endt === "I")
+    if(resiko.kd_endt === "I")
     {
         // refreshGrid("#AkseptasiCoverageGrid");
         // refreshGrid("#AkseptasiObyekGrid");
@@ -115,8 +115,8 @@ function refreshTabOther(){
     var kd_thn = $("#kd_thn").val();
     var no_updt = $("#no_updt").val();
     var no_aks = $("#no_aks").val();
-    var no_rsk = fakultatifResiko?.no_rsk;
-    var kd_endt = fakultatifResiko?.kd_endt;
+    var no_rsk = resiko?.no_rsk;
+    var kd_endt = resiko?.kd_endt;
 
     var form = {};
 
@@ -131,7 +131,7 @@ function refreshTabOther(){
 
     var data = JSON.stringify(form);
 
-    ajaxPost("/Akseptasi/GetResikoOther", data,
+    ajaxPost("/ProsesPremiFakultatifMasuk/GetResikoOther", data,
         function (response) {
             $("#tabOther").html(response);
         }
@@ -142,7 +142,7 @@ function btnCopyResiko_OnClick() {
     $('#btnCopyResiko').click(function () {
         showConfirmation('Confirmation', `Apakah anda yakin akan meng copy resiko ini??`,
             function () {
-                if(fakultatifResiko == null){
+                if(resiko == null){
                     showMessage("Error", "Please select resiko first");
                     return;
                 }
@@ -155,17 +155,17 @@ function btnCopyResiko_OnClick() {
 
 function copyResiko() {
     var data ={
-        kd_cb: fakultatifResiko.kd_cb,
-        kd_cob: fakultatifResiko.kd_cob,
-        kd_scob: fakultatifResiko.kd_scob,
-        kd_thn: fakultatifResiko.kd_thn,
-        no_aks: fakultatifResiko.no_aks,
-        no_updt: fakultatifResiko.no_updt,
-        no_rsk: fakultatifResiko.no_rsk,
-        kd_endt: fakultatifResiko.kd_endt,
+        kd_cb: resiko.kd_cb,
+        kd_cob: resiko.kd_cob,
+        kd_scob: resiko.kd_scob,
+        kd_thn: resiko.kd_thn,
+        no_aks: resiko.no_aks,
+        no_updt: resiko.no_updt,
+        no_rsk: resiko.no_rsk,
+        kd_endt: resiko.kd_endt,
     }
     
-    ajaxPost(`/Akseptasi/CopyResiko`, data, function (response) {
+    ajaxPost(`/ProsesPremiFakultatifMasuk/CopyResiko`, data, function (response) {
         if (response.Result) {
             showMessage('Success', response.Message);
             refreshGrid("#AkseptasiResikoGrid");
@@ -187,6 +187,6 @@ function openCopyEndorsWindow(url, title) {
 
 function btnCopyEndorsResiko_OnClick() {
     $('#btnCopyEndorsResiko').click(function () {
-        openCopyEndorsWindow("/Akseptasi/CopyEndors", "Copy Endors");
+        openCopyEndorsWindow("/ProsesPremiFakultatifMasuk/CopyEndors", "Copy Endors");
     });
 }

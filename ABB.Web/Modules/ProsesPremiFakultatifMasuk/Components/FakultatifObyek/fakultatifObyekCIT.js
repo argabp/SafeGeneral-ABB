@@ -29,7 +29,7 @@ function openAkseptasiObyekCITWindow(url, title) {
 
 function btnAddAkseptasiObyekCIT_Click() {
     $('#btnAddNewAkseptasiObyekCIT').click(function () {
-        openAkseptasiObyekCITWindow(`/ProsesPremiFakultatifMasuk/AddObyekCIT?kd_cb=${$("#kd_cb").val()}&kd_cob=${$("#kd_cob").val()}&kd_scob=${$("#kd_scob").val()}&kd_thn=${$("#kd_thn").val()}&no_aks=${$("#no_aks").val()}&no_updt=${$("#no_updt").val()}&no_rsk=${fakultatifResiko.no_rsk}&pst_share=${fakultatifResiko.pst_share_bgu}`, 'Add New Obyek');
+        openAkseptasiObyekCITWindow(`/ProsesPremiFakultatifMasuk/AddObyekCIT?kd_cb=${$("#kd_cb").val()}&kd_cob=${$("#kd_cob").val()}&kd_scob=${$("#kd_scob").val()}&kd_thn=${$("#kd_thn").val()}&no_aks=${$("#no_aks").val()}&no_updt=${$("#no_updt").val()}&no_rsk=${resiko.no_rsk}&pst_share=${resiko.pst_share_bgu}`, 'Add New Obyek');
     });
 }
 
@@ -37,7 +37,7 @@ function btnEditAkseptasiObyekCIT_OnClick(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
     console.log('dataItem', dataItem);
-    openAkseptasiObyekCITWindow(`/ProsesPremiFakultatifMasuk/EditObyekCIT?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_aks=${dataItem.no_aks}&no_updt=${dataItem.no_updt}&no_rsk=${dataItem.no_rsk}&kd_endt=${dataItem.kd_endt}&no_oby=${dataItem.no_oby}&pst_share=${fakultatifResiko.pst_share_bgu}`, 'Edit Obyek');
+    openAkseptasiObyekCITWindow(`/ProsesPremiFakultatifMasuk/EditObyekCIT?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}&kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}&no_aks=${dataItem.no_aks}&no_updt=${dataItem.no_updt}&no_rsk=${dataItem.no_rsk}&kd_endt=${dataItem.kd_endt}&no_oby=${dataItem.no_oby}&pst_share=${resiko.pst_share_bgu}`, 'Edit Obyek');
 }
 function btnDeleteAkseptasiObyekCIT_OnClick(e) {
     e.preventDefault();
@@ -57,9 +57,9 @@ function searchFilterObyekCIT() {
         kd_scob: $("#kd_scob").val(),
         kd_thn: $("#kd_thn").val(),
         no_aks: $("#no_aks").val(),
-        no_updt: fakultatifResiko.no_updt,
-        no_rsk: fakultatifResiko?.no_rsk,
-        kd_endt: fakultatifResiko?.kd_endt
+        no_updt: resiko.no_updt,
+        no_rsk: resiko?.no_rsk,
+        kd_endt: resiko?.kd_endt
     }
 }
 

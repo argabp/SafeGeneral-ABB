@@ -45,9 +45,9 @@ function saveAkseptasiResikoOther(url) {
     form.kd_scob = $("#kd_scob").val();
     form.kd_thn = $("#kd_thn").val();
     form.no_aks = $("#no_aks").val();
-    form.no_updt = fakultatifResiko.no_updt;
-    form.no_rsk = fakultatifResiko.no_rsk;
-    form.kd_endt = fakultatifResiko.kd_endt;
+    form.no_updt = resiko.no_updt;
+    form.no_rsk = resiko.no_rsk;
+    form.kd_endt = resiko.kd_endt;
     
     form.tgl_mul_ptg = $("#resiko_other_tgl_mul_ptg").val();
     form.tgl_akh_ptg = $("#resiko_other_tgl_akh_ptg").val();

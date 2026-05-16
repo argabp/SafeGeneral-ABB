@@ -11,7 +11,7 @@ function onSelectAkseptasiTab(e) {
     {
         showProgress('#AkseptasiWindow');
 
-        ajaxGet(`/Akseptasi/CheckPranota?kd_cb=${$("#kd_cb").val()}&kd_cob=${$("#kd_cob").val()}&kd_scob=${$("#kd_scob").val()}&kd_thn=${$("#kd_thn").val()}&no_aks=${$("#no_aks").val()}&no_updt=${$("#no_updt").val()}`,
+        ajaxGet(`/ProsesPremiFakultatifMasuk/CheckPranota?kd_cb=${$("#kd_cb").val()}&kd_cob=${$("#kd_cob").val()}&kd_scob=${$("#kd_scob").val()}&kd_thn=${$("#kd_thn").val()}&no_aks=${$("#no_aks").val()}&no_updt=${$("#no_updt").val()}`,
             function (response) {
                 $("#tabTertanggung").html(response);
                 closeProgress('#AkseptasiWindow');

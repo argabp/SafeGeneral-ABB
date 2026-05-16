@@ -4,8 +4,8 @@
 @addTagHelper *, Kendo.Mvc
 @addTagHelper *, ABB.Web
 
-<script src="~/Modules/Akseptasi/JS/akseptasi.form.js"></script>
-<script src="~/Modules/Akseptasi/JS/akseptasi.add.js"></script>
+<script src="~/Modules/ProsesPremiFakultatifMasuk/JS/prosesPremiFakultatifMasuk.form.js"></script>
+<script src="~/Modules/ProsesPremiFakultatifMasuk/JS/prosesPremiFakultatifMasuk.add.js"></script>
 
 <div class="window-body">
     <div id="akseptasiTab">
@@ -21,13 +21,13 @@
             </li>
         </ul>
         <div id="tabAkseptasi">
-            <vc:akseptasi model="@Model"></vc:akseptasi>
+            <vc:proses-premi-fakultatif-masuk model="@Model"></vc:proses-premi-fakultatif-masuk>
         </div>
         <div id="tabResikoView">
-            <vc:resiko-view model="@Model"></vc:resiko-view>
+            <vc:fakultatif-resiko-view model="@Model"></vc:fakultatif-resiko-view>
         </div>
         <div id="tabPranota">
-            <vc:pranota-view model="@Model"></vc:pranota-view>
+            <vc:fakultatif-pranota-view model="@Model"></vc:fakultatif-pranota-view>
         </div>
     </div>
 </div>

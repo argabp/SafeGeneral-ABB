@@ -30,7 +30,7 @@ function openAkseptasiCoverageWindow(url, title) {
 
 function btnAddAkseptasiCoverage_Click() {
     $('#btnAddNewAkseptasiCoverage').click(function () {
-        openAkseptasiCoverageWindow(`/ProsesPremiFakultatifMasuk/AddCoverage?kd_cb=${$("#kd_cb").val()}&kd_cob=${$("#kd_cob").val()}&kd_scob=${$("#kd_scob").val()}&kd_thn=${$("#kd_thn").val()}&no_aks=${$("#no_aks").val()}&no_updt=${$("#no_updt").val()}&no_rsk=${fakultatifResiko.no_rsk}&kd_endt=${fakultatifResiko.kd_endt}`, 'Add New Coverage');
+        openAkseptasiCoverageWindow(`/ProsesPremiFakultatifMasuk/AddCoverage?kd_cb=${$("#kd_cb").val()}&kd_cob=${$("#kd_cob").val()}&kd_scob=${$("#kd_scob").val()}&kd_thn=${$("#kd_thn").val()}&no_aks=${$("#no_aks").val()}&no_updt=${$("#no_updt").val()}&no_rsk=${resiko.no_rsk}&kd_endt=${resiko.kd_endt}`, 'Add New Coverage');
     });
 }
 function btnEditAkseptasiCoverage_OnClick(e) {
@@ -57,9 +57,9 @@ function searchFilterCoverage() {
         kd_scob: $("#kd_scob").val(),
         kd_thn: $("#kd_thn").val(),
         no_aks: $("#no_aks").val(),
-        no_updt: fakultatifResiko?.no_updt,
-        no_rsk: fakultatifResiko?.no_rsk,
-        kd_endt: fakultatifResiko?.kd_endt
+        no_updt: resiko?.no_updt,
+        no_rsk: resiko?.no_rsk,
+        kd_endt: resiko?.kd_endt
     }
 }
 

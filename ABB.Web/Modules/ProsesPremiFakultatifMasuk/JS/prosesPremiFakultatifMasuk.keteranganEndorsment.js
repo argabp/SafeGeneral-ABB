@@ -6,7 +6,7 @@ function btnSaveKeteranganEndorsment_Click() {
     $('#btn-save-keteranganEndorsment').click(function () {
         showProgress('#AkseptasiWindow');
         setTimeout(function () {
-            saveKeteranganEndorsment('/Akseptasi/SaveKeteranganEndorsment')
+            saveKeteranganEndorsment('/ProsesPremiFakultatifMasuk/SaveKeteranganEndorsment')
         }, 500);
     });
 }

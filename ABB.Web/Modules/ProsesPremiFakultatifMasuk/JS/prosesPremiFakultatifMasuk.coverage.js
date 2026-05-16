@@ -6,7 +6,7 @@ function btnSaveAkseptasiCoverage_Click() {
     $('#btn-save-akseptasiCoverage').click(function () {
         showProgress('#AkseptasiCoverageWindow');
         setTimeout(function () {
-            saveAkseptasiCoverage('/Akseptasi/SaveAkseptasiCoverage')
+            saveAkseptasiCoverage('/ProsesPremiFakultatifMasuk/SaveAkseptasiCoverage')
         }, 500);
     });
 }
@@ -22,8 +22,8 @@ function saveAkseptasiCoverage(url) {
     form.kd_scob = $("#kd_scob").val();
     form.kd_thn = $("#kd_thn").val();
     form.no_aks = $("#no_aks").val();
-    form.no_updt = fakultatifResiko.no_updt;
-    form.no_rsk = fakultatifResiko.no_rsk;
+    form.no_updt = resiko.no_updt;
+    form.no_rsk = resiko.no_rsk;
     form.kd_endt = $("#resiko_coverage_kd_endt").val();
     form.no_pol_ttg = $("#no_pol_ttg").val();
     
@@ -48,10 +48,10 @@ function saveAkseptasiCoverage(url) {
 }
 
 function OnKodeCoverageChange(e){
-    ajaxGet(`/Akseptasi/GetFlagPKK?kd_cvrg=${e.sender._cascadedValue}`, (returnValue) => {
+    ajaxGet(`/ProsesPremiFakultatifMasuk/GetFlagPKK?kd_cvrg=${e.sender._cascadedValue}`, (returnValue) => {
         var strings = returnValue.split(",");
         $("#flag_pkk").getKendoDropDownList().value(strings[1]);
-        ajaxGet(`/Akseptasi/GeneratePstAndStnRatePremi?kd_cb=${$("#kd_cb").val()}&kd_cob=${$("#kd_cob").val()}&kd_scob=${$("#kd_scob").val()}&kd_thn=${$("#kd_thn").val()}&no_aks=${$("#no_aks").val()}&no_updt=${$("#no_updt").val()}&no_rsk=${fakultatifResiko.no_rsk}&kd_endt=${fakultatifResiko.kd_endt}&flag_pkk=${strings[1]}&kd_cvrg=${e.sender._cascadedValue}`, (returnValues) => {
+        ajaxGet(`/ProsesPremiFakultatifMasuk/GeneratePstAndStnRatePremi?kd_cb=${$("#kd_cb").val()}&kd_cob=${$("#kd_cob").val()}&kd_scob=${$("#kd_scob").val()}&kd_thn=${$("#kd_thn").val()}&no_aks=${$("#no_aks").val()}&no_updt=${$("#no_updt").val()}&no_rsk=${resiko.no_rsk}&kd_endt=${resiko.kd_endt}&flag_pkk=${strings[1]}&kd_cvrg=${e.sender._cascadedValue}`, (returnValues) => {
             if(returnValues[0] != null){
                 $("#resiko_coverage_pst_rate_prm").getKendoNumericTextBox().value(returnValues[0].split(",")[1]);
                 $("#resiko_coverage_stn_rate_prm").getKendoDropDownList().value(returnValues[1].split(",")[1]);

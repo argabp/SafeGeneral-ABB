@@ -6,7 +6,7 @@ function btnSaveAkseptasiObyekCIT_Click() {
     $('#btn-save-akseptasiObyekCIT').click(function () {
         showProgress('#AkseptasiObyekWindow');
         setTimeout(function () {
-            saveAkseptasiObyekCIT('/Akseptasi/SaveAkseptasiObyekCIT')
+            saveAkseptasiObyekCIT('/ProsesPremiFakultatifMasuk/SaveAkseptasiObyekCIT')
         }, 500);
     });
 }
@@ -19,11 +19,11 @@ function saveAkseptasiObyekCIT(url) {
     form.kd_scob = $("#kd_scob").val();
     form.kd_thn = $("#kd_thn").val();
     form.no_aks = $("#no_aks").val();
-    form.no_updt = fakultatifResiko.no_updt;
-    form.no_rsk = fakultatifResiko.no_rsk;
-    form.kd_endt = fakultatifResiko.kd_endt;
+    form.no_updt = resiko.no_updt;
+    form.no_rsk = resiko.no_rsk;
+    form.kd_endt = resiko.kd_endt;
     form.no_pol_ttg = $("#no_pol_ttg").val();
-    form.pst_share = fakultatifResiko.pst_share_bgu;
+    form.pst_share = resiko.pst_share_bgu;
     
     var data = JSON.stringify(form);
     
@@ -46,7 +46,7 @@ function saveAkseptasiObyekCIT(url) {
 }
 
 function OnRatePaChange(e){
-    ajaxGet(`/Akseptasi/GetNilaiPremiPA?nilai_pa=${$("#nilai_pa").val()}&pst_rate_pa=${e.sender.value()}`, (returnValue) => {
+    ajaxGet(`/ProsesPremiFakultatifMasuk/GetNilaiPremiPA?nilai_pa=${$("#nilai_pa").val()}&pst_rate_pa=${e.sender.value()}`, (returnValue) => {
         $("#nilai_prm_pa").getKendoNumericTextBox().value(returnValue.split(",")[1]);
     });
 }

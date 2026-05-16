@@ -4,7 +4,7 @@
 @addTagHelper *, Kendo.Mvc
 @addTagHelper *, ABB.Web
 
-<script src="~/Modules/Akseptasi/JS/akseptasi.obyek.js"></script>
+<script src="~/Modules/ProsesPremiFakultatifMasuk/JS/prosesPremiFakultatifMasuk.obyek.js"></script>
 
 <style>
     p {
@@ -54,7 +54,7 @@
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
-                                <read url="@Url.Action("GetKodeEndorsment", "Akseptasi")"/>
+                                <read url="@Url.Action("GetKodeEndorsment", "ProsesPremiFakultatifMasuk")"/>
                             </transport>
                         </datasource>
                     </kendo-dropdownlist>
@@ -77,7 +77,7 @@
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
-                                <read url="@Url.Action("GetKodeGroupObyek", "Akseptasi")"/>
+                                <read url="@Url.Action("GetKodeGroupObyek", "ProsesPremiFakultatifMasuk")"/>
                             </transport>
                         </datasource>
                     </kendo-dropdownlist>

@@ -4,7 +4,7 @@
 @addTagHelper *, Kendo.Mvc
 @addTagHelper *, ABB.Web
 
-<script src="~/Modules/Akseptasi/JS/akseptasi.pranota.js"></script>
+<script src="~/Modules/ProsesPremiFakultatifMasuk/JS/prosesPremiFakultatifMasuk.pranota.js"></script>
 
 <style>
     p {
@@ -46,7 +46,7 @@
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
-                                <read url="@Url.Action("GetMataUang", "Akseptasi")"/>
+                                <read url="@Url.Action("GetMataUang", "ProsesPremiFakultatifMasuk")"/>
                             </transport>
                         </datasource>
                     </kendo-dropdownlist>

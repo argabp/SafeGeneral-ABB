@@ -4,7 +4,7 @@
 @addTagHelper *, Kendo.Mvc
 @addTagHelper *, ABB.Web
 
-<script src="~/Modules/Akseptasi/JS/akseptasi.pranotaKoas.js"></script>
+<script src="~/Modules/ProsesPremiFakultatifMasuk/JS/prosesPremiFakultatifMasuk.pranotaKoas.js"></script>
 
 <style>
     p {
@@ -53,7 +53,7 @@
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
-                                <read url="@Url.Action("GetMataUang", "Akseptasi")"/>
+                                <read url="@Url.Action("GetMataUang", "ProsesPremiFakultatifMasuk")"/>
                             </transport>
                         </datasource>
                     </kendo-dropdownlist>
@@ -77,7 +77,7 @@
                                             datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                             <datasource type="DataSourceTagHelperType.Custom">
                                 <transport>
-                                    <read url="@Url.Action("GetKodePersAsuransi", "Akseptasi")"/>
+                                    <read url="@Url.Action("GetKodePersAsuransi", "ProsesPremiFakultatifMasuk")"/>
                                 </transport>
                             </datasource>
                         </kendo-dropdownlist>
@@ -88,7 +88,7 @@
                                             datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                             <datasource type="DataSourceTagHelperType.Custom">
                                 <transport>
-                                    <read url="@Url.Action("GetKodeRekanan", "Akseptasi")" data="dataKodeRekananPranotaKoasDropDown"/>
+                                    <read url="@Url.Action("GetKodeRekanan", "ProsesPremiFakultatifMasuk")" data="dataKodeRekananPranotaKoasDropDown"/>
                                 </transport>
                             </datasource>
                         </kendo-dropdownlist>

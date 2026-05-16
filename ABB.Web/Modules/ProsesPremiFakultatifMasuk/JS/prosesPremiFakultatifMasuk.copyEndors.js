@@ -36,7 +36,7 @@ function copyEndorsDelete(dataItem){
     form.flag_endt = "D";
     
     var data = JSON.stringify(form);
-    ajaxPost(`/Akseptasi/CopyEndorsDelete`, data,  function (response) {
+    ajaxPost(`/ProsesPremiFakultatifMasuk/CopyEndorsDelete`, data,  function (response) {
         if (response.Result === "OK") {
             refreshGrid("#AkseptasiResikoGrid");
             showMessage('Success', response.Message);
@@ -73,7 +73,7 @@ function copyEndorsUpdate(dataItem){
     form.flag_endt = "U";
 
     var data = JSON.stringify(form);
-    ajaxPost(`/Akseptasi/CopyEndorsUpdate`, data,  function (response) {
+    ajaxPost(`/ProsesPremiFakultatifMasuk/CopyEndorsUpdate`, data,  function (response) {
         if (response.Result === "OK") {
             refreshGrid("#AkseptasiResikoGrid");
             showMessage('Success', response.Message);
@@ -110,7 +110,7 @@ function copyEndorsInsert(dataItem){
     form.flag_endt = "U";
 
     var data = JSON.stringify(form);
-    ajaxPost(`/Akseptasi/CopyEndorsInsert`, data,  function (response) {
+    ajaxPost(`/ProsesPremiFakultatifMasuk/CopyEndorsInsert`, data,  function (response) {
         if (response.Result === "OK") {
             refreshGrid("#AkseptasiResikoGrid");
             showMessage('Success', response.Message);

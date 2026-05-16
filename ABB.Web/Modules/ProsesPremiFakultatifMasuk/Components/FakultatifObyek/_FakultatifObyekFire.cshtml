@@ -17,7 +17,7 @@
     @(Html.Kendo().Grid<AkseptasiObyekDto>()
         .Name("AkseptasiObyekGrid")
         .DataSource(dataSource => dataSource.Ajax()
-            .Read(read => read.Action("GetAkseptasiObyeks", "ProsesPremiFakultatifMasuk/").Data("searchFilterObyek"))
+            .Read(read => read.Action("GetAkseptasiObyeks", "ProsesPremiFakultatifMasuk").Data("searchFilterObyek"))
             .Model(model => model.Id(p => p.no_oby))
         )
         .Columns(columns =>

@@ -13,7 +13,7 @@ function btnSaveAkseptasiPranotaKoas_Click() {
     $('#btn-save-akseptasiPranotaKoas').click(function () {
         showProgress('#AkseptasiPranotaKoasWindow');
         setTimeout(function () {
-            saveAkseptasiPranotaKoas('/Akseptasi/SaveAkseptasiPranotaKoas')
+            saveAkseptasiPranotaKoas('/ProsesPremiFakultatifMasuk/SaveAkseptasiPranotaKoas')
         }, 500);
     });
 }
@@ -71,25 +71,25 @@ function OnKodeRekananPranotaKoasChange(e){
 }
 
 function OnPranotaKoasPstShareChange(e){
-    ajaxGet(`/Akseptasi/GenerateNilaiPrmKoas?pst_share=${e.sender.value()}&nilai_prm_leader=${$("#premi_100").val()}&pst_hf=${$("#pranota_koas_pst_hf").val()}`, (returnValue) => {
+    ajaxGet(`/ProsesPremiFakultatifMasuk/GenerateNilaiPrmKoas?pst_share=${e.sender.value()}&nilai_prm_leader=${$("#premi_100").val()}&pst_hf=${$("#pranota_koas_pst_hf").val()}`, (returnValue) => {
         $("#pranota_koas_nilai_prm").getKendoNumericTextBox().value(returnValue.split(",")[1]);
     });
 }
 
 function OnPranotaKoasPstDisChange(e){
-    ajaxGet(`/Akseptasi/GenerateNilaiDisKoas?pst_dis=${e.sender.value()}&nilai_prm=${$("#pranota_koas_nilai_prm").val()}`, (returnValue) => {
+    ajaxGet(`/ProsesPremiFakultatifMasuk/GenerateNilaiDisKoas?pst_dis=${e.sender.value()}&nilai_prm=${$("#pranota_koas_nilai_prm").val()}`, (returnValue) => {
         $("#pranota_koas_nilai_dis").getKendoNumericTextBox().value(returnValue.split(",")[1]);
     });
 }
 
 function OnPranotaKoasPstHfChange(e){
-    ajaxGet(`/Akseptasi/GenerateNilaiPrmKoas?pst_share=${$("#pranota_koas_pst_share").val()}&nilai_prm_leader=${$("#pranota_koas_nilai_prm").val()}&pst_hf=${e.sender.value()}`, (returnValue) => {
+    ajaxGet(`/ProsesPremiFakultatifMasuk/GenerateNilaiPrmKoas?pst_share=${$("#pranota_koas_pst_share").val()}&nilai_prm_leader=${$("#pranota_koas_nilai_prm").val()}&pst_hf=${e.sender.value()}`, (returnValue) => {
         $("#pranota_koas_nilai_hf").getKendoNumericTextBox().value(returnValue.split(",")[1]);
     });
 }
 
 function OnPranotaKoasPstKmsChange(e){
-    ajaxGet(`/Akseptasi/GenerateNilaiKmsKoas?pst_kms=${e.sender.value()}&nilai_prm=${$("#pranota_koas_nilai_prm").val()}&nilai_dis=${$("#pranota_koas_nilai_dis").val()}`, (returnValue) => {
+    ajaxGet(`/ProsesPremiFakultatifMasuk/GenerateNilaiKmsKoas?pst_kms=${e.sender.value()}&nilai_prm=${$("#pranota_koas_nilai_prm").val()}&nilai_dis=${$("#pranota_koas_nilai_dis").val()}`, (returnValue) => {
         $("#pranota_koas_nilai_kms").getKendoNumericTextBox().value(returnValue.split(",")[1]);
     });
 }

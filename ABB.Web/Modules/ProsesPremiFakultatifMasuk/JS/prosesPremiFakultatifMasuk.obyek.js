@@ -6,7 +6,7 @@ function btnSaveAkseptasiObyek_Click() {
     $('#btn-save-akseptasiObyek').click(function () {
         showProgress('#AkseptasiObyekWindow');
         setTimeout(function () {
-            saveAkseptasiObyek('/Akseptasi/SaveAkseptasiObyek')
+            saveAkseptasiObyek('/ProsesPremiFakultatifMasuk/SaveAkseptasiObyek')
         }, 500);
     });
 }
@@ -19,11 +19,11 @@ function saveAkseptasiObyek(url) {
     form.kd_scob = $("#kd_scob").val();
     form.kd_thn = $("#kd_thn").val();
     form.no_aks = $("#no_aks").val();
-    form.no_updt = fakultatifResiko.no_updt;
-    form.no_rsk = fakultatifResiko.no_rsk;
-    form.kd_endt = fakultatifResiko.kd_endt;
+    form.no_updt = resiko.no_updt;
+    form.no_rsk = resiko.no_rsk;
+    form.kd_endt = resiko.kd_endt;
     form.no_pol_ttg = $("#no_pol_ttg").val();
-    form.pst_share = fakultatifResiko.pst_share_bgu;
+    form.pst_share = resiko.pst_share_bgu;
     
     var data = JSON.stringify(form);
     
@@ -46,7 +46,7 @@ function saveAkseptasiObyek(url) {
 }
 
 function OnNilaiPtg100Change(e){
-    ajaxGet(`/Akseptasi/GetNilaiPtg?pst_share=${$("#pst_share_bgu").val()}&nilai_ttl_ptg100=${e.sender.value()}`, (returnValue) => {
+    ajaxGet(`/ProsesPremiFakultatifMasuk/GetNilaiPtg?pst_share=${$("#pst_share_bgu").val()}&nilai_ttl_ptg100=${e.sender.value()}`, (returnValue) => {
         $("#resiko_obyek_nilai_ttl_ptg").getKendoNumericTextBox().value(returnValue.split(",")[1]);
     });
 }

@@ -27,9 +27,9 @@ function deleteAkseptasiResikoOtherMotor() {
         kd_scob: $("#kd_scob").val(),
         kd_thn: $("#kd_thn").val(),
         no_aks: $("#no_aks").val(),
-        no_updt: fakultatifResiko.no_updt,
-        no_rsk: fakultatifResiko.no_rsk,
-        kd_endt: fakultatifResiko.kd_endt
+        no_updt: resiko.no_updt,
+        no_rsk: resiko.no_rsk,
+        kd_endt: resiko.kd_endt
     }
 
     ajaxPost(`/ProsesPremiFakultatifMasuk/DeleteOtherMotor`, JSON.stringify(data), function (response) {
@@ -47,10 +47,10 @@ function deleteAkseptasiResikoOtherMotor() {
             kd_scob: $("#kd_scob").val(),
             kd_thn: $("#kd_thn").val(),
             no_aks: $("#no_aks").val(),
-            no_updt: fakultatifResiko.no_updt,
-            no_rsk: fakultatifResiko.no_rsk,
-            kd_endt: fakultatifResiko.kd_endt,
-            pst_share: fakultatifResiko.pst_share_bgu,
+            no_updt: resiko.no_updt,
+            no_rsk: resiko.no_rsk,
+            kd_endt: resiko.kd_endt,
+            pst_share: resiko.pst_share_bgu,
         }
 
         ajaxPost(`/ProsesPremiFakultatifMasuk/CheckOther`, JSON.stringify(dataOther),
@@ -105,9 +105,9 @@ function saveAkseptasiResikoOther(url) {
     form.kd_scob = $("#kd_scob").val();
     form.kd_thn = $("#kd_thn").val();
     form.no_aks = $("#no_aks").val();
-    form.no_updt = fakultatifResiko.no_updt;
-    form.no_rsk = fakultatifResiko.no_rsk;
-    form.kd_endt = fakultatifResiko.kd_endt;
+    form.no_updt = resiko.no_updt;
+    form.no_rsk = resiko.no_rsk;
+    form.kd_endt = resiko.kd_endt;
 
     form.tgl_mul_ptg = $("#resiko_other_tgl_mul_ptg").val();
     form.tgl_akh_ptg = $("#resiko_other_tgl_akh_ptg").val();

@@ -9,10 +9,10 @@
 
 @{
     Layout = "~/Modules/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Akseptasi Polis";
+    ViewData["Title"] = "Proses Premi Fakultatif Masuk";
 }
 
-<script src="~/Modules/Akseptasi/JS/akseptasi.index.js"></script>
+<script src="~/Modules/ProsesPremiFakultatifMasuk/JS/prosesPremiFakultatifMasuk.index.js"></script>
 
 <style>
     .div-box{
@@ -23,14 +23,14 @@
 <div class="flat-box">
     <div class="row">
         <div class="flat-box-title col-md-5">
-            Akseptasi Polis
+            Proses Premi Fakultatif Masuk
         </div>
 
         <div class="col-md-4">
             <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
         </div>
         <div class="col-md-3">
-            <button class="flat-btn-primary" id="btnAddNewAkseptasi">Add New Akseptasi Polis</button>
+            <button class="flat-btn-primary" id="btnAddNewAkseptasi">Add</button>
         </div>
     </div>
 
@@ -39,7 +39,7 @@
             @(Html.Kendo().Grid<AkseptasiDto>()
                 .Name("AkseptasiGrid")
                 .DataSource(dataSource => dataSource.Ajax()
-                    .Read(read => read.Action("GetAkseptasis", "Akseptasi").Data("searchFilter"))
+                    .Read(read => read.Action("GetAkseptasis", "ProsesPremiFakultatifMasuk").Data("searchFilter"))
                     .Model(model => model.Id(p => p.no_pol_induk))
                 )
                 .Columns(columns =>
@@ -56,11 +56,6 @@
                             .IconClass("fa fa-lock")
                             .HtmlAttributes(new { title = "Closing" })
                             .Click("btnClosingAkseptasi_OnClick");
-                        // command.Custom("DeleteAkseptasi")
-                        //     .Text("Delete")
-                        //     .IconClass("k-icon k-i-delete")
-                        //     .HtmlAttributes(new { title = "Delete" })
-                        //     .Click("btnDeleteAkseptasi_OnClick");
                         command.Custom("KeteranganEndorsment")
                             .Text("Keterangan Endorsment")
                             .IconClass("fa fa-indent")
