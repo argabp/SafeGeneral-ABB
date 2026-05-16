@@ -13,10 +13,13 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ABB.Web.Modules.EntriNota
+namespace ABB.Web.Modules.NotaPremiFakultatifMasuk
 {
-    public class EntriNotaController : AuthorizedBaseController
+    public class NotaPremiFakultatifMasukController : AuthorizedBaseController
     {
+        private const string DatabaseName = "abb_kp00";
+        private const string KodeCabang = "PS10";
+        
         public ActionResult Index()
         {
             ViewBag.Module = Request.Cookies["Module"];
@@ -36,7 +39,7 @@ namespace ABB.Web.Modules.EntriNota
         {
             var command = new GetEntriNotaQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"],
+                DatabaseName = DatabaseName,
                 kd_cb = kd_cb,
                 jns_tr = jns_tr,
                 jns_nt_msk = jns_nt_msk,
@@ -58,7 +61,7 @@ namespace ABB.Web.Modules.EntriNota
         {
             var command = new GetEntriNotaQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"],
+                DatabaseName = DatabaseName,
                 kd_cb = kd_cb,
                 jns_tr = jns_tr,
                 jns_nt_msk = jns_nt_msk,
@@ -80,7 +83,7 @@ namespace ABB.Web.Modules.EntriNota
         {
             var command = new GetEntriNotaQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"],
+                DatabaseName = DatabaseName,
                 kd_cb = kd_cb,
                 jns_tr = jns_tr,
                 jns_nt_msk = jns_nt_msk,
@@ -101,8 +104,8 @@ namespace ABB.Web.Modules.EntriNota
             var ds = await Mediator.Send(new GetEntriNotasQuery()
             {
                 SearchKeyword = searchkeyword,
-                DatabaseName = Request.Cookies["DatabaseValue"],
-                kd_cb = Request.Cookies["UserCabang"]
+                DatabaseName = DatabaseName,
+                kd_cb = KodeCabang
             });
             
             var statusPolis = new List<DropdownOptionDto>()
@@ -127,7 +130,7 @@ namespace ABB.Web.Modules.EntriNota
                 kd_thn = kd_thn,
                 no_pol = no_pol,
                 no_updt = no_updt,
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = DatabaseName
             });
             
             var statusPolis = new List<DropdownOptionDto>()
@@ -165,7 +168,7 @@ namespace ABB.Web.Modules.EntriNota
                 no_nt_msk = no_nt_msk,
                 jns_nt_kel = jns_nt_kel,
                 no_nt_kel = no_nt_kel,
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = DatabaseName
             });
             
             return Json(ds.AsQueryable().ToDataSourceResult(request));
@@ -177,7 +180,7 @@ namespace ABB.Web.Modules.EntriNota
             try
             {
                 var command = Mapper.Map<SaveEntriNotaCommand>(model);
-                command.DatabaseName = Request.Cookies["DatabaseValue"];
+                command.DatabaseName = DatabaseName;
                 await Mediator.Send(command);
                 return Json(new { Result = "OK", Message = "Data Berhasil Disimpan"});
             }
@@ -193,7 +196,7 @@ namespace ABB.Web.Modules.EntriNota
             try
             {
                 var command = Mapper.Map<SaveEntriNotaCancelCommand>(model);
-                command.DatabaseName = Request.Cookies["DatabaseValue"];
+                command.DatabaseName = DatabaseName;
                 await Mediator.Send(command);
                 return Json(new { Result = "OK", Message = Constant.DataDisimpan});
             }
@@ -207,7 +210,7 @@ namespace ABB.Web.Modules.EntriNota
         {
             var result = await Mediator.Send(new GetMataUangQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = DatabaseName
             });
 
             return Json(result);
@@ -217,7 +220,7 @@ namespace ABB.Web.Modules.EntriNota
         {
             var result = await Mediator.Send(new GetKodeTertujuQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = DatabaseName
             });
 
             return Json(result);
@@ -228,7 +231,7 @@ namespace ABB.Web.Modules.EntriNota
         {
             var result = await Mediator.Send(new GetRekananTertujuQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"],
+                DatabaseName = DatabaseName,
                 kd_cb = kd_cb,
                 kd_cob = kd_cob,
                 kd_scob = kd_scob,
@@ -260,7 +263,7 @@ namespace ABB.Web.Modules.EntriNota
         {
             var result = await Mediator.Send(new GenerateEntriNotaDataQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"],
+                DatabaseName = DatabaseName,
                 kd_cb = kd_cb,
                 kd_grp_rk = kd_grp_rk,
                 kd_rk = kd_rk
@@ -273,7 +276,7 @@ namespace ABB.Web.Modules.EntriNota
         {
             var result = await Mediator.Send(new GenerateNilaiAngQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"],
+                DatabaseName = DatabaseName,
                 pst_ang = pst_ang,
                 nilai_nt = nilai_nt,
                 nilai_ppn = nilai_ppn,
@@ -287,7 +290,7 @@ namespace ABB.Web.Modules.EntriNota
         {
             var result = await Mediator.Send(new ValidateSaveDetailNotaCommand()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"],
+                DatabaseName = DatabaseName,
                 no_pol = no_pol,
                 nilai_nt = nilai_nt,
                 nilai_ang = nilai_ang
