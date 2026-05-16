@@ -10,7 +10,7 @@
         .Name("EntriNotaCancelGrid")
         .Editable(editable => editable.Mode(GridEditMode.InLine))
         .DataSource(dataSource => dataSource.Ajax()
-            .Read(read => read.Action("GetEntriNotaCancels", "NotaPremiFakultatifMasuk").Data("dataNotaCancel"))
+            .Read(read => read.Action("GetNotaPremiFakultatifMasuks", "NotaPremiFakultatifMasuk").Data("dataNotaCancel"))
             .Model(model => model.Id(p => p.Id))
         )
         .Columns(columns =>

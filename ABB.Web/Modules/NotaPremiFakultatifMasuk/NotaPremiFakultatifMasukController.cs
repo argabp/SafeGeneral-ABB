@@ -99,7 +99,7 @@ namespace ABB.Web.Modules.NotaPremiFakultatifMasuk
             return PartialView(Mapper.Map<NotaViewModel>(data));
         }
         
-        public async Task<ActionResult> GetEntriNotas([DataSourceRequest] DataSourceRequest request, string searchkeyword)
+        public async Task<ActionResult> GetNotaPremiFakultatifMasuks([DataSourceRequest] DataSourceRequest request, string searchkeyword)
         {
             var ds = await Mediator.Send(new GetEntriNotasQuery()
             {
@@ -119,7 +119,7 @@ namespace ABB.Web.Modules.NotaPremiFakultatifMasuk
             return Json(ds.AsQueryable().ToDataSourceResult(request));
         }
         
-        public async Task<ActionResult> GetEntriNotaCancels([DataSourceRequest] DataSourceRequest request, string kd_cb,
+        public async Task<ActionResult> GetNotaPremiFakultatifMasukCancels([DataSourceRequest] DataSourceRequest request, string kd_cb,
             string kd_cob, string kd_scob, string kd_thn, string no_pol, Int16 no_updt)
         {
             var ds = await Mediator.Send(new GetEntriNotaCancelsQuery()

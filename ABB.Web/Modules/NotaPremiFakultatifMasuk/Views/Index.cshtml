@@ -36,7 +36,7 @@
                 .Name("EntriNotaGrid")
                 .Editable(editable => editable.Mode(GridEditMode.InLine))
                 .DataSource(dataSource => dataSource.Ajax()
-                    .Read(read => read.Action("GetEntriNotas", "NotaPremiFakultatifMasuk").Data("searchFilter"))
+                    .Read(read => read.Action("GetNotaPremiFakultatifMasuks", "NotaPremiFakultatifMasuk").Data("searchFilter"))
                     .Model(model => model.Id(p => p.Id))
                 )
                 .Columns(columns =>

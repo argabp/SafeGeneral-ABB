@@ -1,0 +1,61 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using ABB.Application.PostingPolicies.Commands;
+using ABB.Application.PostingPolicies.Queries;
+using ABB.Web.Modules.Base;
+using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
+using Microsoft.AspNetCore.Mvc;
+
+namespace ABB.Web.Modules.PostingNotaPremiFakultatifMasuk
+{
+    public class PostingNotaPremiFakultatifMasukController : AuthorizedBaseController
+    {
+        private const string DatabaseName = "abb_kp00";
+        private const string KodeCabang = "PS10";
+        
+        public ActionResult Index()
+        {
+            ViewBag.Module = Request.Cookies["Module"];
+            ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
+            ViewBag.UserLogin = CurrentUser.UserId;
+
+            return View();
+        }
+        
+        public async Task<ActionResult> GetPostingNotaPremiFakultatifMasuks([DataSourceRequest] DataSourceRequest request, string searchkeyword)
+        {
+            var ds = await Mediator.Send(new GetPostingPolisQuery()
+            {
+                SearchKeyword = searchkeyword,
+                DatabaseName = DatabaseName,
+                kd_cb = KodeCabang
+            });
+
+            return Json(ds.AsQueryable().ToDataSourceResult(request));
+        }
+        
+        [HttpPost]
+        public async Task<ActionResult> Posting([FromBody] List<PostingPolisDto> model)
+        {
+            try
+            {
+                var command = new PostingPolisCommand()
+                {
+                    DatabaseName = DatabaseName,
+                    Data = model
+                };
+
+                await Mediator.Send(command);
+
+                return Ok(new { Status = "OK"});
+            }
+            catch (Exception e)
+            {
+                return Ok( new { Status = "ERROR", Message = e.InnerException == null ? e.Message : e.InnerException.Message});
+            }
+        }
+    }
+}
