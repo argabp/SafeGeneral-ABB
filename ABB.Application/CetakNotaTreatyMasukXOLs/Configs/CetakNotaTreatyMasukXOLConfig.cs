@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using ABB.Application.Common.Grids.Models;
 
-namespace ABB.Application.CetakNotaTreatyMasuks.Configs
+namespace ABB.Application.CetakNotaTreatyMasukXOLs.Configs
 {
-    public static class CetakNotaTreatyMasukConfig
+    public static class CetakNotaTreatyMasukXOLConfig
     {
         public static GridConfig Create()
         {
@@ -27,7 +27,7 @@ namespace ABB.Application.CetakNotaTreatyMasuks.Configs
                             ) src
                             ",
                 
-               BaseWhere = "(src.kd_jns_sor <> 'XOL')",
+               BaseWhere = "(src.kd_jns_sor = 'XOL')",
 
 
                 ColumnMap = new Dictionary<string, string>

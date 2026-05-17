@@ -3,16 +3,16 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ABB.Application.CetakNotaTreatyMasuks.Queries;
+using ABB.Application.CetakNotaTreatyMasukXOLs.Queries;
 using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Hosting;
 using Scriban;
 
-namespace ABB.Application.CetakNotaTreatyMasuks.Commands
+namespace ABB.Application.CetakNotaTreatyMasukXOLs.Commands
 {
-    public class CetakNotaTreatyMasukCommand : IRequest<string>
+    public class CetakNotaTreatyMasukXOLCommand : IRequest<string>
     {
         public string kd_cb { get; set; }
         public string jns_tr { get; set; }
@@ -25,20 +25,20 @@ namespace ABB.Application.CetakNotaTreatyMasuks.Commands
         public string flag_posting { get; set; }
     }
 
-    public class CetakNotaTreatyMasukCommandHandler : IRequestHandler<CetakNotaTreatyMasukCommand, string>
+    public class CetakNotaTreatyMasukXOLCommandHandler : IRequestHandler<CetakNotaTreatyMasukXOLCommand, string>
     {
         private readonly IDbConnectionPst _connectionPst;
         private readonly IHostEnvironment _environment;
 
-        public CetakNotaTreatyMasukCommandHandler(IDbConnectionPst connectionPst, IHostEnvironment environment)
+        public CetakNotaTreatyMasukXOLCommandHandler(IDbConnectionPst connectionPst, IHostEnvironment environment)
         {
             _connectionPst = connectionPst;
             _environment = environment;
         }
 
-        public async Task<string> Handle(CetakNotaTreatyMasukCommand request, CancellationToken cancellationToken)
+        public async Task<string> Handle(CetakNotaTreatyMasukXOLCommand request, CancellationToken cancellationToken)
         {
-            var datas = (await _connectionPst.QueryProc<CetakNotaTreatyMasukModel>("spr_ri02r_03", 
+            var datas = (await _connectionPst.QueryProc<CetakNotaTreatyMasukXOLModel>("spr_ri02r_03", 
                 new
                 {
                     input_str = $"{request.kd_cb.Trim()},{request.jns_tr.Trim()},{request.jns_nt_msk.Trim()}," +

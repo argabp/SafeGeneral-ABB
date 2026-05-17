@@ -1,8 +1,8 @@
 using System;
 
-namespace ABB.Application.CetakNotaTreatyMasuks.Queries
+namespace ABB.Application.CetakNotaTreatyMasukXOLs.Queries
 {
-    public class CetakNotaTreatyMasukDto
+    public class CetakNotaTreatyMasukXOLDto
     {
         public string Id { get; set; }
 
