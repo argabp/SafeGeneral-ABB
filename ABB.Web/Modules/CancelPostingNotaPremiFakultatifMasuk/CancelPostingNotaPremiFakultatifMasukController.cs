@@ -9,9 +9,9 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ABB.Web.Modules.CancelPostingPolis
+namespace ABB.Web.Modules.CancelPostingNotaPremiFakultatifMasuk
 {
-    public class CancelPostingPolisController : AuthorizedBaseController
+    public class CancelPostingNotaPremiFakultatifMasukController : AuthorizedBaseController
     {
         public ActionResult Index()
         {
@@ -22,7 +22,7 @@ namespace ABB.Web.Modules.CancelPostingPolis
             return View();
         }
 
-        public async Task<ActionResult> GetCancelPolicies([DataSourceRequest] DataSourceRequest request)
+        public async Task<ActionResult> GetCancelPostingNotaPremiFakultatifMasuks([DataSourceRequest] DataSourceRequest request)
         {
             var ds = await Mediator.Send(new GetCancelPostingPolisQuery()
             {

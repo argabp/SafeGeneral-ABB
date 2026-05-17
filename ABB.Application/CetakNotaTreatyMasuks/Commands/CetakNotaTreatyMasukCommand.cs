@@ -3,17 +3,17 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ABB.Application.CetakNotaTreatyMasuks.Queries;
 using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Hosting;
 using Scriban;
 
-namespace ABB.Application.CetakNotaKlaim.Queries
+namespace ABB.Application.CetakNotaTreatyMasuks.Commands
 {
-    public class GetCetakNotaKlaimQuery : IRequest<string>
+    public class CetakNotaTreatyMasukCommand : IRequest<string>
     {
-        public string DatabaseName { get; set; }
         public string kd_cb { get; set; }
         public string jns_tr { get; set; }
         public string jns_nt_msk { get; set; }
@@ -25,22 +25,20 @@ namespace ABB.Application.CetakNotaKlaim.Queries
         public string flag_posting { get; set; }
     }
 
-    public class GetCetakNotaKlaimQueryHandler : IRequestHandler<GetCetakNotaKlaimQuery, string>
+    public class CetakNotaTreatyMasukCommandHandler : IRequestHandler<CetakNotaTreatyMasukCommand, string>
     {
-        private readonly IDbConnectionFactory _connectionFactory;
+        private readonly IDbConnectionPst _connectionPst;
         private readonly IHostEnvironment _environment;
 
-        public GetCetakNotaKlaimQueryHandler(IDbConnectionFactory connectionFactory, IHostEnvironment environment)
+        public CetakNotaTreatyMasukCommandHandler(IDbConnectionPst connectionPst, IHostEnvironment environment)
         {
-            _connectionFactory = connectionFactory;
+            _connectionPst = connectionPst;
             _environment = environment;
         }
 
-        public async Task<string> Handle(GetCetakNotaKlaimQuery request, CancellationToken cancellationToken)
+        public async Task<string> Handle(CetakNotaTreatyMasukCommand request, CancellationToken cancellationToken)
         {
-            _connectionFactory.CreateDbConnection(request.DatabaseName);
-
-            var datas = (await _connectionFactory.QueryProc<CetakNotaKlaimDto>("spr_cl02r_01", 
+            var datas = (await _connectionPst.QueryProc<CetakNotaTreatyMasukModel>("spr_ri02r_03", 
                 new
                 {
                     input_str = $"{request.kd_cb.Trim()},{request.jns_tr.Trim()},{request.jns_nt_msk.Trim()}," +
@@ -48,7 +46,7 @@ namespace ABB.Application.CetakNotaKlaim.Queries
                                 $"{request.jns_nt_kel},{request.no_nt_kel.Trim()},{request.flag_posting.Trim()},"
                 })).ToList();
             
-            string reportPath = Path.Combine( _environment.ContentRootPath, "Modules", "Reports", "Templates", "CetakNotaKlaim.html" );
+            string reportPath = Path.Combine( _environment.ContentRootPath, "Modules", "Reports", "Templates", "NotaTreatyMasuk.html" );
             
             string templateReportHtml = await File.ReadAllTextAsync( reportPath );
             
@@ -127,12 +125,12 @@ namespace ABB.Application.CetakNotaKlaim.Queries
                 nilai_01_1, nilai_02_1, nilai_03_1, nilai_04_1, nilai_05_1,
                 nilai_nt, nilai_01, nilai_02, nilai_03, nilai_04, nilai_05, nilai_total, 
                 data.jns_tr, data.jns_nt_msk, data.jns_nt_kel, data.nm_cb, data.almt_ttj,
-                data.almt_ttg, data.flag_postr, data.nm_ttg, data.nm_ttj, data.kt_ttj,
+                data.almt_ttg, data.nm_ttg, data.nm_ttj, data.kt_ttj, data.nm_tty, data.nilai_ttl_ptg,
                 data.no_berkas, data.no_pol_ttg, data.kt_ttg, data.kd_mtu_symbol, data.kd_tl,
-                data.nm_kt_cb, data.tgl_nt_ind, data.no_nota, data.nm_scob, data.nm_scob_ing,
+                data.kt_cb, tgl_nt_ind = data.tgl_nt_ind.Split(" ")[2], data.no_nota, data.nm_scob, data.nm_scob_ing,
                 data.kd_cob, data.kd_scob, nilai_share_bgu = ReportHelper.ConvertToReportFormat(data.nilai_share_bgu), data.ket_nt,
-                tgl_mul_ptg = ReportHelper.ConvertDateTime(data.tgl_mul_ptg, "dd/MM/yyyy"),
-                tgl_akh_ptg = ReportHelper.ConvertDateTime(data.tgl_akh_ptg, "dd/MM/yyyy"),
+                tgl_mul = ReportHelper.ConvertDateTime(data.tgl_mul, "dd MMMM yyyy"),
+                tgl_akh = ReportHelper.ConvertDateTime(data.tgl_akh, "dd MMMM yyyy"),
                 data.uraian_01, data.uraian_02, data.uraian_03, data.uraian_04, data.uraian_05,
                 data.kd_mtu_pol_symbol, header, data.kd_thn_pol, view_jumlah_untuk, grand_nilai_total
             } );

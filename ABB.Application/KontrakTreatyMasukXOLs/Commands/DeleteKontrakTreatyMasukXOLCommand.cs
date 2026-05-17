@@ -6,9 +6,9 @@ using ABB.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace ABB.Application.KontrakTreatyMasuks.Commands
+namespace ABB.Application.KontrakTreatyMasukXOLs.Commands
 {
-    public class DeleteKontrakTreatyMasukCommand : IRequest
+    public class DeleteKontrakTreatyMasukXOLCommand : IRequest
     {
         public string kd_cb { get; set; }
 
@@ -17,19 +17,19 @@ namespace ABB.Application.KontrakTreatyMasuks.Commands
         public string kd_tty_msk { get; set; }
     }
 
-    public class DeleteKontrakTreatyMasukCommandHandler : IRequestHandler<DeleteKontrakTreatyMasukCommand>
+    public class DeleteKontrakTreatyMasukXOLCommandHandler : IRequestHandler<DeleteKontrakTreatyMasukXOLCommand>
     {
         private readonly IDbContextPst _contextPst;
-        private readonly ILogger<DeleteKontrakTreatyMasukCommandHandler> _logger;
+        private readonly ILogger<DeleteKontrakTreatyMasukXOLCommandHandler> _logger;
 
-        public DeleteKontrakTreatyMasukCommandHandler(IDbContextPst contextPst,
-            ILogger<DeleteKontrakTreatyMasukCommandHandler> logger)
+        public DeleteKontrakTreatyMasukXOLCommandHandler(IDbContextPst contextPst,
+            ILogger<DeleteKontrakTreatyMasukXOLCommandHandler> logger)
         {;
             _contextPst = contextPst;
             _logger = logger;
         }
 
-        public async Task<Unit> Handle(DeleteKontrakTreatyMasukCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DeleteKontrakTreatyMasukXOLCommand request, CancellationToken cancellationToken)
         {
             await ExceptionHelper.ExecuteWithLoggingAsync(async () => 
             {

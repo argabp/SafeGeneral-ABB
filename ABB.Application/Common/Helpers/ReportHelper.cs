@@ -4,6 +4,15 @@ namespace ABB.Application.Common.Helpers
 {
     public static class ReportHelper
     {
+        public static bool StartsWithSpace(string s)
+            => !string.IsNullOrEmpty(s) && s.StartsWith(" ");
+        
+        public static string FormatIf(bool condition, decimal value, bool percentage = false)
+            => condition && value != 0
+                ? ConvertToReportFormat(value)
+                : string.Empty;
+        
+        
         public static string ConvertToReportFormat(decimal? value, bool percentage = false)
         {
             if (value == null)

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using ABB.Application.Common.Grids.Models;
 
-namespace ABB.Application.KontrakTreatyMasuks.Configs
+namespace ABB.Application.KontrakTreatyMasukXOLs.Configs
 {
-    public static class KontrakTreatyMasukConfig
+    public static class KontrakTreatyMasukXOLConfig
     {
         public static GridConfig Create()
         {
@@ -20,7 +20,7 @@ namespace ABB.Application.KontrakTreatyMasuks.Configs
                             ) src
                             ",
 
-                BaseWhere = "(src.kd_jns_sor <> 'XOL')",
+                BaseWhere = "(src.kd_jns_sor = 'XOL')",
 
                 ColumnMap = new Dictionary<string, string>
                 {

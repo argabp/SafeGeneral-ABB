@@ -6150,6 +6150,9 @@
         <None Update="Modules\Reports\Templates\CetakanNotaDebetKreditAngsuran.html">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Update="Modules\Reports\Templates\NotaTreatyMasuk.html">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>

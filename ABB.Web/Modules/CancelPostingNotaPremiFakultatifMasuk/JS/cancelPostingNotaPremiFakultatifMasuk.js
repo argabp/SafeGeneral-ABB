@@ -1,6 +1,6 @@
 ﻿
 function cancelPolis(){
-    showConfirmation('Confirmation', `Apakah anda akan melanjutkan Cancel Posting Polis?`,
+    showConfirmation('Confirmation', `Apakah anda akan melanjutkan Cancel Posting?`,
         function () {
             showProgressOnGrid('#CancelPostingPolisGrid');
             // Get the Kendo UI Grid instance
@@ -28,7 +28,7 @@ function cancelPolis(){
                 });
             });
 
-            ajaxPost("/CancelPostingPolis/Cancel", JSON.stringify(selectedData),
+            ajaxPost("/CancelPostingNotaPremiFakultatifMasuk/Cancel", JSON.stringify(selectedData),
                 function (response) {
                     if(response.Status === "OK"){
                         showMessage("Success", "Cancel berhasil")

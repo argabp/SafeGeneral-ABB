@@ -1,0 +1,87 @@
+@using ABB.Application.KontrakTreatyMasukXOLs.Queries
+@using Kendo.Mvc.UI
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Kontrak Treaty Masuk XOL";
+}
+<script src="~/Modules/KontrakTreatyMasukXOL/JS/kontrakTreatyMasukXOL.index.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Kontrak Treaty Masuk XOL
+        </div>
+
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+        </div>
+
+        <div class="col-md-2">
+            <button class="flat-btn-primary" onclick="btnAddKontrakTreatyMasukXOL_OnClick()" >Add</button>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<KontrakTreatyMasukXOLDto>()
+                .Name("KontrakTreatyMasukXOLGrid")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetKontrakTreatyMasukXOLs", "KontrakTreatyMasukXOL").Data("searchFilterKontrakTreatyMasukXOL"))
+                    .Model(model => model.Id(p => p.Id))
+                )
+                .Columns(columns =>
+                {
+                    columns.Command(command =>
+                    {
+                        command.Custom("EditKontrakTreatyMasukXOL")
+                            .Text("Edit")
+                            .IconClass("k-icon k-i-edit")
+                            .HtmlAttributes(new { title="Edit"})
+                            .Click("onEditKontrakTreatyMasukXOL");
+                        command.Custom("DeleteKontrakTreatyMasukXOL")
+                            .Text("Delete")
+                            .IconClass("k-icon k-i-delete")
+                            .HtmlAttributes(new { title="Delete"})
+                            .Click("onDeleteKontrakTreatyMasukXOL");
+                    }).Width(150).Title("Action").Locked(true);
+                    columns.Bound(col => col.nm_jns_sor).Width(150).Title("Nama Jenis SOR");
+                    columns.Bound(col => col.kd_tty_msk).Width(200).Title("Kode Treaty Masuk");
+                    columns.Bound(col => col.thn_uw).Width(200).Title("Tahun Underwriting");
+                    columns.Bound(col => col.desk_tty).Width(200).Title("Keterangan Treaty");
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit"))
+                ) 
+        </div>
+        
+        @(Html.Kendo().Window()
+            .Name("KontrakTreatyMasukXOLWindow")
+            .Title("Kontrak Treaty Masuk")
+            .Width(800)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+            )
+    </div>
+</div>
