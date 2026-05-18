@@ -1,6 +1,6 @@
 namespace ABB.Application.CetakRekapitulasiProduksiPremiFakultatifMasuks.Commands
 {
-    public class CetakRekapitulasiProduksiPremiFakultatifMasuModel
+    public class CetakRekapitulasiProduksiPremiFakultatifMasukModel
     {
         public string nm_cob_ing { get; set; }
         public decimal? nilai_prm { get; set; }

@@ -4802,6 +4802,7 @@
 
     <ItemGroup>
       <Folder Include="Logs" />
+      <Folder Include="Modules\CetakSOATreatyMasuks\" />
       <Folder Include="wwwroot\img\profile-picture" />
     </ItemGroup>
 
@@ -6160,6 +6161,9 @@
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="Modules\Reports\Templates\RekapitulasiProduksiTreatyMasuk.html">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Modules\Reports\Templates\SOATreatyMasuk.html">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>

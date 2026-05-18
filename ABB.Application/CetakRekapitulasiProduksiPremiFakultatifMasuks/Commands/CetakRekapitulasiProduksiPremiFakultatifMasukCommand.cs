@@ -43,7 +43,7 @@ namespace ABB.Application.CetakRekapitulasiProduksiPremiFakultatifMasuks.Command
                     break;
             }
             
-            var datas = (await _connectionPst.QueryProc<CetakRekapitulasiProduksiPremiFakultatifMasuModel>(spName, 
+            var datas = (await _connectionPst.QueryProc<CetakRekapitulasiProduksiPremiFakultatifMasukModel>(spName, 
                 new
                 {
                     input_str = $"{request.periode:yyyy/MM/dd}"
@@ -80,7 +80,7 @@ namespace ABB.Application.CetakRekapitulasiProduksiPremiFakultatifMasuks.Command
                                 <td style='width: 12%;  text-align: center; border: 1px solid'>KOMISI</td>
                                 <td style='width: 12%; text-align: center; border: 1px solid'>s/d BULAN INI</td>
                                 <td style='width: 12%; text-align: center; border: 1px solid'>NETT PREMI</td>
-                                <td style='width: 123A5S%; text-align: center; border: 1px solid'>s/d BULAN INI</td>
+                                <td style='width: 12%; text-align: center; border: 1px solid'>s/d BULAN INI</td>
                             </tr>");
 
             var sequence = 1;

@@ -31,21 +31,6 @@ namespace ABB.Web.Modules.CetakRekapitulasiProduksiTreatyMasuk
             return View();
         }
 
-        public async Task<JsonResult> GetCabang()
-        {
-            var dropdownData = new List<DropdownOptionDto>()
-            {
-                new DropdownOptionDto()
-                {
-                    Text = "",
-                    Value = ""
-                }
-            };
-            var result = await Mediator.Send(new GetCabangPSTQuery());
-            dropdownData.AddRange(result);
-            return Json(dropdownData);
-        }
-
         [HttpPost]
         public async Task<ActionResult> GenerateReport([FromBody] CetakRekapitulasiProduksiTreatyMasukViewModel model)
         {
