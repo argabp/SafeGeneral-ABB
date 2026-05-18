@@ -1,6 +1,6 @@
-﻿@using Kendo.Mvc.UI
-@using ABB.Application.CetakSchedulePolis.Queries
+﻿@using ABB.Application.CetakNotaPremiFakultatifMasuks.Queries
 @using ABB.Application.Common.Dtos
+@using Kendo.Mvc.UI
 @using Microsoft.Extensions.Configuration
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Kendo.Mvc
@@ -9,9 +9,9 @@
 
 @{
     Layout = "~/Modules/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Cetak Nota Dan Kwitansi Polis";
+    ViewData["Title"] = "Cetak Nota Treaty Masuk";
 }
-<script src="~/Modules/CetakNotaDanKwitansiPolis/JS/cetakNotaDanKwitansiPolis.js"></script>
+<script src="~/Modules/CetakNotaPremiFakultatifMasuk/JS/cetakNotaPremiFakultatifMasuk.js"></script>
 
 <style>
     .div-box{
@@ -25,7 +25,7 @@
 <div class="flat-box">
     <div class="row">
         <div class="flat-box-title col-md-8">
-            Cetak Nota Dan Kwitansi Polis
+            Cetak Nota Treaty Masuk
         </div>
 
         <div class="col-md-4">
@@ -35,10 +35,10 @@
 
     <div class="flat-box-content">
         <div class="div-box">
-            @(Html.Kendo().Grid<AkseptasiDto>()
-                .Name("AkseptasiGrid")
+            @(Html.Kendo().Grid<CetakNotaPremiFakultatifMasukDto>()
+                .Name("CetakNotaPremiFakultatifMasukGrid")
                 .DataSource(dataSource => dataSource.Ajax()
-                    .Read(read => read.Action("GetAkseptasis", "CetakNotaDanKwitansiPolis").Data("searchFilter"))
+                    .Read(read => read.Action("GetCetakNotaPremiFakultatifMasuks", "CetakNotaPremiFakultatifMasuk").Data("searchFilterServerFiltering"))
                     .Model(model => model.Id(p => p.Id))
                 )
                 .Columns(columns =>
@@ -46,7 +46,8 @@
                     columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
                     columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
                     columns.Bound(col => col.nm_scob).Width(150).Title("Nama Sub COB");
-                    columns.Bound(col => col.no_pol_ttg).Width(200).Title("Nomor Polis").ClientTemplate("#= formatNoPol(no_pol_ttg) #");
+                    columns.Bound(col => col.nomor_akseptasi).Width(200).Title("Nomor Akseptasi");
+                    columns.Bound(col => col.no_pol_ttg_masked).Width(200).Title("Nomor Polis");
                     columns.Bound(col => col.no_updt).Width(150).Title("Nomor Update");
                     columns.Bound(col => col.tgl_closing).Width(150).Title("Tanggal Closing").Format("{0: dd-MM-yyyy}");
                     columns.Bound(col => col.nm_ttg).Width(150).Title("Nama Tertanggung");
@@ -62,7 +63,8 @@
                 .Scrollable()
                 .Height(450)
                 .Resizable(a=>a.Columns(true))
-                .Events(ev => ev.DataBound("gridAutoFit")))
+                .Events(ev => ev.DataBound("gridAutoFit"))
+                ) 
         </div>
         
         <script id="template" type="text/kendo-tmpl">

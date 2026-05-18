@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang='id'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Cetak Rekapitulasi Produksi Premi Fakultatif Masuk</title>
+    <style>
+        body {
+            /*font-family: Arial, sans-serif;*/
+            font-size: 1pt;   /* readable in print */
+            line-height: 1.4;  /* adds vertical space */
+        }
+        td {
+            font-size: 9pt;
+            padding: 2px 4px; /* give breathing room */
+            letter-spacing: 1px;
+        }
+
+        .section {
+            margin-top: 10px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+    </style>
+</head>
+<body>
+<div style='page-break-before: always;'>
+    <div class='container'>
+        <div class='section'>
+            <p style='font-size: 14px; margin: auto; text-align: center;'><strong>RINCIAN PRODUKSI PREMI FAKULTATIF MASUK</strong></p>
+            <p style='font-size: 14px; margin: auto; text-align: center;'><strong>BULAN TAHUN: {{periode}}</strong></p>
+            <br>
+            {{details}}
+            
+            <br><br><br><br><br>
+            <table class="table" style="margin-top: 7rem">
+                <tr>
+                    <td style="width: 80%;"></td>
+                    <td style="text-align: center"><strong>{{nm_kpl_bag}}</strong></td>
+                </tr>
+                <tr>
+                    <td style="width: 80%;"></td>
+                    <td style="text-align: center"><strong>{{nm_bag}}</strong></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

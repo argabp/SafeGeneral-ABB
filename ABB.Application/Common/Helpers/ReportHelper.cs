@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace ABB.Application.Common.Helpers
 {
@@ -38,6 +39,23 @@ namespace ABB.Application.Common.Helpers
         {
             
             return value == null ? string.Empty : value.Value.ToString(format);
+        }
+        
+        public static string BuildSection(decimal? triggerValue, string template, Dictionary<string, object> values)
+        {
+            // Only render if triggerValue is > 0
+            if (triggerValue is null || triggerValue <= 0)
+                return string.Empty;
+
+            string result = template;
+
+            // Replace placeholders dynamically
+            foreach (var kvp in values)
+            {
+                result = result.Replace($"{{{kvp.Key}}}", kvp.Value?.ToString() ?? string.Empty);
+            }
+
+            return result;
         }
     }
 }

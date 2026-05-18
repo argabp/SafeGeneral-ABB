@@ -43,7 +43,7 @@ namespace ABB.Application.CetakNotaTreatyMasuks.Commands
                 {
                     input_str = $"{request.kd_cb.Trim()},{request.jns_tr.Trim()},{request.jns_nt_msk.Trim()}," +
                                 $"{request.kd_thn},{request.kd_bln.Trim()},{request.no_nt_msk.Trim()}," +
-                                $"{request.jns_nt_kel},{request.no_nt_kel.Trim()},{request.flag_posting.Trim()},"
+                                $"{request.jns_nt_kel},{request.no_nt_kel.Trim()},{request.flag_posting.Trim()}"
                 })).ToList();
             
             string reportPath = Path.Combine( _environment.ContentRootPath, "Modules", "Reports", "Templates", "NotaTreatyMasuk.html" );

@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
-using ABB.Application.LaporanBulananCabang.Queries;
 using MediatR;
 using Microsoft.Extensions.Hosting;
 using Scriban;

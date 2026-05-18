@@ -1,23 +1,23 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ABB.Application.CetakRekapitulasiProduksiPremiFakultatifMasuks.Commands;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Queries;
 using ABB.Application.Common.Services;
-using ABB.Application.LaporanBulananRekap.Queries;
 using ABB.Web.Modules.Base;
-using ABB.Web.Modules.LaporanBulananRekap.Models;
+using ABB.Web.Modules.CetakRekapitulasiProduksiPremiFakultatifMasuk.Models;
 using DinkToPdf;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ABB.Web.Modules.LaporanBulananRekap
+namespace ABB.Web.Modules.CetakRekapitulasiProduksiPremiFakultatifMasuk
 {
-    public class LaporanBulananRekapController : AuthorizedBaseController
+    public class CetakRekapitulasiProduksiPremiFakultatifMasukController : AuthorizedBaseController
     {
         private readonly IReportGeneratorService _reportGeneratorService;
 
-        public LaporanBulananRekapController(IReportGeneratorService reportGeneratorService)
+        public CetakRekapitulasiProduksiPremiFakultatifMasukController(IReportGeneratorService reportGeneratorService)
         {
             _reportGeneratorService = reportGeneratorService;
         }
@@ -28,10 +28,7 @@ namespace ABB.Web.Modules.LaporanBulananRekap
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
             
-            return View(new LaporanBulananRekapViewModel()
-            {
-                kd_cb = Request.Cookies["UserCabang"]?.Trim() ?? string.Empty
-            });
+            return View();
         }
 
         public async Task<JsonResult> GetCabang()
@@ -44,21 +41,17 @@ namespace ABB.Web.Modules.LaporanBulananRekap
                     Value = ""
                 }
             };
-            var result = await Mediator.Send(new GetCabangQuery()
-            {
-                DatabaseName = Request.Cookies["DatabaseValue"]
-            });
+            var result = await Mediator.Send(new GetCabangPSTQuery());
             dropdownData.AddRange(result);
             return Json(dropdownData);
         }
         
         [HttpPost]
-        public async Task<ActionResult> GenerateReport([FromBody] LaporanBulananRekapViewModel model)
+        public async Task<ActionResult> GenerateReport([FromBody] CetakRekapitulasiProduksiPremiFakultatifMasukViewModel model)
         {
             try
             {
-                var command = Mapper.Map<GetLaporanBulananRekapQuery>(model);
-                command.DatabaseName = Request.Cookies["DatabaseValue"];
+                var command = Mapper.Map<CetakRekapitulasiProduksiPremiFakultatifMasukCommand>(model);
 
                 var sessionId = HttpContext.Session.GetString("SessionId");
 
@@ -67,7 +60,7 @@ namespace ABB.Web.Modules.LaporanBulananRekap
 
                 var reportTemplate = await Mediator.Send(command);
                 
-                _reportGeneratorService.GenerateReport("LaporanBulananRekap.pdf", reportTemplate, sessionId, Orientation.Landscape,
+                _reportGeneratorService.GenerateReport("CetakRekapitulasiProduksiPremiFakultatifMasuk.pdf", reportTemplate, sessionId, Orientation.Landscape,
                     5, 5, 5, 5, PaperKind.Legal);
 
                 return Ok(new { Status = "OK", Data = sessionId});
@@ -82,11 +75,9 @@ namespace ABB.Web.Modules.LaporanBulananRekap
         {
             var result = new List<DropdownOptionDto>()
             {
-                new DropdownOptionDto() { Text = "Rekap Premi Bruto", Value = "6" },
-                new DropdownOptionDto() { Text = "Rekap Premi Netto", Value = "7" },
-                new DropdownOptionDto() { Text = "Rekap Discount + Komisi", Value = "8" },
-                new DropdownOptionDto() { Text = "Rekap Klaim", Value = "9" },
-                new DropdownOptionDto() { Text = "Rekap Premi Rate", Value = "10" }
+                new DropdownOptionDto() { Text = "Per COB", Value = "1" },
+                new DropdownOptionDto() { Text = "Per Ceding", Value = "2" },
+                new DropdownOptionDto() { Text = "Per Broker", Value = "3" }
             };
 
             return Json(result);
