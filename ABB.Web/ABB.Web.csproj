@@ -6159,6 +6159,9 @@
         <None Update="Modules\Reports\Templates\RekapitulasiProduksiPremiFakultatifMasuk.html">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Update="Modules\Reports\Templates\RekapitulasiProduksiTreatyMasuk.html">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
