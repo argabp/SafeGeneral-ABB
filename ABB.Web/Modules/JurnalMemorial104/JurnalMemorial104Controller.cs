@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using ABB.Application.Common.Interfaces;
 
 // Import Command & Query (Sesuaikan namespace Application Anda)
 using ABB.Application.JurnalMemorials104.Commands;
@@ -26,6 +27,15 @@ namespace ABB.Web.Modules.JurnalMemorial104
 {
     public class JurnalMemorial104Controller : AuthorizedBaseController
     {
+
+        private readonly IDbContextPstNota _context;
+
+        public JurnalMemorial104Controller(IDbContextPstNota context)
+        {
+            _context = context;
+        }
+
+
         public async Task<IActionResult> Index()
         {
             ViewBag.Module = Request.Cookies["Module"];
@@ -138,6 +148,29 @@ namespace ABB.Web.Modules.JurnalMemorial104
          [HttpPost]
         public async Task<IActionResult> SaveHeader([FromBody] JurnalMemorial104Dto model)
         {
+
+            // --- LOGIC BARU: VALIDASI CLOSING PERIODE ---
+            if (model.Tanggal.HasValue) 
+            {
+                short blnPrdInput = (short)model.Tanggal.Value.Month; 
+                decimal thnPrdInput = (decimal)model.Tanggal.Value.Year;  
+                
+                bool isPeriodeClosed = _context.EntriPeriode
+                    .Any(p => p.BlnPrd == blnPrdInput && 
+                            p.ThnPrd == thnPrdInput && 
+                            p.FlagClosing == "N"); 
+
+                if (isPeriodeClosed)
+                {
+                    string namaBulan = blnPrdInput.ToString("00"); 
+                    ModelState.AddModelError("Tanggal", $"Transaksi gagal: Periode untuk bulan {namaBulan} tahun {thnPrdInput} sudah di-close.");
+                    return BadRequest(ModelState); // Ini akan ditangkap oleh error callback di JS
+                }
+            }
+            // --------------------------------------------
+
+
+
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var existingData = await Mediator.Send(new GetJurnalMemorial104ByIdQuery 

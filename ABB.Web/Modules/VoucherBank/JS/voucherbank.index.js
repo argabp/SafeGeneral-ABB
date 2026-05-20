@@ -115,14 +115,41 @@ function onSaveVoucherBank() {
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            closeProgress('#VoucherBankWindow');
+            // 1. PERBAIKI NAMA WINDOW-NYA
+            closeProgress('#VoucherBankWindow'); 
+
             if (jqXHR.status === 400) {
                 var errorData = jqXHR.responseJSON;
-                var errorMessage = "Terdapat error validasi:\n";
-                for (var key in errorData.errors) {
-                    errorMessage += "- " + errorData.errors[key][0] + "\n";
+                var errorMessage = ""; // Hapus teks default agar langsung to the point
+                var foundError = false;
+
+                if (errorData) {
+                    var errorsList = errorData.errors ? errorData.errors : errorData;
+
+                    for (var key in errorsList) {
+                        if (errorsList.hasOwnProperty(key)) {
+                            if (Array.isArray(errorsList[key]) && errorsList[key].length > 0) {
+                                errorMessage += errorsList[key][0] + "\n";
+                                foundError = true;
+                            } else if (typeof errorsList[key] === 'string') {
+                                errorMessage += errorsList[key] + "\n";
+                                foundError = true;
+                            }
+                        }
+                    }
                 }
-                alert(errorMessage);
+
+                if (!foundError) {
+                    if (typeof errorData === 'string') {
+                        errorMessage += errorData;
+                    } else {
+                        errorMessage += "Data tidak valid.";
+                    }
+                }
+
+                // 2. GUNAKAN SHOWMESSAGE AGAR POP-UP NYA CANTIK (Bukan Alert biasa)
+                showMessage('Error', errorMessage);
+                
             } else {
                 showMessage('Error', 'Tidak dapat terhubung ke server. Status: ' + jqXHR.status);
             }

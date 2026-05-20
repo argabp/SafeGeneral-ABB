@@ -12,7 +12,8 @@ function postingJurnalMemorial104() {
 
                 // hanya kirim NoVoucher
                 selectedData.push({
-                    NoVoucher: dataItem.NoVoucher
+                    NoVoucher: dataItem.NoVoucher,
+                    Tanggal: dataItem.Tanggal
                 });
             });
 

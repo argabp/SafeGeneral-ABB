@@ -20,11 +20,22 @@ using ABB.Application.Cabangs.Queries;
 using ABB.Application.Coas117.Queries;
 using ABB.Application.MataUangs.Queries;
 using ABB.Application.InquiryNotaProduksis.Queries;
+using ABB.Application.Common.Interfaces;
 
 namespace ABB.Web.Modules.JurnalMemorial117
 {
     public class JurnalMemorial117Controller : AuthorizedBaseController
     {
+
+        private readonly IDbContextPstNota _context;
+
+        // Update Constructor (Pastikan ada inject IDbContextPstNota)
+        public JurnalMemorial117Controller(IDbContextPstNota context)
+        {
+            _context = context;
+        }
+
+
         public async Task<IActionResult> Index()
         {
             ViewBag.Module = Request.Cookies["Module"];
@@ -138,6 +149,28 @@ namespace ABB.Web.Modules.JurnalMemorial117
         [HttpPost]
         public async Task<IActionResult> SaveHeader([FromBody] JurnalMemorial117Dto model)
         {
+
+            // --- LOGIC: VALIDASI CLOSING PERIODE ---
+            if (model.Tanggal.HasValue) 
+            {
+                short blnPrdInput = (short)model.Tanggal.Value.Month; 
+                decimal thnPrdInput = (decimal)model.Tanggal.Value.Year;  
+                
+                bool isPeriodeClosed = _context.EntriPeriode
+                    .Any(p => p.BlnPrd == blnPrdInput && 
+                            p.ThnPrd == thnPrdInput && 
+                            p.FlagClosing == "N"); // 'N' berarti tutup
+
+                if (isPeriodeClosed)
+                {
+                    string namaBulan = blnPrdInput.ToString("00"); 
+                    ModelState.AddModelError("Tanggal", $"Transaksi gagal: Periode untuk bulan {namaBulan} tahun {thnPrdInput} sudah di-close.");
+                    return BadRequest(ModelState); // Respon 400
+                }
+            }
+            // ---------------------------------------
+
+
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var existingData = await Mediator.Send(new GetJurnalMemorial117ByIdQuery 

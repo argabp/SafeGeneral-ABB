@@ -112,6 +112,36 @@ function onSaveHeaderAndProceed() {
                  // Error akan ditangani oleh .fail()
                 console.log("Header save failed:", response.message);
             }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 400) {
+                var errorData = jqXHR.responseJSON;
+                var errorMessage = "";
+                var foundError = false;
+
+                if (errorData) {
+                    var errorsList = errorData.errors ? errorData.errors : errorData;
+                    for (var key in errorsList) {
+                        if (errorsList.hasOwnProperty(key)) {
+                            if (Array.isArray(errorsList[key]) && errorsList[key].length > 0) {
+                                errorMessage += errorsList[key][0] + "\n";
+                                foundError = true;
+                            } else if (typeof errorsList[key] === 'string') {
+                                errorMessage += errorsList[key] + "\n";
+                                foundError = true;
+                            }
+                        }
+                    }
+                }
+
+                if (!foundError) {
+                    errorMessage += "Data tidak valid atau format salah.";
+                }
+
+                showMessage('Error', errorMessage);
+            } else {
+                showMessage('Error', 'Tidak dapat terhubung ke server. Status: ' + jqXHR.status);
+            }
         }
     });
 
@@ -910,8 +940,11 @@ $(document).on('change keyup', '#PilihNotaGrid .total-org-input', function () {
 
 function onSavePembayaranPiutangFinal() {
     var form = $("#NewPaymentForm");
+    var tanggalCmp = $("#PenyelesaianHeader_Tanggal").data("kendoDatePicker");
+    var tanggal = tanggalCmp ? tanggalCmp.value() : null;
     var data = {
-       NoBukti : $("#PenyelesaianHeader_NomorBukti").val()
+       NoBukti : $("#PenyelesaianHeader_NomorBukti").val(),
+       Tanggal: kendo.toString(tanggal, "yyyy-MM-dd")
     };
 
     if (!data.NoBukti) {
@@ -961,8 +994,28 @@ function onSavePembayaranPiutangFinal() {
                 showMessage("Error", response.message || "Gagal memproses data.");
             }
         },
-        error: function () {
-            showMessage("Error", "Terjadi kesalahan saat menyimpan data.");
+        error: function (jqXHR, textStatus, errorThrown) {
+            // Ini menangani error teknis (misal server down atau 400 Bad Request)
+            if (jqXHR.status === 400) {
+                var errorData = jqXHR.responseJSON;
+                var errorMessage = "Terdapat error validasi:\n";
+                
+                if (errorData) {
+                    var errorsList = errorData.errors ? errorData.errors : errorData;
+                    for (var key in errorsList) {
+                        if (errorsList.hasOwnProperty(key)) {
+                            if (Array.isArray(errorsList[key]) && errorsList[key].length > 0) {
+                                errorMessage += "- " + errorsList[key][0] + "\n";
+                            } else if (typeof errorsList[key] === 'string') {
+                                errorMessage += "- " + errorsList[key] + "\n";
+                            }
+                        }
+                    }
+                }
+                showMessage("Error", errorMessage);
+            } else {
+                showMessage("Error", "Terjadi kesalahan teknis saat menyimpan data.");
+            }
         },
     });
 }

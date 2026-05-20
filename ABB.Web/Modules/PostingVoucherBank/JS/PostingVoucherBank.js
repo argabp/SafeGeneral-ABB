@@ -12,7 +12,8 @@ function postingVoucherBank() {
 
                 // hanya kirim NoVoucher
                 selectedData.push({
-                    NoVoucher: dataItem.NoVoucher
+                    NoVoucher: dataItem.NoVoucher,
+                    TanggalVoucher: dataItem.TanggalVoucher
                 });
             });
 

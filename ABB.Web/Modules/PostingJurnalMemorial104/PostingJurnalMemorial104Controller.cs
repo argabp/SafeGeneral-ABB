@@ -11,11 +11,19 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using System.Collections.Generic; 
 using Microsoft.AspNetCore.Mvc;
+using ABB.Application.Common.Interfaces;
 
 namespace ABB.Web.Modules.PostingJurnalMemorial104
 {
     public class PostingJurnalMemorial104Controller : AuthorizedBaseController
     {
+
+        private readonly IDbContextPstNota _context;
+
+        public PostingJurnalMemorial104Controller(IDbContextPstNota context)
+        {
+            _context = context;
+        }
         
         public ActionResult Index()
         {
@@ -46,6 +54,31 @@ namespace ABB.Web.Modules.PostingJurnalMemorial104
         {
             try
             {
+
+                // --- VALIDASI TUTUP BULAN ---
+                foreach (var item in model)
+                {
+                    if (item.Tanggal.HasValue)
+                    {
+                        short blnPrdInput = (short)item.Tanggal.Value.Month;
+                        decimal thnPrdInput = (decimal)item.Tanggal.Value.Year;
+
+                        bool isPeriodeClosed = _context.EntriPeriode
+                            .Any(p => p.BlnPrd == blnPrdInput && 
+                                    p.ThnPrd == thnPrdInput && 
+                                    p.FlagClosing == "N");
+
+                        if (isPeriodeClosed)
+                        {
+                            string namaBulan = blnPrdInput.ToString("00");
+                            return Ok(new { 
+                                Status = "ERROR", 
+                                Message = $"Voucher {item.NoVoucher} (Bulan {namaBulan}/{thnPrdInput}) tidak bisa di-posting karena periode tersebut sudah di-close." 
+                            });
+                        }
+                    }
+                }
+                // -----------------------------
                 
                 var command = new PostingJurnalMemorial104Command()
                 {

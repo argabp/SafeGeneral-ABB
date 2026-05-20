@@ -11,11 +11,19 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using System.Collections.Generic; 
 using Microsoft.AspNetCore.Mvc;
+using ABB.Application.Common.Interfaces;
 
 namespace ABB.Web.Modules.PostingVoucherBank
 {
     public class PostingVoucherBankController : AuthorizedBaseController
     {
+
+        private readonly IDbContextPstNota _context;
+
+        public PostingVoucherBankController(IDbContextPstNota context)
+        {
+            _context = context;
+        }
         
         public ActionResult Index()
         {
@@ -47,6 +55,32 @@ namespace ABB.Web.Modules.PostingVoucherBank
         {
             try
             {
+
+                // 1. Validasi Periode (Dilakukan sebelum proses Posting)
+                    foreach (var item in model)
+                    {
+                        if (item.TanggalVoucher.HasValue)
+                        {
+                            short blnPrdInput = (short)item.TanggalVoucher.Value.Month;
+                            decimal thnPrdInput = (decimal)item.TanggalVoucher.Value.Year;
+
+                            bool isPeriodeClosed = _context.EntriPeriode
+                                .Any(p => p.BlnPrd == blnPrdInput && 
+                                        p.ThnPrd == thnPrdInput && 
+                                        p.FlagClosing == "N"); // "N" = Tutup
+
+                            if (isPeriodeClosed)
+                            {
+                                string namaBulan = blnPrdInput.ToString("00");
+                                // Langsung return error jika ditemukan ada yang di-close
+                                return Ok(new { 
+                                    Status = "ERROR", 
+                                    Message = $"Voucher {item.NoVoucher} (Bulan {namaBulan}/{thnPrdInput}) tidak bisa di-posting karena periode tersebut sudah di-close." 
+                                });
+                            }
+                        }
+                    }
+                    
                 // --- PERBAIKI BAGIAN INI ---
                 var command = new PostingVoucherBankCommand()
                 {

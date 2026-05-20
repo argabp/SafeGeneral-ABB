@@ -18,7 +18,8 @@ function postingJurnalMemorial117() {
                 // Kita butuh NoVoucher dan KodeCabang untuk Command
                 selectedData.push({
                     NoVoucher: dataItem.NoVoucher,
-                    KodeCabang: dataItem.KodeCabang 
+                    KodeCabang: dataItem.KodeCabang,
+                    Tanggal: dataItem.Tanggal
                 });
             });
 

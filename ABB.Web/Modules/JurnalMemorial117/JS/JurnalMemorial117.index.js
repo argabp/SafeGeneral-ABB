@@ -134,8 +134,22 @@ function onSaveHeader() {
                 showMessage('Error', 'Gagal menyimpan header.');
             }
         },
-        error: function(err) {
-            showMessage('Error', 'Terjadi kesalahan server.');
+      error: function(jqXHR) {
+            // Menangani error validasi (Status 400 dari Controller)
+            if (jqXHR.status === 400) {
+                var errorData = jqXHR.responseJSON;
+                var errorMessage = "Data tidak valid.";
+                
+                // Jika error datang dari ModelState.AddModelError
+                if (errorData && errorData.Tanggal) {
+                    errorMessage = errorData.Tanggal[0];
+                } else if (errorData && typeof errorData === 'string') {
+                    errorMessage = errorData;
+                }
+                showMessage('Error', errorMessage);
+            } else {
+                showMessage('Error', 'Terjadi kesalahan pada server.');
+            }
         }
     });
 }

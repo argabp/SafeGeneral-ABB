@@ -21,12 +21,23 @@ using ABB.Application.Cabangs.Queries;
 using ABB.Application.Coas.Queries;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using ABB.Application.Common.Interfaces;
 
 
 namespace ABB.Web.Modules.EntriPenyelesaianPiutang
 {
     public class EntriPenyelesaianPiutangController : AuthorizedBaseController
     {
+
+        private readonly IDbContextPstNota _context;
+
+        public EntriPenyelesaianPiutangController(IDbContextPstNota context)
+        {
+            _context = context;
+        }
+
+
+
         public async Task<IActionResult> Index()
         {
            
@@ -218,6 +229,31 @@ namespace ABB.Web.Modules.EntriPenyelesaianPiutang
         [HttpPost]
         public async Task<IActionResult> SaveHeader([FromBody] HeaderPenyelesaianUtangDto model)
         {
+
+            // --- LOGIC BARU: VALIDASI CLOSING PERIODE ---
+                // Gunakan .HasValue untuk mengecek apakah tanggalnya tidak null
+                if (model.Tanggal.HasValue) 
+                {
+                    // Akses nilai tanggalnya menggunakan .Value sebelum memanggil Month/Year
+                    short blnPrdInput = (short)model.Tanggal.Value.Month; 
+                    decimal thnPrdInput = (decimal)model.Tanggal.Value.Year;  
+                    
+                    // Cek Bulan AND Tahun AND FlagClosing
+                    bool isPeriodeClosed = _context.EntriPeriode
+                        .Any(p => p.BlnPrd == blnPrdInput && 
+                                p.ThnPrd == thnPrdInput && 
+                                p.FlagClosing == "N"); // "N" = Tutup
+
+                    if (isPeriodeClosed)
+                    {
+                        string namaBulan = blnPrdInput.ToString("00"); 
+                        ModelState.AddModelError("Tanggal", $"Transaksi gagal: Periode untuk bulan {namaBulan} tahun {thnPrdInput} sudah di-close.");
+                        return BadRequest(ModelState); // <-- Kirim error ke frontend
+                    }
+                }
+                // --------------------------------------------
+
+    
             if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
@@ -394,6 +430,27 @@ namespace ABB.Web.Modules.EntriPenyelesaianPiutang
             {
                 if (string.IsNullOrEmpty(request.noBukti))
                     return Json(new { success = false, message = "Nomor bukti tidak boleh kosong." });
+
+
+            // --- LOGIC BARU: VALIDASI CLOSING PERIODE ---
+                if (request.Tanggal.HasValue)
+                {
+                    short blnPrdInput = (short)request.Tanggal.Value.Month; 
+                    decimal thnPrdInput = (decimal)request.Tanggal.Value.Year;  
+                    
+                    bool isPeriodeClosed = _context.EntriPeriode
+                        .Any(p => p.BlnPrd == blnPrdInput && 
+                                p.ThnPrd == thnPrdInput && 
+                                p.FlagClosing == "N"); // "N" = Tutup
+
+                    if (isPeriodeClosed)
+                    {
+                        string namaBulan = blnPrdInput.ToString("00"); 
+                        return Json(new { success = false, message = $"Transaksi gagal: Periode untuk bulan {namaBulan} tahun {thnPrdInput} sudah di-close." });
+                    }
+                }
+                // --------------------------------------------
+
 
                 try
                 {

@@ -10,9 +10,13 @@ function postingPenyelesaianPiutang() {
             selectedRows.each(function () {
                 var dataItem = grid.dataItem(this);
 
+                var rawDate = dataItem.Tanggal;
+                var formattedDate = kendo.toString(kendo.parseDate(rawDate), "yyyy-MM-dd");
+
                 // hanya kirim NoVoucher
                 selectedData.push({
                     NomorBukti: dataItem.NomorBukti,
+                    Tanggal: formattedDate
                 });
             });
             console.log(selectedData)

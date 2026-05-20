@@ -19,12 +19,22 @@ using ABB.Application.MataUangs.Queries;
 using ABB.Application.Coas.Queries;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using ABB.Application.Common.Interfaces;
 
 
 namespace ABB.Web.Modules.EntriPembayaranBank
 {
     public class EntriPembayaranBankController : AuthorizedBaseController
     {
+
+        private readonly IDbContextPstNota _context;
+
+        public EntriPembayaranBankController(IDbContextPstNota context)
+        {
+            _context = context;
+        }
+
+
         public async Task<IActionResult> Index()
         {
             
@@ -350,6 +360,27 @@ namespace ABB.Web.Modules.EntriPembayaranBank
             {
                 if (string.IsNullOrEmpty(request.NoVoucher))
                     return Json(new { success = false, message = "Nomor voucher tidak boleh kosong." });
+
+                    // --- LOGIC BARU: VALIDASI CLOSING PERIODE ---
+                    if (request.TanggalVoucher.HasValue)
+                    {
+                        short blnPrdInput = (short)request.TanggalVoucher.Value.Month; 
+                        decimal thnPrdInput = (decimal)request.TanggalVoucher.Value.Year;  
+                        
+                        bool isPeriodeClosed = _context.EntriPeriode
+                            .Any(p => p.BlnPrd == blnPrdInput && 
+                                        p.ThnPrd == thnPrdInput && 
+                                        p.FlagClosing == "N"); // Sesuai dengan aturan Anda (N = Tutup)
+
+                        if (isPeriodeClosed)
+                        {
+                            string namaBulan = blnPrdInput.ToString("00"); 
+                            
+                            // Kita return dengan format Json biasa, otomatis dibaca oleh response.message di JS!
+                            return Json(new { success = false, message = $"Transaksi gagal: Periode untuk bulan {namaBulan} tahun {thnPrdInput} sudah di-close." });
+                        }
+                    }
+                    // --------------------------------------------
 
                 try
                 {

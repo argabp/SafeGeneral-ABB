@@ -75,8 +75,21 @@ function onSaveHeader() {
                showMessage('Error', 'Gagal menyimpan header.');
             }
         },
-        error: function(err) {
-           showMessage('Error', 'Terjadi kesalahan server.');
+        error: function(jqXHR) {
+            if (jqXHR.status === 400) {
+                var errorData = jqXHR.responseJSON;
+                var errorMessage = "";
+                
+                // Parsing error dari ModelState
+                if (errorData && errorData.Tanggal) {
+                    errorMessage = errorData.Tanggal[0];
+                } else {
+                    errorMessage = "Data tidak valid.";
+                }
+                showMessage('Error', errorMessage);
+            } else {
+                showMessage('Error', 'Terjadi kesalahan server.');
+            }
         }
     });
 }

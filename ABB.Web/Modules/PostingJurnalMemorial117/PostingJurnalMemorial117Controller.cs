@@ -10,11 +10,21 @@ using MediatR;
 using ABB.Application.JurnalMemorial117.Queries;
 using ABB.Application.JurnalMemorial117.Commands;
 using ABB.Web.Modules.JurnalMemorial117.Models; // Pastikan namespace DTO benar
+using ABB.Application.Common.Interfaces;
 
 namespace ABB.Web.Modules.PostingJurnalMemorial117
 {
     public class PostingJurnalMemorial117Controller : AuthorizedBaseController
     {
+
+        private readonly IDbContextPstNota _context;
+
+        public PostingJurnalMemorial117Controller(IDbContextPstNota context)
+        {
+            _context = context;
+        }
+
+
         public ActionResult Index()
         {
             ViewBag.Module = Request.Cookies["Module"];
@@ -44,6 +54,32 @@ namespace ABB.Web.Modules.PostingJurnalMemorial117
         {
             try
             {
+
+                foreach (var item in model)
+                {
+                    if (item.Tanggal.HasValue)
+                    {
+                        short blnPrdInput = (short)item.Tanggal.Value.Month;
+                        decimal thnPrdInput = (decimal)item.Tanggal.Value.Year;
+
+                        bool isPeriodeClosed = _context.EntriPeriode
+                            .Any(p => p.BlnPrd == blnPrdInput && 
+                                    p.ThnPrd == thnPrdInput && 
+                                    p.FlagClosing == "N");
+
+                        if (isPeriodeClosed)
+                        {
+                            string namaBulan = blnPrdInput.ToString("00");
+                            return Ok(new { 
+                                Status = "ERROR", 
+                                Message = $"Voucher {item.NoVoucher} (Bulan {namaBulan}/{thnPrdInput}) tidak bisa di-posting karena periode tersebut sudah di-close." 
+                            });
+                        }
+                    }
+                }
+                // 
+
+
                 if (model == null || !model.Any())
                 {
                     return Ok(new { Status = "ERROR", Message = "Tidak ada data yang dipilih." });

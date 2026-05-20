@@ -14,6 +14,7 @@ using ABB.Application.MataUangs.Queries;
 using ABB.Application.KasBanks.Queries;
 
 using ABB.Application.EntriPembayaranKass.Queries;
+using ABB.Application.Common.Interfaces;
 
 using ABB.Web.Modules.Base;
 using ABB.Web.Modules.VoucherKas.Models;
@@ -30,6 +31,15 @@ namespace ABB.Web.Modules.VoucherKas
 {
     public class VoucherKasController : AuthorizedBaseController
     {
+
+        private readonly IDbContextPstNota _context;
+
+        public VoucherKasController(IDbContextPstNota context)
+        {
+            _context = context;
+        }
+
+
         public async Task<IActionResult> Index()
         {
             ViewBag.Module = Request.Cookies["Module"];
@@ -209,6 +219,32 @@ namespace ABB.Web.Modules.VoucherKas
             {
                 return BadRequest(ModelState);
             }
+
+            // --- LOGIC BARU: VALIDASI CLOSING PERIODE ---
+            if (model.TanggalVoucher.HasValue)
+            {
+                // Ambil Bulan (tipe short) dan Tahun (tipe decimal)
+                short blnPrdInput = (short)model.TanggalVoucher.Value.Month; 
+                decimal thnPrdInput = (decimal)model.TanggalVoucher.Value.Year;  // <-- UBAH KE DECIMAL DI SINI
+                
+                // Cek Bulan AND Tahun AND FlagClosing
+                bool isPeriodeClosed = _context.EntriPeriode
+                    .Any(p => p.BlnPrd == blnPrdInput && 
+                            p.ThnPrd == thnPrdInput && 
+                            p.FlagClosing == "N");
+
+                if (isPeriodeClosed)
+                {
+                    string namaBulan = blnPrdInput.ToString("00"); 
+                    
+                    ModelState.AddModelError("TanggalVoucher", $"Transaksi gagal: Periode untuk bulan {namaBulan} tahun {thnPrdInput} sudah di-close.");
+                    return BadRequest(ModelState);
+                }
+            }
+            // --------------------------------------------
+
+
+
 
             // LOGIC BARU: Cek berdasarkan ID
             // Jika ID > 0 artinya data sudah ada di DB (Update)

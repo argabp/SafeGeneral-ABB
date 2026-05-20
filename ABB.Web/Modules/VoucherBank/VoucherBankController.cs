@@ -11,6 +11,8 @@ using ABB.Application.Cabangs.Queries;
 // tambahan mata uang
 using ABB.Application.MataUangs.Queries;
 
+using ABB.Application.Common.Interfaces;
+
 using ABB.Application.KasBanks.Queries;
 using ABB.Application.EntriPembayaranBanks.Queries;
 using ABB.Web.Modules.Base;
@@ -28,6 +30,14 @@ namespace ABB.Web.Modules.VoucherBank
 {
     public class VoucherBankController : AuthorizedBaseController
     {
+
+        private readonly IDbContextPstNota _context;
+
+        public VoucherBankController(IDbContextPstNota context)
+        {
+            _context = context;
+        }
+
         public async Task<IActionResult> Index()
         {
             
@@ -248,6 +258,29 @@ namespace ABB.Web.Modules.VoucherBank
             {
                 return BadRequest(ModelState);
             }
+
+            // --- LOGIC BARU: VALIDASI CLOSING PERIODE ---
+            if (model.TanggalVoucher.HasValue)
+            {
+                // Ambil Bulan (tipe short) dan Tahun (tipe decimal)
+                short blnPrdInput = (short)model.TanggalVoucher.Value.Month; 
+                decimal thnPrdInput = (decimal)model.TanggalVoucher.Value.Year;  // <-- UBAH KE DECIMAL DI SINI
+                
+                // Cek Bulan AND Tahun AND FlagClosing
+                bool isPeriodeClosed = _context.EntriPeriode
+                    .Any(p => p.BlnPrd == blnPrdInput && 
+                            p.ThnPrd == thnPrdInput && 
+                            p.FlagClosing == "N");
+
+                if (isPeriodeClosed)
+                {
+                    string namaBulan = blnPrdInput.ToString("00"); 
+                    
+                    ModelState.AddModelError("TanggalVoucher", $"Transaksi gagal: Periode untuk bulan {namaBulan} tahun {thnPrdInput} sudah di-close.");
+                    return BadRequest(ModelState);
+                }
+            }
+            // --------------------------------------------
 
             if (model.Id > 0) 
             {

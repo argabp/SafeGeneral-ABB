@@ -11,12 +11,20 @@ using Microsoft.AspNetCore.Mvc;
 using ABB.Application.PostingPenyelesaianPiutang.Commands;
 using ABB.Application.PostingPenyelesaianPiutang.Queries;
 using ABB.Application.EntriPenyelesaianPiutangs.Queries;
+using ABB.Application.Common.Interfaces;
 
 
 namespace ABB.Web.Modules.PostingPenyelesaianPiutang
 {
     public class PostingPenyelesaianPiutangController : AuthorizedBaseController
     {
+
+        private readonly IDbContextPstNota _context;
+
+        public PostingPenyelesaianPiutangController(IDbContextPstNota context)
+        {
+            _context = context;
+        }
         
         public ActionResult Index()
         {
@@ -49,6 +57,33 @@ namespace ABB.Web.Modules.PostingPenyelesaianPiutang
         {
             try
             {
+
+                // 1. Validasi Periode (Dilakukan sebelum proses Posting)
+                    foreach (var item in model)
+                    {
+                        if (item.Tanggal.HasValue)
+                        {
+                            short blnPrdInput = (short)item.Tanggal.Value.Month;
+                            decimal thnPrdInput = (decimal)item.Tanggal.Value.Year;
+
+                            bool isPeriodeClosed = _context.EntriPeriode
+                                .Any(p => p.BlnPrd == blnPrdInput && 
+                                        p.ThnPrd == thnPrdInput && 
+                                        p.FlagClosing == "N"); // "N" = Tutup
+
+                            if (isPeriodeClosed)
+                            {
+                                string namaBulan = blnPrdInput.ToString("00");
+                                // Langsung return error jika ditemukan ada yang di-close
+                                return Ok(new { 
+                                    Status = "ERROR", 
+                                    Message = $"Nomor {item.NomorBukti} (Bulan {namaBulan}/{thnPrdInput}) tidak bisa di-posting karena periode tersebut sudah di-close." 
+                                });
+                            }
+                        }
+                    }
+
+
                 // --- PERBAIKI BAGIAN INI ---
                 var command = new PostingPenyelesaianPiutangCommand()
                 {

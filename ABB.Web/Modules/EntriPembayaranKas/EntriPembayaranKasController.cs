@@ -19,13 +19,24 @@ using ABB.Application.MataUangs.Queries;
 using ABB.Application.Coas.Queries;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using ABB.Application.Common.Interfaces;
 
 
 
 namespace ABB.Web.Modules.EntriPembayaranKas
 {
+
     public class EntriPembayaranKasController : AuthorizedBaseController
     {
+
+        private readonly IDbContextPstNota _context;
+
+        public EntriPembayaranKasController(IDbContextPstNota context)
+        {
+            _context = context;
+        }
+
+
         public async Task<IActionResult> Index()
         {
             ViewBag.Module = Request.Cookies["Module"];
@@ -371,6 +382,24 @@ namespace ABB.Web.Modules.EntriPembayaranKas
             {
                 if (string.IsNullOrEmpty(request.NoVoucher))
                     return Json(new { success = false, message = "Nomor voucher tidak boleh kosong." });
+
+                if (request.TanggalVoucher.HasValue)
+                {
+                    short blnPrdInput = (short)request.TanggalVoucher.Value.Month; 
+                    decimal thnPrdInput = (decimal)request.TanggalVoucher.Value.Year;  
+                    
+                    // Asumsi _context sudah di-inject di controller ini
+                    bool isPeriodeClosed = _context.EntriPeriode
+                        .Any(p => p.BlnPrd == blnPrdInput && 
+                                p.ThnPrd == thnPrdInput && 
+                                p.FlagClosing == "N"); // Sesuai kesepakatan (N = Tutup)
+
+                    if (isPeriodeClosed)
+                    {
+                        string namaBulan = blnPrdInput.ToString("00"); 
+                        return Json(new { success = false, message = $"Transaksi gagal: Periode untuk bulan {namaBulan} tahun {thnPrdInput} sudah di-close." });
+                    }
+                }
 
                 try
                 {

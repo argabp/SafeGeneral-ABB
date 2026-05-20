@@ -630,9 +630,15 @@ function onEntriPembayaranWindowClose(e) {
 
 function onSavePembayaranBankFinal() {
     var form = $("#NewPaymentForm");
+
+    var tanggalVal = $("#TangVoc").val();
+
+
     var data = {
         NoVoucher: form.find("#NoVoucher").val(),
+        TanggalVoucher: tanggalVal
     };
+    console.log(data)
 
     if (!data.NoVoucher) {
         showMessage("Warning", "Nomor voucher tidak boleh kosong.");
