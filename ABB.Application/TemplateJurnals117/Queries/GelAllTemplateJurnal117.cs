@@ -48,9 +48,12 @@ namespace ABB.Application.TemplateJurnals117.Queries
                     var keyword = request.SearchKeyword.Trim();
 
                     query = query.Where(x =>
-                        x.Type.Contains(keyword) ||
-                        x.NamaJurnal.Contains(keyword) ||
-                        x.JenisAss.Contains(keyword)
+                        x.type_tr.Contains(keyword) ||
+                        x.type_jr.Contains(keyword) ||
+                        x.metode.Contains(keyword) ||
+                        x.Event.Contains(keyword) ||
+                        x.jn_ass.Contains(keyword) ||
+                        x.nm_jr.Contains(keyword)
                     );
                 }
 

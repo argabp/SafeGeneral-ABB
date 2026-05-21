@@ -14,7 +14,6 @@
 
 <script>
 function getDetailParams(e) {
-    // Cari instance Grid Detail Kendo
     var gridDetail = this;
     var detailRow = $(gridDetail.element).closest(".k-detail-row"); 
     var masterRow = detailRow.prev();
@@ -22,17 +21,16 @@ function getDetailParams(e) {
     var dataItem = masterGrid.dataItem(masterRow);
 
     if (dataItem) {
-        console.log("Data Item Master:", dataItem); 
         return {
-            // !!! PENTING: Lakukan TRIM di sisi client
-            Type: dataItem.Type.trim(), 
-            JenisAss: dataItem.JenisAss.trim() // Trim JenisAss juga untuk amannya
+            type_tr: dataItem.type_tr ? dataItem.type_tr.trim() : "", 
+            type_jr: dataItem.type_jr ? dataItem.type_jr.trim() : "",
+            metode: dataItem.metode ? dataItem.metode.trim() : "",
+            Event: dataItem.Event ? dataItem.Event.trim() : "",
+            jn_ass: dataItem.jn_ass ? dataItem.jn_ass.trim() : ""
         };
     }
-
     return {};
 }
-// ... searchFilter ...
 </script>
 
 <style>
@@ -76,9 +74,12 @@ function getDetailParams(e) {
                             .HtmlAttributes(new { title = "Delete" })
                             .Click("onDeleteTemplateJurnal117");
                     }).Width(200).Title("Action");
-                    columns.Bound(col => col.Type).Width(150).Title("Type").Editable("disableGridTextboxWhenEdit");
-                    columns.Bound(col => col.JenisAss).Width(150).Title("Jenis Ass").Editable("disableGridTextboxWhenEdit");
-                    columns.Bound(col => col.NamaJurnal).Width(150).Title("Nama Jurnal");
+                    columns.Bound(col => col.type_tr).Width(150).Title("Type Tr").Editable("disableGridTextboxWhenEdit");
+                    columns.Bound(col => col.type_jr).Width(150).Title("Type Jr").Editable("disableGridTextboxWhenEdit");
+                    columns.Bound(col => col.metode).Width(150).Title("Metode").Editable("disableGridTextboxWhenEdit");
+                    columns.Bound(col => col.Event).Width(150).Title("Event").Editable("disableGridTextboxWhenEdit");
+                    columns.Bound(col => col.jn_ass).Width(150).Title("Jenis ASS").Editable("disableGridTextboxWhenEdit");
+                    columns.Bound(col => col.nm_jr).Width(150).Title("Nama Jurnal");
                 })
                 .Pageable(pager => pager.Refresh(true).Info(true).PageSizes(true))
                 .ClientDetailTemplateId("template") // Ini yang mengaktifkan panah detail Kendo
@@ -91,85 +92,83 @@ function getDetailParams(e) {
             )
         </div>
 
-       <script id="template" type="text/kendo-tmpl">
-    @(Html.Kendo().TabStrip()
-        .Name("tabStrip_#=GridId#")
-        .SelectedIndex(0)
-        .Items(items =>
-        {
-            items.Add().Text("Detail").Content(@<text>
-                @(Html.Kendo().Grid<TemplateJurnalDetail117Dto>()
-                    .Name("grid_detail_#=GridId#")
-                    .ToolBar(t => t.Create())
-                    .Editable(e => e.Mode(GridEditMode.InLine))
-                    .DataSource(ds => ds.Ajax()
-                      
-                        .Read(read => read.Action("GetDetailTemplateJurnal117", "TemplateJurnal117",
-                            new { Type = "#=Type#", JenisAss = "#=JenisAss#" }))
-                        
-                        .Model(m =>
-                        {
-                            m.Id(p => p.GlAkun); 
-                            
-                            // --- BAGIAN PERBAIKAN ---
-                            // Kita set DefaultValue menggunakan Syntax Template Kendo (#=...#)
-                            // Ini akan mengisi value secara otomatis saat tombol Add diklik
-                            
-                            m.Field(p => p.Type).DefaultValue("#=Type#");      
-                            m.Field(p => p.JenisAss).DefaultValue("#=JenisAss#");
-                            m.Field(p => p.GridId).DefaultValue("#=GridId#");
+        <script id="template" type="text/kendo-tmpl">
+            @(Html.Kendo().TabStrip()
+                .Name("tabStrip_#=GridId#")
+                .SelectedIndex(0)
+                .Items(items =>
+                {
+                    items.Add().Text("Detail").Content(@<text>
+                        @(Html.Kendo().Grid<TemplateJurnalDetail117Dto>()
+                            .Name("grid_detail_#=GridId#")
+                            .ToolBar(t => t.Create())
+                            .Editable(e => e.Mode(GridEditMode.InLine))
+                            .DataSource(ds => ds.Ajax()
+                                .Read(read => read.Action("GetDetailTemplateJurnal117", "TemplateJurnal117",
+                                    new { type_tr = "#=type_tr#", type_jr = "#=type_jr#", metode = "#=metode#", Event = "#=Event#", jn_ass = "#=jn_ass#" }))
+                                .Model(m =>
+                                {
+                                    m.Id(p => p.gl_akun); 
+                                    
+                                    m.Field(p => p.type_tr).DefaultValue("#=type_tr#");      
+                                    m.Field(p => p.type_jr).DefaultValue("#=type_jr#");
+                                    m.Field(p => p.metode).DefaultValue("#=metode#");
+                                    m.Field(p => p.Event).DefaultValue("#=Event#");
+                                    m.Field(p => p.jn_ass).DefaultValue("#=jn_ass#");
+                                    m.Field(p => p.GridId).DefaultValue("#=GridId#");
 
-                            // Kita kunci agar user tidak bisa mengubahnya (ReadOnly)
-                            m.Field(p => p.Type).Editable(false);
-                         
-                            m.Field(p => p.JenisAss).Editable(false);
-                            m.Field(p => p.GlDk).DefaultValue("D");
-                            m.Field(p => p.GlUrut).DefaultValue(0);
-                            // ------------------------
-                        })
-                    )
-                    .Columns(columns =>
-                    {
-                        // Kolom Type & JenisAss bisa ditampilkan atau disembunyikan (.Hidden())
-                        columns.Command(command =>
-                        {
-                            command.Edit();
-                            command.Custom("DeleteTemplateJurnalDetail117")
-                                .Text("Delete")
-                                .IconClass("k-icon k-i-delete")
-                                .HtmlAttributes(new { title = "Delete" })
-                                .Click("onDeleteTemplateJurnalDetail117");
-                        }).Width(200).Title("Action");
-                        columns.Bound(m => m.Type).Title("Type").Width(150);
-                        columns.Bound(m => m.JenisAss).Title("Jenis Ass").Width(150);
-                        
-                        columns.Bound(m => m.GlAkun).Title("GL Akun").Width(150);
-                        columns.Bound(m => m.GlRumus).Title("Rumus").Width(150);
-                        columns.Bound(m => m.GlDk).Title("D/K").Width(100);
-                        columns.Bound(m => m.GlUrut).Title("Urut").Width(80);
-                        columns.Bound(m => m.FlagDetail).Title("Flag Detail").Width(120);
-                        columns.Bound(m => m.FlagNt).Title("Flag NT").Width(100);
-
-                        
-                    })
-                    .Pageable(p => p.Refresh(true).Info(true).PageSizes(true))
-                    .Sortable()
-                    .Selectable()
-                    .Filterable()
-                    .Scrollable()
-                    .Height(380)
-                    .Resizable(a => a.Columns(true))
-                    .Events(ev => ev
-                        .DataBound("gridAutoFit")
-                        .Save("onSaveTemplateJurnalDetail117") 
-                        .Edit("onEditTemplateJurnalDetail117") 
-                    )
-                    .ToClientTemplate()
-                )
-            </text>);
-        })
-        .ToClientTemplate())
-</script>
+                                    m.Field(p => p.type_tr).Editable(false);
+                                    m.Field(p => p.type_jr).Editable(false);
+                                    m.Field(p => p.metode).Editable(false);
+                                    m.Field(p => p.Event).Editable(false);
+                                    m.Field(p => p.jn_ass).Editable(false);
+                                    
+                                    m.Field(p => p.gl_dk).DefaultValue("D");
+                                    m.Field(p => p.gl_urut).DefaultValue(0);
+                                })
+                            )
+                            .Columns(columns =>
+                            {
+                                columns.Command(command =>
+                                {
+                                    command.Edit();
+                                    command.Custom("DeleteTemplateJurnalDetail117")
+                                        .Text("Delete")
+                                        .IconClass("k-icon k-i-delete")
+                                        .HtmlAttributes(new { title = "Delete" })
+                                        .Click("onDeleteTemplateJurnalDetail117");
+                                }).Width(200).Title("Action");
+                                
+                                columns.Bound(m => m.type_tr).Title("Type TR").Width(100);
+                                columns.Bound(m => m.type_jr).Title("Type JR").Width(100);
+                                columns.Bound(m => m.metode).Title("Metode").Width(100);
+                                columns.Bound(m => m.Event).Title("Event").Width(100);
+                                columns.Bound(m => m.jn_ass).Title("Jenis Ass").Width(100);
+                                columns.Bound(m => m.gl_akun).Title("GL Akun").Width(150);
+                                columns.Bound(m => m.gl_rumus).Title("Rumus").Width(150);
+                                columns.Bound(m => m.gl_dk).Title("D/K").Width(100);
+                                columns.Bound(m => m.gl_urut).Title("Urut").Width(80);
+                                columns.Bound(m => m.flag_detail).Title("Flag Detail").Width(120);
+                                columns.Bound(m => m.flag_nt).Title("Flag NT").Width(100);
+                            })
+                            .Pageable(p => p.Refresh(true).Info(true).PageSizes(true))
+                            .Sortable()
+                            .Selectable()
+                            .Filterable()
+                            .Scrollable()
+                            .Height(380)
+                            .Resizable(a => a.Columns(true))
+                            .Events(ev => ev
+                                .DataBound("gridAutoFit")
+                                .Save("onSaveTemplateJurnalDetail117") 
+                                .Edit("onEditTemplateJurnalDetail117") 
+                            )
+                            .ToClientTemplate()
+                        )
+                    </text>);
+                })
+                .ToClientTemplate())
+        </script>
 
     </div>
 </div>

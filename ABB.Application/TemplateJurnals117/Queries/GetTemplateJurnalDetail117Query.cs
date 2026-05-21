@@ -12,8 +12,11 @@ namespace ABB.Application.TemplateJurnals117.Queries
 {
     public class GetTemplateJurnalDetail117Query : IRequest<List<TemplateJurnalDetail117Dto>>
     {
-        public string Type { get; set; }
-        public string JenisAss { get; set; }
+        public string type_tr { get; set; }
+        public string type_jr { get; set; }
+        public string metode { get; set; }
+        public string Event { get; set; }
+        public string jn_ass { get; set; }
         public string DatabaseName { get; set; }
     }
 
@@ -35,24 +38,32 @@ namespace ABB.Application.TemplateJurnals117.Queries
         {
             try
             {
-                var reqType = request.Type?.Trim() ?? "";
-                var reqJenis = request.JenisAss?.Trim() ?? "";
+                var reqTypeTr = request.type_tr ?? "";
+                var reqTypeJr = request.type_jr ?? "";
+                var reqMetode = request.metode ?? "";
+                var reqEvent = request.Event ?? "";
+                var reqJenis = request.jn_ass ?? "";
 
-                
                 var data =
                     await _context.TemplateJurnalDetail117
-                        .Where(x => x.Type.Trim() == reqType && 
-                            x.JenisAss.Trim() == reqJenis)
+                        .Where(x => x.type_tr.Trim() == reqTypeTr && 
+                                    x.type_jr.Trim() == reqTypeJr &&
+                                    x.metode.Trim() == reqMetode &&
+                                    x.Event.Trim() == reqEvent &&
+                                    x.jn_ass.Trim() == reqJenis)
                         .Select(x => new TemplateJurnalDetail117Dto
                         {
-                            Type = x.Type,
-                            JenisAss = x.JenisAss,
-                            GlAkun = x.GlAkun,
-                            GlRumus = x.GlRumus,
-                            GlDk = x.GlDk,
-                            GlUrut = (int)x.GlUrut,
-                            FlagDetail = x.FlagDetail,
-                            FlagNt = x.FlagNt
+                            type_tr = x.type_tr,
+                            type_jr = x.type_jr,
+                            metode = x.metode,
+                            Event = x.Event,
+                            jn_ass = x.jn_ass,
+                            gl_akun = x.gl_akun,
+                            gl_rumus = x.gl_rumus,
+                            gl_dk = x.gl_dk,
+                            gl_urut = (short)x.gl_urut,
+                            flag_detail = x.flag_detail,
+                            flag_nt = x.flag_nt
                         })
                         .ToListAsync(cancellationToken);
 

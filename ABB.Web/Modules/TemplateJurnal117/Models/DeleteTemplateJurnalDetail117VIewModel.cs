@@ -7,14 +7,12 @@ namespace ABB.Web.Modules.TemplateJurnal117.Models
 {
     public class DeleteTemplateJurnalDetail117ViewModel : IMapFrom<DeleteTemplateJurnalDetail117Command>
     {
-        public string Type { get; set; }
-        public string JenisAss { get; set; }
-        public string GlAkun { get; set; }
-        public string GlRumus { get; set; }
-        public string GlDk { get; set; }
-        public short GlUrut { get; set; }
-        public string FlagDetail { get; set; }
-        public bool? FlagNt { get; set; }
+        public string type_tr { get; set; }
+        public string type_jr { get; set; }
+        public string metode { get; set; }
+        public string Event { get; set; }
+        public string jn_ass { get; set; }
+        public short gl_akun { get; set; }
 
         public void Mapping(Profile profile)
         {

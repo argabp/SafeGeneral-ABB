@@ -7,14 +7,17 @@ namespace ABB.Application.TemplateJurnals117.Queries
 {
     public class TemplateJurnalDetail117Dto : IMapFrom<TemplateJurnalDetail117>
     {
-        public string Type { get; set; }
-        public string JenisAss { get; set; }
-        public string GlAkun { get; set; }
-        public string GlRumus { get; set; }
-        public string GlDk { get; set; }
-        public int GlUrut { get; set; }
-        public string FlagDetail { get; set; }
-        public bool? FlagNt { get; set; }
+        public string type_tr { get; set; }
+        public string type_jr { get; set; }
+        public string metode { get; set; }
+        public string Event { get; set; }
+        public string jn_ass { get; set; }
+        public string gl_akun { get; set; }
+        public string gl_rumus { get; set; }
+        public string gl_dk { get; set; }
+        public short gl_urut { get; set; }
+        public string flag_detail { get; set; }
+        public bool? flag_nt { get; set; }
 
         public string GridId { get; set; }
 

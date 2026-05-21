@@ -10,19 +10,27 @@ namespace ABB.Infrastructure.Data.Mapping
         {
             builder.ToTable("abb_templatejurnal117");
 
-            builder.HasKey(t => new { t.Type, t.JenisAss });
+            // PERBAIKAN: Ubah t.event menjadi t.Event
+            builder.HasKey(t => new { t.type_tr, t.type_jr, t.metode, t.Event, t.jn_ass });
 
-            builder.Property(t => t.Type)
-                .HasColumnName("type")
-                .HasMaxLength(2);   // sesuaikan dengan DB, jika 1 → ganti 1
+            builder.Property(t => t.type_tr)
+                .HasColumnName("type_tr");   
 
-            builder.Property(t => t.JenisAss)
-                .HasColumnName("jn_ass")
-                .HasMaxLength(2);    // WAJIB, karena DB hanya 2 karakter
+            builder.Property(t => t.type_jr)
+                .HasColumnName("type_jr");
+                
+            builder.Property(t => t.metode)
+                .HasColumnName("metode"); 
 
-            builder.Property(t => t.NamaJurnal)
-                .HasColumnName("nm_jurnal")
-                .HasMaxLength(50);   // sesuaikan ukuran DB
+            // Pastikan di file entity (TemplateJurnal117.cs), propertinya ditulis "public string Event { get; set; }"
+            builder.Property(t => t.Event)
+                .HasColumnName("event");
+
+            builder.Property(t => t.jn_ass)
+                .HasColumnName("jn_ass"); 
+
+            builder.Property(t => t.nm_jr)
+                .HasColumnName("nm_jr"); 
         }
     }
 }

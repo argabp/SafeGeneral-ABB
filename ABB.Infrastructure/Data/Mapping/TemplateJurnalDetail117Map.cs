@@ -11,16 +11,20 @@ namespace ABB.Infrastructure.Data.Mapping
             
             builder.ToTable("abb_templatejurnaldetail117");
             
-            // ditambahin untuk pk
-            builder.HasKey(t => new { t.Type, t.JenisAss, t.GlAkun });
-            builder.Property(t => t.Type).HasColumnName("type");
-            builder.Property(t => t.JenisAss).HasColumnName("jn_ass");
-            builder.Property(t => t.GlAkun).HasColumnName("gl_akun");
-            builder.Property(t => t.GlRumus).HasColumnName("gl_rumus");
-            builder.Property(t => t.GlDk).HasColumnName("gl_dk");
-            builder.Property(t => t.GlUrut).HasColumnName("gl_urut");
-            builder.Property(t => t.FlagDetail).HasColumnName("flag_detail");
-            builder.Property(t => t.FlagNt).HasColumnName("flag_nt");
+            // PERBAIKAN: Ubah t.event menjadi t.Event
+            builder.HasKey(t => new { t.type_tr, t.type_jr, t.metode, t.Event, t.jn_ass, t.gl_akun});
+
+            builder.Property(t => t.type_tr).HasColumnName("type_tr");
+            builder.Property(t => t.type_jr).HasColumnName("type_jr");
+            builder.Property(t => t.metode).HasColumnName("metode");
+            builder.Property(t => t.Event).HasColumnName("event");
+            builder.Property(t => t.jn_ass).HasColumnName("jn_ass");
+            builder.Property(t => t.gl_akun).HasColumnName("gl_akun");
+            builder.Property(t => t.gl_rumus).HasColumnName("gl_rumus");
+            builder.Property(t => t.gl_dk).HasColumnName("gl_dk");
+            builder.Property(t => t.gl_urut).HasColumnName("gl_urut");
+            builder.Property(t => t.flag_detail).HasColumnName("flag_detail");
+            builder.Property(t => t.flag_nt).HasColumnName("flag_nt");
         }
     }
 }

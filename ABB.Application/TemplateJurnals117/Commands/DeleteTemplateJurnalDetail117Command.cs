@@ -11,14 +11,12 @@ namespace ABB.Application.TemplateJurnals117.Commands
     public class DeleteTemplateJurnalDetail117Command : IRequest
     {
         public string DatabaseName { get; set; }
-        public string Type { get; set; }
-        public string JenisAss { get; set; }
-        public string GlAkun { get; set; }
-        public string GlRumus { get; set; }
-        public string GlDk { get; set; }
-        public short GlUrut { get; set; }
-        public string FlagDetail { get; set; }
-        public bool? FlagNt { get; set; }
+        public string type_tr { get; set; }
+        public string type_jr { get; set; }
+        public string metode { get; set; }
+        public string Event { get; set; }
+        public string jn_ass { get; set; }
+        public string gl_akun { get; set; }
     }
 
     public class DeleteTemplateJurnalDetail117CommandHandler : IRequestHandler<DeleteTemplateJurnalDetail117Command>
@@ -38,13 +36,14 @@ namespace ABB.Application.TemplateJurnals117.Commands
         {
             try
             {
-                // PERBAIKAN: Cari berdasarkan 3 kunci (Type, JenisAss, GlAkun)
-                // Gunakan Trim() untuk keamanan
                 var entity = _context.TemplateJurnalDetail117
                     .FirstOrDefault(w => 
-                        w.Type == request.Type && 
-                        w.JenisAss == request.JenisAss && 
-                        w.GlAkun == request.GlAkun
+                        w.type_tr == request.type_tr && 
+                        w.type_jr == request.type_jr && 
+                        w.metode == request.metode && 
+                        w.Event == request.Event && 
+                        w.jn_ass == request.jn_ass && 
+                        w.gl_akun == request.gl_akun
                     );
 
                 if (entity != null)
@@ -54,7 +53,6 @@ namespace ABB.Application.TemplateJurnals117.Commands
                 }
                 else 
                 {
-                    // Opsional: Beritahu user jika data tidak ketemu
                     throw new Exception("Data tidak ditemukan atau sudah dihapus.");
                 }
             }

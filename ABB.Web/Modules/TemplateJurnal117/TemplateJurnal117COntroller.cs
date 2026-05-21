@@ -34,26 +34,35 @@ namespace ABB.Web.Modules.TemplateJurnal117
         }
 
        public async Task<ActionResult> GetDetailTemplateJurnal117(
-    [DataSourceRequest] DataSourceRequest request, 
-    string Type, 
-    string JenisAss)
+        [DataSourceRequest] DataSourceRequest request, 
+        string type_tr, 
+        string type_jr, 
+        string metode, 
+        string Event, 
+        string jn_ass)
+        {
+            var trimmedTypeTr = type_tr?.Trim();
+            var trimmedTypeJr = type_jr?.Trim();
+            var trimmedMetode = metode?.Trim();
+            var trimmedEvent = Event?.Trim();
+            var trimmedJenisAss = jn_ass?.Trim();
+            
+            // Sesuaikan validasi dengan PK yang dibutuhkan
+            if (string.IsNullOrWhiteSpace(trimmedTypeTr) || string.IsNullOrWhiteSpace(trimmedJenisAss))
+                return Ok();
+
+            var ds = await Mediator.Send(new GetTemplateJurnalDetail117Query
             {
-                var trimmedType = Type?.Trim();
-                var trimmedJenisAss = JenisAss?.Trim();
-                
-                if (string.IsNullOrWhiteSpace(trimmedType) || string.IsNullOrWhiteSpace(trimmedJenisAss))
-                    return Ok();
+                type_tr = trimmedTypeTr,
+                type_jr = trimmedTypeJr,
+                metode = trimmedMetode,
+                Event = trimmedEvent,
+                jn_ass = trimmedJenisAss,
+                DatabaseName = Request.Cookies["DatabaseValue"] 
+            });
 
-                var ds = await Mediator.Send(new GetTemplateJurnalDetail117Query
-                {
-                    Type = trimmedType,
-                    JenisAss = trimmedJenisAss,
-                    // TAMBAHKAN INI agar connect ke DB yang benar
-                    DatabaseName = Request.Cookies["DatabaseValue"] 
-                });
-
-                return Json(ds.AsQueryable().ToDataSourceResult(request));
-            }
+            return Json(ds.AsQueryable().ToDataSourceResult(request));
+        }
 
         [HttpPost]
         public async Task<IActionResult> DeleteTemplateJurnal117([FromBody] DeleteTemplateJurnal117ViewModel model)

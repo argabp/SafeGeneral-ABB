@@ -5,15 +5,18 @@ using ABB.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Linq;
-using Microsoft.EntityFrameworkCore; // Pastikan ada ini buat query
+using Microsoft.EntityFrameworkCore;
 
 namespace ABB.Application.TemplateJurnals117.Commands
 {
     public class DeleteTemplateJurnal117Command : IRequest
     {
         public string DatabaseName { get; set; }
-        public string Type { get; set; }
-        public string JenisAss { get; set; }
+        public string type_tr { get; set; }
+        public string type_jr { get; set; }
+        public string metode { get; set; }
+        public string Event { get; set; }
+        public string jn_ass { get; set; }
     }
 
     public class DeleteTemplateJurnal117CommandHandler : IRequestHandler<DeleteTemplateJurnal117Command>
@@ -33,14 +36,19 @@ namespace ABB.Application.TemplateJurnals117.Commands
         {
             try
             {
-                var reqType = request.Type?.Trim();
-                var reqJenis = request.JenisAss?.Trim();
+                var reqTypeTr = request.type_tr?.Trim();
+                var reqTypeJr = request.type_jr?.Trim();
+                var reqMetode = request.metode?.Trim();
+                var reqEvent = request.Event?.Trim();
+                var reqJenisAss = request.jn_ass?.Trim();
 
-                // -----------------------------------------------------------
-                // LANGKAH 1: Hapus DATA DETAIL terlebih dahulu (Cascade Delete Manual)
-                // -----------------------------------------------------------
+                // 1. Hapus DATA DETAIL terlebih dahulu
                 var details = _context.TemplateJurnalDetail117
-                    .Where(d => d.Type == reqType && d.JenisAss == reqJenis)
+                    .Where(d => d.type_tr == reqTypeTr && 
+                                d.type_jr == reqTypeJr && 
+                                d.metode == reqMetode && 
+                                d.Event == reqEvent && 
+                                d.jn_ass == reqJenisAss)
                     .ToList();
 
                 if (details.Any())
@@ -48,21 +56,20 @@ namespace ABB.Application.TemplateJurnals117.Commands
                     _context.TemplateJurnalDetail117.RemoveRange(details);
                 }
 
-                // -----------------------------------------------------------
-                // LANGKAH 2: Hapus DATA HEADER
-                // -----------------------------------------------------------
+                // 2. Hapus DATA HEADER
                 var header = _context.TemplateJurnal117
-                    .FirstOrDefault(w => w.Type == reqType && w.JenisAss == reqJenis);
+                    .FirstOrDefault(w => w.type_tr == reqTypeTr && 
+                                         w.type_jr == reqTypeJr && 
+                                         w.metode == reqMetode && 
+                                         w.Event == reqEvent && 
+                                         w.jn_ass == reqJenisAss);
 
                 if (header != null)
                 {
                     _context.TemplateJurnal117.Remove(header);
                 }
-               
-                // -----------------------------------------------------------
-                // LANGKAH 3: Simpan Perubahan (Commit Transaction)
-                // -----------------------------------------------------------
-                // SaveChangesAsync akan mengeksekusi penghapusan Detail & Header sekaligus
+                
+                // 3. Simpan Perubahan
                 await _context.SaveChangesAsync(cancellationToken);
             }
             catch (Exception ex)
