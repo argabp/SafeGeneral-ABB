@@ -6171,6 +6171,9 @@
         <None Update="Modules\Reports\Templates\SOATreatyKeluar.html">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Update="Modules\Reports\Templates\RekapitulasiProduksiTreatyXOLKeluar.html">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>

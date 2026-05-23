@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang='id'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Cetak Rekapitulasi Produksi Treaty XOL Keluar</title>
+    <style>
+        body {
+            /*font-family: Arial, sans-serif;*/
+            font-size: 1pt;   /* readable in print */
+            line-height: 1.4;  /* adds vertical space */
+        }
+        td {
+            font-size: 9pt;
+            padding: 2px 4px; /* give breathing room */
+            letter-spacing: 1px;
+        }
+
+        .section {
+            margin-top: 10px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+    </style>
+</head>
+<body>
+<div style='page-break-before: always;'>
+    <div class='container'>
+        <div class='section'>
+            <p style='font-size: 14px; margin: auto; text-align: center;'><strong>RINCIAN PRODUKSI XOL</strong></p>
+            <p style='font-size: 14px; margin: auto; text-align: center;'><strong>BULAN TAHUN: {{periode}}</strong></p>
+            <br>
+            {{details}}
+
+            <table class="table" style="margin-top: 7rem">
+                <tr>
+                    <td style="text-align: right"><strong>Departemen Reasuransi</strong></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
