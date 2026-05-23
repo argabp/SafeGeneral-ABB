@@ -176,8 +176,7 @@ namespace ABB.Application.CetakRekapitulasiProduksiTreatyMasuks.Commands
                             </tr>");
 
                     var nm_rks = datas.Select(s => s.nm_rk).Distinct().ToList();
-
-
+                    
                     foreach (var nm_rk in nm_rks)
                     {
                         stringBuilder.Append($@"<tr>

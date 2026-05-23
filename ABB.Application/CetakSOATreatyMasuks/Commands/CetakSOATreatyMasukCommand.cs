@@ -78,13 +78,13 @@ namespace ABB.Application.CetakSOATreatyMasuks.Commands
                 var nilai_share_bgu = ReportHelper.ConvertToReportFormat(data.nilai_share_bgu);
                 
                 stringBuilder.Append(@$"<tr>
-                                            <td style='text-align: left; vertical-align: top; border: 1px solid;'>{data.no_nota}</td>
-                                            <td style='text-align: left; vertical-align: top; border: 1px solid;'>{data.desk_tty}</td>
-                                            <td style='width: 3%; text-align: center; vertical-align: top; border: 1px solid;'>{data.symbol}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{nilai_prm}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{nilai_kms}</td>
-                                            <td style='width: 10%;  text-align: right; vertical-align: top; border: 1px solid;'>{nilai_kl}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{nilai_share_bgu}</td>
+                                            <td style='text-align: left; vertical-align: top; border-right: 1px solid; border-left: 1px solid;'>{data.no_nota}</td>
+                                            <td style='text-align: left; vertical-align: top; border-right: 1px solid; border-left: 1px solid;'>{data.desk_tty}</td>
+                                            <td style='width: 3%; text-align: center; vertical-align: top; border-right: 1px solid; border-left: 1px solid;'>{data.symbol}</td>
+                                            <td style='width: 10%; text-align: right; vertical-align: top; border-right: 1px solid; border-left: 1px solid;'>{nilai_prm}</td>
+                                            <td style='width: 10%; text-align: right; vertical-align: top; border-right: 1px solid; border-left: 1px solid;'>{nilai_kms}</td>
+                                            <td style='width: 10%; text-align: right; vertical-align: top; border-right: 1px solid; border-left: 1px solid;'>{nilai_kl}</td>
+                                            <td style='width: 10%; text-align: right; vertical-align: top; border-right: 1px solid; border-left: 1px solid;'>{nilai_share_bgu}</td>
                                         </tr>");
             }
             
