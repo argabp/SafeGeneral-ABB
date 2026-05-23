@@ -10,46 +10,46 @@ using MediatR;
 using Microsoft.Extensions.Hosting;
 using Scriban;
 
-namespace ABB.Application.CetakRekapitulasiProduksiPremiFakultatifMasuks.Commands
+namespace ABB.Application.CetakRekapitulasiProduksiPremiFakultatifKeluars.Commands
 {
-    public class CetakRekapitulasiProduksiPremiFakultatifMasukCommand : IRequest<string>
+    public class CetakRekapitulasiProduksiPremiFakultatifKeluarCommand : IRequest<string>
     {
         public DateTime periode { get; set; }
         
         public string jns_lap { get; set; }
     }
 
-    public class CetakRekapitulasiProduksiPremiFakultatifMasukCommandHandler : IRequestHandler<CetakRekapitulasiProduksiPremiFakultatifMasukCommand, string>
+    public class CetakRekapitulasiProduksiPremiFakultatifKeluarCommandHandler : IRequestHandler<CetakRekapitulasiProduksiPremiFakultatifKeluarCommand, string>
     {
         private readonly IDbConnectionPst _connectionPst;
         private readonly IHostEnvironment _environment;
 
-        public CetakRekapitulasiProduksiPremiFakultatifMasukCommandHandler(IDbConnectionPst connectionPst, IHostEnvironment environment)
+        public CetakRekapitulasiProduksiPremiFakultatifKeluarCommandHandler(IDbConnectionPst connectionPst, IHostEnvironment environment)
         {
             _connectionPst = connectionPst;
             _environment = environment;
         }
 
-        public async Task<string> Handle(CetakRekapitulasiProduksiPremiFakultatifMasukCommand request, CancellationToken cancellationToken)
+        public async Task<string> Handle(CetakRekapitulasiProduksiPremiFakultatifKeluarCommand request, CancellationToken cancellationToken)
         {
             var spName = string.Empty;
             switch (request.jns_lap)
             {
                 case "1":
-                    spName = "spr_ri06r_01";
+                    spName = "spr_ri06r_02";
                     break;
                 case "2":
-                    spName = "spr_ri06r_01_01";
+                    //spName = "spr_ri06r_02_01";
                     break;
             }
             
-            var datas = (await _connectionPst.QueryProc<CetakRekapitulasiProduksiPremiFakultatifMasukModel>(spName, 
+            var datas = (await _connectionPst.QueryProc<CetakRekapitulasiProduksiPremiFakultatifKeluarModel>(spName, 
                 new
                 {
                     input_str = $"{request.periode:yyyy/MM/dd}"
                 })).ToList();
 
-            string reportPath = Path.Combine( _environment.ContentRootPath, "Modules", "Reports", "Templates", "RekapitulasiProduksiPremiFakultatifMasuk.html" );
+            string reportPath = Path.Combine( _environment.ContentRootPath, "Modules", "Reports", "Templates", "RekapitulasiProduksiPremiFakultatifKeluar.html" );
             
             string templateReportHtml = await File.ReadAllTextAsync( reportPath );
             
@@ -77,7 +77,7 @@ namespace ABB.Application.CetakRekapitulasiProduksiPremiFakultatifMasuks.Command
                                 <td style='text-align: center; border: 1px solid'>JENIS BISNIS</td>
                                 <td style='width: 12%; text-align: center; border: 1px solid'>GROSS PREMI</td>
                                 <td style='width: 12%; text-align: center; border: 1px solid'>s/d BULAN INI</td>
-                                <td style='width: 12%; text-align: center; border: 1px solid'>KOMISI</td>
+                                <td style='width: 12%;  text-align: center; border: 1px solid'>KOMISI</td>
                                 <td style='width: 12%; text-align: center; border: 1px solid'>s/d BULAN INI</td>
                                 <td style='width: 12%; text-align: center; border: 1px solid'>NETT PREMI</td>
                                 <td style='width: 12%; text-align: center; border: 1px solid'>s/d BULAN INI</td>

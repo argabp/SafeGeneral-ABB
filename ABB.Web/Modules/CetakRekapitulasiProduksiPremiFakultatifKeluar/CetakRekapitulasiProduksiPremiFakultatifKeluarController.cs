@@ -1,22 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ABB.Application.CetakRekapitulasiProduksiPremiFakultatifMasuks.Commands;
+using ABB.Application.CetakRekapitulasiProduksiPremiFakultatifKeluars.Commands;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Services;
 using ABB.Web.Modules.Base;
-using ABB.Web.Modules.CetakRekapitulasiProduksiPremiFakultatifMasuk.Models;
+using ABB.Web.Modules.CetakRekapitulasiProduksiPremiFakultatifKeluar.Models;
 using DinkToPdf;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ABB.Web.Modules.CetakRekapitulasiProduksiPremiFakultatifMasuk
+namespace ABB.Web.Modules.CetakRekapitulasiProduksiPremiFakultatifKeluar
 {
-    public class CetakRekapitulasiProduksiPremiFakultatifMasukController : AuthorizedBaseController
+    public class CetakRekapitulasiProduksiPremiFakultatifKeluarController : AuthorizedBaseController
     {
         private readonly IReportGeneratorService _reportGeneratorService;
 
-        public CetakRekapitulasiProduksiPremiFakultatifMasukController(IReportGeneratorService reportGeneratorService)
+        public CetakRekapitulasiProduksiPremiFakultatifKeluarController(IReportGeneratorService reportGeneratorService)
         {
             _reportGeneratorService = reportGeneratorService;
         }
@@ -31,11 +31,11 @@ namespace ABB.Web.Modules.CetakRekapitulasiProduksiPremiFakultatifMasuk
         }
         
         [HttpPost]
-        public async Task<ActionResult> GenerateReport([FromBody] CetakRekapitulasiProduksiPremiFakultatifMasukViewModel model)
+        public async Task<ActionResult> GenerateReport([FromBody] CetakRekapitulasiProduksiPremiFakultatifKeluarViewModel model)
         {
             try
             {
-                var command = Mapper.Map<CetakRekapitulasiProduksiPremiFakultatifMasukCommand>(model);
+                var command = Mapper.Map<CetakRekapitulasiProduksiPremiFakultatifKeluarCommand>(model);
 
                 var sessionId = HttpContext.Session.GetString("SessionId");
 
@@ -44,7 +44,7 @@ namespace ABB.Web.Modules.CetakRekapitulasiProduksiPremiFakultatifMasuk
 
                 var reportTemplate = await Mediator.Send(command);
                 
-                _reportGeneratorService.GenerateReport("CetakRekapitulasiProduksiPremiFakultatifMasuk.pdf", reportTemplate, sessionId, Orientation.Landscape,
+                _reportGeneratorService.GenerateReport("CetakRekapitulasiProduksiPremiFakultatifKeluar.pdf", reportTemplate, sessionId, Orientation.Landscape,
                     5, 5, 5, 5, PaperKind.Legal);
 
                 return Ok(new { Status = "OK", Data = sessionId});
