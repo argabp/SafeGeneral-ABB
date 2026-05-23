@@ -1,0 +1,73 @@
+﻿@using ABB.Application.CetakNotaPremiTreatyXOLKeluars.Queries
+@using Kendo.Mvc.UI
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Cetak Nota Treaty XOL Masuk";
+}
+<script src="~/Modules/CetakNotaPremiTreatyXOLKeluar/JS/cetakNotaPremiTreatyXOLKeluar.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-8">
+            Cetak Nota Treaty XOL Masuk
+        </div>
+
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<CetakNotaPremiTreatyXOLKeluarDto>()
+                .Name("CetakNotaPremiTreatyXOLKeluarGrid")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetCetakNotaPremiTreatyXOLKeluars", "CetakNotaPremiTreatyXOLKeluar").Data("searchFilterServerFiltering"))
+                    .Model(model => model.Id(p => p.Id))
+                )
+                .Columns(columns =>
+                {
+                    columns.Command(command =>
+                    {
+                        command.Custom("Print")
+                            .Text("Print")
+                            .IconClass("fa fa-print")
+                            .HtmlAttributes(new { title = "Print" })
+                            .Click("viewReport");
+                    }).Width(100).Title("Action").Locked(true);
+                    columns.Bound(col => col.nomor_nota).Width(200).Title("Nomor Nota");
+                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
+                    columns.Bound(col => col.nm_mtu).Width(150).Title("Nama Mata Uang");
+                    columns.Bound(col => col.nm_ttj).Width(150).Title("Nama Tertuju");
+                    columns.Bound(col => col.ket_nt).Width(200).Title("Keterangan Nota");
+                    columns.Bound(col => col.tgl_nt).Title("Tanggal Nota").Format("{0: dd-MM-yyyy}");
+                    columns.Bound(col => col.nilai_nt).Width(150).Title("Nilai Nota").Format("{0:n2}");
+                    columns.Bound(col => col.flag_posting).Width(150).Title("Flag Posting");
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit"))
+                ) 
+        </div>
+    </div>
+</div>
+

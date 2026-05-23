@@ -3,17 +3,18 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ABB.Application.CetakNotaTreatyMasukXOLs.Queries;
+using ABB.Application.CetakNotaPremiTreatyXOLKeluars.Queries;
 using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Hosting;
 using Scriban;
 
-namespace ABB.Application.CetakNotaTreatyMasukXOLs.Commands
+namespace ABB.Application.CetakNotaPremiTreatyXOLKeluars.Commands
 {
-    public class CetakNotaTreatyMasukXOLCommand : IRequest<string>
+    public class CetakNotaPremiTreatyXOLKeluarCommand : IRequest<string>
     {
+        public string jns_sb_nt { get; set; }
         public string kd_cb { get; set; }
         public string jns_tr { get; set; }
         public string jns_nt_msk { get; set; }
@@ -25,28 +26,28 @@ namespace ABB.Application.CetakNotaTreatyMasukXOLs.Commands
         public string flag_posting { get; set; }
     }
 
-    public class CetakNotaTreatyMasukXOLCommandHandler : IRequestHandler<CetakNotaTreatyMasukXOLCommand, string>
+    public class CetakNotaPremiTreatyXOLKeluarCommandHandler : IRequestHandler<CetakNotaPremiTreatyXOLKeluarCommand, string>
     {
         private readonly IDbConnectionPst _connectionPst;
         private readonly IHostEnvironment _environment;
 
-        public CetakNotaTreatyMasukXOLCommandHandler(IDbConnectionPst connectionPst, IHostEnvironment environment)
+        public CetakNotaPremiTreatyXOLKeluarCommandHandler(IDbConnectionPst connectionPst, IHostEnvironment environment)
         {
             _connectionPst = connectionPst;
             _environment = environment;
         }
 
-        public async Task<string> Handle(CetakNotaTreatyMasukXOLCommand request, CancellationToken cancellationToken)
+        public async Task<string> Handle(CetakNotaPremiTreatyXOLKeluarCommand request, CancellationToken cancellationToken)
         {
-            var datas = (await _connectionPst.QueryProc<CetakNotaTreatyMasukXOLModel>("spr_ri02r_03", 
+                var datas = (await _connectionPst.QueryProc<CetakNotaPremiTreatyXOLKeluarModel>("spr_fn04r_01", 
                 new
                 {
-                    input_str = $"{request.kd_cb.Trim()},{request.jns_tr.Trim()},{request.jns_nt_msk.Trim()}," +
+                    input_str = $"{request.jns_sb_nt.Trim()},{request.kd_cb.Trim()},{request.jns_tr.Trim()},{request.jns_nt_msk.Trim()}," +
                                 $"{request.kd_thn},{request.kd_bln.Trim()},{request.no_nt_msk.Trim()}," +
                                 $"{request.jns_nt_kel},{request.no_nt_kel.Trim()},{request.flag_posting.Trim()}"
                 })).ToList();
             
-            string reportPath = Path.Combine( _environment.ContentRootPath, "Modules", "Reports", "Templates", "NotaTreatyMasuk XOL.html" );
+            string reportPath = Path.Combine( _environment.ContentRootPath, "Modules", "Reports", "Templates", "NotaPremiTreatyXOLKeluar.html" );
             
             string templateReportHtml = await File.ReadAllTextAsync( reportPath );
             
@@ -80,7 +81,7 @@ namespace ABB.Application.CetakNotaTreatyMasukXOLs.Commands
                 first_nilai_nota = nilai_nt;
 
                 // CREDIT SIDE (no leading space)
-                nilai_01 = ReportHelper.FormatIf(!ReportHelper.StartsWithSpace(data.uraian_01), data.nilai_01);
+                nilai_01 = ReportHelper.FormatIf(!ReportHelper.StartsWithSpace(data.uraian_01), data.nilai_nt);
                 nilai_02 = ReportHelper.FormatIf(!ReportHelper.StartsWithSpace(data.uraian_02), data.nilai_02);
                 nilai_03 = ReportHelper.FormatIf(!ReportHelper.StartsWithSpace(data.uraian_03), data.nilai_03);
                 nilai_04 = ReportHelper.FormatIf(!ReportHelper.StartsWithSpace(data.uraian_04), data.nilai_04);
@@ -92,7 +93,7 @@ namespace ABB.Application.CetakNotaTreatyMasukXOLs.Commands
                 second_nilai_nota = nilai_nt;
 
                 // DEBIT SIDE (leading space)
-                nilai_01_1 = ReportHelper.FormatIf(ReportHelper.StartsWithSpace(data.uraian_01), data.nilai_01);
+                nilai_01_1 = ReportHelper.FormatIf(ReportHelper.StartsWithSpace(data.uraian_01), data.nilai_nt);
                 nilai_02_1 = ReportHelper.FormatIf(ReportHelper.StartsWithSpace(data.uraian_02), data.nilai_02);
                 nilai_03_1 = ReportHelper.FormatIf(ReportHelper.StartsWithSpace(data.uraian_03), data.nilai_03);
                 nilai_04_1 = ReportHelper.FormatIf(ReportHelper.StartsWithSpace(data.uraian_04), data.nilai_04);
@@ -122,18 +123,16 @@ namespace ABB.Application.CetakNotaTreatyMasukXOLs.Commands
             
             var resultTemplate = templateProfileResult.Render( new
             {
-                nilai_01_1, nilai_02_1, nilai_03_1, nilai_04_1, nilai_05_1,
-                nilai_nt, nilai_01, nilai_02, nilai_03, nilai_04, nilai_05, nilai_total, 
+                nilai_01_1 = second_nilai_nota, nilai_02_1, nilai_03_1, nilai_04_1, nilai_05_1,
+                nilai_nt, nilai_01 = first_nilai_nota, nilai_02, nilai_03, nilai_04, nilai_05, nilai_total, 
                 data.jns_tr, data.jns_nt_msk, data.jns_nt_kel, data.nm_cb, data.almt_ttj,
-                data.almt_ttg, data.nm_ttg, data.nm_ttj, data.kt_ttj, data.nm_tty, 
-                nilai_ttl_ptg = ReportHelper.ConvertToReportFormat(data.nilai_ttl_ptg),
+                data.almt_ttg, data.nm_ttg, data.nm_ttj, data.kt_ttj,
                 data.no_berkas, data.no_pol_ttg, data.kt_ttg, data.kd_mtu_symbol, data.kd_tl,
-                data.kt_cb, tgl_nt_ind = data.tgl_nt_ind.Split(" ")[2], data.no_nota, data.nm_scob, data.nm_scob_ing,
+                data.tgl_nt_ind, data.no_nota, data.nm_scob, data.nm_scob_ing,
                 data.kd_cob, data.kd_scob, nilai_share_bgu = ReportHelper.ConvertToReportFormat(data.nilai_share_bgu), data.ket_nt,
-                tgl_mul = ReportHelper.ConvertDateTime(data.tgl_mul, "dd MMMM yyyy"),
-                tgl_akh = ReportHelper.ConvertDateTime(data.tgl_akh, "dd MMMM yyyy"),
                 data.uraian_01, data.uraian_02, data.uraian_03, data.uraian_04, data.uraian_05,
-                data.kd_mtu_pol_symbol, header, data.kd_thn_pol, view_jumlah_untuk, grand_nilai_total
+                data.kd_mtu_pol_symbol, header, view_jumlah_untuk, grand_nilai_total,
+                kd_thn_pol = data.tgl_nt_ind.Split(" ")[2], data.kt_cb
             } );
 
             return resultTemplate;

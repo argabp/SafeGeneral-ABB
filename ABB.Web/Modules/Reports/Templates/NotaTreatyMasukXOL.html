@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nota Treaty Masuk XOL</title>
+    <style>
+        .container {
+            width: 100%;
+            margin: auto;
+        }
+
+        .h1 {
+            text-align: center;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .section {
+            margin-top: 50px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table td {
+            padding: 4px;
+            font-size: 12px;
+        }
+        .table-uraian {
+            width: 100%;
+            margin: auto;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        .table-uraian th, .table-uraian td {
+            border-left: 1px solid black;
+            border-right: 1px solid black; /* Garis vertikal */
+            padding: 8px;
+        }
+        .table-uraian tr.no-border td {
+            border-bottom: none; /* Hilangkan garis bawah untuk baris tertentu */
+        }
+        .table-uraian tr.border-botup td {
+            border-bottom: 1px solid black; /* Baris yang tetap punya garis bawah */
+            border-top: 1px solid black; /* Baris yang tetap punya garis bawah */
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="section">
+        <table class="table">
+            <tr>
+                <td style="text-align: center"colspan="7"><u style="font-size: 14px">{{header}}</u><br>{{no_nota}}</td>
+            </tr>
+            <tr>
+                <td style="width: 15%;">KANTOR</td>
+                <td style="width: 1%;">:</td>
+                <td style="width: 30%;">{{nm_cb}}</td>
+                <td style="text-align: center;"></td>
+                <td style="text-align: right;">Jenis Nota</td>
+                <td style="width: 1%;">:</td>
+                <td>{{jns_tr}}.{{jns_nt_msk}}.{{jns_nt_kel}}</td>
+            </tr>
+            <tr>
+                <td style="width: 5%;">UNDERWRITING YEAR</td>
+                <td style="width: 1%;">:</td>
+                <td style="width: 30%;">{{tgl_nt_ind}}</td>
+                <td style="text-align: center;"></td>
+                <td style="text-align: right;">MATA UANG</td>
+                <td style="width: 1%;">:</td>
+                <td>{{kd_mtu_symbol}}</td>
+            </tr>
+        </table>
+        <table class="table">
+            <tr>
+                <td style="width: 20%; vertical-align: top;">To</td>
+                <td style="vertical-align: top; text-align: justify; width: 1%;">:</td>
+                <td style="vertical-align: top; text-align: justify; width: 35%;" colspan="3">{{nm_ttj}}</td>
+            </tr>
+            <tr>
+                <td style="width: 20%; vertical-align: top;"></td>
+                <td style="vertical-align: top; text-align: justify; width: 1%;">:</td>
+                <td style="vertical-align: top; text-align: justify; width: 35%;" colspan="3">{{almt_ttj}}</td>
+            </tr>
+            <tr>
+                <td style="width: 20%; vertical-align: top;"></td>
+                <td style="vertical-align: top; text-align: justify; width: 1%;">:</td>
+                <td style="vertical-align: top; text-align: justify; width: 35%;" colspan="3">{{kt_ttj}}</td>
+            </tr>
+            <tr>
+                <td style="width: 20%; vertical-align: top;">Insured</td>
+                <td style="vertical-align: top; text-align: justify; width: 1%;">:</td>
+                <td style="vertical-align: top; text-align: justify; width: 35%;" colspan="3">{{nm_ttg}}</td>
+            </tr>
+            <tr>
+                <td style="width: 20%; vertical-align: top;">Business</td>
+                <td style="vertical-align: top; text-align: justify; width: 1%;">:</td>
+                <td style="vertical-align: top; text-align: justify; width: 35%;">{{nm_tty}}</td>
+                <td style="vertical-align: top; text-align: justify; width: 15%;">Policy No.</td>
+                <td style="vertical-align: top; text-align: justify; width: 1%;">:</td>
+                <td style="vertical-align: top; text-align: justify;" colspan="3">{{no_pol_ttg}}</td>
+            </tr>
+            <tr>
+                <td style="width: 20%; vertical-align: top;">Premi 100%</td>
+                <td style="vertical-align: top; text-align: justify; width: 1%;">:</td>
+                <td style="vertical-align: top; text-align: justify; width: 35%;">{{kd_mtu_symbol}} {{nilai_ttl_ptg}}</td>
+                <td style="vertical-align: top; text-align: justify;">Period</td>
+                <td style="vertical-align: top; text-align: justify; width: 1%;">:</td>
+                <td style="vertical-align: top; text-align: justify;" colspan="3">{{tgl_mul}} S/D {{tgl_akh}}</td>
+            </tr>
+        </table>
+        <table class="table-uraian">
+            <tr class="border-botup">
+                <td style="width: 20%; text-align: center; letter-spacing: 3px;">DESCRIPTION</td>
+                <td style="width: 20%; text-align: center;">DEBET</td>
+                <td style="width: 20%; text-align: center;">CREDIT</td>
+            </tr>
+            <tr class="no-border">
+                <td style="width: 20%;">{{uraian_01}}</td>
+                <td style="width: 20%; text-align: right;">{{nilai_01_2}}</td>
+                <td style="width: 20%; text-align: right;">{{nilai_01}}</td>
+            </tr>
+            <tr class="no-border">
+                <td style="width: 20%;">{{uraian_02}}</td>
+                <td style="width: 20%; text-align: right;">{{nilai_02}}</td>
+                <td style="width: 20%; text-align: right;">{{nilai_02_1}}</td>
+            </tr>
+            <tr class="no-border">
+                <td style="width: 20%;">{{uraian_03}}</td>
+                <td style="width: 20%; text-align: right;">{{nilai_03}}</td>
+                <td style="width: 20%; text-align: right;">{{nilai_03_2}}</td>
+            </tr>
+            <tr class="no-border">
+                <td style="width: 20%;">{{uraian_04}}</td>
+                <td style="width: 20%; text-align: right;">{{nilai_04_2}}</td>
+                <td style="width: 20%; text-align: right;">{{nilai_04}}</td>
+            </tr>
+            <tr class="no-border">
+                <td style="width: 20%;">{{uraian_05}}</td>
+                <td style="width: 20%; text-align: right;">{{nilai_05_1}}</td>
+                <td style="width: 20%; text-align: right;">{{nilai_05}}</td>
+            </tr>
+            {{view_jumlah_untuk}}
+            <tr class="border-botup">
+                <td style="width: 20%;">JUMLAH</td>
+                <td style="width: 20%; text-align: right;">{{nilai_total}}</td>
+                <td style="width: 20%; text-align: right;">{{grand_nilai_total}}</td>
+            </tr>
+        </table>
+        <table class="table">
+            <tr>
+                <td style="width: 5%; padding-left: 30px;">Catatan</td>
+                <td style="width: 1%;">:</td>
+                <td style="width: 70%;">{{ket_nt}}</td>
+                <td style="width: 60%;">{{kt_cb}}, {{tgl_nt_ind}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

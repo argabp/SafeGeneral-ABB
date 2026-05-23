@@ -6177,6 +6177,12 @@
         <None Update="Modules\Reports\Templates\RekapitulasiProduksiPremiFakultatifKeluar.html">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Update="Modules\Reports\Templates\NotaTreatyMasukXOL.html">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Modules\Reports\Templates\NotaPremiTreatyXOLKeluar.html">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
