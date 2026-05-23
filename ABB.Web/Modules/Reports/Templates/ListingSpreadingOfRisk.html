@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang='id'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Listing Spreading Of Risk</title>
+    <style>
+        body {
+            /*font-family: Arial, sans-serif;*/
+            font-size: 1pt;   /* readable in print */
+            line-height: 1.4;  /* adds vertical space */
+        }
+        td {
+            font-size: 9pt;
+            padding: 2px 4px; /* give breathing room */
+            letter-spacing: 1px;
+        }
+
+        .section {
+            margin-top: 10px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+    </style>
+</head>
+<body>
+<div style='page-break-before: always;'>
+    <div class='container'>
+        <div class='section'>
+            <p style='font-size: 14px; margin: auto; text-align: center;'><strong>LISTING ALOKASI REASURANSI</strong></p>
+            <p style='font-size: 14px; margin: auto; text-align: center;'><strong>CLASS OF BUSINESS {{nm_cob}}</strong></p>
+            <p style='font-size: 14px; margin: auto; text-align: center;'><strong>Periode {{tgl_mul}} s/d {{tgl_akh}}</strong></p>
+            <br>
+
+            <table class="table">
+                <tr>
+                    <td style=""><strong>Nomor Polis</strong></td>
+                    <td>:</td>
+                    <td style="" colspan="6"><strong>{{no_pol_ttg}}</strong></td>
+                </tr>
+                <tr>
+                    <td style="">Nama Tertanggung</td>
+                    <td>:</td>
+                    <td style="">{{nm_ttg}}</td>
+                    <td style="">Sub COB</td>
+                    <td>:</td>
+                    <td style="">{{nm_scob}}</td>
+                    <td style="">Tanggal Closing</td>
+                    <td>:</td>
+                    <td style="">{{tgl_closing_id}}</td>
+                </tr>
+                <tr>
+                    <td style="">Nomor Resiko</td>
+                    <td>:</td>
+                    <td style="">{{no_rsk}} / Kode Endorsment : {{kd_endt}}</td>
+                    <td style="">Mata Uang</td>
+                    <td>:</td>
+                    <td style="">{{nm_mtu}}</td>
+                    <td style="">Premi</td>
+                    <td>:</td>
+                    <td style="">{{nilai_prm_rsk}}</td>
+                </tr>
+                <tr>
+                    <td style="">Coverage</td>
+                    <td>:</td>
+                    <td style="vertical-align: top;" rowspan="2">{{pst_cvrg}}</td>
+                    <td style="">Total Pertanggungan</td>
+                    <td>:</td>
+                    <td style="">{{nilai_ttl_ptg}}</td>
+                    <td style="">Diskon</td>
+                    <td>:</td>
+                    <td style="">{{nilai_dis_rsk}}</td>
+                </tr>
+                <tr>
+                    <td style=""></td>
+                    <td></td>
+                    <td style="">Rate Premi</td>
+                    <td>:</td>
+                    <td style="">{{pst_rate_prm_rsk}} {{stn_rate_prm_rsk}}</td>
+                    <td style="">Nett Premi</td>
+                    <td>:</td>
+                    <td style="">{{nilai_prm_rsk_net}}</td>
+                </tr>
+                <tr>
+                    <td style="">Alamat Resiko</td>
+                    <td>:</td>
+                    <td style="vertical-align: top;" rowspan="2">{{almt_rsk}}</td>
+                    <td style="">Jangka Waktu Pertanggungan</td>
+                    <td>:</td>
+                    <td style="width: 15%">{{tgl_mul_ptg_ind}} s/d {{tgl_akh_ptg_ind}}</td>
+                    <td style="" colspan="3">{{ket_rsk}}</td>
+                </tr>
+                <tr>
+                    <td style=""></td>
+                    <td></td>
+                    <td style="">Kode Okupasi</td>
+                    <td>:</td>
+                    <td style="">{{kd_okup}}</td>
+                    <td style=""></td>
+                    <td></td>
+                    <td style=""></td>
+                </tr>
+                <tr>
+                    <td style="">Table Of Limit</td>
+                    <td>:</td>
+                    <td style="vertical-align: top;" rowspan="2">{{nm_tol}}</td>
+                    <td style="">Kelas Konstruksi</td>
+                    <td>:</td>
+                    <td style="">{{kd_kls_konstr}}</td>
+                    <td style="" colspan="3"></td>
+                </tr>
+                <tr>
+                    <td style=""></td>
+                    <td></td>
+                    <td style=""></td>
+                    <td>:</td>
+                    <td style=""></td>
+                    <td style=""></td>
+                    <td></td>
+                    <td style=""></td>
+                </tr>
+            </table>
+            {{details}}
+
+            <table class="table" style="margin-top: 7rem">
+                <tr>
+                    <td style="width:80%"></td>
+                    <td style="text-align: center"><strong>{{nm_bag}}</strong></td>
+                </tr>
+                <tr>
+                    <td style="width:80%"></td>
+                    <td style="text-align: center"><strong>{{nm_kpl_bag}}</strong></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
