@@ -58,7 +58,7 @@ namespace ABB.Application.CetakNotaPremiTreatyXOLKeluars.Commands
 
             var data = datas.FirstOrDefault();
             
-            var nilai_nt = data.nilai_nt == 0 ? string.Empty : ReportHelper.ConvertToReportFormat(data.nilai_nt);
+            var nilai_nt = data.nilai_nt == 0 ? string.Empty : ReportHelper.ConvertToReportFormat(Math.Abs(data.nilai_nt));
             string nilai_01 = string.Empty;
             string nilai_02 = string.Empty;
             string nilai_03 = string.Empty;

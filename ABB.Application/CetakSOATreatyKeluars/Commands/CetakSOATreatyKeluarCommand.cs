@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using ABB.Application.CetakSOATreatyMasuks.Commands;
 using ABB.Application.Common.Helpers;
 using ABB.Application.Common.Interfaces;
 using MediatR;
@@ -138,7 +137,15 @@ namespace ABB.Application.CetakSOATreatyKeluars.Commands
                     break;
             }
             
-            
+            stringBuilder.Append(@$"<tr>
+                                        <td style='text-align: left; vertical-align: top; border-right: 1px solid; border-left: 1px solid; border-bottom: 1px solid;'></td>
+                                        <td style='text-align: left; vertical-align: top; border-right: 1px solid; border-left: 1px solid; border-bottom: 1px solid;'></td>
+                                        <td style='width: 3%; text-align: center; vertical-align: top; border-right: 1px solid; border-left: 1px solid; border-bottom: 1px solid;'></td>
+                                        <td style='width: 10%; text-align: right; vertical-align: top; border-right: 1px solid; border-left: 1px solid; border-bottom: 1px solid;'></td>
+                                        <td style='width: 10%; text-align: right; vertical-align: top; border-right: 1px solid; border-left: 1px solid; border-bottom: 1px solid;'></td>
+                                        <td style='width: 10%; text-align: right; vertical-align: top; border-right: 1px solid; border-left: 1px solid; border-bottom: 1px solid;'></td>
+                                        <td style='width: 10%; text-align: right; vertical-align: top; border-right: 1px solid; border-left: 1px solid; border-bottom: 1px solid;'></td>
+                                    </tr>");
             
             stringBuilder.Append("</table>");
             

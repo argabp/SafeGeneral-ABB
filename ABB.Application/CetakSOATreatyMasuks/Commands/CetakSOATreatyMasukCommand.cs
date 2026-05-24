@@ -88,6 +88,16 @@ namespace ABB.Application.CetakSOATreatyMasuks.Commands
                                         </tr>");
             }
             
+            stringBuilder.Append(@"<tr>
+                                            <td style='text-align: left; vertical-align: top; border-right: 1px solid; border-left: 1px solid; border-bottom: 1px solid;'></td>
+                                            <td style='text-align: left; vertical-align: top; border-right: 1px solid; border-left: 1px solid; border-bottom: 1px solid;'></td>
+                                            <td style='width: 3%; text-align: center; vertical-align: top; border-right: 1px solid; border-left: 1px solid; border-bottom: 1px solid;'></td>
+                                            <td style='width: 10%; text-align: right; vertical-align: top; border-right: 1px solid; border-left: 1px solid; border-bottom: 1px solid;'></td>
+                                            <td style='width: 10%; text-align: right; vertical-align: top; border-right: 1px solid; border-left: 1px solid; border-bottom: 1px solid;'></td>
+                                            <td style='width: 10%; text-align: right; vertical-align: top; border-right: 1px solid; border-left: 1px solid; border-bottom: 1px solid;'></td>
+                                            <td style='width: 10%; text-align: right; vertical-align: top; border-right: 1px solid; border-left: 1px solid; border-bottom: 1px solid;'></td>
+                                        </tr>");
+            
             stringBuilder.Append("</table>");
 
             var firstData = datas.FirstOrDefault();

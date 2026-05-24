@@ -3,7 +3,7 @@
 <head>
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <title>Cetak Rekapitulasi Produksi Premi Fakultatif Keluar</title>
+    <title>Cetak Nota Treaty Keluar</title>
     <style>
         body {
             /*font-family: Arial, sans-serif;*/
@@ -30,10 +30,17 @@
 <div style='page-break-before: always;'>
     <div class='container'>
         <div class='section'>
-            <p style='font-size: 14px; margin: auto; text-align: center;'><strong>RINCIAN PRODUKSI PREMI FAKULTATIF KELUAR</strong></p>
+            <p style='font-size: 14px; margin: auto; text-align: center;'><strong>NOTA PREMI TREATY KELUAR</strong></p>
+            <p style='font-size: 14px; margin: auto; text-align: center;'><strong>{{header}}</strong></p>
             <p style='font-size: 14px; margin: auto; text-align: center; padding-bottom: 2rem;'><strong>BULAN TAHUN : {{periode}}</strong></p>
+
+            <table class="table">
+                <tr>
+                    <td style="text-align: right"><strong>U/Y : {{thn_tty_pps}}</strong></td>
+                </tr>
+            </table>
             {{details}}
-            
+
             <table class="table" style="margin-top: 7rem">
                 <tr>
                     <td style="width: 80%;"></td>

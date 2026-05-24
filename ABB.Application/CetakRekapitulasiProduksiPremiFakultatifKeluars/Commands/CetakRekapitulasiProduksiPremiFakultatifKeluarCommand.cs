@@ -115,14 +115,14 @@ namespace ABB.Application.CetakRekapitulasiProduksiPremiFakultatifKeluars.Comman
             }
                 
             stringBuilder.Append(@$"<tr>
-                                            <td style='text-align: left; vertical-align: top; border-right: 1px solid; border-left: 1px solid;'></td>
-                                            <td style='text-align: left; vertical-align: top; border-right: 1px solid; border-left: 1px solid;'>Total</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border-right: 1px solid; border-left: 1px solid;'>{total_nilai_prm}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border-right: 1px solid; border-left: 1px solid;'>{total_nilai_prm_bl}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border-right: 1px solid; border-left: 1px solid;'>{total_nilai_kms}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border-right: 1px solid; border-left: 1px solid;'>{total_nilai_kms_bl}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border-right: 1px solid; border-left: 1px solid;'>{total_net_prm}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border-right: 1px solid; border-left: 1px solid;'>{total_net_prm_bl}</td>
+                                            <td style='text-align: left; vertical-align: top; border: 1px solid;'></td>
+                                            <td style='text-align: left; vertical-align: top; border: 1px solid;'>Total</td>
+                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{total_nilai_prm}</td>
+                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{total_nilai_prm_bl}</td>
+                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{total_nilai_kms}</td>
+                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{total_nilai_kms_bl}</td>
+                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{total_net_prm}</td>
+                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{total_net_prm_bl}</td>
                                         </tr>");
             
             stringBuilder.Append("</table>");
