@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang='id'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Cetak Nota Premi Fakultatif Keluar</title>
+    <style>
+        body {
+            /*font-family: Arial, sans-serif;*/
+            font-size: 1pt;   /* readable in print */
+            line-height: 1.4;  /* adds vertical space */
+        }
+        td {
+            font-size: 9pt;
+            padding: 5px; /* give breathing room */
+            letter-spacing: 1px;
+        }
+
+        .section {
+            margin-top: 10px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+    </style>
+</head>
+<body>
+<div style='page-break-before: always;'>
+    <div class='container'>
+        <div class='section'>
+            <table class='table'>
+                <tr>
+                    <td style='text-align: right; padding-right: 20px;'>{{jns_nota}}</td>
+                </tr>
+            </table>
+
+            <table class='table' style='border: 1px solid black;'>
+                <tr>
+                    <td colspan='2' style='border-bottom: 1px solid black;'>
+                        <h1 style='margin: 0; font-size: 14pt; font-weight: bold; padding: 10px'>{{title}}</h1>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='2' style='text-align: center;'>
+                        <h2 style='margin: 0; font-size: 15pt; font-weight: bold;'>NOTA KREDIT</h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='2' style='text-align: center; border-bottom: 1px solid black;'>
+                        <h3 style='margin: 0; font-size: 10pt; font-weight: bold;'>NOMOR : {{no_nota}}</h3>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style='width: 25%; border-right: 1px solid black; border-bottom: 1px solid black;'>JENIS ASURANSI</td>
+                    <td style='border-bottom: 1px solid black;'>{{nm_scob}} ({{kd_cob}} {{kd_scob}})</td>
+                </tr>
+                <tr>
+                    <td style='border-right: 1px solid black; border-bottom: 1px solid black;'>NO. POLIS</td>
+                    <td style='border-bottom: 1px solid black;'>{{no_pol_ttg}}</td>
+                </tr>
+                <tr>
+                    <td style='border-right: 1px solid black; border-bottom: 1px solid black;'>REINSURED</td>
+                    <td style='border-bottom: 1px solid black;'>{{nm_ttj}}</td>
+                </tr>
+                <tr>
+                    <td style='border-right: 1px solid black; border-bottom: 1px solid black;'>NAMA TERTANGGUNG</td>
+                    <td style='border-bottom: 1px solid black;'>{{nm_ttg}}</td>
+                </tr>
+                <tr>
+                    <td style='border-right: 1px solid black; border-bottom: 1px solid black; vertical-align: top'>OBYEK PERTANGGUNGAN</td>
+                    <td style='border-bottom: 1px solid black;'>{{ket_nt}}
+                    </td>
+                </tr>
+                <tr>
+                    <td style='border-right: 1px solid black; border-bottom: 1px solid black;'>PERIODE</td>
+                    <td style='border-bottom: 1px solid black;'>{{tgl_mul}} up to {{tgl_akh}}</td>
+                </tr>
+                <tr>
+                    <td style='border-right: 1px solid black; border-bottom: 1px solid black;'>NILAI PERTANGGUNGAN</td>
+                    <td style='border-bottom: 1px solid black;'>{{kd_mtu_symbol}} {{nilai_ttl_ptg}}</td>
+                </tr>
+
+                <tr>
+                    <td style='border-right: 1px solid black; height: 250px; vertical-align: top;'>URAIAN</td>
+                    <td style='vertical-align: top;'>
+                        <table style='width: 100%; border-collapse: collapse;'>
+                            <tr>
+                                <td style='width: 15%; padding-top: 15px;'></td>
+                                <td style='width: 20%; padding-top: 15px;'>{{uraian_01}}</td>
+                                <td style='width: 5%; padding-top: 15px;'>:</td>
+                                <td style='width: 15%; padding-top: 15px;'>{{kd_mtu_symbol}}</td>
+                                <td style='text-align: right; width: 35%; padding-top: 15px;'>{{nilai_01}}</td>
+                                <td style='width: 5%;'></td> 
+                            </tr>
+                            {{rincian_2}}
+                            {{rincian_3}}
+                            {{rincian_4}}
+                            {{rincian_5}}
+                            {{total}}
+
+                            <tr>
+                                <td></td>
+                                <td colspan='4' style='padding-top: 35px;'>
+                                    {{uraian_09}}
+                                </td>
+                                <td></td>
+                            </tr>
+
+                            <tr>
+                                <td colspan='5' style='text-align: right; padding-top: 45px;'>
+                                    {{kt_ttj}}, {{tgl_nt_ind}}
+                                </td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

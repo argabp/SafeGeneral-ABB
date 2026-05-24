@@ -6186,6 +6186,9 @@
         <None Update="Modules\Reports\Templates\NotaPremiTreatyKeluar.html">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Update="Modules\Reports\Templates\NotaPremiFakultatifKeluar.html">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>

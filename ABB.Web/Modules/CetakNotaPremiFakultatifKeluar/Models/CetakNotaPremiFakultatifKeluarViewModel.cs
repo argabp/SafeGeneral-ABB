@@ -1,0 +1,24 @@
+using ABB.Application.CetakNotaPremiFakultatifKeluars.Commands;
+using ABB.Application.Common.Interfaces;
+using AutoMapper;
+
+namespace ABB.Web.Modules.CetakNotaPremiFakultatifKeluar.Models
+{
+    public class CetakNotaPremiFakultatifKeluarViewModel : IMapFrom<CetakNotaPremiFakultatifKeluarCommand>
+    {
+        public string kd_cb { get; set; }
+        public string jns_tr { get; set; }
+        public string jns_nt_msk { get; set; }
+        public string kd_thn { get; set; }
+        public string kd_bln { get; set; }
+        public string no_nt_msk { get; set; }
+        public string jns_nt_kel { get; set; }
+        public string no_nt_kel { get; set; }
+        public string flag_posting { get; set; }
+        public string jns_lap { get; set; }
+        public void Mapping(Profile profile)
+        {
+            profile.CreateMap<CetakNotaPremiFakultatifKeluarViewModel, CetakNotaPremiFakultatifKeluarCommand>();
+        }
+    }
+}
