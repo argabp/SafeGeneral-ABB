@@ -39,6 +39,7 @@ using RekapJurnalEntity = ABB.Domain.Entities.RekapJurnal;
 using KeteranganProduksiEntity = ABB.Domain.Entities.KeteranganProduksi;
 using LabaRugiKursEntity = ABB.Domain.Entities.LabaRugiKurs;
 using AbbRolePusatEntity = ABB.Domain.Entities.AbbRolePusat;
+using EntriMappingEntity = ABB.Domain.Entities.EntriMapping;
 
 namespace ABB.Application.Common.Interfaces
 {
@@ -92,6 +93,8 @@ namespace ABB.Application.Common.Interfaces
         DbSet<SpLaporanPelunasanResult> SpLaporanPelunasanResults { get; set; }
         DbSet<SpLaporanOutstandingResult> SpLaporanOutstandingResults { get; set; }
         DbSet<SpLaporanNeracaSaldoResult> SpLaporanNeracaSaldoResults { get; set; }
+
+        DbSet<EntriMappingEntity> EntriMapping { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

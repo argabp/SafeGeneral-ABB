@@ -13,6 +13,7 @@ namespace ABB.Application.Coas117.Queries
     public class GetAllCoa117Query : IRequest<List<Coa117Dto>>
     {
         public string SearchKeyword { get; set; } // ✅ properti pencarian
+         public string KodeCabang { get; set; }
     }
 
     public class GetAllCoa117QueryHandler : IRequestHandler<GetAllCoa117Query, List<Coa117Dto>>
@@ -29,6 +30,32 @@ namespace ABB.Application.Coas117.Queries
         public async Task<List<Coa117Dto>> Handle(GetAllCoa117Query request, CancellationToken cancellationToken)
         {
             var query = _context.Coa117.AsQueryable();
+
+             if (!string.IsNullOrWhiteSpace(request.KodeCabang))
+            {
+                string dept = request.KodeCabang.Trim();
+
+                var deptQuery = _context.Coa117
+                    .Where(x => x.gl_dept.Trim() == dept);
+
+                if (dept == "10")
+                {
+                    var rangeQuery = _context.Coa117
+                        .Where(x => 
+                            x.gl_kode.Trim().CompareTo("16011100") >= 0 &&
+                            x.gl_kode.Trim().CompareTo("16070100") <= 0);
+
+                    query = deptQuery.Union(rangeQuery);
+                }
+                else
+                {
+                    var additionalQuery = _context.Coa117
+                        .Where(x => x.gl_kode.Trim() == "16010100");
+
+                    query = deptQuery.Union(additionalQuery);
+                }
+            }
+
 
             // ✅ Tambahkan filter pencarian
             if (!string.IsNullOrWhiteSpace(request.SearchKeyword))

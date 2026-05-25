@@ -48,6 +48,7 @@ using SpListingVoucherKasResult = ABB.Domain.Entities.SpListingVoucherKasResult;
 using SpLaporanPelunasanResult = ABB.Domain.Entities.SpLaporanPelunasanResult;
 using SpLaporanOutstandingResult = ABB.Domain.Entities.SpLaporanOutstandingResult;
 using SpLaporanNeracaSaldoResult = ABB.Domain.Entities.SpLaporanNeracaSaldoResult;
+using EntriMappingEntity = ABB.Domain.Entities.EntriMapping;
 
 namespace ABB.Infrastructure.Data
 {
@@ -104,6 +105,7 @@ namespace ABB.Infrastructure.Data
         public DbSet<SpLaporanPelunasanResult> SpLaporanPelunasanResults { get; set; }
         public DbSet<SpLaporanOutstandingResult> SpLaporanOutstandingResults { get; set; }
         public DbSet<SpLaporanNeracaSaldoResult> SpLaporanNeracaSaldoResults { get; set; }
+        public DbSet<EntriMappingEntity> EntriMapping { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -144,6 +146,7 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new RekapJurnalMap());
             builder.ApplyConfiguration(new KeteranganProduksiMap());
             builder.ApplyConfiguration(new AbbRolePusatMap());
+            builder.ApplyConfiguration(new EntriMappingMap());
 
             builder.Entity<BukuBesarSpDto>(entity =>
             {

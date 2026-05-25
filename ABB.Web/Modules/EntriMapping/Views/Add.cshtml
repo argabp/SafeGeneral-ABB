@@ -1,0 +1,53 @@
+@model ABB.Web.Modules.EntriMapping.Models.EntriMappingViewModel
+@using Kendo.Mvc.UI
+
+<style>
+    .custom-kode .k-input { background-color: #00FFFF !important; }
+    .custom-kuning .k-input { background-color: rgb(255, 255, 225) !important; }
+</style>
+
+<div class="window-body" style="background-color: lightgray">
+    <form id="EntriMappingForm" enctype="multipart/form-data" autocomplete="off">
+      <div class="row">
+    <div class="form-group col-sm-8">
+        <label>Kode Akun 104</label> 
+        <div>
+            @(Html.Kendo().ComboBox()
+                .Name("gl_akun104")
+                .DataTextField("Text")
+                .DataValueField("Value")
+                .BindTo((IEnumerable<SelectListItem>)ViewBag.KodeAkunOptions) // Pastikan di-cast
+                .Filter(FilterType.Contains)
+                .Placeholder("Pilih atau ketik kode Akun...")
+                .HtmlAttributes(new { @class = "custom-kuning", style = "width: 100%;" })
+            )
+            <span asp-validation-for="gl_akun104" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="form-group col-sm-8">
+        <label>Kode Akun 117</label> 
+        <div>
+            @(Html.Kendo().ComboBox()
+                .Name("gl_akun117")
+                .DataTextField("Text")
+                .DataValueField("Value")
+                .BindTo((IEnumerable<SelectListItem>)ViewBag.KodeAkunOptions117) // Pastikan di-cast
+                .Filter(FilterType.Contains)
+                .Placeholder("Pilih atau ketik kode Akun...")
+                .HtmlAttributes(new { @class = "custom-kuning", style = "width: 100%;" })
+            )
+            <span asp-validation-for="gl_akun117" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+    </form>
+</div>
+
+<div class="window-footer">
+    <button type="button" onclick="onSaveEntriMapping()" class="btn btn-success space-right">
+        <span class="fa fa-save"></span> Save
+    </button>
+</div>

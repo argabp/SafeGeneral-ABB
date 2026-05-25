@@ -1,6 +1,7 @@
 @using Kendo.Mvc.UI
 @using Kendo.Mvc.TagHelpers
 @using Microsoft.Extensions.Configuration
+@using ABB.Application.EntriMappings.Queries 
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Kendo.Mvc
 
@@ -12,6 +13,7 @@
 }
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="~/Modules/EntriMapping/JS/entrimapping.index.js"></script>
 <style>
     .div-box { padding-bottom: 1em; }
     .swal2-container { z-index: 10050 !important; }
@@ -27,3 +29,63 @@
         <li class="breadcrumb-item active" aria-current="page">Entri Mapping</li>
     </ol>
 </nav>
+
+<div class="flat-box">
+    <div class="flat-box-title ">
+       Daftar Entri Mapping
+        <div class="pullright-flex">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Cari ..."/>
+            <button class="flat-btn-primary" onclick="btnAddMapping_OnClick()">Add</button>
+        </div>
+</div>
+
+<div class="flat-box-content">
+    <div class="div-box">
+        @(Html.Kendo().Grid<EntriMappingDto>()
+            .Name("MappingGrid") 
+            .DataSource(dataSource => dataSource.Ajax()
+                .Read(read => read.Action("GetMapping", "EntriMapping").Data("getSearchFilter")) 
+                .Model(model => {
+                    model.Id(p => p.gl_akun104); 
+                })
+                .PageSize(20)
+            )
+            .Columns(columns =>
+            {
+                columns.Bound(col => col.gl_akun104).Title("Kode Akun 104").Width(200);
+                columns.Bound(col => col.Nama104).Title("Nama Akun 104").Width(300); // Kolom Baru
+                columns.Bound(col => col.gl_akun117).Title("Kode Akun 117").Width(200);
+                columns.Bound(col => col.Nama117).Title("Nama Akun 117").Width(300);
+                
+                    
+               columns.Command(command =>
+            {
+                  //  command.Custom("EditEntriMapping")
+                  //      .Text(" Edit ")
+                  //      .IconClass("fa fa-edit")
+                  //      .Click("btnEditEntriMapping_OnClick"); 
+                   command.Custom("DeleteEntriMapping")
+                        .Text(" Hapus ")
+                        .IconClass("fa fa-trash")
+                        .Click("onDeleteEntriMapping");
+                }).Width(100).Title("Action").Locked(true);
+            })
+            .Pageable(pager => pager.Refresh(true).PageSizes(true))
+            .Sortable()
+            .Filterable()
+            .Scrollable()
+            .Height(500)
+            .Resizable(a=>a.Columns(true))
+        )
+    </div>
+
+    @(Html.Kendo().Window()
+        .Name("EntriMappingWindow")
+        .Title("Form Entri Mapping")
+        .Width(600)
+        .Modal(true)
+        .Visible(false)
+        .Draggable(true)
+    )
+</div>
+</div>
