@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slip Premi Fakultatif Keluar</title>
+    <style>
+        body {
+            /* font-family: Arial, sans-serif; */
+        }
+
+        .container {
+            width: 95%;
+            margin: auto;
+            /* border: 1px solid black; */
+            padding: 20px;
+        }
+
+        .h1 {
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .section {
+            margin-top: 10px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table td {
+            padding: 4px;
+            /* border: 1px solid black; */
+            font-size: 12px;
+        }
+        p {
+            text-align: justify;
+            font-size: 13px;
+            /* font-style: italic; */
+        }
+        h2 {
+            text-align: center;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="section">
+
+        <table class="table" style="margin-bottom: 15px; width: 100%; table-layout: fixed;">
+            <colgroup>
+                <col style="width: 25%;">
+                <col style="width: 3%;">
+                <col style="width: 72%;">
+            </colgroup>
+            <tr>
+                <td colspan="3" style="font-weight: bold; font-size: 15px; font-style: italic; letter-spacing: 0.5px; padding-bottom: 0;">
+                    FACULTATIF REINSURANCE SLIP
+                </td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold; font-size: 15px; font-style: italic; letter-spacing: 0.5px; padding-bottom: 0;">BUSINESS</td>
+                <td style="font-weight: bold; font-size: 15px; font-style: italic; letter-spacing: 0.5px; padding-bottom: 0;">:</td>
+                <td style="font-weight: bold; font-size: 15px; font-style: italic; letter-spacing: 0.5px; padding-bottom: 0;">{{business}}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold; font-size: 15px; font-style: italic; letter-spacing: 0.5px; padding-bottom: 0;">SUB BUSINESS</td>
+                <td style="font-weight: bold; font-size: 15px; font-style: italic; letter-spacing: 0.5px; padding-bottom: 0;">:</td>
+                <td style="font-weight: bold; font-size: 15px; font-style: italic; letter-spacing: 0.5px; padding-bottom: 0;">{{sub_business}}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold; font-size: 15px; font-style: italic; letter-spacing: 0.5px; padding-bottom: 0;">RE - INSURER</td>
+                <td style="font-weight: bold; font-size: 15px; font-style: italic; letter-spacing: 0.5px; padding-bottom: 0;">:</td>
+                <td style="font-weight: bold; font-size: 15px; font-style: italic; letter-spacing: 0.5px; padding-bottom: 0;">{{re_insurer}}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold; font-size: 15px; font-style: italic; letter-spacing: 0.5px; padding-bottom: 0;">NO. SLIP</td>
+                <td style="font-weight: bold; font-size: 15px; font-style: italic; letter-spacing: 0.5px; padding-bottom: 0;">:</td>
+                <td style="font-weight: bold; font-size: 15px; font-style: italic; letter-spacing: 0.5px; padding-bottom: 0;">{{no_slip}}</td>
+            </tr>
+        </table>
+
+        <table class="table" style="width: 100%; table-layout: fixed;">
+            <colgroup>
+                <col style="width: 25%;">
+                <col style="width: 3%;">
+                <col style="width: 72%;">
+            </colgroup>
+            <tr>
+                <td style="padding-left: 20px; vertical-align: top;">POLICY NO.</td>
+                <td style="vertical-align: top;">:</td>
+                <td style="vertical-align: top;">{{policy_no}}</td>
+            </tr>
+            <tr>
+                <td style="padding-left: 20px; vertical-align: top;">INSURED</td>
+                <td style="vertical-align: top;">:</td>
+                <td style="vertical-align: top;">{{insured_name}}</td>
+            </tr>
+            <tr>
+                <td style="padding-left: 20px; vertical-align: top;">PERIOD OF POLIS</td>
+                <td style="vertical-align: top;">:</td>
+                <td style="vertical-align: top;">{{period_of_polis}}</td>
+            </tr>
+            <tr>
+                <td style="padding-left: 20px; vertical-align: top;">PERIOD OF REINSURANCE</td>
+                <td style="vertical-align: top;">:</td>
+                <td style="vertical-align: top;">{{period_of_reinsurance}}</td>
+            </tr>
+            <tr>
+                <td style="padding-left: 20px; vertical-align: top;">RATE</td>
+                <td style="vertical-align: top;">:</td>
+                <td style="vertical-align: top;">{{rate_percentage}} &nbsp; %</td>
+            </tr>
+            <tr>
+                <td style="padding-left: 20px; vertical-align: top;">YOUR SHARE</td>
+                <td style="vertical-align: top;">:</td>
+                <td style="vertical-align: top;">
+                    <table style="width: 200px; border-collapse: collapse;">
+                        <tr>
+                            <td style="padding: 0; width: 45px;">{{currency_share}}</td>
+                            <td style="padding: 0; text-align: right;">{{your_share_amount}}</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding-left: 20px; vertical-align: top;">SUM INSURED</td>
+                <td style="vertical-align: top;">:</td>
+                <td style="vertical-align: top;">
+                    <table style="width: 200px; border-collapse: collapse;">
+                        <tr>
+                            <td style="padding: 0; width: 45px;">{{currency_sum}}</td>
+                            <td style="padding: 0; text-align: right;">{{sum_insured_amount}}</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding-left: 20px; vertical-align: top;">R/I COMM.</td>
+                <td style="vertical-align: top;">:</td>
+                <td style="vertical-align: top;">{{ri_comm_percentage}} %</td>
+            </tr>
+            <tr>
+                <td style="padding-left: 20px; vertical-align: top;">CONDITION</td>
+                <td style="vertical-align: top;">:</td>
+                <td style="text-align: justify; line-height: 1.4; vertical-align: top;">{{condition_text}}</td>
+            </tr>
+
+            <tr style="height: 15px;"><td colspan="3"></td></tr>
+
+            <tr>
+                <td style="padding-left: 20px; vertical-align: top;">REMARKS</td>
+                <td style="vertical-align: top;">:</td>
+                <td style="text-align: justify; line-height: 1.4; vertical-align: top;">{{remarks_text}}</td>
+            </tr>
+
+            <tr style="height: 15px;"><td colspan="3"></td></tr>
+
+            <tr>
+                <td style="padding-left: 20px; vertical-align: top;">LOCATION OF RISKS</td>
+                <td style="vertical-align: top;">:</td>
+                <td style="text-align: justify; line-height: 1.4; vertical-align: top;">{{location_of_risks}}</td>
+            </tr>
+        </table>
+
+        <table class="table" style="margin-top: 35px; width: 100%; table-layout: fixed;">
+            <colgroup>
+                <col style="width: 22%;">
+                <col style="width: 8%;">
+                <col style="width: 15%;">
+                <col style="width: 4%;">
+                <col style="width: 18%;">
+                <col style="width: 4%;">
+                <col style="width: 29%;">
+            </colgroup>
+            <tr>
+                <td colspan="7" style="font-weight: bold; text-decoration: underline; padding-left: 10px; font-size: 13px; font-style: italic; letter-spacing: 0.5px;">CALCULATION</td>
+            </tr>
+            <tr>
+                <td style="padding-left: 20px; vertical-align: bottom;">GROSS PREMIUM</td>
+                <td style="vertical-align: bottom;">{{currency_calc}}</td>
+                <td style="text-align: right; vertical-align: bottom;">{{gross_premium_base}}</td>
+                <td style="text-align: center; vertical-align: bottom;">X</td>
+                <td style="vertical-align: bottom; padding-left: 10px;">{{calc_rate_percentage}} %</td>
+                <td style="text-align: center; vertical-align: bottom;">=</td>
+                <td style="text-align: right; padding-right: 15px;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td style="text-align: left; padding: 0;">{{currency_calc}}</td>
+                            <td style="text-align: right; padding: 0;">{{gross_premium_total}}</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding-left: 20px; padding-top: 8px;">R/I COMMISSION</td>
+                <td style="padding-top: 8px;" colspan="2">{{ri_commission_percentage}} %</td>
+                <td></td>
+                <td></td>
+                <td style="text-align: center; padding-top: 8px;">=</td>
+                <td style="text-align: right; padding-right: 15px; padding-top: 8px;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td style="text-align: left; padding: 0;">{{currency_calc}}</td>
+                            <td style="text-align: right; padding: 0;">{{ri_commission_total}}</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6"></td>
+                <td style="padding: 0; padding-right: 15px;">
+                    <div style="border-top: 1px dashed black; width: 100%; margin: 4px 0;"></div>
+                </td>
+            </tr>
+            <tr style="font-weight: bold;">
+                <td style="padding-left: 20px; padding-top: 4px;">DUE TO YOU</td>
+                <td colspan="2"></td>
+                <td></td>
+                <td></td>
+                <td style="text-align: center; padding-top: 4px;">=</td>
+                <td style="text-align: right; padding-right: 15px; padding-top: 4px;">
+                    <table style="width: 100%; border-collapse: collapse; font-weight: bold;">
+                        <tr>
+                            <td style="text-align: left; padding: 0;">{{currency_calc}}</td>
+                            <td style="text-align: right; padding: 0;">{{due_to_you_total}}</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+        <table class="table" style="margin-top: 50px; width: 100%;">
+            <tr>
+                <td style="width: 60%;"></td>
+                <td style="text-align: center; width: 40%; font-size: 12px;">{{place_date_signature}}</td>
+            </tr>
+            <tr style="height: 75px;">
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="text-align: center; line-height: 1.3;">
+                    <strong><u>{{signature_name}}</u></strong><br>
+                    <span style="font-size: 11px; text-decoration: underline;">{{signature_title}}</span>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+</div>
+
+</body>
+</html>

@@ -58,9 +58,9 @@
             columns.Bound(col => col.no_pol_ttg).Width(200).Title("Nomor Polis").ClientTemplate("#= formatNoPol(no_pol_ttg) #");
             columns.Bound(col => col.no_rsk).Width(200).Title("No Resiko");
             columns.Bound(col => col.nomor_nota).Width(200).Title("Nomor Nota");
-                    columns.Bound(col => col.nm_ttg).Width(150).Title("Nama Tertanggung");
-                    columns.Bound(col => col.nm_ttj).Width(150).Title("Nama Tertuju");
-                    columns.Bound(col => col.nilai_nt).Width(150).Title("Nilai Nota").Format("{0:n2}");
+            columns.Bound(col => col.nm_ttg).Width(150).Title("Nama Tertanggung");
+            columns.Bound(col => col.nm_ttj).Width(150).Title("Nama Tertuju");
+            columns.Bound(col => col.nilai_nt).Width(150).Title("Nilai Nota").Format("{0:n2}");
             columns.Bound(col => col.flag_posting).Width(150).Title("Flag Posting");
                 })
                 .Pageable(pager => pager

@@ -1,0 +1,75 @@
+﻿@using ABB.Application.CetakSlipKomisiFakultatifKeluars.Queries
+@using Kendo.Mvc.UI
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Cetak Slip Komisi Fakultatif Keluar";
+}
+<script src="~/Modules/CetakSlipKomisiFakultatifKeluar/JS/cetakSlipKomisiFakultatifKeluar.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+<div class="flat-box">
+    <div class="row">
+        <div class="flat-box-title col-md-8">
+            Cetak Slip Komisi Fakultatif Keluar
+        </div>
+
+        <div class="col-md-4">
+            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <div class="div-box">
+            @(Html.Kendo().Grid<CetakSlipKomisiFakultatifKeluarDto>()
+                .Name("CetakSlipKomisiFakultatifKeluarGrid")
+                .DataSource(dataSource => dataSource.Ajax()
+                    .Read(read => read.Action("GetCetakSlipKomisiFakultatifKeluars", "CetakSlipKomisiFakultatifKeluar").Data("searchFilterServerFiltering"))
+                    .Model(model => model.Id(p => p.Id))
+                )
+                .Columns(columns =>
+                {
+                    columns.Command(command =>
+                    {
+                        command.Custom("Print")
+                            .Text("Print")
+                            .IconClass("fa fa-print")
+                            .HtmlAttributes(new { title = "Print" })
+                            .Click("viewReport");
+                    }).Width(100).Title("Action").Locked(true);
+                    columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
+                    columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
+                    columns.Bound(col => col.nm_scob).Width(150).Title("Nama SCOB");
+                    columns.Bound(col => col.no_pol_ttg).Width(200).Title("Nomor Polis").ClientTemplate("#= formatNoPol(no_pol_ttg) #");
+                    columns.Bound(col => col.no_rsk).Width(200).Title("No Resiko");
+                    columns.Bound(col => col.nomor_nota).Width(200).Title("Nomor Nota");
+                    columns.Bound(col => col.nm_ttg).Width(150).Title("Nama Tertanggung");
+                    columns.Bound(col => col.nm_ttj).Width(150).Title("Nama Tertuju");
+                    columns.Bound(col => col.nilai_nt).Width(150).Title("Nilai Nota").Format("{0:n2}");
+                    columns.Bound(col => col.flag_posting).Width(150).Title("Flag Posting");
+                })
+                .Pageable(pager => pager
+                    .Refresh(true)
+                    .Info(true)
+                    .PageSizes(true)
+                )
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+                .Height(450)
+                .Resizable(a=>a.Columns(true))
+                .Events(ev => ev.DataBound("gridAutoFit"))
+                ) 
+        </div>
+    </div>
+</div>
+
