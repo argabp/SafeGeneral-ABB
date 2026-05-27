@@ -57,5 +57,20 @@ namespace ABB.Application.Common.Helpers
 
             return result;
         }
+
+        public static string ConvertSatuanType(byte? satuan)
+        {
+            return satuan == 1 ? "%" : "%o";
+        }
+
+        public static string ConvertSatuanType(string? satuan)
+        {
+            return satuan == "1" ? "%" : "%o";
+        }
+
+        public static string ConvertSatuanType(decimal? satuan)
+        {
+            return satuan == 1 ? "%" : "%o";
+        }
     }
 }

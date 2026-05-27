@@ -68,17 +68,17 @@
             <tr>
                 <td style="font-weight: bold; font-size: 15px; font-style: italic; letter-spacing: 0.5px; padding-bottom: 0;">BUSINESS</td>
                 <td style="font-weight: bold; font-size: 15px; font-style: italic; letter-spacing: 0.5px; padding-bottom: 0;">:</td>
-                <td style="font-weight: bold; font-size: 15px; font-style: italic; letter-spacing: 0.5px; padding-bottom: 0;">{{business}}</td>
+                <td style="font-weight: bold; font-size: 15px; font-style: italic; letter-spacing: 0.5px; padding-bottom: 0;">{{nm_cob}}</td>
             </tr>
             <tr>
                 <td style="font-weight: bold; font-size: 15px; font-style: italic; letter-spacing: 0.5px; padding-bottom: 0;">SUB BUSINESS</td>
                 <td style="font-weight: bold; font-size: 15px; font-style: italic; letter-spacing: 0.5px; padding-bottom: 0;">:</td>
-                <td style="font-weight: bold; font-size: 15px; font-style: italic; letter-spacing: 0.5px; padding-bottom: 0;">{{sub_business}}</td>
+                <td style="font-weight: bold; font-size: 15px; font-style: italic; letter-spacing: 0.5px; padding-bottom: 0;">{{nm_scob}}</td>
             </tr>
             <tr>
                 <td style="font-weight: bold; font-size: 15px; font-style: italic; letter-spacing: 0.5px; padding-bottom: 0;">RE - INSURER</td>
                 <td style="font-weight: bold; font-size: 15px; font-style: italic; letter-spacing: 0.5px; padding-bottom: 0;">:</td>
-                <td style="font-weight: bold; font-size: 15px; font-style: italic; letter-spacing: 0.5px; padding-bottom: 0;">{{re_insurer}}</td>
+                <td style="font-weight: bold; font-size: 15px; font-style: italic; letter-spacing: 0.5px; padding-bottom: 0;">{{nm_rk}}</td>
             </tr>
             <tr>
                 <td style="font-weight: bold; font-size: 15px; font-style: italic; letter-spacing: 0.5px; padding-bottom: 0;">NO. SLIP</td>
@@ -96,85 +96,65 @@
             <tr>
                 <td style="padding-left: 20px; vertical-align: top;">POLICY NO.</td>
                 <td style="vertical-align: top;">:</td>
-                <td style="vertical-align: top;">{{policy_no}}</td>
+                <td style="vertical-align: top;">{{no_pol_ttg}}</td>
             </tr>
             <tr>
                 <td style="padding-left: 20px; vertical-align: top;">INSURED</td>
                 <td style="vertical-align: top;">:</td>
-                <td style="vertical-align: top;">{{insured_name}}</td>
+                <td style="vertical-align: top;">{{nm_ttg}}</td>
             </tr>
             <tr>
                 <td style="padding-left: 20px; vertical-align: top;">PERIOD OF POLIS</td>
                 <td style="vertical-align: top;">:</td>
-                <td style="vertical-align: top;">{{period_of_polis}}</td>
+                <td style="vertical-align: top;">{{tgl_mul_reas}} UP TO {{tgl_akh_reas}}</td>
             </tr>
             <tr>
                 <td style="padding-left: 20px; vertical-align: top;">PERIOD OF REINSURANCE</td>
                 <td style="vertical-align: top;">:</td>
-                <td style="vertical-align: top;">{{period_of_reinsurance}}</td>
+                <td style="vertical-align: top;">{{tgl_mul_ptg}} UP TO {{tgl_akh_ptg}}</td>
             </tr>
             <tr>
                 <td style="padding-left: 20px; vertical-align: top;">RATE</td>
                 <td style="vertical-align: top;">:</td>
-                <td style="vertical-align: top;">{{rate_percentage}} &nbsp; %</td>
+                <td style="vertical-align: top;">{{pst_adj_reas}} {{stn_adj_reas}}</td>
             </tr>
             <tr>
                 <td style="padding-left: 20px; vertical-align: top;">YOUR SHARE</td>
                 <td style="vertical-align: top;">:</td>
-                <td style="vertical-align: top;">
-                    <table style="width: 200px; border-collapse: collapse;">
-                        <tr>
-                            <td style="padding: 0; width: 45px;">{{currency_share}}</td>
-                            <td style="padding: 0; text-align: right;">{{your_share_amount}}</td>
-                        </tr>
-                    </table>
-                </td>
+                <td style="vertical-align: top;">{{symbol}} {{nilai_ttl_ptg_reas}}</td>
             </tr>
             <tr>
                 <td style="padding-left: 20px; vertical-align: top;">SUM INSURED</td>
                 <td style="vertical-align: top;">:</td>
-                <td style="vertical-align: top;">
-                    <table style="width: 200px; border-collapse: collapse;">
-                        <tr>
-                            <td style="padding: 0; width: 45px;">{{currency_sum}}</td>
-                            <td style="padding: 0; text-align: right;">{{sum_insured_amount}}</td>
-                        </tr>
-                    </table>
-                </td>
+                <td style="vertical-align: top;">{{symbol}} {{nilai_ttl_ptg}}</td>
             </tr>
             <tr>
                 <td style="padding-left: 20px; vertical-align: top;">R/I COMM.</td>
                 <td style="vertical-align: top;">:</td>
-                <td style="vertical-align: top;">{{ri_comm_percentage}} %</td>
+                <td style="vertical-align: top;">{{pst_kms_reas}} %</td>
             </tr>
-            <tr>
+            <tr style="height: 50px">
                 <td style="padding-left: 20px; vertical-align: top;">CONDITION</td>
                 <td style="vertical-align: top;">:</td>
-                <td style="text-align: justify; line-height: 1.4; vertical-align: top;">{{condition_text}}</td>
+                <td style="text-align: justify; line-height: 1.4; vertical-align: top;">{{ket_tc}}</td>
             </tr>
-
-            <tr style="height: 15px;"><td colspan="3"></td></tr>
-
-            <tr>
+            <tr style="height: 50px">
                 <td style="padding-left: 20px; vertical-align: top;">REMARKS</td>
                 <td style="vertical-align: top;">:</td>
-                <td style="text-align: justify; line-height: 1.4; vertical-align: top;">{{remarks_text}}</td>
+                <td style="text-align: justify; line-height: 1.4; vertical-align: top;">{{ket_net}}</td>
             </tr>
 
-            <tr style="height: 15px;"><td colspan="3"></td></tr>
-
-            <tr>
+            <tr style="height: 50px">
                 <td style="padding-left: 20px; vertical-align: top;">LOCATION OF RISKS</td>
                 <td style="vertical-align: top;">:</td>
-                <td style="text-align: justify; line-height: 1.4; vertical-align: top;">{{location_of_risks}}</td>
+                <td style="text-align: justify; line-height: 1.4; vertical-align: top;">{{almt_rsk}}</td>
             </tr>
         </table>
 
-        <table class="table" style="margin-top: 35px; width: 100%; table-layout: fixed;">
+        <table class="table" style="width: 100%; table-layout: fixed;">
             <colgroup>
                 <col style="width: 22%;">
-                <col style="width: 8%;">
-                <col style="width: 15%;">
+                <col style="width: 23%;">
                 <col style="width: 4%;">
                 <col style="width: 18%;">
                 <col style="width: 4%;">
@@ -185,15 +165,14 @@
             </tr>
             <tr>
                 <td style="padding-left: 20px; vertical-align: bottom;">GROSS PREMIUM</td>
-                <td style="vertical-align: bottom;">{{currency_calc}}</td>
-                <td style="text-align: right; vertical-align: bottom;">{{gross_premium_base}}</td>
+                <td style="vertical-align: bottom;">{{symbol}} {{nilai_ttl_ptg_reas}}</td>
                 <td style="text-align: center; vertical-align: bottom;">X</td>
-                <td style="vertical-align: bottom; padding-left: 10px;">{{calc_rate_percentage}} %</td>
+                <td style="vertical-align: bottom; padding-left: 10px;">{{pst_adj_reas}} {{stn_adj_reas}}</td>
                 <td style="text-align: center; vertical-align: bottom;">=</td>
                 <td style="text-align: right; padding-right: 15px;">
                     <table style="width: 100%; border-collapse: collapse;">
                         <tr>
-                            <td style="text-align: left; padding: 0;">{{currency_calc}}</td>
+                            <td style="text-align: left; padding: 0;">{{symbol}}</td>
                             <td style="text-align: right; padding: 0;">{{gross_premium_total}}</td>
                         </tr>
                     </table>
@@ -201,36 +180,34 @@
             </tr>
             <tr>
                 <td style="padding-left: 20px; padding-top: 8px;">R/I COMMISSION</td>
-                <td style="padding-top: 8px;" colspan="2">{{ri_commission_percentage}} %</td>
-                <td></td>
+                <td style="padding-top: 8px;" colspan="2">{{pst_kms_reas}} %</td>
                 <td></td>
                 <td style="text-align: center; padding-top: 8px;">=</td>
                 <td style="text-align: right; padding-right: 15px; padding-top: 8px;">
                     <table style="width: 100%; border-collapse: collapse;">
                         <tr>
-                            <td style="text-align: left; padding: 0;">{{currency_calc}}</td>
-                            <td style="text-align: right; padding: 0;">{{ri_commission_total}}</td>
+                            <td style="text-align: left; padding: 0;">{{symbol}}</td>
+                            <td style="text-align: right; padding: 0;">{{nilai_kms_reas}}</td>
                         </tr>
                     </table>
                 </td>
             </tr>
             <tr>
-                <td colspan="6"></td>
+                <td colspan="5"></td>
                 <td style="padding: 0; padding-right: 15px;">
                     <div style="border-top: 1px dashed black; width: 100%; margin: 4px 0;"></div>
                 </td>
             </tr>
-            <tr style="font-weight: bold;">
-                <td style="padding-left: 20px; padding-top: 4px;">DUE TO YOU</td>
+            <tr>
+                <td style="padding-left: 20px; padding-top: 0px;">DUE TO YOU</td>
                 <td colspan="2"></td>
-                <td></td>
                 <td></td>
                 <td style="text-align: center; padding-top: 4px;">=</td>
                 <td style="text-align: right; padding-right: 15px; padding-top: 4px;">
                     <table style="width: 100%; border-collapse: collapse; font-weight: bold;">
                         <tr>
-                            <td style="text-align: left; padding: 0;">{{currency_calc}}</td>
-                            <td style="text-align: right; padding: 0;">{{due_to_you_total}}</td>
+                            <td style="text-align: left; padding: 0;">{{symbol}}</td>
+                            <td style="text-align: right; padding: 0;">{{nilai_nt}}</td>
                         </tr>
                     </table>
                 </td>
@@ -240,7 +217,7 @@
         <table class="table" style="margin-top: 50px; width: 100%;">
             <tr>
                 <td style="width: 60%;"></td>
-                <td style="text-align: center; width: 40%; font-size: 12px;">{{place_date_signature}}</td>
+                <td style="text-align: center; width: 40%; font-size: 12px;">{{tgl_nt}}</td>
             </tr>
             <tr style="height: 75px;">
                 <td></td>
@@ -249,8 +226,8 @@
             <tr>
                 <td></td>
                 <td style="text-align: center; line-height: 1.3;">
-                    <strong><u>{{signature_name}}</u></strong><br>
-                    <span style="font-size: 11px; text-decoration: underline;">{{signature_title}}</span>
+                    <strong><u>{{nm_bag}}</u></strong><br>
+                    <span style="font-size: 11px; text-decoration: underline;">{{nm_kpl_bag}}</span>
                 </td>
             </tr>
         </table>

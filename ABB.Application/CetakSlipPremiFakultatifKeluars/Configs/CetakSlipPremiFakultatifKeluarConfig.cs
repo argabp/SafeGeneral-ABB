@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using ABB.Application.Common.Grids.Models;
 
-namespace ABB.Application.CetakSlipKomisiFakultatifKeluars.Configs
+namespace ABB.Application.CetakSlipPremiFakultatifKeluars.Configs
 {
-    public static class CetakSlipKomisiFakultatifKeluarConfig
+    public static class CetakSlipPremiFakultatifKeluarConfig
     {
         public static GridConfig Create()
         {
@@ -46,7 +46,7 @@ namespace ABB.Application.CetakSlipKomisiFakultatifKeluars.Configs
                             ",
 
                 BaseWhere = @"
-                            (src.flag_cancel = 'N')
+                            (src.flag_cancel = 'N' AND src.no_pol_ttg = '5045552202600010')
                             ",
 
                 ColumnMap = new Dictionary<string, string>

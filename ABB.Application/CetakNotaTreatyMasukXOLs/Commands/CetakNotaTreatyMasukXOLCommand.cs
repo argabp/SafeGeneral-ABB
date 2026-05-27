@@ -46,7 +46,7 @@ namespace ABB.Application.CetakNotaTreatyMasukXOLs.Commands
                                 $"{request.jns_nt_kel},{request.no_nt_kel.Trim()},{request.flag_posting.Trim()}"
                 })).ToList();
             
-            string reportPath = Path.Combine( _environment.ContentRootPath, "Modules", "Reports", "Templates", "NotaTreatyMasuk XOL.html" );
+            string reportPath = Path.Combine( _environment.ContentRootPath, "Modules", "Reports", "Templates", "NotaTreatyMasukXOL.html" );
             
             string templateReportHtml = await File.ReadAllTextAsync( reportPath );
             

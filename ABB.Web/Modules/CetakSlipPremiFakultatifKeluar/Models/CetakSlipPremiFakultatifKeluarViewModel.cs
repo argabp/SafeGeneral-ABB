@@ -1,10 +1,11 @@
-using System;
+using ABB.Application.CetakSlipPremiFakultatifKeluars.Commands;
+using ABB.Application.Common.Interfaces;
+using AutoMapper;
 
-namespace ABB.Application.CetakNotaPremiFakultatifMasuks.Queries
+namespace ABB.Web.Modules.CetakSlipPremiFakultatifKeluar.Models
 {
-    public class CetakNotaPremiFakultatifMasukDto
+    public class CetakSlipPremiFakultatifKeluarViewModel : IMapFrom<CetakSlipPremiFakultatifKeluarCommand>
     {
-        public string Id { get; set; }
         public string kd_cb { get; set; }
 
         public string kd_cob { get; set; }
@@ -26,19 +27,10 @@ namespace ABB.Application.CetakNotaPremiFakultatifMasuks.Queries
         public string kd_grp_sor { get; set; }
 
         public string kd_rk_sor { get; set; }
-
-        public string nm_cb { get; set; }
-
-        public string nm_cob { get; set; }
-
-        public string nm_scob { get; set; }
-
-        public string nomor_akseptasi { get; set; }
-
-        public string no_pol_ttg_masked { get; set; }
-
-        public DateTime tgl_closing { get; set; }
-
-        public string nm_ttg { get; set; }
+        
+        public void Mapping(Profile profile)
+        {
+            profile.CreateMap<CetakSlipPremiFakultatifKeluarViewModel, CetakSlipPremiFakultatifKeluarCommand>();
+        }
     }
 }

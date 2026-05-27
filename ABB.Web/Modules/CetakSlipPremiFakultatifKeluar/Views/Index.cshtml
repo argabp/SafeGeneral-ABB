@@ -1,4 +1,4 @@
-﻿@using ABB.Application.CetakSlipKomisiFakultatifKeluars.Queries
+﻿@using ABB.Application.CetakSlipPremiFakultatifKeluars.Queries
 @using Kendo.Mvc.UI
 @using Microsoft.Extensions.Configuration
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
@@ -8,9 +8,9 @@
 
 @{
     Layout = "~/Modules/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Cetak Slip Komisi Fakultatif Keluar";
+    ViewData["Title"] = "Cetak Slip Premi Fakultatif Keluar";
 }
-<script src="~/Modules/CetakSlipKomisiFakultatifKeluar/JS/cetakSlipKomisiFakultatifKeluar.js"></script>
+<script src="~/Modules/CetakSlipPremiFakultatifKeluar/JS/cetakSlipPremiFakultatifKeluar.js"></script>
 
 <style>
     .div-box{
@@ -20,7 +20,7 @@
 <div class="flat-box">
     <div class="row">
         <div class="flat-box-title col-md-8">
-            Cetak Slip Komisi Fakultatif Keluar
+            Cetak Slip Premi Fakultatif Keluar
         </div>
 
         <div class="col-md-4">
@@ -30,10 +30,10 @@
 
     <div class="flat-box-content">
         <div class="div-box">
-            @(Html.Kendo().Grid<CetakSlipKomisiFakultatifKeluarDto>()
-                .Name("CetakSlipKomisiFakultatifKeluarGrid")
+            @(Html.Kendo().Grid<CetakSlipPremiFakultatifKeluarDto>()
+                .Name("CetakSlipPremiFakultatifKeluarGrid")
                 .DataSource(dataSource => dataSource.Ajax()
-                    .Read(read => read.Action("GetCetakSlipKomisiFakultatifKeluars", "CetakSlipKomisiFakultatifKeluar").Data("searchFilterServerFiltering"))
+                    .Read(read => read.Action("GetCetakSlipPremiFakultatifKeluars", "CetakSlipPremiFakultatifKeluar").Data("searchFilterServerFiltering"))
                     .Model(model => model.Id(p => p.Id))
                 )
                 .Columns(columns =>

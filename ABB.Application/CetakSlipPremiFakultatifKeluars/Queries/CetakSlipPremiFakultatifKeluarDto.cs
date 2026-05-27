@@ -1,8 +1,8 @@
 using System;
 
-namespace ABB.Application.CetakSlipKomisiFakultatifKeluars.Queries
+namespace ABB.Application.CetakSlipPremiFakultatifKeluars.Queries
 {
-    public class CetakSlipKomisiFakultatifKeluarDto
+    public class CetakSlipPremiFakultatifKeluarDto
     {
         public string Id { get; set; }
 
