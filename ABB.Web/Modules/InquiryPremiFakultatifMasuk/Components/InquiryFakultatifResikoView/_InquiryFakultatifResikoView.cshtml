@@ -1,0 +1,48 @@
+﻿@using Kendo.Mvc.TagHelpers
+@using Kendo.Mvc.UI
+@model ABB.Web.Modules.Inquiry.Models.InquiryResikoParameterViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifResikoView/resikoView.js"></script>
+
+<div class="window-body">
+    <div id="resikoTab">
+        <ul>
+            <li class="k-active">
+                Resiko
+            </li>
+            <li>
+                Coverage
+            </li>
+            <li>
+                Obyek
+            </li>
+            <li>
+                Others
+            </li>
+        </ul>
+        <div id="tabResiko">
+            <vc:inquiry-fakultatif-resiko model="@Model"></vc:inquiry-fakultatif-resiko>
+        </div>
+        <div id="tabCoverage">
+            <vc:inquiry-fakultatif-coverage model="@Model"></vc:inquiry-fakultatif-coverage>
+        </div>
+        <div id="tabObyek">
+            <vc:inquiry-fakultatif-obyek model="@Model"></vc:inquiry-fakultatif-obyek>
+        </div>
+        <div id="tabOther">
+            <vc:inquiry-fakultatif-other model="@Model"></vc:inquiry-fakultatif-other>
+        </div>
+    </div>
+    
+    <div class="window-footer">
+        <button type="button" id="btn-previous-akseptasiResikoView" class="btn btn-primary space-right">
+            <span class="fa fa-arrow-left"></span> Previous
+        </button>
+        <button type="button" id="btn-next-akseptasiResikoView" class="btn btn-primary space-right">
+            Next <span class="fa fa-arrow-right"></span>
+        </button>
+    </div>
+</div>

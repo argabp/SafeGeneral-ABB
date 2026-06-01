@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ABB.Application.Inquiries.Queries;
 using ABB.Application.Common;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Queries;
 using ABB.Application.Inquiries.Commands;
+using ABB.Application.Inquiries.Queries;
+using ABB.Application.InquiryPremiFakultatifMasuks.Commands;
 using ABB.Application.PolisInduks.Queries;
 using ABB.Web.Modules.Base;
 using ABB.Web.Modules.Inquiry.Models;
@@ -14,12 +15,14 @@ using ABB.Web.Modules.PolisInduk.Models;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
-using GetKodeWilayahQuery = ABB.Application.Common.Queries.GetKodeWilayahQuery;
 
-namespace ABB.Web.Modules.Inquiry
+namespace ABB.Web.Modules.InquiryPremiFakultatifMasuk
 {
-    public class InquiryController : AuthorizedBaseController
+    public class InquiryPremiFakultatifMasukController : AuthorizedBaseController
     {
+        private const string DatabaseName = "abb_kp00";
+        private const string KodeCabang = "PS10";
+        
         public async Task<ActionResult> Index()
         {
             ViewBag.Module = Request.Cookies["Module"];
@@ -31,13 +34,13 @@ namespace ABB.Web.Modules.Inquiry
 
         #region Inquiry
         
-        public async Task<ActionResult> GetInquiries([DataSourceRequest] DataSourceRequest request, string searchkeyword)
+        public async Task<ActionResult> GetInquiryPremiFakultatifMasuks([DataSourceRequest] DataSourceRequest request, string searchkeyword)
         {
-            var ds = await Mediator.Send(new GetInquiriesQuery()
+            var ds = await Mediator.Send(new GetInquiryPremiFakultatifMasuksQuery()
             {
                 SearchKeyword = searchkeyword,
-                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
-                KodeCabang = Request.Cookies["UserCabang"] ?? string.Empty
+                DatabaseName = DatabaseName,
+                KodeCabang = KodeCabang
             });
 
             
@@ -61,7 +64,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetCabangQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = DatabaseName
             });
 
             return Json(result);
@@ -71,7 +74,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var cobs = await Mediator.Send(new GetCobQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = DatabaseName
             });
              
             return Json(cobs);
@@ -81,7 +84,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetSCOBQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"],
+                DatabaseName = DatabaseName,
                 kd_cob = kd_cob
             });
 
@@ -135,7 +138,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetNomorPolisInduksQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = DatabaseName
             });
 
             return Json(result);
@@ -145,7 +148,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetKodeTertanggungQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = DatabaseName
             });
 
             return Json(result);
@@ -160,7 +163,7 @@ namespace ABB.Web.Modules.Inquiry
             {
                 result = await Mediator.Send(new GetRekanansByKodeGroupAndCabangQuery()
                 {
-                    DatabaseName = Request.Cookies["DatabaseValue"],
+                    DatabaseName = DatabaseName,
                     kd_cb = kd_cb,
                     kd_grp_rk = kd_grp_rk
                 });
@@ -169,7 +172,7 @@ namespace ABB.Web.Modules.Inquiry
             {
                 result = await Mediator.Send(new GetRekanansByKodeGroupAndCabangAndNoFaxQuery()
                 {
-                    DatabaseName = Request.Cookies["DatabaseValue"],
+                    DatabaseName = DatabaseName,
                     kd_cb = kd_cb,
                     kd_grp_rk = kd_grp_rk,
                     no_fax = no_fax
@@ -185,7 +188,7 @@ namespace ABB.Web.Modules.Inquiry
             var result = await Mediator.Send(new GetObligeeQueries()
             {
                 kd_grp_rk = kd_grp_rk,
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = DatabaseName
             });
 
             return Json(result);
@@ -249,7 +252,7 @@ namespace ABB.Web.Modules.Inquiry
         public async Task<JsonResult> GetTahunUnderwriting([FromBody] TahunUnderwritingViewModel model)
         {
             var command = Mapper.Map<GetTahunUnderwritingQuery>(model);
-            command.DatabaseName = Request.Cookies["DatabaseValue"];
+            command.DatabaseName = DatabaseName;
             var result = await Mediator.Send(command);
 
             return Json(result);
@@ -261,7 +264,7 @@ namespace ABB.Web.Modules.Inquiry
             var command = new GetPolisIndukQuery()
             {
                 no_pol_induk = no_pol_induk,
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = DatabaseName
             };
             
             var result = await Mediator.Send(command);
@@ -273,7 +276,7 @@ namespace ABB.Web.Modules.Inquiry
         public async Task<JsonResult> GetJangkaWaktuPertanggungan([FromBody] JangkaWaktuPertanggunganViewModel model)
         {
             var command = Mapper.Map<GetJangkaWaktuPertanggunganQuery>(model);
-            command.DatabaseName = Request.Cookies["DatabaseValue"];
+            command.DatabaseName = DatabaseName;
             var result = await Mediator.Send(command);
 
             return Json(result);
@@ -287,7 +290,7 @@ namespace ABB.Web.Modules.Inquiry
                 kd_cb = kd_cb,
                 kd_grp_rk = kd_grp_rk,
                 kd_rk = kd_rk,
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = DatabaseName
             };
             
             var result = await Mediator.Send(command);
@@ -308,7 +311,7 @@ namespace ABB.Web.Modules.Inquiry
             var ds = await Mediator.Send(new GetInquiryResikosQuery()
             {
                 SearchKeyword = searchkeyword,
-                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                DatabaseName = DatabaseName ?? string.Empty,
                 KodeCabang = kd_cb,
                 kd_cob = kd_cob,
                 kd_scob = kd_scob,
@@ -327,7 +330,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var inquiryResiko = await Mediator.Send(new GetInquiryResikoQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                DatabaseName = DatabaseName ?? string.Empty,
                 kd_cb = kd_cb,
                 kd_cob = kd_cob,
                 kd_scob = kd_scob,
@@ -354,7 +357,7 @@ namespace ABB.Web.Modules.Inquiry
             var ds = await Mediator.Send(new GetInquiryCoveragesQuery()
             {
                 SearchKeyword = searchkeyword,
-                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                DatabaseName = DatabaseName ?? string.Empty,
                 KodeCabang = kd_cb,
                 kd_cob = kd_cob,
                 kd_scob = kd_scob,
@@ -375,7 +378,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var inquiryResiko = await Mediator.Send(new GetInquiryCoverageQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                DatabaseName = DatabaseName ?? string.Empty,
                 kd_cb = kd_cb,
                 kd_cob = kd_cob,
                 kd_scob = kd_scob,
@@ -403,7 +406,7 @@ namespace ABB.Web.Modules.Inquiry
             var ds = await Mediator.Send(new GetInquiryObyeksQuery()
             {
                 SearchKeyword = searchkeyword,
-                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                DatabaseName = DatabaseName ?? string.Empty,
                 KodeCabang = kd_cb,
                 kd_cob = kd_cob,
                 kd_scob = kd_scob,
@@ -424,7 +427,7 @@ namespace ABB.Web.Modules.Inquiry
             var ds = await Mediator.Send(new GetInquiryObyekCITsQuery()
             {
                 SearchKeyword = searchkeyword,
-                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                DatabaseName = DatabaseName ?? string.Empty,
                 KodeCabang = kd_cb,
                 kd_cob = kd_cob,
                 kd_scob = kd_scob,
@@ -445,7 +448,7 @@ namespace ABB.Web.Modules.Inquiry
             var ds = await Mediator.Send(new GetInquiryObyekCISsQuery()
             {
                 SearchKeyword = searchkeyword,
-                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                DatabaseName = DatabaseName ?? string.Empty,
                 KodeCabang = kd_cb,
                 kd_cob = kd_cob,
                 kd_scob = kd_scob,
@@ -466,7 +469,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var inquiryResiko = await Mediator.Send(new GetInquiryObyekQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                DatabaseName = DatabaseName ?? string.Empty,
                 kd_cb = kd_cb,
                 kd_cob = kd_cob,
                 kd_scob = kd_scob,
@@ -490,7 +493,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var inquiryResiko = await Mediator.Send(new GetInquiryObyekCITQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                DatabaseName = DatabaseName ?? string.Empty,
                 kd_cb = kd_cb,
                 kd_cob = kd_cob,
                 kd_scob = kd_scob,
@@ -514,7 +517,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var inquiryResiko = await Mediator.Send(new GetInquiryObyekCISQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                DatabaseName = DatabaseName ?? string.Empty,
                 kd_cb = kd_cb,
                 kd_cob = kd_cob,
                 kd_scob = kd_scob,
@@ -538,7 +541,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var inquiryResiko = await Mediator.Send(new GetInquiryObyekQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                DatabaseName = DatabaseName ?? string.Empty,
                 kd_cb = kd_cb,
                 kd_cob = kd_cob,
                 kd_scob = kd_scob,
@@ -576,7 +579,7 @@ namespace ABB.Web.Modules.Inquiry
                     };
                     
                     var bondingCommand = Mapper.Map<GetInquiryOtherBondingQuery>(model);
-                    bondingCommand.DatabaseName = Request.Cookies["DatabaseValue"];
+                    bondingCommand.DatabaseName = DatabaseName;
                     var bondingResult = await Mediator.Send(bondingCommand);
 
                     if (bondingResult == null)
@@ -590,7 +593,7 @@ namespace ABB.Web.Modules.Inquiry
                         inquiryBondingViewModel.kd_rk_surety = "000214";
                         inquiryBondingViewModel.kd_grp_prc = "P";
                     
-                        return PartialView("~/Modules/Inquiry/Components/InquiryOther/_InquiryOtherBonding.cshtml", inquiryBondingViewModel);
+                        return PartialView("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifOther/_InquiryFakultatifOtherBonding.cshtml", inquiryBondingViewModel);
                     }
                 
                     Mapper.Map(bondingResult, inquiryBondingViewModel);
@@ -598,9 +601,9 @@ namespace ABB.Web.Modules.Inquiry
                     inquiryBondingViewModel.kd_cob = inquiryBondingViewModel.kd_cob.Trim();
                     inquiryBondingViewModel.kd_scob = inquiryBondingViewModel.kd_scob.Trim();
 
-                    return PartialView("~/Modules/Inquiry/Components/InquiryOther/_InquiryOtherBonding.cshtml", inquiryBondingViewModel);
+                    return PartialView("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifOther/_InquiryFakultatifOtherBonding.cshtml", inquiryBondingViewModel);
                 case "C":
-                    return PartialView("~/Modules/Inquiry/Components/InquiryOther/_InquiryOtherCargo.cshtml" , model);
+                    return PartialView("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifOther/_InquiryFakultatifOtherCargo.cshtml" , model);
                 case "M":var inquiryMotorViewModel = new InquiryResikoOtherMotorViewModel()
                     {
                         kd_cb = model.kd_cb.Trim(),
@@ -612,7 +615,7 @@ namespace ABB.Web.Modules.Inquiry
                     };
                     
                     var motorCommand = Mapper.Map<GetInquiryOtherMotorQuery>(model);
-                    motorCommand.DatabaseName = Request.Cookies["DatabaseValue"];
+                    motorCommand.DatabaseName = DatabaseName;
                     var motorResult = await Mediator.Send(motorCommand);
 
                     if (motorResult == null)
@@ -659,7 +662,7 @@ namespace ABB.Web.Modules.Inquiry
                         inquiryMotorViewModel.stn_rate_pad = 1;
                         inquiryMotorViewModel.kd_endt = "I";
 
-                        return View("~/Modules/Inquiry/Components/InquiryOther/_InquiryOtherMotor.cshtml", inquiryMotorViewModel);
+                        return View("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifOther/_InquiryFakultatifOtherMotor.cshtml", inquiryMotorViewModel);
                     }
                 
                     Mapper.Map(motorResult, inquiryMotorViewModel);
@@ -672,7 +675,7 @@ namespace ABB.Web.Modules.Inquiry
                     inquiryMotorViewModel.warna_kend = inquiryMotorViewModel.warna_kend?.Trim();
                     inquiryMotorViewModel.kd_wilayah = inquiryMotorViewModel.kd_wilayah?.Trim();
                     
-                    return View("~/Modules/Inquiry/Components/InquiryOther/_InquiryOtherMotor.cshtml", inquiryMotorViewModel);
+                    return View("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifOther/_InquiryFakultatifOtherMotor.cshtml", inquiryMotorViewModel);
                 case "F":
                     var inquiryFireViewModel = new InquiryResikoOtherFireViewModel()
                     {
@@ -685,7 +688,7 @@ namespace ABB.Web.Modules.Inquiry
                     };
                     
                     var fireCommand = Mapper.Map<GetInquiryOtherFireQuery>(model);
-                    fireCommand.DatabaseName = Request.Cookies["DatabaseValue"];
+                    fireCommand.DatabaseName = DatabaseName;
                     var fireResult = await Mediator.Send(fireCommand);
 
                     if (fireResult == null)
@@ -693,7 +696,7 @@ namespace ABB.Web.Modules.Inquiry
                         inquiryFireViewModel.kd_penerangan = "1";
                         inquiryFireViewModel.kategori_gd = "E";
                     
-                        return PartialView("~/Modules/Inquiry/Components/InquiryOther/_InquiryOtherFire.cshtml", inquiryFireViewModel);
+                        return PartialView("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifOther/_InquiryFakultatifOtherFire.cshtml", inquiryFireViewModel);
                     }
                 
                     Mapper.Map(fireResult, inquiryFireViewModel);
@@ -701,7 +704,7 @@ namespace ABB.Web.Modules.Inquiry
                     inquiryFireViewModel.kd_cob = inquiryFireViewModel.kd_cob.Trim();
                     inquiryFireViewModel.kd_scob = inquiryFireViewModel.kd_scob.Trim();
 
-                    return PartialView("~/Modules/Inquiry/Components/InquiryOther/_InquiryOtherFire.cshtml", inquiryFireViewModel);
+                    return PartialView("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifOther/_InquiryFakultatifOtherFire.cshtml", inquiryFireViewModel);
                 case "H":
                     var inquiryHullViewModel = new InquiryResikoOtherHullViewModel()
                     {
@@ -714,12 +717,12 @@ namespace ABB.Web.Modules.Inquiry
                     };
                     
                     var hullCommand = Mapper.Map<GetInquiryOtherHullQuery>(model);
-                    hullCommand.DatabaseName = Request.Cookies["DatabaseValue"];
+                    hullCommand.DatabaseName = DatabaseName;
                     var hullResult = await Mediator.Send(hullCommand);
 
                     if (hullResult == null)
                     {
-                        return PartialView("~/Modules/Inquiry/Components/InquiryOther/_InquiryOtherHull.cshtml", inquiryHullViewModel);
+                        return PartialView("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifOther/_InquiryFakultatifOtherHull.cshtml", inquiryHullViewModel);
                     }
                 
                     Mapper.Map(hullResult, inquiryHullViewModel);
@@ -729,7 +732,7 @@ namespace ABB.Web.Modules.Inquiry
                     inquiryHullViewModel.merk_kapal = inquiryHullViewModel.merk_kapal?.Trim();
                     inquiryHullViewModel.kd_kapal = inquiryHullViewModel.kd_kapal.Trim();
 
-                    return PartialView("~/Modules/Inquiry/Components/InquiryOther/_InquiryOtherHull.cshtml", inquiryHullViewModel);
+                    return PartialView("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifOther/_InquiryFakultatifOtherHull.cshtml", inquiryHullViewModel);
                 case "P":
                     var inquiryPaViewModel = new InquiryResikoOtherPAViewModel()
                     {
@@ -742,7 +745,7 @@ namespace ABB.Web.Modules.Inquiry
                     };
                     
                     var paCommand = Mapper.Map<GetInquiryOtherPAQuery>(model);
-                    paCommand.DatabaseName = Request.Cookies["DatabaseValue"];
+                    paCommand.DatabaseName = DatabaseName;
                     var paResult = await Mediator.Send(paCommand);
 
                     if (paResult == null)
@@ -779,7 +782,7 @@ namespace ABB.Web.Modules.Inquiry
                         inquiryPaViewModel.nilai_prm_gb = 0;
                         inquiryPaViewModel.nilai_ptg_phk = 0;
                     
-                        return PartialView("~/Modules/Inquiry/Components/InquiryOther/_InquiryOtherPA.cshtml", inquiryPaViewModel);
+                        return PartialView("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifOther/_InquiryFakultatifOtherPA.cshtml", inquiryPaViewModel);
                     }
                 
                     Mapper.Map(paResult, inquiryPaViewModel);
@@ -787,7 +790,7 @@ namespace ABB.Web.Modules.Inquiry
                     inquiryPaViewModel.kd_cob = inquiryPaViewModel.kd_cob.Trim();
                     inquiryPaViewModel.kd_scob = inquiryPaViewModel.kd_scob.Trim();
 
-                    return PartialView("~/Modules/Inquiry/Components/InquiryOther/_InquiryOtherPA.cshtml", inquiryPaViewModel);
+                    return PartialView("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifOther/_InquiryFakultatifOtherPA.cshtml", inquiryPaViewModel);
                 case "V":
                     var inquiryHoleInOneViewModel = new InquiryResikoOtherHoleInOneViewModel()
                     {
@@ -800,12 +803,12 @@ namespace ABB.Web.Modules.Inquiry
                     };
                     
                     var holeInOneCommand = Mapper.Map<GetInquiryOtherHoleInOneQuery>(model);
-                    holeInOneCommand.DatabaseName = Request.Cookies["DatabaseValue"];
+                    holeInOneCommand.DatabaseName = DatabaseName;
                     var holeInOneResult = await Mediator.Send(holeInOneCommand);
 
                     if (holeInOneResult == null)
                     {
-                        return PartialView("~/Modules/Inquiry/Components/InquiryOther/_InquiryOtherHoleInOne.cshtml", inquiryHoleInOneViewModel);
+                        return PartialView("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifOther/_InquiryFakultatifOtherHoleInOne.cshtml", inquiryHoleInOneViewModel);
                     }
                 
                     Mapper.Map(holeInOneResult, inquiryHoleInOneViewModel);
@@ -813,7 +816,7 @@ namespace ABB.Web.Modules.Inquiry
                     inquiryHoleInOneViewModel.kd_cob = inquiryHoleInOneViewModel.kd_cob.Trim();
                     inquiryHoleInOneViewModel.kd_scob = inquiryHoleInOneViewModel.kd_scob.Trim();
 
-                    return PartialView("~/Modules/Inquiry/Components/InquiryOther/_InquiryOtherHoleInOne.cshtml", inquiryHoleInOneViewModel);
+                    return PartialView("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifOther/_InquiryFakultatifOtherHoleInOne.cshtml", inquiryHoleInOneViewModel);
                 default:
                     return NotFound();
             }
@@ -828,7 +831,7 @@ namespace ABB.Web.Modules.Inquiry
             var ds = await Mediator.Send(new GetInquiryOtherMotorDetailsQuery()
             {
                 SearchKeyword = searchkeyword,
-                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                DatabaseName = DatabaseName ?? string.Empty,
                 kd_cb = kd_cb,
                 kd_cob = kd_cob,
                 kd_scob = kd_scob,
@@ -849,7 +852,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var inquiryResikoOtherMotor = await Mediator.Send(new GetInquiryOtherMotorDetailQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                DatabaseName = DatabaseName ?? string.Empty,
                 kd_cb = kd_cb,
                 kd_cob = kd_cob,
                 kd_scob = kd_scob,
@@ -870,7 +873,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetKodeOkupasiDetailQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                DatabaseName = DatabaseName ?? string.Empty,
                 kd_zona = kd_zona,
                 kd_kls_konstr = kd_kls_konstr,
                 kd_okup = kd_okup,
@@ -891,7 +894,7 @@ namespace ABB.Web.Modules.Inquiry
             var ds = await Mediator.Send(new GetInquiryOtherCargoDetailsQuery()
             {
                 SearchKeyword = searchkeyword,
-                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                DatabaseName = DatabaseName ?? string.Empty,
                 kd_cb = kd_cb,
                 kd_cob = kd_cob,
                 kd_scob = kd_scob,
@@ -912,7 +915,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var inquiryResikoOtherCargo = await Mediator.Send(new GetInquiryOtherCargoDetailQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                DatabaseName = DatabaseName ?? string.Empty,
                 kd_cb = kd_cb,
                 kd_cob = kd_cob,
                 kd_scob = kd_scob,
@@ -951,7 +954,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetLokasisQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = DatabaseName
             });
 
             return Json(result);
@@ -961,7 +964,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetMataUangQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = DatabaseName
             });
 
             return Json(result);
@@ -992,7 +995,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetKodeTOLQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"],
+                DatabaseName = DatabaseName,
                 kd_cob = kd_cob
             });
 
@@ -1003,7 +1006,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetKodeKemendagriQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = DatabaseName
             });
 
             return Json(result);
@@ -1013,7 +1016,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetKodeCoverageQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = DatabaseName
             });
 
             return Json(result);
@@ -1034,7 +1037,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetKodeGroupObyekQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = DatabaseName
             });
 
             return Json(result);
@@ -1044,7 +1047,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetKodeSurety()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"],
+                DatabaseName = DatabaseName,
                 kd_cb = kd_cb,
                 kd_grp_surety = kd_grp_surety
             });
@@ -1056,7 +1059,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetDetailGrupResikoQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"],
+                DatabaseName = DatabaseName,
                 kd_grp_rsk = grp_kontr
             });
 
@@ -1089,7 +1092,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetTTDSuretyQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"],
+                DatabaseName = DatabaseName,
                 kd_cb = kd_cb
             });
 
@@ -1100,7 +1103,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetKodeZonaQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = DatabaseName
             });
 
             return Json(result);
@@ -1110,7 +1113,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetKodeWilayahQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = DatabaseName
             });
 
             return Json(result);
@@ -1123,7 +1126,7 @@ namespace ABB.Web.Modules.Inquiry
             
             var result = await Mediator.Send(new GetKodeKabupatenQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"],
+                DatabaseName = DatabaseName,
                 kd_prop = kd_prop
             });
 
@@ -1137,7 +1140,7 @@ namespace ABB.Web.Modules.Inquiry
             
             var result = await Mediator.Send(new GetKodeKecamatanQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"],
+                DatabaseName = DatabaseName,
                 kd_prop = kd_prop,
                 kd_kab = kd_kab
             });
@@ -1152,7 +1155,7 @@ namespace ABB.Web.Modules.Inquiry
             
             var result = await Mediator.Send(new GetKodeKelurahanQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"],
+                DatabaseName = DatabaseName,
                 kd_prop = kd_prop,
                 kd_kab = kd_kab,
                 kd_kec = kd_kec
@@ -1176,7 +1179,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetKodeKelasKonstruksiQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = DatabaseName
             });
 
             return Json(result);
@@ -1186,7 +1189,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetKodeKodeOkupasiQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = DatabaseName
             });
 
             return Json(result);
@@ -1209,7 +1212,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetDetailGrupResikoQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"],
+                DatabaseName = DatabaseName,
                 kd_grp_rsk = "009"
             });
 
@@ -1220,7 +1223,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetDetailGrupResikoQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"],
+                DatabaseName = DatabaseName,
                 kd_grp_rsk = "001"
             });
 
@@ -1231,7 +1234,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetGrupResikoQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"],
+                DatabaseName = DatabaseName,
                 kd_jns_grp = "M"
             });
 
@@ -1242,7 +1245,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetDetailGrupResikoQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"],
+                DatabaseName = DatabaseName,
                 kd_grp_rsk = kd_grp_rsk
             });
 
@@ -1253,7 +1256,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetJenisPertanggunganQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = DatabaseName
             });
 
             return Json(result);
@@ -1263,7 +1266,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetKodeUntukQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = DatabaseName
             });
 
             return Json(result);
@@ -1273,7 +1276,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetKodeGunaQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = DatabaseName
             });
 
             return Json(result);
@@ -1283,7 +1286,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetGrupResikoQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"],
+                DatabaseName = DatabaseName,
                 kd_jns_grp = ""
             });
 
@@ -1307,7 +1310,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetKodeWilayahQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = DatabaseName
             });
 
             return Json(result);
@@ -1317,7 +1320,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetKodeAlatAngkutQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = DatabaseName
             });
 
             return Json(result);
@@ -1327,7 +1330,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetDetailGrupResikoQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"],
+                DatabaseName = DatabaseName,
                 kd_grp_rsk = "003"
             });
 
@@ -1361,7 +1364,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetKodeKapalQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"],
+                DatabaseName = DatabaseName,
             });
 
             return Json(result);
@@ -1371,7 +1374,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetDetailGrupResikoQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"],
+                DatabaseName = DatabaseName,
                 kd_grp_rsk = grp_obl
             });
 
@@ -1382,7 +1385,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetDetailGrupResikoQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"],
+                DatabaseName = DatabaseName,
                 kd_grp_rsk = kd_grp_rk
             });
 
@@ -1393,7 +1396,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetKodeJenisKreditQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"],
+                DatabaseName = DatabaseName,
                 kd_cb = kd_cb
             });
 
@@ -1415,7 +1418,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetJenisCoverQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"],
+                DatabaseName = DatabaseName,
                 kd_cb = kd_cb,
                 kd_jns_kr = kd_jns_kr
             });
@@ -1427,7 +1430,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var result = await Mediator.Send(new GetAsuransiJiwaQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"],
+                DatabaseName = DatabaseName,
                 kd_grp_asj = kd_grp_asj
             });
 
@@ -1531,7 +1534,7 @@ namespace ABB.Web.Modules.Inquiry
             var ds = await Mediator.Send(new GetInquiryPranotasQuery()
             {
                 SearchKeyword = searchkeyword,
-                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                DatabaseName = DatabaseName ?? string.Empty,
                 KodeCabang = kd_cb,
                 kd_cob = kd_cob,
                 kd_scob = kd_scob,
@@ -1549,7 +1552,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var inquiryPranota = await Mediator.Send(new GetInquiryPranotaQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                DatabaseName = DatabaseName ?? string.Empty,
                 kd_cb = kd_cb,
                 kd_cob = kd_cob,
                 kd_scob = kd_scob,
@@ -1573,7 +1576,7 @@ namespace ABB.Web.Modules.Inquiry
             var ds = await Mediator.Send(new GetInquiryPranotaKoassQuery()
             {
                 SearchKeyword = searchkeyword,
-                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                DatabaseName = DatabaseName ?? string.Empty,
                 KodeCabang = kd_cb,
                 kd_cob = kd_cob,
                 kd_scob = kd_scob,
@@ -1593,7 +1596,7 @@ namespace ABB.Web.Modules.Inquiry
         {
             var inquiryResiko = await Mediator.Send(new GetInquiryPranotaKoasQuery()
             {
-                DatabaseName = Request.Cookies["DatabaseValue"] ?? string.Empty,
+                DatabaseName = DatabaseName ?? string.Empty,
                 kd_cb = kd_cb,
                 kd_cob = kd_cob,
                 kd_scob = kd_scob,
@@ -1621,7 +1624,7 @@ namespace ABB.Web.Modules.Inquiry
             {
                 kd_cob = kd_cob,
                 kd_scob = kd_scob,
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = DatabaseName
             });
 
             if (string.IsNullOrWhiteSpace(result.Item1))
@@ -1630,7 +1633,7 @@ namespace ABB.Web.Modules.Inquiry
             }
             else
             {
-                return PartialView("~/Modules/Inquiry/Components/InquiryCoverage/_InquiryCoverage.cshtml", new InquiryResikoCoverageViewModel());
+                return PartialView("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifCoverage/_InquiryFakultatifCoverage.cshtml", new InquiryResikoCoverageViewModel());
             }
         }
         
@@ -1642,7 +1645,7 @@ namespace ABB.Web.Modules.Inquiry
                 kd_cob = kd_cob,
                 kd_scob = kd_scob,
                 pst_share = pst_share ?? 0,
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = DatabaseName
             });
 
             if (string.IsNullOrWhiteSpace(result.Item1))
@@ -1654,16 +1657,16 @@ namespace ABB.Web.Modules.Inquiry
             switch (Constant.AkseptasiObyekViewMapping[resultView])
             {
                 case "_ObyekFire":
-                    return View("~/Modules/Inquiry/Components/InquiryObyek/_InquiryObyekFire.cshtml",
+                    return View("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifObyek/_InquiryFakultatifObyekFire.cshtml",
                         new InquiryResikoObyekViewModel());
                 case "_ObyekFireFull":
-                    return View("~/Modules/Inquiry/Components/InquiryObyek/_InquiryObyekFireFull.cshtml",
+                    return View("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifObyek/_InquiryFakultatifObyekFireFull.cshtml",
                         new InquiryResikoObyekViewModel());
                 case "_ObyekCIS":
-                    return View("~/Modules/Inquiry/Components/InquiryObyek/_InquiryObyekCIS.cshtml",
+                    return View("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifObyek/_InquiryFakultatifObyekCIS.cshtml",
                         new InquiryResikoObyekCISViewModel());
                 case "_ObyekCIT":
-                    return View("~/Modules/Inquiry/Components/InquiryObyek/_InquiryObyekCIT.cshtml",
+                    return View("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifObyek/_InquiryFakultatifObyekCIT.cshtml",
                         new InquiryResikoObyekCITViewModel());
                 default:
                     return View("EmptyWithMessage");
@@ -1678,7 +1681,7 @@ namespace ABB.Web.Modules.Inquiry
                 kd_cob = model.kd_cob,
                 kd_scob = model.kd_scob,
                 pst_share = model.pst_share ?? 0,
-                DatabaseName = Request.Cookies["DatabaseValue"]
+                DatabaseName = DatabaseName
             });
             
 
@@ -1702,7 +1705,7 @@ namespace ABB.Web.Modules.Inquiry
                     };
                     
                     var bondingCommand = Mapper.Map<GetInquiryOtherBondingQuery>(model);
-                    bondingCommand.DatabaseName = Request.Cookies["DatabaseValue"];
+                    bondingCommand.DatabaseName = DatabaseName;
                     var bondingResult = await Mediator.Send(bondingCommand);
 
                     if (bondingResult == null)
@@ -1716,7 +1719,7 @@ namespace ABB.Web.Modules.Inquiry
                         inquiryBondingViewModel.kd_rk_surety = "000214";
                         inquiryBondingViewModel.kd_grp_prc = "P";
                     
-                        return View("~/Modules/Inquiry/Components/InquiryOther/_InquiryOtherBonding.cshtml", inquiryBondingViewModel);
+                        return View("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifOther/_InquiryFakultatifOtherBonding.cshtml", inquiryBondingViewModel);
                     }
                 
                     Mapper.Map(bondingResult, inquiryBondingViewModel);
@@ -1724,9 +1727,9 @@ namespace ABB.Web.Modules.Inquiry
                     inquiryBondingViewModel.kd_cob = inquiryBondingViewModel.kd_cob.Trim();
                     inquiryBondingViewModel.kd_scob = inquiryBondingViewModel.kd_scob.Trim();
 
-                    return View("~/Modules/Inquiry/Components/InquiryOther/_InquiryOtherBonding.cshtml", inquiryBondingViewModel);
+                    return View("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifOther/_InquiryFakultatifOtherBonding.cshtml", inquiryBondingViewModel);
                 case "_OtherCargo":
-                    return View("~/Modules/Inquiry/Components/InquiryOther/_InquiryOtherCargo.cshtml", model);
+                    return View("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifOther/_InquiryFakultatifOtherCargo.cshtml", model);
                 case "_OtherMotor":
                     var inquiryMotorViewModel = new InquiryResikoOtherMotorViewModel()
                     {
@@ -1739,7 +1742,7 @@ namespace ABB.Web.Modules.Inquiry
                     };
                     
                     var motorCommand = Mapper.Map<GetInquiryOtherMotorQuery>(model);
-                    motorCommand.DatabaseName = Request.Cookies["DatabaseValue"];
+                    motorCommand.DatabaseName = DatabaseName;
                     var motorResult = await Mediator.Send(motorCommand);
 
                     if (motorResult == null)
@@ -1786,7 +1789,7 @@ namespace ABB.Web.Modules.Inquiry
                         inquiryMotorViewModel.stn_rate_pad = 1;
                         inquiryMotorViewModel.kd_endt = "I";
 
-                        return View("~/Modules/Inquiry/Components/InquiryOther/_InquiryOtherMotor.cshtml", inquiryMotorViewModel);
+                        return View("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifOther/_InquiryFakultatifOtherMotor.cshtml", inquiryMotorViewModel);
                     }
                 
                     Mapper.Map(motorResult, inquiryMotorViewModel);
@@ -1799,7 +1802,7 @@ namespace ABB.Web.Modules.Inquiry
                     inquiryMotorViewModel.warna_kend = inquiryMotorViewModel.warna_kend?.Trim();
                     inquiryMotorViewModel.kd_wilayah = inquiryMotorViewModel.kd_wilayah?.Trim();
                     
-                    return View("~/Modules/Inquiry/Components/InquiryOther/_InquiryOtherMotor.cshtml", inquiryMotorViewModel);
+                    return View("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifOther/_InquiryFakultatifOtherMotor.cshtml", inquiryMotorViewModel);
                 case "_OtherFire":
                     var inquiryFireViewModel = new InquiryResikoOtherFireViewModel()
                     {
@@ -1812,7 +1815,7 @@ namespace ABB.Web.Modules.Inquiry
                     };
                     
                     var fireCommand = Mapper.Map<GetInquiryOtherFireQuery>(model);
-                    fireCommand.DatabaseName = Request.Cookies["DatabaseValue"];
+                    fireCommand.DatabaseName = DatabaseName;
                     var fireResult = await Mediator.Send(fireCommand);
 
                     if (fireResult == null)
@@ -1820,7 +1823,7 @@ namespace ABB.Web.Modules.Inquiry
                         inquiryFireViewModel.kd_penerangan = "1";
                         inquiryFireViewModel.kategori_gd = "E";
 
-                        return View("~/Modules/Inquiry/Components/InquiryOther/_InquiryOtherFire.cshtml", inquiryFireViewModel);
+                        return View("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifOther/_InquiryFakultatifOtherFire.cshtml", inquiryFireViewModel);
                     }
                 
                     Mapper.Map(fireResult, inquiryFireViewModel);
@@ -1830,7 +1833,7 @@ namespace ABB.Web.Modules.Inquiry
                     inquiryFireViewModel.kd_zona = inquiryFireViewModel.kd_zona?.Trim();
                     inquiryFireViewModel.kd_okup = inquiryFireViewModel.kd_okup.Trim();
                     
-                    return View("~/Modules/Inquiry/Components/InquiryOther/_InquiryOtherFire.cshtml", inquiryFireViewModel);
+                    return View("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifOther/_InquiryFakultatifOtherFire.cshtml", inquiryFireViewModel);
                 case "_OtherHull":
                     var inquiryHullViewModel = new InquiryResikoOtherHullViewModel()
                     {
@@ -1843,12 +1846,12 @@ namespace ABB.Web.Modules.Inquiry
                     };
                     
                     var hullCommand = Mapper.Map<GetInquiryOtherHullQuery>(model);
-                    hullCommand.DatabaseName = Request.Cookies["DatabaseValue"];
+                    hullCommand.DatabaseName = DatabaseName;
                     var hullResult = await Mediator.Send(hullCommand);
 
                     if (hullResult == null)
                     {
-                        return View("~/Modules/Inquiry/Components/InquiryOther/_InquiryOtherHull.cshtml", inquiryHullViewModel);
+                        return View("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifOther/_InquiryFakultatifOtherHull.cshtml", inquiryHullViewModel);
                     }
                 
                     Mapper.Map(hullResult, inquiryHullViewModel);
@@ -1858,7 +1861,7 @@ namespace ABB.Web.Modules.Inquiry
                     inquiryHullViewModel.merk_kapal = inquiryHullViewModel.merk_kapal?.Trim();
                     inquiryHullViewModel.kd_kapal = inquiryHullViewModel.kd_kapal.Trim();
                     
-                    return View("~/Modules/Inquiry/Components/InquiryOther/_InquiryOtherHull.cshtml", inquiryHullViewModel);
+                    return View("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifOther/_InquiryFakultatifOtherHull.cshtml", inquiryHullViewModel);
                 case "_OtherPA":
                     var inquiryPaViewModel = new InquiryResikoOtherPAViewModel()
                     {
@@ -1871,7 +1874,7 @@ namespace ABB.Web.Modules.Inquiry
                     };
                     
                     var paCommand = Mapper.Map<GetInquiryOtherPAQuery>(model);
-                    paCommand.DatabaseName = Request.Cookies["DatabaseValue"];
+                    paCommand.DatabaseName = DatabaseName;
                     var paResult = await Mediator.Send(paCommand);
 
                     if (paResult == null)
@@ -1914,7 +1917,7 @@ namespace ABB.Web.Modules.Inquiry
                         inquiryPaViewModel.tgl_mul_ptg = DateTime.Now;
                         inquiryPaViewModel.tgl_input = DateTime.Now;
 
-                        return View("~/Modules/Inquiry/Components/InquiryOther/_InquiryOtherPA.cshtml", inquiryPaViewModel);
+                        return View("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifOther/_InquiryFakultatifOtherPA.cshtml", inquiryPaViewModel);
                     }
                 
                     Mapper.Map(paResult, inquiryPaViewModel);
@@ -1922,7 +1925,7 @@ namespace ABB.Web.Modules.Inquiry
                     inquiryPaViewModel.kd_cob = inquiryPaViewModel.kd_cob.Trim();
                     inquiryPaViewModel.kd_scob = inquiryPaViewModel.kd_scob.Trim();
 
-                    return View("~/Modules/Inquiry/Components/InquiryOther/_InquiryOtherPA.cshtml", inquiryPaViewModel);
+                    return View("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifOther/_InquiryFakultatifOtherPA.cshtml", inquiryPaViewModel);
                 case "_OtherHoleInOne":
                     var inquiryHoleInOneViewModel = new InquiryResikoOtherHoleInOneViewModel()
                     {
@@ -1935,12 +1938,12 @@ namespace ABB.Web.Modules.Inquiry
                     };
                     
                     var holeInOneCommand = Mapper.Map<GetInquiryOtherHoleInOneQuery>(model);
-                    holeInOneCommand.DatabaseName = Request.Cookies["DatabaseValue"];
+                    holeInOneCommand.DatabaseName = DatabaseName;
                     var holeInOneResult = await Mediator.Send(holeInOneCommand);
 
                     if (holeInOneResult == null)
                     {
-                        return PartialView("~/Modules/Inquiry/Components/InquiryOther/_InquiryOtherHoleInOne.cshtml", inquiryHoleInOneViewModel);
+                        return PartialView("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifOther/_InquiryFakultatifOtherHoleInOne.cshtml", inquiryHoleInOneViewModel);
                     }
                 
                     Mapper.Map(holeInOneResult, inquiryHoleInOneViewModel);
@@ -1948,7 +1951,7 @@ namespace ABB.Web.Modules.Inquiry
                     inquiryHoleInOneViewModel.kd_cob = inquiryHoleInOneViewModel.kd_cob.Trim();
                     inquiryHoleInOneViewModel.kd_scob = inquiryHoleInOneViewModel.kd_scob.Trim();
 
-                    return PartialView("~/Modules/Inquiry/Components/InquiryOther/_InquiryOtherHoleInOne.cshtml", inquiryHoleInOneViewModel);
+                    return PartialView("~/Modules/InquiryPremiFakultatifMasuk/Components/InquiryFakultatifOther/_InquiryFakultatifOtherHoleInOne.cshtml", inquiryHoleInOneViewModel);
                 default:
                     return View("EmptyWithMessage");
             }

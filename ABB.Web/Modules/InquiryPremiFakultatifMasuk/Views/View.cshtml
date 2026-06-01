@@ -1,0 +1,32 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.Inquiry.Models.InquiryParameterViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/InquiryPremiFakultatifMasuk/JS/inquiryPremiFakultatifMasuk.form.js"></script>
+
+<div class="window-body">
+    <div id="akseptasiTab">
+        <ul>
+            <li class="k-active">
+                Inquiry
+            </li>
+            <li>
+                Resiko
+            </li>
+            <li>
+                Pranota
+            </li>
+        </ul>
+        <div id="tabAkseptasi">
+            <vc:inquiry-fakultatif model="Model"></vc:inquiry-fakultatif>
+        </div>
+        <div id="tabResikoView">
+            <vc:inquiry-fakultatif-resiko-view model="Model"></vc:inquiry-fakultatif-resiko-view>
+        </div>
+        <div id="tabPranota">
+            <vc:inquiry-fakultatif-pranota-view model="@Model"></vc:inquiry-fakultatif-pranota-view>
+        </div>
+    </div>
+</div>
