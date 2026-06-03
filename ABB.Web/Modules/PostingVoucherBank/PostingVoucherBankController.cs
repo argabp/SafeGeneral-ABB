@@ -51,47 +51,44 @@ namespace ABB.Web.Modules.PostingVoucherBank
             return Json(ds.ToDataSourceResult(request));
         }
         
-        public async Task<ActionResult> Posting([FromBody] List<VoucherBankDto> model)
+       public async Task<ActionResult> Posting([FromBody] List<VoucherBankDto> model)
         {
             try
             {
-
                 // 1. Validasi Periode (Dilakukan sebelum proses Posting)
-                    foreach (var item in model)
+                foreach (var item in model)
+                {
+                    if (item.TanggalVoucher.HasValue)
                     {
-                        if (item.TanggalVoucher.HasValue)
+                        // PERBAIKAN: Konversi ke waktu lokal agar 30 April 17:00 UTC kembali menjadi 01 Mei 00:00 Lokal
+                        DateTime localDate = item.TanggalVoucher.Value.ToLocalTime();
+
+                        short blnPrdInput = (short)localDate.Month;
+                        decimal thnPrdInput = (decimal)localDate.Year;
+
+                        bool isPeriodeClosed = _context.EntriPeriode
+                            .Any(p => p.BlnPrd == blnPrdInput && 
+                                    p.ThnPrd == thnPrdInput && 
+                                    p.FlagClosing == "N"); // "N" = Tutup
+
+                        if (isPeriodeClosed)
                         {
-                            short blnPrdInput = (short)item.TanggalVoucher.Value.Month;
-                            decimal thnPrdInput = (decimal)item.TanggalVoucher.Value.Year;
-
-                            bool isPeriodeClosed = _context.EntriPeriode
-                                .Any(p => p.BlnPrd == blnPrdInput && 
-                                        p.ThnPrd == thnPrdInput && 
-                                        p.FlagClosing == "N"); // "N" = Tutup
-
-                            if (isPeriodeClosed)
-                            {
-                                string namaBulan = blnPrdInput.ToString("00");
-                                // Langsung return error jika ditemukan ada yang di-close
-                                return Ok(new { 
-                                    Status = "ERROR", 
-                                    Message = $"Voucher {item.NoVoucher} (Bulan {namaBulan}/{thnPrdInput}) tidak bisa di-posting karena periode tersebut sudah di-close." 
-                                });
-                            }
+                            string namaBulan = blnPrdInput.ToString("00");
+                            // Langsung return error jika ditemukan ada yang di-close
+                            return Ok(new { 
+                                Status = "ERROR", 
+                                Message = $"Voucher {item.NoVoucher} (Bulan {namaBulan}/{thnPrdInput}) tidak bisa di-posting karena periode tersebut sudah di-close." 
+                            });
                         }
                     }
-                    
-                // --- PERBAIKI BAGIAN INI ---
+                }
+                
+                // --- PROSES POSTING COMMAND ---
                 var command = new PostingVoucherBankCommand()
                 {
-                    // 1. Hapus 'DatabaseName' karena sudah tidak ada di Command
-                    // DatabaseName = Request.Cookies["DatabaseValue"],
-                    
-                    // 2. Ubah List<VoucherBankDto> menjadi List<string> berisi NoVoucher
                     Data = model.Select(m => m.NoVoucher).ToList(),
                     UserId = CurrentUser.UserId 
                 };
-                // -------------------------
 
                 await Mediator.Send(command);
 
