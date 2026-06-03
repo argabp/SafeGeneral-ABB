@@ -38,37 +38,37 @@ namespace ABB.Application.PostingPenyelesaianPiutang.Commands
                 // 1. VALIDASI KODE AKUN KE TABEL MAPPING
                 // =========================================================
                 
-                // Ambil semua akun dari Header Penyelesaian Utang/Piutang
-                var akunHeader = await _context.HeaderPenyelesaianUtang 
-                    .Where(h => h.NomorBukti == noVoucher) 
-                    .Select(h => h.KodeAkun)
-                    .ToListAsync(cancellationToken);
+                // // Ambil semua akun dari Header Penyelesaian Utang/Piutang
+                // var akunHeader = await _context.HeaderPenyelesaianUtang 
+                //     .Where(h => h.NomorBukti == noVoucher) 
+                //     .Select(h => h.KodeAkun)
+                //     .ToListAsync(cancellationToken);
 
-                // Ambil semua akun dari Detail Penyelesaian Utang/Piutang
-                // (Sesuaikan nama Entity "PenyelesaianUtang" jika di project Anda berbeda)
-                var akunDetail = await _context.EntriPenyelesaianPiutang 
-                    .Where(d => d.NoBukti == noVoucher)
-                    .Select(d => d.KodeAkun)
-                    .ToListAsync(cancellationToken);
+                // // Ambil semua akun dari Detail Penyelesaian Utang/Piutang
+                // // (Sesuaikan nama Entity "PenyelesaianUtang" jika di project Anda berbeda)
+                // var akunDetail = await _context.EntriPenyelesaianPiutang 
+                //     .Where(d => d.NoBukti == noVoucher)
+                //     .Select(d => d.KodeAkun)
+                //     .ToListAsync(cancellationToken);
 
-                // Gabungkan akun header dan detail, hilangkan yang kosong, dan buat unik
-                var semuaAkunUnik = akunHeader.Concat(akunDetail)
-                                              .Where(a => !string.IsNullOrWhiteSpace(a))
-                                              .Distinct()
-                                              .ToList();
+                // // Gabungkan akun header dan detail, hilangkan yang kosong, dan buat unik
+                // var semuaAkunUnik = akunHeader.Concat(akunDetail)
+                //                               .Where(a => !string.IsNullOrWhiteSpace(a))
+                //                               .Distinct()
+                //                               .ToList();
 
-                // Cek satu per satu apakah akun tersebut ada di EntriMapping
-                foreach (var akun in semuaAkunUnik)
-                {
-                    var isMapped = await _context.EntriMapping
-                        .AnyAsync(m => m.gl_akun104 == akun, cancellationToken);
+                // // Cek satu per satu apakah akun tersebut ada di EntriMapping
+                // foreach (var akun in semuaAkunUnik)
+                // {
+                //     var isMapped = await _context.EntriMapping
+                //         .AnyAsync(m => m.gl_akun104 == akun, cancellationToken);
 
-                    if (!isMapped)
-                    {
-                        // Lempar error jika belum di-mapping
-                        throw new Exception($"Gagal Posting! Kode akun '{akun}' pada Nomor Bukti '{noVoucher}' belum di-mapping.");
-                    }
-                }
+                //     if (!isMapped)
+                //     {
+                //         // Lempar error jika belum di-mapping
+                //         throw new Exception($"Gagal Posting! Kode akun '{akun}' pada Nomor Bukti '{noVoucher}' belum di-mapping.");
+                //     }
+                // }
                 // =========================================================
 
                 // 2. JIKA VALIDASI AMAN, LANJUT EKSEKUSI SP

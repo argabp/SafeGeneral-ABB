@@ -38,35 +38,35 @@ namespace ABB.Application.PostingVoucherBank.Commands
                 // =========================================================
                 
                 // Ambil semua akun dari Header (Pastikan nama DbSet dan Property sesuai Entity Anda)
-                var akunHeader = await _context.VoucherBank 
-                    .Where(v => v.NoVoucher == noVoucher) 
-                    .Select(v => v.KodeAkun)
-                    .ToListAsync(cancellationToken);
+                // var akunHeader = await _context.VoucherBank 
+                //     .Where(v => v.NoVoucher == noVoucher) 
+                //     .Select(v => v.KodeAkun)
+                //     .ToListAsync(cancellationToken);
 
-                // Ambil semua akun dari Detail (Pastikan nama DbSet dan Property sesuai Entity Anda)
-                var akunDetail = await _context.EntriPembayaranBank 
-                    .Where(d => d.NoVoucher == noVoucher)
-                    .Select(d => d.KodeAkun)
-                    .ToListAsync(cancellationToken);
+                // // Ambil semua akun dari Detail (Pastikan nama DbSet dan Property sesuai Entity Anda)
+                // var akunDetail = await _context.EntriPembayaranBank 
+                //     .Where(d => d.NoVoucher == noVoucher)
+                //     .Select(d => d.KodeAkun)
+                //     .ToListAsync(cancellationToken);
 
-                // Gabungkan akun header dan detail, hilangkan yang kosong, dan buat unik (tidak duplikat)
-                var semuaAkunUnik = akunHeader.Concat(akunDetail)
-                                              .Where(a => !string.IsNullOrWhiteSpace(a))
-                                              .Distinct()
-                                              .ToList();
+                // // Gabungkan akun header dan detail, hilangkan yang kosong, dan buat unik (tidak duplikat)
+                // var semuaAkunUnik = akunHeader.Concat(akunDetail)
+                //                               .Where(a => !string.IsNullOrWhiteSpace(a))
+                //                               .Distinct()
+                //                               .ToList();
 
-                // Cek satu per satu apakah akun tersebut ada di EntriMapping
-                foreach (var akun in semuaAkunUnik)
-                {
-                    var isMapped = await _context.EntriMapping
-                        .AnyAsync(m => m.gl_akun104 == akun, cancellationToken);
+                // // Cek satu per satu apakah akun tersebut ada di EntriMapping
+                // foreach (var akun in semuaAkunUnik)
+                // {
+                //     var isMapped = await _context.EntriMapping
+                //         .AnyAsync(m => m.gl_akun104 == akun, cancellationToken);
 
-                    if (!isMapped)
-                    {
-                        // Lempar error! Controller akan menangkap ini dan mengirim ke JS Anda
-                        throw new Exception($"Gagal Posting! Kode akun '{akun}' pada Voucher '{noVoucher}' belum di-mapping.");
-                    }
-                }
+                //     if (!isMapped)
+                //     {
+                //         // Lempar error! Controller akan menangkap ini dan mengirim ke JS Anda
+                //         throw new Exception($"Gagal Posting! Kode akun '{akun}' pada Voucher '{noVoucher}' belum di-mapping.");
+                //     }
+                // }
                 // =========================================================
 
                 // 2. JIKA VALIDASI AMAN, LANJUT EKSEKUSI SP
