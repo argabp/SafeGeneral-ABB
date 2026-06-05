@@ -1,4 +1,4 @@
-﻿@using ABB.Application.Akseptasis.Queries
+﻿@using ABB.Application.ProsesPremiFakultatifMasuks.Commands
 @using Kendo.Mvc.UI
 @using Kendo.Mvc.TagHelpers
 @using Microsoft.Extensions.Configuration
@@ -36,7 +36,7 @@
 
     <div class="flat-box-content">
         <div class="div-box">
-            @(Html.Kendo().Grid<AkseptasiDto>()
+            @(Html.Kendo().Grid<ProsesPremiFakultatifMasukDto>()
                 .Name("AkseptasiGrid")
                 .DataSource(dataSource => dataSource.Ajax()
                     .Read(read => read.Action("GetAkseptasis", "ProsesPremiFakultatifMasuk").Data("searchFilter"))

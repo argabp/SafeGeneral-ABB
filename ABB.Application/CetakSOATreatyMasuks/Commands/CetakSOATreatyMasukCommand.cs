@@ -59,52 +59,68 @@ namespace ABB.Application.CetakSOATreatyMasuks.Commands
 
             StringBuilder stringBuilder = new StringBuilder();
 
-            stringBuilder.Append($@"<table class='table'>
-                            <tr>
-                                <td style='text-align: center; border: 1px solid'>NOMOR NOTA</td>
-                                <td style='text-align: center; border: 1px solid'>TIPE BISNIS / TREATY</td>
-                                <td style='width: 3%; text-align: center; border: 1px solid'>KURS</td>
-                                <td style='width: 15%; text-align: center; border: 1px solid'>GROSS PREMI</td>
-                                <td style='width: 15%;  text-align: center; border: 1px solid'>KOMISI R/I</td>
-                                <td style='width: 15%; text-align: center; border: 1px solid'>KLAIM</td>
-                                <td style='width: 15%; text-align: center; border: 1px solid'>BAGIAN PAS</td>
-                            </tr>");
-                
-            foreach (var data in datas)
+            var outerGroups = datas.Select(s => s.nm_rk_pas + s.ket_tr).Distinct();
+
+            foreach (var outerGroup in outerGroups)
             {
-                var nilai_prm = ReportHelper.ConvertToReportFormat(data.nilai_prm);
-                var nilai_kms = ReportHelper.ConvertToReportFormat(data.nilai_kms);
-                var nilai_kl = ReportHelper.ConvertToReportFormat(data.nilai_kl);
-                var nilai_share_bgu = ReportHelper.ConvertToReportFormat(data.nilai_share_bgu);
+                var firstData = datas.First(w => w.nm_rk_pas + w.ket_tr == outerGroup);
+                var no_ref = string.IsNullOrWhiteSpace(firstData.ket_tr) ? string.Empty : "No Ref: " + firstData.ket_tr;
+                stringBuilder.Append($@"
+                        <div style='page-break-before: always;'>
+                            <div class='container'>
+                                <div class='section'>
+                                    <p style='font-size: 14px; margin: auto; text-align: center;'><strong>REASURANSI TREATY MASUK</strong></p>
+                                    <p style='font-size: 14px; margin: auto; text-align: center;'><strong>CEDING COMPANY: {firstData.nm_rk_pas}</strong></p>
+                                    <p style='font-size: 14px; margin: auto; text-align: center;'><strong>TECHNICAL ACCOUNT STATEMENT TRIWULAN / TAHUN : {request.kuartal_tr} / {request.thn_tr}</strong></p>
+                                    
+                                    <p style='font-size: 14px; margin: auto; text-align: left; padding-top: 3em'><strong>{no_ref}</strong></p>
+                                    <table class='table'>
+                                        <tr>
+                                            <td style='text-align: center; border: 1px solid'>NOMOR NOTA</td>
+                                            <td style='text-align: center; border: 1px solid'>TIPE BISNIS / TREATY</td>
+                                            <td style='width: 3%; text-align: center; border: 1px solid'>KURS</td>
+                                            <td style='width: 15%; text-align: center; border: 1px solid'>GROSS PREMI</td>
+                                            <td style='width: 15%;  text-align: center; border: 1px solid'>KOMISI R/I</td>
+                                            <td style='width: 15%; text-align: center; border: 1px solid'>KLAIM</td>
+                                            <td style='width: 15%; text-align: center; border: 1px solid'>BAGIAN PAS</td>
+                                        </tr>
+                                    ");
+                    
+                foreach (var data in datas.Where(w => w.nm_rk_pas + w.ket_tr == outerGroup))
+                {
+                    var nilai_prm = ReportHelper.ConvertToReportFormat(data.nilai_prm);
+                    var nilai_kms = ReportHelper.ConvertToReportFormat(data.nilai_kms);
+                    var nilai_kl = ReportHelper.ConvertToReportFormat(data.nilai_kl);
+                    var nilai_share_bgu = ReportHelper.ConvertToReportFormat(data.nilai_share_bgu);
+                    var borderStyle = string.IsNullOrWhiteSpace(data.no_nota)
+                        ? "border: 1px solid"
+                        : "border-right: 1px solid; border-left: 1px solid;";
+                    
+                    stringBuilder.Append(@$"<tr>
+                                                <td style='text-align: left; vertical-align: top; {borderStyle}'>{data.no_nota}</td>
+                                                <td style='text-align: left; vertical-align: top; {borderStyle}'>{data.desk_tty}</td>
+                                                <td style='width: 3%; text-align: center; vertical-align: top; {borderStyle}'>{data.symbol}</td>
+                                                <td style='width: 10%; text-align: right; vertical-align: top; {borderStyle}'>{nilai_prm}</td>
+                                                <td style='width: 10%; text-align: right; vertical-align: top; {borderStyle}'>{nilai_kms}</td>
+                                                <td style='width: 10%; text-align: right; vertical-align: top; {borderStyle}'>{nilai_kl}</td>
+                                                <td style='width: 10%; text-align: right; vertical-align: top; {borderStyle}'>{nilai_share_bgu}</td>
+                                            </tr>");
+                }
                 
-                stringBuilder.Append(@$"<tr>
-                                            <td style='text-align: left; vertical-align: top; border-right: 1px solid; border-left: 1px solid;'>{data.no_nota}</td>
-                                            <td style='text-align: left; vertical-align: top; border-right: 1px solid; border-left: 1px solid;'>{data.desk_tty}</td>
-                                            <td style='width: 3%; text-align: center; vertical-align: top; border-right: 1px solid; border-left: 1px solid;'>{data.symbol}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border-right: 1px solid; border-left: 1px solid;'>{nilai_prm}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border-right: 1px solid; border-left: 1px solid;'>{nilai_kms}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border-right: 1px solid; border-left: 1px solid;'>{nilai_kl}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border-right: 1px solid; border-left: 1px solid;'>{nilai_share_bgu}</td>
-                                        </tr>");
+                stringBuilder.Append(@"</table>
+                                        <table class='table' style='margin-top: 3rem'>
+                                        <tr>
+                                            <td style='text-align: right'><strong>Departemen Reasuransi</strong></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>");
             }
             
-            stringBuilder.Append(@"<tr>
-                                            <td style='text-align: left; vertical-align: top; border-right: 1px solid; border-left: 1px solid; border-bottom: 1px solid;'></td>
-                                            <td style='text-align: left; vertical-align: top; border-right: 1px solid; border-left: 1px solid; border-bottom: 1px solid;'></td>
-                                            <td style='width: 3%; text-align: center; vertical-align: top; border-right: 1px solid; border-left: 1px solid; border-bottom: 1px solid;'></td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border-right: 1px solid; border-left: 1px solid; border-bottom: 1px solid;'></td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border-right: 1px solid; border-left: 1px solid; border-bottom: 1px solid;'></td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border-right: 1px solid; border-left: 1px solid; border-bottom: 1px solid;'></td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border-right: 1px solid; border-left: 1px solid; border-bottom: 1px solid;'></td>
-                                        </tr>");
-            
-            stringBuilder.Append("</table>");
-
-            var firstData = datas.FirstOrDefault();
             resultTemplate = templateProfileResult.Render( new
             {
-                details = stringBuilder.ToString(), request.thn_tr,
-                firstData?.nm_rk_pas, request.kuartal_tr
+                data = stringBuilder.ToString()
             } );
             
             return resultTemplate;

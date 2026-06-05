@@ -12,6 +12,8 @@ namespace ABB.Application.CancelPostingNotaPremiFakultatifKeluars.Queries
 
         public string no_pol { get; set; }
 
+        public string no_pol_ttg { get; set; }
+
         public string nilai_nt { get; set; }
         
         public string jns_sb_nt { get; set; }

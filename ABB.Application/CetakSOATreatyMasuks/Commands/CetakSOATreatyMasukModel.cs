@@ -17,5 +17,7 @@ namespace ABB.Application.CetakSOATreatyMasuks.Commands
         public decimal? nilai_kl { get; set; }
 
         public decimal? nilai_share_bgu { get; set; }
+
+        public string? ket_tr { get; set; }
     }
 }

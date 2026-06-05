@@ -20,7 +20,7 @@ namespace ABB.Application.PostingNotaTreatyMasuks.Queries
 
         public DateTime tgl_nt { get; set; }
 
-        public string nilai_nt { get; set; }
+        public decimal nilai_nt { get; set; }
 
         public string kd_cb { get; set; }
 

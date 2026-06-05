@@ -20,7 +20,7 @@
 <div class="flat-box">
     <div class="row">
         <div class="flat-box-title col-md-6">
-            Posting Nota Klaim Treaty Masuk
+            Posting Nota Premi XOL Keluar
         </div>
 
         <div class="col-md-4">
@@ -38,7 +38,7 @@
                 .Name("PostingNotaPremiXOLKeluarGrid")
                 .DataSource(dataSource => dataSource.Ajax()
                     .Read(read => read.Action("GetPostingNotaPremiXOLKeluars", "PostingNotaPremiXOLKeluar").Data("searchFilterPostingNotaPremiXOLKeluar"))
-                    .Model(model => model.Id(p => p.nomor_nota))
+                    .Model(model => model.Id(p => p.Id))
                 )
                 .Columns(columns =>
                 {
@@ -49,7 +49,7 @@
                     columns.Bound(col => col.nm_ttj).Width(150).Title("Nama Tertuju");
                     columns.Bound(col => col.ket_nt).Width(150).Title("Keterangan Nota");
                     columns.Bound(col => col.tgl_nt).Width(150).Title("Tanggal Nota").Format("{0: dd-MM-yyyy}");
-                    columns.Bound(col => col.nilai_nt).Width(150).Title("Nilai Nota").Format("{0:n2}");;
+                    columns.Bound(col => col.nilai_nt).Width(150).Title("Nilai Nota").Format("{0:n2}");
                 })
                 .Pageable(pager => pager
                     .Refresh(true)

@@ -109,9 +109,9 @@ namespace ABB.Application.CetakNotaPremiFakultatifMasuks.Commands
             var nilai_04 = ReportHelper.ConvertToReportFormat(data.nilai_04);
             var nilai_nt = ReportHelper.ConvertToReportFormat(data.nilai_nt);
             var nilai_ttl_ptg = ReportHelper.ConvertToReportFormat(data.nilai_ttl_ptg);
-            var nilai_share = (data.nilai_ttl_ptg ?? 0 * data.pst_pjk ?? 0) / 100;
+            var nilai_share = ReportHelper.ConvertToReportFormat(Math.Round(data.nilai_ttl_ptg * data.pst_pjk / 100 ?? 0));
 
-            var share = data.pst_pjk / 100;
+            var share = ReportHelper.ConvertToReportFormat(data.pst_pjk);
 
             var sectionTemplate = @"
 	                <td style='width: 5%'>{uraian}</td>

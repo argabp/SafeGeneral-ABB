@@ -37,6 +37,7 @@ function onChangeGridCancelPostingNotaPremiXOLKeluar(e) {
                 kd_cb: item.kd_cb,
                 jns_tr: item.jns_tr,
                 jns_nt_msk: item.jns_nt_msk,
+                jns_sb_nt: item.jns_sb_nt,
                 kd_thn: item.kd_thn,
                 kd_bln: item.kd_bln,
                 no_nt_msk: item.no_nt_msk,

@@ -27,6 +27,7 @@ namespace ABB.Web.Modules.CetakSOATreatyMasuk
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
+            ViewBag.KodeCabang = "PS10";
 
             return View();
         }

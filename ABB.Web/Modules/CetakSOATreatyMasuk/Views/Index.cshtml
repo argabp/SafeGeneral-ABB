@@ -28,8 +28,8 @@
             <div class="row col-sm-8">
                 <label class="col-sm-3">Cabang</label>
                 <div class="col-sm-3">
-                    <kendo-dropdownlist for="kd_cb" style="width: 100%" option-label="Pilih Cabang" on-change="onCabangChange"
-                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <kendo-dropdownlist for="kd_cb" style="width: 100%" option-label="Pilih Cabang" on-change="onCabangChange" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" value="@ViewBag.KodeCabang">
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
                                 <read url="@Url.Action("GetCabang", "CetakSOATreatyMasuk")"/>

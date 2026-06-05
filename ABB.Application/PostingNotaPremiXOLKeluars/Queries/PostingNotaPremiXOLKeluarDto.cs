@@ -4,6 +4,8 @@ namespace ABB.Application.PostingNotaPremiXOLKeluars.Queries
 {
     public class PostingNotaPremiXOLKeluarDto
     {
+        public string Id { get; set; }
+        
         public string nomor_nota { get; set; }
 
         public string nm_cob { get; set; }

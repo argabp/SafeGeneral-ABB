@@ -138,6 +138,7 @@ namespace ABB.Application.NotaTreatyMasuks.Commands
                     transaksiTreatyMasuk.nm_ttg = request.nm_ttg;
                     transaksiTreatyMasuk.wpc = request.wpc;
                     transaksiTreatyMasuk.kd_usr_updt = _currentUserService.UserId;
+                    transaksiTreatyMasuk.kd_usr_closing = _currentUserService.UserId;
                     transaksiTreatyMasuk.tgl_updt = DateTime.Now;
                 }
 

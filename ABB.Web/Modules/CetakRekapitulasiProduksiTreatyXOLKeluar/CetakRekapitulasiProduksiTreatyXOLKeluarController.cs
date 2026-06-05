@@ -61,9 +61,7 @@ namespace ABB.Web.Modules.CetakRekapitulasiProduksiTreatyXOLKeluar
         {
             var result = new List<DropdownOptionDto>()
             {
-                new DropdownOptionDto() { Text = "Per COB", Value = "1" },
-                new DropdownOptionDto() { Text = "Per Ceding", Value = "2" },
-                new DropdownOptionDto() { Text = "Per Broker", Value = "3" }
+                new DropdownOptionDto() { Text = "Per COB", Value = "1" }
             };
 
             return Json(result);

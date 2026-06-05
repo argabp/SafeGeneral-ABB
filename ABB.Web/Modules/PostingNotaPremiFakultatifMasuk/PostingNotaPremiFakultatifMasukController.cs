@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ABB.Application.PostingNotaPremiFakultatifMasuks.Queries;
 using ABB.Application.PostingPolicies.Commands;
 using ABB.Application.PostingPolicies.Queries;
 using ABB.Web.Modules.Base;
@@ -27,7 +28,7 @@ namespace ABB.Web.Modules.PostingNotaPremiFakultatifMasuk
         
         public async Task<ActionResult> GetPostingNotaPremiFakultatifMasuks([DataSourceRequest] DataSourceRequest request, string searchkeyword)
         {
-            var ds = await Mediator.Send(new GetPostingPolisQuery()
+            var ds = await Mediator.Send(new GetPostingNotaPremiFakultatifMasuksQuery()
             {
                 SearchKeyword = searchkeyword,
                 DatabaseName = DatabaseName,

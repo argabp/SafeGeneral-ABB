@@ -19,7 +19,7 @@
 </style>
 <div class="flat-box">
     <div class="row">
-        <div class="flat-box-title col-md-4">
+        <div class="flat-box-title col-md-6">
             Cancel Posting Nota Premi Fakultatif Keluar
         </div>
 
@@ -30,9 +30,6 @@
         <div class="col-md-2">
             <button class="flat-btn-primary" onclick="cancelPostingNotaPremiFakultatifKeluar()">Cancel Posting</button>
         </div>
-        @* <div class="col-md-2"> *@
-        @*     <button class="flat-btn-primary" onclick="accountingPostingNotaPremiFakultatifKeluar()">Posting Accounting</button> *@
-        @* </div> *@
     </div>
 
     <div class="flat-box-content">
@@ -46,8 +43,8 @@
                 .Columns(columns =>
                 {
                     columns.Select().Width(50);
-                    columns.Bound(col => col.no_pol).Width(150).Title("Nomor Polis");
-                    columns.Bound(col => col.nm_ttg).Width(150).Title("Nama Tertanggung");
+                    columns.Bound(col => col.no_pol_ttg).Width(200).Title("Nomor Polis").ClientTemplate("#= formatNoPol(no_pol_ttg) #");
+                    columns.Bound(col => col.nm_ttg).Width(200).Title("Nama Tertanggung");
                     columns.Bound(col => col.nomor_nota).Width(200).Title("Nomor Nota");
                     columns.Bound(col => col.nm_ttj).Width(150).Title("Nama Tertuju");
                     columns.Bound(col => col.tgl_nt).Width(150).Title("Tanggal Nota").Format("{0: dd-MM-yyyy}");

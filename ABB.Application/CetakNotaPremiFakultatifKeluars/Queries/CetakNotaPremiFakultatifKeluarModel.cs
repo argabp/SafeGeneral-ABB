@@ -61,5 +61,7 @@ namespace ABB.Application.CetakNotaPremiFakultatifKeluars.Queries
         public string kt_ttj { get; set; }
 
         public string tgl_nt_ind { get; set; }
+
+        public string st_nota { get; set; }
     }
 }

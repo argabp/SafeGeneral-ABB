@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using ABB.Application.CetakRekapitulasiProduksiTreatyMasuks.Commands;
 using ABB.Application.Common.Dtos;
-using ABB.Application.Common.Queries;
 using ABB.Application.Common.Services;
 using ABB.Web.Modules.Base;
 using ABB.Web.Modules.CetakRekapitulasiProduksiTreatyMasuk.Models;
@@ -63,8 +62,7 @@ namespace ABB.Web.Modules.CetakRekapitulasiProduksiTreatyMasuk
             var result = new List<DropdownOptionDto>()
             {
                 new DropdownOptionDto() { Text = "Per COB", Value = "1" },
-                new DropdownOptionDto() { Text = "Per Ceding", Value = "2" },
-                new DropdownOptionDto() { Text = "Per Broker", Value = "3" }
+                new DropdownOptionDto() { Text = "Per Ceding", Value = "2" }
             };
 
             return Json(result);

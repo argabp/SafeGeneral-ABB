@@ -9,7 +9,7 @@ namespace ABB.Web.Modules.Inquiry.Components.InquiryObyek
         public async Task<IViewComponentResult> InvokeAsync(InquiryResikoParameterViewModel model)
         {
             
-            return View("~/Modules/Inquiry/Views/Empty.cshtml");
+            return View("~/Modules/Shared/Empty.cshtml");
         }
     }
 }

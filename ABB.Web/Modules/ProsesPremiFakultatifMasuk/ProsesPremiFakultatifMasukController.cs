@@ -9,6 +9,7 @@ using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Exceptions;
 using ABB.Application.Common.Queries;
 using ABB.Application.PolisInduks.Queries;
+using ABB.Application.ProsesPremiFakultatifMasuks.Commands;
 using ABB.Web.Extensions;
 using ABB.Web.Modules.Akseptasi.Models;
 using ABB.Web.Modules.Base;
@@ -39,7 +40,7 @@ namespace ABB.Web.Modules.ProsesPremiFakultatifMasuk
         
         public async Task<ActionResult> GetAkseptasis([DataSourceRequest] DataSourceRequest request, string searchkeyword)
         {
-            var ds = await Mediator.Send(new GetAkseptasisQuery()
+            var ds = await Mediator.Send(new GetProsesPremiFakultatifMasuksQuery()
             {
                 SearchKeyword = searchkeyword,
                 DatabaseName = DatabaseName,

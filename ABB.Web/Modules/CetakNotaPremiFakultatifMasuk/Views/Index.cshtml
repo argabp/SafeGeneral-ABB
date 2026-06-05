@@ -9,7 +9,7 @@
 
 @{
     Layout = "~/Modules/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Cetak Nota Treaty Masuk";
+    ViewData["Title"] = "Cetak Premi Fakultatif Masuk";
 }
 <script src="~/Modules/CetakNotaPremiFakultatifMasuk/JS/cetakNotaPremiFakultatifMasuk.js"></script>
 
@@ -25,7 +25,7 @@
 <div class="flat-box">
     <div class="row">
         <div class="flat-box-title col-md-8">
-            Cetak Nota Treaty Masuk
+            Cetak Premi Fakultatif Masuk
         </div>
 
         <div class="col-md-4">
@@ -46,7 +46,6 @@
                     columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
                     columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
                     columns.Bound(col => col.nm_scob).Width(150).Title("Nama Sub COB");
-                    columns.Bound(col => col.nomor_akseptasi).Width(200).Title("Nomor Akseptasi");
                     columns.Bound(col => col.no_pol_ttg_masked).Width(200).Title("Nomor Polis");
                     columns.Bound(col => col.no_updt).Width(150).Title("Nomor Update");
                     columns.Bound(col => col.tgl_closing).Width(150).Title("Tanggal Closing").Format("{0: dd-MM-yyyy}");

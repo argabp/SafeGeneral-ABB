@@ -32,18 +32,7 @@ namespace ABB.Application.CetakRekapitulasiProduksiPremiFakultatifKeluars.Comman
 
         public async Task<string> Handle(CetakRekapitulasiProduksiPremiFakultatifKeluarCommand request, CancellationToken cancellationToken)
         {
-            var spName = string.Empty;
-            switch (request.jns_lap)
-            {
-                case "1":
-                    spName = "spr_ri06r_02";
-                    break;
-                case "2":
-                    //spName = "spr_ri06r_02_01";
-                    break;
-            }
-            
-            var datas = (await _connectionPst.QueryProc<CetakRekapitulasiProduksiPremiFakultatifKeluarModel>(spName, 
+            var datas = (await _connectionPst.QueryProc<CetakRekapitulasiProduksiPremiFakultatifKeluarModel>("spr_ri06r_02", 
                 new
                 {
                     input_str = $"{request.periode:yyyy/MM/dd}"
@@ -117,12 +106,12 @@ namespace ABB.Application.CetakRekapitulasiProduksiPremiFakultatifKeluars.Comman
             stringBuilder.Append(@$"<tr>
                                             <td style='text-align: left; vertical-align: top; border: 1px solid;'></td>
                                             <td style='text-align: left; vertical-align: top; border: 1px solid;'>Total</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{total_nilai_prm}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{total_nilai_prm_bl}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{total_nilai_kms}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{total_nilai_kms_bl}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{total_net_prm}</td>
-                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{total_net_prm_bl}</td>
+                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{ReportHelper.ConvertToReportFormat(total_nilai_prm)}</td>
+                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{ReportHelper.ConvertToReportFormat(total_nilai_prm_bl)}</td>
+                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{ReportHelper.ConvertToReportFormat(total_nilai_kms)}</td>
+                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{ReportHelper.ConvertToReportFormat(total_nilai_kms_bl)}</td>
+                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{ReportHelper.ConvertToReportFormat(total_net_prm)}</td>
+                                            <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{ReportHelper.ConvertToReportFormat(total_net_prm_bl)}</td>
                                         </tr>");
             
             stringBuilder.Append("</table>");

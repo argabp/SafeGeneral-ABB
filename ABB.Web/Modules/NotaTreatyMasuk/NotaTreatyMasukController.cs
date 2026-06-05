@@ -76,7 +76,7 @@ namespace ABB.Web.Modules.NotaTreatyMasuk
                 kd_bln = kd_bln,
                 kd_jns_sor = kd_jns_sor,
                 kd_tty_msk = kd_tty_msk,
-                kd_mtu = kd_mtu,
+                kd_mtu = string.IsNullOrWhiteSpace(kd_mtu) ? string.Empty : kd_mtu,
                 no_tr = no_tr
             };
             

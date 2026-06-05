@@ -6,7 +6,6 @@ using ABB.Application.Common.Grids.Models;
 using ABB.Application.Common.Services;
 using ABB.Web.Modules.Base;
 using ABB.Web.Modules.CetakSlipPremiFakultatifKeluar.Models;
-using DinkToPdf;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

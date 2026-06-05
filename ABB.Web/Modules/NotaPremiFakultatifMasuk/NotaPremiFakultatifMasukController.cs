@@ -7,6 +7,7 @@ using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Queries;
 using ABB.Application.EntriNotas.Commands;
 using ABB.Application.EntriNotas.Queries;
+using ABB.Application.NotaPremiFakultatifMasuks.Commands;
 using ABB.Web.Modules.Base;
 using ABB.Web.Modules.EntriNota.Models;
 using Kendo.Mvc.Extensions;
@@ -101,20 +102,12 @@ namespace ABB.Web.Modules.NotaPremiFakultatifMasuk
         
         public async Task<ActionResult> GetNotaPremiFakultatifMasuks([DataSourceRequest] DataSourceRequest request, string searchkeyword)
         {
-            var ds = await Mediator.Send(new GetEntriNotasQuery()
+            var ds = await Mediator.Send(new GetNotaPremiFakultatifMasuksQuery()
             {
                 SearchKeyword = searchkeyword,
                 DatabaseName = DatabaseName,
                 kd_cb = KodeCabang
             });
-            
-            var statusPolis = new List<DropdownOptionDto>()
-            {
-                new DropdownOptionDto() { Text = "Leader (Sebagai Leader Koasuransi)", Value = "L" },
-                new DropdownOptionDto() { Text = "Member (Sebagai Member Koasuransi)", Value = "M" },
-                new DropdownOptionDto() { Text = "Transaksi Direct", Value = "O" },
-                new DropdownOptionDto() { Text = "Inward Fakultatif", Value = "C" }
-            };
             
             return Json(ds.AsQueryable().ToDataSourceResult(request));
         }

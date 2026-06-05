@@ -43,5 +43,11 @@ namespace ABB.Application.CetakNotaPremiTreatyKeluars.Commands
         public decimal tot_kms_usd { get; set; }
 
         public decimal tot_netto_usd { get; set; }
+
+        public string nm_cob { get; set; }
+
+        public string? nm_bag { get; set; }
+
+        public string? nm_kpl_bag { get; set; }
     }
 }

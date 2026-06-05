@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Nota Premi Fakultatif Masukt</title>
+	<title>Nota Premi Fakultatif Masuk</title>
 </head>
 <style>
 	body {
@@ -79,7 +79,7 @@
 <hr style="color: black; border: solid 1px;  margin:0px">
 <table style="border-collapse: collapse; width: 100%;">
 	<tr style="height: 20px;">
-		<td colspan=4></td>
+		<td colspan=6></td>
 		<td colspan=3 style="text-align: center">
 			<strong>RINCIAN</strong>
 		</td>
@@ -89,7 +89,7 @@
 			<strong>Ref. No. Surat Saudara</strong>
 		</td>
 		<td style="width: 1%">:</td>
-		<td style="width: 17.5%">{{no_ref}}</td>
+		<td style="width: 17.5%" colspan="3">{{no_ref}}</td>
 		{{rincian_1}}
 	</tr>
 	<tr style="height: 20px;">
@@ -97,7 +97,7 @@
 			<strong>Nama Tertanggung</strong>
 		</td>
 		<td style="width: 1%">:</td>
-		<td style="width: 17.5%">{{nm_ttg}}</td>
+		<td style="width: 17.5%" colspan="3">{{nm_ttg}}</td>
 		{{rincian_2}}
 	</tr>
 	<tr style="height: 20px;">
@@ -105,7 +105,7 @@
 			<strong>Periode</strong>
 		</td>
 		<td style="width: 1%">:</td>
-		<td style="width: 17.5%">{{period_polis}}</td>
+		<td style="width: 17.5%" colspan="3">{{period_polis}}</td>
 		{{rincian_3}}
 	</tr>
 	<tr style="height: 20px;">
@@ -113,7 +113,7 @@
 			<strong>Obyek Pertanggungan</strong>
 		</td>
 		<td style="width: 1%">:</td>
-		<td style="width: 17.5%">{{nm_scob}}</td>
+		<td style="width: 17.5%" colspan="3">{{nm_scob}}</td>
 		{{rincian_4}}
 	</tr>
 	<tr style="height: 20px;">
@@ -121,17 +121,21 @@
 			<strong>Harga Pertanggungan</strong>
 		</td>
 		<td style="width: 1%">:</td>
-		<td style="width: 17.5%" colspan=2>{{kd_mtu_symbol}} {{nilai_ttl_ptg}}</td>
+		<td style="width: 2%">{{kd_mtu_symbol}}</td>
+		<td style="width: 4%; text-align: right">{{nilai_ttl_ptg}}</td>
+		<td colspan="2"></td>
 		<td colspan=3>
 			<hr style="height: 1px; color: black; background-color: black;">
 		</td>
 	</tr>
 	<tr style="height: 20px;">
 		<td style="width: 10%;">
-			<strong>ABB {{share}}</strong>
+			<strong>ABB {{share}}%</strong>
 		</td>
 		<td style="width: 1%">:</td>
-		<td style="width: 17.5%">{{kd_mtu_symbol}} {{nilai_share}}</td>
+		<td style="width: 2%">{{kd_mtu_symbol}}</td>
+		<td style="width: 4%; text-align: right">{{nilai_share}}</td>
+		<td></td>
 		<td style="width: 5%">
 			<strong>Total</strong>
 		</td>
@@ -148,7 +152,7 @@
 			<strong>WPC</strong>
 		</td>
 		<td style="width: 1%">:</td>
-		<td style="width: 17.5%" colspan=2>{{wpc}} Hari</td>
+		<td style="width: 17.5%" colspan=4>{{wpc}} Hari</td>
 		<td colspan=3>
 		</td>
 	</tr>

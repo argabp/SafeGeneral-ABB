@@ -46,7 +46,7 @@ namespace ABB.Application.CetakNotaPremiFakultatifKeluars.Configs
                             ",
 
                 BaseWhere = @"
-                            (src.flag_cancel = 'N' AND src.kd_cb_pol = 'PS10')
+                            (src.flag_cancel = 'N')
                             ",
 
                 ColumnMap = new Dictionary<string, string>
@@ -54,7 +54,7 @@ namespace ABB.Application.CetakNotaPremiFakultatifKeluars.Configs
 	                ["nm_cb"]       = "src.nm_cb",
 	                ["nm_cob"]      = "src.nm_cob",
 	                ["nm_scob"]     = "src.nm_scob",
-	                ["no_pol_lama"] = "src.no_pol_lama",
+	                ["no_pol_ttg"] = "src.no_pol_ttg",
 	                ["no_rsk"]     = "src.no_rsk",
 	                ["nomor_nota"]     = "src.nomor_nota",
 	                ["nm_ttg"] = "src.nm_ttg",
@@ -68,7 +68,7 @@ namespace ABB.Application.CetakNotaPremiFakultatifKeluars.Configs
 	                "src.nm_cb",
 	                "src.nm_cob",
 	                "src.nm_scob",
-	                "src.no_pol_lama",
+	                "src.no_pol_ttg",
 	                "src.no_rsk",
 	                "src.nomor_nota",
 	                "src.nm_ttg",

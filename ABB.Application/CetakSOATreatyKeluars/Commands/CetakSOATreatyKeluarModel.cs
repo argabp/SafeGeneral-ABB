@@ -1,3 +1,5 @@
+using System;
+
 namespace ABB.Application.CetakSOATreatyKeluars.Commands
 {
     public class CetakSOATreatyKeluarModel
@@ -19,5 +21,15 @@ namespace ABB.Application.CetakSOATreatyKeluars.Commands
         public decimal? nilai_share_bgu { get; set; }
 
         public string? thn_uw { get; set; }
+
+        public string? jns_nt_kel { get; set; }
+
+        public string? kd_rk_pas { get; set; }
+
+        public DateTime? tgl_soa { get; set; }
+
+        public string? nm_bag { get; set; }
+
+        public string? nm_kpl_bag { get; set; }
     }
 }

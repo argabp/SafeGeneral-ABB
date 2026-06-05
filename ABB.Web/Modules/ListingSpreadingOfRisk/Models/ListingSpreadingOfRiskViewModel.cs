@@ -17,8 +17,6 @@ namespace ABB.Web.Modules.ListingSpreadingOfRisk.Models
 
         public string no_pol_ttg { get; set; }
 
-        public string almt_rsk { get; set; }
-
         public void Mapping(Profile profile)
         {
             profile.CreateMap<ListingSpreadingOfRiskViewModel, ListingSpreadingOfRiskCommand>();

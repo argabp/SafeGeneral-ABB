@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using ABB.Application.CancelProsesPremiFakultatifMasuks.Queries;
 using ABB.Application.ReopenPolis.Commands;
 using ABB.Application.ReopenPolis.Queries;
 using ABB.Web.Modules.Base;
@@ -27,7 +28,7 @@ namespace ABB.Web.Modules.CancelProsesPremiFakultatifMasuk
         
     public async Task<ActionResult> GetCancelProsesPremiFakultatifMasuks([DataSourceRequest] DataSourceRequest request, string searchkeyword)
     {
-      var ds = await Mediator.Send(new GetReopenPolisQuery()
+      var ds = await Mediator.Send(new GetCancelProsesPremiFakultatifMasuksQuery()
       {
         SearchKeyword = searchkeyword,
         DatabaseName = DatabaseName,

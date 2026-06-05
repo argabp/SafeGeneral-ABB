@@ -1,6 +1,5 @@
-﻿@using Kendo.Mvc.UI
-@using ABB.Application.ReopenPolis.Queries
-@using ABB.Application.Common.Dtos
+﻿@using ABB.Application.CancelProsesPremiFakultatifMasuks.Queries
+@using Kendo.Mvc.UI
 @using Microsoft.Extensions.Configuration
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Kendo.Mvc
@@ -31,7 +30,7 @@
 
     <div class="flat-box-content">
         <div class="div-box">
-            @(Html.Kendo().Grid<ReopenPolisDto>()
+            @(Html.Kendo().Grid<CancelProsesPremiFakultatifMasukDto>()
                 .Name("ReopenPolisGrid")
                 .DataSource(dataSource => dataSource.Ajax()
                     .Read(read => read.Action("GetCancelProsesPremiFakultatifMasuks", "CancelProsesPremiFakultatifMasuk").Data("searchFilter"))

@@ -28,7 +28,7 @@ namespace ABB.Application.ListingSpreadingOfRisks.Commands
 
         public decimal nilai_ttl_ptg { get; set; }
 
-        public decimal pst_rate_prm { get; set; }
+        public decimal pst_rate_prm_rsk { get; set; }
 
         public string stn_rate_prm_rsk { get; set; }
 
@@ -71,5 +71,9 @@ namespace ABB.Application.ListingSpreadingOfRisks.Commands
         public string nm_kpl_bag { get; set; }
 
         public string nm_bag { get; set; }
+
+        public string kd_cob { get; set; }
+
+        public string no_updt_reas { get; set; }
     }
 }

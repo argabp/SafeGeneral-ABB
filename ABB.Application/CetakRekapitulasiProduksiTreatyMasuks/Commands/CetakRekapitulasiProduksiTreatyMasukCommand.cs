@@ -79,31 +79,38 @@ namespace ABB.Application.CetakRekapitulasiProduksiTreatyMasuks.Commands
             decimal total_nilai_kl_bl = 0;
 
             var sequence = 1;
-
-            stringBuilder.Append("<table class='table'>");
             
             switch (request.jns_lap)
             {
                 case "1":
-                    stringBuilder.Append(@"
-                            <tr>
-                                <td style='width: 3%; text-align: center; border: 1px solid' rowspan='2'>NO</td>
-                                <td style='text-align: center; border: 1px solid' rowspan='2'>BISNIS</td>
-                                <td style='width: 20%; text-align: center; border: 1px solid' colspan='2'>GROSS PREMI</td>
-                                <td style='width: 20%; text-align: center; border: 1px solid' colspan='2'>KOMISI</td>
-                                <td style='width: 20%; text-align: center; border: 1px solid' colspan='2'>NET PREMI</td>
-                                <td style='width: 20%; text-align: center; border: 1px solid' colspan='2'>KLAIM</td>
-                            </tr>
-                            <tr>
-                                <td style='width: 10%; text-align: center; border: 1px solid'>BULAN INI</td>
-                                <td style='width: 10%; text-align: center; border: 1px solid'>s/d BULAN INI</td>
-                                <td style='width: 10%; text-align: center; border: 1px solid'>BULAN INI</td>
-                                <td style='width: 10%; text-align: center; border: 1px solid'>s/d BULAN INI</td>
-                                <td style='width: 10%; text-align: center; border: 1px solid'>BULAN INI</td>
-                                <td style='width: 10%; text-align: center; border: 1px solid'>s/d BULAN INI</td>
-                                <td style='width: 10%; text-align: center; border: 1px solid'>BULAN INI</td>
-                                <td style='width: 10%; text-align: center; border: 1px solid'>s/d BULAN INI</td>
-                            </tr>");
+                    stringBuilder.Append($@"<table class='table'>
+                                            <thead>
+                                                <tr>
+                                                    <td colspan='10' style='border: none; text-align: center; padding-bottom: 0.5rem;'>
+                                                        <p style='font-size: 14px; margin: 0;'><strong>RINCIAN PRODUKSI TREATY MASUK</strong></p>
+                                                        <p style='font-size: 14px; margin: 0; padding-bottom: 1.5rem;'><strong>BULAN TAHUN : {request.periode:MMMM yyyy}</strong></p>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style='width: 3%; text-align: center; border: 1px solid' rowspan='2'>NO</td>
+                                                    <td style='text-align: center; border: 1px solid' rowspan='2'>BISNIS</td>
+                                                    <td style='width: 20%; text-align: center; border: 1px solid' colspan='2'>GROSS PREMI</td>
+                                                    <td style='width: 20%; text-align: center; border: 1px solid' colspan='2'>KOMISI</td>
+                                                    <td style='width: 20%; text-align: center; border: 1px solid' colspan='2'>NET PREMI</td>
+                                                    <td style='width: 20%; text-align: center; border: 1px solid' colspan='2'>KLAIM</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style='width: 10%; text-align: center; border: 1px solid'>BULAN INI</td>
+                                                    <td style='width: 10%; text-align: center; border: 1px solid'>s/d BULAN INI</td>
+                                                    <td style='width: 10%; text-align: center; border: 1px solid'>BULAN INI</td>
+                                                    <td style='width: 10%; text-align: center; border: 1px solid'>s/d BULAN INI</td>
+                                                    <td style='width: 10%; text-align: center; border: 1px solid'>BULAN INI</td>
+                                                    <td style='width: 10%; text-align: center; border: 1px solid'>s/d BULAN INI</td>
+                                                    <td style='width: 10%; text-align: center; border: 1px solid'>BULAN INI</td>
+                                                    <td style='width: 10%; text-align: center; border: 1px solid'>s/d BULAN INI</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>");
 
                     foreach (var data in datas)
                     {
@@ -142,45 +149,63 @@ namespace ABB.Application.CetakRekapitulasiProduksiTreatyMasuks.Commands
 
                     stringBuilder.Append(@$"<tr>
                                                     <td style='text-align: left; vertical-align: top; border: 1px solid;'></td>
-                                                    <td style='text-align: left; vertical-align: top; border: 1px solid;'>Total</td>
-                                                    <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{total_nilai_prm}</td>
-                                                    <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{total_nilai_prm_bl}</td>
-                                                    <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{total_nilai_kms}</td>
-                                                    <td style='width: 10%;  text-align: right; vertical-align: top; border: 1px solid;'>{total_nilai_kms_bl}</td>
-                                                    <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{total_net_prm}</td>
-                                                    <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{total_net_prm_bl}</td>
-                                                    <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{total_nilai_kl}</td>
-                                                    <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{total_nilai_kl_bl}</td>
+                                                    <td style='text-align: left; vertical-align: top; border: 1px solid;'><strong>Jumlah</strong></td>
+                                                    <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{ReportHelper.ConvertToReportFormat(total_nilai_prm)}</td>
+                                                    <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{ReportHelper.ConvertToReportFormat(total_nilai_prm_bl)}</td>
+                                                    <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{ReportHelper.ConvertToReportFormat(total_nilai_kms)}</td>
+                                                    <td style='width: 10%;  text-align: right; vertical-align: top; border: 1px solid;'>{ReportHelper.ConvertToReportFormat(total_nilai_kms_bl)}</td>
+                                                    <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{ReportHelper.ConvertToReportFormat(total_net_prm)}</td>
+                                                    <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{ReportHelper.ConvertToReportFormat(total_net_prm_bl)}</td>
+                                                    <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{ReportHelper.ConvertToReportFormat(total_nilai_kl)}</td>
+                                                    <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{ReportHelper.ConvertToReportFormat(total_nilai_kl_bl)}</td>
                                                 </tr>");
+                
+                    stringBuilder.Append(@"<tfoot>
+                        <tr>
+                            <td colspan='10' style='border: none; text-align: right; padding-top: 2rem; padding-bottom: 1rem;'>
+                                <strong>Departemen Reasuransi</strong>
+                            </td>
+                        </tr>
+                    </tfoot></table>");
                     break;
                 case "2":
-
-                    stringBuilder.Append(@"
-                            <tr>
-                                <td style='width: 3%; text-align: center; border: 1px solid' rowspan='2'>NO</td>
-                                <td style='text-align: center; border: 1px solid' rowspan='2'>BISNIS</td>
-                                <td style='width: 20%; text-align: center; border: 1px solid' colspan='2'>GROSS PREMI</td>
-                                <td style='width: 20%; text-align: center; border: 1px solid' colspan='2'>KOMISI</td>
-                                <td style='width: 20%; text-align: center; border: 1px solid' colspan='2'>NET PREMI</td>
-                                <td style='width: 20%; text-align: center; border: 1px solid' colspan='2'>kl</td>
-                            </tr>
-                            <tr>
-                                <td style='width: 10%; text-align: center; border: 1px solid'>BULAN INI</td>
-                                <td style='width: 10%; text-align: center; border: 1px solid'>s/d BULAN INI</td>
-                                <td style='width: 10%; text-align: center; border: 1px solid'>BULAN INI</td>
-                                <td style='width: 10%; text-align: center; border: 1px solid'>s/d BULAN INI</td>
-                                <td style='width: 10%; text-align: center; border: 1px solid'>BULAN INI</td>
-                                <td style='width: 10%; text-align: center; border: 1px solid'>s/d BULAN INI</td>
-                                <td style='width: 10%; text-align: center; border: 1px solid'>BULAN INI</td>
-                                <td style='width: 10%; text-align: center; border: 1px solid'>s/d BULAN INI</td>
-                            </tr>");
-
-                    var nm_rks = datas.Select(s => s.nm_rk).Distinct().ToList();
                     
-                    foreach (var nm_rk in nm_rks)
+                    stringBuilder.Append($@"<table class='table'>
+                                            <thead>
+                                                <tr>
+                                                    <td colspan='10' style='border: none; text-align: center; padding-bottom: 0.5rem;'>
+                                                        <p style='font-size: 14px; margin: 0;'><strong>RINCIAN PRODUKSI TREATY MASUK</strong></p>
+                                                        <p style='font-size: 14px; margin: 0; padding-bottom: 1.5rem;'><strong>BULAN TAHUN : {request.periode:MMMM yyyy}</strong></p>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style='width: 3%; text-align: center; border: 1px solid' rowspan='2'>NO</td>
+                                                    <td style='text-align: center; border: 1px solid' rowspan='2'>BISNIS</td>
+                                                    <td style='width: 20%; text-align: center; border: 1px solid' colspan='2'>GROSS PREMI</td>
+                                                    <td style='width: 20%; text-align: center; border: 1px solid' colspan='2'>KOMISI</td>
+                                                    <td style='width: 20%; text-align: center; border: 1px solid' colspan='2'>NET PREMI</td>
+                                                    <td style='width: 20%; text-align: center; border: 1px solid' colspan='2'>KLAIM</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style='width: 10%; text-align: center; border: 1px solid'>BULAN INI</td>
+                                                    <td style='width: 10%; text-align: center; border: 1px solid'>s/d BULAN INI</td>
+                                                    <td style='width: 10%; text-align: center; border: 1px solid'>BULAN INI</td>
+                                                    <td style='width: 10%; text-align: center; border: 1px solid'>s/d BULAN INI</td>
+                                                    <td style='width: 10%; text-align: center; border: 1px solid'>BULAN INI</td>
+                                                    <td style='width: 10%; text-align: center; border: 1px solid'>s/d BULAN INI</td>
+                                                    <td style='width: 10%; text-align: center; border: 1px solid'>BULAN INI</td>
+                                                    <td style='width: 10%; text-align: center; border: 1px solid'>s/d BULAN INI</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>");
+                    
+                    var list_kd_rk_pas = datas.Select(s => s.kd_rk_pas).Distinct().ToList();
+                    
+                    foreach (var kd_rk_pas in list_kd_rk_pas)
                     {
+                        var firstData = datas.First(s => s.kd_rk_pas == kd_rk_pas);
                         stringBuilder.Append($@"<tr>
-                                    <td style='text-align: left; border: 1px solid' colspan='10'>{nm_rk}</td>
+                                    <td style='text-align: left; border: 1px solid' colspan='10'>{firstData.nm_rk}</td>
                                 </tr>");
 
                         total_nilai_prm = 0;
@@ -194,7 +219,7 @@ namespace ABB.Application.CetakRekapitulasiProduksiTreatyMasuks.Commands
 
                         sequence = 1;
 
-                        foreach (var data in datas)
+                        foreach (var data in datas.Where(s => s.kd_rk_pas == kd_rk_pas))
                         {
                             var nilai_prm = ReportHelper.ConvertToReportFormat(data.nilai_prm);
                             var nilai_prm_bl = ReportHelper.ConvertToReportFormat(data.nilai_prm_bl);
@@ -231,27 +256,32 @@ namespace ABB.Application.CetakRekapitulasiProduksiTreatyMasuks.Commands
 
                         stringBuilder.Append(@$"<tr>
                                                         <td style='text-align: left; vertical-align: top; border: 1px solid;'></td>
-                                                        <td style='text-align: left; vertical-align: top; border: 1px solid;'>Total</td>
-                                                        <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{total_nilai_prm}</td>
-                                                        <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{total_nilai_prm_bl}</td>
-                                                        <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{total_nilai_kms}</td>
-                                                        <td style='width: 10%;  text-align: right; vertical-align: top; border: 1px solid;'>{total_nilai_kms_bl}</td>
-                                                        <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{total_net_prm}</td>
-                                                        <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{total_net_prm_bl}</td>
-                                                        <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{total_nilai_kl}</td>
-                                                        <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{total_nilai_kl_bl}</td>
+                                                        <td style='text-align: left; vertical-align: top; border: 1px solid;'><strong>Jumlah</strong></td>
+                                                        <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{ReportHelper.ConvertToReportFormat(total_nilai_prm)}</td>
+                                                        <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{ReportHelper.ConvertToReportFormat(total_nilai_prm_bl)}</td>
+                                                        <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{ReportHelper.ConvertToReportFormat(total_nilai_kms)}</td>
+                                                        <td style='width: 10%;  text-align: right; vertical-align: top; border: 1px solid;'>{ReportHelper.ConvertToReportFormat(total_nilai_kms_bl)}</td>
+                                                        <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{ReportHelper.ConvertToReportFormat(total_net_prm)}</td>
+                                                        <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{ReportHelper.ConvertToReportFormat(total_net_prm_bl)}</td>
+                                                        <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{ReportHelper.ConvertToReportFormat(total_nilai_kl)}</td>
+                                                        <td style='width: 10%; text-align: right; vertical-align: top; border: 1px solid;'>{ReportHelper.ConvertToReportFormat(total_nilai_kl_bl)}</td>
                                                     </tr>");
                     }
+                
+                    stringBuilder.Append(@"<tfoot>
+                                <tr>
+                                    <td colspan='10' style='border: none; text-align: right; padding-top: 2rem; padding-bottom: 1rem;'>
+                                        <strong>Departemen Reasuransi</strong>
+                                    </td>
+                                </tr>
+                            </tfoot></table>");
 
                     break;
             }
 
-            stringBuilder.Append("</table>");
-
             resultTemplate = templateProfileResult.Render(new
             {
-                details = stringBuilder.ToString(),
-                periode = request.periode.ToString("MMMM yyyy")
+                details = stringBuilder.ToString()
             });
 
             return resultTemplate;

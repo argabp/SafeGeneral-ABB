@@ -64,8 +64,8 @@ namespace ABB.Web.Modules.CetakNotaPremiFakultatifMasuk
                 
                 var reportTemplate = await Mediator.Send(command);
 
-                _reportGeneratorService.GenerateReport("CetakNotaPremiFakultatifMasuk.pdf", reportTemplate, sessionId, Orientation.Landscape,
-                    right: 10, left: 10, bottom: 10, top: 10);
+                _reportGeneratorService.GenerateReport("CetakNotaPremiFakultatifMasuk.pdf", reportTemplate, sessionId,
+                    right: 0, left: 0, bottom: 0, top: 0);
 
                 return Ok(new { Status = "OK", Data = sessionId});
             }

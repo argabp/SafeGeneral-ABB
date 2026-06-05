@@ -19,7 +19,7 @@ namespace ABB.Web.Modules.Inquiry.Components.InquiryCoverage
         {
             if (string.IsNullOrWhiteSpace(model.kd_cob) && string.IsNullOrWhiteSpace(model.kd_scob))
             {
-                return View("~/Modules/Inquiry/Views/Empty.cshtml");
+                return View("~/Modules/Shared/Empty.cshtml");
             }
             
             return View("_InquiryCoverage", new InquiryResikoCoverageViewModel());

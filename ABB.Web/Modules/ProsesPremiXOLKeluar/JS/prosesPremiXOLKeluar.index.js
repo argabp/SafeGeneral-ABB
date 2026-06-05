@@ -40,8 +40,15 @@ function onProsesPremiXOLKeluar(e) {
     showConfirmation('Confirmation', `Are you sure you want to Proses?`,
         function () {
             showProgressOnGrid('#ProsesPremiXOLKeluarGrid');
+            
+            var payload = { ...dataItem };
 
-            ajaxPost("/ProsesPremiXOLKeluar/Proses", JSON.stringify(dataItem),
+            payload.tgl_closing = kendo.toString(
+                dataItem.tgl_closing,
+                "yyyy-MM-dd"
+            );
+            
+            ajaxPost("/ProsesPremiXOLKeluar/Proses", JSON.stringify(payload),
                 function (response) {
                     if (response.Result === "OK") {
                         showMessage("Success", response.Message)
@@ -62,7 +69,14 @@ function onCancelProsesPremiXOLKeluar(e) {
         function () {
             showProgressOnGrid('#ProsesPremiXOLKeluarGrid');
 
-            ajaxPost("/ProsesPremiXOLKeluar/CancelProses", JSON.stringify(dataItem),
+            var payload = { ...dataItem };
+
+            payload.tgl_closing = kendo.toString(
+                dataItem.tgl_closing,
+                "yyyy-MM-dd"
+            );
+
+            ajaxPost("/ProsesPremiXOLKeluar/CancelProses", JSON.stringify(payload),
                 function (response) {
                     if (response.Result === "OK") {
                         showMessage("Success", response.Message)

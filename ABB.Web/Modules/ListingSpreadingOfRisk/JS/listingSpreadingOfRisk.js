@@ -13,6 +13,7 @@ function btnPreview_Click() {
 
 function previewReport(url) {
     var form = getFormData($('#ListingSpreadingOfRiskForm'));
+    form.no_pol_ttg = $("#no_pol_ttg").getKendoMaskedTextBox().raw();
 
     var data = JSON.stringify(form);
 

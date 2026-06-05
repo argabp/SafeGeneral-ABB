@@ -163,6 +163,8 @@ namespace ABB.Application.CetakNotaPremiFakultatifKeluars.Commands
                     { "symbol", data.kd_mtu_symbol },
                     { "nilai", nilai_nt }
                 });
+
+            var header = data.st_nota == "D" ? "NOTA DEBET" : "NOTA KREDIT";
             
             var resultTemplate = templateProfileResult.Render( new
             {
@@ -170,7 +172,7 @@ namespace ABB.Application.CetakNotaPremiFakultatifKeluars.Commands
                 jns_nota, rincian_2, rincian_3, rincian_4, total, data.nm_ttj, data.nm_ttg, rincian_5,
                 data.ket_nt, tgl_mul = data.tgl_mul.ToString("dd MMM yyyy"), data.kd_mtu_symbol,
                 tgl_akh = data.tgl_akh.ToString("dd MMM yyyy"), nilai_ttl_ptg, data.uraian_09,
-                data.kt_ttj, data.tgl_nt_ind, title = reportConfig.Title.Title1, data.uraian_01,
+                data.kt_ttj, data.tgl_nt_ind, title = reportConfig.Title.Title1, data.uraian_01, header
             } );
 
             return resultTemplate;

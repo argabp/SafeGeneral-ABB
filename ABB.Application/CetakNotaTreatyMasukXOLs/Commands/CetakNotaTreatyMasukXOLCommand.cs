@@ -57,7 +57,7 @@ namespace ABB.Application.CetakNotaTreatyMasukXOLs.Commands
 
             var data = datas.FirstOrDefault();
             
-            var nilai_nt = data.nilai_nt == 0 ? string.Empty : ReportHelper.ConvertToReportFormat(data.nilai_nt);
+            var nilai_nt = ReportHelper.ConvertToReportFormat(Math.Abs(data?.nilai_nt ?? 0));
             string nilai_01 = string.Empty;
             string nilai_02 = string.Empty;
             string nilai_03 = string.Empty;
@@ -71,6 +71,7 @@ namespace ABB.Application.CetakNotaTreatyMasukXOLs.Commands
             string nilai_05_1 = string.Empty;
 
             string header;
+            string title;
             string first_nilai_nota = string.Empty;
             string second_nilai_nota = string.Empty;
 
@@ -78,25 +79,27 @@ namespace ABB.Application.CetakNotaTreatyMasukXOLs.Commands
             {
                 header = "NOTA DEBET";
                 first_nilai_nota = nilai_nt;
+                title = "JUMLAH UNTUK KAMI";
 
                 // CREDIT SIDE (no leading space)
-                nilai_01 = ReportHelper.FormatIf(!ReportHelper.StartsWithSpace(data.uraian_01), data.nilai_01);
-                nilai_02 = ReportHelper.FormatIf(!ReportHelper.StartsWithSpace(data.uraian_02), data.nilai_02);
-                nilai_03 = ReportHelper.FormatIf(!ReportHelper.StartsWithSpace(data.uraian_03), data.nilai_03);
-                nilai_04 = ReportHelper.FormatIf(!ReportHelper.StartsWithSpace(data.uraian_04), data.nilai_04);
-                nilai_05 = ReportHelper.FormatIf(!ReportHelper.StartsWithSpace(data.uraian_05), data.nilai_05);
+                nilai_01 = string.IsNullOrWhiteSpace(data.uraian_01) ? string.Empty : ReportHelper.ConvertToReportFormat(Math.Abs(data.nilai_01));
+                nilai_02 = string.IsNullOrWhiteSpace(data.uraian_02) ? string.Empty : ReportHelper.ConvertToReportFormat(Math.Abs(data.nilai_02));
+                nilai_03 = string.IsNullOrWhiteSpace(data.uraian_03) ? string.Empty : ReportHelper.ConvertToReportFormat(Math.Abs(data.nilai_03));
+                nilai_04 = string.IsNullOrWhiteSpace(data.uraian_04) ? string.Empty : ReportHelper.ConvertToReportFormat(Math.Abs(data.nilai_04));
+                nilai_05 = string.IsNullOrWhiteSpace(data.uraian_05) ? string.Empty : ReportHelper.ConvertToReportFormat(Math.Abs(data.nilai_05));
             }
             else
             {
                 header = "NOTA KREDIT";
                 second_nilai_nota = nilai_nt;
+                title = "JUMLAH UNTUK ANDA";
 
                 // DEBIT SIDE (leading space)
-                nilai_01_1 = ReportHelper.FormatIf(ReportHelper.StartsWithSpace(data.uraian_01), data.nilai_01);
-                nilai_02_1 = ReportHelper.FormatIf(ReportHelper.StartsWithSpace(data.uraian_02), data.nilai_02);
-                nilai_03_1 = ReportHelper.FormatIf(ReportHelper.StartsWithSpace(data.uraian_03), data.nilai_03);
-                nilai_04_1 = ReportHelper.FormatIf(ReportHelper.StartsWithSpace(data.uraian_04), data.nilai_04);
-                nilai_05_1 = ReportHelper.FormatIf(ReportHelper.StartsWithSpace(data.uraian_05), data.nilai_05);
+                nilai_01_1 = string.IsNullOrWhiteSpace(data.uraian_01) ? string.Empty : ReportHelper.ConvertToReportFormat(Math.Abs(data.nilai_01));
+                nilai_02_1 = string.IsNullOrWhiteSpace(data.uraian_02) ? string.Empty : ReportHelper.ConvertToReportFormat(Math.Abs(data.nilai_02));
+                nilai_03_1 = string.IsNullOrWhiteSpace(data.uraian_03) ? string.Empty : ReportHelper.ConvertToReportFormat(Math.Abs(data.nilai_03));
+                nilai_04_1 = string.IsNullOrWhiteSpace(data.uraian_04) ? string.Empty : ReportHelper.ConvertToReportFormat(Math.Abs(data.nilai_04));
+                nilai_05_1 = string.IsNullOrWhiteSpace(data.uraian_05) ? string.Empty : ReportHelper.ConvertToReportFormat(Math.Abs(data.nilai_05));
             }
             
             decimal total =
@@ -115,7 +118,7 @@ namespace ABB.Application.CetakNotaTreatyMasukXOLs.Commands
             
             var view_jumlah_untuk = @$"
                 <tr class='no-border'>
-                    <td style='width: 20%;'>JUMLAH UNTUK ANDA</td>
+                    <td style='width: 20%;'>{title}</td>
                     <td style='width: 20%; text-align: right;'>{first_nilai_nota}</td>
                     <td style='width: 20%; text-align: right;'>{second_nilai_nota}</td>
                 </tr>";
@@ -128,7 +131,7 @@ namespace ABB.Application.CetakNotaTreatyMasukXOLs.Commands
                 data.almt_ttg, data.nm_ttg, data.nm_ttj, data.kt_ttj, data.nm_tty, 
                 nilai_ttl_ptg = ReportHelper.ConvertToReportFormat(data.nilai_ttl_ptg),
                 data.no_berkas, data.no_pol_ttg, data.kt_ttg, data.kd_mtu_symbol, data.kd_tl,
-                data.kt_cb, tgl_nt_ind = data.tgl_nt_ind.Split(" ")[2], data.no_nota, data.nm_scob, data.nm_scob_ing,
+                data.kt_cb, data.tgl_nt_ind, data.no_nota, data.nm_scob, data.nm_scob_ing,
                 data.kd_cob, data.kd_scob, nilai_share_bgu = ReportHelper.ConvertToReportFormat(data.nilai_share_bgu), data.ket_nt,
                 tgl_mul = ReportHelper.ConvertDateTime(data.tgl_mul, "dd MMMM yyyy"),
                 tgl_akh = ReportHelper.ConvertDateTime(data.tgl_akh, "dd MMMM yyyy"),

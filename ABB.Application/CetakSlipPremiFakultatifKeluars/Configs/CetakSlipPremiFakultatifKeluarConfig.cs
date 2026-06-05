@@ -46,7 +46,7 @@ namespace ABB.Application.CetakSlipPremiFakultatifKeluars.Configs
                             ",
 
                 BaseWhere = @"
-                            (src.flag_cancel = 'N' AND src.no_pol_ttg = '5045552202600010')
+                            (src.flag_cancel = 'N')
                             ",
 
                 ColumnMap = new Dictionary<string, string>
