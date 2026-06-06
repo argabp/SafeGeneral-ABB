@@ -97,11 +97,11 @@ namespace ABB.Application.CetakNotaPremiFakultatifKeluars.Commands
             
             var reportConfig = _reportConfig.GetReportData(request.kd_cb);
 
-            var nilai_01 = ReportHelper.ConvertToReportFormat(data.nilai_01);
-            var nilai_02 = ReportHelper.ConvertToReportFormat(data.nilai_02);
-            var nilai_03 = ReportHelper.ConvertToReportFormat(data.nilai_03);
-            var nilai_04 = ReportHelper.ConvertToReportFormat(data.nilai_04);
-            var nilai_05 = ReportHelper.ConvertToReportFormat(data.nilai_05);
+            var nilai_01 = ReportHelper.ConvertToReportFormat(data.nilai_01 * - 1);
+            var nilai_02 = ReportHelper.ConvertToReportFormat(data.nilai_02 * - 1);
+            var nilai_03 = ReportHelper.ConvertToReportFormat(data.nilai_03 * - 1);
+            var nilai_04 = ReportHelper.ConvertToReportFormat(data.nilai_04 * - 1);
+            var nilai_05 = ReportHelper.ConvertToReportFormat(data.nilai_05 * - 1);
             var nilai_nt = ReportHelper.ConvertToReportFormat(data.nilai_nt);
             var nilai_ttl_ptg = ReportHelper.ConvertToReportFormat(data.nilai_ttl_ptg);
 
