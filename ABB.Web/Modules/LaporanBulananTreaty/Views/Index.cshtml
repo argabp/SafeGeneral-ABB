@@ -1,0 +1,128 @@
+﻿@using Kendo.Mvc.UI
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@model ABB.Web.Modules.LaporanBulananTreaty.Models.LaporanBulananTreatyViewModel
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Laporan Bulanan Treaty";
+}
+<script src="~/Modules/LaporanBulananTreaty/JS/laporanBulananTreaty.js"></script>
+
+<style>
+    .div-box{
+        padding-bottom: 1em;
+    }
+</style>
+<div class="flat-box">
+    <div class="row" style="padding-bottom: 1em;">
+        <div class="flat-box-title col-md-8">
+            Laporan Bulanan Treaty
+        </div>
+    </div>
+    <form id="LaporanBulananTreatyForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-group row">
+            <div class="row col-sm-9">
+                <label class="col-sm-3">Cabang</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_cb" style="width: 100%" option-label="Pilih Cabang" value="@ViewBag.KodeCabang" readonly="true"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetCabang", "LaporanBulananTreaty")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_cb" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-9">
+                <label class="col-sm-3">COB</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="kd_cob" style="width: 100%" option-label="Pilih COB"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetCOB", "LaporanBulananTreaty")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_cob" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-9">
+                <label class="col-sm-3">Periode</label>
+                <div class="col-sm-6 row" style="padding-right: 0">
+                    <div class="col-sm-5">
+                        <kendo-datepicker for="tgl_mul" value="DateTime.Now"/>
+                        <span asp-validation-for="tgl_mul" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-2" style="align-content: center; text-align: center">
+                        <p style="margin-bottom: 3px">s/d</p>
+                    </div>
+                    <div class="col-sm-5" style="padding-right: 0">
+                        <kendo-datepicker for="tgl_akh" value="DateTime.Now"/>
+                        <span asp-validation-for="tgl_akh" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-9">
+                <label class="col-sm-3">Persh. Asuransi</label>
+                <div class="col-sm-3">
+                    <kendo-dropdownlist for="kd_grp_pas" style="width: 100%" option-label="Pilih Persh. Asuransi" on-change="OnPershAsuransiChange"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodePersh", "CetakSOATreatyMasuk")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_grp_pas" class="text-danger"></span>
+                </div>
+                <div class="col-sm-3">
+                    <kendo-dropdownlist for="kd_rk_pas" style="width: 100%" option-label="Pilih Rekanan"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetKodeRekananPersh", "CetakSOATreatyMasuk")" data="dataKodePasDropDown"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_rk_pas" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="row col-sm-9">
+                <label class="col-sm-3">Jenis Laporan</label>
+                <div class="col-sm-6">
+                    <kendo-dropdownlist for="jns_tr" style="width: 100%" option-label="Pilih Jenis Laporan"
+                                        datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                        <datasource type="DataSourceTagHelperType.Custom">
+                            <transport>
+                                <read url="@Url.Action("GetJenisLaporan", "LaporanBulananTreaty")"/>
+                            </transport>
+                        </datasource>
+                    </kendo-dropdownlist>
+                    <span asp-validation-for="kd_cob" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <button type="button" id="btn-preview" class="btn btn-success space-right">
+                <span class="fa fa-search"></span> Preview
+            </button>
+        </div>
+    </form>
+</div>
+
