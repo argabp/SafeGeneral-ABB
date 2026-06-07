@@ -1,0 +1,51 @@
+﻿@using ABB.Domain.Entities
+@using Kendo.Mvc.UI
+@model ABB.Web.Modules.LaporanMaipark.Models.LaporanMaiparkViewModel
+@using Microsoft.Extensions.Configuration
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+
+@inject IConfiguration Configuration
+
+@{
+    Layout = "~/Modules/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Laporan Maipark";
+}
+<script src="~/Modules/LaporanMaipark/JS/laporanMaipark.js"></script>
+
+<div class="flat-box" id="container-cancel-csm">
+    <div class="row">
+        <div class="flat-box-title col-md-6">
+            Laporan Maipark
+        </div>
+    </div>
+
+    <div class="flat-box-content">
+        <form id="LaporanMaiparkForm" enctype="multipart/form-data" autocomplete="off">
+            <div>
+                <div class="row form-group">
+                    <div class="row col-md-8">
+                        <div class="col-md-3" style="align-self: center">
+                            <label>Periode</label>
+                        </div>
+                        <div class="col-md-3">
+                            <kendo-datepicker for="tgl_mul" value="@DateTime.Now" style="width: 100%" />
+                        </div>
+                        <div class="col-md-1" style="text-align: center; align-self: center">
+                            <span>sd</span>
+                        </div>
+                        <div class="col-md-3">
+                            <kendo-datepicker for="tgl_akh" value="@DateTime.Now" style="width: 100%" />
+                        </div>
+                        <div class="col-sm-2">
+                            <button type="button" id="btn-refresh-grid" class="btn btn-primary" style="width: 100%">
+                                <span class="fa fa-redo"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
