@@ -35,7 +35,7 @@ namespace ABB.Application.Alokasis.Configs
                 
                 BaseWhere = "(src.kd_cb = @kd_cb AND src.kd_cob = @kd_cob AND" +
                             " src.kd_scob = @kd_scob AND src.kd_thn = @kd_thn AND" +
-                            " src.no_pol = @no_pol AND src.no_updt = @no_updt)",
+                            " src.no_pol = @no_pol AND src.no_updt = @no_updt AND src.no_updt_reas = @no_updt_reas)",
 
                 ColumnMap = new Dictionary<string, string>
                 {

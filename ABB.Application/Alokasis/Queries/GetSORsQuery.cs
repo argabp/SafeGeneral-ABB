@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ABB.Application.Alokasis.Configs;
-using ABB.Application.Common.Grids.Interfaces;
-using ABB.Application.Common.Grids.Models;
 using ABB.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -60,6 +57,7 @@ namespace ABB.Application.Alokasis.Queries
                              uw01e.tgl_closing,   
                              ri01e.tgl_closing tgl_closing_reas,  
                              ri01e.flag_closing,   
+                             ri01e.no_updt_reas,
                             cb.nm_cb,
                             cob.nm_cob,
                             scob.nm_scob,
@@ -81,7 +79,7 @@ namespace ABB.Application.Alokasis.Queries
                             LEFT JOIN rf04 cob ON uw01e.kd_cob = cob.kd_cob
                         LEFT JOIN rf05 scob ON uw01e.kd_cob = scob.kd_cob 
                                            AND uw01e.kd_scob = scob.kd_scob 
-                        WHERE (cb.nm_cb like '%'+@SearchKeyword+'%' 
+                        WHERE uw01e.no_pol_ttg = '7050350202600010' AND (cb.nm_cb like '%'+@SearchKeyword+'%' 
 					OR cob.nm_cob like '%'+@SearchKeyword+'%' 
 					OR scob.nm_scob like '%'+@SearchKeyword+'%' 
 					OR ri01e.flag_closing like '%'+@SearchKeyword+'%' 

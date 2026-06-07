@@ -39,5 +39,7 @@ namespace ABB.Application.Alokasis.Queries
         public string flag_closing { get; set; }
 
         public string thn_uw { get; set; }
+
+        public short no_updt_reas { get; set; }
     }
 }
