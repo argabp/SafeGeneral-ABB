@@ -6192,6 +6192,9 @@
         <None Update="Modules\Reports\Templates\SlipPremiFakultatifKeluar.html">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Update="Modules\Reports\Templates\LaporanBulananFakultatif.html">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
