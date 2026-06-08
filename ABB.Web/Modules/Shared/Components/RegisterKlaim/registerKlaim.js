@@ -12,12 +12,19 @@ function dataKodeSCOBDropDown(){
     }
 }
 
+function dataKodeSebab(){
+    return {
+        kd_cob: $("#temp_kd_cob").val().trim()
+    }
+}
+
 async function setRegisterKlaimEditedValue(){
     showProgress('#RegisterKlaimWindow');
     var flag_konv = $("#tempFlag_konv").val();
     flag_konv == "Y" ? $("#flag_konv").prop("checked", true) : $("#flag_konv").prop("checked", false);
     
     await restoreDropdownValue("#kd_scob", "#temp_kd_scob");
+    await restoreDropdownValue("#kd_sebab", "#temp_kd_sebab");
     
     if($("#IsEdit").val() === 'True')
     {

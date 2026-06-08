@@ -295,11 +295,12 @@
             <div class="row col-sm-6">
                 <label class="col-sm-6">Kode Penyebab</label>
                 <div class="col-sm-6">
+                    <input type="hidden" id="temp_kd_sebab" value="@Model.kd_sebab">
                     <kendo-dropdownlist for="kd_sebab" style="width: 100%" option-label="Pilih Kode Sebab" on-change="OnKodePenyebabChange"
                                         datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains" >
                         <datasource type="DataSourceTagHelperType.Custom">
                             <transport>
-                                <read url="@Url.Action("GetKodeSebab", "RegisterKlaim")"/>
+                                <read url="@Url.Action("GetKodeSebab", "RegisterKlaim")", data="dataKodeSebab"/>
                             </transport>
                         </datasource>
                     </kendo-dropdownlist>

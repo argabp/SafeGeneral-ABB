@@ -249,7 +249,7 @@ function OnPolisIndukChange(e){
         $("#desk_deduct").getKendoTextArea().value(returnValue[2].split(",")[1]);
         $("#faktor_prd").getKendoNumericTextBox().value(returnValue[3].split(",")[1]);
         returnValue[4].split(",")[1] == "Y" ? $("#flag_konv").prop("checked", true) : $("#flag_konv").prop("checked", false);
-        $("#kd_cb").getKendoDropDownList().value(returnValue[5].split(",")[1]);
+        $("#kd_cb").getKendoDropDownList().value(returnValue[5].split(",")[1].trim());
         $("#kd_cb").getKendoDropDownList().trigger("change");
         $("#kd_cob").getKendoDropDownList().value(returnValue[6].split(",")[1]);
         $("#kd_cob").getKendoDropDownList().trigger("change");
