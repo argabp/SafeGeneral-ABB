@@ -177,13 +177,13 @@ namespace ABB.Application.CetakSOATreatyKeluars.Commands
                                     ");
                         
                         var innerGroups = datas.Where(s => s.kd_rk_pas == outerData)
-                            .Select(s => s.thn_uw);
+                            .Select(s => s.thn_uw).Distinct();
 
                         foreach (var innerData in innerGroups)
                         {
                             var firstDataInner = datas.First(s => s.kd_rk_pas == outerData && s.thn_uw == innerData);
                             stringBuilder.Append(@$"<tr>
-                                            <td style='text-align: left; vertical-align: top; border: 1px solid;' colspan=6>U/Y {firstDataInner.thn_uw}</td>
+                                            <td style='text-align: left; vertical-align: top; border: 1px solid;' colspan=7>U/Y {firstDataInner.thn_uw}</td>
                                         </tr>");
                             
                             foreach (var data in datas.Where(s => s.kd_rk_pas == outerData && s.thn_uw == innerData))

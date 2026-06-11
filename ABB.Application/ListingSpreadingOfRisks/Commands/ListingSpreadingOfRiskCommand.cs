@@ -59,41 +59,40 @@ namespace ABB.Application.ListingSpreadingOfRisks.Commands
 
             StringBuilder stringBuilder = new StringBuilder();
 
-            var outerGroups = datas.Select(w => w.kd_cob).Distinct();
+            // var outerGroups = datas.Select(w => w.kd_cob).Distinct();
+            //
+            // foreach (var outerGroup in outerGroups)
+            // {
+//                 var firstData = datas.First(w => w.kd_cob == outerGroup);
+//                 stringBuilder.Append($@"
+//                     <div style='page-break-before: always;'>
+//                         <div class='container'>
+//                             <div class='section'>
+//                                 <p style='font-size: 14px; margin: auto; text-align: center;'><strong>LISTING ALOKASI REASURANSI</strong></p>
+//                                 <p style='font-size: 14px; margin: auto; text-align: center;'><strong>CLASS OF BUSINESS {firstData.nm_cob}</strong></p>
+//                                 <p style='font-size: 14px; margin: auto; text-align: center;'><strong>Periode {request.tgl_mul:dd MMM yyyy} s/d {request.tgl_akh:dd MMM yyyy}</strong></p>
+//                                 <br>
+//
+//                                 <table class='table'>
+//                                     <tr>
+//                                         <td style=''><strong>Nomor Polis</strong></td>
+//                                         <td>:</td>
+//                                         <td style='' colspan='6'><strong>{firstData.no_pol_ttg}</strong></td>
+//                                     </tr>
+//                                     <tr>
+//                                         <td style='width: 10%'>Nama Tertanggung</td>
+//                                         <td style='width: 1%'>:</td>
+//                                         <td style='width: 36%'>{firstData.nm_ttg}</td>
+//                                         <td style='width: 20%'>Sub COB</td>
+//                                         <td style='width: 1%'>:</td>
+//                                         <td style='width: 10%'>{firstData.nm_scob}</td>
+//                                         <td style='width: 10%'>Tanggal Closing</td>
+//                                         <td style='width: 1%'>:</td>
+//                                         <td style='width: 10%'>{firstData.tgl_closing_id}</td>
+//                                     </tr>
+//                                 </table>");
 
-            foreach (var outerGroup in outerGroups)
-            {
-                var firstData = datas.First(w => w.kd_cob == outerGroup);
-                stringBuilder.Append($@"
-                    <div style='page-break-before: always;'>
-                        <div class='container'>
-                            <div class='section'>
-                                <p style='font-size: 14px; margin: auto; text-align: center;'><strong>LISTING ALOKASI REASURANSI</strong></p>
-                                <p style='font-size: 14px; margin: auto; text-align: center;'><strong>CLASS OF BUSINESS {firstData.nm_cob}</strong></p>
-                                <p style='font-size: 14px; margin: auto; text-align: center;'><strong>Periode {request.tgl_mul:dd MMM yyyy} s/d {request.tgl_akh:dd MMM yyyy}</strong></p>
-                                <br>
-
-                                <table class='table'>
-                                    <tr>
-                                        <td style=''><strong>Nomor Polis</strong></td>
-                                        <td>:</td>
-                                        <td style='' colspan='6'><strong>{firstData.no_pol_ttg}</strong></td>
-                                    </tr>
-                                    <tr>
-                                        <td style='width: 10%'>Nama Tertanggung</td>
-                                        <td style='width: 1%'>:</td>
-                                        <td style='width: 46%'>{firstData.nm_ttg}</td>
-                                        <td style='width: 10%'>Sub COB</td>
-                                        <td style='width: 1%'>:</td>
-                                        <td style='width: 10%'>{firstData.nm_scob}</td>
-                                        <td style='width: 10%'>Tanggal Closing</td>
-                                        <td style='width: 1%'>:</td>
-                                        <td style='width: 10%'>{firstData.tgl_closing_id}</td>
-                                    </tr>
-                                </table>");
-
-                var innerGroup = datas.Where(w => w.kd_cob == outerGroup)
-                    .Select(s => s.no_updt_reas.Trim() + s.no_pol_ttg.Trim()).Distinct();
+                var innerGroup = datas.Select(s => s.no_updt_reas.Trim() + s.no_pol_ttg.Trim()).Distinct();
                 
                 foreach (var innerData in innerGroup)
                 {
@@ -106,20 +105,45 @@ namespace ABB.Application.ListingSpreadingOfRisks.Commands
                     decimal total_nilai_kms_reas = 0;
 
                     var firstInnerGroupData = datas.First(w =>
-                        w.kd_cob == outerGroup && w.no_updt_reas.Trim() + w.no_pol_ttg.Trim() == innerData);
+                        w.no_updt_reas.Trim() + w.no_pol_ttg.Trim() == innerData);
 
+                    stringBuilder.Append($@"
+                    <div style='page-break-before: always;'>
+                        <div class='container'>
+                            <div class='section'>
+                                <p style='font-size: 14px; margin: auto; text-align: center;'><strong>LISTING ALOKASI REASURANSI</strong></p>
+                                <p style='font-size: 14px; margin: auto; text-align: center;'><strong>CLASS OF BUSINESS {firstInnerGroupData.nm_cob}</strong></p>
+                                <p style='font-size: 14px; margin: auto; text-align: center;'><strong>Periode {request.tgl_mul:dd MMM yyyy} s/d {request.tgl_akh:dd MMM yyyy}</strong></p>
+                                <br>");
+                    
                     stringBuilder.Append($@"
                                 <table>
                                     <tr>
+                                        <td style=''><strong>Nomor Polis</strong></td>
+                                        <td>:</td>
+                                        <td style='' colspan='6'><strong>{firstInnerGroupData.no_pol_ttg}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td style='width: 10%'>Nama Tertanggung</td>
+                                        <td style='width: 1%'>:</td>
+                                        <td style='width: 37%'>{firstInnerGroupData.nm_ttg}</td>
+                                        <td style='width: 15%'>Sub COB</td>
+                                        <td style='width: 1%'>:</td>
+                                        <td style='width: 15%'>{firstInnerGroupData.nm_scob}</td>
+                                        <td style='width: 10%'>Tanggal Closing</td>
+                                        <td style='width: 1%'>:</td>
+                                        <td style='width: 10%'>{firstInnerGroupData.tgl_closing_id}</td>
+                                    </tr>
+                                    <tr>
                                         <td style='width: 10%'>Nomor Resiko</td>
                                         <td style='width: 1%'>:</td>
-                                        <td style='width: 47%'>{firstInnerGroupData.no_rsk} / Kode Endorsment : {firstInnerGroupData.kd_endt}</td>
-                                        <td style='width: 10%'>Mata Uang</td>
+                                        <td style='width: 37%'>{firstInnerGroupData.no_rsk} / Kode Endorsment : {firstInnerGroupData.kd_endt}</td>
+                                        <td style='width: 15%'>Mata Uang</td>
                                         <td style='width: 1%'>:</td>
-                                        <td style='width: 10%'>{firstInnerGroupData.nm_mtu}</td>
+                                        <td style='width: 15%'>{firstInnerGroupData.nm_mtu}</td>
                                         <td style='width: 10%'>Premi</td>
                                         <td style='width: 1%'>:</td>
-                                        <td style='width: 10%'>{ReportHelper.ConvertToReportFormat(firstInnerGroupData.nilai_prm_rsk)}</td>
+                                        <td style='width: 10%; text-align: right;'>{ReportHelper.ConvertToReportFormat(firstInnerGroupData.nilai_prm_rsk)}</td>
                                     </tr>
                                     <tr>
                                         <td style=''>Coverage</td>
@@ -130,17 +154,17 @@ namespace ABB.Application.ListingSpreadingOfRisks.Commands
                                         <td style=''>{ReportHelper.ConvertToReportFormat(firstInnerGroupData.nilai_ttl_ptg)}</td>
                                         <td style=''>Diskon</td>
                                         <td>:</td>
-                                        <td style=''>{ReportHelper.ConvertToReportFormat(firstInnerGroupData.nilai_dis_rsk)}</td>
+                                        <td style=' text-align: right;'>{ReportHelper.ConvertToReportFormat(firstInnerGroupData.nilai_dis_rsk)}</td>
                                     </tr>
                                     <tr>
                                         <td style=''></td>
                                         <td></td>
                                         <td style=''>Rate Premi</td>
                                         <td>:</td>
-                                        <td style=''>{ReportHelper.ConvertToReportFormat(firstInnerGroupData.pst_rate_prm_rsk)} {ReportHelper.ConvertSatuanType(firstInnerGroupData.stn_rate_prm_rsk)}</td>
+                                        <td style=''>{ReportHelper.ConvertToReportFormat(firstInnerGroupData.pst_rate_prm_rsk, true)} {ReportHelper.ConvertSatuanType(firstInnerGroupData.stn_rate_prm_rsk)}</td>
                                         <td style=''>Nett Premi</td>
                                         <td>:</td>
-                                        <td style=''>{ReportHelper.ConvertToReportFormat(firstInnerGroupData.nilai_prm_rsk_net)}</td>
+                                        <td style=' text-align: right;'>{ReportHelper.ConvertToReportFormat(firstInnerGroupData.nilai_prm_rsk_net)}</td>
                                     </tr>
                                     <tr>
                                         <td style=''>Alamat Resiko</td>
@@ -170,16 +194,6 @@ namespace ABB.Application.ListingSpreadingOfRisks.Commands
                                         <td style=''>{firstInnerGroupData.kd_kls_konstr}</td>
                                         <td style='' colspan='3'></td>
                                     </tr>
-                                    <tr>
-                                        <td style=''></td>
-                                        <td></td>
-                                        <td style=''></td>
-                                        <td>:</td>
-                                        <td style=''></td>
-                                        <td style=''></td>
-                                        <td></td>
-                                        <td style=''></td>
-                                    </tr>
                                 </table>
                                 <table class='table'>
                                     <tr>
@@ -194,7 +208,7 @@ namespace ABB.Application.ListingSpreadingOfRisks.Commands
                                         <td style='width: 12%; text-align: center; border: 1px solid'>Komisi</td>
                                     </tr>");
                         
-                    foreach (var data in datas.Where(w => w.kd_cob == outerGroup && w.no_updt_reas.Trim() + w.no_pol_ttg.Trim() == innerData))
+                    foreach (var data in datas.Where(w => w.no_updt_reas.Trim() + w.no_pol_ttg.Trim() == innerData))
                     {
                         var nilai_ttl_ptg_reas = ReportHelper.ConvertToReportFormat(data.nilai_ttl_ptg_reas);
                         var pst_share_reas = ReportHelper.ConvertToReportFormat(data.pst_share_reas);
@@ -230,7 +244,7 @@ namespace ABB.Application.ListingSpreadingOfRisks.Commands
                     stringBuilder.Append(@$"<tr>
                                                 <td style='width: 10%; text-align: left; vertical-align: top;'></td>
                                                 <td style='text-align: left; vertical-align: top;'></td>
-                                                <td style='text-align: left; vertical-align: top; border-top: 1px solid; border-bottom: 1px solid;'>{firstData.symbol}</td>
+                                                <td style='text-align: left; vertical-align: top; border-top: 1px solid; border-bottom: 1px solid;'>{firstInnerGroupData.symbol}</td>
                                                 <td style='width: 12%; text-align: right; vertical-align: top; border-top: 1px solid; border-bottom: 1px solid;'>{ReportHelper.ConvertToReportFormat(total_nilai_ttl_ptg_reas)}</td>
                                                 <td style='width: 8%; text-align: right; vertical-align: top; border-top: 1px solid; border-bottom: 1px solid;'>{ReportHelper.ConvertToReportFormat(total_pst_share_reas)}</td>
                                                 <td style='width: 12%; text-align: right; vertical-align: top; border-top: 1px solid; border-bottom: 1px solid;'>{ReportHelper.ConvertToReportFormat(total_nilai_prm_reas)}</td>
@@ -241,23 +255,23 @@ namespace ABB.Application.ListingSpreadingOfRisks.Commands
                                             </tr>");
                     
                     stringBuilder.Append("</table>");
-                }
 
-                stringBuilder.Append($@"
+                    stringBuilder.Append($@"
 
                                 <table class='table' style='margin-top: 7rem'>
                                     <tr>
                                         <td style='width:80%'></td>
-                                        <td style='text-align: center'><strong>{firstData.nm_bag}</strong></td>
+                                        <td style='text-align: center'><strong>{firstInnerGroupData.nm_bag}</strong></td>
                                     </tr>
                                     <tr>
                                         <td style='width:80%'></td>
-                                        <td style='text-align: center'><strong>{firstData.nm_kpl_bag}</strong></td>
+                                        <td style='text-align: center'><strong>{firstInnerGroupData.nm_kpl_bag}</strong></td>
                                     </tr>
                                 </table>
                             </div>
                         </div>
                     </div>");
+                // }
             }
 
             resultTemplate = templateProfileResult.Render( new
