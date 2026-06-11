@@ -19,6 +19,7 @@
 @{
     var nomor_aksepatsi = Model.kd_cb.Trim() + "." + Model.kd_cob.Trim() +
                           Model.kd_scob.Trim() + "." + Model.kd_thn.Trim() + "." + Model.no_pol.Trim();
+    Model.thn_akh = string.IsNullOrWhiteSpace(Model.thn_akh) ? null : Model.thn_akh;
 }
 <div class="window-body" style="background-color: lightgray">
     <form id="OtherPAForm" enctype="multipart/form-data" autocomplete="off">
