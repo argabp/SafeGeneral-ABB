@@ -79,7 +79,7 @@ namespace ABB.Application.Alokasis.Queries
                             LEFT JOIN rf04 cob ON uw01e.kd_cob = cob.kd_cob
                         LEFT JOIN rf05 scob ON uw01e.kd_cob = scob.kd_cob 
                                            AND uw01e.kd_scob = scob.kd_scob 
-                        WHERE uw01e.no_pol_ttg = '7050350202600010' AND (cb.nm_cb like '%'+@SearchKeyword+'%' 
+                        WHERE (cb.nm_cb like '%'+@SearchKeyword+'%' 
 					OR cob.nm_cob like '%'+@SearchKeyword+'%' 
 					OR scob.nm_scob like '%'+@SearchKeyword+'%' 
 					OR ri01e.flag_closing like '%'+@SearchKeyword+'%' 
