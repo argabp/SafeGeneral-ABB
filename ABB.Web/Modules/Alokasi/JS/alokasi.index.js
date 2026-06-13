@@ -34,6 +34,10 @@ function openSORWindow(url, title) {
     openWindow('#AlokasiWindow', url, title);
 }
 
+function openEndorsWindow(url, title) {
+    openWindow('#EndorsWindow', url, title);
+}
+
 function OnClickEditAlokasi(e) {
     e.preventDefault();
     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
@@ -93,6 +97,7 @@ function setButtonActions(e){
             if(dataItem.flag_closing == "Y"){
                 buttonContainer.find(".k-grid-Edit").hide();
             } else {
+                buttonContainer.find(".k-grid-EndorsSOR").hide();
                 buttonContainer.find(".k-grid-View").hide();
             }
         }
@@ -118,4 +123,11 @@ function deleteAlokasi(dataItem) {
 
         closeProgressOnGrid('#SORGrid');
     }, AjaxContentType.URLENCODED);
+}
+
+function OnClickEndorsSOR(e) {
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    sorData = dataItem;
+    openEndorsWindow(`/Alokasi/EndorsSOR`, 'Endors SOR');
 }

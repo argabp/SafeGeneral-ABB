@@ -98,6 +98,7 @@ function onAlokasiDataBound(e){
     var grid = e.sender;
 
     grid.tbody.find("tr").each(function(e, element) {
+        var dataItem = grid.dataItem(this);
         var uid = $(this).data("uid");
 
         // Find button container - try locked column first, then regular
@@ -112,7 +113,11 @@ function onAlokasiDataBound(e){
             //     buttonContainer.find(".k-grid-Edit").hide();
             //     buttonContainer.find(".k-grid-Delete").hide();
             // }
-
+            
+            if(dataItem.no_updt_reas == 0){
+                buttonContainer.find(".k-grid-EndorsAlokasi").hide();
+            }
+            
             if($("#IsViewOnly").val() == "True") {
                 buttonContainer.find(".k-grid-EditAlokasi").hide();
             } else{
@@ -122,4 +127,11 @@ function onAlokasiDataBound(e){
     });
 
     gridAutoFit(grid);
+}
+
+function OnClickEndorsAlokasi(e) {
+    e.preventDefault();
+    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    alokasi = dataItem;
+    openEndorsWindow(`/Alokasi/EndorsAlokasi`, 'Endors Alokasi');
 }

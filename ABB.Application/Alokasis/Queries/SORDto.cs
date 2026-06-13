@@ -18,6 +18,8 @@ namespace ABB.Application.Alokasis.Queries
         
         public string kd_scob { get; set; }
         
+        public string kd_endt { get; set; }
+        
         public DateTime tgl_closing { get; set; }
 
         public DateTime tgl_closing_reas { get; set; }
@@ -41,5 +43,7 @@ namespace ABB.Application.Alokasis.Queries
         public string thn_uw { get; set; }
 
         public short no_updt_reas { get; set; }
+        
+        public short no_rsk { get; set; }
     }
 }

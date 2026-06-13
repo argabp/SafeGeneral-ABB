@@ -95,11 +95,11 @@
                     .IconClass("fa fa-eye")
                     .HtmlAttributes(new { title = "View" })
                     .Click("OnClickViewAlokasi");
-                // command.Custom("Delete")
-                //     .Text("Delete")
-                //     .IconClass("k-icon k-i-delete")
-                //     .HtmlAttributes(new { title = "Delete" })
-                //     .Click("OnClickDeleteAlokasi");
+                command.Custom("EndorsSOR")
+                    .Text("Endors SOR")
+                    .IconClass("fa fa-suitcase")
+                    .HtmlAttributes(new { title = "Endors SOR" })
+                    .Click("OnClickEndorsSOR");
             }).Title("Action").Width(200).Locked(true);
             columns.Bound(col => col.Id).Hidden();
             columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
@@ -141,6 +141,15 @@
         @(Html.Kendo().Window()
             .Name("FormAlokasiWindow")
             .Title("Form Alokasi Page")
+            .Width(800)
+            .Modal(true)
+            .Visible(false)
+            .Draggable(true)
+        )
+        
+        @(Html.Kendo().Window()
+            .Name("EndorsWindow")
+            .Title("Endors Page")
             .Width(800)
             .Modal(true)
             .Visible(false)

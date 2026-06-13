@@ -33,6 +33,11 @@
                     .IconClass("k-icon k-i-delete")
                     .HtmlAttributes(new { title = "Delete" })
                     .Click("btnDeleteAlokasi_OnClick");
+                command.Custom("EndorsAlokasi")
+                    .Text("Keterangan Endors SOR")
+                    .IconClass("fa fa-suitcase")
+                    .HtmlAttributes(new { title = "Endors Alokasi" })
+                    .Click("OnClickEndorsAlokasi");
             }).Width(150).Locked(true).Title("Action");
             columns.Bound(col => col.no_rsk).Width(150).Title("Nomor Risiko");
             columns.Bound(col => col.kd_endt).Width(150).Title("Kode Endorsment").ClientTemplate("#= data.kd_endt == 'I' ? 'Insert' : 'Delete' #");;

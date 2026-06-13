@@ -1,0 +1,22 @@
+﻿@using Kendo.Mvc.UI
+@model ABB.Web.Modules.Alokasi.Models.EndorsSORViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, ABB.Web
+
+<script src="~/Modules/Alokasi/JS/alokasi.endors.sor.js"></script>
+
+<div class="window-body">
+    <div class="form-group">
+        <div class="col-md-12 col-sm-6">
+            <kendo-textarea style="width: 100%" rows="5" name="ket_endt"></kendo-textarea>
+            <span asp-validation-for="ket_endt" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+
+<div class="window-footer" style="text-align: center">
+    <button type="button" id="btn-endors-sor" class="btn btn-primary" style="width: 82.5%">
+        Endors SOR
+    </button>
+</div>
