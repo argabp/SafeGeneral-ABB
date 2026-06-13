@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using ABB.Application.Common.Grids.Models;
+using ABB.Application.Common.Queries;
 using ABB.Application.ReopenAlokasiKlaimReasuransis.Commands;
 using ABB.Application.ReopenAlokasiKlaimReasuransis.Queries;
 using ABB.Web.Modules.Base;
@@ -19,12 +20,23 @@ namespace ABB.Web.Modules.ReopenAlokasiKlaimReasuransi
             
             return View();
         }
+
+        public async Task<JsonResult> GetCabang()
+        {
+            var result = await Mediator.Send(new GetCabangPSTQuery());
+
+            return Json(result);
+        }
         
-        public async Task<ActionResult> GetReopenAlokasiKlaimReasuransis(GridRequest grid)
+        public async Task<ActionResult> GetReopenAlokasiKlaimReasuransis(GridRequest grid,
+            string kodeCabang, DateTime startDate, DateTime endDate)
         {
             var result = await Mediator.Send(new GetReopenAlokasiKlaimReasuransisQuery()
             {
-                Grid = grid
+                Grid = grid,
+                KodeCabang = kodeCabang,
+                StartDate = startDate,
+                EndDate = endDate
             });
             
             return Json(result);

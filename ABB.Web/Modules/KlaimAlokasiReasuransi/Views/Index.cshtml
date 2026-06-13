@@ -20,7 +20,54 @@
             Spreading of Loss (SOL)
         </div>
         <div class="col-md-4">
-            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+            @* <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/> *@
+        </div>
+    </div>
+    <div class="flat-box filter-box">
+        <div class="flat-box-content">
+            <div class="filter-bar" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+
+                <label for="kd_cb"><b>Kode Cabang :</b></label>
+        
+                <kendo-dropdownlist name="kd_cb" option-label="Pilih Cabang"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetCabang", "Alokasi")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+
+        
+                <!-- Label Periode -->
+                <label for="StartDate"><b>Periode :</b></label>
+
+                <!-- DatePicker Dari -->
+                @(Html.Kendo().DatePicker()
+                    .Name("StartDate")
+                    .Value(DateTime.Now)
+                    .HtmlAttributes(new { style = "width:150px;" })
+                    .Format("dd-MM-yyyy")
+                )
+
+                <span class="date-separator">s/d</span>
+
+                <!-- DatePicker Sampai -->
+                @(Html.Kendo().DatePicker()
+                    .Name("EndDate")
+                    .Value(DateTime.Now)
+                    .HtmlAttributes(new { style = "width:150px;" })
+                    .Format("dd-MM-yyyy")
+                )
+
+                <!-- Tombol Cari -->
+                @(Html.Kendo().Button()
+                    .Name("btnSearch")
+                    .Content("<span class='k-icon k-i-search'></span> Cari")
+                    .HtmlAttributes(new { @class = "k-primary", style = "border-radius:6px; margin-left:10px;" })
+                    .Events(e => e.Click("onSearchClick"))
+                )
+            </div>
         </div>
     </div>
 
@@ -61,8 +108,8 @@
                     columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
                     columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
                     columns.Bound(col => col.nm_scob).Width(150).Title("Nama Sub COB");
-                    columns.Bound(col => col.no_pol_lama).Title("Nomor Polis").ClientTemplate("#= formatNoPol(no_pol_lama) #");
-                    columns.Bound(col => col.nomor_register).Title("Nomor Berkas");
+                    columns.Bound(col => col.no_pol_lama).Width(200).Title("Nomor Polis").ClientTemplate("#= formatNoPol(no_pol_lama) #");
+                    columns.Bound(col => col.nomor_register).Width(200).Title("Nomor Berkas");
                     columns.Bound(col => col.no_mts).Width(150).Title("Nomor Mutasi");
                     columns.Bound(col => col.nm_tipe_mts).Width(150).Title("Tipe Mutasi");
                     columns.Bound(col => col.nm_ttg).Width(200).Title("Nama Tertanggung");
@@ -79,6 +126,7 @@
                     .Info(true)
                     .PageSizes(true)
                 )
+                .AutoBind(false)
                 .ClientDetailTemplateId("template")
                 .Sortable()
                 .Filterable()

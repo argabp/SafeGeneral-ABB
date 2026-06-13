@@ -79,7 +79,7 @@ function searchFilterDetailAlokasi(e) {
         kd_scob: alokasi?.kd_scob,
         kd_thn: alokasi?.kd_thn,
         no_pol: alokasi?.no_pol,
-        no_updt: alokasi?.no_updt,
+        no_updt_reas: alokasi?.no_updt_reas,
         no_rsk: alokasi?.no_rsk,
         kd_endt: alokasi?.kd_endt
     };

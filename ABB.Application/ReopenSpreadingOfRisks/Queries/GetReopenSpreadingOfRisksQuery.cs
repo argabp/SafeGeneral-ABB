@@ -15,6 +15,9 @@ namespace ABB.Application.ReopenSpreadingOfRisks.Queries
     public class GetReopenSpreadingOfRisksQuery : IRequest<List<ReopenSpreadingOfRiskDto>>
     {
         public string SearchKeyword { get; set; }
+        public string KodeCabang { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
     }
 
     public class GetReopenSpreadingOfRisksQueryHandler : IRequestHandler<GetReopenSpreadingOfRisksQuery, List<ReopenSpreadingOfRiskDto>>
@@ -53,7 +56,7 @@ namespace ABB.Application.ReopenSpreadingOfRisks.Queries
                         INNER JOIN rf04 cob ON p.kd_cob = cob.kd_cob
                         INNER JOIN rf05 scob ON p.kd_cob = scob.kd_cob 
                                             AND p.kd_scob = scob.kd_scob
-                        WHERE p.flag_closing = 'Y' AND (cb.nm_cb like '%'+@SearchKeyword+'%' 
+                        WHERE p.tgl_closing between @StartDate AND @EndDate AND p.flag_closing = 'Y' AND (cb.nm_cb like '%'+@SearchKeyword+'%' 
 					OR cob.nm_cob like '%'+@SearchKeyword+'%' 
 					OR scob.nm_scob like '%'+@SearchKeyword+'%' 
 					OR p.nm_ttg like '%'+@SearchKeyword+'%' 
@@ -61,7 +64,11 @@ namespace ABB.Application.ReopenSpreadingOfRisks.Queries
 					OR p.tgl_mul_ptg like '%'+@SearchKeyword+'%' 
 					OR p.tgl_akh_ptg like '%'+@SearchKeyword+'%' 
 					OR p.no_pol_ttg like '%'+@SearchKeyword+'%' 
-					OR @SearchKeyword = '' OR @SearchKeyword IS NULL)", new { request.SearchKeyword })).ToList();
+					OR @SearchKeyword = '' OR @SearchKeyword IS NULL)
+					AND (p.kd_cb = @KodeCabang OR @KodeCabang = '' OR @KodeCabang IS NULL)", new
+                {
+                    request.SearchKeyword, request.StartDate, request.EndDate, request.KodeCabang
+                })).ToList();
 
                 return rekanans;
             }

@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using ABB.Application.Common.Grids.Interfaces;
@@ -10,6 +11,9 @@ namespace ABB.Application.ReopenAlokasiKlaimReasuransis.Queries
     public class GetReopenAlokasiKlaimReasuransisQuery : IRequest<GridResponse<ReopenAlokasiKlaimReasuransiDto>>
     {
         public GridRequest Grid { get; set; }
+        public string KodeCabang { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
     }
 
     public class GetReopenAlokasiKlaimReasuransisQueryHandler : IRequestHandler<GetReopenAlokasiKlaimReasuransisQuery, GridResponse<ReopenAlokasiKlaimReasuransiDto>>
@@ -32,6 +36,7 @@ namespace ABB.Application.ReopenAlokasiKlaimReasuransis.Queries
                 config,
                 new
                 {
+                    request.StartDate, request.EndDate, request.KodeCabang
                 }
             );
         }

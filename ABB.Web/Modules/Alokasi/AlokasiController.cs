@@ -39,14 +39,28 @@ namespace ABB.Web.Modules.Alokasi
         //     return Json(result);
         // }
 
-        public async Task<ActionResult> GetSORs([DataSourceRequest] DataSourceRequest request, string searchkeyword)
+        public async Task<JsonResult> GetCabang()
         {
-            var ds = await Mediator.Send(new GetSORsQuery() { SearchKeyword = searchkeyword });
+            var result = await Mediator.Send(new GetCabangPSTQuery());
+
+            return Json(result);
+        }
+
+        public async Task<ActionResult> GetSORs([DataSourceRequest] DataSourceRequest request, string searchkeyword,
+            string kodeCabang, DateTime startDate, DateTime endDate)
+        {
+            var ds = await Mediator.Send(new GetSORsQuery()
+            {
+                SearchKeyword = searchkeyword,
+                KodeCabang = kodeCabang,
+                StartDate = startDate,
+                EndDate = endDate
+            });
             return Json(ds.AsQueryable().ToDataSourceResult(request));
         }
         
         public async Task<ActionResult> GetAlokasis(GridRequest grid, string kd_cb, string kd_cob, 
-            string kd_scob, string kd_thn, Int16 no_updt, string no_pol, Int16 no_updt_reas)
+            string kd_scob, string kd_thn, string no_pol, Int16 no_updt_reas)
         {
             var result = await Mediator.Send(new GetAlokasisQuery()
             {
@@ -55,7 +69,6 @@ namespace ABB.Web.Modules.Alokasi
                 kd_cob = kd_cob,
                 kd_scob = kd_scob,
                 kd_thn = kd_thn,
-                no_updt = no_updt,
                 no_pol = no_pol,
                 no_updt_reas = no_updt_reas
             });
@@ -64,7 +77,7 @@ namespace ABB.Web.Modules.Alokasi
         }
         
         public async Task<ActionResult> GetDetailAlokasis(GridRequest grid, string kd_cb, string kd_cob, string kd_scob, 
-            string kd_thn, Int16 no_updt, Int16 no_rsk, string kd_endt, string no_pol)
+            string kd_thn, Int16 no_updt_reas, Int16 no_rsk, string kd_endt, string no_pol)
         {
             var result = await Mediator.Send(new GetDetailAlokasisQuery()
             {
@@ -73,7 +86,7 @@ namespace ABB.Web.Modules.Alokasi
                 kd_cob = kd_cob,
                 kd_scob = kd_scob,
                 kd_thn = kd_thn,
-                no_updt = no_updt,
+                no_updt_reas = no_updt_reas,
                 no_rsk = no_rsk,
                 kd_endt = kd_endt,
                 no_pol = no_pol

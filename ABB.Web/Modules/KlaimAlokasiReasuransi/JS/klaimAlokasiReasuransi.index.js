@@ -2,11 +2,22 @@
     searchKeyword_OnKeyUp();
 });
 
+function onSearchClick() {
+    // Cukup perintahkan grid untuk membaca ulang datanya
+    $("#MutasiKlaimGrid").data("kendoGrid").dataSource.read();
+}
+
 function searchFilterMutasiKlaim(e) {
     const gridReq = buildGridRequest(e, "SearchKeyword");
+    var startDatePicker = $("#StartDate").data("kendoDatePicker");
+    var endDatePicker = $("#EndDate").data("kendoDatePicker");
+    var KodeCabang = $("#kd_cb").data("kendoDropDownList");
 
     return {
-        grid: gridReq
+        grid: gridReq,
+        startDate: startDatePicker && startDatePicker.value() ? kendo.toString(startDatePicker.value(), "yyyy-MM-dd") : null,
+        endDate: endDatePicker && endDatePicker.value() ? kendo.toString(endDatePicker.value(), "yyyy-MM-dd") : null,
+        kodeCabang: KodeCabang && KodeCabang.value() ? KodeCabang.value() : null,
     };
 }
 

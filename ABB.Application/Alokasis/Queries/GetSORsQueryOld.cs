@@ -11,6 +11,9 @@ namespace ABB.Application.Alokasis.Queries
     public class GetSORsQueryOld : IRequest<GridResponse<SORDto>>
     {
         public GridRequest Grid { get; set; }
+        public string KodeCabang { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
     }
 
     public class GetSORsQueryOldHandler : IRequestHandler<GetSORsQueryOld, GridResponse<SORDto>>
@@ -31,6 +34,9 @@ namespace ABB.Application.Alokasis.Queries
                 config,
                 new
                 {
+                    request.KodeCabang,
+                    request.StartDate,
+                    request.EndDate
                 }
             );
         }

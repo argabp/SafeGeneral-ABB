@@ -12,6 +12,9 @@ namespace ABB.Application.Alokasis.Queries
     public class GetSORsQuery : IRequest<List<SORDto>>
     {
         public string SearchKeyword { get; set; }
+        public string KodeCabang { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
     }
 
     public class GetSORsQueryHandler : IRequestHandler<GetSORsQuery, List<SORDto>>
@@ -79,7 +82,7 @@ namespace ABB.Application.Alokasis.Queries
                             LEFT JOIN rf04 cob ON uw01e.kd_cob = cob.kd_cob
                         LEFT JOIN rf05 scob ON uw01e.kd_cob = scob.kd_cob 
                                            AND uw01e.kd_scob = scob.kd_scob 
-                        WHERE (cb.nm_cb like '%'+@SearchKeyword+'%' 
+                        WHERE uw01e.tgl_closing between @StartDate AND @EndDate AND (cb.nm_cb like '%'+@SearchKeyword+'%' 
 					OR cob.nm_cob like '%'+@SearchKeyword+'%' 
 					OR scob.nm_scob like '%'+@SearchKeyword+'%' 
 					OR ri01e.flag_closing like '%'+@SearchKeyword+'%' 
@@ -89,7 +92,11 @@ namespace ABB.Application.Alokasis.Queries
 					OR uw01e.tgl_mul_ptg like '%'+@SearchKeyword+'%' 
 					OR uw01e.tgl_akh_ptg like '%'+@SearchKeyword+'%' 
 					OR uw01e.no_pol_ttg like '%'+@SearchKeyword+'%' 
-					OR @SearchKeyword = '' OR @SearchKeyword IS NULL)", new { request.SearchKeyword })).ToList();
+					OR @SearchKeyword = '' OR @SearchKeyword IS NULL)
+					AND (uw01e.kd_cb = @KodeCabang OR @KodeCabang = '' OR @KodeCabang IS NULL)", new
+                {
+                    request.SearchKeyword, request.StartDate, request.EndDate, request.KodeCabang
+                })).ToList();
 
                 return rekanans;
             }

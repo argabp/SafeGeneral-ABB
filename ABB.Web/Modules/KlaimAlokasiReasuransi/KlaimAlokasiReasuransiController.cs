@@ -34,11 +34,15 @@ namespace ABB.Web.Modules.KlaimAlokasiReasuransi
         }
         
         [HttpPost]
-        public async Task<IActionResult> GetMutasiKlaims(GridRequest grid)
+        public async Task<IActionResult> GetMutasiKlaims(GridRequest grid, 
+            string kodeCabang, DateTime startDate, DateTime endDate)
         {
             var result = await Mediator.Send(new GetMutasiKlaimsQuery()
             {
-                Grid = grid
+                Grid = grid,
+                KodeCabang = kodeCabang,
+                StartDate = startDate,
+                EndDate = endDate
             });
 
             return Json(result);

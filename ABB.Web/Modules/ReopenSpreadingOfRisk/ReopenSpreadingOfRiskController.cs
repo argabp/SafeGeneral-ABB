@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ABB.Application.Common;
-using ABB.Application.Common.Grids.Models;
+using ABB.Application.Common.Queries;
 using ABB.Application.ReopenSpreadingOfRisks.Commands;
 using ABB.Application.ReopenSpreadingOfRisks.Queries;
 using ABB.Web.Modules.Base;
@@ -36,9 +36,22 @@ namespace ABB.Web.Modules.ReopenSpreadingOfRisk
         //     return Json(result);
         // }
 
-        public async Task<ActionResult> GetReopenSpreadingOfRisks([DataSourceRequest] DataSourceRequest request, string searchkeyword)
+        public async Task<JsonResult> GetCabang()
         {
-            var ds = await Mediator.Send(new GetReopenSpreadingOfRisksQuery() { SearchKeyword = searchkeyword });
+            var result = await Mediator.Send(new GetCabangPSTQuery());
+
+            return Json(result);
+        }
+
+        public async Task<ActionResult> GetReopenSpreadingOfRisks([DataSourceRequest] DataSourceRequest request, 
+            string kodeCabang, DateTime startDate, DateTime endDate)
+        {
+            var ds = await Mediator.Send(new GetReopenSpreadingOfRisksQuery()
+            {
+                KodeCabang = kodeCabang,
+                StartDate = startDate,
+                EndDate = endDate
+            });
             return Json(ds.AsQueryable().ToDataSourceResult(request));
         }
 

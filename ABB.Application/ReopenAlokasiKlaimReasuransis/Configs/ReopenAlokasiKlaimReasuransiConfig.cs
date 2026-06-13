@@ -62,7 +62,7 @@ namespace ABB.Application.ReopenAlokasiKlaimReasuransis.Configs
                                 ) as src
                             ",
                 
-               BaseWhere = @"src.flag_closing = 'Y' AND src.flag_reas = 'Y'",
+               BaseWhere = @"src.tgl_closing between @StartDate AND @EndDate AND src.flag_closing = 'Y' AND src.flag_reas = 'Y' AND (src.kd_cb = @KodeCabang OR @KodeCabang = '' OR @KodeCabang IS NULL)",
 
 
                 ColumnMap = new Dictionary<string, string>

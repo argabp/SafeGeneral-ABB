@@ -22,7 +22,7 @@ namespace ABB.Application.Alokasis.Configs
                             pp.stn_rate_prm
                         FROM ri01e p
                         INNER JOIN rf06 m ON p.kd_mtu_prm = m.kd_mtu
-                        INNER JOIN uw04e pp
+                        LEFT OUTER JOIN uw04e pp
                             ON pp.kd_cb = p.kd_cb
                             AND pp.kd_cob = p.kd_cob
                             AND pp.kd_scob = p.kd_scob
@@ -35,7 +35,7 @@ namespace ABB.Application.Alokasis.Configs
                 
                 BaseWhere = "(src.kd_cb = @kd_cb AND src.kd_cob = @kd_cob AND" +
                             " src.kd_scob = @kd_scob AND src.kd_thn = @kd_thn AND" +
-                            " src.no_pol = @no_pol AND src.no_updt = @no_updt AND src.no_updt_reas = @no_updt_reas)",
+                            " src.no_pol = @no_pol AND src.no_updt_reas = @no_updt_reas)",
 
                 ColumnMap = new Dictionary<string, string>
                 {

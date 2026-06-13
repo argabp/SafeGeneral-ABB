@@ -10,8 +10,7 @@ namespace ABB.Application.Alokasis.Configs
             return new GridConfig
             {
                 FromSql = @"
-                    FROM (
-                        SELECT DISTINCT 
+                    FROM (SELECT DISTINCT 
                             CAST(uw01e.kd_cb AS VARCHAR) + '-' + 
                                 CAST(uw01e.kd_cob AS VARCHAR) + '-' + 
                                 CAST(uw01e.kd_scob AS VARCHAR) + '-' + 
@@ -35,6 +34,7 @@ namespace ABB.Application.Alokasis.Configs
                              uw01e.tgl_closing,   
                              ri01e.tgl_closing tgl_closing_reas,  
                              ri01e.flag_closing,   
+                             ri01e.no_updt_reas,
                             cb.nm_cb,
                             cob.nm_cob,
                             scob.nm_scob,
@@ -55,10 +55,10 @@ namespace ABB.Application.Alokasis.Configs
                             LEFT JOIN rf01 cb ON uw01e.kd_cb = cb.kd_cb
                             LEFT JOIN rf04 cob ON uw01e.kd_cob = cob.kd_cob
                         LEFT JOIN rf05 scob ON uw01e.kd_cob = scob.kd_cob 
-                                           AND uw01e.kd_scob = scob.kd_scob 
+                                           AND uw01e.kd_scob = scob.kd_scob
                     ) as src",
 
-                BaseWhere = @"",
+                BaseWhere = @"(src.tgl_closing between @StartDate AND @EndDate AND src.kd_cb = @KodeCabang OR @KodeCabang = '' OR @KodeCabang IS NULL)",
 
                 ColumnMap = new Dictionary<string, string>
                 {
@@ -70,6 +70,7 @@ namespace ABB.Application.Alokasis.Configs
                     ["flag_closing"] = "src.flag_closing",
                     ["tgl_mul_ptg"] = "src.tgl_mul_ptg",
                     ["tgl_akh_ptg"] = "src.tgl_akh_ptg",
+                    ["no_updt_reas"] = "src.no_updt_reas",
                     ["no_pol_ttg_masked"] = "src.no_pol_ttg_masked",
                     ["nm_ttg"] = "src.nm_ttg"
                 },
@@ -80,6 +81,7 @@ namespace ABB.Application.Alokasis.Configs
                     "src.nm_cob",
                     "src.nm_scob",
                     "src.nm_ttg",
+                    "src.no_updt_reas",
                     "src.tgl_closing",
                     "src.tgl_closing_reas",
                     "src.flag_closing",

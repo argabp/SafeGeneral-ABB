@@ -3,6 +3,25 @@ $(document).ready(function () {
     var sorData;
 });
 
+function searchFilterSOR(e){
+    var startDatePicker = $("#StartDate").data("kendoDatePicker");
+    var endDatePicker = $("#EndDate").data("kendoDatePicker");
+    var KodeCabang = $("#kd_cb").data("kendoDropDownList");
+    var searchkeyword = $("#searchkeyword").val();
+
+    return {
+        startDate: startDatePicker && startDatePicker.value() ? kendo.toString(startDatePicker.value(), "yyyy-MM-dd") : null,
+        endDate: endDatePicker && endDatePicker.value() ? kendo.toString(endDatePicker.value(), "yyyy-MM-dd") : null,
+        kodeCabang: KodeCabang && KodeCabang.value() ? KodeCabang.value() : null,
+        searchkeyword: searchkeyword
+    };
+}
+
+function onSearchClick() {
+    // Cukup perintahkan grid untuk membaca ulang datanya
+    $("#SORGrid").data("kendoGrid").dataSource.read();
+}
+
 let statusFilterApplied = false;
 
 function searchKeyword_OnKeyUp() {

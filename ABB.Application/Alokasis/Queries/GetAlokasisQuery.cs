@@ -22,8 +22,6 @@ namespace ABB.Application.Alokasis.Queries
 
         public string no_pol { get; set; }
 
-        public Int16 no_updt { get; set; }
-
         public Int16 no_updt_reas { get; set; }
     }
 
@@ -40,14 +38,13 @@ namespace ABB.Application.Alokasis.Queries
         {
             var config = AlokasiConfig.Create();
 
-            return await _gridEngine.QueryAsyncPST<AlokasiDto>(
+                return await _gridEngine.QueryAsyncPST<AlokasiDto>(
                 request.Grid,
                 config,
                 new
                 {
                     request.kd_cb, request.kd_cob, request.kd_scob,
-                    request.kd_thn, request.no_pol, request.no_updt,
-                    request.no_updt_reas
+                    request.kd_thn, request.no_pol, request.no_updt_reas
                 }
             );
         }

@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using ABB.Application.Common.Grids.Interfaces;
@@ -12,6 +13,9 @@ namespace ABB.Application.KlaimAlokasiReasuransis.Queries
         public GridRequest Grid { get; set; }
 
         public string SearchKeyword { get; set; }
+        public string KodeCabang { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
     }
 
     public class GetMutasiKlaimsQueryHandler : IRequestHandler<GetMutasiKlaimsQuery, GridResponse<MutasiKlaimDto>>
@@ -34,7 +38,7 @@ namespace ABB.Application.KlaimAlokasiReasuransis.Queries
                 config,
                 new
                 {
-                    request.SearchKeyword
+                    request.SearchKeyword, request.StartDate, request.EndDate, request.KodeCabang
                 }
             );
         }

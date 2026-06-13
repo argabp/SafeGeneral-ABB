@@ -20,11 +20,58 @@
             Reopen Spreading of Risk (SOR)
         </div>
         <div class="col-md-4">
-            <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/>
+            @* <input type="text" class="search-field-top " id="SearchKeyword" placeholder="Search"/> *@
         </div>
 
         <div class="col-md-2">
             <button class="flat-btn-primary" onclick="reopenSpreadingOfRisk()">Reopen</button>
+        </div>
+    </div>
+    <div class="flat-box filter-box">
+        <div class="flat-box-content">
+            <div class="filter-bar" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+
+                <label for="kd_cb"><b>Kode Cabang :</b></label>
+        
+                <kendo-dropdownlist name="kd_cb" option-label="Pilih Cabang"
+                                    datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
+                    <datasource type="DataSourceTagHelperType.Custom">
+                        <transport>
+                            <read url="@Url.Action("GetCabang", "Alokasi")"/>
+                        </transport>
+                    </datasource>
+                </kendo-dropdownlist>
+
+        
+                <!-- Label Periode -->
+                <label for="StartDate"><b>Periode :</b></label>
+
+                <!-- DatePicker Dari -->
+                @(Html.Kendo().DatePicker()
+                    .Name("StartDate")
+                    .Value(DateTime.Now)
+                    .HtmlAttributes(new { style = "width:150px;" })
+                    .Format("dd-MM-yyyy")
+                )
+
+                <span class="date-separator">s/d</span>
+
+                <!-- DatePicker Sampai -->
+                @(Html.Kendo().DatePicker()
+                    .Name("EndDate")
+                    .Value(DateTime.Now)
+                    .HtmlAttributes(new { style = "width:150px;" })
+                    .Format("dd-MM-yyyy")
+                )
+
+                <!-- Tombol Cari -->
+                @(Html.Kendo().Button()
+                    .Name("btnSearch")
+                    .Content("<span class='k-icon k-i-search'></span> Cari")
+                    .HtmlAttributes(new { @class = "k-primary", style = "border-radius:6px; margin-left:10px;" })
+                    .Events(e => e.Click("onSearchClick"))
+                )
+            </div>
         </div>
     </div>
 
@@ -33,7 +80,7 @@
             @(Html.Kendo().Grid<ReopenSpreadingOfRiskDto>()
                 .Name("ReopenSpreadingOfRiskGrid")
                 .DataSource(dataSource => dataSource.Ajax()
-                    .Read(read => read.Action("GetReopenSpreadingOfRisks", "ReopenSpreadingOfRisk").Data("searchFilter"))
+                    .Read(read => read.Action("GetReopenSpreadingOfRisks", "ReopenSpreadingOfRisk").Data("searchFilterReopenSpreadingOfRisk"))
                     .Model(model => model.Id(p => p.Id))
                 )
                 .Columns(columns =>
@@ -43,8 +90,8 @@
                     columns.Bound(col => col.nm_cb).Width(150).Title("Nama Cabang");
                     columns.Bound(col => col.nm_cob).Width(150).Title("Nama COB");
                     columns.Bound(col => col.nm_scob).Width(150).Title("Nama Sub COB");
-                    columns.Bound(col => col.no_updt_reas).Width(200).Title("Nomor Update Reas");
                     columns.Bound(col => col.no_pol_ttg_masked).Width(150).Title("Nomor Polis");
+                    columns.Bound(col => col.no_updt_reas).Width(200).Title("Nomor Update Reas");
                     columns.Bound(col => col.nm_ttg).Width(200).Title("Nama Tertanggung");
                     columns.Bound(col => col.tgl_mul_ptg).Width(150).Title("Tanggal Mulai").Format("{0: dd-MM-yyyy}");
                     columns.Bound(col => col.tgl_akh_ptg).Width(150).Title("Tanggal Akhir").Format("{0: dd-MM-yyyy}");
@@ -55,6 +102,7 @@
                     .Info(true)
                     .PageSizes(true)
                 )
+                .AutoBind(false)
                 .PersistSelection()
                 .Sortable()
                 .Filterable()
