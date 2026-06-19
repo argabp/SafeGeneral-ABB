@@ -8,14 +8,14 @@
 
 @{
     Layout = "~/Modules/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Outstanding Klaim";
+    ViewData["Title"] = "Data Outstanding Klaim";
 }
 <script src="~/Modules/OutstandingKlaimProduksiUmum/JS/outstandingKlaimProduksiUmum.js"></script>
 
 <div class="flat-box" id="container-cancel-csm">
     <div class="row">
         <div class="flat-box-title col-md-6">
-            Outstanding Klaim Produksi Umum
+            Data Outstanding Klaim
         </div>
     </div>
 
@@ -36,7 +36,7 @@
                     <div class="row col-sm-6">
                         <label class="col-sm-4">Kode Cabang</label>
                         <div class="col-sm-6">
-                            <kendo-dropdownlist for="KodeCabang"
+                            <kendo-dropdownlist for="KodeCabang" readonly="true"
                                                 datavaluefield="kd_cb" datatextfield="nm_cb" filter="FilterType.Contains">
                                 <datasource type="DataSourceTagHelperType.Custom">
                                     <transport>

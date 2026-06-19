@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Queries;
 using ABB.Application.Common.Services;
-using ABB.Application.KapasitasCabangs.Queries;
 using ABB.Application.LaporanBulananCabang.Queries;
 using ABB.Web.Modules.Base;
 using ABB.Web.Modules.LaporanBulananCabang.Models;
@@ -86,7 +85,7 @@ namespace ABB.Web.Modules.LaporanBulananCabang
                 new DropdownOptionDto() { Text = "Premi Bruto", Value = "1" },
                 new DropdownOptionDto() { Text = "Premi Netto", Value = "2" },
                 new DropdownOptionDto() { Text = "Discount + Komisi", Value = "3" },
-                new DropdownOptionDto() { Text = "Klaim", Value = "4" },
+                // new DropdownOptionDto() { Text = "Klaim", Value = "4" },
                 new DropdownOptionDto() { Text = "Premi Rate", Value = "5" }
             };
 

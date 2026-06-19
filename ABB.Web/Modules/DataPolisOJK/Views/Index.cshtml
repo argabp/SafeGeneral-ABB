@@ -8,19 +8,17 @@
 
 @{
     Layout = "~/Modules/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Data Polis OJK";
+    ViewData["Title"] = "Data Polis OJK (APOLO)";
 }
 <script src="~/Modules/DataPolisOJK/JS/dataPolisOJK.js"></script>
 
 <div class="flat-box" id="container-cancel-csm">
     <div class="row">
         <div class="flat-box-title col-md-6">
-            Data Polis OJK
+            Data Polis OJK (APOLO)
         </div>
     </div>
 
-    <input type="hidden" id="kd_cb" value="@ViewBag.KodeCabang">
-    
     <div class="flat-box-content">
         <form id="DataPolisOJKForm" enctype="multipart/form-data" autocomplete="off">
             <div>
@@ -28,7 +26,7 @@
                     <div class="row col-sm-6">
                         <label class="col-sm-4">Kode Cabang</label>
                         <div class="col-sm-4">
-                            <kendo-dropdownlist for="KodeCabang"
+                            <kendo-dropdownlist for="KodeCabang" readonly="true"
                                                 datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
                                 <datasource type="DataSourceTagHelperType.Custom">
                                     <transport>

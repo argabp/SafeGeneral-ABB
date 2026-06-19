@@ -85,7 +85,7 @@ namespace ABB.Web.Modules.LaporanBulananRekap
                 new DropdownOptionDto() { Text = "Rekap Premi Bruto", Value = "6" },
                 new DropdownOptionDto() { Text = "Rekap Premi Netto", Value = "7" },
                 new DropdownOptionDto() { Text = "Rekap Discount + Komisi", Value = "8" },
-                new DropdownOptionDto() { Text = "Rekap Klaim", Value = "9" },
+                // new DropdownOptionDto() { Text = "Rekap Klaim", Value = "9" },
                 new DropdownOptionDto() { Text = "Rekap Premi Rate", Value = "10" }
             };
 

@@ -17,7 +17,10 @@ namespace ABB.Web.Modules.OutstandingKlaimProduksiUmum
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
             
-            var model = new OutstandingKlaimProduksiUmumModel();
+            var model = new OutstandingKlaimProduksiUmumModel()
+            {
+                KodeCabang = Request.Cookies["UserCabang"]
+            };
             
             return View(model);
         }

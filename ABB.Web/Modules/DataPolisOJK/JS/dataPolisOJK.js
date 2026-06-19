@@ -1,9 +1,5 @@
 ﻿$(document).ready(function () {
     refreshDataPolisOJKGrid();
-    
-    setTimeout(() => {
-        $("#KodeCabang").getKendoDropDownList().value($("#kd_cb").val());
-    }, 1000)
 });
 
 

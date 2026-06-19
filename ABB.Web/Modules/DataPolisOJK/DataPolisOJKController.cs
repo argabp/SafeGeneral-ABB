@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Queries;
 using ABB.Application.DataPolisOJKs.Queries;
-using ABB.Application.KapasitasCabangs.Queries;
 using ABB.Web.Modules.Base;
 using ABB.Web.Modules.DataPolisOJK.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -19,9 +18,11 @@ namespace ABB.Web.Modules.DataPolisOJK
             ViewBag.Module = Request.Cookies["Module"];
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
-            ViewBag.KodeCabang = Request.Cookies["UserCabang"].Trim();
             
-            var model = new DataPolisOJKViewModel();
+            var model = new DataPolisOJKViewModel()
+            {
+                KodeCabang = Request.Cookies["UserCabang"].Trim()
+            };
             
             return View(model);
         }
