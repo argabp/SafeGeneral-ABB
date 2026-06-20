@@ -6198,6 +6198,12 @@
         <None Update="Modules\Reports\Templates\LaporanBulananTreaty.html">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Update="Modules\Reports\Templates\LaporanBulananKlaimRekap.html">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Modules\Reports\Templates\LaporanBulananKlaimCabang.html">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>

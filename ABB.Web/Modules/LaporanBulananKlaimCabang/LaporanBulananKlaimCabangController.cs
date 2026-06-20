@@ -4,20 +4,20 @@ using System.Threading.Tasks;
 using ABB.Application.Common.Dtos;
 using ABB.Application.Common.Queries;
 using ABB.Application.Common.Services;
-using ABB.Application.LaporanBulananRekap.Queries;
+using ABB.Application.LaporanBulananKlaimCabangs.Queries;
 using ABB.Web.Modules.Base;
-using ABB.Web.Modules.LaporanBulananRekap.Models;
+using ABB.Web.Modules.LaporanBulananKlaimCabang.Models;
 using DinkToPdf;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ABB.Web.Modules.LaporanBulananRekap
+namespace ABB.Web.Modules.LaporanBulananKlaimCabang
 {
-    public class LaporanBulananRekapController : AuthorizedBaseController
+    public class LaporanBulananKlaimCabangController : AuthorizedBaseController
     {
         private readonly IReportGeneratorService _reportGeneratorService;
 
-        public LaporanBulananRekapController(IReportGeneratorService reportGeneratorService)
+        public LaporanBulananKlaimCabangController(IReportGeneratorService reportGeneratorService)
         {
             _reportGeneratorService = reportGeneratorService;
         }
@@ -28,7 +28,7 @@ namespace ABB.Web.Modules.LaporanBulananRekap
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
             
-            return View(new LaporanBulananRekapViewModel()
+            return View(new LaporanBulananKlaimCabangViewModel()
             {
                 kd_cb = Request.Cookies["UserCabang"]?.Trim() ?? string.Empty
             });
@@ -53,11 +53,11 @@ namespace ABB.Web.Modules.LaporanBulananRekap
         }
         
         [HttpPost]
-        public async Task<ActionResult> GenerateReport([FromBody] LaporanBulananRekapViewModel model)
+        public async Task<ActionResult> GenerateReport([FromBody] LaporanBulananKlaimCabangViewModel model)
         {
             try
             {
-                var command = Mapper.Map<GetLaporanBulananRekapQuery>(model);
+                var command = Mapper.Map<GetLaporanBulananKlaimCabangsQuery>(model);
                 command.DatabaseName = Request.Cookies["DatabaseValue"];
 
                 var sessionId = HttpContext.Session.GetString("SessionId");
@@ -67,7 +67,7 @@ namespace ABB.Web.Modules.LaporanBulananRekap
 
                 var reportTemplate = await Mediator.Send(command);
                 
-                _reportGeneratorService.GenerateReport("LaporanBulananRekap.pdf", reportTemplate, sessionId, Orientation.Landscape,
+                _reportGeneratorService.GenerateReport("LaporanBulananKlaimCabang.pdf", reportTemplate, sessionId, Orientation.Landscape,
                     5, 5, 5, 5, PaperKind.Legal);
 
                 return Ok(new { Status = "OK", Data = sessionId});
@@ -82,10 +82,7 @@ namespace ABB.Web.Modules.LaporanBulananRekap
         {
             var result = new List<DropdownOptionDto>()
             {
-                new DropdownOptionDto() { Text = "Rekap Premi Bruto", Value = "6" },
-                new DropdownOptionDto() { Text = "Rekap Premi Netto", Value = "7" },
-                new DropdownOptionDto() { Text = "Rekap Discount + Komisi", Value = "8" },
-                new DropdownOptionDto() { Text = "Rekap Premi Rate", Value = "10" }
+                new DropdownOptionDto() { Text = "Klaim", Value = "4" }
             };
 
             return Json(result);

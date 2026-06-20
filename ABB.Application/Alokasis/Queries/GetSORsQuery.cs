@@ -61,8 +61,6 @@ namespace ABB.Application.Alokasis.Queries
                              ri01e.tgl_closing tgl_closing_reas,  
                              ri01e.flag_closing,   
                              ri01e.no_updt_reas,
-                             ri01e.kd_endt,   
-                             ri01e.no_rsk,
                             cb.nm_cb,
                             cob.nm_cob,
                             scob.nm_scob,

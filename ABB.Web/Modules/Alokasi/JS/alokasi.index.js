@@ -45,9 +45,7 @@ function OnClickEditAlokasi(e) {
     console.log('dataItem', dataItem);
     openSORWindow(`/Alokasi/Edit?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}
                                     &kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}
-                                    &no_pol=${dataItem.no_pol}&no_updt=${dataItem.no_updt}
-                                    &no_rsk=${dataItem.no_rsk}&kd_endt=${dataItem.kd_endt}
-                                    &no_updt_reas=${dataItem.no_updt_reas}`, 'Edit');
+                                    &no_pol=${dataItem.no_pol}&no_updt=${dataItem.no_updt}`, 'Edit');
 }
 
 function OnClickViewAlokasi(e) {
@@ -57,20 +55,7 @@ function OnClickViewAlokasi(e) {
     console.log('dataItem', dataItem);
     openSORWindow(`/Alokasi/View?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}
                                     &kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}
-                                    &no_pol=${dataItem.no_pol}&no_updt=${dataItem.no_updt}
-                                    &no_rsk=${dataItem.no_rsk}&kd_endt=${dataItem.kd_endt}
-                                    &no_updt_reas=${dataItem.no_updt_reas}`, 'View');
-}
-
-function OnClickDeleteAlokasi(e) {
-    e.preventDefault();
-    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-    showConfirmation('Confirmation', `Are you sure you want to delete Klaim?`,
-        function () {
-            showProgressOnGrid('#SORGrid');
-            setTimeout(function () { deleteAlokasi(dataItem); }, 500);
-        }
-    );
+                                    &no_pol=${dataItem.no_pol}&no_updt=${dataItem.no_updt}`, 'View');
 }
 
 function setButtonActions(e){
@@ -97,37 +82,10 @@ function setButtonActions(e){
             if(dataItem.flag_closing == "Y"){
                 buttonContainer.find(".k-grid-Edit").hide();
             } else {
-                buttonContainer.find(".k-grid-EndorsSOR").hide();
                 buttonContainer.find(".k-grid-View").hide();
             }
         }
     });
 
     gridAutoFit(grid);
-}
-
-function deleteAlokasi(dataItem) {
-    ajaxGet(`/Alokasi/EditAlokasi?kd_cb=${dataItem.kd_cb}&kd_cob=${dataItem.kd_cob}
-                                    &kd_scob=${dataItem.kd_scob}&kd_thn=${dataItem.kd_thn}
-                                    &no_pol=${dataItem.no_pol}&no_updt=${dataItem.no_updt}
-                                    &no_rsk=${dataItem.no_rsk}&kd_endt=${dataItem.kd_endt}
-                                    &no_updt_reas=${dataItem.no_updt_reas}`, function (response) {
-        if (response.Result) {
-            showMessage('Success', 'Data has been deleted');
-        }
-        else {
-            showMessage('Error', 'Delete data is failed, this data is already used');
-        }
-
-        refreshGrid("#SORGrid");
-
-        closeProgressOnGrid('#SORGrid');
-    }, AjaxContentType.URLENCODED);
-}
-
-function OnClickEndorsSOR(e) {
-    e.preventDefault();
-    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-    sorData = dataItem;
-    openEndorsWindow(`/Alokasi/EndorsSOR`, 'Endors SOR');
 }

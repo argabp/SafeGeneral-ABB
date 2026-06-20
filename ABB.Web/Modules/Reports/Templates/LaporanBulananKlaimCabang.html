@@ -3,7 +3,7 @@
 <head>
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <title>Laporan Bulanan Produksi Rekap</title>
+    <title>Laporan Bulanan Klaim Cabang</title>
     <style>
         body {
             /*font-family: Arial, sans-serif;*/
@@ -14,6 +14,14 @@
             font-size: 7pt;
             padding: 2px 4px; /* give breathing room */
             letter-spacing: 1px;
+        }
+
+        .h1 {
+            text-align: center;
+            font-size: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            /* margin-bottom: 15px; */
         }
 
         .section {
@@ -33,7 +41,7 @@
 
     <div class='container'>
         <div class='section'>
-            <p style='font-size: 14px; margin: auto; text-align: center;'><strong>LAPORAN REKAPITULASI PRODUKSI {{jenis_laporan}}</strong></p>
+            <p style='font-size: 14px; margin: auto; text-align: center;'><strong>LAPORAN PRODUKSI {{jenis_laporan}}</strong></p>
             <p style='font-size: 14px; margin: auto; text-align: center;'><strong>LOKASI {{nm_cab}}</strong></p>
             <p style='font-size: 14px; margin: auto; text-align: center; padding-bottom: 3em'><strong>Periode: {{kd_bln_mul}} s/d {{kd_bln_akh}}</strong></p>
             

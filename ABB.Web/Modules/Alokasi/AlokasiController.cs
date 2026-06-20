@@ -573,28 +573,13 @@ namespace ABB.Web.Modules.Alokasi
         }
         
         [HttpPost]
-        public async Task<IActionResult> EndorsSOR([FromBody] EndorsSORViewModel model)
-        {
-            try
-            {
-                var command = Mapper.Map<EndorsSORCommand>(model);
-                var result = await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = result.Item2});
-            }
-            catch (Exception ex)
-            {
-                return Json(new { Result = "ERROR", ex.Message });
-            }
-        }
-        
-        [HttpPost]
         public async Task<IActionResult> EndorsAlokasi([FromBody] EndorsAlokasiViewModel model)
         {
             try
             {
                 var command = Mapper.Map<EndorsAlokasiCommand>(model);
-                await Mediator.Send(command);
-                return Json(new { Result = "OK", Message = Constant.DataDisimpan});
+                var result = await Mediator.Send(command);
+                return Json(new { Result = "OK", Message = result.Item2});
             }
             catch (Exception ex)
             {

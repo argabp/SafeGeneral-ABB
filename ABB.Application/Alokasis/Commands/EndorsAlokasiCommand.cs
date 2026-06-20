@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ABB.Application.Alokasis.Commands
 {
-    public class EndorsAlokasiCommand : IRequest
+    public class EndorsAlokasiCommand : IRequest<(string, string, string)>
     {
         public string kd_cb { get; set; }
 
@@ -32,34 +32,49 @@ namespace ABB.Application.Alokasis.Commands
         public string ket_endt { get; set; }
     }
 
-    public class EndorsAlokasiCommandHandler : IRequestHandler<EndorsAlokasiCommand>
+    public class EndorsAlokasiCommandHandler : IRequestHandler<EndorsAlokasiCommand, (string, string, string)>
     {
         private readonly IDbContextPst _dbContextPst;
+        private readonly IDbConnectionPst _dbConnectionPst;
         private readonly ILogger<EndorsAlokasiCommandHandler> _logger;
 
-        public EndorsAlokasiCommandHandler(IDbContextPst dbContextPst,
+        public EndorsAlokasiCommandHandler(IDbContextPst dbContextPst, IDbConnectionPst dbConnectionPst,
             ILogger<EndorsAlokasiCommandHandler> logger)
         {
             _dbContextPst = dbContextPst;
+            _dbConnectionPst = dbConnectionPst;
             _logger = logger;
         }
 
-        public async Task<Unit> Handle(EndorsAlokasiCommand request, CancellationToken cancellationToken)
+        public async Task<(string, string, string)> Handle(EndorsAlokasiCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _dbContextPst.Alokasi.FindAsync(request.kd_cb,
-                request.kd_cob, request.kd_scob, request.kd_thn, request.no_pol, request.no_updt,
-                request.no_rsk, request.kd_endt, request.no_updt_reas);
+            var result = await ExceptionHelper.ExecuteWithLoggingAsync(async () => 
+                (await _dbConnectionPst.QueryProc<(string, string, string)>("spe_ri05e_13x",
+                    new
+                    {
+                        request.kd_cb, request.kd_cob, request.kd_scob,
+                        request.kd_thn, request.no_pol, request.no_updt,
+                        request.no_rsk, request.kd_endt, request.no_updt_reas,
+                        request.ket_endt
+                    })).FirstOrDefault(), _logger);
 
-            if (entity == null)
+            if (result.Item1 == "1")
             {
-                throw new NullReferenceException("Alokasi is not found");
-            }
+                var entity = await _dbContextPst.Alokasi.FindAsync(request.kd_cb,
+                    request.kd_cob, request.kd_scob, request.kd_thn, request.no_pol, request.no_updt,
+                    request.no_rsk, request.kd_endt, request.no_updt_reas);
+
+                if (entity == null)
+                {
+                    throw new NullReferenceException("Alokasi is not found");
+                }
             
-            entity.ket_endt = request.ket_endt;
+                entity.ket_endt = request.ket_endt;
 
-            await _dbContextPst.SaveChangesAsync(cancellationToken);
+                await _dbContextPst.SaveChangesAsync(cancellationToken);
+            }
 
-            return Unit.Value;
+            return result;
         }
     }
 }

@@ -12,9 +12,9 @@ using MediatR;
 using Microsoft.Extensions.Hosting;
 using Scriban;
 
-namespace ABB.Application.LaporanBulananCabang.Queries
+namespace ABB.Application.LaporanBulananKlaimRekaps.Queries
 {
-    public class GetLaporanBulananCabangQuery : IRequest<string>
+    public class GetLaporanBulananKlaimRekapQuery : IRequest<string>
     {
         public string DatabaseName { get; set; }
         public string kd_cb { get; set; }
@@ -24,33 +24,33 @@ namespace ABB.Application.LaporanBulananCabang.Queries
         public string jns_lap { get; set; }
     }
 
-    public class GetLaporanBulananCabangQueryHandler : IRequestHandler<GetLaporanBulananCabangQuery, string>
+    public class GetLaporanBulananKlaimRekapQueryHandler : IRequestHandler<GetLaporanBulananKlaimRekapQuery, string>
     {
         private readonly IDbConnectionFactory _connectionFactory;
         private readonly IHostEnvironment _environment;
 
-        public GetLaporanBulananCabangQueryHandler(IDbConnectionFactory connectionFactory, IHostEnvironment environment)
+        public GetLaporanBulananKlaimRekapQueryHandler(IDbConnectionFactory connectionFactory, IHostEnvironment environment)
         {
             _connectionFactory = connectionFactory;
             _environment = environment;
         }
 
-        public async Task<string> Handle(GetLaporanBulananCabangQuery request, CancellationToken cancellationToken)
+        public async Task<string> Handle(GetLaporanBulananKlaimRekapQuery request, CancellationToken cancellationToken)
         {
             _connectionFactory.CreateDbConnection(request.DatabaseName);
 
-            var laporanBulananCabangDatas = (await _connectionFactory.QueryProc<LaporanBulananCabangDto>("spr_lap_bulanan", 
+            var LaporanBulananKlaimRekapDatas = (await _connectionFactory.QueryProc<LaporanBulananKlaimRekapDto>("spr_lap_bulanan_rekap", 
                 new
                 {
                     input_str = $"{request.kd_bln_mul:yyyy/MM/dd},{request.kd_bln_akh:yyyy/MM/dd}," +
                                 $"{request.kd_cb.Trim()},{request.jns_lap.Trim()}"
                 })).ToList();
 
-            string reportPath = Path.Combine( _environment.ContentRootPath, "Modules", "Reports", "Templates", "LaporanBulananCabang.html" );
+            string reportPath = Path.Combine( _environment.ContentRootPath, "Modules", "Reports", "Templates", "LaporanBulananKlaimRekap.html" );
             
             string templateReportHtml = await File.ReadAllTextAsync( reportPath );
             
-            if (laporanBulananCabangDatas.Count == 0)
+            if (LaporanBulananKlaimRekapDatas.Count == 0)
             {
                 throw new NullReferenceException("Data tidak ditemukan");
             }
@@ -74,8 +74,9 @@ namespace ABB.Application.LaporanBulananCabang.Queries
             decimal total_premi_11 = 0;
             decimal total_premi_12 = 0;
             decimal total_nilai_prm_ttl = 0;
+            StringBuilder totalText = new StringBuilder();
 
-            var st_pass = laporanBulananCabangDatas.Select(s => s.st_pas).Distinct().ToList();
+            var st_pass = LaporanBulananKlaimRekapDatas.Select(s => s.st_pas).Distinct().ToList();
             
             stringBuilder.Append($@"<table class='table'>
                             <tr>
@@ -102,7 +103,7 @@ namespace ABB.Application.LaporanBulananCabang.Queries
                                             <td colspan='14' style='border: 1px solid'>{st_pas}</td>
                                         </tr>");
                 
-                foreach (var data in laporanBulananCabangDatas.Where(w => w.st_pas == st_pas))
+                foreach (var data in LaporanBulananKlaimRekapDatas.Where(w => w.st_pas == st_pas))
                 {
                     var nilai_prm_01 = ReportHelper.ConvertToReportFormat(data.nilai_prm_01);
                     var nilai_prm_02 = ReportHelper.ConvertToReportFormat(data.nilai_prm_02);
@@ -141,17 +142,17 @@ namespace ABB.Application.LaporanBulananCabang.Queries
             
             var jenisLaporan = new List<DropdownOptionDto>()
             {
-                new DropdownOptionDto() { Text = "Premi Bruto", Value = "1" },
-                new DropdownOptionDto() { Text = "Premi Netto", Value = "2" },
-                new DropdownOptionDto() { Text = "Discount + Komisi", Value = "3" },
-                new DropdownOptionDto() { Text = "Klaim", Value = "4" },
-                new DropdownOptionDto() { Text = "Premi Rate", Value = "5" }
+                new DropdownOptionDto() { Text = "Rekap Premi Bruto", Value = "6" },
+                new DropdownOptionDto() { Text = "Rekap Premi Netto", Value = "7" },
+                new DropdownOptionDto() { Text = "Rekap Discount + Komisi", Value = "8" },
+                new DropdownOptionDto() { Text = "Rekap Klaim", Value = "9" },
+                new DropdownOptionDto() { Text = "Rekap Premi Rate", Value = "10" }
             };
             
-            var laporanBulananCabang = laporanBulananCabangDatas.FirstOrDefault();
+            var laporanBulananKlaimRekap = LaporanBulananKlaimRekapDatas.FirstOrDefault();
             resultTemplate = templateProfileResult.Render( new
             {
-                laporanBulananCabang?.nm_cab, 
+                laporanBulananKlaimRekap?.nm_cab, 
                 kd_bln_mul = request.kd_bln_mul.ToString("dd-MM-yyyy"),
                 kd_bln_akh = request.kd_bln_akh.ToString("dd-MM-yyyy"),
                 details = stringBuilder.ToString(),

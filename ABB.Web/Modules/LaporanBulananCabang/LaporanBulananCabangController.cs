@@ -85,7 +85,6 @@ namespace ABB.Web.Modules.LaporanBulananCabang
                 new DropdownOptionDto() { Text = "Premi Bruto", Value = "1" },
                 new DropdownOptionDto() { Text = "Premi Netto", Value = "2" },
                 new DropdownOptionDto() { Text = "Discount + Komisi", Value = "3" },
-                // new DropdownOptionDto() { Text = "Klaim", Value = "4" },
                 new DropdownOptionDto() { Text = "Premi Rate", Value = "5" }
             };
 
