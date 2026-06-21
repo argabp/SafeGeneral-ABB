@@ -1,5 +1,5 @@
 ﻿@using Kendo.Mvc.UI
-@model ABB.Web.Modules.PolisInfoceProduksiUmum.Models.PolisInfoceProduksiUmumModel
+@model ABB.Web.Modules.InforcePolis.Models.InforcePolisViewModel
 @using Microsoft.Extensions.Configuration
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Kendo.Mvc
@@ -10,7 +10,7 @@
     Layout = "~/Modules/Shared/_Layout.cshtml";
     ViewData["Title"] = "Data Inforce Polis";
 }
-<script src="~/Modules/PolisInfoceProduksiUmum/JS/polisInfoceProduksiUmum.js"></script>
+<script src="~/Modules/InforcePolis/JS/inforcePolis.js"></script>
 
 <div class="flat-box" id="container-cancel-csm">
     <div class="row">
@@ -20,23 +20,8 @@
     </div>
 
     <div class="flat-box-content">
-        <form id="PolisInfoceProduksiUmumForm" enctype="multipart/form-data" autocomplete="off">
+        <form id="InforcePolisForm" enctype="multipart/form-data" autocomplete="off">
             <div>
-                <div class="row form-group">
-                    <div class="row col-sm-6">
-                        <label class="col-sm-3">Kode Cabang</label>
-                        <div class="col-sm-9">
-                            <kendo-dropdownlist for="kd_cb" readonly="true"
-                                                datavaluefield="Value" datatextfield="Text" filter="FilterType.Contains">
-                                <datasource type="DataSourceTagHelperType.Custom">
-                                    <transport>
-                                        <read url="@Url.Action("GetCabang", "PolisInfoceProduksiUmum")"/>
-                                    </transport>
-                                </datasource>
-                            </kendo-dropdownlist>
-                        </div>
-                    </div>
-                </div>
                 <div class="row form-group">
                     <div class="row col-sm-6">
                         <label class="col-sm-3">Tanggal</label>

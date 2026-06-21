@@ -1,0 +1,42 @@
+using System;
+using System.Threading.Tasks;
+using ABB.Application.InforcePolis.Queries;
+using ABB.Web.Modules.Base;
+using ABB.Web.Modules.InforcePolis.Models;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+
+namespace ABB.Web.Modules.InforcePolis
+{
+    public class InforcePolisController : AuthorizedBaseController
+    {
+        public IActionResult Index()
+        {
+            ViewBag.Module = Request.Cookies["Module"];
+            ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
+            ViewBag.UserLogin = CurrentUser.UserId;
+            
+            var model = new InforcePolisViewModel();
+            
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> GetInforcePolis([FromBody] InforcePolisViewModel model)
+        {
+            try
+            {
+                var ds = await Mediator.Send(new GetInforcePolisQuery()
+                {
+                    tgl_akhir = model.TanggalAkhir
+                });
+                
+                return Json(JsonConvert.DeserializeObject(ds));
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Error = ex.InnerException == null ? ex.Message : ex.InnerException.Message });
+            }
+        }
+    }
+}

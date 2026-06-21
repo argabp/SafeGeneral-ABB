@@ -1,21 +1,20 @@
 ﻿$(document).ready(function () {
-    refreshPolisInfoceProduksiUmumGrid();
+    refreshInforcePolisGrid();
 });
 
-function dataPolisInfoceProduksiUmum(){
+function dataInforcePolis(){
     return {
-        kd_cb: $("#kd_cb").val(),
-        TanggalAkhir: $("#TanggalAkhir").val(),
+        TanggalAkhir: $("#TanggalAkhir").val()
     }
 }
 
-function refreshPolisInfoceProduksiUmumGrid(){
+function refreshInforcePolisGrid(){
     $('#btn-refresh-grid').click(function () {
         $("#custom-loader").show();
-        ajaxPost("/PolisInfoceProduksiUmum/GetPolisInfoceProduksiUmum", JSON.stringify(dataPolisInfoceProduksiUmum()), (result) => {
+        ajaxPost("/InforcePolis/GetInforcePolis", JSON.stringify(dataInforcePolis()), (result) => {
             if(result.Error === undefined){
                 $("#grid").remove();
-                $("#PolisInfoceProduksiUmumForm").append('<div id="grid"></div>')
+                $("#InforcePolisForm").append('<div id="grid"></div>')
                 generateGrid(result);
             } else {
                 showMessage("Error", result.Error)

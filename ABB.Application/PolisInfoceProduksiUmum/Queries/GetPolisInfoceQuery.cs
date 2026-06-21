@@ -12,17 +12,20 @@ namespace ABB.Application.PolisInfoceProduksiUmum.Queries
 {
     public class GetPolisInfoceQuery : IRequest<string>
     {
+        public string DatabaseName { get; set; }
+        public string kd_cb { get; set; }
+        
         public DateTime tgl_akhir { get; set; }
     }
     
     public class GetPolisInfoceQueryHandler : IRequestHandler<GetPolisInfoceQuery, string>
     {
-        private readonly IDbConnectionCSM _db;
+        private readonly IDbConnectionFactory _dbConnectionFactory;
         private readonly ILogger<GetPolisInfoceQueryHandler> _logger;
 
-        public GetPolisInfoceQueryHandler(IDbConnectionCSM db, ILogger<GetPolisInfoceQueryHandler> logger)
+        public GetPolisInfoceQueryHandler(IDbConnectionFactory dbConnectionFactory, ILogger<GetPolisInfoceQueryHandler> logger)
         {
-            _db = db;
+            _dbConnectionFactory = dbConnectionFactory;
             _logger = logger;
         }
     
@@ -31,10 +34,11 @@ namespace ABB.Application.PolisInfoceProduksiUmum.Queries
             List<dynamic> data = new List<dynamic>();
             try
             {
-                data = (await _db.QueryProc<dynamic>("spr_akturia_03",
+                _dbConnectionFactory.CreateDbConnection(request.DatabaseName);
+                data = (await _dbConnectionFactory.QueryProc<dynamic>("spr_akturia_17",
                     new
                     {
-                        tgl_akh = request.tgl_akhir
+                        request.kd_cb, tgl_akh = request.tgl_akhir
                     })).ToList();
             }
             catch (Exception e)

@@ -18,7 +18,10 @@ namespace ABB.Web.Modules.SettledKlaimProduksiUmum
             ViewBag.DatabaseName = Request.Cookies["DatabaseName"];
             ViewBag.UserLogin = CurrentUser.UserId;
             
-            var model = new SettledKlaimProduksiUmumModel();
+            var model = new SettledKlaimProduksiUmumModel()
+            {
+                KodeCabang = Request.Cookies["UserCabang"]
+            };
             
             return View(model);
         }
