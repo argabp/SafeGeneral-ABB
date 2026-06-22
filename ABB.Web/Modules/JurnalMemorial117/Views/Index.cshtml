@@ -39,13 +39,14 @@
         </div>
     </div>
 
-    <div class="flat-box-content">
+   <div class="flat-box-content">
         @(Html.Kendo().Grid<JurnalMemorial117Dto>()
             .Name("JurnalMemorialGrid")
             .Events(e => e.DataBound("onGridDataBound"))
             .DataSource(dataSource => dataSource.Ajax()
                 .Read(read => read.Action("GetJurnalMemorial117", "JurnalMemorial117").Data("getSearchFilter"))
-                .PageSize(20)
+                .PageSize(100) // 100 data pertama
+                .Sort(sort => sort.Add(s => s.Tanggal).Descending()) // <--- TAMBAHKAN INI! Ini akan memberitahu SQL Server cara mengurutkan datanya.
             )
             .Columns(columns =>
             {
@@ -68,11 +69,10 @@
                     "# } #"
                 ).Locked(true);
             })
-            .Pageable(pager => pager.Refresh(true).PageSizes(true))
             .Sortable()
             .Filterable()
-            .Scrollable()
-            .Height(500)
+            .Scrollable(s => s.Endless(true)) 
+            .Height(500) 
             .Resizable(a=>a.Columns(true))
         )
     </div>
@@ -96,17 +96,21 @@
     .Visible(false)
     .Draggable(true)
     .Content(@<text>
-        <div style="padding: 15px; text-align: center;">
-            <p style="margin-bottom: 10px;">Pilih tanggal untuk Voucher Baru:</p>
-            @(Html.Kendo().DatePicker()
-                .Name("CopyTanggalBaru")
-                .Value(DateTime.Now)
-                .Format("dd-MM-yyyy")
-                .HtmlAttributes(new { style = "width: 100%; margin-bottom: 20px;" })
-            )
-            <div style="text-align: right;">
-                <button class="k-button" onclick="closeCopyWindow()"><i class="fa fa-times"></i> Batal</button>
-                <button class="k-button k-primary" onclick="prosesCopyJurnal()"><i class="fa fa-save"></i> Proses Copy</button>
+        <div style="padding: 15px;">
+            <p style="margin-bottom: 15px; font-weight: 500;">Pilih tanggal untuk Voucher Baru:</p>
+            
+            <div style="margin-bottom: 35px;"> 
+                @(Html.Kendo().DatePicker()
+                    .Name("CopyTanggalBaru")
+                    .Value(DateTime.Now)
+                    .Format("dd-MM-yyyy")
+                    .HtmlAttributes(new { style = "width: 100%;" })
+                )
+            </div>
+            
+            <div style="text-align: right; border-top: 1px solid #e5e5e5; padding-top: 15px;">
+                <button class="btn btn-secondary" onclick="closeCopyWindow()"><i class="fa fa-times"></i> Batal</button>
+                <button class="btn btn-primary" style="margin-left: 5px;" onclick="prosesCopyJurnal()"><i class="fa fa-save"></i> Proses Copy</button>
             </div>
         </div>
     </text>)

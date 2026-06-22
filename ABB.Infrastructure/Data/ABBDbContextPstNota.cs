@@ -48,7 +48,9 @@ using SpListingVoucherKasResult = ABB.Domain.Entities.SpListingVoucherKasResult;
 using SpLaporanPelunasanResult = ABB.Domain.Entities.SpLaporanPelunasanResult;
 using SpLaporanOutstandingResult = ABB.Domain.Entities.SpLaporanOutstandingResult;
 using SpLaporanNeracaSaldoResult = ABB.Domain.Entities.SpLaporanNeracaSaldoResult;
+using SpLaporanNeracaSaldo117Result = ABB.Domain.Entities.SpLaporanNeracaSaldo117Result;
 using EntriMappingEntity = ABB.Domain.Entities.EntriMapping;
+using Jurnal117Entitiy = ABB.Domain.Entities.Jurnal117;
 
 namespace ABB.Infrastructure.Data
 {
@@ -105,7 +107,9 @@ namespace ABB.Infrastructure.Data
         public DbSet<SpLaporanPelunasanResult> SpLaporanPelunasanResults { get; set; }
         public DbSet<SpLaporanOutstandingResult> SpLaporanOutstandingResults { get; set; }
         public DbSet<SpLaporanNeracaSaldoResult> SpLaporanNeracaSaldoResults { get; set; }
+        public DbSet<SpLaporanNeracaSaldo117Result> SpLaporanNeracaSaldo117Results { get; set; }
         public DbSet<EntriMappingEntity> EntriMapping { get; set; }
+        public DbSet<Jurnal117Entitiy> Jurnal117 { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -147,6 +151,7 @@ namespace ABB.Infrastructure.Data
             builder.ApplyConfiguration(new KeteranganProduksiMap());
             builder.ApplyConfiguration(new AbbRolePusatMap());
             builder.ApplyConfiguration(new EntriMappingMap());
+            builder.ApplyConfiguration(new Jurnal117Map());
 
             builder.Entity<BukuBesarSpDto>(entity =>
             {
@@ -196,6 +201,12 @@ namespace ABB.Infrastructure.Data
             });
 
               builder.Entity<SpLaporanNeracaSaldoResult>(entity =>
+            {
+                entity.HasNoKey();
+                entity.ToView(null); 
+            });
+
+            builder.Entity<SpLaporanNeracaSaldo117Result>(entity =>
             {
                 entity.HasNoKey();
                 entity.ToView(null); 

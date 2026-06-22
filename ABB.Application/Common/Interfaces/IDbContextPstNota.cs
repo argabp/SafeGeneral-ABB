@@ -40,6 +40,7 @@ using KeteranganProduksiEntity = ABB.Domain.Entities.KeteranganProduksi;
 using LabaRugiKursEntity = ABB.Domain.Entities.LabaRugiKurs;
 using AbbRolePusatEntity = ABB.Domain.Entities.AbbRolePusat;
 using EntriMappingEntity = ABB.Domain.Entities.EntriMapping;
+using Jurnal117Entity = ABB.Domain.Entities.Jurnal117;
 
 namespace ABB.Application.Common.Interfaces
 {
@@ -74,6 +75,7 @@ namespace ABB.Application.Common.Interfaces
         DbSet<JurnalMemorial117Entity> JurnalMemorial117 { get; set; }
         DbSet<DetailJurnalMemorial117Entity> JurnalMemorial117Detail { get; set; }
         DbSet<Jurnal62Entity> Jurnal62 { get; set; }
+        DbSet<Jurnal117Entity> Jurnal117 { get; set; }
 
         DbSet<BukuBesarSpDto> BukuBesarSpResults { get; set; }
         DbSet<BukuBesarSp117Dto> BukuBesarSp117Results { get; set; }
@@ -93,6 +95,7 @@ namespace ABB.Application.Common.Interfaces
         DbSet<SpLaporanPelunasanResult> SpLaporanPelunasanResults { get; set; }
         DbSet<SpLaporanOutstandingResult> SpLaporanOutstandingResults { get; set; }
         DbSet<SpLaporanNeracaSaldoResult> SpLaporanNeracaSaldoResults { get; set; }
+        DbSet<SpLaporanNeracaSaldo117Result> SpLaporanNeracaSaldo117Results { get; set; }
 
         DbSet<EntriMappingEntity> EntriMapping { get; set; }
 

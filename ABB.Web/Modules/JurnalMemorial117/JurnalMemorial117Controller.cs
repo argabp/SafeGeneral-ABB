@@ -21,6 +21,7 @@ using ABB.Application.Coas117.Queries;
 using ABB.Application.MataUangs.Queries;
 using ABB.Application.InquiryNotaProduksis.Queries;
 using ABB.Application.Common.Interfaces;
+using ABB.Domain.Entities;
 
 namespace ABB.Web.Modules.JurnalMemorial117
 {
@@ -77,7 +78,7 @@ namespace ABB.Web.Modules.JurnalMemorial117
             // Load Master Data untuk Dropdown
             var cabangList = await Mediator.Send(new GetCabangsQuery { DatabaseName = databaseName });
             var mataUangList = await Mediator.Send(new GetMataUangQuery { DatabaseName = databaseName });
-            var akunList = await Mediator.Send(new GetAllCoa117Query());
+            // var akunList = await Mediator.Send(new GetAllCoa117Query());
 
             // MODE ADD (NoVoucher kosong)
             if (string.IsNullOrEmpty(noVoucher))
@@ -128,13 +129,55 @@ namespace ABB.Web.Modules.JurnalMemorial117
                 Text = $"{x.kd_mtu.Trim()} - {x.nm_mtu.Trim()}"
             }).ToList();
 
-            ViewBag.KodeAkunOptions = akunList.Select(x => new SelectListItem
-            {
-                Value = x.Kode.Trim(),
-                Text = $"{x.Kode.Trim()} - {x.Nama.Trim()}"
-            }).ToList();
+            // ViewBag.KodeAkunOptions = akunList.Select(x => new SelectListItem
+            // {
+            //     Value = x.Kode.Trim(),
+            //     Text = $"{x.Kode.Trim()} - {x.Nama.Trim()}"
+            // }).ToList();
+
 
             return PartialView(viewModel);
+        }
+
+        [HttpGet] // <--- WAJIB HTTP-GET BUKAN POST
+        public IActionResult GetKodeAkunAjax(string text)
+        {
+            var query = _context.Set<Coa117>().AsQueryable();
+
+            // Kalau user ngetik pencarian, filter datanya
+            if (!string.IsNullOrEmpty(text))
+            {
+                query = query.Where(x => x.gl_kode.Contains(text) || x.gl_nama.Contains(text));
+            }
+
+            // Ambil maksimal 100 data agar RAM super ringan
+            var data = query.Select(x => new 
+            {
+                Value = x.gl_kode.Trim(), 
+                Text = x.gl_kode.Trim() + " - " + x.gl_nama.Trim() 
+            })
+            .OrderBy(x => x.Value)
+            .Take(100) 
+            .ToList();
+
+            return Json(data);
+        }
+
+        [HttpGet]
+        public IActionResult ResolveKodeAkun(string[] values) 
+        {
+            if (values == null || values.Length == 0) return Json(new object[0]);
+
+            var data = _context.Set<Coa117>() 
+                .Where(x => values.Contains(x.gl_kode))
+                .Select(x => new 
+                {
+                    Value = x.gl_kode.Trim(),
+                    Text = x.gl_kode.Trim() + " - " + x.gl_nama.Trim()
+                })
+                .ToList(); // <--- Pakai ToList() biasa bawaan System.Linq
+
+            return Json(data);
         }
 
         // --- GRID DETAIL (BACA DATA) ---
@@ -278,7 +321,7 @@ namespace ABB.Web.Modules.JurnalMemorial117
             // Load Master Data (untuk mengisi dropdown value -> text)
             var cabangList = await Mediator.Send(new GetCabangsQuery { DatabaseName = databaseName });
             var mataUangList = await Mediator.Send(new GetMataUangQuery { DatabaseName = databaseName });
-            var akunList = await Mediator.Send(new GetAllCoa117Query()); // Pastikan pakai query COA 117
+            // var akunList = await Mediator.Send(new GetAllCoa117Query()); // Pastikan pakai query COA 117
 
             // Load Data Header
             var headerDto = await Mediator.Send(new GetJurnalMemorial117ByIdQuery { KodeCabang = kodeCabang, NoVoucher = noVoucher });
@@ -303,11 +346,11 @@ namespace ABB.Web.Modules.JurnalMemorial117
                 Text = $"{x.kd_mtu.Trim()} - {x.nm_mtu.Trim()}"
             }).ToList();
 
-            ViewBag.KodeAkunOptions = akunList.Select(x => new SelectListItem
-            {
-                Value = x.Kode.Trim(),
-                Text = $"{x.Kode.Trim()} - {x.Nama.Trim()}"
-            }).ToList();
+            // ViewBag.KodeAkunOptions = akunList.Select(x => new SelectListItem
+            // {
+            //     Value = x.Kode.Trim(),
+            //     Text = $"{x.Kode.Trim()} - {x.Nama.Trim()}"
+            // }).ToList();
 
             return PartialView("Lihat", viewModel); // Merender View 'Lihat.cshtml'
         }

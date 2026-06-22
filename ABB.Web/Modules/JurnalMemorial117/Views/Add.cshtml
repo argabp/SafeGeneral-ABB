@@ -117,17 +117,25 @@
         <input type="hidden" id="DetailNo" asp-for="No" value="0" />
         
         <div class="row">
-            <div class="form-group col-sm-3">
+           <div class="form-group col-sm-3">
                 <label>Kode Akun</label>
-                <kendo-combobox for="KodeAkun"
-                                style="width:100%;"
-                                class="custom-kuning"
-                                datatextfield="Text"
-                                datavaluefield="Value"
-                                bind-to="ViewBag.KodeAkunOptions"
-                                filter="FilterType.Contains"
-                                placeholder="Pilih Akun...">
-                </kendo-combobox>
+                @(Html.Kendo().ComboBox()
+                    .Name("KodeAkun")
+                    .DataTextField("Text")
+                    .DataValueField("Value")
+                    .Placeholder("Ketik Kode/Nama Akun...")
+                    .Filter(FilterType.Contains)
+                    .MinLength(0) 
+                    .HtmlAttributes(new { style = "width:100%;", @class = "custom-kuning" })
+                    .DataSource(source => source
+                        .Read(read => read
+                            .Action("GetKodeAkunAjax", "JurnalMemorial117")
+                            .Data("getAkunSearchFilter")
+                            .Type(HttpVerbs.Get) // <--- TEGASKAN PAKAI JALUR GET
+                        )
+                        .ServerFiltering(true)
+                    )
+                )
             </div>
 
             <div class="form-group col-sm-2">
@@ -243,7 +251,6 @@
     };
     
     $(document).ready(function() {
-        // Jika mode edit (NoVoucher ada), tampilkan form detail
         var noVoucher = $("#JurnalHeader_NoVoucher").val();
         if (noVoucher) {
             $("#JurnalDetailForm").show();

@@ -277,11 +277,17 @@ function onEditDetail(e) {
     
     $("#NilaiDebet").data("kendoNumericTextBox").value(dataItem.NilaiDebet);
     $("#NilaiKredit").data("kendoNumericTextBox").value(dataItem.NilaiKredit);
-    $("#KeteranganDetail").data("kendoTextArea").value(dataItem.Keterangan);
-    // --- TAMBAHAN: Isi field Rp juga ---
+    
+    // --- ISI FIELD RP ---
     $("#NilaiDebetRp").data("kendoNumericTextBox").value(dataItem.NilaiDebetRp);
     $("#NilaiKreditRp").data("kendoNumericTextBox").value(dataItem.NilaiKreditRp);
-    $("#KeteranganDetail").val(dataItem.KeteranganDetail);
+    
+    // --- PERBAIKAN: Cukup gunakan Kendo TextArea Value tanpa di-overwrite .val() biasa ---
+    var txtKetDetail = $("#KeteranganDetail").data("kendoTextArea");
+    if (txtKetDetail) {
+        txtKetDetail.value(dataItem.Keterangan || "");
+    }
+
     // Pastikan event listener aktif (jaga-jaga)
     attachDetailEvents(); 
 
@@ -331,20 +337,34 @@ function onDeleteDetail(e) {
     );
 
 }
-
 function clearDetailForm() {
     $("#DetailNo").val(0);
-    $("#KodeAkun").data("kendoComboBox").value("");
+    
+    var comboAkun = $("#KodeAkun").data("kendoComboBox");
+    if(comboAkun) { comboAkun.value(""); } // <--- Cara aman reset combobox
+    
     $("#NoNota").val("");
-    $("#KodeMataUang").data("kendoComboBox").value(""); // Atau set default IDR
-    $("#NilaiDebet").data("kendoNumericTextBox").value(0);
-    $("#NilaiKredit").data("kendoNumericTextBox").value(0);
-    $("#NilaiDebetRp").data("kendoNumericTextBox").value(0);
-    $("#NilaiKreditRp").data("kendoNumericTextBox").value(0);
-    $("#KeteranganDetail").data("kendoTextArea").value("");
+    
+    var comboMtu = $("#KodeMataUang").data("kendoComboBox");
+    if(comboMtu) { comboMtu.value(""); } 
+    
+    var txtDebet = $("#NilaiDebet").data("kendoNumericTextBox");
+    if(txtDebet) { txtDebet.value(0); }
+
+    var txtKredit = $("#NilaiKredit").data("kendoNumericTextBox");
+    if(txtKredit) { txtKredit.value(0); }
+
+    var txtDebetRp = $("#NilaiDebetRp").data("kendoNumericTextBox");
+    if(txtDebetRp) { txtDebetRp.value(0); }
+
+    var txtKreditRp = $("#NilaiKreditRp").data("kendoNumericTextBox");
+    if(txtKreditRp) { txtKreditRp.value(0); }
+
+    var txtKet = $("#KeteranganDetail").data("kendoTextArea");
+    if(txtKet) { txtKet.value(""); }
+
     $("#btn-save-detail").html('<i class="fa fa-plus"></i> Tambah Jurnal');
     $("#btn-cancel-detail").hide();
-    
 }
 
 // --- UTILITIES ---
@@ -574,4 +594,11 @@ function prosesCopyJurnal() {
             showMessage('Error', 'Terjadi kesalahan pada server saat mengcopy jurnal.');
         }
     });
+}
+
+function getAkunSearchFilter() {
+    var combobox = $("#KodeAkun").data("kendoComboBox");
+    return { 
+        text: combobox ? combobox.text() : "" 
+    };
 }

@@ -166,8 +166,8 @@ namespace ABB.Application.LaporanBukuBesars117.Queries
                 <tr><td colspan='7' style='border:none; height:15px;'></td></tr>");
             }
 
-            string templatePath = Path.Combine(_environment.ContentRootPath, "Modules", "Reports", "Templates", "LaporanBukuBesar.html");
-            if (!File.Exists(templatePath)) throw new FileNotFoundException("Template LaporanBukuBesar.html tidak ditemukan");
+            string templatePath = Path.Combine(_environment.ContentRootPath, "Modules", "Reports", "Templates", "LaporanBukuBesar117.html");
+            if (!File.Exists(templatePath)) throw new FileNotFoundException("Template LaporanBukuBesar117.html tidak ditemukan");
 
             string templateHtml = await File.ReadAllTextAsync(templatePath);
             var template = Template.Parse(templateHtml);
