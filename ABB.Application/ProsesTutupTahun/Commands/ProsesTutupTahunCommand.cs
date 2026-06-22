@@ -25,7 +25,7 @@ namespace ABB.Application.ProsesTutupTahun.Commands
         {
             // Panggil SP Sakti yang sudah kita buat
             await _context.Database.ExecuteSqlRawAsync(
-                "EXEC sp_ProsesTutupTahun {0}, {1}", 
+                "EXEC sp_proses_tutup_tahun {0}, {1}", 
                 request.Tahun, 
                 request.UserLogin
             );

@@ -54,7 +54,7 @@
                     columns.Bound(col => col.Tahun).Width(150).Title("Tahun Buku");
                     columns.Bound(col => col.Status).Width(200).Title("Status")
                            .ClientTemplate(
-                               "# if (Status == 'Siap Eksekusi') { #" +
+                               "# if (Status == 'Open') { #" +
                                "<span class='badge badge-success' style='padding:8px; font-size:12px;'>#= Status #</span>" +
                                "# } else { #" +
                                "<span class='badge badge-danger' style='padding:8px; font-size:12px;'>#= Status #</span>" +
@@ -76,18 +76,19 @@
         var grid = $("#GridTutupTahun").data("kendoGrid");
         var selectedRows = grid.select();
 
+        // 1. Validasi minimal pilih satu data
         if (selectedRows.length === 0) {
-            Swal.fire('Peringatan', 'Harap centang minimal satu Tahun yang ingin di-Closing!', 'warning');
+            showMessage("Peringatan", "Harap centang minimal satu Tahun yang ingin di-Closing!");
             return;
         }
 
         var commands = [];
         var adaYangBelumClose = false;
 
-        // Looping data yang di-ceklis
+        // 2. Looping baris terpilih
         selectedRows.each(function () {
             var dataItem = grid.dataItem(this);
-            if(dataItem.Status !== 'Siap Eksekusi') {
+            if (dataItem.Status !== 'Open') {
                 adaYangBelumClose = true;
             }
             commands.push({
@@ -95,49 +96,39 @@
             });
         });
 
-        if(adaYangBelumClose) {
-            Swal.fire('Peringatan', 'Ada tahun yang berstatus "Bulan Belum Close". Harap tutup bulan 1 s/d 12 terlebih dahulu!', 'error');
+        // 3. Validasi status kesiapan closing
+        if (adaYangBelumClose) {
+            showMessage("Peringatan", "Ada tahun yang berstatus 'Bulan Belum Close'. Harap tutup bulan 1 s/d 12 terlebih dahulu!");
             return;
         }
 
-        Swal.fire({
-            title: 'Konfirmasi Tutup Tahun',
-            text: "Anda akan mengeksekusi Tutup Tahun untuk " + commands.length + " data terpilih. Lanjutkan?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, Proses!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
+        // 4. Konfirmasi menggunakan showConfirmation bawaan sistem
+        showConfirmation('Konfirmasi Tutup Tahun', 
+            "Anda akan mengeksekusi Tutup Tahun untuk <b>" + commands.length + "</b> data terpilih. <br/>Proses ini akan merekap saldo ke bulan 0 tahun berikutnya. Lanjutkan?", 
+            function () {
                 
-                Swal.fire({
-                    title: 'Memproses...',
-                    text: 'Sedang merekap saldo. Harap tunggu.',
-                    allowOutsideClick: false,
-                    didOpen: () => { Swal.showLoading() }
-                });
+                // Tampilkan loading di atas Grid Tutup Tahun
+                showProgressOnGrid('#GridTutupTahun');
 
-                $.ajax({
-                    url: '/ProsesTutupTahun/ProcessClosing',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(commands),
-                    success: function (res) {
-                        if (res.success) {
-                            Swal.fire('Berhasil!', res.message, 'success').then(() => {
-                                grid.dataSource.read(); // Refresh Grid otomatis
-                            });
+                // 5. Eksekusi AJAX menggunakan ajaxPost helper
+                ajaxPost("/ProsesTutupTahun/ProcessClosing", JSON.stringify(commands),
+                    function (response) {
+                        
+                        // Matikan efek loading pada Grid
+                        closeProgressOnGrid('#GridTutupTahun');
+
+                        if (response.success) {
+                            showMessage("Sukses", response.message);
+                            
+                            // Refresh grid & bersihkan seleksi checkbox
+                            grid.dataSource.read();
+                            grid.clearSelection();
                         } else {
-                            Swal.fire('Gagal!', res.message, 'error');
+                            showMessage("Error", response.message);
                         }
-                    },
-                    error: function () {
-                        Swal.fire('Error', 'Terjadi kesalahan server.', 'error');
                     }
-                });
+                );
             }
-        });
+        );
     }
 </script>

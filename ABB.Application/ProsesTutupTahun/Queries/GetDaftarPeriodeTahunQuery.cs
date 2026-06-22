@@ -55,7 +55,7 @@ namespace ABB.Application.ProsesTutupTahun.Queries
                 // Jika list bulan belum tutup itu KOSONG, artinya semua beres
                 if (!bulanBelumTutupList.Any())
                 {
-                    result.Add(new ProsesTutupTahunDto { Tahun = (int)t, Status = "Siap Eksekusi" });
+                    result.Add(new ProsesTutupTahunDto { Tahun = (int)t, Status = "Open" });
                 }
                 else
                 {
