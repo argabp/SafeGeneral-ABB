@@ -64,7 +64,8 @@ function searchFilterAlokasi(e) {
         kd_scob: sorData?.kd_scob,
         kd_thn: sorData?.kd_thn,
         no_pol: sorData?.no_pol,
-        no_updt_reas: sorData?.no_updt_reas
+        no_updt_reas: sorData?.no_updt_reas,
+        no_updt: sorData?.no_updt
     };
 }
 

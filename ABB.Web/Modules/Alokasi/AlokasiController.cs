@@ -60,7 +60,7 @@ namespace ABB.Web.Modules.Alokasi
         }
         
         public async Task<ActionResult> GetAlokasis(GridRequest grid, string kd_cb, string kd_cob, 
-            string kd_scob, string kd_thn, string no_pol, Int16 no_updt_reas)
+            string kd_scob, string kd_thn, string no_pol, Int16 no_updt_reas, Int16 no_updt)
         {
             var result = await Mediator.Send(new GetAlokasisQuery()
             {
@@ -70,7 +70,8 @@ namespace ABB.Web.Modules.Alokasi
                 kd_scob = kd_scob,
                 kd_thn = kd_thn,
                 no_pol = no_pol,
-                no_updt_reas = no_updt_reas
+                no_updt_reas = no_updt_reas,
+                no_updt = no_updt
             });
             
             return Json(result);
