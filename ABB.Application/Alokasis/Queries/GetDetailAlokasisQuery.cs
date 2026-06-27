@@ -23,6 +23,8 @@ namespace ABB.Application.Alokasis.Queries
 
         public Int16 no_updt_reas { get; set; }
 
+        public Int16 no_updt { get; set; }
+
         public Int16 no_rsk { get; set; }
         
         public string kd_endt { get; set; }
@@ -48,7 +50,7 @@ namespace ABB.Application.Alokasis.Queries
                 {
                     request.kd_cb, request.kd_cob, request.kd_scob,
                     request.kd_thn, request.no_pol, request.no_updt_reas, 
-                    request.no_rsk, request.kd_endt
+                    request.no_rsk, request.kd_endt, request.no_updt 
                 }
             );
         }

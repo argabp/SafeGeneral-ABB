@@ -81,7 +81,8 @@ function searchFilterDetailAlokasi(e) {
         no_pol: alokasi?.no_pol,
         no_updt_reas: alokasi?.no_updt_reas,
         no_rsk: alokasi?.no_rsk,
-        kd_endt: alokasi?.kd_endt
+        kd_endt: alokasi?.kd_endt,
+        no_updt: alokasi?.no_updt
     };
 }
 
